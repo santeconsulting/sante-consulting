@@ -4,89 +4,145 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>SANTE Consulting</title>
+<title>SANTE CONSULTING</title>
 
 <style>
+
+*{
+    box-sizing:border-box;
+}
+
 body{
     margin:0;
-    font-family:Arial, sans-serif;
+    font-family:"Prompt",Arial,sans-serif;
     color:#222;
+    background:#ffffff;
 }
 
 header{
-    background:#0b3d2e;
+    background:linear-gradient(135deg,#111827,#1f2937);
     color:white;
-    padding:60px 10%;
+    padding:80px 10%;
+}
+
+.logo{
+    font-size:42px;
+    font-weight:700;
+    color:#f5c542;
 }
 
 header h1{
     font-size:48px;
-    margin:0;
+    margin:20px 0 10px;
 }
 
 header p{
     font-size:22px;
+    line-height:1.6;
 }
 
 .btn{
     display:inline-block;
+    margin-top:25px;
+    padding:15px 35px;
     background:#f5c542;
-    color:#222;
-    padding:15px 30px;
-    border-radius:30px;
+    color:#111;
     text-decoration:none;
-    margin-top:20px;
+    border-radius:40px;
     font-weight:bold;
 }
 
 section{
-    padding:50px 10%;
+    padding:70px 10%;
 }
 
 .title{
     text-align:center;
-    font-size:32px;
-    margin-bottom:30px;
+    font-size:36px;
+    margin-bottom:50px;
 }
 
 .cards{
     display:flex;
-    gap:20px;
+    gap:25px;
     flex-wrap:wrap;
 }
 
 .card{
     flex:1;
-    min-width:250px;
-    padding:25px;
-    border-radius:15px;
-    box-shadow:0 5px 20px #ddd;
+    min-width:280px;
+    padding:35px;
+    border-radius:20px;
+    background:white;
+    box-shadow:0 10px 30px rgba(0,0,0,0.08);
 }
 
+.card h3{
+    color:#b88a00;
+    font-size:24px;
+}
+
+
+.course{
+    background:#f9fafb;
+}
+
+
 footer{
-    background:#111;
+    background:#111827;
     color:white;
     text-align:center;
-    padding:30px;
+    padding:35px;
 }
+
+
+@media(max-width:768px){
+
+header h1{
+font-size:34px;
+}
+
+header p{
+font-size:18px;
+}
+
+}
+
 </style>
 
 </head>
 
+
 <body>
 
+
 <header>
-<h1>SANTE Consulting</h1>
-<p>Trust in Safety. Trust in SANTE.</p>
+
+<div class="logo">
+SANTE
+</div>
+
+
+<h1>
+Trust in Safety.<br>
+Trust in SANTE.
+</h1>
+
 
 <p>
-ให้บริการด้านความปลอดภัย อาชีวอนามัย 
-สิ่งแวดล้อม และระบบฝึกอบรมออนไลน์
+บริษัท ซานเต้ คอนซัลติ้ง จำกัด<br>
+ผู้เชี่ยวชาญด้านความปลอดภัย อาชีวอนามัย
+สิ่งแวดล้อม และระบบอบรมออนไลน์
 </p>
 
-<a class="btn" href="#">ติดต่อเรา</a>
+
+<a href="#" class="btn">
+ติดต่อ SANTE
+</a>
+
 
 </header>
+
 
 
 <section>
@@ -98,30 +154,60 @@ footer{
 
 <div class="cards">
 
+
 <div class="card">
-<h3>🎓 SANTE Learn</h3>
+
+<h3>
+📚 SANTE Learn
+</h3>
+
 <p>
-ระบบอบรมออนไลน์ด้านความปลอดภัย
-หลักสูตรเตรียมสอบ และพัฒนาบุคลากร
+ระบบอบรมออนไลน์และอบรมสด
+สำหรับบุคลากรด้านความปลอดภัย
 </p>
+
+<p>
+✓ Online Training<br>
+✓ Live Training<br>
+✓ Certificate
+</p>
+
 </div>
 
 
+
 <div class="card">
-<h3>🦺 Safety Consulting</h3>
+
+<h3>
+🏭 Environmental Service
+</h3>
+
 <p>
-ให้คำปรึกษาด้านระบบความปลอดภัย
-จป. กฎหมาย และการจัดการความเสี่ยง
+บริการตรวจวัดสิ่งแวดล้อมในการทำงาน
 </p>
+
+<p>
+✓ แสงสว่าง<br>
+✓ เสียง<br>
+✓ ความร้อน<br>
+✓ ตรวจประเมินด้านสิ่งแวดล้อม
+</p>
+
 </div>
 
 
+
 <div class="card">
-<h3>🌱 Environmental Service</h3>
+
+<h3>
+🦺 Safety Consulting
+</h3>
+
 <p>
-ตรวจวัดและประเมินด้านสิ่งแวดล้อม
-แสง เสียง ความร้อน และปัจจัยเสี่ยง
+ให้คำปรึกษาด้านความปลอดภัย
+และระบบบริหารจัดการความเสี่ยง
 </p>
+
 </div>
 
 
@@ -130,34 +216,87 @@ footer{
 </section>
 
 
-<section>
+
+
+<section class="course">
+
 
 <h2 class="title">
 หลักสูตรอบรม
 </h2>
 
+
 <div class="cards">
 
-<div class="card">
-<h3>ผู้ควบคุมระบบบำบัดมลพิษน้ำ</h3>
-<p>เรียนออนไลน์ พร้อมเอกสารและแบบทดสอบ</p>
-</div>
-
 
 <div class="card">
-<h3>ผู้ควบคุมระบบบำบัดมลพิษอากาศ</h3>
-<p>พัฒนาความรู้สำหรับผู้ปฏิบัติงาน</p>
+
+<h3>
+บุคลากรเฉพาะ (บฉ.)
+</h3>
+
+<p>
+เตรียมสอบพร้อมวิดีโอเรียนย้อนหลัง
+แบบฝึกหัด และข้อสอบ
+</p>
+
 </div>
+
 
 
 <div class="card">
-<h3>บุคลากรเฉพาะ (บฉ.)</h3>
-<p>เตรียมสอบพร้อมข้อสอบฝึกทำ</p>
-</div>
+
+<h3>
+ผู้ควบคุมระบบบำบัดมลพิษ
+</h3>
+
+<p>
+น้ำ อากาศ และกากอุตสาหกรรม
+</p>
 
 </div>
+
+
+
+<div class="card">
+
+<h3>
+In-house Training
+</h3>
+
+<p>
+อบรมตามความต้องการขององค์กร
+</p>
+
+</div>
+
+
+</div>
+
 
 </section>
+
+
+
+
+<section>
+
+<h2 class="title">
+พร้อมให้บริการองค์กรของคุณ
+</h2>
+
+
+<p style="text-align:center;font-size:20px;">
+
+SANTE CONSULTING
+<br>
+Safety | Environment | Training
+
+</p>
+
+
+</section>
+
 
 
 <footer>
@@ -169,6 +308,7 @@ footer{
 <p>
 Trust in Safety. Trust in SANTE.
 </p>
+
 
 </footer>
 
