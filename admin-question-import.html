@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>SANTE SYSTEM | Question Import</title>
+<title>SANTE SYSTEM | คลังข้อสอบ</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,17 +18,17 @@
   --navy-dark:#031f3d;
   --navy-light:#084276;
   --yellow:#ffc400;
-  --yellow-soft:#fff8da;
+  --yellow-soft:#fff9df;
   --white:#ffffff;
   --bg:#f5f7fa;
-  --gray:#6c7b8d;
-  --line:#dfe6ee;
+  --gray:#66778a;
+  --line:#dce4ec;
   --green:#17ad61;
   --green-soft:#eaf9f1;
   --red:#c73543;
   --red-soft:#fff0f1;
-  --orange:#d68b00;
-  --orange-soft:#fff5d9;
+  --orange:#c98000;
+  --orange-soft:#fff4d4;
   --blue-soft:#edf4fb;
 }
 
@@ -44,13 +44,13 @@ html,body{
   color:var(--navy);
 }
 
-button,select,input{
+button,input,select{
   font:inherit;
 }
 
-/* ===============================
+/* =====================================
    AUTH
-================================ */
+===================================== */
 
 .auth-gate{
   position:fixed;
@@ -63,17 +63,18 @@ button,select,input{
 }
 
 .auth-box{
-  width:min(430px,90%);
-  padding:34px;
+  width:min(450px,90%);
+  padding:38px;
   text-align:center;
-  border-radius:20px;
+  border-radius:22px;
   background:#fff;
   box-shadow:0 25px 60px rgba(0,0,0,.22);
 }
 
 .auth-box h1{
   margin:0;
-  font-size:32px;
+  font-size:34px;
+  font-weight:700;
 }
 
 .auth-box h1 span{
@@ -81,14 +82,15 @@ button,select,input{
 }
 
 .auth-box p{
+  margin:8px 0 0;
   color:var(--gray);
-  font-size:13px;
+  font-size:15px;
 }
 
 .spinner{
-  width:40px;
-  height:40px;
-  margin:22px auto 0;
+  width:42px;
+  height:42px;
+  margin:24px auto 0;
   border:5px solid #e5ebf0;
   border-top-color:var(--yellow);
   border-radius:50%;
@@ -101,46 +103,46 @@ button,select,input{
 
 .auth-error{
   display:none;
-  margin-top:16px;
-  padding:11px;
-  border-radius:9px;
+  margin-top:17px;
+  padding:12px;
+  border-radius:10px;
   color:var(--red);
   background:var(--red-soft);
-  font-size:12px;
+  font-size:14px;
 }
 
 .auth-actions{
   display:none;
   justify-content:center;
-  gap:8px;
-  margin-top:13px;
+  gap:9px;
+  margin-top:15px;
 }
 
 .auth-actions button{
   border:0;
-  padding:9px 14px;
-  border-radius:8px;
+  padding:10px 17px;
+  border-radius:9px;
   cursor:pointer;
 }
 
 .retry{
-  background:var(--yellow);
   color:var(--navy);
+  background:var(--yellow);
   font-weight:600;
 }
 
-/* ===============================
+/* =====================================
    APP
-================================ */
+===================================== */
 
 .app{
   display:none;
   min-height:100vh;
 }
 
-/* ===============================
+/* =====================================
    SIDEBAR
-================================ */
+===================================== */
 
 .sidebar{
   position:fixed;
@@ -158,57 +160,60 @@ button,select,input{
 }
 
 .brand{
-  height:74px;
+  height:76px;
   display:flex;
   align-items:center;
   gap:12px;
-  padding:0 14px 16px;
+  padding:0 14px 17px;
   border-bottom:1px solid rgba(255,255,255,.1);
 }
 
 .brand img{
-  width:58px;
-  height:58px;
+  width:60px;
+  height:60px;
   object-fit:contain;
 }
 
 .brand-name{
-  font-size:25px;
+  font-size:26px;
   font-weight:700;
   line-height:1;
 }
 
 .brand-sub{
-  margin-top:6px;
-  font-size:10px;
+  margin-top:7px;
+  font-size:11px;
+  font-weight:500;
 }
 
 .group{
-  padding:18px 14px 7px;
-  color:rgba(255,255,255,.58);
-  font-size:12px;
+  padding:19px 14px 8px;
+  color:rgba(255,255,255,.60);
+  font-size:13px;
+  font-weight:500;
 }
 
 .nav{
   display:flex;
   flex-direction:column;
-  gap:3px;
+  gap:4px;
 }
 
 .nav-btn{
   width:100%;
-  min-height:43px;
+  min-height:47px;
   padding:10px 13px;
   border:0;
   border-radius:10px;
   display:flex;
   align-items:center;
-  gap:11px;
+  gap:12px;
   text-align:left;
   color:#fff;
   background:transparent;
   cursor:pointer;
-  font-size:14px;
+  font-size:15px;
+  font-weight:500;
 }
 
 .nav-btn:hover{
@@ -222,41 +227,41 @@ button,select,input{
 }
 
 .nav-icon{
-  width:27px;
+  width:28px;
   text-align:center;
-  font-size:18px;
+  font-size:20px;
 }
 
-.next{
+.current-badge{
   margin-left:auto;
-  padding:3px 8px;
+  padding:4px 8px;
   border-radius:20px;
-  color:var(--navy);
-  background:var(--yellow);
+  color:var(--yellow);
+  background:var(--navy);
   font-size:9px;
   font-weight:700;
 }
 
-.nav-btn.active .next{
-  color:var(--yellow);
-  background:var(--navy);
-}
-
 .back-dashboard{
-  margin-top:25px;
-  padding:12px;
-  border:1px solid rgba(255,255,255,.15);
-  border-radius:11px;
+  margin-top:27px;
+  padding:13px;
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:12px;
   color:#fff;
   background:rgba(255,255,255,.04);
   cursor:pointer;
   text-align:center;
-  font-size:12px;
+  font-size:14px;
+  font-weight:500;
 }
 
-/* ===============================
+.back-dashboard:hover{
+  background:rgba(255,255,255,.08);
+}
+
+/* =====================================
    MAIN
-================================ */
+===================================== */
 
 .main{
   margin-left:296px;
@@ -268,7 +273,7 @@ button,select,input{
   top:0;
   z-index:30;
   height:72px;
-  padding:0 22px;
+  padding:0 24px;
   display:flex;
   align-items:center;
   justify-content:space-between;
@@ -280,7 +285,7 @@ button,select,input{
 .top-right{
   display:flex;
   align-items:center;
-  gap:12px;
+  gap:14px;
 }
 
 .mobile-menu{
@@ -288,43 +293,23 @@ button,select,input{
   border:0;
   background:none;
   color:var(--navy);
-  font-size:26px;
+  font-size:28px;
   cursor:pointer;
 }
 
 .breadcrumb{
   color:var(--gray);
-  font-size:12px;
+  font-size:14px;
 }
 
 .breadcrumb strong{
   color:var(--navy);
-}
-
-.lang{
-  display:flex;
-  padding:3px;
-  border-radius:9px;
-  background:#f0f3f7;
-}
-
-.lang button{
-  border:0;
-  padding:7px 13px;
-  border-radius:7px;
-  color:var(--navy);
-  background:transparent;
-  cursor:pointer;
-}
-
-.lang button.active{
-  color:#fff;
-  background:var(--navy);
+  font-weight:600;
 }
 
 .avatar{
-  width:38px;
-  height:38px;
+  width:42px;
+  height:42px;
   display:grid;
   place-items:center;
   border-radius:50%;
@@ -335,40 +320,43 @@ button,select,input{
 
 .user{
   color:var(--gray);
-  font-size:10px;
+  font-size:12px;
 }
 
 .user strong{
   display:block;
   color:var(--navy);
-  font-size:11px;
+  font-size:13px;
+  font-weight:600;
 }
 
 .logout{
   border:0;
-  color:#b63d45;
+  padding:8px 4px;
+  color:#b83e48;
   background:none;
   cursor:pointer;
+  font-size:14px;
 }
 
 .content{
   max-width:1500px;
   margin:auto;
-  padding:22px;
+  padding:24px;
 }
 
-/* ===============================
+/* =====================================
    PAGE HEADER
-================================ */
+===================================== */
 
 .page-header{
-  margin-bottom:16px;
-  padding:22px 25px;
+  margin-bottom:18px;
+  padding:26px 28px;
   display:flex;
   align-items:center;
   justify-content:space-between;
   gap:20px;
-  border-radius:16px;
+  border-radius:17px;
   color:#fff;
   background:
     radial-gradient(circle at 90% 20%,#0c4b84 0,transparent 28%),
@@ -377,7 +365,8 @@ button,select,input{
 
 .page-header h1{
   margin:0;
-  font-size:28px;
+  font-size:30px;
+  font-weight:700;
 }
 
 .page-header h1 span{
@@ -385,80 +374,82 @@ button,select,input{
 }
 
 .page-header p{
-  margin:5px 0 0;
-  color:rgba(255,255,255,.78);
-  font-size:12px;
+  margin:7px 0 0;
+  color:rgba(255,255,255,.82);
+  font-size:14px;
 }
 
-.step-badge{
+.page-badge{
   flex:none;
-  padding:8px 13px;
+  padding:9px 16px;
   border-radius:30px;
   color:var(--navy);
   background:var(--yellow);
-  font-size:11px;
+  font-size:12px;
   font-weight:700;
 }
 
-/* ===============================
-   INFO CARDS
-================================ */
+/* =====================================
+   SUMMARY
+===================================== */
 
 .summary{
   display:grid;
   grid-template-columns:repeat(4,1fr);
-  gap:11px;
-  margin-bottom:14px;
+  gap:13px;
+  margin-bottom:16px;
 }
 
 .summary-card{
-  min-height:95px;
-  padding:15px;
+  min-height:108px;
+  padding:17px;
   display:flex;
   align-items:center;
-  gap:12px;
+  gap:14px;
   border:1px solid var(--line);
-  border-radius:12px;
+  border-radius:14px;
   background:#fff;
 }
 
 .summary-icon{
-  width:46px;
-  height:46px;
+  width:53px;
+  height:53px;
   flex:none;
   display:grid;
   place-items:center;
-  border-radius:11px;
+  border-radius:12px;
   color:var(--navy);
   background:var(--blue-soft);
-  font-size:21px;
+  font-size:24px;
 }
 
 .summary-label{
   color:var(--gray);
-  font-size:11px;
+  font-size:13px;
+  font-weight:500;
 }
 
 .summary-value{
   margin-top:2px;
-  font-size:20px;
+  font-size:25px;
+  line-height:1.1;
   font-weight:700;
 }
 
-/* ===============================
+/* =====================================
    PANEL
-================================ */
+===================================== */
 
 .panel{
-  margin-bottom:14px;
-  padding:18px;
+  margin-bottom:16px;
+  padding:20px;
   border:1px solid var(--line);
-  border-radius:13px;
+  border-radius:14px;
   background:#fff;
 }
 
 .panel-header{
-  margin-bottom:14px;
+  margin-bottom:16px;
   display:flex;
   align-items:center;
   justify-content:space-between;
@@ -467,76 +458,83 @@ button,select,input{
 
 .panel-header h2{
   margin:0;
-  font-size:19px;
+  font-size:22px;
+  font-weight:700;
 }
 
 .panel-header p{
-  margin:3px 0 0;
+  margin:4px 0 0;
   color:var(--gray);
-  font-size:11px;
+  font-size:13px;
 }
 
 .refresh{
   border:1px solid var(--line);
-  padding:8px 12px;
-  border-radius:8px;
+  padding:9px 14px;
+  border-radius:9px;
   color:var(--navy);
   background:#fff;
   cursor:pointer;
+  font-size:14px;
+  font-weight:500;
 }
 
-/* ===============================
+.refresh:hover{
+  background:#f7f9fb;
+}
+
+/* =====================================
    BATCH
-================================ */
+===================================== */
 
 .batch-list{
   display:grid;
-  gap:9px;
+  gap:10px;
 }
 
 .batch{
-  padding:13px 14px;
+  padding:15px 16px;
   display:grid;
   grid-template-columns:1fr auto;
   align-items:center;
-  gap:10px;
+  gap:12px;
   border:1px solid var(--line);
-  border-radius:11px;
+  border-radius:12px;
   cursor:pointer;
   transition:.15s;
 }
 
 .batch:hover{
-  border-color:#b9c7d5;
+  border-color:#b6c5d4;
 }
 
 .batch.selected{
-  border:1.5px solid #e4b200;
+  border:1.5px solid #e5b300;
   background:#fffdf5;
 }
 
 .batch-name{
-  font-size:14px;
+  font-size:16px;
   font-weight:600;
 }
 
 .batch-meta{
-  margin-top:4px;
+  margin-top:5px;
   color:var(--gray);
-  font-size:10px;
+  font-size:12px;
 }
 
 .badge{
   display:inline-flex;
   align-items:center;
-  padding:4px 8px;
+  padding:5px 9px;
   border-radius:20px;
-  font-size:9px;
+  font-size:11px;
   font-weight:600;
 }
 
 .badge.pending{
-  color:#996300;
+  color:#956100;
   background:var(--orange-soft);
 }
 
@@ -555,35 +553,37 @@ button,select,input{
   background:#eaf4ff;
 }
 
-/* ===============================
-   SELECTED BATCH
-================================ */
+/* =====================================
+   SELECTED
+===================================== */
 
 .selected-grid{
   display:grid;
   grid-template-columns:1.4fr .6fr;
-  gap:12px;
+  gap:14px;
 }
 
 .batch-detail{
-  padding:15px;
+  padding:17px;
   border:1px solid var(--line);
-  border-radius:11px;
+  border-radius:12px;
   background:#fafbfd;
 }
 
 .batch-detail h3{
-  margin:0 0 10px;
-  font-size:16px;
+  margin:0 0 12px;
+  font-size:18px;
 }
 
 .detail-row{
-  padding:6px 0;
+  min-height:39px;
+  padding:8px 0;
   display:flex;
+  align-items:center;
   justify-content:space-between;
   gap:20px;
-  border-bottom:1px dashed #e1e6eb;
-  font-size:11px;
+  border-bottom:1px dashed #dfe5eb;
+  font-size:13px;
 }
 
 .detail-row:last-child{
@@ -597,16 +597,17 @@ button,select,input{
 .actions{
   display:flex;
   flex-direction:column;
-  gap:8px;
+  gap:9px;
 }
 
 .action-btn{
   width:100%;
-  min-height:43px;
-  padding:9px 12px;
+  min-height:48px;
+  padding:10px 13px;
   border:0;
-  border-radius:9px;
+  border-radius:10px;
   cursor:pointer;
+  font-size:15px;
   font-weight:600;
 }
 
@@ -617,7 +618,7 @@ button,select,input{
 
 .preview-btn{
   color:var(--navy);
-  background:#e9f1f9;
+  background:#e8f0f8;
 }
 
 .import-btn{
@@ -630,17 +631,17 @@ button,select,input{
   cursor:not-allowed;
 }
 
-/* ===============================
+/* =====================================
    MESSAGE
-================================ */
+===================================== */
 
 .message{
   display:none;
-  margin-top:12px;
-  padding:11px 13px;
-  border-radius:9px;
-  font-size:11px;
-  line-height:1.5;
+  margin-top:14px;
+  padding:13px 15px;
+  border-radius:10px;
+  font-size:13px;
+  line-height:1.6;
 }
 
 .message.success{
@@ -661,36 +662,36 @@ button,select,input{
   background:#eaf4ff;
 }
 
-/* ===============================
+/* =====================================
    TABLE
-================================ */
+===================================== */
 
 .table-wrap{
   overflow-x:auto;
   border:1px solid var(--line);
-  border-radius:11px;
+  border-radius:12px;
 }
 
 table{
   width:100%;
-  min-width:900px;
+  min-width:950px;
   border-collapse:collapse;
 }
 
 th{
-  padding:10px;
+  padding:12px;
   text-align:left;
   color:#fff;
   background:var(--navy);
-  font-size:10px;
+  font-size:12px;
   font-weight:500;
 }
 
 td{
-  padding:10px;
+  padding:12px;
   border-bottom:1px solid #edf0f3;
   vertical-align:top;
-  font-size:10px;
+  font-size:12px;
 }
 
 tbody tr:last-child td{
@@ -702,20 +703,20 @@ tbody tr:hover{
 }
 
 .question{
-  min-width:280px;
-  font-size:11px;
+  min-width:300px;
+  font-size:13px;
 }
 
 .empty{
-  padding:28px;
+  padding:32px;
   text-align:center;
   color:var(--gray);
-  font-size:12px;
+  font-size:14px;
 }
 
-/* ===============================
+/* =====================================
    MODAL
-================================ */
+===================================== */
 
 .modal{
   display:none;
@@ -736,34 +737,36 @@ tbody tr:hover{
   width:min(620px,100%);
   max-height:85vh;
   overflow-y:auto;
-  padding:22px;
-  border-radius:15px;
+  padding:24px;
+  border-radius:16px;
   background:#fff;
   box-shadow:0 20px 60px rgba(0,0,0,.2);
 }
 
 .modal-card h2{
-  margin:0 0 8px;
-  font-size:20px;
+  margin:0 0 9px;
+  font-size:22px;
 }
 
 .modal-card p{
   color:var(--gray);
-  font-size:11px;
+  font-size:13px;
+  line-height:1.7;
 }
 
 .modal-actions{
-  margin-top:18px;
+  margin-top:20px;
   display:flex;
   justify-content:flex-end;
-  gap:8px;
+  gap:9px;
 }
 
 .modal-actions button{
   border:0;
-  padding:9px 15px;
-  border-radius:8px;
+  padding:10px 17px;
+  border-radius:9px;
   cursor:pointer;
+  font-size:14px;
 }
 
 .cancel{
@@ -776,13 +779,13 @@ tbody tr:hover{
   background:var(--navy);
 }
 
-/* ===============================
-   MOBILE
-================================ */
-
 .overlay{
   display:none;
 }
+
+/* =====================================
+   RESPONSIVE
+===================================== */
 
 @media(max-width:1100px){
   .summary{
@@ -827,7 +830,7 @@ tbody tr:hover{
 
 @media(max-width:600px){
   .topbar{
-    padding:0 10px;
+    padding:0 12px;
   }
 
   .breadcrumb{
@@ -835,18 +838,22 @@ tbody tr:hover{
   }
 
   .content{
-    padding:12px;
+    padding:13px;
   }
 
   .page-header{
-    padding:18px;
+    padding:20px;
   }
 
   .page-header h1{
-    font-size:22px;
+    font-size:24px;
   }
 
-  .step-badge{
+  .page-header p{
+    font-size:13px;
+  }
+
+  .page-badge{
     display:none;
   }
 
@@ -854,20 +861,21 @@ tbody tr:hover{
     grid-template-columns:1fr 1fr;
   }
 
+  .summary-card{
+    min-height:100px;
+    padding:13px;
+  }
+
   .summary-value{
-    font-size:17px;
+    font-size:21px;
   }
 
   .batch{
     grid-template-columns:1fr;
   }
 
-  .lang button{
-    padding:6px 8px;
-  }
-
   .logout{
-    font-size:10px;
+    font-size:12px;
   }
 }
 </style>
@@ -875,135 +883,134 @@ tbody tr:hover{
 
 <body>
 
-<!-- AUTH -->
+<!-- ตรวจสอบสิทธิ์ -->
 
 <div class="auth-gate" id="authGate">
   <div class="auth-box">
     <h1>SANTE <span>SYSTEM</span></h1>
-    <p data-th="กำลังตรวจสอบสิทธิ์ผู้ดูแลระบบ"
-       data-en="Checking administrator access">
-      กำลังตรวจสอบสิทธิ์ผู้ดูแลระบบ
-    </p>
+    <p>กำลังตรวจสอบสิทธิ์ผู้ดูแลระบบ</p>
 
     <div class="spinner" id="spinner"></div>
     <div class="auth-error" id="authError"></div>
 
     <div class="auth-actions" id="authActions">
-      <button class="retry" id="retryBtn"
-              data-th="ลองอีกครั้ง"
-              data-en="Retry">
-        ลองอีกครั้ง
-      </button>
-
-      <button id="loginBtn"
-              data-th="เข้าสู่ระบบ"
-              data-en="Login">
-        เข้าสู่ระบบ
-      </button>
+      <button class="retry" id="retryBtn">ลองอีกครั้ง</button>
+      <button id="loginBtn">เข้าสู่ระบบ</button>
     </div>
   </div>
 </div>
 
 <div class="overlay" id="overlay"></div>
 
-<!-- APP -->
-
 <div class="app" id="app">
+
+<!-- SIDEBAR -->
 
 <aside class="sidebar" id="sidebar">
 
   <div class="brand">
     <img src="./SANTE-logo.png" alt="SANTE">
-
     <div>
       <div class="brand-name">ซานเต้</div>
       <div class="brand-sub">SANTE CONSULTING</div>
     </div>
   </div>
 
-  <div class="group"
-       data-th="ภาพรวม"
-       data-en="OVERVIEW">
-    ภาพรวม
-  </div>
+  <div class="group">ภาพรวม</div>
 
   <div class="nav">
     <button class="nav-btn" id="dashboardNav">
       <span class="nav-icon">⌂</span>
-      <span data-th="แดชบอร์ด"
-            data-en="Dashboard">
-        แดชบอร์ด
-      </span>
+      <span>แดชบอร์ด</span>
     </button>
   </div>
 
-  <div class="group"
-       data-th="การอบรมและการเรียนรู้"
-       data-en="TRAINING & LEARNING">
-    การอบรมและการเรียนรู้
-  </div>
+  <div class="group">การอบรมและการเรียนรู้</div>
 
   <div class="nav">
 
     <button class="nav-btn" data-coming>
       <span class="nav-icon">♟</span>
-      <span data-th="สมาชิก"
-            data-en="Members">
-        สมาชิก
-      </span>
+      <span>สมาชิก</span>
     </button>
 
     <button class="nav-btn" data-coming>
       <span class="nav-icon">▣</span>
-      <span data-th="หลักสูตร"
-            data-en="Courses">
-        หลักสูตร
-      </span>
+      <span>หลักสูตร</span>
     </button>
 
     <button class="nav-btn" data-coming>
       <span class="nav-icon">◷</span>
-      <span data-th="รอบการอบรม"
-            data-en="Training Sessions">
-        รอบการอบรม
-      </span>
+      <span>รอบการอบรม</span>
     </button>
 
     <button class="nav-btn active">
       <span class="nav-icon">▤</span>
-      <span data-th="คลังข้อสอบ / นำเข้า Excel"
-            data-en="Question Bank / Excel Import">
-        คลังข้อสอบ / นำเข้า Excel
-      </span>
-      <span class="next">9B</span>
+      <span>คลังข้อสอบ / นำเข้าข้อสอบ</span>
+      <span class="current-badge">ใช้งาน</span>
     </button>
 
     <button class="nav-btn" data-coming>
       <span class="nav-icon">☑</span>
-      <span data-th="ข้อสอบและผลสอบ"
-            data-en="Exams & Results">
-        ข้อสอบและผลสอบ
-      </span>
+      <span>ข้อสอบและผลสอบ</span>
     </button>
 
     <button class="nav-btn" data-coming>
       <span class="nav-icon">▣</span>
-      <span data-th="วุฒิบัตร"
-            data-en="Certificates">
-        วุฒิบัตร
-      </span>
+      <span>วุฒิบัตร</span>
     </button>
 
   </div>
 
-  <div class="back-dashboard"
-       id="backDashboard"
-       data-th="← กลับ Dashboard"
-       data-en="← Back to Dashboard">
-    ← กลับ Dashboard
+  <div class="group">งานบริการ</div>
+
+  <div class="nav">
+
+    <button class="nav-btn" data-coming>
+      <span class="nav-icon">◆</span>
+      <span>บริการ</span>
+    </button>
+
+    <button class="nav-btn" data-coming>
+      <span class="nav-icon">▤</span>
+      <span>ใบเสนอราคา</span>
+    </button>
+
+    <button class="nav-btn" data-coming>
+      <span class="nav-icon">▧</span>
+      <span>งานบริการ</span>
+    </button>
+
+  </div>
+
+  <div class="group">การดำเนินงาน</div>
+
+  <div class="nav">
+
+    <button class="nav-btn" data-coming>
+      <span class="nav-icon">฿</span>
+      <span>การเงินและเอกสาร</span>
+    </button>
+
+    <button class="nav-btn" data-coming>
+      <span class="nav-icon">♟</span>
+      <span>การแจ้งเตือน</span>
+    </button>
+
+    <button class="nav-btn" data-coming>
+      <span class="nav-icon">⚙</span>
+      <span>ตั้งค่าระบบ</span>
+    </button>
+
+  </div>
+
+  <div class="back-dashboard" id="backDashboard">
+    ← กลับหน้าแดชบอร์ด
   </div>
 
 </aside>
+
+<!-- MAIN -->
 
 <div class="main">
 
@@ -1011,41 +1018,25 @@ tbody tr:hover{
 
   <div class="top-left">
 
-    <button class="mobile-menu" id="mobileMenu">
-      ☰
-    </button>
+    <button class="mobile-menu" id="mobileMenu">☰</button>
 
     <div class="breadcrumb">
       SANTE SYSTEM /
-      <strong data-th="คลังข้อสอบ"
-              data-en="Question Bank">
-        คลังข้อสอบ
-      </strong>
+      <strong>คลังข้อสอบ / นำเข้าข้อสอบ</strong>
     </div>
 
   </div>
 
   <div class="top-right">
 
-    <div class="lang">
-      <button id="thBtn" class="active">TH</button>
-      <button id="enBtn">EN</button>
-    </div>
-
     <div class="avatar" id="avatar">S</div>
 
     <div class="user">
       <strong id="userEmail">-</strong>
-      <span data-th="ผู้ดูแลระบบ"
-            data-en="Administrator">
-        ผู้ดูแลระบบ
-      </span>
+      <span>ผู้ดูแลระบบ</span>
     </div>
 
-    <button class="logout"
-            id="logoutBtn"
-            data-th="ออกจากระบบ"
-            data-en="Logout">
+    <button class="logout" id="logoutBtn">
       ออกจากระบบ
     </button>
 
@@ -1061,23 +1052,16 @@ tbody tr:hover{
 
   <div>
     <h1>
-      <span>Question Bank</span>
-      /
-      <span style="color:#fff"
-            data-th="นำเข้าข้อสอบ"
-            data-en="Question Import">
-        นำเข้าข้อสอบ
-      </span>
+      <span>คลังข้อสอบ</span> / นำเข้าข้อสอบ
     </h1>
 
-    <p data-th="ตรวจสอบ Preview และนำเข้าข้อสอบเข้าสู่ SANTE SYSTEM"
-       data-en="Validate, preview and import questions into SANTE SYSTEM">
-      ตรวจสอบ Preview และนำเข้าข้อสอบเข้าสู่ SANTE SYSTEM
+    <p>
+      ตรวจสอบข้อมูล ดูตัวอย่าง และนำข้อสอบเข้าสู่ระบบ SANTE
     </p>
   </div>
 
-  <div class="step-badge">
-    PART 9B
+  <div class="page-badge">
+    ระบบจัดการข้อสอบ
   </div>
 
 </section>
@@ -1089,11 +1073,7 @@ tbody tr:hover{
   <div class="summary-card">
     <div class="summary-icon">▤</div>
     <div>
-      <div class="summary-label"
-           data-th="Import Batch"
-           data-en="Import Batches">
-        Import Batch
-      </div>
+      <div class="summary-label">ชุดข้อมูลนำเข้า</div>
       <div class="summary-value" id="batchCount">-</div>
     </div>
   </div>
@@ -1101,11 +1081,7 @@ tbody tr:hover{
   <div class="summary-card">
     <div class="summary-icon">◷</div>
     <div>
-      <div class="summary-label"
-           data-th="รอตรวจสอบ"
-           data-en="Pending">
-        รอตรวจสอบ
-      </div>
+      <div class="summary-label">รอตรวจสอบ</div>
       <div class="summary-value" id="pendingCount">-</div>
     </div>
   </div>
@@ -1113,11 +1089,7 @@ tbody tr:hover{
   <div class="summary-card">
     <div class="summary-icon">✓</div>
     <div>
-      <div class="summary-label"
-           data-th="ผ่านการตรวจสอบ"
-           data-en="Validated">
-        ผ่านการตรวจสอบ
-      </div>
+      <div class="summary-label">ผ่านการตรวจสอบ</div>
       <div class="summary-value" id="validatedCount">-</div>
     </div>
   </div>
@@ -1125,71 +1097,49 @@ tbody tr:hover{
   <div class="summary-card">
     <div class="summary-icon">▣</div>
     <div>
-      <div class="summary-label"
-           data-th="นำเข้าแล้ว"
-           data-en="Imported">
-        นำเข้าแล้ว
-      </div>
+      <div class="summary-label">นำเข้าแล้ว</div>
       <div class="summary-value" id="importedCount">-</div>
     </div>
   </div>
 
 </section>
 
-<!-- BATCHES -->
+<!-- BATCH LIST -->
 
 <section class="panel">
 
   <div class="panel-header">
 
     <div>
-      <h2 data-th="รายการ Import Batch"
-          data-en="Import Batches">
-        รายการ Import Batch
-      </h2>
-
-      <p data-th="เลือก Batch ที่ต้องการตรวจสอบและนำเข้าคลังข้อสอบ"
-         data-en="Select a batch to validate and import">
-        เลือก Batch ที่ต้องการตรวจสอบและนำเข้าคลังข้อสอบ
+      <h2>รายการชุดข้อมูลนำเข้า</h2>
+      <p>
+        เลือกชุดข้อมูลที่ต้องการตรวจสอบและนำเข้าสู่คลังข้อสอบ
       </p>
     </div>
 
-    <button class="refresh"
-            id="refreshBtn"
-            data-th="↻ รีเฟรช"
-            data-en="↻ Refresh">
-      ↻ รีเฟรช
+    <button class="refresh" id="refreshBtn">
+      ↻ รีเฟรชข้อมูล
     </button>
 
   </div>
 
   <div class="batch-list" id="batchList">
-
-    <div class="empty"
-         data-th="กำลังโหลด Import Batch..."
-         data-en="Loading import batches...">
-      กำลังโหลด Import Batch...
+    <div class="empty">
+      กำลังโหลดข้อมูล...
     </div>
-
   </div>
 
 </section>
 
-<!-- SELECTED BATCH -->
+<!-- SELECTED -->
 
 <section class="panel">
 
   <div class="panel-header">
     <div>
-      <h2 data-th="Batch ที่เลือก"
-          data-en="Selected Batch">
-        Batch ที่เลือก
-      </h2>
-
-      <p id="selectedHint"
-         data-th="เลือก Import Batch จากรายการด้านบน"
-         data-en="Select an import batch above">
-        เลือก Import Batch จากรายการด้านบน
+      <h2>ชุดข้อมูลที่เลือก</h2>
+      <p>
+        ตรวจสอบสถานะก่อนนำข้อมูลเข้าสู่คลังข้อสอบ
       </p>
     </div>
   </div>
@@ -1198,30 +1148,30 @@ tbody tr:hover{
 
     <div class="batch-detail">
 
-      <h3 id="selectedName">-</h3>
+      <h3 id="selectedName">ยังไม่ได้เลือกชุดข้อมูล</h3>
 
       <div class="detail-row">
-        <span data-th="สถานะ" data-en="Status">สถานะ</span>
+        <span>สถานะ</span>
         <strong id="selectedStatus">-</strong>
       </div>
 
       <div class="detail-row">
-        <span data-th="จำนวนแถว" data-en="Total Rows">จำนวนแถว</span>
+        <span>จำนวนข้อทั้งหมด</span>
         <strong id="selectedRows">-</strong>
       </div>
 
       <div class="detail-row">
-        <span data-th="ผ่าน" data-en="Valid">ผ่าน</span>
+        <span>ผ่านการตรวจสอบ</span>
         <strong id="selectedValid">-</strong>
       </div>
 
       <div class="detail-row">
-        <span data-th="ไม่ผ่าน" data-en="Invalid">ไม่ผ่าน</span>
+        <span>พบปัญหา</span>
         <strong id="selectedInvalid">-</strong>
       </div>
 
       <div class="detail-row">
-        <span data-th="นำเข้าแล้ว" data-en="Imported">นำเข้าแล้ว</span>
+        <span>นำเข้าสู่คลังแล้ว</span>
         <strong id="selectedImported">-</strong>
       </div>
 
@@ -1231,26 +1181,20 @@ tbody tr:hover{
 
       <button class="action-btn validate-btn"
               id="validateBtn"
-              disabled
-              data-th="① ตรวจสอบข้อมูล (Validate)"
-              data-en="① Validate Data">
-        ① ตรวจสอบข้อมูล (Validate)
+              disabled>
+        ① ตรวจสอบข้อมูล
       </button>
 
       <button class="action-btn preview-btn"
               id="previewBtn"
-              disabled
-              data-th="② ดูตัวอย่าง (Preview)"
-              data-en="② Preview">
-        ② ดูตัวอย่าง (Preview)
+              disabled>
+        ② ดูตัวอย่างข้อสอบ
       </button>
 
       <button class="action-btn import-btn"
               id="importBtn"
-              disabled
-              data-th="③ นำเข้าคลังข้อสอบ (Import)"
-              data-en="③ Import to Question Bank">
-        ③ นำเข้าคลังข้อสอบ (Import)
+              disabled>
+        ③ นำเข้าสู่คลังข้อสอบ
       </button>
 
     </div>
@@ -1268,24 +1212,17 @@ tbody tr:hover{
   <div class="panel-header">
 
     <div>
-      <h2 data-th="ข้อมูลข้อสอบใน Batch"
-          data-en="Questions in Batch">
-        ข้อมูลข้อสอบใน Batch
-      </h2>
-
-      <p data-th="แสดงข้อมูล Staging ก่อนนำเข้าคลังข้อสอบจริง"
-         data-en="Staging data before importing to the live question bank">
-        แสดงข้อมูล Staging ก่อนนำเข้าคลังข้อสอบจริง
+      <h2>รายการข้อสอบ</h2>
+      <p>
+        ข้อมูลข้อสอบในชุดที่เลือกก่อนนำเข้าสู่คลังข้อสอบจริง
       </p>
     </div>
 
   </div>
 
   <div id="questionArea">
-    <div class="empty"
-         data-th="เลือก Batch เพื่อดูข้อมูลข้อสอบ"
-         data-en="Select a batch to view questions">
-      เลือก Batch เพื่อดูข้อมูลข้อสอบ
+    <div class="empty">
+      เลือกชุดข้อมูลเพื่อดูรายการข้อสอบ
     </div>
   </div>
 
@@ -1295,39 +1232,30 @@ tbody tr:hover{
 </div>
 </div>
 
-<!-- IMPORT CONFIRM -->
+<!-- MODAL -->
 
 <div class="modal" id="importModal">
 
   <div class="modal-card">
 
-    <h2 data-th="ยืนยันการนำเข้าคลังข้อสอบ"
-        data-en="Confirm Question Import">
-      ยืนยันการนำเข้าคลังข้อสอบ
-    </h2>
+    <h2>ยืนยันการนำเข้าสู่คลังข้อสอบ</h2>
 
-    <p data-th="ระบบจะนำข้อมูลจาก Import Batch นี้เข้าสู่คลังข้อสอบจริง เมื่อดำเนินการแล้วข้อมูลจะถูกเชื่อมกับชุดข้อสอบที่กำหนด"
-       data-en="The validated batch will be imported into the live question bank and linked to its exam sets.">
-      ระบบจะนำข้อมูลจาก Import Batch นี้เข้าสู่คลังข้อสอบจริง
-      เมื่อดำเนินการแล้วข้อมูลจะถูกเชื่อมกับชุดข้อสอบที่กำหนด
+    <p>
+      ระบบจะนำข้อสอบที่ผ่านการตรวจสอบเข้าสู่คลังข้อสอบจริง
+      และเชื่อมข้อสอบเข้ากับชุดข้อสอบที่กำหนด
+      กรุณาตรวจสอบข้อมูลให้ถูกต้องก่อนดำเนินการ
     </p>
 
     <strong id="confirmBatchName">-</strong>
 
     <div class="modal-actions">
 
-      <button class="cancel"
-              id="cancelImport"
-              data-th="ยกเลิก"
-              data-en="Cancel">
+      <button class="cancel" id="cancelImport">
         ยกเลิก
       </button>
 
-      <button class="confirm"
-              id="confirmImport"
-              data-th="ยืนยัน Import"
-              data-en="Confirm Import">
-        ยืนยัน Import
+      <button class="confirm" id="confirmImport">
+        ยืนยันการนำเข้า
       </button>
 
     </div>
@@ -1338,9 +1266,9 @@ tbody tr:hover{
 
 <script>
 
-/* =========================================================
-   CONFIG
-========================================================= */
+/* ==========================================
+   SUPABASE
+========================================== */
 
 const SUPABASE_URL =
   "https://cyegjwerxlxhczrfiurz.supabase.co";
@@ -1351,20 +1279,16 @@ const SUPABASE_KEY =
 const AUTH_STORAGE_KEY =
   "sante-admin-auth";
 
-const LANGUAGE_KEY =
-  "sante-admin-language";
-
 let sb = null;
 let currentUser = null;
-
 let batches = [];
 let selectedBatch = null;
 let currentRows = [];
 
 
-/* =========================================================
+/* ==========================================
    HELPERS
-========================================================= */
+========================================== */
 
 function sleep(ms){
   return new Promise(resolve=>setTimeout(resolve,ms));
@@ -1374,7 +1298,7 @@ function withTimeout(promise,ms,message){
 
   let timer;
 
-  const timeout =
+  const timeoutPromise =
     new Promise((_,reject)=>{
 
       timer=setTimeout(
@@ -1385,7 +1309,7 @@ function withTimeout(promise,ms,message){
     });
 
   return Promise
-    .race([promise,timeout])
+    .race([promise,timeoutPromise])
     .finally(()=>clearTimeout(timer));
 }
 
@@ -1400,62 +1324,170 @@ function escapeHtml(value){
 }
 
 
-/* =========================================================
-   LANGUAGE
-========================================================= */
+/* ==========================================
+   ชื่อสำหรับแสดงผล
+   รหัสจริงใน Database ไม่ถูกเปลี่ยน
+========================================== */
 
-function getLanguage(){
+function courseDisplayNameFromCode(code){
 
-  return localStorage.getItem(
-    LANGUAGE_KEY
-  ) || "th";
+  const value =
+    String(code || "").toUpperCase();
 
-}
-
-function setLanguage(lang){
-
-  localStorage.setItem(
-    LANGUAGE_KEY,
-    lang
-  );
-
-  document.documentElement.lang =
-    lang;
-
-  document
-    .querySelectorAll("[data-th]")
-    .forEach(el=>{
-
-      el.textContent =
-        lang==="th"
-        ? el.dataset.th
-        : el.dataset.en;
-
-    });
-
-  document
-    .getElementById("thBtn")
-    .classList
-    .toggle("active",lang==="th");
-
-  document
-    .getElementById("enBtn")
-    .classList
-    .toggle("active",lang==="en");
-
-  renderBatches();
-
-  if(selectedBatch){
-    renderSelectedBatch();
-    renderRows();
+  if(value.includes("BOCHO")){
+    return "บุคลากรเฉพาะ (บฉ.)";
   }
 
+  if(value.includes("WASTE")){
+    return "ผู้ควบคุมกากอุตสาหกรรม";
+  }
+
+  if(value.includes("WATER")){
+    return "ผู้ควบคุมระบบบำบัดมลพิษน้ำ";
+  }
+
+  if(value.includes("AIR")){
+    return "ผู้ควบคุมระบบบำบัดมลพิษอากาศ";
+  }
+
+  if(value.includes("RSO")){
+    return "เจ้าหน้าที่ความปลอดภัยทางรังสี ระดับต้น";
+  }
+
+  return "";
+}
+
+function batchDisplayName(batch){
+
+  if(!batch){
+    return "-";
+  }
+
+  const original =
+    String(batch.batch_name || "");
+
+  /*
+    ชุดทดสอบปัจจุบัน
+  */
+
+  if(
+    original.toUpperCase()
+      .includes("BOCHO TEST IMPORT 4 QUESTIONS")
+  ){
+    return "ทดสอบนำเข้าข้อสอบ — บุคลากรเฉพาะ (บฉ.) จำนวน 4 ข้อ";
+  }
+
+  /*
+    หากชื่อ Batch มีรหัสหลักสูตร
+    จะแปลงรหัสเป็นชื่อภาษาไทยสำหรับแสดงผล
+  */
+
+  const courseName =
+    courseDisplayNameFromCode(original);
+
+  if(courseName){
+
+    const total =
+      Number(batch.total_rows || 0);
+
+    return total > 0
+      ? `${courseName} — จำนวน ${total} ข้อ`
+      : courseName;
+  }
+
+  return original || "ชุดข้อมูลข้อสอบ";
+}
+
+function setDisplayName(code){
+
+  const value =
+    String(code || "");
+
+  const match =
+    value.match(/SET[-_ ]?0?(\d+)/i);
+
+  if(match){
+    return `ชุดข้อสอบที่ ${Number(match[1])}`;
+  }
+
+  return "ชุดข้อสอบ";
+}
+
+function questionTypeThai(type){
+
+  const value =
+    String(type || "").toUpperCase();
+
+  if(value==="SINGLE_CHOICE"){
+    return "เลือกคำตอบเดียว";
+  }
+
+  if(value==="MULTIPLE_CHOICE"){
+    return "เลือกได้หลายคำตอบ";
+  }
+
+  if(value==="TEXT"){
+    return "ตอบเป็นข้อความ";
+  }
+
+  return value || "-";
+}
+
+function statusThai(status){
+
+  const value =
+    String(status || "").toUpperCase();
+
+  const map = {
+    "DRAFT":"รอตรวจสอบ",
+    "PENDING":"รอตรวจสอบ",
+    "VALID":"ผ่าน",
+    "VALIDATED":"ผ่านการตรวจสอบ",
+    "INVALID":"พบปัญหา",
+    "HAS_ERRORS":"พบข้อผิดพลาด",
+    "IMPORTED":"นำเข้าแล้ว",
+    "CANCELLED":"ยกเลิก"
+  };
+
+  return map[value] || value || "-";
+}
+
+function statusBadge(status){
+
+  const value =
+    String(status || "DRAFT").toUpperCase();
+
+  let cssClass="pending";
+
+  if(
+    value==="VALIDATED" ||
+    value==="VALID"
+  ){
+    cssClass="validated";
+  }
+
+  if(
+    value==="HAS_ERRORS" ||
+    value==="INVALID"
+  ){
+    cssClass="error";
+  }
+
+  if(value==="IMPORTED"){
+    cssClass="imported";
+  }
+
+  return `
+    <span class="badge ${cssClass}">
+      ${escapeHtml(statusThai(value))}
+    </span>
+  `;
 }
 
 
-/* =========================================================
+/* ==========================================
    AUTH
-========================================================= */
+========================================== */
 
 function showAuthError(message){
 
@@ -1481,7 +1513,7 @@ async function verifyAdmin(){
     if(!window.supabase){
 
       throw new Error(
-        "ไม่สามารถโหลด Supabase Library ได้"
+        "ไม่สามารถเชื่อมต่อระบบเข้าสู่ระบบได้"
       );
 
     }
@@ -1500,7 +1532,7 @@ async function verifyAdmin(){
         }
       );
 
-    let session = null;
+    let session=null;
 
     for(let i=0;i<5;i++){
 
@@ -1508,15 +1540,14 @@ async function verifyAdmin(){
         await withTimeout(
           sb.auth.getSession(),
           5000,
-          "Session timeout"
+          "การตรวจสอบสถานะเข้าสู่ระบบใช้เวลานานเกินไป"
         );
 
       if(result.error){
         throw result.error;
       }
 
-      session =
-        result.data.session;
+      session=result.data.session;
 
       if(session){
         break;
@@ -1527,7 +1558,7 @@ async function verifyAdmin(){
 
     if(!session){
 
-      window.location.replace(
+      location.replace(
         "./admin-login.html"
       );
 
@@ -1538,7 +1569,7 @@ async function verifyAdmin(){
       await withTimeout(
         sb.auth.getUser(),
         6000,
-        "ตรวจสอบบัญชีใช้เวลานานเกินไป"
+        "การตรวจสอบบัญชีใช้เวลานานเกินไป"
       );
 
     if(userResult.error){
@@ -1547,7 +1578,7 @@ async function verifyAdmin(){
 
     if(!userResult.data.user){
 
-      window.location.replace(
+      location.replace(
         "./admin-login.html"
       );
 
@@ -1561,22 +1592,23 @@ async function verifyAdmin(){
       await withTimeout(
         sb.rpc("is_staff"),
         6000,
-        "ตรวจสอบสิทธิ์ Admin ใช้เวลานานเกินไป"
+        "การตรวจสอบสิทธิ์ผู้ดูแลระบบใช้เวลานานเกินไป"
       );
 
     if(permissionResult.error){
 
       throw new Error(
-        "ตรวจสอบสิทธิ์ Admin ไม่สำเร็จ: "
+        "ไม่สามารถตรวจสอบสิทธิ์ผู้ดูแลระบบได้: "
         +
         permissionResult.error.message
       );
+
     }
 
     if(permissionResult.data !== true){
 
       showAuthError(
-        "บัญชีนี้ไม่มีสิทธิ์ Staff/Admin"
+        "บัญชีนี้ไม่มีสิทธิ์เข้าใช้งานระบบผู้ดูแล"
       );
 
       return;
@@ -1584,7 +1616,7 @@ async function verifyAdmin(){
 
     const email =
       currentUser.email ||
-      "SANTE Admin";
+      "ผู้ดูแลระบบ";
 
     document
       .getElementById("userEmail")
@@ -1621,40 +1653,9 @@ async function verifyAdmin(){
 }
 
 
-/* =========================================================
-   STATUS
-========================================================= */
-
-function statusBadge(status){
-
-  const value =
-    String(status || "DRAFT").toUpperCase();
-
-  if(value==="VALIDATED"){
-
-    return `<span class="badge validated">VALIDATED</span>`;
-
-  }
-
-  if(value==="HAS_ERRORS"){
-
-    return `<span class="badge error">HAS ERRORS</span>`;
-
-  }
-
-  if(value==="IMPORTED"){
-
-    return `<span class="badge imported">IMPORTED</span>`;
-
-  }
-
-  return `<span class="badge pending">${escapeHtml(value)}</span>`;
-}
-
-
-/* =========================================================
+/* ==========================================
    LOAD BATCHES
-========================================================= */
+========================================== */
 
 async function loadBatches(){
 
@@ -1664,7 +1665,9 @@ async function loadBatches(){
     document.getElementById("batchList");
 
   list.innerHTML =
-    `<div class="empty">กำลังโหลด Import Batch...</div>`;
+    `<div class="empty">
+      กำลังโหลดชุดข้อมูลข้อสอบ...
+     </div>`;
 
   try{
 
@@ -1689,18 +1692,14 @@ async function loadBatches(){
     renderSummary();
     renderBatches();
 
-    /*
-      ถ้ามี BOCHO TEST IMPORT 4 QUESTIONS
-      ให้เลือกอัตโนมัติในครั้งแรก
-    */
-
     if(!selectedBatch){
 
       const testBatch =
         batches.find(
           item =>
-            item.batch_name ===
-            "BOCHO TEST IMPORT 4 QUESTIONS"
+            String(item.batch_name || "")
+              .toUpperCase()
+              .includes("BOCHO TEST IMPORT 4 QUESTIONS")
         );
 
       if(testBatch){
@@ -1710,21 +1709,26 @@ async function loadBatches(){
         );
 
       }
+      else if(batches.length){
 
-    }else{
+        await selectBatch(
+          batches[0].id
+        );
+
+      }
+
+    }
+    else{
 
       const refreshed =
         batches.find(
           item =>
-            item.id ===
-            selectedBatch.id
+            item.id===selectedBatch.id
         );
 
       if(refreshed){
 
-        selectedBatch =
-          refreshed;
-
+        selectedBatch=refreshed;
         renderSelectedBatch();
 
       }
@@ -1739,7 +1743,8 @@ async function loadBatches(){
 
     list.innerHTML =
       `<div class="empty">
-        โหลด Import Batch ไม่สำเร็จ<br>
+        ไม่สามารถโหลดชุดข้อมูลข้อสอบได้
+        <br>
         ${escapeHtml(error.message)}
        </div>`;
 
@@ -1748,9 +1753,9 @@ async function loadBatches(){
 }
 
 
-/* =========================================================
+/* ==========================================
    SUMMARY
-========================================================= */
+========================================== */
 
 function renderSummary(){
 
@@ -1763,36 +1768,35 @@ function renderSummary(){
     .getElementById("pendingCount")
     .textContent =
     batches.filter(
-      b =>
-        ["DRAFT"].includes(
-          String(b.import_status).toUpperCase()
-        )
+      batch =>
+        String(batch.import_status || "")
+          .toUpperCase()==="DRAFT"
     ).length;
 
   document
     .getElementById("validatedCount")
     .textContent =
     batches.filter(
-      b =>
-        String(b.import_status).toUpperCase()
-        === "VALIDATED"
+      batch =>
+        String(batch.import_status || "")
+          .toUpperCase()==="VALIDATED"
     ).length;
 
   document
     .getElementById("importedCount")
     .textContent =
     batches.filter(
-      b =>
-        String(b.import_status).toUpperCase()
-        === "IMPORTED"
+      batch =>
+        String(batch.import_status || "")
+          .toUpperCase()==="IMPORTED"
     ).length;
 
 }
 
 
-/* =========================================================
-   RENDER BATCHES
-========================================================= */
+/* ==========================================
+   RENDER BATCH LIST
+========================================== */
 
 function renderBatches(){
 
@@ -1803,7 +1807,7 @@ function renderBatches(){
 
     list.innerHTML =
       `<div class="empty">
-        ยังไม่มี Import Batch
+        ยังไม่มีชุดข้อมูลนำเข้าข้อสอบ
        </div>`;
 
     return;
@@ -1818,6 +1822,11 @@ function renderBatches(){
         ? "selected"
         : "";
 
+      const fileText =
+        batch.source_filename
+        ? `ไฟล์: ${escapeHtml(batch.source_filename)}`
+        : "ข้อมูลทดสอบในระบบ";
+
       return `
         <div
           class="batch ${selected}"
@@ -1826,13 +1835,13 @@ function renderBatches(){
           <div>
 
             <div class="batch-name">
-              ${escapeHtml(batch.batch_name)}
+              ${escapeHtml(batchDisplayName(batch))}
             </div>
 
             <div class="batch-meta">
-              ${escapeHtml(batch.source_filename || "Manual / Test Batch")}
+              ${fileText}
               ·
-              ${Number(batch.total_rows || 0)} rows
+              ${Number(batch.total_rows || 0)} ข้อ
             </div>
 
           </div>
@@ -1862,9 +1871,9 @@ function renderBatches(){
 }
 
 
-/* =========================================================
+/* ==========================================
    SELECT BATCH
-========================================================= */
+========================================== */
 
 async function selectBatch(batchId){
 
@@ -1888,9 +1897,9 @@ async function selectBatch(batchId){
 }
 
 
-/* =========================================================
+/* ==========================================
    SELECTED DETAIL
-========================================================= */
+========================================== */
 
 function renderSelectedBatch(){
 
@@ -1907,7 +1916,8 @@ function renderSelectedBatch(){
 
     document
       .getElementById("selectedName")
-      .textContent="-";
+      .textContent =
+      "ยังไม่ได้เลือกชุดข้อมูล";
 
     validateBtn.disabled=true;
     previewBtn.disabled=true;
@@ -1925,7 +1935,7 @@ function renderSelectedBatch(){
   document
     .getElementById("selectedName")
     .textContent =
-    selectedBatch.batch_name;
+    batchDisplayName(selectedBatch);
 
   document
     .getElementById("selectedStatus")
@@ -1964,9 +1974,9 @@ function renderSelectedBatch(){
 }
 
 
-/* =========================================================
-   LOAD ROWS
-========================================================= */
+/* ==========================================
+   LOAD QUESTIONS
+========================================== */
 
 async function loadRows(batchId){
 
@@ -1975,7 +1985,7 @@ async function loadRows(batchId){
 
   area.innerHTML =
     `<div class="empty">
-      กำลังโหลดข้อมูลข้อสอบ...
+      กำลังโหลดรายการข้อสอบ...
      </div>`;
 
   try{
@@ -2012,7 +2022,8 @@ async function loadRows(batchId){
 
     area.innerHTML =
       `<div class="empty">
-        โหลดข้อมูลข้อสอบไม่สำเร็จ<br>
+        ไม่สามารถโหลดรายการข้อสอบได้
+        <br>
         ${escapeHtml(error.message)}
        </div>`;
 
@@ -2021,9 +2032,9 @@ async function loadRows(batchId){
 }
 
 
-/* =========================================================
-   RENDER ROWS
-========================================================= */
+/* ==========================================
+   RENDER QUESTIONS
+========================================== */
 
 function renderRows(){
 
@@ -2034,7 +2045,7 @@ function renderRows(){
 
     area.innerHTML =
       `<div class="empty">
-        เลือก Batch เพื่อดูข้อมูลข้อสอบ
+        เลือกชุดข้อมูลเพื่อดูรายการข้อสอบ
        </div>`;
 
     return;
@@ -2044,7 +2055,7 @@ function renderRows(){
 
     area.innerHTML =
       `<div class="empty">
-        Batch นี้ไม่มีข้อมูลข้อสอบ
+        ชุดข้อมูลนี้ยังไม่มีข้อสอบ
        </div>`;
 
     return;
@@ -2057,13 +2068,12 @@ function renderRows(){
 
         <thead>
           <tr>
-            <th>Row</th>
-            <th>Set</th>
-            <th>Code</th>
-            <th>Type</th>
-            <th>Question</th>
-            <th>Answer</th>
-            <th>Status</th>
+            <th>ลำดับ</th>
+            <th>ชุดข้อสอบ</th>
+            <th>ประเภท</th>
+            <th>คำถาม</th>
+            <th>คำตอบที่ถูกต้อง</th>
+            <th>สถานะ</th>
           </tr>
         </thead>
 
@@ -2071,8 +2081,9 @@ function renderRows(){
 
           ${currentRows.map(row=>{
 
-            let answer =
-              row.question_type==="TEXT"
+            const answer =
+              String(row.question_type || "")
+                .toUpperCase()==="TEXT"
               ? row.accepted_text_answers
               : row.correct_answer;
 
@@ -2085,7 +2096,11 @@ function renderRows(){
             ){
 
               errorText =
-                `<div style="color:#b12631;margin-top:4px">
+                `<div style="
+                    color:#b12631;
+                    margin-top:5px;
+                    font-size:11px;
+                  ">
                   ${escapeHtml(
                     row.validation_errors.join(", ")
                   )}
@@ -2101,19 +2116,25 @@ function renderRows(){
                 </td>
 
                 <td>
-                  ${escapeHtml(row.exam_set_code || "-")}
+                  ${escapeHtml(
+                    setDisplayName(
+                      row.exam_set_code
+                    )
+                  )}
                 </td>
 
                 <td>
-                  ${escapeHtml(row.question_code || "-")}
-                </td>
-
-                <td>
-                  ${escapeHtml(row.question_type || "-")}
+                  ${escapeHtml(
+                    questionTypeThai(
+                      row.question_type
+                    )
+                  )}
                 </td>
 
                 <td class="question">
-                  ${escapeHtml(row.question_text || "-")}
+                  ${escapeHtml(
+                    row.question_text || "-"
+                  )}
                   ${errorText}
                 </td>
 
@@ -2142,9 +2163,9 @@ function renderRows(){
 }
 
 
-/* =========================================================
+/* ==========================================
    MESSAGE
-========================================================= */
+========================================== */
 
 function clearMessage(){
 
@@ -2170,15 +2191,18 @@ function showMessage(type,message){
 }
 
 
-/* =========================================================
+/* ==========================================
    VALIDATE
-========================================================= */
+========================================== */
 
 async function validateBatch(){
 
   if(!selectedBatch){
     return;
   }
+
+  const batchId =
+    selectedBatch.id;
 
   const btn =
     document.getElementById("validateBtn");
@@ -2189,9 +2213,7 @@ async function validateBatch(){
 
   showMessage(
     "info",
-    getLanguage()==="th"
-      ? "กำลังตรวจสอบข้อมูลข้อสอบ..."
-      : "Validating question data..."
+    "กำลังตรวจสอบความถูกต้องของข้อมูลข้อสอบ..."
   );
 
   try{
@@ -2200,8 +2222,7 @@ async function validateBatch(){
       await sb.rpc(
         "validate_question_import_batch",
         {
-          p_batch_id:
-            selectedBatch.id
+          p_batch_id:batchId
         }
       );
 
@@ -2211,16 +2232,12 @@ async function validateBatch(){
 
     showMessage(
       "success",
-      getLanguage()==="th"
-        ? "ตรวจสอบข้อมูลเรียบร้อยแล้ว"
-        : "Validation completed."
+      "ตรวจสอบข้อมูลเรียบร้อยแล้ว"
     );
 
     await loadBatches();
 
-    await selectBatch(
-      selectedBatch.id
-    );
+    await selectBatch(batchId);
 
   }
 
@@ -2230,7 +2247,7 @@ async function validateBatch(){
 
     showMessage(
       "error",
-      "Validate ไม่สำเร็จ: "
+      "ตรวจสอบข้อมูลไม่สำเร็จ: "
       +
       error.message
     );
@@ -2243,7 +2260,7 @@ async function validateBatch(){
 
       const status =
         String(
-          selectedBatch.import_status
+          selectedBatch.import_status || ""
         ).toUpperCase();
 
       btn.disabled =
@@ -2256,9 +2273,9 @@ async function validateBatch(){
 }
 
 
-/* =========================================================
+/* ==========================================
    PREVIEW
-========================================================= */
+========================================== */
 
 async function previewBatch(){
 
@@ -2270,9 +2287,7 @@ async function previewBatch(){
 
   showMessage(
     "info",
-    getLanguage()==="th"
-      ? "กำลังโหลด Preview..."
-      : "Loading preview..."
+    "กำลังเตรียมตัวอย่างข้อสอบ..."
   );
 
   try{
@@ -2290,29 +2305,18 @@ async function previewBatch(){
       throw result.error;
     }
 
-    /*
-      RPC preview อาจคืนข้อมูลในรูปแบบต่างจาก staging
-      รอบนี้แสดงจำนวนรายการที่ RPC ส่งกลับ
-      และ staging table ด้านล่างยังคงแสดงข้อมูลเต็ม
-    */
+    let count=0;
 
-    const preview =
-      result.data;
-
-    let count = 0;
-
-    if(Array.isArray(preview)){
-      count=preview.length;
+    if(Array.isArray(result.data)){
+      count=result.data.length;
     }
-    else if(preview){
+    else if(result.data){
       count=1;
     }
 
     showMessage(
       "success",
-      getLanguage()==="th"
-        ? `Preview สำเร็จ — ระบบคืนข้อมูล ${count} รายการ`
-        : `Preview successful — ${count} item(s) returned`
+      `แสดงตัวอย่างเรียบร้อยแล้ว จำนวน ${count} รายการ`
     );
 
     document
@@ -2330,7 +2334,7 @@ async function previewBatch(){
 
     showMessage(
       "error",
-      "Preview ไม่สำเร็จ: "
+      "ไม่สามารถแสดงตัวอย่างได้: "
       +
       error.message
     );
@@ -2340,9 +2344,9 @@ async function previewBatch(){
 }
 
 
-/* =========================================================
+/* ==========================================
    IMPORT
-========================================================= */
+========================================== */
 
 function openImportConfirm(){
 
@@ -2353,7 +2357,7 @@ function openImportConfirm(){
   document
     .getElementById("confirmBatchName")
     .textContent =
-    selectedBatch.batch_name;
+    batchDisplayName(selectedBatch);
 
   document
     .getElementById("importModal")
@@ -2390,9 +2394,7 @@ async function importBatch(){
 
   showMessage(
     "info",
-    getLanguage()==="th"
-      ? "กำลังนำเข้าข้อสอบเข้าสู่คลังข้อสอบ..."
-      : "Importing questions into the question bank..."
+    "กำลังนำข้อสอบเข้าสู่คลังข้อสอบ..."
   );
 
   try{
@@ -2401,8 +2403,7 @@ async function importBatch(){
       await sb.rpc(
         "import_question_batch",
         {
-          p_batch_id:
-            batchId
+          p_batch_id:batchId
         }
       );
 
@@ -2412,16 +2413,12 @@ async function importBatch(){
 
     showMessage(
       "success",
-      getLanguage()==="th"
-        ? "นำเข้าข้อสอบเข้าสู่คลังข้อสอบเรียบร้อยแล้ว"
-        : "Questions imported successfully."
+      "นำข้อสอบเข้าสู่คลังข้อสอบเรียบร้อยแล้ว"
     );
 
     await loadBatches();
 
-    await selectBatch(
-      batchId
-    );
+    await selectBatch(batchId);
 
   }
 
@@ -2431,7 +2428,7 @@ async function importBatch(){
 
     showMessage(
       "error",
-      "Import ไม่สำเร็จ: "
+      "นำเข้าข้อสอบไม่สำเร็จ: "
       +
       error.message
     );
@@ -2441,9 +2438,9 @@ async function importBatch(){
 }
 
 
-/* =========================================================
+/* ==========================================
    EVENTS
-========================================================= */
+========================================== */
 
 document
   .getElementById("validateBtn")
@@ -2502,20 +2499,6 @@ document
   );
 
 document
-  .getElementById("thBtn")
-  .addEventListener(
-    "click",
-    ()=>setLanguage("th")
-  );
-
-document
-  .getElementById("enBtn")
-  .addEventListener(
-    "click",
-    ()=>setLanguage("en")
-  );
-
-document
   .getElementById("retryBtn")
   .addEventListener(
     "click",
@@ -2542,7 +2525,7 @@ document
           await withTimeout(
             sb.auth.signOut(),
             5000,
-            "Logout timeout"
+            "ออกจากระบบใช้เวลานานเกินไป"
           );
 
         }
@@ -2560,7 +2543,9 @@ document
   );
 
 
-/* MOBILE */
+/* ==========================================
+   MOBILE
+========================================== */
 
 const sidebar =
   document.getElementById("sidebar");
@@ -2601,7 +2586,9 @@ overlay.addEventListener(
 );
 
 
-/* COMING SOON */
+/* ==========================================
+   COMING SOON
+========================================== */
 
 document
   .querySelectorAll("[data-coming]")
@@ -2612,9 +2599,7 @@ document
       ()=>{
 
         alert(
-          getLanguage()==="th"
-          ? "โมดูลนี้กำลังพัฒนา"
-          : "This module is under development"
+          "เมนูนี้กำลังอยู่ระหว่างการพัฒนา"
         );
 
       }
@@ -2623,7 +2608,9 @@ document
   });
 
 
-/* CLOSE MODAL */
+/* ==========================================
+   MODAL BACKDROP
+========================================== */
 
 document
   .getElementById("importModal")
@@ -2632,8 +2619,7 @@ document
     event=>{
 
       if(
-        event.target.id ===
-        "importModal"
+        event.target.id==="importModal"
       ){
         closeImportConfirm();
       }
@@ -2642,15 +2628,9 @@ document
   );
 
 
-/* =========================================================
+/* ==========================================
    START
-========================================================= */
-
-setLanguage(
-  localStorage.getItem(
-    LANGUAGE_KEY
-  ) || "th"
-);
+========================================== */
 
 verifyAdmin();
 
