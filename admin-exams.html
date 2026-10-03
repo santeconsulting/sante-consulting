@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SANTE SYSTEM | ข้อสอบและผลสอบ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--navy:#062e5b;--navy-dark:#031f3d;--navy-light:#084276;--yellow:#ffc400;--white:#fff;--bg:#f5f7fa;--gray:#66778a;--line:#dce4ec;--green:#17ad61;--red:#c73543;--blue-soft:#edf4fb}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:"Prompt",sans-serif;background:var(--bg);color:var(--navy)}button,input,select{font:inherit}
+.auth-gate{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--navy-dark),var(--navy-light))}
+.auth-box{width:min(450px,90%);padding:38px;text-align:center;border-radius:22px;background:#fff;box-shadow:0 25px 60px #0003}.auth-box h1{margin:0;font-size:34px}.auth-box h1 span{color:var(--yellow)}.auth-box p{color:var(--gray)}
+.spinner{width:42px;height:42px;margin:24px auto 0;border:5px solid #e5ebf0;border-top-color:var(--yellow);border-radius:50%;animation:spin .7s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}.auth-error{display:none;margin-top:17px;padding:12px;border-radius:10px;color:var(--red);background:#fff0f1}
+.app{display:none;min-height:100vh}.sidebar{position:fixed;left:0;top:0;bottom:0;z-index:50;width:296px;padding:18px 14px;overflow-y:auto;color:#fff;background:radial-gradient(circle at 15% 10%,#0b4d87 0,transparent 30%),linear-gradient(180deg,#073764,#03274c)}
+.brand{height:76px;display:flex;align-items:center;gap:12px;padding:0 14px 17px;border-bottom:1px solid #ffffff1a}.brand img{width:60px;height:60px;object-fit:contain}.brand-name{font-size:26px;font-weight:700;line-height:1}.brand-sub{margin-top:7px;font-size:11px}.group{padding:19px 14px 8px;color:#ffffff99;font-size:13px}.nav{display:flex;flex-direction:column;gap:4px}
+.nav-btn{width:100%;min-height:47px;padding:10px 13px;border:0;border-radius:10px;display:flex;align-items:center;gap:12px;text-align:left;color:#fff;background:transparent;cursor:pointer;font-size:15px;font-weight:500}.nav-btn:hover{background:#ffffff14}.nav-btn.active{color:var(--navy);background:var(--yellow);font-weight:600}.nav-icon{width:28px;text-align:center;font-size:20px}
+.main{margin-left:296px;min-height:100vh}.topbar{position:sticky;top:0;z-index:30;height:72px;padding:0 24px;display:flex;align-items:center;justify-content:space-between;background:#fff;border-bottom:1px solid var(--line)}.top-left,.top-right{display:flex;align-items:center;gap:14px}.mobile-menu{display:none;border:0;background:none;color:var(--navy);font-size:28px;cursor:pointer}.breadcrumb{color:var(--gray);font-size:14px}.breadcrumb strong{color:var(--navy)}.avatar{width:42px;height:42px;display:grid;place-items:center;border-radius:50%;color:var(--yellow);background:var(--navy);font-weight:700}.user{color:var(--gray);font-size:12px}.user strong{display:block;color:var(--navy);font-size:13px}.logout{border:0;color:#b83e48;background:none;cursor:pointer}
+.content{max-width:1500px;margin:auto;padding:24px}.page-header{margin-bottom:18px;padding:26px 28px;display:flex;align-items:center;justify-content:space-between;gap:20px;border-radius:17px;color:#fff;background:radial-gradient(circle at 90% 20%,#0c4b84 0,transparent 28%),linear-gradient(120deg,#052b55,#073d70)}.page-header h1{margin:0;font-size:30px}.page-header h1 span{color:var(--yellow)}.page-header p{margin:7px 0 0;color:#ffffffd1;font-size:14px}.page-badge{padding:9px 16px;border-radius:30px;color:var(--navy);background:var(--yellow);font-size:12px;font-weight:700}
+.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-bottom:16px}.summary-card{min-height:108px;padding:17px;display:flex;align-items:center;gap:14px;border:1px solid var(--line);border-radius:14px;background:#fff}.summary-icon{width:53px;height:53px;display:grid;place-items:center;border-radius:12px;background:var(--blue-soft);font-size:24px}.summary-label{color:var(--gray);font-size:13px}.summary-value{margin-top:2px;font-size:25px;font-weight:700}
+.panel{margin-bottom:16px;padding:20px;border:1px solid var(--line);border-radius:14px;background:#fff}.panel-header{margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;gap:15px}.panel-header h2{margin:0;font-size:22px}.panel-header p{margin:4px 0 0;color:var(--gray);font-size:13px}.refresh{border:1px solid var(--line);padding:9px 14px;border-radius:9px;color:var(--navy);background:#fff;cursor:pointer;font-weight:500}
+.filters{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:10px;margin-bottom:14px}.filters input,.filters select{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:9px;background:#fff;color:var(--navy)}
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px}table{width:100%;min-width:980px;border-collapse:collapse}th{padding:12px;text-align:left;color:#fff;background:var(--navy);font-size:12px;font-weight:500}td{padding:12px;border-bottom:1px solid #edf0f3;vertical-align:top;font-size:12px}tbody tr:hover{background:#fafcfe}
+.badge{display:inline-flex;padding:5px 9px;border-radius:20px;font-size:11px;font-weight:600}.badge.active{color:#087744;background:#eaf9f1}.badge.inactive{color:#ad2632;background:#fff0f1}.view-btn{border:0;padding:7px 11px;border-radius:8px;color:var(--navy);background:#e8f0f8;cursor:pointer;font-weight:600}
+.set-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.set-card{padding:16px;border:1px solid var(--line);border-radius:12px;background:#fafbfd}.set-card h3{margin:0 0 8px;font-size:16px}.set-meta{color:var(--gray);font-size:12px;line-height:1.9}.progress{height:8px;margin-top:10px;border-radius:20px;background:#e5ebf0;overflow:hidden}.progress span{display:block;height:100%;background:var(--yellow)}.empty{padding:32px;text-align:center;color:var(--gray)}
+.message{display:none;margin-bottom:14px;padding:13px 15px;border-radius:10px;font-size:13px}.message.error{display:block;color:#a8222d;background:#fff0f1}.message.info{display:block;color:#145b9c;background:#eaf4ff}.overlay{display:none}
+@media(max-width:1100px){.summary{grid-template-columns:repeat(2,1fr)}.set-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:850px){.sidebar{transform:translateX(-100%);transition:.2s}.sidebar.open{transform:none}.overlay.show{display:block;position:fixed;inset:0;z-index:40;background:#0007}.main{margin-left:0}.mobile-menu{display:block}.user{display:none}.filters{grid-template-columns:1fr}}
+@media(max-width:600px){.topbar{padding:0 12px}.breadcrumb{display:none}.content{padding:13px}.page-header{padding:20px}.page-header h1{font-size:24px}.page-badge{display:none}.summary{grid-template-columns:1fr 1fr}.set-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="auth-gate" id="authGate"><div class="auth-box"><h1>SANTE <span>SYSTEM</span></h1><p>กำลังตรวจสอบสิทธิ์ผู้ดูแลระบบ</p><div class="spinner"></div><div class="auth-error" id="authError"></div></div></div>
+<div class="overlay" id="overlay"></div>
+<div class="app" id="app">
+<aside class="sidebar" id="sidebar">
+<div class="brand"><img src="./SANTE-logo.png" alt="SANTE"><div><div class="brand-name">ซานเต้</div><div class="brand-sub">SANTE CONSULTING</div></div></div>
+<div class="group">ภาพรวม</div><div class="nav"><button class="nav-btn" onclick="location.href='./admin.html'"><span class="nav-icon">⌂</span><span>แดชบอร์ด</span></button></div>
+<div class="group">การอบรมและการเรียนรู้</div><div class="nav">
+<button class="nav-btn" data-coming><span class="nav-icon">♟</span><span>สมาชิก</span></button>
+<button class="nav-btn" onclick="location.href='./admin-courses.html'"><span class="nav-icon">▣</span><span>หลักสูตร</span></button>
+<button class="nav-btn" onclick="location.href='./admin-training-sessions.html'"><span class="nav-icon">◷</span><span>รอบการอบรม</span></button>
+<button class="nav-btn" onclick="location.href='./admin-question-import.html'"><span class="nav-icon">▤</span><span>คลังข้อสอบ / นำเข้าข้อสอบ</span></button>
+<button class="nav-btn active"><span class="nav-icon">☑</span><span>ข้อสอบและผลสอบ</span></button>
+<button class="nav-btn" data-coming><span class="nav-icon">▣</span><span>วุฒิบัตร</span></button>
+</div>
+<div class="group">งานบริการ</div><div class="nav"><button class="nav-btn" data-coming><span class="nav-icon">◆</span><span>บริการ</span></button><button class="nav-btn" data-coming><span class="nav-icon">▤</span><span>ใบเสนอราคา</span></button><button class="nav-btn" data-coming><span class="nav-icon">▧</span><span>งานบริการ</span></button></div>
+</aside>
+<div class="main">
+<header class="topbar"><div class="top-left"><button class="mobile-menu" id="mobileMenu">☰</button><div class="breadcrumb">SANTE SYSTEM / <strong>ข้อสอบและผลสอบ</strong></div></div><div class="top-right"><div class="avatar" id="avatar">S</div><div class="user"><strong id="userEmail">-</strong><span>ผู้ดูแลระบบ</span></div><button class="logout" id="logoutBtn">ออกจากระบบ</button></div></header>
+<main class="content">
+<section class="page-header"><div><h1><span>ข้อสอบ</span> และผลสอบ</h1><p>ตรวจสอบข้อสอบ ชุดข้อสอบ จำนวนข้อ และผลการทำข้อสอบของผู้เรียน</p></div><div class="page-badge">ระบบจัดการข้อสอบ</div></section>
+<section class="summary">
+<div class="summary-card"><div class="summary-icon">☑</div><div><div class="summary-label">ข้อสอบทั้งหมด</div><div class="summary-value" id="examCount">-</div></div></div>
+<div class="summary-card"><div class="summary-icon">▤</div><div><div class="summary-label">ชุดข้อสอบทั้งหมด</div><div class="summary-value" id="setCount">-</div></div></div>
+<div class="summary-card"><div class="summary-icon">✎</div><div><div class="summary-label">ทำข้อสอบทั้งหมด</div><div class="summary-value" id="attemptCount">-</div></div></div>
+<div class="summary-card"><div class="summary-icon">✓</div><div><div class="summary-label">สอบผ่าน</div><div class="summary-value" id="passCount">-</div></div></div>
+</section>
+<div class="message" id="messageBox"></div>
+<section class="panel">
+<div class="panel-header"><div><h2>รายการข้อสอบ</h2><p>เลือกข้อสอบเพื่อดูชุดข้อสอบและข้อมูลการทำข้อสอบ</p></div><button class="refresh" id="refreshBtn">↻ รีเฟรชข้อมูล</button></div>
+<div class="filters"><input id="searchInput" placeholder="ค้นหาชื่อข้อสอบหรือหลักสูตร"><select id="courseFilter"><option value="">ทุกหลักสูตร</option></select><select id="statusFilter"><option value="">ทุกสถานะ</option><option value="true">เปิดใช้งาน</option><option value="false">ปิดใช้งาน</option></select></div>
+<div id="examArea"><div class="empty">กำลังโหลดข้อมูล...</div></div>
+</section>
+<section class="panel">
+<div class="panel-header"><div><h2 id="setTitle">ชุดข้อสอบ</h2><p>จำนวนข้อจริงเทียบกับจำนวนข้อที่กำหนดไว้ในแต่ละชุด</p></div></div>
+<div class="set-grid" id="setArea"><div class="empty">เลือกข้อสอบจากรายการด้านบน</div></div>
+</section>
+</main></div></div>
+<script>
+const SUPABASE_URL="https://cyegjwerxlxhczrfiurz.supabase.co";
+const SUPABASE_KEY="sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF";
+const AUTH_STORAGE_KEY="sante-admin-auth";
+let sb=null,currentUser=null,courses=[],exams=[],sets=[],attempts=[],setQuestionCounts={};
+const el=id=>document.getElementById(id);
+const esc=v=>String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
+function showMessage(type,msg){el("messageBox").className="message "+type;el("messageBox").textContent=msg}
+function clearMessage(){el("messageBox").className="message";el("messageBox").textContent=""}
+function courseName(id){const c=courses.find(x=>x.id===id);return c?.course_name_th||c?.course_code||"ไม่ระบุหลักสูตร"}
+async function verifyAdmin(){
+ try{
+  if(!window.supabase)throw new Error("ไม่สามารถเชื่อมต่อระบบเข้าสู่ระบบได้");
+  sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{storageKey:AUTH_STORAGE_KEY,persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+  const s=await sb.auth.getSession();if(s.error)throw s.error;if(!s.data.session){location.replace("./admin-login.html");return}
+  const u=await sb.auth.getUser();if(u.error)throw u.error;if(!u.data.user){location.replace("./admin-login.html");return}
+  currentUser=u.data.user;
+  const p=await sb.rpc("is_staff");if(p.error)throw p.error;if(p.data!==true)throw new Error("บัญชีนี้ไม่มีสิทธิ์เข้าใช้งานระบบผู้ดูแล");
+  const email=currentUser.email||"ผู้ดูแลระบบ";el("userEmail").textContent=email;el("avatar").textContent=email.charAt(0).toUpperCase();
+  el("authGate").style.display="none";el("app").style.display="block";await loadAll();
+ }catch(error){console.error(error);el("authError").style.display="block";el("authError").textContent=error.message||"เกิดข้อผิดพลาดในการตรวจสอบสิทธิ์"}
+}
+async function loadAll(){
+ clearMessage();showMessage("info","กำลังโหลดข้อมูลข้อสอบ...");
+ try{
+  const [c,e,s,a,q]=await Promise.all([
+   sb.from("courses").select("id,course_code,course_name_th,sort_order").order("sort_order",{ascending:true}),
+   sb.from("exams").select("id,course_id,exam_code,exam_name_th,exam_name_en,exam_type,pass_percentage,time_limit_minutes,max_attempts,show_correct_answers,show_explanation,is_active,created_at").order("created_at",{ascending:false}),
+   sb.from("exam_sets").select("id,exam_id,set_code,set_name,set_number,expected_question_count,sort_order,is_active").order("sort_order",{ascending:true}),
+   sb.from("exam_attempts").select("id,exam_id,exam_set_id,attempt_status,percentage,passed,submitted_at,created_at"),
+   sb.from("exam_set_questions").select("exam_set_id")
+  ]);
+  for(const r of [c,e,s,a,q])if(r.error)throw r.error;
+  courses=c.data||[];exams=e.data||[];sets=s.data||[];attempts=a.data||[];
+  setQuestionCounts={};(q.data||[]).forEach(row=>{setQuestionCounts[row.exam_set_id]=(setQuestionCounts[row.exam_set_id]||0)+1});
+  renderCourseFilter();renderSummary();renderExams();clearMessage();
+ }catch(error){console.error(error);showMessage("error","ไม่สามารถโหลดข้อมูลได้: "+error.message);el("examArea").innerHTML='<div class="empty">ไม่สามารถโหลดรายการข้อสอบได้</div>'}
+}
+function renderCourseFilter(){
+ const old=el("courseFilter").value;
+ el("courseFilter").innerHTML='<option value="">ทุกหลักสูตร</option>'+courses.map(c=>`<option value="${esc(c.id)}">${esc(c.course_name_th||c.course_code)}</option>`).join("");
+ el("courseFilter").value=old;
+}
+function renderSummary(){el("examCount").textContent=exams.length;el("setCount").textContent=sets.length;el("attemptCount").textContent=attempts.length;el("passCount").textContent=attempts.filter(a=>a.passed===true).length}
+function renderExams(){
+ const term=el("searchInput").value.trim().toLowerCase(),courseId=el("courseFilter").value,status=el("statusFilter").value;
+ const filtered=exams.filter(exam=>{const text=((exam.exam_name_th||"")+" "+(exam.exam_code||"")+" "+courseName(exam.course_id)).toLowerCase();return(!term||text.includes(term))&&(!courseId||exam.course_id===courseId)&&(!status||String(exam.is_active)===status)});
+ if(!filtered.length){el("examArea").innerHTML='<div class="empty">ไม่พบรายการข้อสอบ</div>';return}
+ el("examArea").innerHTML=`<div class="table-wrap"><table><thead><tr><th>ข้อสอบ</th><th>หลักสูตร</th><th>เกณฑ์ผ่าน</th><th>ชุดข้อสอบ</th><th>ทำข้อสอบ</th><th>สอบผ่าน</th><th>สถานะ</th><th></th></tr></thead><tbody>${filtered.map(exam=>{
+  const examSets=sets.filter(s=>s.exam_id===exam.id),examAttempts=attempts.filter(a=>a.exam_id===exam.id),passed=examAttempts.filter(a=>a.passed===true).length;
+  return `<tr><td><strong>${esc(exam.exam_name_th||"ข้อสอบ")}</strong></td><td>${esc(courseName(exam.course_id))}</td><td>${Number(exam.pass_percentage||0)}%</td><td>${examSets.length} ชุด</td><td>${examAttempts.length} ครั้ง</td><td>${passed} ครั้ง</td><td><span class="badge ${exam.is_active?"active":"inactive"}">${exam.is_active?"เปิดใช้งาน":"ปิดใช้งาน"}</span></td><td><button class="view-btn" data-exam-id="${esc(exam.id)}">ดูชุดข้อสอบ</button></td></tr>`
+ }).join("")}</tbody></table></div>`;
+ document.querySelectorAll("[data-exam-id]").forEach(btn=>btn.addEventListener("click",()=>renderSets(btn.dataset.examId)));
+}
+function renderSets(examId){
+ const exam=exams.find(x=>x.id===examId);el("setTitle").textContent="ชุดข้อสอบ — "+(exam?.exam_name_th||"ข้อสอบ");
+ const list=sets.filter(s=>s.exam_id===examId).sort((a,b)=>(a.set_number||a.sort_order||0)-(b.set_number||b.sort_order||0));
+ if(!list.length){el("setArea").innerHTML='<div class="empty">ข้อสอบนี้ยังไม่มีชุดข้อสอบ</div>';return}
+ el("setArea").innerHTML=list.map(set=>{
+  const actual=setQuestionCounts[set.id]||0,expected=Number(set.expected_question_count||0),pct=expected?Math.min(100,Math.round(actual/expected*100)):0,setAttempts=attempts.filter(a=>a.exam_set_id===set.id),passed=setAttempts.filter(a=>a.passed===true).length;
+  return `<div class="set-card"><h3>${esc(set.set_name||("ชุดข้อสอบที่ "+(set.set_number||"")))}</h3><div class="set-meta">จำนวนข้อ: <strong>${actual} / ${expected||"-"}</strong><br>ทำข้อสอบแล้ว: <strong>${setAttempts.length}</strong> ครั้ง<br>สอบผ่าน: <strong>${passed}</strong> ครั้ง<br>สถานะ: <strong>${set.is_active?"เปิดใช้งาน":"ปิดใช้งาน"}</strong></div><div class="progress"><span style="width:${pct}%"></span></div></div>`
+ }).join("");
+}
+el("searchInput").addEventListener("input",renderExams);el("courseFilter").addEventListener("change",renderExams);el("statusFilter").addEventListener("change",renderExams);el("refreshBtn").addEventListener("click",loadAll);
+el("logoutBtn").addEventListener("click",async()=>{try{if(sb)await sb.auth.signOut()}catch(e){console.error(e)}location.replace("./admin-login.html")});
+document.querySelectorAll("[data-coming]").forEach(node=>node.addEventListener("click",()=>alert("เมนูนี้กำลังอยู่ระหว่างการพัฒนา")));
+const sidebar=el("sidebar"),overlay=el("overlay");el("mobileMenu").addEventListener("click",()=>{sidebar.classList.toggle("open");overlay.classList.toggle("show")});overlay.addEventListener("click",()=>{sidebar.classList.remove("open");overlay.classList.remove("show")});
+verifyAdmin();
+</script>
+</body>
+</html>
