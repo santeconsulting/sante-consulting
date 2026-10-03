@@ -1,0 +1,2660 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>SANTE SYSTEM | Question Import</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+:root{
+  --navy:#062e5b;
+  --navy-dark:#031f3d;
+  --navy-light:#084276;
+  --yellow:#ffc400;
+  --yellow-soft:#fff8da;
+  --white:#ffffff;
+  --bg:#f5f7fa;
+  --gray:#6c7b8d;
+  --line:#dfe6ee;
+  --green:#17ad61;
+  --green-soft:#eaf9f1;
+  --red:#c73543;
+  --red-soft:#fff0f1;
+  --orange:#d68b00;
+  --orange-soft:#fff5d9;
+  --blue-soft:#edf4fb;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html,body{
+  margin:0;
+  min-height:100%;
+  font-family:"Prompt",sans-serif;
+  background:var(--bg);
+  color:var(--navy);
+}
+
+button,select,input{
+  font:inherit;
+}
+
+/* ===============================
+   AUTH
+================================ */
+
+.auth-gate{
+  position:fixed;
+  inset:0;
+  z-index:9999;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:linear-gradient(135deg,var(--navy-dark),var(--navy-light));
+}
+
+.auth-box{
+  width:min(430px,90%);
+  padding:34px;
+  text-align:center;
+  border-radius:20px;
+  background:#fff;
+  box-shadow:0 25px 60px rgba(0,0,0,.22);
+}
+
+.auth-box h1{
+  margin:0;
+  font-size:32px;
+}
+
+.auth-box h1 span{
+  color:var(--yellow);
+}
+
+.auth-box p{
+  color:var(--gray);
+  font-size:13px;
+}
+
+.spinner{
+  width:40px;
+  height:40px;
+  margin:22px auto 0;
+  border:5px solid #e5ebf0;
+  border-top-color:var(--yellow);
+  border-radius:50%;
+  animation:spin .7s linear infinite;
+}
+
+@keyframes spin{
+  to{transform:rotate(360deg)}
+}
+
+.auth-error{
+  display:none;
+  margin-top:16px;
+  padding:11px;
+  border-radius:9px;
+  color:var(--red);
+  background:var(--red-soft);
+  font-size:12px;
+}
+
+.auth-actions{
+  display:none;
+  justify-content:center;
+  gap:8px;
+  margin-top:13px;
+}
+
+.auth-actions button{
+  border:0;
+  padding:9px 14px;
+  border-radius:8px;
+  cursor:pointer;
+}
+
+.retry{
+  background:var(--yellow);
+  color:var(--navy);
+  font-weight:600;
+}
+
+/* ===============================
+   APP
+================================ */
+
+.app{
+  display:none;
+  min-height:100vh;
+}
+
+/* ===============================
+   SIDEBAR
+================================ */
+
+.sidebar{
+  position:fixed;
+  left:0;
+  top:0;
+  bottom:0;
+  z-index:50;
+  width:296px;
+  padding:18px 14px;
+  overflow-y:auto;
+  color:#fff;
+  background:
+    radial-gradient(circle at 15% 10%,#0b4d87 0,transparent 30%),
+    linear-gradient(180deg,#073764,#03274c);
+}
+
+.brand{
+  height:74px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:0 14px 16px;
+  border-bottom:1px solid rgba(255,255,255,.1);
+}
+
+.brand img{
+  width:58px;
+  height:58px;
+  object-fit:contain;
+}
+
+.brand-name{
+  font-size:25px;
+  font-weight:700;
+  line-height:1;
+}
+
+.brand-sub{
+  margin-top:6px;
+  font-size:10px;
+}
+
+.group{
+  padding:18px 14px 7px;
+  color:rgba(255,255,255,.58);
+  font-size:12px;
+}
+
+.nav{
+  display:flex;
+  flex-direction:column;
+  gap:3px;
+}
+
+.nav-btn{
+  width:100%;
+  min-height:43px;
+  padding:10px 13px;
+  border:0;
+  border-radius:10px;
+  display:flex;
+  align-items:center;
+  gap:11px;
+  text-align:left;
+  color:#fff;
+  background:transparent;
+  cursor:pointer;
+  font-size:14px;
+}
+
+.nav-btn:hover{
+  background:rgba(255,255,255,.08);
+}
+
+.nav-btn.active{
+  color:var(--navy);
+  background:var(--yellow);
+  font-weight:600;
+}
+
+.nav-icon{
+  width:27px;
+  text-align:center;
+  font-size:18px;
+}
+
+.next{
+  margin-left:auto;
+  padding:3px 8px;
+  border-radius:20px;
+  color:var(--navy);
+  background:var(--yellow);
+  font-size:9px;
+  font-weight:700;
+}
+
+.nav-btn.active .next{
+  color:var(--yellow);
+  background:var(--navy);
+}
+
+.back-dashboard{
+  margin-top:25px;
+  padding:12px;
+  border:1px solid rgba(255,255,255,.15);
+  border-radius:11px;
+  color:#fff;
+  background:rgba(255,255,255,.04);
+  cursor:pointer;
+  text-align:center;
+  font-size:12px;
+}
+
+/* ===============================
+   MAIN
+================================ */
+
+.main{
+  margin-left:296px;
+  min-height:100vh;
+}
+
+.topbar{
+  position:sticky;
+  top:0;
+  z-index:30;
+  height:72px;
+  padding:0 22px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  background:#fff;
+  border-bottom:1px solid var(--line);
+}
+
+.top-left,
+.top-right{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.mobile-menu{
+  display:none;
+  border:0;
+  background:none;
+  color:var(--navy);
+  font-size:26px;
+  cursor:pointer;
+}
+
+.breadcrumb{
+  color:var(--gray);
+  font-size:12px;
+}
+
+.breadcrumb strong{
+  color:var(--navy);
+}
+
+.lang{
+  display:flex;
+  padding:3px;
+  border-radius:9px;
+  background:#f0f3f7;
+}
+
+.lang button{
+  border:0;
+  padding:7px 13px;
+  border-radius:7px;
+  color:var(--navy);
+  background:transparent;
+  cursor:pointer;
+}
+
+.lang button.active{
+  color:#fff;
+  background:var(--navy);
+}
+
+.avatar{
+  width:38px;
+  height:38px;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  color:var(--yellow);
+  background:var(--navy);
+  font-weight:700;
+}
+
+.user{
+  color:var(--gray);
+  font-size:10px;
+}
+
+.user strong{
+  display:block;
+  color:var(--navy);
+  font-size:11px;
+}
+
+.logout{
+  border:0;
+  color:#b63d45;
+  background:none;
+  cursor:pointer;
+}
+
+.content{
+  max-width:1500px;
+  margin:auto;
+  padding:22px;
+}
+
+/* ===============================
+   PAGE HEADER
+================================ */
+
+.page-header{
+  margin-bottom:16px;
+  padding:22px 25px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  border-radius:16px;
+  color:#fff;
+  background:
+    radial-gradient(circle at 90% 20%,#0c4b84 0,transparent 28%),
+    linear-gradient(120deg,#052b55,#073d70);
+}
+
+.page-header h1{
+  margin:0;
+  font-size:28px;
+}
+
+.page-header h1 span{
+  color:var(--yellow);
+}
+
+.page-header p{
+  margin:5px 0 0;
+  color:rgba(255,255,255,.78);
+  font-size:12px;
+}
+
+.step-badge{
+  flex:none;
+  padding:8px 13px;
+  border-radius:30px;
+  color:var(--navy);
+  background:var(--yellow);
+  font-size:11px;
+  font-weight:700;
+}
+
+/* ===============================
+   INFO CARDS
+================================ */
+
+.summary{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:11px;
+  margin-bottom:14px;
+}
+
+.summary-card{
+  min-height:95px;
+  padding:15px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:#fff;
+}
+
+.summary-icon{
+  width:46px;
+  height:46px;
+  flex:none;
+  display:grid;
+  place-items:center;
+  border-radius:11px;
+  color:var(--navy);
+  background:var(--blue-soft);
+  font-size:21px;
+}
+
+.summary-label{
+  color:var(--gray);
+  font-size:11px;
+}
+
+.summary-value{
+  margin-top:2px;
+  font-size:20px;
+  font-weight:700;
+}
+
+/* ===============================
+   PANEL
+================================ */
+
+.panel{
+  margin-bottom:14px;
+  padding:18px;
+  border:1px solid var(--line);
+  border-radius:13px;
+  background:#fff;
+}
+
+.panel-header{
+  margin-bottom:14px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+}
+
+.panel-header h2{
+  margin:0;
+  font-size:19px;
+}
+
+.panel-header p{
+  margin:3px 0 0;
+  color:var(--gray);
+  font-size:11px;
+}
+
+.refresh{
+  border:1px solid var(--line);
+  padding:8px 12px;
+  border-radius:8px;
+  color:var(--navy);
+  background:#fff;
+  cursor:pointer;
+}
+
+/* ===============================
+   BATCH
+================================ */
+
+.batch-list{
+  display:grid;
+  gap:9px;
+}
+
+.batch{
+  padding:13px 14px;
+  display:grid;
+  grid-template-columns:1fr auto;
+  align-items:center;
+  gap:10px;
+  border:1px solid var(--line);
+  border-radius:11px;
+  cursor:pointer;
+  transition:.15s;
+}
+
+.batch:hover{
+  border-color:#b9c7d5;
+}
+
+.batch.selected{
+  border:1.5px solid #e4b200;
+  background:#fffdf5;
+}
+
+.batch-name{
+  font-size:14px;
+  font-weight:600;
+}
+
+.batch-meta{
+  margin-top:4px;
+  color:var(--gray);
+  font-size:10px;
+}
+
+.badge{
+  display:inline-flex;
+  align-items:center;
+  padding:4px 8px;
+  border-radius:20px;
+  font-size:9px;
+  font-weight:600;
+}
+
+.badge.pending{
+  color:#996300;
+  background:var(--orange-soft);
+}
+
+.badge.validated{
+  color:#087744;
+  background:var(--green-soft);
+}
+
+.badge.error{
+  color:#ad2632;
+  background:var(--red-soft);
+}
+
+.badge.imported{
+  color:#145b9c;
+  background:#eaf4ff;
+}
+
+/* ===============================
+   SELECTED BATCH
+================================ */
+
+.selected-grid{
+  display:grid;
+  grid-template-columns:1.4fr .6fr;
+  gap:12px;
+}
+
+.batch-detail{
+  padding:15px;
+  border:1px solid var(--line);
+  border-radius:11px;
+  background:#fafbfd;
+}
+
+.batch-detail h3{
+  margin:0 0 10px;
+  font-size:16px;
+}
+
+.detail-row{
+  padding:6px 0;
+  display:flex;
+  justify-content:space-between;
+  gap:20px;
+  border-bottom:1px dashed #e1e6eb;
+  font-size:11px;
+}
+
+.detail-row:last-child{
+  border-bottom:0;
+}
+
+.detail-row span:first-child{
+  color:var(--gray);
+}
+
+.actions{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.action-btn{
+  width:100%;
+  min-height:43px;
+  padding:9px 12px;
+  border:0;
+  border-radius:9px;
+  cursor:pointer;
+  font-weight:600;
+}
+
+.validate-btn{
+  color:var(--navy);
+  background:var(--yellow);
+}
+
+.preview-btn{
+  color:var(--navy);
+  background:#e9f1f9;
+}
+
+.import-btn{
+  color:#fff;
+  background:var(--navy);
+}
+
+.action-btn:disabled{
+  opacity:.45;
+  cursor:not-allowed;
+}
+
+/* ===============================
+   MESSAGE
+================================ */
+
+.message{
+  display:none;
+  margin-top:12px;
+  padding:11px 13px;
+  border-radius:9px;
+  font-size:11px;
+  line-height:1.5;
+}
+
+.message.success{
+  display:block;
+  color:#087744;
+  background:var(--green-soft);
+}
+
+.message.error{
+  display:block;
+  color:#a8222d;
+  background:var(--red-soft);
+}
+
+.message.info{
+  display:block;
+  color:#145b9c;
+  background:#eaf4ff;
+}
+
+/* ===============================
+   TABLE
+================================ */
+
+.table-wrap{
+  overflow-x:auto;
+  border:1px solid var(--line);
+  border-radius:11px;
+}
+
+table{
+  width:100%;
+  min-width:900px;
+  border-collapse:collapse;
+}
+
+th{
+  padding:10px;
+  text-align:left;
+  color:#fff;
+  background:var(--navy);
+  font-size:10px;
+  font-weight:500;
+}
+
+td{
+  padding:10px;
+  border-bottom:1px solid #edf0f3;
+  vertical-align:top;
+  font-size:10px;
+}
+
+tbody tr:last-child td{
+  border-bottom:0;
+}
+
+tbody tr:hover{
+  background:#fafcfe;
+}
+
+.question{
+  min-width:280px;
+  font-size:11px;
+}
+
+.empty{
+  padding:28px;
+  text-align:center;
+  color:var(--gray);
+  font-size:12px;
+}
+
+/* ===============================
+   MODAL
+================================ */
+
+.modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:500;
+  padding:20px;
+  align-items:center;
+  justify-content:center;
+  background:rgba(0,20,40,.58);
+}
+
+.modal.show{
+  display:flex;
+}
+
+.modal-card{
+  width:min(620px,100%);
+  max-height:85vh;
+  overflow-y:auto;
+  padding:22px;
+  border-radius:15px;
+  background:#fff;
+  box-shadow:0 20px 60px rgba(0,0,0,.2);
+}
+
+.modal-card h2{
+  margin:0 0 8px;
+  font-size:20px;
+}
+
+.modal-card p{
+  color:var(--gray);
+  font-size:11px;
+}
+
+.modal-actions{
+  margin-top:18px;
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
+}
+
+.modal-actions button{
+  border:0;
+  padding:9px 15px;
+  border-radius:8px;
+  cursor:pointer;
+}
+
+.cancel{
+  color:var(--navy);
+  background:#edf1f5;
+}
+
+.confirm{
+  color:#fff;
+  background:var(--navy);
+}
+
+/* ===============================
+   MOBILE
+================================ */
+
+.overlay{
+  display:none;
+}
+
+@media(max-width:1100px){
+  .summary{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .selected-grid{
+    grid-template-columns:1fr;
+  }
+}
+
+@media(max-width:850px){
+  .sidebar{
+    transform:translateX(-100%);
+    transition:.2s;
+  }
+
+  .sidebar.open{
+    transform:none;
+  }
+
+  .overlay.show{
+    display:block;
+    position:fixed;
+    inset:0;
+    z-index:40;
+    background:rgba(0,0,0,.45);
+  }
+
+  .main{
+    margin-left:0;
+  }
+
+  .mobile-menu{
+    display:block;
+  }
+
+  .user{
+    display:none;
+  }
+}
+
+@media(max-width:600px){
+  .topbar{
+    padding:0 10px;
+  }
+
+  .breadcrumb{
+    display:none;
+  }
+
+  .content{
+    padding:12px;
+  }
+
+  .page-header{
+    padding:18px;
+  }
+
+  .page-header h1{
+    font-size:22px;
+  }
+
+  .step-badge{
+    display:none;
+  }
+
+  .summary{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .summary-value{
+    font-size:17px;
+  }
+
+  .batch{
+    grid-template-columns:1fr;
+  }
+
+  .lang button{
+    padding:6px 8px;
+  }
+
+  .logout{
+    font-size:10px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- AUTH -->
+
+<div class="auth-gate" id="authGate">
+  <div class="auth-box">
+    <h1>SANTE <span>SYSTEM</span></h1>
+    <p data-th="กำลังตรวจสอบสิทธิ์ผู้ดูแลระบบ"
+       data-en="Checking administrator access">
+      กำลังตรวจสอบสิทธิ์ผู้ดูแลระบบ
+    </p>
+
+    <div class="spinner" id="spinner"></div>
+    <div class="auth-error" id="authError"></div>
+
+    <div class="auth-actions" id="authActions">
+      <button class="retry" id="retryBtn"
+              data-th="ลองอีกครั้ง"
+              data-en="Retry">
+        ลองอีกครั้ง
+      </button>
+
+      <button id="loginBtn"
+              data-th="เข้าสู่ระบบ"
+              data-en="Login">
+        เข้าสู่ระบบ
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="overlay"></div>
+
+<!-- APP -->
+
+<div class="app" id="app">
+
+<aside class="sidebar" id="sidebar">
+
+  <div class="brand">
+    <img src="./SANTE-logo.png" alt="SANTE">
+
+    <div>
+      <div class="brand-name">ซานเต้</div>
+      <div class="brand-sub">SANTE CONSULTING</div>
+    </div>
+  </div>
+
+  <div class="group"
+       data-th="ภาพรวม"
+       data-en="OVERVIEW">
+    ภาพรวม
+  </div>
+
+  <div class="nav">
+    <button class="nav-btn" id="dashboardNav">
+      <span class="nav-icon">⌂</span>
+      <span data-th="แดชบอร์ด"
+            data-en="Dashboard">
+        แดชบอร์ด
+      </span>
+    </button>
+  </div>
+
+  <div class="group"
+       data-th="การอบรมและการเรียนรู้"
+       data-en="TRAINING & LEARNING">
+    การอบรมและการเรียนรู้
+  </div>
+
+  <div class="nav">
+
+    <button class="nav-btn" data-coming>
+      <span class="nav-icon">♟</span>
+      <span data-th="สมาชิก"
+            data-en="Members">
+        สมาชิก
+      </span>
+    </button>
+
+    <button class="nav-btn" data-coming>
+      <span class="nav-icon">▣</span>
+      <span data-th="หลักสูตร"
+            data-en="Courses">
+        หลักสูตร
+      </span>
+    </button>
+
+    <button class="nav-btn" data-coming>
+      <span class="nav-icon">◷</span>
+      <span data-th="รอบการอบรม"
+            data-en="Training Sessions">
+        รอบการอบรม
+      </span>
+    </button>
+
+    <button class="nav-btn active">
+      <span class="nav-icon">▤</span>
+      <span data-th="คลังข้อสอบ / นำเข้า Excel"
+            data-en="Question Bank / Excel Import">
+        คลังข้อสอบ / นำเข้า Excel
+      </span>
+      <span class="next">9B</span>
+    </button>
+
+    <button class="nav-btn" data-coming>
+      <span class="nav-icon">☑</span>
+      <span data-th="ข้อสอบและผลสอบ"
+            data-en="Exams & Results">
+        ข้อสอบและผลสอบ
+      </span>
+    </button>
+
+    <button class="nav-btn" data-coming>
+      <span class="nav-icon">▣</span>
+      <span data-th="วุฒิบัตร"
+            data-en="Certificates">
+        วุฒิบัตร
+      </span>
+    </button>
+
+  </div>
+
+  <div class="back-dashboard"
+       id="backDashboard"
+       data-th="← กลับ Dashboard"
+       data-en="← Back to Dashboard">
+    ← กลับ Dashboard
+  </div>
+
+</aside>
+
+<div class="main">
+
+<header class="topbar">
+
+  <div class="top-left">
+
+    <button class="mobile-menu" id="mobileMenu">
+      ☰
+    </button>
+
+    <div class="breadcrumb">
+      SANTE SYSTEM /
+      <strong data-th="คลังข้อสอบ"
+              data-en="Question Bank">
+        คลังข้อสอบ
+      </strong>
+    </div>
+
+  </div>
+
+  <div class="top-right">
+
+    <div class="lang">
+      <button id="thBtn" class="active">TH</button>
+      <button id="enBtn">EN</button>
+    </div>
+
+    <div class="avatar" id="avatar">S</div>
+
+    <div class="user">
+      <strong id="userEmail">-</strong>
+      <span data-th="ผู้ดูแลระบบ"
+            data-en="Administrator">
+        ผู้ดูแลระบบ
+      </span>
+    </div>
+
+    <button class="logout"
+            id="logoutBtn"
+            data-th="ออกจากระบบ"
+            data-en="Logout">
+      ออกจากระบบ
+    </button>
+
+  </div>
+
+</header>
+
+<main class="content">
+
+<!-- HEADER -->
+
+<section class="page-header">
+
+  <div>
+    <h1>
+      <span>Question Bank</span>
+      /
+      <span style="color:#fff"
+            data-th="นำเข้าข้อสอบ"
+            data-en="Question Import">
+        นำเข้าข้อสอบ
+      </span>
+    </h1>
+
+    <p data-th="ตรวจสอบ Preview และนำเข้าข้อสอบเข้าสู่ SANTE SYSTEM"
+       data-en="Validate, preview and import questions into SANTE SYSTEM">
+      ตรวจสอบ Preview และนำเข้าข้อสอบเข้าสู่ SANTE SYSTEM
+    </p>
+  </div>
+
+  <div class="step-badge">
+    PART 9B
+  </div>
+
+</section>
+
+<!-- SUMMARY -->
+
+<section class="summary">
+
+  <div class="summary-card">
+    <div class="summary-icon">▤</div>
+    <div>
+      <div class="summary-label"
+           data-th="Import Batch"
+           data-en="Import Batches">
+        Import Batch
+      </div>
+      <div class="summary-value" id="batchCount">-</div>
+    </div>
+  </div>
+
+  <div class="summary-card">
+    <div class="summary-icon">◷</div>
+    <div>
+      <div class="summary-label"
+           data-th="รอตรวจสอบ"
+           data-en="Pending">
+        รอตรวจสอบ
+      </div>
+      <div class="summary-value" id="pendingCount">-</div>
+    </div>
+  </div>
+
+  <div class="summary-card">
+    <div class="summary-icon">✓</div>
+    <div>
+      <div class="summary-label"
+           data-th="ผ่านการตรวจสอบ"
+           data-en="Validated">
+        ผ่านการตรวจสอบ
+      </div>
+      <div class="summary-value" id="validatedCount">-</div>
+    </div>
+  </div>
+
+  <div class="summary-card">
+    <div class="summary-icon">▣</div>
+    <div>
+      <div class="summary-label"
+           data-th="นำเข้าแล้ว"
+           data-en="Imported">
+        นำเข้าแล้ว
+      </div>
+      <div class="summary-value" id="importedCount">-</div>
+    </div>
+  </div>
+
+</section>
+
+<!-- BATCHES -->
+
+<section class="panel">
+
+  <div class="panel-header">
+
+    <div>
+      <h2 data-th="รายการ Import Batch"
+          data-en="Import Batches">
+        รายการ Import Batch
+      </h2>
+
+      <p data-th="เลือก Batch ที่ต้องการตรวจสอบและนำเข้าคลังข้อสอบ"
+         data-en="Select a batch to validate and import">
+        เลือก Batch ที่ต้องการตรวจสอบและนำเข้าคลังข้อสอบ
+      </p>
+    </div>
+
+    <button class="refresh"
+            id="refreshBtn"
+            data-th="↻ รีเฟรช"
+            data-en="↻ Refresh">
+      ↻ รีเฟรช
+    </button>
+
+  </div>
+
+  <div class="batch-list" id="batchList">
+
+    <div class="empty"
+         data-th="กำลังโหลด Import Batch..."
+         data-en="Loading import batches...">
+      กำลังโหลด Import Batch...
+    </div>
+
+  </div>
+
+</section>
+
+<!-- SELECTED BATCH -->
+
+<section class="panel">
+
+  <div class="panel-header">
+    <div>
+      <h2 data-th="Batch ที่เลือก"
+          data-en="Selected Batch">
+        Batch ที่เลือก
+      </h2>
+
+      <p id="selectedHint"
+         data-th="เลือก Import Batch จากรายการด้านบน"
+         data-en="Select an import batch above">
+        เลือก Import Batch จากรายการด้านบน
+      </p>
+    </div>
+  </div>
+
+  <div class="selected-grid">
+
+    <div class="batch-detail">
+
+      <h3 id="selectedName">-</h3>
+
+      <div class="detail-row">
+        <span data-th="สถานะ" data-en="Status">สถานะ</span>
+        <strong id="selectedStatus">-</strong>
+      </div>
+
+      <div class="detail-row">
+        <span data-th="จำนวนแถว" data-en="Total Rows">จำนวนแถว</span>
+        <strong id="selectedRows">-</strong>
+      </div>
+
+      <div class="detail-row">
+        <span data-th="ผ่าน" data-en="Valid">ผ่าน</span>
+        <strong id="selectedValid">-</strong>
+      </div>
+
+      <div class="detail-row">
+        <span data-th="ไม่ผ่าน" data-en="Invalid">ไม่ผ่าน</span>
+        <strong id="selectedInvalid">-</strong>
+      </div>
+
+      <div class="detail-row">
+        <span data-th="นำเข้าแล้ว" data-en="Imported">นำเข้าแล้ว</span>
+        <strong id="selectedImported">-</strong>
+      </div>
+
+    </div>
+
+    <div class="actions">
+
+      <button class="action-btn validate-btn"
+              id="validateBtn"
+              disabled
+              data-th="① ตรวจสอบข้อมูล (Validate)"
+              data-en="① Validate Data">
+        ① ตรวจสอบข้อมูล (Validate)
+      </button>
+
+      <button class="action-btn preview-btn"
+              id="previewBtn"
+              disabled
+              data-th="② ดูตัวอย่าง (Preview)"
+              data-en="② Preview">
+        ② ดูตัวอย่าง (Preview)
+      </button>
+
+      <button class="action-btn import-btn"
+              id="importBtn"
+              disabled
+              data-th="③ นำเข้าคลังข้อสอบ (Import)"
+              data-en="③ Import to Question Bank">
+        ③ นำเข้าคลังข้อสอบ (Import)
+      </button>
+
+    </div>
+
+  </div>
+
+  <div class="message" id="messageBox"></div>
+
+</section>
+
+<!-- QUESTIONS -->
+
+<section class="panel">
+
+  <div class="panel-header">
+
+    <div>
+      <h2 data-th="ข้อมูลข้อสอบใน Batch"
+          data-en="Questions in Batch">
+        ข้อมูลข้อสอบใน Batch
+      </h2>
+
+      <p data-th="แสดงข้อมูล Staging ก่อนนำเข้าคลังข้อสอบจริง"
+         data-en="Staging data before importing to the live question bank">
+        แสดงข้อมูล Staging ก่อนนำเข้าคลังข้อสอบจริง
+      </p>
+    </div>
+
+  </div>
+
+  <div id="questionArea">
+    <div class="empty"
+         data-th="เลือก Batch เพื่อดูข้อมูลข้อสอบ"
+         data-en="Select a batch to view questions">
+      เลือก Batch เพื่อดูข้อมูลข้อสอบ
+    </div>
+  </div>
+
+</section>
+
+</main>
+</div>
+</div>
+
+<!-- IMPORT CONFIRM -->
+
+<div class="modal" id="importModal">
+
+  <div class="modal-card">
+
+    <h2 data-th="ยืนยันการนำเข้าคลังข้อสอบ"
+        data-en="Confirm Question Import">
+      ยืนยันการนำเข้าคลังข้อสอบ
+    </h2>
+
+    <p data-th="ระบบจะนำข้อมูลจาก Import Batch นี้เข้าสู่คลังข้อสอบจริง เมื่อดำเนินการแล้วข้อมูลจะถูกเชื่อมกับชุดข้อสอบที่กำหนด"
+       data-en="The validated batch will be imported into the live question bank and linked to its exam sets.">
+      ระบบจะนำข้อมูลจาก Import Batch นี้เข้าสู่คลังข้อสอบจริง
+      เมื่อดำเนินการแล้วข้อมูลจะถูกเชื่อมกับชุดข้อสอบที่กำหนด
+    </p>
+
+    <strong id="confirmBatchName">-</strong>
+
+    <div class="modal-actions">
+
+      <button class="cancel"
+              id="cancelImport"
+              data-th="ยกเลิก"
+              data-en="Cancel">
+        ยกเลิก
+      </button>
+
+      <button class="confirm"
+              id="confirmImport"
+              data-th="ยืนยัน Import"
+              data-en="Confirm Import">
+        ยืนยัน Import
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+
+/* =========================================================
+   CONFIG
+========================================================= */
+
+const SUPABASE_URL =
+  "https://cyegjwerxlxhczrfiurz.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF";
+
+const AUTH_STORAGE_KEY =
+  "sante-admin-auth";
+
+const LANGUAGE_KEY =
+  "sante-admin-language";
+
+let sb = null;
+let currentUser = null;
+
+let batches = [];
+let selectedBatch = null;
+let currentRows = [];
+
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function sleep(ms){
+  return new Promise(resolve=>setTimeout(resolve,ms));
+}
+
+function withTimeout(promise,ms,message){
+
+  let timer;
+
+  const timeout =
+    new Promise((_,reject)=>{
+
+      timer=setTimeout(
+        ()=>reject(new Error(message)),
+        ms
+      );
+
+    });
+
+  return Promise
+    .race([promise,timeout])
+    .finally(()=>clearTimeout(timer));
+}
+
+function escapeHtml(value){
+
+  return String(value ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+
+/* =========================================================
+   LANGUAGE
+========================================================= */
+
+function getLanguage(){
+
+  return localStorage.getItem(
+    LANGUAGE_KEY
+  ) || "th";
+
+}
+
+function setLanguage(lang){
+
+  localStorage.setItem(
+    LANGUAGE_KEY,
+    lang
+  );
+
+  document.documentElement.lang =
+    lang;
+
+  document
+    .querySelectorAll("[data-th]")
+    .forEach(el=>{
+
+      el.textContent =
+        lang==="th"
+        ? el.dataset.th
+        : el.dataset.en;
+
+    });
+
+  document
+    .getElementById("thBtn")
+    .classList
+    .toggle("active",lang==="th");
+
+  document
+    .getElementById("enBtn")
+    .classList
+    .toggle("active",lang==="en");
+
+  renderBatches();
+
+  if(selectedBatch){
+    renderSelectedBatch();
+    renderRows();
+  }
+
+}
+
+
+/* =========================================================
+   AUTH
+========================================================= */
+
+function showAuthError(message){
+
+  document
+    .getElementById("spinner")
+    .style.display="none";
+
+  const box =
+    document.getElementById("authError");
+
+  box.textContent=message;
+  box.style.display="block";
+
+  document
+    .getElementById("authActions")
+    .style.display="flex";
+}
+
+async function verifyAdmin(){
+
+  try{
+
+    if(!window.supabase){
+
+      throw new Error(
+        "ไม่สามารถโหลด Supabase Library ได้"
+      );
+
+    }
+
+    sb =
+      window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY,
+        {
+          auth:{
+            storageKey:AUTH_STORAGE_KEY,
+            persistSession:true,
+            autoRefreshToken:true,
+            detectSessionInUrl:true
+          }
+        }
+      );
+
+    let session = null;
+
+    for(let i=0;i<5;i++){
+
+      const result =
+        await withTimeout(
+          sb.auth.getSession(),
+          5000,
+          "Session timeout"
+        );
+
+      if(result.error){
+        throw result.error;
+      }
+
+      session =
+        result.data.session;
+
+      if(session){
+        break;
+      }
+
+      await sleep(300);
+    }
+
+    if(!session){
+
+      window.location.replace(
+        "./admin-login.html"
+      );
+
+      return;
+    }
+
+    const userResult =
+      await withTimeout(
+        sb.auth.getUser(),
+        6000,
+        "ตรวจสอบบัญชีใช้เวลานานเกินไป"
+      );
+
+    if(userResult.error){
+      throw userResult.error;
+    }
+
+    if(!userResult.data.user){
+
+      window.location.replace(
+        "./admin-login.html"
+      );
+
+      return;
+    }
+
+    currentUser =
+      userResult.data.user;
+
+    const permissionResult =
+      await withTimeout(
+        sb.rpc("is_staff"),
+        6000,
+        "ตรวจสอบสิทธิ์ Admin ใช้เวลานานเกินไป"
+      );
+
+    if(permissionResult.error){
+
+      throw new Error(
+        "ตรวจสอบสิทธิ์ Admin ไม่สำเร็จ: "
+        +
+        permissionResult.error.message
+      );
+    }
+
+    if(permissionResult.data !== true){
+
+      showAuthError(
+        "บัญชีนี้ไม่มีสิทธิ์ Staff/Admin"
+      );
+
+      return;
+    }
+
+    const email =
+      currentUser.email ||
+      "SANTE Admin";
+
+    document
+      .getElementById("userEmail")
+      .textContent=email;
+
+    document
+      .getElementById("avatar")
+      .textContent=
+      email.charAt(0).toUpperCase();
+
+    document
+      .getElementById("authGate")
+      .style.display="none";
+
+    document
+      .getElementById("app")
+      .style.display="block";
+
+    await loadBatches();
+
+  }
+
+  catch(error){
+
+    console.error(error);
+
+    showAuthError(
+      error.message ||
+      "เกิดข้อผิดพลาดในการตรวจสอบสิทธิ์"
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+function statusBadge(status){
+
+  const value =
+    String(status || "DRAFT").toUpperCase();
+
+  if(value==="VALIDATED"){
+
+    return `<span class="badge validated">VALIDATED</span>`;
+
+  }
+
+  if(value==="HAS_ERRORS"){
+
+    return `<span class="badge error">HAS ERRORS</span>`;
+
+  }
+
+  if(value==="IMPORTED"){
+
+    return `<span class="badge imported">IMPORTED</span>`;
+
+  }
+
+  return `<span class="badge pending">${escapeHtml(value)}</span>`;
+}
+
+
+/* =========================================================
+   LOAD BATCHES
+========================================================= */
+
+async function loadBatches(){
+
+  clearMessage();
+
+  const list =
+    document.getElementById("batchList");
+
+  list.innerHTML =
+    `<div class="empty">กำลังโหลด Import Batch...</div>`;
+
+  try{
+
+    const result =
+      await sb
+        .from("question_import_batches")
+        .select(
+          "id,batch_name,course_id,exam_id,source_filename,import_status,total_rows,valid_rows,invalid_rows,imported_rows,created_at,validated_at,imported_at"
+        )
+        .order(
+          "created_at",
+          {ascending:false}
+        );
+
+    if(result.error){
+      throw result.error;
+    }
+
+    batches =
+      result.data || [];
+
+    renderSummary();
+    renderBatches();
+
+    /*
+      ถ้ามี BOCHO TEST IMPORT 4 QUESTIONS
+      ให้เลือกอัตโนมัติในครั้งแรก
+    */
+
+    if(!selectedBatch){
+
+      const testBatch =
+        batches.find(
+          item =>
+            item.batch_name ===
+            "BOCHO TEST IMPORT 4 QUESTIONS"
+        );
+
+      if(testBatch){
+
+        await selectBatch(
+          testBatch.id
+        );
+
+      }
+
+    }else{
+
+      const refreshed =
+        batches.find(
+          item =>
+            item.id ===
+            selectedBatch.id
+        );
+
+      if(refreshed){
+
+        selectedBatch =
+          refreshed;
+
+        renderSelectedBatch();
+
+      }
+
+    }
+
+  }
+
+  catch(error){
+
+    console.error(error);
+
+    list.innerHTML =
+      `<div class="empty">
+        โหลด Import Batch ไม่สำเร็จ<br>
+        ${escapeHtml(error.message)}
+       </div>`;
+
+  }
+
+}
+
+
+/* =========================================================
+   SUMMARY
+========================================================= */
+
+function renderSummary(){
+
+  document
+    .getElementById("batchCount")
+    .textContent =
+    batches.length;
+
+  document
+    .getElementById("pendingCount")
+    .textContent =
+    batches.filter(
+      b =>
+        ["DRAFT"].includes(
+          String(b.import_status).toUpperCase()
+        )
+    ).length;
+
+  document
+    .getElementById("validatedCount")
+    .textContent =
+    batches.filter(
+      b =>
+        String(b.import_status).toUpperCase()
+        === "VALIDATED"
+    ).length;
+
+  document
+    .getElementById("importedCount")
+    .textContent =
+    batches.filter(
+      b =>
+        String(b.import_status).toUpperCase()
+        === "IMPORTED"
+    ).length;
+
+}
+
+
+/* =========================================================
+   RENDER BATCHES
+========================================================= */
+
+function renderBatches(){
+
+  const list =
+    document.getElementById("batchList");
+
+  if(!batches.length){
+
+    list.innerHTML =
+      `<div class="empty">
+        ยังไม่มี Import Batch
+       </div>`;
+
+    return;
+  }
+
+  list.innerHTML =
+    batches.map(batch=>{
+
+      const selected =
+        selectedBatch &&
+        selectedBatch.id===batch.id
+        ? "selected"
+        : "";
+
+      return `
+        <div
+          class="batch ${selected}"
+          data-batch-id="${escapeHtml(batch.id)}">
+
+          <div>
+
+            <div class="batch-name">
+              ${escapeHtml(batch.batch_name)}
+            </div>
+
+            <div class="batch-meta">
+              ${escapeHtml(batch.source_filename || "Manual / Test Batch")}
+              ·
+              ${Number(batch.total_rows || 0)} rows
+            </div>
+
+          </div>
+
+          <div>
+            ${statusBadge(batch.import_status)}
+          </div>
+
+        </div>
+      `;
+
+    }).join("");
+
+  list
+    .querySelectorAll("[data-batch-id]")
+    .forEach(element=>{
+
+      element.addEventListener(
+        "click",
+        ()=>selectBatch(
+          element.dataset.batchId
+        )
+      );
+
+    });
+
+}
+
+
+/* =========================================================
+   SELECT BATCH
+========================================================= */
+
+async function selectBatch(batchId){
+
+  selectedBatch =
+    batches.find(
+      item =>
+        item.id===batchId
+    ) || null;
+
+  renderBatches();
+  renderSelectedBatch();
+
+  if(selectedBatch){
+
+    await loadRows(
+      selectedBatch.id
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   SELECTED DETAIL
+========================================================= */
+
+function renderSelectedBatch(){
+
+  const validateBtn =
+    document.getElementById("validateBtn");
+
+  const previewBtn =
+    document.getElementById("previewBtn");
+
+  const importBtn =
+    document.getElementById("importBtn");
+
+  if(!selectedBatch){
+
+    document
+      .getElementById("selectedName")
+      .textContent="-";
+
+    validateBtn.disabled=true;
+    previewBtn.disabled=true;
+    importBtn.disabled=true;
+
+    return;
+  }
+
+  const status =
+    String(
+      selectedBatch.import_status ||
+      "DRAFT"
+    ).toUpperCase();
+
+  document
+    .getElementById("selectedName")
+    .textContent =
+    selectedBatch.batch_name;
+
+  document
+    .getElementById("selectedStatus")
+    .innerHTML =
+    statusBadge(status);
+
+  document
+    .getElementById("selectedRows")
+    .textContent =
+    selectedBatch.total_rows || 0;
+
+  document
+    .getElementById("selectedValid")
+    .textContent =
+    selectedBatch.valid_rows || 0;
+
+  document
+    .getElementById("selectedInvalid")
+    .textContent =
+    selectedBatch.invalid_rows || 0;
+
+  document
+    .getElementById("selectedImported")
+    .textContent =
+    selectedBatch.imported_rows || 0;
+
+  validateBtn.disabled =
+    status==="IMPORTED";
+
+  previewBtn.disabled =
+    false;
+
+  importBtn.disabled =
+    status!=="VALIDATED";
+
+}
+
+
+/* =========================================================
+   LOAD ROWS
+========================================================= */
+
+async function loadRows(batchId){
+
+  const area =
+    document.getElementById("questionArea");
+
+  area.innerHTML =
+    `<div class="empty">
+      กำลังโหลดข้อมูลข้อสอบ...
+     </div>`;
+
+  try{
+
+    const result =
+      await sb
+        .from("question_import_rows")
+        .select(
+          "id,row_number,exam_set_code,question_code,question_type,question_text,points,choice_a,choice_b,choice_c,choice_d,choice_e,correct_answer,accepted_text_answers,validation_status,validation_errors,imported_question_id"
+        )
+        .eq(
+          "batch_id",
+          batchId
+        )
+        .order(
+          "row_number",
+          {ascending:true}
+        );
+
+    if(result.error){
+      throw result.error;
+    }
+
+    currentRows =
+      result.data || [];
+
+    renderRows();
+
+  }
+
+  catch(error){
+
+    console.error(error);
+
+    area.innerHTML =
+      `<div class="empty">
+        โหลดข้อมูลข้อสอบไม่สำเร็จ<br>
+        ${escapeHtml(error.message)}
+       </div>`;
+
+  }
+
+}
+
+
+/* =========================================================
+   RENDER ROWS
+========================================================= */
+
+function renderRows(){
+
+  const area =
+    document.getElementById("questionArea");
+
+  if(!selectedBatch){
+
+    area.innerHTML =
+      `<div class="empty">
+        เลือก Batch เพื่อดูข้อมูลข้อสอบ
+       </div>`;
+
+    return;
+  }
+
+  if(!currentRows.length){
+
+    area.innerHTML =
+      `<div class="empty">
+        Batch นี้ไม่มีข้อมูลข้อสอบ
+       </div>`;
+
+    return;
+  }
+
+  area.innerHTML = `
+    <div class="table-wrap">
+
+      <table>
+
+        <thead>
+          <tr>
+            <th>Row</th>
+            <th>Set</th>
+            <th>Code</th>
+            <th>Type</th>
+            <th>Question</th>
+            <th>Answer</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          ${currentRows.map(row=>{
+
+            let answer =
+              row.question_type==="TEXT"
+              ? row.accepted_text_answers
+              : row.correct_answer;
+
+            let errorText="";
+
+            if(
+              row.validation_errors &&
+              Array.isArray(row.validation_errors) &&
+              row.validation_errors.length
+            ){
+
+              errorText =
+                `<div style="color:#b12631;margin-top:4px">
+                  ${escapeHtml(
+                    row.validation_errors.join(", ")
+                  )}
+                 </div>`;
+
+            }
+
+            return `
+              <tr>
+
+                <td>
+                  ${escapeHtml(row.row_number)}
+                </td>
+
+                <td>
+                  ${escapeHtml(row.exam_set_code || "-")}
+                </td>
+
+                <td>
+                  ${escapeHtml(row.question_code || "-")}
+                </td>
+
+                <td>
+                  ${escapeHtml(row.question_type || "-")}
+                </td>
+
+                <td class="question">
+                  ${escapeHtml(row.question_text || "-")}
+                  ${errorText}
+                </td>
+
+                <td>
+                  ${escapeHtml(answer || "-")}
+                </td>
+
+                <td>
+                  ${statusBadge(
+                    row.validation_status
+                  )}
+                </td>
+
+              </tr>
+            `;
+
+          }).join("")}
+
+        </tbody>
+
+      </table>
+
+    </div>
+  `;
+
+}
+
+
+/* =========================================================
+   MESSAGE
+========================================================= */
+
+function clearMessage(){
+
+  const box =
+    document.getElementById("messageBox");
+
+  box.className="message";
+  box.textContent="";
+
+}
+
+function showMessage(type,message){
+
+  const box =
+    document.getElementById("messageBox");
+
+  box.className =
+    "message " + type;
+
+  box.textContent =
+    message;
+
+}
+
+
+/* =========================================================
+   VALIDATE
+========================================================= */
+
+async function validateBatch(){
+
+  if(!selectedBatch){
+    return;
+  }
+
+  const btn =
+    document.getElementById("validateBtn");
+
+  btn.disabled=true;
+
+  clearMessage();
+
+  showMessage(
+    "info",
+    getLanguage()==="th"
+      ? "กำลังตรวจสอบข้อมูลข้อสอบ..."
+      : "Validating question data..."
+  );
+
+  try{
+
+    const result =
+      await sb.rpc(
+        "validate_question_import_batch",
+        {
+          p_batch_id:
+            selectedBatch.id
+        }
+      );
+
+    if(result.error){
+      throw result.error;
+    }
+
+    showMessage(
+      "success",
+      getLanguage()==="th"
+        ? "ตรวจสอบข้อมูลเรียบร้อยแล้ว"
+        : "Validation completed."
+    );
+
+    await loadBatches();
+
+    await selectBatch(
+      selectedBatch.id
+    );
+
+  }
+
+  catch(error){
+
+    console.error(error);
+
+    showMessage(
+      "error",
+      "Validate ไม่สำเร็จ: "
+      +
+      error.message
+    );
+
+  }
+
+  finally{
+
+    if(selectedBatch){
+
+      const status =
+        String(
+          selectedBatch.import_status
+        ).toUpperCase();
+
+      btn.disabled =
+        status==="IMPORTED";
+
+    }
+
+  }
+
+}
+
+
+/* =========================================================
+   PREVIEW
+========================================================= */
+
+async function previewBatch(){
+
+  if(!selectedBatch){
+    return;
+  }
+
+  clearMessage();
+
+  showMessage(
+    "info",
+    getLanguage()==="th"
+      ? "กำลังโหลด Preview..."
+      : "Loading preview..."
+  );
+
+  try{
+
+    const result =
+      await sb.rpc(
+        "get_question_import_preview",
+        {
+          p_batch_id:
+            selectedBatch.id
+        }
+      );
+
+    if(result.error){
+      throw result.error;
+    }
+
+    /*
+      RPC preview อาจคืนข้อมูลในรูปแบบต่างจาก staging
+      รอบนี้แสดงจำนวนรายการที่ RPC ส่งกลับ
+      และ staging table ด้านล่างยังคงแสดงข้อมูลเต็ม
+    */
+
+    const preview =
+      result.data;
+
+    let count = 0;
+
+    if(Array.isArray(preview)){
+      count=preview.length;
+    }
+    else if(preview){
+      count=1;
+    }
+
+    showMessage(
+      "success",
+      getLanguage()==="th"
+        ? `Preview สำเร็จ — ระบบคืนข้อมูล ${count} รายการ`
+        : `Preview successful — ${count} item(s) returned`
+    );
+
+    document
+      .getElementById("questionArea")
+      .scrollIntoView({
+        behavior:"smooth",
+        block:"start"
+      });
+
+  }
+
+  catch(error){
+
+    console.error(error);
+
+    showMessage(
+      "error",
+      "Preview ไม่สำเร็จ: "
+      +
+      error.message
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   IMPORT
+========================================================= */
+
+function openImportConfirm(){
+
+  if(!selectedBatch){
+    return;
+  }
+
+  document
+    .getElementById("confirmBatchName")
+    .textContent =
+    selectedBatch.batch_name;
+
+  document
+    .getElementById("importModal")
+    .classList
+    .add("show");
+
+}
+
+function closeImportConfirm(){
+
+  document
+    .getElementById("importModal")
+    .classList
+    .remove("show");
+
+}
+
+async function importBatch(){
+
+  if(!selectedBatch){
+    return;
+  }
+
+  const batchId =
+    selectedBatch.id;
+
+  closeImportConfirm();
+
+  document
+    .getElementById("importBtn")
+    .disabled=true;
+
+  clearMessage();
+
+  showMessage(
+    "info",
+    getLanguage()==="th"
+      ? "กำลังนำเข้าข้อสอบเข้าสู่คลังข้อสอบ..."
+      : "Importing questions into the question bank..."
+  );
+
+  try{
+
+    const result =
+      await sb.rpc(
+        "import_question_batch",
+        {
+          p_batch_id:
+            batchId
+        }
+      );
+
+    if(result.error){
+      throw result.error;
+    }
+
+    showMessage(
+      "success",
+      getLanguage()==="th"
+        ? "นำเข้าข้อสอบเข้าสู่คลังข้อสอบเรียบร้อยแล้ว"
+        : "Questions imported successfully."
+    );
+
+    await loadBatches();
+
+    await selectBatch(
+      batchId
+    );
+
+  }
+
+  catch(error){
+
+    console.error(error);
+
+    showMessage(
+      "error",
+      "Import ไม่สำเร็จ: "
+      +
+      error.message
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   EVENTS
+========================================================= */
+
+document
+  .getElementById("validateBtn")
+  .addEventListener(
+    "click",
+    validateBatch
+  );
+
+document
+  .getElementById("previewBtn")
+  .addEventListener(
+    "click",
+    previewBatch
+  );
+
+document
+  .getElementById("importBtn")
+  .addEventListener(
+    "click",
+    openImportConfirm
+  );
+
+document
+  .getElementById("cancelImport")
+  .addEventListener(
+    "click",
+    closeImportConfirm
+  );
+
+document
+  .getElementById("confirmImport")
+  .addEventListener(
+    "click",
+    importBatch
+  );
+
+document
+  .getElementById("refreshBtn")
+  .addEventListener(
+    "click",
+    loadBatches
+  );
+
+document
+  .getElementById("dashboardNav")
+  .addEventListener(
+    "click",
+    ()=>location.href="./admin.html"
+  );
+
+document
+  .getElementById("backDashboard")
+  .addEventListener(
+    "click",
+    ()=>location.href="./admin.html"
+  );
+
+document
+  .getElementById("thBtn")
+  .addEventListener(
+    "click",
+    ()=>setLanguage("th")
+  );
+
+document
+  .getElementById("enBtn")
+  .addEventListener(
+    "click",
+    ()=>setLanguage("en")
+  );
+
+document
+  .getElementById("retryBtn")
+  .addEventListener(
+    "click",
+    verifyAdmin
+  );
+
+document
+  .getElementById("loginBtn")
+  .addEventListener(
+    "click",
+    ()=>location.replace("./admin-login.html")
+  );
+
+document
+  .getElementById("logoutBtn")
+  .addEventListener(
+    "click",
+    async()=>{
+
+      try{
+
+        if(sb){
+
+          await withTimeout(
+            sb.auth.signOut(),
+            5000,
+            "Logout timeout"
+          );
+
+        }
+
+      }
+      catch(error){
+        console.error(error);
+      }
+
+      location.replace(
+        "./admin-login.html"
+      );
+
+    }
+  );
+
+
+/* MOBILE */
+
+const sidebar =
+  document.getElementById("sidebar");
+
+const overlay =
+  document.getElementById("overlay");
+
+document
+  .getElementById("mobileMenu")
+  .addEventListener(
+    "click",
+    ()=>{
+
+      sidebar
+        .classList
+        .toggle("open");
+
+      overlay
+        .classList
+        .toggle("show");
+
+    }
+  );
+
+overlay.addEventListener(
+  "click",
+  ()=>{
+
+    sidebar
+      .classList
+      .remove("open");
+
+    overlay
+      .classList
+      .remove("show");
+
+  }
+);
+
+
+/* COMING SOON */
+
+document
+  .querySelectorAll("[data-coming]")
+  .forEach(element=>{
+
+    element.addEventListener(
+      "click",
+      ()=>{
+
+        alert(
+          getLanguage()==="th"
+          ? "โมดูลนี้กำลังพัฒนา"
+          : "This module is under development"
+        );
+
+      }
+    );
+
+  });
+
+
+/* CLOSE MODAL */
+
+document
+  .getElementById("importModal")
+  .addEventListener(
+    "click",
+    event=>{
+
+      if(
+        event.target.id ===
+        "importModal"
+      ){
+        closeImportConfirm();
+      }
+
+    }
+  );
+
+
+/* =========================================================
+   START
+========================================================= */
+
+setLanguage(
+  localStorage.getItem(
+    LANGUAGE_KEY
+  ) || "th"
+);
+
+verifyAdmin();
+
+</script>
+
+</body>
+</html>
