@@ -982,7 +982,7 @@
         <span>หลักสูตร</span>
       </a>
 
-      <a href="admin-training-sessions.html" class="nav-item">
+      <a href="#" class="nav-item">
         <span class="nav-icon">▤</span>
         <span>รอบการอบรม</span>
       </a>
@@ -992,14 +992,9 @@
         <span>คลังข้อสอบ</span>
       </a>
 
-      <a href="admin-exams.html" class="nav-item">
-        <span class="nav-icon">☑</span>
-        <span>ข้อสอบและผลสอบ</span>
-      </a>
-
-      <a href="admin-training-registrations.html" class="nav-item">
+      <a href="#" class="nav-item">
         <span class="nav-icon">♙</span>
-        <span>ผู้สมัครอบรม</span>
+        <span>สมาชิก</span>
       </a>
 
       <div class="sidebar-section-title" style="padding-left:10px;">
@@ -1139,9 +1134,9 @@
         <select id="typeFilter" class="field-control">
           <option value="">ทุกประเภทหลักสูตร</option>
           <option value="EXAM_PREP">หลักสูตรเตรียมสอบ</option>
-          <option value="FREE_TRAINING">อบรมออนไลน์</option>
-          <option value="PAID_TRAINING">อบรมแบบมีค่าใช้จ่าย</option>
-          <option value="INHOUSE_TRAINING">อบรมภายในองค์กร</option>
+          <option value="FREE_TRAINING">Safety SANTE Sharing (อบรมฟรี)</option>
+          <option value="PAID_TRAINING">อบรม (มีค่าใช้จ่าย)</option>
+          <option value="INHOUSE_TRAINING">In-house training</option>
         </select>
 
         <select id="statusFilter" class="field-control">
@@ -1212,9 +1207,9 @@
                 >
                   <option value="">เลือกประเภท</option>
                   <option value="EXAM_PREP">หลักสูตรเตรียมสอบ</option>
-                  <option value="FREE_TRAINING">อบรมออนไลน์</option>
-                  <option value="PAID_TRAINING">อบรมแบบมีค่าใช้จ่าย</option>
-                  <option value="INHOUSE_TRAINING">อบรมภายในองค์กร</option>
+                  <option value="FREE_TRAINING">Safety SANTE Sharing (อบรมฟรี)</option>
+                  <option value="PAID_TRAINING">อบรม (มีค่าใช้จ่าย)</option>
+                  <option value="INHOUSE_TRAINING">In-house training</option>
                 </select>
               </div>
 
@@ -2298,9 +2293,9 @@
 
       const map = {
         EXAM_PREP: "หลักสูตรเตรียมสอบ",
-        FREE_TRAINING: "อบรมออนไลน์",
-        PAID_TRAINING: "อบรมแบบมีค่าใช้จ่าย",
-        INHOUSE_TRAINING: "อบรมภายในองค์กร"
+        FREE_TRAINING: "Safety SANTE Sharing (อบรมฟรี)",
+        PAID_TRAINING: "อบรม (มีค่าใช้จ่าย)",
+        INHOUSE_TRAINING: "In-house training"
       };
 
       return map[type] || "หลักสูตร";
