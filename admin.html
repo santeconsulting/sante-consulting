@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>SANTE SYSTEM | Admin Dashboard</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,18 +16,28 @@
     :root{
       --navy:#082b55;
       --navy-dark:#051f3e;
-      --navy-light:#123f70;
+      --navy-mid:#0e3a69;
       --yellow:#ffc400;
+      --yellow-soft:#fff7d6;
+
+      --white:#ffffff;
       --bg:#f4f6f9;
-      --white:#fff;
-      --text:#182230;
-      --muted:#748092;
-      --border:#e3e8ef;
+      --panel:#ffffff;
+
+      --text:#172334;
+      --gray:#6f7b8b;
+      --gray-light:#9aa4b1;
+      --line:#e3e8ef;
+
       --green:#168447;
       --red:#c62828;
+
+      --shadow:0 8px 25px rgba(8,43,85,.07);
     }
 
-    *{box-sizing:border-box}
+    *{
+      box-sizing:border-box;
+    }
 
     html,body{
       margin:0;
@@ -36,611 +47,1320 @@
       color:var(--text);
     }
 
-    button{font-family:inherit;cursor:pointer}
+    button,
+    input{
+      font-family:inherit;
+    }
 
-    /* AUTH */
+    button{
+      cursor:pointer;
+    }
+
+    /* =========================
+       AUTH CHECK
+    ========================= */
 
     #authGate{
       position:fixed;
       inset:0;
       z-index:99999;
+
       display:flex;
       align-items:center;
       justify-content:center;
+
       padding:24px;
-      background:linear-gradient(135deg,var(--navy-dark),var(--navy),var(--navy-light));
+
+      background:
+        linear-gradient(
+          135deg,
+          var(--navy-dark),
+          var(--navy),
+          var(--navy-mid)
+        );
     }
 
-    .gate{
+    .gate-card{
       width:min(470px,100%);
-      padding:32px;
-      border-radius:20px;
-      background:#fff;
+      padding:35px;
+
+      background:white;
+
+      border-radius:22px;
+
       text-align:center;
-      box-shadow:0 25px 60px rgba(0,0,0,.25);
+
+      box-shadow:
+        0 25px 70px rgba(0,0,0,.28);
     }
 
-    .gate h1{
+    .gate-card h1{
       margin:0;
+
       color:var(--navy);
-      font-size:29px;
+
+      font-size:32px;
+      font-weight:700;
     }
 
     .gate-line{
-      width:82px;
-      height:4px;
-      margin:12px auto 22px;
+      width:85px;
+      height:5px;
+
+      margin:13px auto 22px;
+
       border-radius:20px;
+
       background:var(--yellow);
     }
 
     .gate-title{
       color:var(--navy);
-      font-size:14px;
+
+      font-size:18px;
       font-weight:600;
     }
 
     .gate-message{
       margin-top:8px;
-      color:var(--muted);
-      font-size:11px;
-      line-height:1.7;
+
+      color:var(--gray);
+
+      font-size:13px;
     }
 
     .spinner{
-      width:35px;
-      height:35px;
-      margin:22px auto 3px;
+      width:38px;
+      height:38px;
+
+      margin:24px auto 3px;
+
       border:4px solid #e7ecf2;
       border-top-color:var(--yellow);
+
       border-radius:50%;
+
       animation:spin .75s linear infinite;
     }
 
     @keyframes spin{
-      to{transform:rotate(360deg)}
+      to{
+        transform:rotate(360deg);
+      }
     }
 
     #gateError{
       display:none;
+
       margin-top:16px;
-      padding:12px;
+      padding:13px;
+
       border:1px solid #efc5c5;
-      border-radius:9px;
+      border-radius:10px;
+
       background:#fff3f3;
+
       color:var(--red);
-      font-size:11px;
+
+      font-size:12px;
       line-height:1.7;
     }
 
     #gateActions{
       display:none;
+
       justify-content:center;
-      flex-wrap:wrap;
       gap:8px;
+
       margin-top:15px;
     }
 
     .gate-button{
-      padding:9px 14px;
+      padding:10px 16px;
+
       border:0;
-      border-radius:8px;
-      font-size:11px;
+      border-radius:9px;
+
+      font-size:12px;
     }
 
     .gate-primary{
       background:var(--yellow);
+
       color:var(--navy);
+
+      font-weight:600;
     }
 
     .gate-light{
       background:#edf1f5;
+
       color:var(--navy);
     }
 
-    /* APP */
+    /* =========================
+       APP
+    ========================= */
 
     #app{
       display:none;
+
       min-height:100vh;
     }
 
-    /* SIDEBAR */
+    /* =========================
+       SIDEBAR
+    ========================= */
 
     .sidebar{
       position:fixed;
+
+      left:0;
       top:0;
       bottom:0;
-      left:0;
+
       z-index:1000;
-      width:280px;
-      padding:22px 16px;
+
+      width:286px;
+
+      padding:20px 15px;
+
       overflow-y:auto;
-      background:linear-gradient(180deg,var(--navy),var(--navy-dark));
-      color:#fff;
+
+      background:
+        linear-gradient(
+          180deg,
+          #082f5e 0%,
+          #052448 100%
+        );
+
+      color:white;
     }
 
     .brand{
       display:flex;
       align-items:center;
-      gap:11px;
-      padding:4px 10px 20px;
-      margin-bottom:16px;
-      border-bottom:1px solid rgba(255,255,255,.1);
+
+      gap:12px;
+
+      padding:5px 10px 20px;
+
+      margin-bottom:8px;
+
+      border-bottom:
+        1px solid rgba(255,255,255,.10);
     }
 
-    .brand-mark{
-      width:42px;
-      height:42px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      border-radius:11px;
-      background:var(--yellow);
-      color:var(--navy);
-      font-size:21px;
+    .brand-logo{
+      width:52px;
+      height:52px;
+
+      object-fit:contain;
+
+      filter:
+        drop-shadow(
+          0 3px 8px rgba(0,0,0,.15)
+        );
+    }
+
+    .brand-th{
+      color:white;
+
+      font-size:24px;
       font-weight:700;
+
+      line-height:1;
     }
 
-    .brand-name{
+    .brand-en{
+      margin-top:5px;
+
       color:var(--yellow);
-      font-size:22px;
-      font-weight:700;
-      line-height:1.1;
-    }
 
-    .brand-sub{
-      margin-top:3px;
-      color:rgba(255,255,255,.63);
       font-size:10px;
-      letter-spacing:.7px;
+      font-weight:600;
+
+      letter-spacing:.6px;
     }
 
     .menu-title{
-      padding:10px 12px 6px;
-      color:rgba(255,255,255,.4);
-      font-size:9px;
-      letter-spacing:1.1px;
+      padding:
+        14px 12px 7px;
+
+      color:
+        rgba(255,255,255,.47);
+
+      font-size:11px;
     }
 
     .menu{
       display:flex;
+
       flex-direction:column;
-      gap:3px;
+
+      gap:4px;
     }
 
     .menu-item{
       width:100%;
+
       display:flex;
+
       align-items:center;
-      gap:10px;
-      padding:10px 11px;
+
+      gap:11px;
+
+      padding:11px 12px;
+
       border:0;
-      border-radius:9px;
+      border-radius:10px;
+
       background:transparent;
-      color:rgba(255,255,255,.82);
+
+      color:
+        rgba(255,255,255,.87);
+
       text-align:left;
-      font-size:12px;
+
+      font-size:14px;
     }
 
-    .menu-item:hover,
-    .menu-item.active{
-      background:rgba(255,255,255,.1);
-      color:#fff;
+    .menu-item:hover{
+      background:
+        rgba(255,255,255,.08);
+
+      color:white;
     }
 
     .menu-item.active{
-      box-shadow:inset 3px 0 0 var(--yellow);
+      background:var(--yellow);
+
+      color:var(--navy);
+
+      font-weight:600;
     }
 
     .menu-icon{
       width:25px;
+
       text-align:center;
-      font-size:16px;
+
+      font-size:18px;
     }
 
     .badge{
       margin-left:auto;
-      padding:3px 6px;
+
+      padding:3px 7px;
+
       border-radius:20px;
-      background:rgba(255,196,0,.16);
+
+      background:var(--yellow);
+
+      color:var(--navy);
+
+      font-size:9px;
+      font-weight:700;
+    }
+
+    .menu-item.active .badge{
+      background:var(--navy);
+
       color:var(--yellow);
-      font-size:8px;
     }
 
-    /* MAIN */
+    /* MASCOT SIDEBAR */
 
-    .main{
-      width:calc(100% - 280px);
-      min-height:100vh;
-      margin-left:280px;
-    }
-
-    .header{
-      position:sticky;
-      top:0;
-      z-index:500;
-      height:74px;
+    .assistant-card{
       display:flex;
+
       align-items:center;
-      justify-content:space-between;
-      padding:0 28px;
-      border-bottom:1px solid var(--border);
-      background:#fff;
+
+      gap:10px;
+
+      margin-top:22px;
+
+      padding:10px;
+
+      border:
+        1px solid rgba(255,255,255,.13);
+
+      border-radius:13px;
+
+      background:
+        rgba(255,255,255,.05);
     }
 
-    .header-left,
-    .header-right,
-    .user-area{
-      display:flex;
-      align-items:center;
+    .assistant-mascot{
+      width:56px;
+      height:64px;
+
+      object-fit:contain;
     }
 
-    .header-left{gap:12px}
-    .header-right{gap:12px}
-    .user-area{gap:10px}
+    .assistant-title{
+      font-size:13px;
 
-    .mobile-menu{
-      display:none;
-      border:0;
-      background:transparent;
-      color:var(--navy);
-      font-size:24px;
-    }
-
-    .page-title{
-      color:var(--navy);
-      font-size:18px;
       font-weight:600;
     }
 
-    .page-sub{
-      margin-top:2px;
-      color:var(--muted);
-      font-size:10px;
+    .assistant-sub{
+      margin-top:3px;
+
+      color:
+        rgba(255,255,255,.62);
+
+      font-size:9px;
+    }
+
+    /* =========================
+       MAIN
+    ========================= */
+
+    .main{
+      width:
+        calc(100% - 286px);
+
+      min-height:100vh;
+
+      margin-left:286px;
+    }
+
+    /* =========================
+       HEADER
+    ========================= */
+
+    .header{
+      position:sticky;
+
+      top:0;
+
+      z-index:500;
+
+      height:76px;
+
+      display:flex;
+
+      align-items:center;
+      justify-content:space-between;
+
+      gap:15px;
+
+      padding:0 25px;
+
+      border-bottom:
+        1px solid var(--line);
+
+      background:
+        rgba(255,255,255,.96);
+
+      backdrop-filter:
+        blur(10px);
+    }
+
+    .header-left{
+      display:flex;
+
+      align-items:center;
+
+      gap:14px;
+    }
+
+    .mobile-menu{
+      display:none;
+
+      border:0;
+
+      background:transparent;
+
+      color:var(--navy);
+
+      font-size:25px;
+    }
+
+    .search{
+      width:
+        min(470px,42vw);
+
+      display:flex;
+
+      align-items:center;
+
+      gap:10px;
+
+      padding:10px 14px;
+
+      border-radius:11px;
+
+      background:#f0f3f7;
+
+      color:var(--gray);
+
+      font-size:13px;
+    }
+
+    .search input{
+      width:100%;
+
+      border:0;
+
+      outline:0;
+
+      background:transparent;
+
+      color:var(--navy);
+
+      font-size:13px;
+    }
+
+    .header-right{
+      display:flex;
+
+      align-items:center;
+
+      gap:10px;
     }
 
     /* LANGUAGE */
 
     .language{
       display:flex;
+
       padding:3px;
-      border:1px solid var(--border);
+
+      border:
+        1px solid var(--line);
+
       border-radius:9px;
+
       background:#f6f8fa;
     }
 
     .lang-button{
-      min-width:40px;
-      padding:6px 9px;
+      min-width:42px;
+
+      padding:7px 9px;
+
       border:0;
       border-radius:6px;
+
       background:transparent;
-      color:var(--muted);
-      font-size:10px;
+
+      color:var(--gray);
+
+      font-size:11px;
       font-weight:600;
     }
 
     .lang-button.active{
       background:var(--navy);
-      color:#fff;
+
+      color:white;
     }
 
-    .user-text{text-align:right}
+    /* USER */
+
+    .user-area{
+      display:flex;
+
+      align-items:center;
+
+      gap:9px;
+    }
+
+    .user-text{
+      text-align:right;
+    }
 
     .user-email{
-      font-size:11px;
+      color:var(--navy);
+
+      font-size:12px;
+
       font-weight:500;
     }
 
     .user-role{
-      color:var(--muted);
-      font-size:9px;
+      color:var(--gray);
+
+      font-size:10px;
     }
 
     .avatar{
-      width:36px;
-      height:36px;
+      width:38px;
+      height:38px;
+
       display:flex;
+
       align-items:center;
       justify-content:center;
+
       border-radius:50%;
+
       background:var(--navy);
+
       color:var(--yellow);
+
       font-weight:700;
     }
 
     .logout{
-      padding:8px 11px;
-      border:1px solid var(--border);
+      padding:8px 10px;
+
+      border:
+        1px solid var(--line);
+
       border-radius:8px;
-      background:#fff;
+
+      background:white;
+
       color:var(--red);
+
       font-size:11px;
     }
 
-    /* CONTENT */
+    /* =========================
+       CONTENT
+    ========================= */
 
     .content{
-      max-width:1550px;
+      max-width:1600px;
+
       margin:auto;
-      padding:27px;
+
+      padding:20px 24px 30px;
     }
 
-    .welcome{
+    /* =========================
+       HERO
+    ========================= */
+
+    .hero{
       position:relative;
+
+      min-height:270px;
+
       overflow:hidden;
-      padding:27px 29px;
-      border-radius:16px;
-      background:linear-gradient(135deg,var(--navy),var(--navy-light));
-      color:#fff;
+
+      border-radius:18px;
+
+      background:
+
+        radial-gradient(
+          circle at 85% 20%,
+          rgba(255,255,255,.12),
+          transparent 26%
+        ),
+
+        linear-gradient(
+          135deg,
+          #062a54 0%,
+          #0b3b70 68%,
+          #164f82 100%
+        );
+
+      color:white;
+
+      box-shadow:var(--shadow);
     }
 
-    .welcome:after{
+    .hero:before{
       content:"";
+
       position:absolute;
-      width:240px;
-      height:240px;
-      right:-50px;
-      top:-120px;
+
+      left:-55px;
+      bottom:-115px;
+
+      width:330px;
+      height:190px;
+
       border-radius:50%;
-      background:rgba(255,196,0,.12);
+
+      border:
+        26px solid
+        rgba(255,196,0,.95);
+
+      transform:
+        rotate(-10deg);
     }
 
-    .welcome h1{
-      margin:0 0 6px;
-      font-size:24px;
+    .hero-content{
+      position:relative;
+
+      z-index:3;
+
+      width:64%;
+
+      padding:31px 32px;
     }
 
-    .welcome p{
-      margin:0;
-      color:rgba(255,255,255,.73);
-      font-size:12px;
-    }
-
-    .yellow{color:var(--yellow)}
-
-    .verified{
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-      margin-top:14px;
-      padding:6px 10px;
-      border-radius:20px;
-      background:rgba(255,255,255,.1);
-      font-size:9px;
-    }
-
-    .dot{
-      width:7px;
-      height:7px;
-      border-radius:50%;
-      background:#53d886;
-    }
-
-    .section-head{
+    .hero-kicker{
       display:flex;
-      align-items:flex-end;
-      justify-content:space-between;
-      gap:12px;
-      margin:24px 0 12px;
-    }
 
-    .section-title{
-      color:var(--navy);
-      font-size:15px;
+      align-items:center;
+
+      gap:10px;
+
+      font-size:18px;
+
       font-weight:600;
     }
 
-    .section-note{
-      color:var(--muted);
-      font-size:9px;
+    .hero-logo-mini{
+      width:46px;
+      height:46px;
+
+      object-fit:contain;
     }
 
-    .stats,
-    .modules{
-      display:grid;
-      grid-template-columns:repeat(4,1fr);
-      gap:13px;
+    .hero h1{
+      margin:4px 0 9px;
+
+      font-size:46px;
+
+      line-height:1.08;
+
+      letter-spacing:-.5px;
     }
 
-    .card{
-      padding:18px;
-      border:1px solid var(--border);
-      border-radius:13px;
-      background:#fff;
+    .hero h1 span{
+      color:var(--yellow);
     }
 
-    .stat-label{
-      color:var(--muted);
-      font-size:10px;
+    .hero p{
+      max-width:720px;
+
+      margin:0;
+
+      color:
+        rgba(255,255,255,.82);
+
+      font-size:15px;
+
+      line-height:1.7;
     }
 
-    .stat-value{
-      margin-top:6px;
+    .verified{
+      display:inline-flex;
+
+      align-items:center;
+
+      gap:7px;
+
+      margin-top:17px;
+
+      padding:7px 12px;
+
+      border:
+        1px solid
+        rgba(80,222,137,.55);
+
+      border-radius:22px;
+
+      background:
+        rgba(12,96,61,.24);
+
+      font-size:11px;
+    }
+
+    .dot{
+      width:8px;
+      height:8px;
+
+      border-radius:50%;
+
+      background:#42db80;
+    }
+
+    .hero-mascot{
+      position:absolute;
+
+      z-index:2;
+
+      right:2.5%;
+      bottom:-18px;
+
+      width:min(31%,390px);
+      height:98%;
+
+      object-fit:contain;
+
+      object-position:
+        center bottom;
+
+      filter:
+        drop-shadow(
+          0 10px 18px
+          rgba(0,0,0,.22)
+        );
+    }
+
+    .hero-glow{
+      position:absolute;
+
+      right:0;
+      top:0;
+
+      width:42%;
+      height:100%;
+
+      background:
+        linear-gradient(
+          90deg,
+          transparent,
+          rgba(255,255,255,.07)
+        );
+    }
+
+    /* =========================
+       SECTION
+    ========================= */
+
+    .section-head{
+      display:flex;
+
+      align-items:center;
+
+      justify-content:space-between;
+
+      gap:12px;
+
+      margin:
+        23px 2px 12px;
+    }
+
+    .section-title{
+      display:flex;
+
+      align-items:center;
+
+      gap:9px;
+
       color:var(--navy);
-      font-size:23px;
+
+      font-size:20px;
+
       font-weight:700;
     }
 
+    .section-note{
+      color:var(--gray);
+
+      font-size:11px;
+    }
+
+    .online-pill{
+      display:inline-flex;
+
+      align-items:center;
+
+      gap:6px;
+
+      padding:5px 10px;
+
+      border-radius:20px;
+
+      background:#eaf7ef;
+
+      color:var(--green);
+
+      font-weight:600;
+    }
+
+    /* =========================
+       STATS
+    ========================= */
+
+    .stats{
+      display:grid;
+
+      grid-template-columns:
+        repeat(4,1fr);
+
+      gap:12px;
+    }
+
+    .card{
+      background:var(--panel);
+
+      border:
+        1px solid var(--line);
+
+      border-radius:14px;
+
+      box-shadow:
+        0 5px 18px
+        rgba(8,43,85,.035);
+    }
+
+    .stat{
+      display:flex;
+
+      align-items:center;
+
+      gap:14px;
+
+      padding:18px;
+    }
+
+    .stat-icon{
+      flex:0 0 auto;
+
+      width:50px;
+      height:50px;
+
+      display:flex;
+
+      align-items:center;
+      justify-content:center;
+
+      border-radius:12px;
+
+      background:#edf4fb;
+
+      color:var(--navy);
+
+      font-size:23px;
+    }
+
+    .stat:nth-child(2) .stat-icon{
+      background:var(--yellow-soft);
+
+      color:#a66f00;
+    }
+
+    .stat-label{
+      color:var(--navy);
+
+      font-size:13px;
+
+      font-weight:500;
+    }
+
+    .stat-value{
+      margin-top:2px;
+
+      color:var(--navy);
+
+      font-size:28px;
+
+      font-weight:700;
+
+      line-height:1.1;
+    }
+
     .stat-note{
-      color:#9aa4b1;
-      font-size:9px;
+      margin-top:4px;
+
+      color:var(--gray);
+
+      font-size:10px;
+    }
+
+    /* =========================
+       MODULES
+    ========================= */
+
+    .modules{
+      display:grid;
+
+      grid-template-columns:
+        repeat(4,1fr);
+
+      gap:12px;
     }
 
     .module{
-      min-height:150px;
-      cursor:pointer;
-      transition:.2s;
+      position:relative;
+
+      min-height:155px;
+
+      padding:18px;
+
+      transition:.18s;
     }
 
     .module:hover{
-      transform:translateY(-2px);
-      box-shadow:0 10px 25px rgba(20,40,70,.07);
+      transform:
+        translateY(-2px);
+
+      box-shadow:var(--shadow);
+    }
+
+    .module.next{
+      border:
+        1.5px solid var(--yellow);
+
+      background:
+        linear-gradient(
+          135deg,
+          #fffdf6,
+          #ffffff
+        );
+
+      cursor:pointer;
+    }
+
+    .module-top{
+      display:flex;
+
+      gap:12px;
+
+      align-items:flex-start;
     }
 
     .module-icon{
-      width:40px;
-      height:40px;
+      flex:0 0 auto;
+
+      width:48px;
+      height:48px;
+
       display:flex;
+
       align-items:center;
       justify-content:center;
-      margin-bottom:11px;
-      border-radius:10px;
-      background:#f2f5f9;
-      font-size:19px;
+
+      border-radius:12px;
+
+      background:#edf4fb;
+
+      color:var(--navy);
+
+      font-size:23px;
+    }
+
+    .module.next .module-icon{
+      background:var(--yellow-soft);
+
+      color:#a66f00;
     }
 
     .module-name{
       color:var(--navy);
-      font-size:13px;
-      font-weight:600;
+
+      font-size:15px;
+
+      font-weight:700;
+
+      line-height:1.35;
     }
 
     .module-desc{
-      margin-top:5px;
-      color:var(--muted);
-      font-size:10px;
-      line-height:1.6;
+      margin-top:6px;
+
+      color:var(--gray);
+
+      font-size:11px;
+
+      line-height:1.65;
     }
 
     .tag{
       display:inline-block;
-      margin-top:9px;
-      padding:3px 8px;
+
+      margin-top:10px;
+
+      padding:4px 8px;
+
       border-radius:20px;
+
       background:#f1f3f6;
+
       color:#7d8795;
-      font-size:8px;
+
+      font-size:9px;
     }
 
     .tag.next{
-      background:#fff8dd;
-      color:#8b6900;
+      background:var(--yellow);
+
+      color:var(--navy);
+
+      font-weight:700;
     }
+
+    /* =========================
+       BOTTOM
+    ========================= */
 
     .bottom{
       display:grid;
-      grid-template-columns:1.25fr .75fr;
-      gap:13px;
-      margin-top:13px;
+
+      grid-template-columns:
+        1.25fr .75fr;
+
+      gap:12px;
+
+      margin-top:12px;
+    }
+
+    .bottom .card{
+      padding:19px;
     }
 
     .panel-title{
-      margin-bottom:10px;
+      display:flex;
+
+      align-items:center;
+
+      gap:8px;
+
+      margin-bottom:11px;
+
       color:var(--navy);
-      font-size:12px;
-      font-weight:600;
+
+      font-size:17px;
+
+      font-weight:700;
     }
 
     .check-row{
       display:flex;
+
       align-items:center;
+
       gap:9px;
+
       padding:8px 0;
-      border-bottom:1px solid #eef1f5;
-      color:var(--muted);
-      font-size:10px;
+
+      border-bottom:
+        1px solid #eef1f5;
+
+      color:#536174;
+
+      font-size:12px;
     }
 
-    .check-row:last-child{border:0}
+    .check-row:last-child{
+      border:0;
+    }
 
     .check{
-      width:20px;
-      height:20px;
-      flex:0 0 20px;
+      width:21px;
+      height:21px;
+
       display:flex;
+
       align-items:center;
       justify-content:center;
+
       border-radius:50%;
+
       background:#e5f5eb;
+
       color:var(--green);
+
       font-size:10px;
+
       font-weight:700;
     }
 
     .quick{
       width:100%;
+
+      display:flex;
+
+      align-items:center;
+
+      justify-content:space-between;
+
+      gap:8px;
+
       margin-bottom:8px;
-      padding:10px 12px;
-      border:1px solid var(--border);
+
+      padding:12px 13px;
+
+      border:
+        1px solid var(--line);
+
       border-radius:9px;
+
       background:#fafbfd;
+
       color:var(--navy);
+
       text-align:left;
-      font-size:10px;
+
+      font-size:12px;
     }
+
+    .quick:first-of-type{
+      border-color:var(--yellow);
+
+      background:#fffdf4;
+    }
+
+    /* =========================
+       MOBILE OVERLAY
+    ========================= */
 
     .overlay{
       display:none;
+
       position:fixed;
+
       inset:0;
+
       z-index:900;
-      background:rgba(0,0,0,.3);
+
+      background:
+        rgba(0,0,0,.32);
     }
 
-    @media(max-width:1180px){
-      .stats,.modules{
-        grid-template-columns:repeat(2,1fr);
+    /* =========================
+       RESPONSIVE
+    ========================= */
+
+    @media(max-width:1200px){
+
+      .stats,
+      .modules{
+        grid-template-columns:
+          repeat(2,1fr);
+      }
+
+      .hero-content{
+        width:70%;
+      }
+
+      .hero h1{
+        font-size:38px;
+      }
+
+      .hero-mascot{
+        width:34%;
       }
     }
 
-    @media(max-width:820px){
+    @media(max-width:850px){
+
       .sidebar{
-        transform:translateX(-100%);
+        transform:
+          translateX(-100%);
+
         transition:.25s;
       }
 
-      .sidebar.open{transform:none}
-      .overlay.show{display:block}
+      .sidebar.open{
+        transform:none;
+      }
+
+      .overlay.show{
+        display:block;
+      }
 
       .main{
         width:100%;
+
         margin-left:0;
       }
 
-      .mobile-menu{display:block}
+      .mobile-menu{
+        display:block;
+      }
 
       .header{
-        height:68px;
+        height:70px;
+
         padding:0 14px;
       }
 
       .content{
-        padding:17px 14px 28px;
+        padding:14px;
       }
 
-      .user-text{display:none}
+      .search{
+        display:none;
+      }
+
+      .user-text{
+        display:none;
+      }
+
+      .hero{
+        min-height:260px;
+      }
+
+      .hero-content{
+        width:68%;
+
+        padding:25px 22px;
+      }
+
+      .hero h1{
+        font-size:33px;
+      }
+
+      .hero p{
+        font-size:13px;
+      }
+
+      .hero-mascot{
+        width:40%;
+
+        right:-2%;
+      }
 
       .bottom{
         grid-template-columns:1fr;
       }
     }
 
-    @media(max-width:620px){
-      .header-right{gap:5px}
+    @media(max-width:600px){
+
+      .header-right{
+        gap:5px;
+      }
 
       .lang-button{
         min-width:34px;
+
         padding:6px;
       }
 
       .logout{
         padding:7px;
       }
-    }
 
-    @media(max-width:560px){
-      .stats,.modules{
+      .stats,
+      .modules{
         grid-template-columns:1fr;
       }
 
-      .welcome{
-        padding:22px 20px;
+      .hero{
+        min-height:350px;
       }
 
-      .welcome h1{
-        font-size:20px;
+      .hero-content{
+        width:100%;
+
+        padding:
+          22px 19px 165px;
+      }
+
+      .hero h1{
+        font-size:30px;
+      }
+
+      .hero-kicker{
+        font-size:16px;
+      }
+
+      .hero-mascot{
+        width:195px;
+        height:205px;
+
+        right:5px;
+        bottom:-12px;
+      }
+
+      .section-title{
+        font-size:18px;
+      }
+
+      .section-note{
+        display:none;
       }
     }
   </style>
@@ -648,8 +1368,11 @@
 
 <body>
 
+<!-- AUTH CHECK -->
+
 <div id="authGate">
-  <div class="gate">
+
+  <div class="gate-card">
 
     <h1>SANTE SYSTEM</h1>
 
@@ -659,169 +1382,347 @@
       กำลังตรวจสอบสิทธิ์ผู้ดูแลระบบ
     </div>
 
-    <div class="gate-message" id="gateMessage">
+    <div
+      class="gate-message"
+      id="gateMessage">
       กรุณารอสักครู่
     </div>
 
-    <div class="spinner" id="spinner"></div>
+    <div
+      class="spinner"
+      id="spinner">
+    </div>
 
     <div id="gateError"></div>
 
     <div id="gateActions">
-      <button class="gate-button gate-primary" id="retryButton">
+
+      <button
+        class="gate-button gate-primary"
+        id="retryButton">
         ลองอีกครั้ง
       </button>
 
-      <button class="gate-button gate-light" id="loginButton">
+      <button
+        class="gate-button gate-light"
+        id="loginButton">
         เข้าสู่ระบบ
       </button>
+
     </div>
 
   </div>
+
 </div>
 
 
-<div class="overlay" id="overlay"></div>
+<div
+  class="overlay"
+  id="overlay">
+</div>
 
+
+<!-- APPLICATION -->
 
 <div id="app">
 
-  <aside class="sidebar" id="sidebar">
+  <!-- SIDEBAR -->
+
+  <aside
+    class="sidebar"
+    id="sidebar">
 
     <div class="brand">
-      <div class="brand-mark">S</div>
+
+      <img
+        class="brand-logo"
+        src="./SANTE-logo.png"
+        alt="SANTE">
 
       <div>
-        <div class="brand-name">SANTE</div>
-        <div class="brand-sub">SYSTEM ADMIN</div>
+
+        <div class="brand-th">
+          ซานเต้
+        </div>
+
+        <div class="brand-en">
+          SANTE CONSULTING
+        </div>
+
       </div>
+
     </div>
 
 
-    <div class="menu-title" data-i18n="overviewGroup">
+    <div
+      class="menu-title"
+      data-i18n="overviewGroup">
       ภาพรวม
     </div>
 
     <nav class="menu">
 
-      <button class="menu-item active">
-        <span class="menu-icon">⌂</span>
-        <span data-i18n="dashboard">แดชบอร์ด</span>
+      <button
+        class="menu-item active">
+
+        <span class="menu-icon">
+          ⌂
+        </span>
+
+        <span data-i18n="dashboard">
+          แดชบอร์ด
+        </span>
+
       </button>
 
     </nav>
 
 
-    <div class="menu-title" data-i18n="learningGroup">
+    <div
+      class="menu-title"
+      data-i18n="learningGroup">
       การอบรมและการเรียนรู้
     </div>
 
     <nav class="menu">
 
-      <button class="menu-item" data-coming="members">
+      <button
+        class="menu-item"
+        data-coming="members">
+
         <span class="menu-icon">♙</span>
-        <span data-i18n="members">สมาชิก</span>
+
+        <span data-i18n="members">
+          สมาชิก
+        </span>
+
       </button>
 
-      <button class="menu-item" data-coming="courses">
+
+      <button
+        class="menu-item"
+        data-coming="courses">
+
         <span class="menu-icon">▣</span>
-        <span data-i18n="courses">หลักสูตร</span>
+
+        <span data-i18n="courses">
+          หลักสูตร
+        </span>
+
       </button>
 
-      <button class="menu-item" data-coming="training">
+
+      <button
+        class="menu-item"
+        data-coming="training">
+
         <span class="menu-icon">◷</span>
-        <span data-i18n="training">รอบการอบรม</span>
+
+        <span data-i18n="training">
+          รอบการอบรม
+        </span>
+
       </button>
 
-      <button class="menu-item" id="importMenu">
-        <span class="menu-icon">✎</span>
+
+      <button
+        class="menu-item"
+        id="importMenu">
+
+        <span class="menu-icon">
+          ✎
+        </span>
+
         <span data-i18n="questionBank">
           คลังข้อสอบ / นำเข้า Excel
         </span>
-        <span class="badge">NEXT</span>
+
+        <span class="badge">
+          NEXT
+        </span>
+
       </button>
 
-      <button class="menu-item" data-coming="exams">
+
+      <button
+        class="menu-item"
+        data-coming="exams">
+
         <span class="menu-icon">☑</span>
-        <span data-i18n="exams">ข้อสอบและผลสอบ</span>
+
+        <span data-i18n="exams">
+          ข้อสอบและผลสอบ
+        </span>
+
       </button>
 
-      <button class="menu-item" data-coming="certificates">
+
+      <button
+        class="menu-item"
+        data-coming="certificates">
+
         <span class="menu-icon">✓</span>
-        <span data-i18n="certificates">วุฒิบัตร</span>
+
+        <span data-i18n="certificates">
+          วุฒิบัตร
+        </span>
+
       </button>
 
     </nav>
 
 
-    <div class="menu-title" data-i18n="serviceGroup">
+    <div
+      class="menu-title"
+      data-i18n="serviceGroup">
       งานบริการ
     </div>
 
     <nav class="menu">
 
-      <button class="menu-item" data-coming="services">
+      <button
+        class="menu-item"
+        data-coming="services">
+
         <span class="menu-icon">⚙</span>
-        <span data-i18n="services">บริการ</span>
+
+        <span data-i18n="services">
+          บริการ
+        </span>
+
       </button>
 
-      <button class="menu-item" data-coming="quotations">
+
+      <button
+        class="menu-item"
+        data-coming="quotations">
+
         <span class="menu-icon">▤</span>
-        <span data-i18n="quotations">ใบเสนอราคา</span>
+
+        <span data-i18n="quotations">
+          ใบเสนอราคา
+        </span>
+
       </button>
 
-      <button class="menu-item" data-coming="jobs">
+
+      <button
+        class="menu-item"
+        data-coming="jobs">
+
         <span class="menu-icon">◆</span>
-        <span data-i18n="jobs">งาน</span>
+
+        <span data-i18n="jobs">
+          งาน
+        </span>
+
       </button>
 
     </nav>
 
 
-    <div class="menu-title" data-i18n="operationsGroup">
+    <div
+      class="menu-title"
+      data-i18n="operationsGroup">
       การดำเนินงาน
     </div>
 
     <nav class="menu">
 
-      <button class="menu-item" data-coming="finance">
+      <button
+        class="menu-item"
+        data-coming="finance">
+
         <span class="menu-icon">฿</span>
-        <span data-i18n="finance">การเงินและเอกสาร</span>
+
+        <span data-i18n="finance">
+          การเงินและเอกสาร
+        </span>
+
       </button>
 
-      <button class="menu-item" data-coming="notifications">
+
+      <button
+        class="menu-item"
+        data-coming="notifications">
+
         <span class="menu-icon">✉</span>
-        <span data-i18n="notifications">การแจ้งเตือน</span>
+
+        <span data-i18n="notifications">
+          การแจ้งเตือน
+        </span>
+
       </button>
 
-      <button class="menu-item" data-coming="settings">
+
+      <button
+        class="menu-item"
+        data-coming="settings">
+
         <span class="menu-icon">⚙</span>
-        <span data-i18n="settings">ตั้งค่าระบบ</span>
+
+        <span data-i18n="settings">
+          ตั้งค่าระบบ
+        </span>
+
       </button>
 
     </nav>
 
+
+    <!-- MASCOT -->
+
+    <div class="assistant-card">
+
+      <img
+        class="assistant-mascot"
+        src="./SANTE-mascot.png"
+        alt="SANTE Mascot">
+
+      <div>
+
+        <div class="assistant-title">
+          SANTE Assistant
+        </div>
+
+        <div
+          class="assistant-sub"
+          data-i18n="assistantSub">
+          พร้อมช่วยให้ระบบทำงานง่ายขึ้น
+        </div>
+
+      </div>
+
+    </div>
+
   </aside>
 
 
+  <!-- MAIN -->
+
   <div class="main">
+
+    <!-- HEADER -->
 
     <header class="header">
 
       <div class="header-left">
 
-        <button class="mobile-menu" id="mobileMenu">
+        <button
+          class="mobile-menu"
+          id="mobileMenu">
           ☰
         </button>
 
-        <div>
-          <div class="page-title" data-i18n="dashboard">
-            แดชบอร์ด
-          </div>
+        <div class="search">
 
-          <div class="page-sub" data-i18n="systemName">
-            ระบบบริหารจัดการ SANTE Consulting
-          </div>
+          <span>⌕</span>
+
+          <input
+            type="text"
+            data-i18n-placeholder="searchPlaceholder"
+            placeholder="ค้นหาเมนู / หลักสูตร / สมาชิก ...">
+
         </div>
 
       </div>
@@ -831,11 +1732,15 @@
 
         <div class="language">
 
-          <button class="lang-button active" id="langTH">
+          <button
+            class="lang-button active"
+            id="langTH">
             TH
           </button>
 
-          <button class="lang-button" id="langEN">
+          <button
+            class="lang-button"
+            id="langEN">
             EN
           </button>
 
@@ -844,20 +1749,38 @@
 
         <div class="user-area">
 
-          <div class="user-text">
-            <div class="user-email" id="userEmail">-</div>
-
-            <div class="user-role" data-i18n="authorized">
-              ผู้ดูแลระบบ
-            </div>
-          </div>
-
-          <div class="avatar" id="avatar">
+          <div
+            class="avatar"
+            id="avatar">
             S
           </div>
 
-          <button class="logout" id="logoutButton">
-            <span data-i18n="logout">ออกจากระบบ</span>
+
+          <div class="user-text">
+
+            <div
+              class="user-email"
+              id="userEmail">
+              -
+            </div>
+
+            <div
+              class="user-role"
+              data-i18n="authorized">
+              ผู้ดูแลระบบ
+            </div>
+
+          </div>
+
+
+          <button
+            class="logout"
+            id="logoutButton">
+
+            <span data-i18n="logout">
+              ออกจากระบบ
+            </span>
+
           </button>
 
         </div>
@@ -869,334 +1792,701 @@
 
     <main class="content">
 
-      <section class="welcome">
+      <!-- HERO -->
 
-        <h1>
-          <span data-i18n="welcome">ยินดีต้อนรับสู่</span>
-          <span class="yellow">SANTE SYSTEM</span>
-        </h1>
+      <section class="hero">
 
-        <p data-i18n="welcomeDesc">
-          ศูนย์บริหารจัดการหลักสูตร การอบรม ข้อสอบ วุฒิบัตร งานบริการ และเอกสารธุรกิจ
-        </p>
+        <div class="hero-glow"></div>
 
-        <div class="verified">
-          <span class="dot"></span>
-          <span data-i18n="verified">
-            ยืนยันสิทธิ์ผู้ดูแลระบบแล้ว
-          </span>
+        <div class="hero-content">
+
+          <div class="hero-kicker">
+
+            <img
+              class="hero-logo-mini"
+              src="./SANTE-logo.png"
+              alt="SANTE">
+
+            <span data-i18n="welcome">
+              ยินดีต้อนรับสู่
+            </span>
+
+          </div>
+
+
+          <h1>
+            SANTE
+            <span>SYSTEM</span>
+          </h1>
+
+
+          <p data-i18n="welcomeDesc">
+            ศูนย์บริหารจัดการหลักสูตร
+            การอบรม ข้อสอบ วุฒิบัตร
+            งานบริการ และเอกสารธุรกิจ
+          </p>
+
+
+          <div class="verified">
+
+            <span class="dot"></span>
+
+            <span data-i18n="verified">
+              ยืนยันสิทธิ์ผู้ดูแลระบบแล้ว
+            </span>
+
+          </div>
+
         </div>
+
+
+        <!-- YOUR TRANSPARENT MASCOT -->
+
+        <img
+          class="hero-mascot"
+          src="./SANTE-mascot.png"
+          alt="SANTE Mascot">
 
       </section>
 
 
+      <!-- OVERVIEW -->
+
       <div class="section-head">
-        <div class="section-title" data-i18n="overview">
-          ภาพรวมระบบ
+
+        <div class="section-title">
+
+          <span>▥</span>
+
+          <span data-i18n="overview">
+            ภาพรวมระบบ
+          </span>
+
         </div>
 
+
         <div class="section-note">
-          Production
+
+          <span class="online-pill">
+
+            <span class="dot"></span>
+
+            <span data-i18n="online">
+              ออนไลน์
+            </span>
+
+          </span>
+
+          &nbsp;
+
+          Supabase + Cloudflare
+
         </div>
+
       </div>
 
 
       <section class="stats">
 
-        <div class="card">
-          <div class="stat-label" data-i18n="status">
-            สถานะระบบ
+        <div class="card stat">
+
+          <div class="stat-icon">
+            ▤
           </div>
 
-          <div class="stat-value" data-i18n="online">
-            ออนไลน์
+          <div>
+
+            <div
+              class="stat-label"
+              data-i18n="status">
+              สถานะระบบ
+            </div>
+
+            <div
+              class="stat-value"
+              data-i18n="online">
+              ออนไลน์
+            </div>
+
+            <div class="stat-note">
+              Supabase + Cloudflare
+            </div>
+
           </div>
 
-          <div class="stat-note">
-            Supabase + Cloudflare
-          </div>
         </div>
 
 
-        <div class="card">
-          <div class="stat-label" data-i18n="examCourses">
-            หลักสูตรเตรียมสอบ
+        <div class="card stat">
+
+          <div class="stat-icon">
+            ▣
           </div>
 
-          <div class="stat-value">5</div>
+          <div>
 
-          <div class="stat-note" data-i18n="configured">
-            ตั้งค่าแล้ว
+            <div
+              class="stat-label"
+              data-i18n="examCourses">
+              หลักสูตรเตรียมสอบ
+            </div>
+
+            <div class="stat-value">
+              5
+            </div>
+
+            <div
+              class="stat-note"
+              data-i18n="configured">
+              ตั้งค่าแล้ว
+            </div>
+
           </div>
+
         </div>
 
 
-        <div class="card">
-          <div class="stat-label" data-i18n="examSets">
-            ชุดข้อสอบ
+        <div class="card stat">
+
+          <div class="stat-icon">
+            ▧
           </div>
 
-          <div class="stat-value">18</div>
+          <div>
 
-          <div class="stat-note" data-i18n="setPlan">
-            วางแผน 100 ข้อต่อชุด
+            <div
+              class="stat-label"
+              data-i18n="examSets">
+              ชุดข้อสอบ
+            </div>
+
+            <div class="stat-value">
+              18
+            </div>
+
+            <div
+              class="stat-note"
+              data-i18n="setPlan">
+              วางแผน 100 ข้อต่อชุด
+            </div>
+
           </div>
+
         </div>
 
 
-        <div class="card">
-          <div class="stat-label" data-i18n="questions">
-            จำนวนข้อสอบตามแผน
+        <div class="card stat">
+
+          <div class="stat-icon">
+            ▥
           </div>
 
-          <div class="stat-value">1,800</div>
+          <div>
 
-          <div class="stat-note" data-i18n="fiveCourses">
-            รวม 5 หลักสูตร
+            <div
+              class="stat-label"
+              data-i18n="questions">
+              จำนวนข้อสอบตามแผน
+            </div>
+
+            <div class="stat-value">
+              1,800
+            </div>
+
+            <div
+              class="stat-note"
+              data-i18n="fiveCourses">
+              รวม 5 หลักสูตร
+            </div>
+
           </div>
+
         </div>
 
       </section>
 
 
+      <!-- MODULES -->
+
       <div class="section-head">
-        <div class="section-title" data-i18n="management">
-          ระบบจัดการ
+
+        <div class="section-title">
+
+          <span>▦</span>
+
+          <span data-i18n="management">
+            ระบบจัดการ
+          </span>
+
         </div>
 
-        <div class="section-note" data-i18n="development">
+        <div
+          class="section-note"
+          data-i18n="development">
           เปิดใช้งานตามลำดับการพัฒนา
         </div>
+
       </div>
 
 
       <section class="modules">
 
-        <div class="card module" id="importCard">
+        <!-- NEXT -->
 
-          <div class="module-icon">✎</div>
+        <div
+          class="card module next"
+          id="importCard">
 
-          <div class="module-name" data-i18n="questionBank">
-            คลังข้อสอบ / นำเข้า Excel
+          <div class="module-top">
+
+            <div class="module-icon">
+              ✎
+            </div>
+
+            <div>
+
+              <div
+                class="module-name"
+                data-i18n="questionBank">
+                คลังข้อสอบ / นำเข้า Excel
+              </div>
+
+              <div
+                class="module-desc"
+                data-i18n="questionDesc">
+                ตรวจสอบและนำเข้าคลังข้อสอบ
+                ผ่านระบบ Admin
+              </div>
+
+              <span
+                class="tag next"
+                data-i18n="next">
+                โมดูลถัดไป
+              </span>
+
+            </div>
+
           </div>
-
-          <div class="module-desc" data-i18n="questionDesc">
-            ตรวจสอบและนำเข้าคลังข้อสอบผ่านระบบ Admin
-          </div>
-
-          <span class="tag next" data-i18n="next">
-            โมดูลถัดไป
-          </span>
 
         </div>
 
 
-        <div class="card module" data-coming="courses">
+        <div
+          class="card module"
+          data-coming="courses">
 
-          <div class="module-icon">▣</div>
+          <div class="module-top">
 
-          <div class="module-name" data-i18n="courses">
-            หลักสูตร
+            <div class="module-icon">
+              ▣
+            </div>
+
+            <div>
+
+              <div
+                class="module-name"
+                data-i18n="courses">
+                หลักสูตร
+              </div>
+
+              <div
+                class="module-desc"
+                data-i18n="courseDesc">
+                จัดการหลักสูตร ราคา
+                ระยะเวลาสิทธิ์ และเนื้อหา
+              </div>
+
+              <span
+                class="tag"
+                data-i18n="planned">
+                วางแผนแล้ว
+              </span>
+
+            </div>
+
           </div>
-
-          <div class="module-desc" data-i18n="courseDesc">
-            จัดการหลักสูตร ราคา ระยะเวลาสิทธิ์ และเนื้อหา
-          </div>
-
-          <span class="tag" data-i18n="planned">
-            วางแผนแล้ว
-          </span>
 
         </div>
 
 
-        <div class="card module" data-coming="training">
+        <div
+          class="card module"
+          data-coming="training">
 
-          <div class="module-icon">◷</div>
+          <div class="module-top">
 
-          <div class="module-name" data-i18n="training">
-            รอบการอบรม
+            <div class="module-icon">
+              ◷
+            </div>
+
+            <div>
+
+              <div
+                class="module-name"
+                data-i18n="training">
+                รอบการอบรม
+              </div>
+
+              <div
+                class="module-desc"
+                data-i18n="trainingDesc">
+                จัดการรอบอบรม ผู้สมัคร
+                จำนวนที่นั่ง และแบบทดสอบ
+              </div>
+
+              <span
+                class="tag"
+                data-i18n="planned">
+                วางแผนแล้ว
+              </span>
+
+            </div>
+
           </div>
-
-          <div class="module-desc" data-i18n="trainingDesc">
-            จัดการรอบอบรม ผู้สมัคร จำนวนที่นั่ง และแบบทดสอบ
-          </div>
-
-          <span class="tag" data-i18n="planned">
-            วางแผนแล้ว
-          </span>
 
         </div>
 
 
-        <div class="card module" data-coming="certificates">
+        <div
+          class="card module"
+          data-coming="certificates">
 
-          <div class="module-icon">✓</div>
+          <div class="module-top">
 
-          <div class="module-name" data-i18n="certificates">
-            วุฒิบัตร
+            <div class="module-icon">
+              ✓
+            </div>
+
+            <div>
+
+              <div
+                class="module-name"
+                data-i18n="certificates">
+                วุฒิบัตร
+              </div>
+
+              <div
+                class="module-desc"
+                data-i18n="certDesc">
+                สร้างวุฒิบัตร PDF
+                เลขที่เอกสาร และ QR Verification
+              </div>
+
+              <span
+                class="tag"
+                data-i18n="planned">
+                วางแผนแล้ว
+              </span>
+
+            </div>
+
           </div>
-
-          <div class="module-desc" data-i18n="certDesc">
-            สร้างวุฒิบัตร PDF เลขที่เอกสาร และ QR Verification
-          </div>
-
-          <span class="tag" data-i18n="planned">
-            วางแผนแล้ว
-          </span>
 
         </div>
 
 
-        <div class="card module" data-coming="services">
+        <div
+          class="card module"
+          data-coming="services">
 
-          <div class="module-icon">⚙</div>
+          <div class="module-top">
 
-          <div class="module-name" data-i18n="servicesJobs">
-            งานบริการและงาน
+            <div class="module-icon">
+              ⚙
+            </div>
+
+            <div>
+
+              <div
+                class="module-name"
+                data-i18n="servicesJobs">
+                งานบริการและงาน
+              </div>
+
+              <div
+                class="module-desc"
+                data-i18n="servicesDesc">
+                บริหารงานบริการ ตารางงาน
+                สถานที่ และทีมงาน
+              </div>
+
+              <span
+                class="tag"
+                data-i18n="planned">
+                วางแผนแล้ว
+              </span>
+
+            </div>
+
           </div>
-
-          <div class="module-desc" data-i18n="servicesDesc">
-            บริหารงานบริการ ตารางงาน สถานที่ และทีมงาน
-          </div>
-
-          <span class="tag" data-i18n="planned">
-            วางแผนแล้ว
-          </span>
 
         </div>
 
 
-        <div class="card module" data-coming="quotations">
+        <div
+          class="card module"
+          data-coming="quotations">
 
-          <div class="module-icon">▤</div>
+          <div class="module-top">
 
-          <div class="module-name" data-i18n="quotations">
-            ใบเสนอราคา
+            <div class="module-icon">
+              ▤
+            </div>
+
+            <div>
+
+              <div
+                class="module-name"
+                data-i18n="quotations">
+                ใบเสนอราคา
+              </div>
+
+              <div
+                class="module-desc"
+                data-i18n="quoteDesc">
+                จัดการใบเสนอราคา Revision
+                การอนุมัติ และสร้าง Job
+              </div>
+
+              <span
+                class="tag"
+                data-i18n="planned">
+                วางแผนแล้ว
+              </span>
+
+            </div>
+
           </div>
-
-          <div class="module-desc" data-i18n="quoteDesc">
-            จัดการใบเสนอราคา Revision การอนุมัติ และสร้าง Job
-          </div>
-
-          <span class="tag" data-i18n="planned">
-            วางแผนแล้ว
-          </span>
 
         </div>
 
 
-        <div class="card module" data-coming="finance">
+        <div
+          class="card module"
+          data-coming="finance">
 
-          <div class="module-icon">฿</div>
+          <div class="module-top">
 
-          <div class="module-name" data-i18n="finance">
-            การเงินและเอกสาร
+            <div class="module-icon">
+              ฿
+            </div>
+
+            <div>
+
+              <div
+                class="module-name"
+                data-i18n="finance">
+                การเงินและเอกสาร
+              </div>
+
+              <div
+                class="module-desc"
+                data-i18n="financeDesc">
+                Payment, Invoice,
+                Receipt/Tax Invoice,
+                VAT และ WHT
+              </div>
+
+              <span
+                class="tag"
+                data-i18n="planned">
+                วางแผนแล้ว
+              </span>
+
+            </div>
+
           </div>
-
-          <div class="module-desc" data-i18n="financeDesc">
-            Payment, Invoice, Receipt/Tax Invoice, VAT และ WHT
-          </div>
-
-          <span class="tag" data-i18n="planned">
-            วางแผนแล้ว
-          </span>
 
         </div>
 
 
-        <div class="card module" data-coming="members">
+        <div
+          class="card module"
+          data-coming="members">
 
-          <div class="module-icon">♙</div>
+          <div class="module-top">
 
-          <div class="module-name" data-i18n="membersRoles">
-            สมาชิกและสิทธิ์
+            <div class="module-icon">
+              ♙
+            </div>
+
+            <div>
+
+              <div
+                class="module-name"
+                data-i18n="membersRoles">
+                สมาชิกและสิทธิ์
+              </div>
+
+              <div
+                class="module-desc"
+                data-i18n="memberDesc">
+                จัดการสมาชิก โปรไฟล์
+                สิทธิ์ Staff/Admin และ LINE
+              </div>
+
+              <span
+                class="tag"
+                data-i18n="planned">
+                วางแผนแล้ว
+              </span>
+
+            </div>
+
           </div>
-
-          <div class="module-desc" data-i18n="memberDesc">
-            จัดการสมาชิก โปรไฟล์ สิทธิ์ Staff/Admin และ LINE
-          </div>
-
-          <span class="tag" data-i18n="planned">
-            วางแผนแล้ว
-          </span>
 
         </div>
 
       </section>
 
 
+      <!-- FOUNDATION -->
+
       <div class="bottom">
 
         <section class="card">
 
-          <div class="panel-title" data-i18n="foundation">
-            ระบบพื้นฐาน
+          <div class="panel-title">
+
+            <span>▰</span>
+
+            <span data-i18n="foundation">
+              ระบบพื้นฐาน
+            </span>
+
           </div>
 
+
           <div class="check-row">
+
             <span class="check">✓</span>
+
             <span data-i18n="dbReady">
-              โครงสร้างฐานข้อมูล Supabase พร้อมใช้งาน
+              โครงสร้างฐานข้อมูล Supabase
+              พร้อมใช้งาน
             </span>
+
           </div>
 
+
           <div class="check-row">
+
             <span class="check">✓</span>
+
             <span data-i18n="rlsReady">
-              RLS และสิทธิ์ Admin พร้อมใช้งาน
+              RLS และสิทธิ์ Admin
+              พร้อมใช้งาน
             </span>
+
           </div>
 
+
           <div class="check-row">
+
             <span class="check">✓</span>
+
             <span data-i18n="examReady">
-              Exam และ Question Import Backend พร้อมใช้งาน
+              Exam และ Question Import Backend
+              พร้อมใช้งาน
             </span>
+
           </div>
 
+
           <div class="check-row">
+
             <span class="check">✓</span>
+
             <span data-i18n="authReady">
-              Admin Authentication ผ่านการตรวจสอบแล้ว
+              Admin Authentication
+              ผ่านการตรวจสอบแล้ว
             </span>
+
           </div>
 
+
           <div class="check-row">
+
             <span class="check">✓</span>
+
             <span>
               GitHub → Cloudflare
             </span>
+
           </div>
 
         </section>
 
 
+        <!-- QUICK -->
+
         <section class="card">
 
-          <div class="panel-title" data-i18n="quick">
-            เมนูลัด
+          <div class="panel-title">
+
+            <span>⚡</span>
+
+            <span data-i18n="quick">
+              เมนูลัด
+            </span>
+
           </div>
 
-          <button class="quick" id="importQuick">
-            ✎
-            <span data-i18n="openImport">
-              เปิดคลังข้อสอบ / นำเข้า Excel
+
+          <button
+            class="quick"
+            id="importQuick">
+
+            <span>
+
+              ✎ &nbsp;
+
+              <span data-i18n="openImport">
+                เปิดคลังข้อสอบ / นำเข้า Excel
+              </span>
+
             </span>
+
+            <span>›</span>
+
           </button>
 
-          <button class="quick" data-coming="courses">
-            ▣
-            <span data-i18n="manageCourses">
-              จัดการหลักสูตร
+
+          <button
+            class="quick"
+            data-coming="courses">
+
+            <span>
+
+              ▣ &nbsp;
+
+              <span data-i18n="manageCourses">
+                จัดการหลักสูตร
+              </span>
+
             </span>
+
+            <span>›</span>
+
           </button>
 
-          <button class="quick" data-coming="training">
-            ◷
-            <span data-i18n="manageTraining">
-              จัดการรอบการอบรม
+
+          <button
+            class="quick"
+            data-coming="training">
+
+            <span>
+
+              ◷ &nbsp;
+
+              <span data-i18n="manageTraining">
+                จัดการรอบการอบรม
+              </span>
+
             </span>
+
+            <span>›</span>
+
           </button>
 
         </section>
@@ -1213,264 +2503,402 @@
 <script>
 
 const SUPABASE_URL =
-  "https://cyegjwerxlxhczrfiurz.supabase.co";
+"https://cyegjwerxlxhczrfiurz.supabase.co";
 
 const SUPABASE_KEY =
-  "sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF";
+"sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF";
 
 const AUTH_STORAGE_KEY =
-  "sante-admin-auth";
+"sante-admin-auth";
 
 const LANGUAGE_STORAGE_KEY =
-  "sante-admin-language";
-
+"sante-admin-language";
 
 let supabaseClient = null;
+
 let authorizedUser = null;
 
 
-/* ===============================
-   TRANSLATION
-=============================== */
+/* =========================
+   TRANSLATIONS
+========================= */
 
 const translations = {
 
   th:{
+
     overviewGroup:"ภาพรวม",
-    learningGroup:"การอบรมและการเรียนรู้",
-    serviceGroup:"งานบริการ",
-    operationsGroup:"การดำเนินงาน",
 
-    dashboard:"แดชบอร์ด",
-    systemName:"ระบบบริหารจัดการ SANTE Consulting",
+    learningGroup:
+    "การอบรมและการเรียนรู้",
 
-    members:"สมาชิก",
-    courses:"หลักสูตร",
-    training:"รอบการอบรม",
-    questionBank:"คลังข้อสอบ / นำเข้า Excel",
-    exams:"ข้อสอบและผลสอบ",
-    certificates:"วุฒิบัตร",
-    services:"บริการ",
-    quotations:"ใบเสนอราคา",
-    jobs:"งาน",
-    finance:"การเงินและเอกสาร",
-    notifications:"การแจ้งเตือน",
-    settings:"ตั้งค่าระบบ",
+    serviceGroup:
+    "งานบริการ",
 
-    authorized:"ผู้ดูแลระบบ",
-    logout:"ออกจากระบบ",
+    operationsGroup:
+    "การดำเนินงาน",
 
-    welcome:"ยินดีต้อนรับสู่",
+    dashboard:
+    "แดชบอร์ด",
+
+    members:
+    "สมาชิก",
+
+    courses:
+    "หลักสูตร",
+
+    training:
+    "รอบการอบรม",
+
+    questionBank:
+    "คลังข้อสอบ / นำเข้า Excel",
+
+    exams:
+    "ข้อสอบและผลสอบ",
+
+    certificates:
+    "วุฒิบัตร",
+
+    services:
+    "บริการ",
+
+    quotations:
+    "ใบเสนอราคา",
+
+    jobs:
+    "งาน",
+
+    finance:
+    "การเงินและเอกสาร",
+
+    notifications:
+    "การแจ้งเตือน",
+
+    settings:
+    "ตั้งค่าระบบ",
+
+    authorized:
+    "ผู้ดูแลระบบ",
+
+    logout:
+    "ออกจากระบบ",
+
+    assistantSub:
+    "พร้อมช่วยให้ระบบทำงานง่ายขึ้น",
+
+    searchPlaceholder:
+    "ค้นหาเมนู / หลักสูตร / สมาชิก ...",
+
+    welcome:
+    "ยินดีต้อนรับสู่",
 
     welcomeDesc:
-      "ศูนย์บริหารจัดการหลักสูตร การอบรม ข้อสอบ วุฒิบัตร งานบริการ และเอกสารธุรกิจ",
+    "ศูนย์บริหารจัดการหลักสูตร การอบรม ข้อสอบ วุฒิบัตร งานบริการ และเอกสารธุรกิจ",
 
-    verified:"ยืนยันสิทธิ์ผู้ดูแลระบบแล้ว",
+    verified:
+    "ยืนยันสิทธิ์ผู้ดูแลระบบแล้ว",
 
-    overview:"ภาพรวมระบบ",
-    status:"สถานะระบบ",
-    online:"ออนไลน์",
+    overview:
+    "ภาพรวมระบบ",
 
-    examCourses:"หลักสูตรเตรียมสอบ",
-    configured:"ตั้งค่าแล้ว",
+    status:
+    "สถานะระบบ",
 
-    examSets:"ชุดข้อสอบ",
-    setPlan:"วางแผน 100 ข้อต่อชุด",
+    online:
+    "ออนไลน์",
 
-    questions:"จำนวนข้อสอบตามแผน",
-    fiveCourses:"รวม 5 หลักสูตร",
+    examCourses:
+    "หลักสูตรเตรียมสอบ",
 
-    management:"ระบบจัดการ",
-    development:"เปิดใช้งานตามลำดับการพัฒนา",
+    configured:
+    "ตั้งค่าแล้ว",
+
+    examSets:
+    "ชุดข้อสอบ",
+
+    setPlan:
+    "วางแผน 100 ข้อต่อชุด",
+
+    questions:
+    "จำนวนข้อสอบตามแผน",
+
+    fiveCourses:
+    "รวม 5 หลักสูตร",
+
+    management:
+    "ระบบจัดการ",
+
+    development:
+    "เปิดใช้งานตามลำดับการพัฒนา",
 
     questionDesc:
-      "ตรวจสอบและนำเข้าคลังข้อสอบผ่านระบบ Admin",
+    "ตรวจสอบและนำเข้าคลังข้อสอบผ่านระบบ Admin",
 
-    next:"โมดูลถัดไป",
-    planned:"วางแผนแล้ว",
+    next:
+    "โมดูลถัดไป",
+
+    planned:
+    "วางแผนแล้ว",
 
     courseDesc:
-      "จัดการหลักสูตร ราคา ระยะเวลาสิทธิ์ และเนื้อหา",
+    "จัดการหลักสูตร ราคา ระยะเวลาสิทธิ์ และเนื้อหา",
 
     trainingDesc:
-      "จัดการรอบอบรม ผู้สมัคร จำนวนที่นั่ง และแบบทดสอบ",
+    "จัดการรอบอบรม ผู้สมัคร จำนวนที่นั่ง และแบบทดสอบ",
 
     certDesc:
-      "สร้างวุฒิบัตร PDF เลขที่เอกสาร และ QR Verification",
+    "สร้างวุฒิบัตร PDF เลขที่เอกสาร และ QR Verification",
 
-    servicesJobs:"งานบริการและงาน",
+    servicesJobs:
+    "งานบริการและงาน",
 
     servicesDesc:
-      "บริหารงานบริการ ตารางงาน สถานที่ และทีมงาน",
+    "บริหารงานบริการ ตารางงาน สถานที่ และทีมงาน",
 
     quoteDesc:
-      "จัดการใบเสนอราคา Revision การอนุมัติ และสร้าง Job",
+    "จัดการใบเสนอราคา Revision การอนุมัติ และสร้าง Job",
 
     financeDesc:
-      "Payment, Invoice, Receipt/Tax Invoice, VAT และ WHT",
+    "Payment, Invoice, Receipt/Tax Invoice, VAT และ WHT",
 
-    membersRoles:"สมาชิกและสิทธิ์",
+    membersRoles:
+    "สมาชิกและสิทธิ์",
 
     memberDesc:
-      "จัดการสมาชิก โปรไฟล์ สิทธิ์ Staff/Admin และ LINE",
+    "จัดการสมาชิก โปรไฟล์ สิทธิ์ Staff/Admin และ LINE",
 
-    foundation:"ระบบพื้นฐาน",
+    foundation:
+    "ระบบพื้นฐาน",
 
     dbReady:
-      "โครงสร้างฐานข้อมูล Supabase พร้อมใช้งาน",
+    "โครงสร้างฐานข้อมูล Supabase พร้อมใช้งาน",
 
     rlsReady:
-      "RLS และสิทธิ์ Admin พร้อมใช้งาน",
+    "RLS และสิทธิ์ Admin พร้อมใช้งาน",
 
     examReady:
-      "Exam และ Question Import Backend พร้อมใช้งาน",
+    "Exam และ Question Import Backend พร้อมใช้งาน",
 
     authReady:
-      "Admin Authentication ผ่านการตรวจสอบแล้ว",
+    "Admin Authentication ผ่านการตรวจสอบแล้ว",
 
-    quick:"เมนูลัด",
+    quick:
+    "เมนูลัด",
 
     openImport:
-      "เปิดคลังข้อสอบ / นำเข้า Excel",
+    "เปิดคลังข้อสอบ / นำเข้า Excel",
 
     manageCourses:
-      "จัดการหลักสูตร",
+    "จัดการหลักสูตร",
 
     manageTraining:
-      "จัดการรอบการอบรม",
+    "จัดการรอบการอบรม",
 
     coming:
-      "โมดูลนี้กำลังพัฒนา"
+    "โมดูลนี้กำลังพัฒนา"
+
   },
 
 
   en:{
-    overviewGroup:"OVERVIEW",
-    learningGroup:"TRAINING & LEARNING",
-    serviceGroup:"SERVICE",
-    operationsGroup:"OPERATIONS",
 
-    dashboard:"Dashboard",
-    systemName:"SANTE Consulting Management System",
+    overviewGroup:
+    "OVERVIEW",
 
-    members:"Members",
-    courses:"Courses",
-    training:"Training Sessions",
-    questionBank:"Question Bank / Excel Import",
-    exams:"Exams & Results",
-    certificates:"Certificates",
-    services:"Services",
-    quotations:"Quotations",
-    jobs:"Jobs",
-    finance:"Finance & Documents",
-    notifications:"Notifications",
-    settings:"System Settings",
+    learningGroup:
+    "TRAINING & LEARNING",
 
-    authorized:"Authorized Staff",
-    logout:"Logout",
+    serviceGroup:
+    "SERVICE",
 
-    welcome:"Welcome to",
+    operationsGroup:
+    "OPERATIONS",
+
+    dashboard:
+    "Dashboard",
+
+    members:
+    "Members",
+
+    courses:
+    "Courses",
+
+    training:
+    "Training Sessions",
+
+    questionBank:
+    "Question Bank / Excel Import",
+
+    exams:
+    "Exams & Results",
+
+    certificates:
+    "Certificates",
+
+    services:
+    "Services",
+
+    quotations:
+    "Quotations",
+
+    jobs:
+    "Jobs",
+
+    finance:
+    "Finance & Documents",
+
+    notifications:
+    "Notifications",
+
+    settings:
+    "System Settings",
+
+    authorized:
+    "Authorized Staff",
+
+    logout:
+    "Logout",
+
+    assistantSub:
+    "Helping make system operations easier",
+
+    searchPlaceholder:
+    "Search menu / courses / members ...",
+
+    welcome:
+    "Welcome to",
 
     welcomeDesc:
-      "Central management for courses, training, examinations, certificates, services and business documents",
+    "Central management for courses, training, examinations, certificates, services and business documents",
 
-    verified:"Admin authentication verified",
+    verified:
+    "Admin authentication verified",
 
-    overview:"System Overview",
-    status:"System Status",
-    online:"Online",
+    overview:
+    "System Overview",
 
-    examCourses:"Exam-prep Courses",
-    configured:"Configured courses",
+    status:
+    "System Status",
 
-    examSets:"Fixed Exam Sets",
-    setPlan:"100 questions per set planned",
+    online:
+    "Online",
 
-    questions:"Planned Questions",
-    fiveCourses:"Across 5 exam-prep courses",
+    examCourses:
+    "Exam-prep Courses",
 
-    management:"Management Modules",
-    development:"Modules enabled according to development plan",
+    configured:
+    "Configured",
+
+    examSets:
+    "Fixed Exam Sets",
+
+    setPlan:
+    "100 questions per set planned",
+
+    questions:
+    "Planned Questions",
+
+    fiveCourses:
+    "Across 5 courses",
+
+    management:
+    "Management Modules",
+
+    development:
+    "Modules enabled according to development plan",
 
     questionDesc:
-      "Validate and import examination questions through the Admin system",
+    "Validate and import examination questions through the Admin system",
 
-    next:"NEXT MODULE",
-    planned:"PLANNED",
+    next:
+    "NEXT MODULE",
+
+    planned:
+    "PLANNED",
 
     courseDesc:
-      "Manage courses, pricing, access periods and content",
+    "Manage courses, pricing, access periods and content",
 
     trainingDesc:
-      "Manage sessions, registrations, seats and examinations",
+    "Manage sessions, registrations, seats and examinations",
 
     certDesc:
-      "Generate certificate PDFs, document numbers and QR verification",
+    "Generate certificate PDFs, document numbers and QR verification",
 
-    servicesJobs:"Services & Jobs",
+    servicesJobs:
+    "Services & Jobs",
 
     servicesDesc:
-      "Manage services, schedules, locations and teams",
+    "Manage services, schedules, locations and teams",
 
     quoteDesc:
-      "Manage quotations, revisions, approvals and jobs",
+    "Manage quotations, revisions, approvals and jobs",
 
     financeDesc:
-      "Payments, invoices, receipts/tax invoices, VAT and WHT",
+    "Payments, invoices, receipts/tax invoices, VAT and WHT",
 
-    membersRoles:"Members & Roles",
+    membersRoles:
+    "Members & Roles",
 
     memberDesc:
-      "Manage members, profiles, Staff/Admin roles and LINE",
+    "Manage members, profiles, Staff/Admin roles and LINE",
 
-    foundation:"System Foundation",
+    foundation:
+    "System Foundation",
 
     dbReady:
-      "Supabase database foundation ready",
+    "Supabase database foundation ready",
 
     rlsReady:
-      "RLS and Admin permissions ready",
+    "RLS and Admin permissions ready",
 
     examReady:
-      "Exam and Question Import backend ready",
+    "Exam and Question Import backend ready",
 
     authReady:
-      "Admin authentication verified",
+    "Admin authentication verified",
 
-    quick:"Quick Actions",
+    quick:
+    "Quick Actions",
 
     openImport:
-      "Open Question Bank / Excel Import",
+    "Open Question Bank / Excel Import",
 
     manageCourses:
-      "Manage Courses",
+    "Manage Courses",
 
     manageTraining:
-      "Manage Training Sessions",
+    "Manage Training Sessions",
 
     coming:
-      "This module is under development"
+    "This module is under development"
+
   }
 
 };
 
 
-/* ===============================
+/* =========================
    LANGUAGE
-=============================== */
+========================= */
 
 function currentLanguage(){
 
-  return localStorage.getItem(
-    LANGUAGE_STORAGE_KEY
-  ) || "th";
+  return (
+    localStorage.getItem(
+      LANGUAGE_STORAGE_KEY
+    ) || "th"
+  );
 
 }
 
 
 function setLanguage(lang){
 
-  if(lang !== "th" && lang !== "en"){
+  if(
+    lang !== "th" &&
+    lang !== "en"
+  ){
     lang = "th";
   }
 
@@ -1482,40 +2910,72 @@ function setLanguage(lang){
   document.documentElement.lang =
     lang;
 
-  document
-    .querySelectorAll("[data-i18n]")
-    .forEach(function(element){
-
-      const key =
-        element.dataset.i18n;
-
-      if(translations[lang][key]){
-        element.textContent =
-          translations[lang][key];
-      }
-
-    });
 
   document
-    .getElementById("langTH")
-    .classList.toggle(
-      "active",
-      lang === "th"
-    );
+  .querySelectorAll(
+    "[data-i18n]"
+  )
+  .forEach(el=>{
+
+    const key =
+      el.dataset.i18n;
+
+    if(
+      translations[lang][key]
+    ){
+
+      el.textContent =
+        translations[lang][key];
+
+    }
+
+  });
+
 
   document
-    .getElementById("langEN")
-    .classList.toggle(
-      "active",
-      lang === "en"
-    );
+  .querySelectorAll(
+    "[data-i18n-placeholder]"
+  )
+  .forEach(el=>{
+
+    const key =
+      el.dataset.i18nPlaceholder;
+
+    if(
+      translations[lang][key]
+    ){
+
+      el.placeholder =
+        translations[lang][key];
+
+    }
+
+  });
+
+
+  document
+  .getElementById("langTH")
+  .classList
+  .toggle(
+    "active",
+    lang === "th"
+  );
+
+
+  document
+  .getElementById("langEN")
+  .classList
+  .toggle(
+    "active",
+    lang === "en"
+  );
 
 }
 
 
-/* ===============================
+/* =========================
    TIMEOUT
-=============================== */
+========================= */
 
 function withTimeout(
   promise,
@@ -1527,17 +2987,13 @@ function withTimeout(
 
   const timeout =
     new Promise(
-      function(_,reject){
+      (_,reject)=>{
 
         timer =
           setTimeout(
-            function(){
-
-              reject(
-                new Error(message)
-              );
-
-            },
+            ()=>reject(
+              new Error(message)
+            ),
             milliseconds
           );
 
@@ -1545,82 +3001,86 @@ function withTimeout(
     );
 
   return Promise
-    .race([
-      promise,
-      timeout
-    ])
-    .finally(
-      function(){
-
-        clearTimeout(timer);
-
-      }
-    );
+  .race([
+    promise,
+    timeout
+  ])
+  .finally(
+    ()=>clearTimeout(timer)
+  );
 
 }
 
 
-/* ===============================
+/* =========================
    ERROR
-=============================== */
+========================= */
 
 function showError(message){
 
   document
-    .getElementById("spinner")
-    .style.display =
-      "none";
+  .getElementById("spinner")
+  .style.display =
+  "none";
+
 
   document
-    .getElementById("gateMessage")
-    .textContent =
-      "ไม่สามารถเปิด Admin Dashboard ได้";
+  .getElementById("gateMessage")
+  .textContent =
+  "ไม่สามารถเปิด Admin Dashboard ได้";
+
 
   const box =
-    document.getElementById(
-      "gateError"
-    );
+    document
+    .getElementById("gateError");
+
 
   box.textContent =
     message;
 
+
   box.style.display =
     "block";
 
+
   document
-    .getElementById("gateActions")
-    .style.display =
-      "flex";
+  .getElementById("gateActions")
+  .style.display =
+    "flex";
 
 }
 
 
-/* ===============================
+/* =========================
    AUTH
-=============================== */
+========================= */
 
 async function verifyAdmin(){
 
   document
-    .getElementById("spinner")
-    .style.display =
-      "block";
+  .getElementById("spinner")
+  .style.display =
+  "block";
+
 
   document
-    .getElementById("gateError")
-    .style.display =
-      "none";
+  .getElementById("gateError")
+  .style.display =
+  "none";
+
 
   document
-    .getElementById("gateActions")
-    .style.display =
-      "none";
+  .getElementById("gateActions")
+  .style.display =
+  "none";
 
 
-  if(!window.supabase){
+  if(
+    !window.supabase
+  ){
 
     showError(
-      "ไม่สามารถโหลด Supabase Library ได้ กรุณาลอง Refresh หน้าอีกครั้ง"
+      "ไม่สามารถโหลด Supabase Library ได้ กรุณา Refresh หน้าอีกครั้ง"
     );
 
     return;
@@ -1630,46 +3090,52 @@ async function verifyAdmin(){
 
   try{
 
+
     supabaseClient =
-      window.supabase.createClient(
+      window.supabase
+      .createClient(
 
         SUPABASE_URL,
 
         SUPABASE_KEY,
 
         {
+
           auth:{
+
             storageKey:
-              AUTH_STORAGE_KEY,
+            AUTH_STORAGE_KEY,
 
             persistSession:
-              true,
+            true,
 
             autoRefreshToken:
-              true,
+            true,
 
             detectSessionInUrl:
-              true
+            true
+
           }
+
         }
 
       );
 
 
-    /* SESSION */
-
     document
-      .getElementById("gateMessage")
-      .textContent =
-        "กำลังตรวจสอบ Session...";
+    .getElementById(
+      "gateMessage"
+    )
+    .textContent =
+    "กำลังตรวจสอบ Session...";
 
 
     const sessionResult =
       await withTimeout(
 
         supabaseClient
-          .auth
-          .getSession(),
+        .auth
+        .getSession(),
 
         8000,
 
@@ -1678,7 +3144,9 @@ async function verifyAdmin(){
       );
 
 
-    if(sessionResult.error){
+    if(
+      sessionResult.error
+    ){
 
       throw sessionResult.error;
 
@@ -1686,11 +3154,13 @@ async function verifyAdmin(){
 
 
     if(
-      !sessionResult.data ||
-      !sessionResult.data.session
+      !sessionResult
+      .data
+      ?.session
     ){
 
-      window.location.replace(
+      window.location
+      .replace(
         "./admin-login.html"
       );
 
@@ -1699,20 +3169,20 @@ async function verifyAdmin(){
     }
 
 
-    /* USER */
-
     document
-      .getElementById("gateMessage")
-      .textContent =
-        "กำลังยืนยันบัญชีผู้ดูแลระบบ...";
+    .getElementById(
+      "gateMessage"
+    )
+    .textContent =
+    "กำลังยืนยันบัญชีผู้ดูแลระบบ...";
 
 
     const userResult =
       await withTimeout(
 
         supabaseClient
-          .auth
-          .getUser(),
+        .auth
+        .getUser(),
 
         8000,
 
@@ -1721,7 +3191,9 @@ async function verifyAdmin(){
       );
 
 
-    if(userResult.error){
+    if(
+      userResult.error
+    ){
 
       throw userResult.error;
 
@@ -1729,11 +3201,13 @@ async function verifyAdmin(){
 
 
     if(
-      !userResult.data ||
-      !userResult.data.user
+      !userResult
+      .data
+      ?.user
     ){
 
-      window.location.replace(
+      window.location
+      .replace(
         "./admin-login.html"
       );
 
@@ -1743,21 +3217,24 @@ async function verifyAdmin(){
 
 
     authorizedUser =
-      userResult.data.user;
+      userResult
+      .data
+      .user;
 
-
-    /* STAFF */
 
     document
-      .getElementById("gateMessage")
-      .textContent =
-        "กำลังตรวจสอบสิทธิ์ Staff/Admin...";
+    .getElementById(
+      "gateMessage"
+    )
+    .textContent =
+    "กำลังตรวจสอบสิทธิ์ Staff/Admin...";
 
 
     const staffResult =
       await withTimeout(
 
-        supabaseClient.rpc(
+        supabaseClient
+        .rpc(
           "is_staff"
         ),
 
@@ -1768,7 +3245,9 @@ async function verifyAdmin(){
       );
 
 
-    if(staffResult.error){
+    if(
+      staffResult.error
+    ){
 
       throw staffResult.error;
 
@@ -1776,7 +3255,8 @@ async function verifyAdmin(){
 
 
     if(
-      staffResult.data !== true
+      staffResult.data
+      !== true
     ){
 
       showError(
@@ -1788,17 +3268,17 @@ async function verifyAdmin(){
     }
 
 
-    /* SUCCESS */
-
     openDashboard();
 
 
-  }catch(error){
+  }
+  catch(error){
 
     console.error(
       "ADMIN AUTH ERROR:",
       error
     );
+
 
     showError(
       error?.message ||
@@ -1810,9 +3290,9 @@ async function verifyAdmin(){
 }
 
 
-/* ===============================
-   DASHBOARD
-=============================== */
+/* =========================
+   OPEN DASHBOARD
+========================= */
 
 function openDashboard(){
 
@@ -1820,175 +3300,204 @@ function openDashboard(){
     authorizedUser?.email ||
     "SANTE Admin";
 
-  document
-    .getElementById("userEmail")
-    .textContent =
-      email;
 
   document
-    .getElementById("avatar")
-    .textContent =
-      email
-        .charAt(0)
-        .toUpperCase();
+  .getElementById(
+    "userEmail"
+  )
+  .textContent =
+  email;
+
+
+  document
+  .getElementById(
+    "avatar"
+  )
+  .textContent =
+  email
+  .charAt(0)
+  .toUpperCase();
+
 
   setLanguage(
     currentLanguage()
   );
 
-  document
-    .getElementById("authGate")
-    .style.display =
-      "none";
 
   document
-    .getElementById("app")
-    .style.display =
-      "block";
+  .getElementById(
+    "authGate"
+  )
+  .style.display =
+  "none";
+
+
+  document
+  .getElementById(
+    "app"
+  )
+  .style.display =
+  "block";
 
 }
 
 
-/* ===============================
-   BUTTONS
-=============================== */
+/* =========================
+   EVENTS
+========================= */
 
 document
-  .getElementById("retryButton")
-  .addEventListener(
-    "click",
-    verifyAdmin
-  );
-
-
-document
-  .getElementById("loginButton")
-  .addEventListener(
-    "click",
-    function(){
-
-      window.location.replace(
-        "./admin-login.html"
-      );
-
-    }
-  );
-
-
-document
-  .getElementById("langTH")
-  .addEventListener(
-    "click",
-    function(){
-
-      setLanguage("th");
-
-    }
-  );
-
-
-document
-  .getElementById("langEN")
-  .addEventListener(
-    "click",
-    function(){
-
-      setLanguage("en");
-
-    }
-  );
-
-
-/* LOGOUT */
-
-document
-  .getElementById("logoutButton")
-  .addEventListener(
-    "click",
-    async function(){
-
-      try{
-
-        if(supabaseClient){
-
-          await withTimeout(
-
-            supabaseClient
-              .auth
-              .signOut(),
-
-            5000,
-
-            "Logout timeout"
-
-          );
-
-        }
-
-      }catch(error){
-
-        console.error(
-          error
-        );
-
-      }
-
-      window.location.replace(
-        "./admin-login.html"
-      );
-
-    }
-  );
-
-
-/* MOBILE */
-
-const sidebar =
-  document.getElementById(
-    "sidebar"
-  );
-
-const overlay =
-  document.getElementById(
-    "overlay"
-  );
-
-
-document
-  .getElementById("mobileMenu")
-  .addEventListener(
-    "click",
-    function(){
-
-      sidebar
-        .classList
-        .toggle("open");
-
-      overlay
-        .classList
-        .toggle("show");
-
-    }
-  );
-
-
-overlay.addEventListener(
+.getElementById(
+  "retryButton"
+)
+.addEventListener(
   "click",
-  function(){
+  verifyAdmin
+);
 
-    sidebar
-      .classList
-      .remove("open");
 
-    overlay
-      .classList
-      .remove("show");
+document
+.getElementById(
+  "loginButton"
+)
+.addEventListener(
+  "click",
+  ()=>{
+
+    window.location
+    .replace(
+      "./admin-login.html"
+    );
 
   }
 );
 
 
-/* QUESTION IMPORT */
+document
+.getElementById(
+  "langTH"
+)
+.addEventListener(
+  "click",
+  ()=>setLanguage("th")
+);
+
+
+document
+.getElementById(
+  "langEN"
+)
+.addEventListener(
+  "click",
+  ()=>setLanguage("en")
+);
+
+
+/* LOGOUT */
+
+document
+.getElementById(
+  "logoutButton"
+)
+.addEventListener(
+  "click",
+  async()=>{
+
+    try{
+
+      if(
+        supabaseClient
+      ){
+
+        await withTimeout(
+
+          supabaseClient
+          .auth
+          .signOut(),
+
+          5000,
+
+          "Logout timeout"
+
+        );
+
+      }
+
+    }
+    catch(error){
+
+      console.error(error);
+
+    }
+
+
+    window.location
+    .replace(
+      "./admin-login.html"
+    );
+
+  }
+);
+
+
+/* MOBILE MENU */
+
+const sidebar =
+  document
+  .getElementById(
+    "sidebar"
+  );
+
+
+const overlay =
+  document
+  .getElementById(
+    "overlay"
+  );
+
+
+document
+.getElementById(
+  "mobileMenu"
+)
+.addEventListener(
+  "click",
+  ()=>{
+
+    sidebar
+    .classList
+    .toggle("open");
+
+
+    overlay
+    .classList
+    .toggle("show");
+
+  }
+);
+
+
+overlay
+.addEventListener(
+  "click",
+  ()=>{
+
+    sidebar
+    .classList
+    .remove("open");
+
+
+    overlay
+    .classList
+    .remove("show");
+
+  }
+);
+
+
+/* =========================
+   QUESTION IMPORT
+========================= */
 
 function openImport(){
 
@@ -1999,59 +3508,67 @@ function openImport(){
 
 
 document
-  .getElementById("importMenu")
-  .addEventListener(
-    "click",
-    openImport
-  );
+.getElementById(
+  "importMenu"
+)
+.addEventListener(
+  "click",
+  openImport
+);
 
 
 document
-  .getElementById("importCard")
-  .addEventListener(
-    "click",
-    openImport
-  );
+.getElementById(
+  "importCard"
+)
+.addEventListener(
+  "click",
+  openImport
+);
 
 
 document
-  .getElementById("importQuick")
-  .addEventListener(
-    "click",
-    openImport
-  );
+.getElementById(
+  "importQuick"
+)
+.addEventListener(
+  "click",
+  openImport
+);
 
 
-/* COMING SOON */
+/* =========================
+   COMING SOON
+========================= */
 
 document
-  .querySelectorAll(
-    "[data-coming]"
-  )
-  .forEach(
-    function(element){
+.querySelectorAll(
+  "[data-coming]"
+)
+.forEach(
+  element=>{
 
-      element.addEventListener(
-        "click",
-        function(){
+    element
+    .addEventListener(
+      "click",
+      ()=>{
 
-          const lang =
-            currentLanguage();
+        alert(
+          translations[
+            currentLanguage()
+          ].coming
+        );
 
-          alert(
-            translations[lang].coming
-          );
+      }
+    );
 
-        }
-      );
-
-    }
-  );
+  }
+);
 
 
-/* ===============================
+/* =========================
    START
-=============================== */
+========================= */
 
 setLanguage(
   currentLanguage()
