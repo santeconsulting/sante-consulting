@@ -6,7 +6,6 @@
 
   <title>SANTE SYSTEM | Admin Login</title>
 
-  <!-- Prompt Font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
@@ -14,7 +13,6 @@
     rel="stylesheet"
   >
 
-  <!-- Supabase JS -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
@@ -36,8 +34,7 @@
       padding:0;
     }
 
-    html,
-    body{
+    html,body{
       width:100%;
       height:100%;
     }
@@ -49,10 +46,6 @@
       overflow:hidden;
     }
 
-    /* =========================
-       PAGE
-    ========================= */
-
     .page{
       width:100%;
       height:100vh;
@@ -61,9 +54,7 @@
       overflow:hidden;
     }
 
-    /* =========================
-       LEFT
-    ========================= */
+    /* LEFT */
 
     .visual{
       position:relative;
@@ -106,10 +97,6 @@
       background:rgba(255,255,255,.035);
     }
 
-    /* =========================
-       WELCOME
-    ========================= */
-
     .welcome{
       position:absolute;
       z-index:10;
@@ -148,7 +135,6 @@
       font-size:clamp(20px,1.75vw,29px);
       font-weight:600;
       line-height:1.3;
-      letter-spacing:.1px;
       white-space:nowrap;
     }
 
@@ -169,36 +155,23 @@
       font-weight:500;
     }
 
-    /* =========================
-       WHITE AREA
-    ========================= */
-
     .white-wave{
       position:absolute;
       z-index:1;
-
       left:-10%;
       bottom:-9%;
-
       width:125%;
       height:64%;
-
       background:#fff;
-
-      border-radius:
-        53% 47% 0 0 /
-        15% 18% 0 0;
-
+      border-radius:53% 47% 0 0 / 15% 18% 0 0;
       transform:rotate(-1deg);
     }
 
     .light-wave{
       position:absolute;
       z-index:2;
-
       left:-8%;
       bottom:0;
-
       width:122%;
       height:52%;
 
@@ -221,10 +194,6 @@
       );
     }
 
-    /* =========================
-       SKYLINE
-    ========================= */
-
     .skyline{
       position:absolute;
       z-index:3;
@@ -243,153 +212,90 @@
       background:
         linear-gradient(
           90deg,
-
           transparent 0 4%,
           #75b6e4 4% 6%,
           transparent 6% 9%,
-
           #75b6e4 9% 11%,
           transparent 11% 15%,
-
           #75b6e4 15% 18%,
           transparent 18% 22%,
-
           #75b6e4 22% 25%,
           transparent 25% 30%,
-
           #75b6e4 30% 33%,
           transparent 33% 38%,
-
           #75b6e4 38% 41%,
           transparent 41% 47%,
-
           #75b6e4 47% 50%,
           transparent 50% 56%,
-
           #75b6e4 56% 59%,
           transparent 59% 65%,
-
           #75b6e4 65% 68%,
           transparent 68% 74%,
-
           #75b6e4 74% 77%,
           transparent 77% 83%,
-
           #75b6e4 83% 86%,
           transparent 86% 91%,
-
           #75b6e4 91% 94%,
           transparent 94%
         );
     }
 
-    /* =========================
-       MASCOT
-    ========================= */
-
     .mascot{
       position:absolute;
       z-index:7;
-
       left:50%;
       bottom:1%;
-
       width:min(58vw,710px);
       max-height:65vh;
-
       transform:translateX(-50%);
-
       object-fit:contain;
       object-position:center bottom;
-
-      filter:
-        drop-shadow(
-          0 18px 20px
-          rgba(0,30,65,.18)
-        );
+      filter:drop-shadow(0 18px 20px rgba(0,30,65,.18));
     }
-
-    /* =========================
-       BOTTOM RIBBON
-    ========================= */
 
     .ribbon{
       position:absolute;
       z-index:5;
-
       left:-5%;
       bottom:-7%;
-
       width:112%;
       height:17%;
-
-      background:
-        linear-gradient(
-          90deg,
-          #00254f,
-          #003c75
-        );
-
-      border-radius:
-        50% 50% 0 0 /
-        35% 35% 0 0;
-
+      background:linear-gradient(90deg,#00254f,#003c75);
+      border-radius:50% 50% 0 0 / 35% 35% 0 0;
       transform:rotate(1.5deg);
     }
 
     .ribbon::before{
       content:"";
       position:absolute;
-
       left:0;
       top:-12px;
-
       width:100%;
       height:12px;
-
       border-radius:50%;
-
       background:var(--yellow);
     }
 
-    /* =========================
-       RIGHT
-    ========================= */
+    /* RIGHT */
 
     .login-side{
       position:relative;
-
       height:100vh;
-
       display:flex;
       align-items:center;
       justify-content:center;
-
-      padding:
-        clamp(14px,2vh,26px)
-        clamp(35px,6vw,90px);
-
-      background:
-        linear-gradient(
-          135deg,
-          #fff 0%,
-          #f7fbff 100%
-        );
-
+      padding:clamp(14px,2vh,26px) clamp(35px,6vw,90px);
+      background:linear-gradient(135deg,#fff 0%,#f7fbff 100%);
       overflow:hidden;
     }
 
     .top-accent{
       position:absolute;
-
       right:0;
       top:0;
-
       width:34%;
       height:14px;
-
       background:var(--yellow);
-
       transform:skewX(-38deg);
       transform-origin:right;
     }
@@ -398,10 +304,6 @@
       width:100%;
       max-width:600px;
     }
-
-    /* =========================
-       LANGUAGE
-    ========================= */
 
     .language{
       display:flex;
@@ -412,27 +314,19 @@
     .language-box{
       display:flex;
       gap:4px;
-
       padding:5px;
-
       border-radius:40px;
-
       background:#eef3f8;
     }
 
     .lang{
       border:0;
       background:transparent;
-
       padding:7px 15px;
-
       border-radius:25px;
-
       font-family:"Prompt",sans-serif;
       font-size:13px;
-
       color:var(--text);
-
       cursor:pointer;
     }
 
@@ -441,10 +335,6 @@
       background:var(--navy);
     }
 
-    /* =========================
-       BRAND
-    ========================= */
-
     .brand{
       text-align:center;
       margin-bottom:16px;
@@ -452,12 +342,9 @@
 
     .company-logo{
       display:block;
-
       width:min(330px,68%);
       max-height:150px;
-
       margin:0 auto 8px;
-
       object-fit:contain;
       object-position:center;
     }
@@ -465,22 +352,16 @@
     .brand h1{
       font-size:clamp(32px,3vw,50px);
       font-weight:700;
-
       line-height:1;
-
       letter-spacing:-1px;
-
       color:var(--navy);
     }
 
     .brand-line{
       width:120px;
       height:3px;
-
       margin:7px auto 8px;
-
       border-radius:10px;
-
       background:var(--yellow);
     }
 
@@ -492,34 +373,22 @@
 
     .brand .english{
       margin-top:1px;
-
       font-size:clamp(14px,1.25vw,18px);
       font-weight:500;
-
       line-height:1.3;
-
       color:#59677e;
     }
 
     .admin-badge{
       display:inline-block;
-
       margin-top:6px;
-
       padding:3px 12px;
-
       border-radius:20px;
-
       background:#fff2b7;
       color:#705700;
-
       font-size:11px;
       font-weight:500;
     }
-
-    /* =========================
-       FORM
-    ========================= */
 
     .form-group{
       margin-bottom:12px;
@@ -529,9 +398,7 @@
       display:flex;
       align-items:center;
       gap:8px;
-
       margin-bottom:5px;
-
       font-size:15px;
       font-weight:600;
     }
@@ -543,80 +410,46 @@
     .field input{
       width:100%;
       height:52px;
-
       padding:0 52px 0 18px;
-
       border:1.5px solid var(--border);
       border-radius:12px;
-
       outline:none;
-
       background:#fff;
-
       font-family:"Prompt",sans-serif;
       font-size:15px;
-
       color:var(--text);
-
       transition:.2s;
     }
 
     .field input:focus{
       border-color:#78a9d2;
-
-      box-shadow:
-        0 0 0 4px
-        rgba(0,91,160,.07);
+      box-shadow:0 0 0 4px rgba(0,91,160,.07);
     }
 
     .eye{
       position:absolute;
-
       right:17px;
       top:50%;
-
       transform:translateY(-50%);
-
       border:0;
       background:transparent;
-
       cursor:pointer;
-
       font-size:20px;
     }
 
-    /* =========================
-       LOGIN BUTTON
-    ========================= */
-
     .login-button{
       position:relative;
-
       width:100%;
       height:56px;
-
       margin-top:2px;
-
       border:0;
       border-radius:13px;
-
-      background:
-        linear-gradient(
-          90deg,
-          #ffd22b,
-          var(--yellow)
-        );
-
-      box-shadow:
-        0 8px 20px
-        rgba(255,196,0,.20);
-
+      background:linear-gradient(90deg,#ffd22b,var(--yellow));
+      box-shadow:0 8px 20px rgba(255,196,0,.20);
       color:var(--navy);
-
       font-family:"Prompt",sans-serif;
       font-size:19px;
       font-weight:600;
-
       cursor:pointer;
     }
 
@@ -627,39 +460,25 @@
 
     .arrow{
       position:absolute;
-
       right:9px;
       top:50%;
-
       transform:translateY(-50%);
-
       width:40px;
       height:40px;
-
       display:flex;
       align-items:center;
       justify-content:center;
-
       border-radius:50%;
-
       background:var(--navy);
       color:#fff;
-
       font-size:23px;
     }
-
-    /* =========================
-       BOTTOM
-    ========================= */
 
     .admin-only{
       display:flex;
       align-items:center;
-
       gap:13px;
-
       margin:12px 0 8px;
-
       font-size:13px;
       font-weight:500;
     }
@@ -667,10 +486,8 @@
     .admin-only::before,
     .admin-only::after{
       content:"";
-
       flex:1;
       height:1px;
-
       background:#cbd8e5;
     }
 
@@ -680,10 +497,8 @@
 
     .home a{
       color:var(--navy);
-
       font-size:14px;
       font-weight:600;
-
       text-decoration:underline;
       text-underline-offset:4px;
     }
@@ -701,37 +516,13 @@
       color:#168447;
     }
 
-    /* =========================
-       LAPTOP 100%
-    ========================= */
-
-    @media
-    (min-width:901px)
-    and (max-height:850px){
-
-      .welcome{
-        top:3.2vh;
-      }
-
-      .welcome h1{
-        font-size:43px;
-      }
-
-      .welcome h2{
-        font-size:37px;
-      }
-
-      .welcome-line{
-        margin:10px auto 9px;
-      }
-
-      .slogan{
-        font-size:18px;
-      }
-
-      .slogan-th{
-        font-size:15px;
-      }
+    @media (min-width:901px) and (max-height:850px){
+      .welcome{top:3.2vh}
+      .welcome h1{font-size:43px}
+      .welcome h2{font-size:37px}
+      .welcome-line{margin:10px auto 9px}
+      .slogan{font-size:18px}
+      .slogan-th{font-size:15px}
 
       .mascot{
         width:min(55vw,630px);
@@ -740,14 +531,10 @@
       }
 
       .login-side{
-        padding:
-          10px
-          clamp(35px,5vw,72px);
+        padding:10px clamp(35px,5vw,72px);
       }
 
-      .language{
-        margin-bottom:3px;
-      }
+      .language{margin-bottom:3px}
 
       .company-logo{
         width:min(260px,58%);
@@ -755,17 +542,9 @@
         margin-bottom:5px;
       }
 
-      .brand{
-        margin-bottom:9px;
-      }
-
-      .brand h1{
-        font-size:34px;
-      }
-
-      .brand-line{
-        margin:4px auto 5px;
-      }
+      .brand{margin-bottom:9px}
+      .brand h1{font-size:34px}
+      .brand-line{margin:4px auto 5px}
 
       .brand .thai,
       .brand .english{
@@ -777,9 +556,7 @@
         font-size:9px;
       }
 
-      .form-group{
-        margin-bottom:8px;
-      }
+      .form-group{margin-bottom:8px}
 
       .form-group label{
         margin-bottom:3px;
@@ -807,21 +584,11 @@
         font-size:11px;
       }
 
-      .home a{
-        font-size:12px;
-      }
+      .home a{font-size:12px}
     }
 
-    /* =========================
-       TABLET
-    ========================= */
-
     @media(max-width:900px){
-
-      html,
-      body{
-        height:auto;
-      }
+      html,body{height:auto}
 
       body{
         overflow:auto;
@@ -846,11 +613,7 @@
       .login-side{
         height:auto;
         min-height:700px;
-
-        padding:
-          40px
-          8%
-          55px;
+        padding:40px 8% 55px;
       }
 
       .company-logo{
@@ -858,28 +621,16 @@
       }
     }
 
-    /* =========================
-       MOBILE
-    ========================= */
-
     @media(max-width:600px){
-
-      .visual{
-        height:550px;
-      }
+      .visual{height:550px}
 
       .welcome{
         top:30px;
         padding:0 14px;
       }
 
-      .welcome h1{
-        font-size:36px;
-      }
-
-      .welcome h2{
-        font-size:31px;
-      }
+      .welcome h1{font-size:36px}
+      .welcome h2{font-size:31px}
 
       .slogan{
         font-size:14px;
@@ -899,28 +650,16 @@
 
       .login-side{
         min-height:auto;
-
-        padding:
-          30px
-          21px
-          45px;
+        padding:30px 21px 45px;
       }
 
       .company-logo{
         width:min(280px,75%);
       }
 
-      .brand h1{
-        font-size:34px;
-      }
-
-      .field input{
-        height:53px;
-      }
-
-      .login-button{
-        height:55px;
-      }
+      .brand h1{font-size:34px}
+      .field input{height:53px}
+      .login-button{height:55px}
     }
   </style>
 </head>
@@ -929,7 +668,6 @@
 
 <div class="page">
 
-  <!-- LEFT -->
   <section class="visual">
 
     <div class="welcome">
@@ -976,14 +714,12 @@
   </section>
 
 
-  <!-- RIGHT -->
   <section class="login-side">
 
     <div class="top-accent"></div>
 
     <div class="login-card">
 
-      <!-- LANGUAGE -->
       <div class="language">
 
         <div class="language-box">
@@ -1011,7 +747,6 @@
       </div>
 
 
-      <!-- BRAND -->
       <div class="brand">
 
         <img
@@ -1024,10 +759,7 @@
 
         <div class="brand-line"></div>
 
-        <div
-          class="thai"
-          id="systemThai"
-        >
+        <div class="thai" id="systemThai">
           ระบบบริหารจัดการ
         </div>
 
@@ -1042,7 +774,6 @@
       </div>
 
 
-      <!-- FORM -->
       <form id="loginForm">
 
         <div class="form-group">
@@ -1116,23 +847,16 @@
 
 
       <div class="admin-only">
-
         <span id="adminOnlyText">
           🔒 เฉพาะผู้ดูแลระบบเท่านั้น
         </span>
-
       </div>
 
 
       <div class="home">
-
-        <a
-          href="index.html"
-          id="homeText"
-        >
+        <a href="index.html" id="homeText">
           🏠 กลับหน้าหลัก
         </a>
-
       </div>
 
 
@@ -1151,7 +875,7 @@
 <script>
 
   /* =========================
-     SUPABASE
+     SUPABASE CONFIG
   ========================= */
 
   const SUPABASE_URL =
@@ -1160,15 +884,27 @@
   const SUPABASE_KEY =
     "sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF";
 
+  const AUTH_STORAGE_KEY =
+    "sante-admin-auth";
+
+
+  if (!window.supabase) {
+    document.getElementById("message").textContent =
+      "SYSTEM ERROR: ไม่สามารถโหลด Supabase library ได้";
+    throw new Error("Supabase library failed to load.");
+  }
+
+
   const supabaseClient =
     window.supabase.createClient(
       SUPABASE_URL,
       SUPABASE_KEY,
       {
-        auth:{
-          persistSession:true,
-          autoRefreshToken:true,
-          detectSessionInUrl:true
+        auth: {
+          storageKey: AUTH_STORAGE_KEY,
+          persistSession: true,
+          autoRefreshToken: true,
+          detectSessionInUrl: true
         }
       }
     );
@@ -1181,7 +917,7 @@
   let currentLanguage = "th";
 
 
-  function setLanguage(language){
+  function setLanguage(language) {
 
     currentLanguage = language;
 
@@ -1203,98 +939,62 @@
     );
 
 
-    if(language === "th"){
+    if (language === "th") {
 
-      document
-        .getElementById("welcomeTitle")
-        .textContent =
+      document.getElementById("welcomeTitle").textContent =
         "ยินดีต้อนรับ";
 
-      document
-        .getElementById("welcomeEnglish")
-        .textContent =
+      document.getElementById("welcomeEnglish").textContent =
         "Welcome";
 
-      document
-        .getElementById("systemThai")
-        .textContent =
+      document.getElementById("systemThai").textContent =
         "ระบบบริหารจัดการ";
 
-      document
-        .getElementById("emailLabel")
-        .textContent =
+      document.getElementById("emailLabel").textContent =
         "✉️ อีเมล";
 
-      document
-        .getElementById("passwordLabel")
-        .textContent =
+      document.getElementById("passwordLabel").textContent =
         "🔒 รหัสผ่าน";
 
-      document
-        .getElementById("password")
-        .placeholder =
+      document.getElementById("password").placeholder =
         "กรุณากรอกรหัสผ่าน";
 
-      document
-        .getElementById("loginText")
-        .textContent =
+      document.getElementById("loginText").textContent =
         "เข้าสู่ระบบ";
 
-      document
-        .getElementById("adminOnlyText")
-        .textContent =
+      document.getElementById("adminOnlyText").textContent =
         "🔒 เฉพาะผู้ดูแลระบบเท่านั้น";
 
-      document
-        .getElementById("homeText")
-        .textContent =
+      document.getElementById("homeText").textContent =
         "🏠 กลับหน้าหลัก";
 
-    }else{
+    } else {
 
-      document
-        .getElementById("welcomeTitle")
-        .textContent =
+      document.getElementById("welcomeTitle").textContent =
         "Welcome";
 
-      document
-        .getElementById("welcomeEnglish")
-        .textContent =
+      document.getElementById("welcomeEnglish").textContent =
         "SANTE";
 
-      document
-        .getElementById("systemThai")
-        .textContent =
+      document.getElementById("systemThai").textContent =
         "Management System";
 
-      document
-        .getElementById("emailLabel")
-        .textContent =
+      document.getElementById("emailLabel").textContent =
         "✉️ Email";
 
-      document
-        .getElementById("passwordLabel")
-        .textContent =
+      document.getElementById("passwordLabel").textContent =
         "🔒 Password";
 
-      document
-        .getElementById("password")
-        .placeholder =
+      document.getElementById("password").placeholder =
         "Enter your password";
 
-      document
-        .getElementById("loginText")
-        .textContent =
+      document.getElementById("loginText").textContent =
         "Sign In";
 
-      document
-        .getElementById("adminOnlyText")
-        .textContent =
+      document.getElementById("adminOnlyText").textContent =
         "🔒 Administrators only";
 
-      document
-        .getElementById("homeText")
-        .textContent =
+      document.getElementById("homeText").textContent =
         "🏠 Back to Home";
     }
   }
@@ -1304,7 +1004,7 @@
      PASSWORD
   ========================= */
 
-  function togglePassword(){
+  function togglePassword() {
 
     const password =
       document.getElementById("password");
@@ -1317,10 +1017,10 @@
 
 
   /* =========================
-     ERROR HELPER
+     HELPERS
   ========================= */
 
-  function showError(stage, error){
+  function showError(stage, error) {
 
     console.error(stage, error);
 
@@ -1339,6 +1039,18 @@
   }
 
 
+  function wait(milliseconds) {
+
+    return new Promise(
+      resolve =>
+        setTimeout(
+          resolve,
+          milliseconds
+        )
+    );
+  }
+
+
   /* =========================
      LOGIN
   ========================= */
@@ -1347,7 +1059,7 @@
     .getElementById("loginForm")
     .addEventListener(
       "submit",
-      async function(event){
+      async function(event) {
 
         event.preventDefault();
 
@@ -1383,11 +1095,12 @@
             : "Signing in...";
 
 
-        try{
+        let shouldRestoreButton = true;
 
-          /* =========================
-             STEP 1 : AUTH
-          ========================= */
+
+        try {
+
+          /* STEP 1 — LOGIN */
 
           const {
             data: authData,
@@ -1395,12 +1108,12 @@
           } =
           await supabaseClient.auth
             .signInWithPassword({
-              email:email,
-              password:password
+              email: email,
+              password: password
             });
 
 
-          if(authError){
+          if (authError) {
 
             showError(
               "AUTH ERROR",
@@ -1411,11 +1124,7 @@
           }
 
 
-          if(
-            !authData ||
-            !authData.user ||
-            !authData.session
-          ){
+          if (!authData?.user || !authData?.session) {
 
             showError(
               "AUTH ERROR",
@@ -1429,43 +1138,59 @@
 
 
           console.log(
-            "AUTH OK",
-            authData.user
+            "AUTH OK:",
+            authData.user.id
           );
 
 
-          /* =========================
-             STEP 2 : SESSION
-          ========================= */
+          /* STEP 2 — VERIFY STORED SESSION */
 
-          const {
-            data: sessionData,
-            error: sessionError
-          } =
-          await supabaseClient.auth
-            .getSession();
+          let activeSession = null;
+
+          for (
+            let attempt = 1;
+            attempt <= 5;
+            attempt++
+          ) {
+
+            const {
+              data: sessionData,
+              error: sessionError
+            } =
+            await supabaseClient.auth
+              .getSession();
 
 
-          if(sessionError){
+            if (sessionError) {
 
-            showError(
-              "SESSION ERROR",
-              sessionError
-            );
+              showError(
+                "SESSION ERROR",
+                sessionError
+              );
 
-            return;
+              return;
+            }
+
+
+            if (sessionData?.session) {
+
+              activeSession =
+                sessionData.session;
+
+              break;
+            }
+
+
+            await wait(150);
           }
 
 
-          if(
-            !sessionData ||
-            !sessionData.session
-          ){
+          if (!activeSession) {
 
             showError(
               "SESSION ERROR",
               new Error(
-                "No active Supabase session."
+                "Supabase session was not available after login."
               )
             );
 
@@ -1474,14 +1199,12 @@
 
 
           console.log(
-            "SESSION OK",
-            sessionData.session.user.id
+            "SESSION OK:",
+            activeSession.user.id
           );
 
 
-          /* =========================
-             STEP 3 : IS STAFF RPC
-          ========================= */
+          /* STEP 3 — STAFF PERMISSION */
 
           const {
             data: isStaff,
@@ -1492,7 +1215,7 @@
           );
 
 
-          if(staffError){
+          if (staffError) {
 
             showError(
               "RPC ERROR",
@@ -1509,11 +1232,7 @@
           );
 
 
-          /* =========================
-             STEP 4 : PERMISSION
-          ========================= */
-
-          if(isStaff !== true){
+          if (isStaff !== true) {
 
             await supabaseClient.auth
               .signOut();
@@ -1524,16 +1243,14 @@
 
             message.textContent =
               currentLanguage === "th"
-                ? "PERMISSION ERROR: เข้าสู่ระบบสำเร็จ แต่บัญชีนี้ไม่ได้รับสิทธิ์ STAFF / ADMIN"
-                : "PERMISSION ERROR: Login succeeded, but this account does not have STAFF / ADMIN access.";
+                ? "PERMISSION ERROR: บัญชีนี้ไม่มีสิทธิ์ STAFF / ADMIN"
+                : "PERMISSION ERROR: This account does not have STAFF / ADMIN access.";
 
             return;
           }
 
 
-          /* =========================
-             SUCCESS
-          ========================= */
+          /* STEP 4 — SUCCESS */
 
           message.classList.add(
             "success"
@@ -1545,38 +1262,50 @@
               : "Login successful. Opening SANTE Admin...";
 
 
+          loginText.textContent =
+            currentLanguage === "th"
+              ? "เข้าสู่ระบบสำเร็จ"
+              : "Login successful";
+
+
           /*
-            IMPORTANT:
-            Repository currently contains admin.html
+            Keep the button locked while moving
+            to the dashboard.
           */
 
-          setTimeout(
-            function(){
-
-              window.location.replace(
-                "admin.html"
-              );
-
-            },
-            350
-          );
+          shouldRestoreButton = false;
 
 
-        }catch(error){
+          /*
+            Small settling period after the
+            session has been verified.
+          */
+
+          await wait(500);
+
+
+          window.location.href =
+            "./admin.html";
+
+
+        } catch (error) {
 
           showError(
             "UNEXPECTED ERROR",
             error
           );
 
-        }finally{
+        } finally {
 
-          button.disabled = false;
+          if (shouldRestoreButton) {
 
-          loginText.textContent =
-            currentLanguage === "th"
-              ? "เข้าสู่ระบบ"
-              : "Sign In";
+            button.disabled = false;
+
+            loginText.textContent =
+              currentLanguage === "th"
+                ? "เข้าสู่ระบบ"
+                : "Sign In";
+          }
         }
       }
     );
