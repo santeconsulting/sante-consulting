@@ -1,1999 +1,1278 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>SANTE SYSTEM | Admin Login</title>
-
-<link rel="preconnect" href="https://eur02.safelinks.protection.outlook.com/?url=https%3A%2F%2Ffonts.googleapis.com%2F&data=05%7C02%7Cwaleephon.hannaphachewin%40basf.com%7C6341282af7fc4fed304908df2102ade2%7Cecaa386bc8df4ce0ad01740cbdb5ba55%7C0%7C0%7C639265967535990054%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=kFrBYeH2Nydz%2FHnbUeZUwBr8kcJOpq60ONI6hYhXQSY%3D&reserved=0">
-<link rel="preconnect" href="https://eur02.safelinks.protection.outlook.com/?url=https%3A%2F%2Ffonts.gstatic.com%2F&data=05%7C02%7Cwaleephon.hannaphachewin%40basf.com%7C6341282af7fc4fed304908df2102ade2%7Cecaa386bc8df4ce0ad01740cbdb5ba55%7C0%7C0%7C639265967536012392%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=1V95LCMd%2B3zkrFMwKuyOzKmBHNc3SgfvdI5xfqj48jw%3D&reserved=0" crossorigin> <link href="https://eur02.safelinks.protection.outlook.com/?url=https%3A%2F%2Ffonts.googleapis.com%2Fcss2%3Ffamily%3DPrompt%3Awght%40300%3B400%3B500%3B600%3B700%3B800%26display%3Dswap&data=05%7C02%7Cwaleephon.hannaphachewin%40basf.com%7C6341282af7fc4fed304908df2102ade2%7Cecaa386bc8df4ce0ad01740cbdb5ba55%7C0%7C0%7C639265967536026468%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=GajjzgKbj0AtUZp%2FUQMP3lZ9Ll8t6cN0QxHzQwn4B3k%3D&reserved=0" rel="stylesheet">
-
-<script src="https://eur02.safelinks.protection.outlook.com/?url=https%3A%2F%2Fcdn.jsdelivr.net%2Fnpm%2F%40supabase%2Fsupabase-js%402&data=05%7C02%7Cwaleephon.hannaphachewin%40basf.com%7C6341282af7fc4fed304908df2102ade2%7Cecaa386bc8df4ce0ad01740cbdb5ba55%7C0%7C0%7C639265967536039719%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=5E6ZT4wnC533pD%2F1vRdZ7AK70M5SOBQkec%2FkKhUa400%3D&reserved=0"></script>
-
-<style>
-
-*{
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
-}
-
-:root{
-    --navy:#06356c;
-    --navy-dark:#032755;
-    --navy-deep:#021d42;
-    --yellow:#ffc400;
-    --yellow-light:#ffd633;
-    --white:#ffffff;
-    --border:#d5dfeb;
-    --muted:#718097;
-}
-
-html,
-body{
-    width:100%;
-    min-height:100%;
-}
-
-body{
-    font-family:"Prompt",sans-serif;
-    background:#eef5fc;
-    color:var(--navy);
-}
-
-/* =========================================
-   DESKTOP MAIN SCREEN
-========================================= */
-
-.page{
-    width:100%;
-    height:100vh;
-    height:100dvh;
-
-    min-height:620px;
-
-    display:grid;
-    grid-template-columns:52% 48%;
-
-    overflow:hidden;
-}
-
-/* =========================================
-   LEFT
-========================================= */
-
-.brand-panel{
-    position:relative;
-    height:100%;
-    overflow:hidden;
-
-    background:
-        radial-gradient(
-            circle at 25% 10%,
-            rgba(34,112,190,.60),
-            transparent 37%
-        ),
-        linear-gradient(
-            145deg,
-            #0b5599 0%,
-            #063b75 44%,
-            #032959 75%,
-            #021d42 100%
-        );
-}
-
-/* subtle background shapes */
-
-.brand-panel::before{
-    content:"";
-    position:absolute;
-
-    width:700px;
-    height:700px;
-
-    left:-400px;
-    top:-430px;
-
-    border-radius:50%;
-
-    background:
-        rgba(255,255,255,.035);
-}
-
-.brand-panel::after{
-    content:"";
-    position:absolute;
-
-    width:650px;
-    height:650px;
-
-    left:-380px;
-    bottom:-480px;
-
-    border-radius:50%;
-
-    border:
-        1px solid rgba(255,255,255,.08); }
-
-
-/* =========================================
-   WELCOME TEXT
-========================================= */
-
-.welcome-area{
-    position:absolute;
-
-    z-index:10;
-
-    top:6vh;
-    left:7%;
-    right:7%;
-
-    text-align:center;
-}
-
-.welcome-th{
-    color:white;
-
-    font-size:
-        clamp(30px,3.2vw,57px);
-
-    font-weight:700;
-
-    line-height:1.05;
-}
-
-.welcome-en{
-    margin-top:2px;
-
-    color:var(--yellow);
-
-    font-size:
-        clamp(27px,3vw,52px);
-
-    font-weight:700;
-
-    line-height:1.05;
-}
-
-.welcome-line{
-    width:92px;
-    height:4px;
-
-    margin:
-        clamp(10px,1.5vh,17px)
-        auto
-        clamp(10px,1.4vh,16px);
-
-    border-radius:20px;
-
-    background:var(--yellow);
-}
-
-.slogan{
-    color:white;
-
-    font-size:
-        clamp(14px,1.5vw,24px);
-
-    font-weight:600;
-
-    line-height:1.4;
-
-    white-space:nowrap;
-}
-
-.slogan-yellow{
-    color:var(--yellow);
-}
-
-.slogan-thai{
-    margin-top:3px;
-
-    color:white;
-
-    font-size:
-        clamp(13px,1.25vw,20px);
-
-    font-weight:400;
-
-    line-height:1.5;
-}
-
-.slogan-thai .highlight{
-    color:var(--yellow);
-    font-weight:500;
-}
-
-
-/* =========================================
-   LEFT DECORATION
-========================================= */
-
-.white-wave{
-    position:absolute;
-
-    z-index:1;
-
-    left:-12%;
-    width:125%;
-
-    bottom:9%;
-
-    height:51%;
-
-    border-radius:
-        50% 50% 0 0 /
-        20% 20% 0 0;
-
-    background:
-        linear-gradient(
-            180deg,
-            #f8fcff,
-            #eaf5ff
-        );
-
-    transform:rotate(-3deg);
-}
-
-.yellow-wave{
-    position:absolute;
-
-    z-index:2;
-
-    left:-8%;
-    bottom:4%;
-
-    width:125%;
-    height:18px;
-
-    border-radius:50%;
-
-    background:var(--yellow);
-
-    transform:rotate(5deg);
-}
-
-.bottom-navy{
-    position:absolute;
-
-    z-index:1;
-
-    left:-10%;
-    bottom:-13%;
-
-    width:125%;
-    height:28%;
-
-    background:#06366c;
-
-    border-radius:50% 50% 0 0;
-
-    transform:rotate(3deg);
-}
-
-
-/* factory silhouette */
-
-.factory{
-    position:absolute;
-
-    z-index:2;
-
-    left:0;
-    right:0;
-
-    bottom:18%;
-
-    height:20%;
-
-    opacity:.22;
-
-    background:
-        linear-gradient(
-            to top,
-            rgba(45,135,210,.85),
-            rgba(45,135,210,0)
-        );
-
-    clip-path:polygon(
-        0 100%,
-        0 60%,
-        4% 60%,
-        4% 20%,
-        7% 20%,
-        7% 72%,
-        11% 72%,
-        11% 42%,
-        14% 42%,
-        14% 76%,
-        20% 76%,
-        20% 30%,
-        23% 30%,
-        23% 80%,
-        31% 80%,
-        31% 50%,
-        35% 50%,
-        35% 80%,
-        43% 80%,
-        43% 35%,
-        47% 35%,
-        47% 77%,
-        54% 77%,
-        54% 58%,
-        59% 58%,
-        59% 82%,
-        67% 82%,
-        67% 28%,
-        71% 28%,
-        71% 76%,
-        77% 76%,
-        77% 46%,
-        81% 46%,
-        81% 82%,
-        88% 82%,
-        88% 34%,
-        92% 34%,
-        92% 73%,
-        100% 73%,
-        100% 100%
-    );
-}
-
-
-/* =========================================
-   MASCOT
-========================================= */
-
-.artwork-wrap{
-    position:absolute;
-
-    z-index:5;
-
-    left:0;
-    right:0;
-
-    bottom:0;
-
-    height:67%;
-
-    display:flex;
-
-    align-items:flex-end;
-    justify-content:center;
-
-    pointer-events:none;
-}
-
-.artwork{
-    display:block;
-
-    width:auto;
-    height:100%;
-
-    max-width:96%;
-
-    object-fit:contain;
-    object-position:center bottom;
-}
-
-
-/* =========================================
-   RIGHT PANEL
-========================================= */
-
-.login-panel{
-    position:relative;
-
-    height:100%;
-
-    display:flex;
-
-    align-items:center;
-    justify-content:center;
-
-    padding:
-        clamp(18px,3vh,38px)
-        clamp(22px,4vw,65px);
-
-    overflow:hidden;
-
-    background:
-        radial-gradient(
-            circle at 100% 20%,
-            rgba(65,135,210,.12),
-            transparent 35%
-        ),
-        linear-gradient(
-            145deg,
-            #ffffff,
-            #f4f9ff
-        );
-}
-
-
-/* yellow / navy corner */
-
-.login-panel::before{
-    content:"";
-
-    position:absolute;
-
-    width:500px;
-    height:25px;
-
-    top:-3px;
-    right:-130px;
-
-    background:var(--yellow);
-
-    transform:rotate(-40deg);
-}
-
-.login-panel::after{
-    content:"";
-
-    position:absolute;
-
-    width:540px;
-    height:38px;
-
-    top:17px;
-    right:-170px;
-
-    background:var(--navy);
-
-    transform:rotate(-40deg);
-}
-
-
-/* =========================================
-   LOGIN CARD
-========================================= */
-
-.login-card{
-    position:relative;
-
-    z-index:5;
-
-    width:min(100%,650px);
-
-    max-height:calc(100dvh - 36px);
-
-    padding:
-        clamp(17px,2.2vh,28px)
-        clamp(28px,3.4vw,52px)
-        clamp(18px,2.5vh,32px);
-
-    background:
-        rgba(255,255,255,.98);
-
-    border-radius:30px;
-
-    border:
-        1px solid rgba(255,255,255,.9);
-
-    box-shadow:
-        0 24px 65px rgba(4,48,97,.13);
-
-    overflow:auto;
-
-    scrollbar-width:none;
-}
-
-.login-card::-webkit-scrollbar{
-    display:none;
-}
-
-
-/* =========================================
-   LANGUAGE
-========================================= */
-
-.language-row{
-    display:flex;
-    justify-content:flex-end;
-}
-
-.language-switch{
-    display:inline-flex;
-
-    padding:4px;
-
-    gap:2px;
-
-    border-radius:30px;
-
-    background:#f0f4f9;
-}
-
-.lang-btn{
-    border:0;
-
-    padding:7px 14px;
-
-    border-radius:25px;
-
-    background:transparent;
-
-    color:#536176;
-
-    font-family:"Prompt",sans-serif;
-
-    font-size:14px;
-
-    cursor:pointer;
-}
-
-.lang-btn.active{
-    background:var(--navy);
-    color:white;
-}
-
-
-/* =========================================
-   SANTE LOGO
-========================================= */
-
-.card-logo{
-    text-align:center;
-}
-
-.mini-symbol{
-    height:
-        clamp(58px,8.5vh,90px);
-
-    display:flex;
-
-    justify-content:center;
-    align-items:center;
-
-    gap:7px;
-
-    margin:
-        clamp(3px,.8vh,8px)
-        0
-        clamp(5px,.7vh,8px);
-}
-
-.mini-symbol span{
-    display:block;
-
-    width:
-        clamp(13px,1.3vw,19px);
-
-    border-radius:20px;
-
-    background:
-        linear-gradient(
-            180deg,
-            #ffd83d,
-            #ffbe00
-        );
-}
-
-.mini-symbol span:nth-child(1),
-.mini-symbol span:nth-child(5){
-    height:45%;
-}
-
-.mini-symbol span:nth-child(2),
-.mini-symbol span:nth-child(4){
-    height:68%;
-}
-
-.mini-symbol span:nth-child(3){
-    height:100%;
-}
-
-.system-title{
-    color:var(--navy);
-
-    font-size:
-        clamp(31px,3vw,48px);
-
-    line-height:1;
-
-    font-weight:800;
-
-    letter-spacing:.3px;
-}
-
-.title-line{
-    width:120px;
-    height:3px;
-
-    background:var(--yellow);
-
-    margin:
-        clamp(6px,.8vh,10px)
-        auto;
-}
-
-.system-subtitle{
-    color:var(--navy);
-
-    font-size:
-        clamp(15px,1.3vw,19px);
-
-    font-weight:600;
-
-    line-height:1.35;
-}
-
-.system-subtitle-en{
-    color:#53647b;
-
-    font-size:
-        clamp(14px,1.2vw,18px);
-
-    font-weight:500;
-}
-
-
-/* =========================================
-   FORM
-========================================= */
-
-.login-form{
-    margin-top:
-        clamp(12px,1.8vh,22px);
-}
-
-.field{
-    margin-bottom:
-        clamp(10px,1.5vh,17px);
-}
-
-.field-label{
-    display:flex;
-
-    align-items:center;
-
-    gap:9px;
-
-    margin-bottom:
-        clamp(5px,.7vh,8px);
-
-    color:var(--navy);
-
-    font-size:
-        clamp(14px,1.1vw,17px);
-
-    font-weight:600;
-}
-
-.field-icon{
-    width:24px;
-    height:24px;
-
-    display:flex;
-
-    align-items:center;
-    justify-content:center;
-}
-
-.field-icon svg{
-    width:23px;
-    height:23px;
-
-    fill:none;
-
-    stroke:var(--navy);
-
-    stroke-width:2;
-}
-
-.input-wrap{
-    position:relative;
-}
-
-.form-input{
-    width:100%;
-
-    height:
-        clamp(48px,6.4vh,61px);
-
-    padding:0 17px;
-
-    border:
-        1.5px solid #cad6e5;
-
-    border-radius:11px;
-
-    outline:none;
-
-    background:white;
-
-    color:#173b68;
-
-    font-family:"Prompt",sans-serif;
-
-    font-size:
-        clamp(14px,1vw,16px);
-}
-
-.form-input:focus{
-    border-color:var(--navy);
-
-    box-shadow:
-        0 0 0 4px
-        rgba(5,55,111,.07);
-}
-
-.form-input::placeholder{
-    color:#9ba7b7;
-}
-
-.password-input{
-    padding-right:58px;
-}
-
-.toggle-password{
-    position:absolute;
-
-    right:10px;
-    top:50%;
-
-    transform:translateY(-50%);
-
-    width:42px;
-    height:42px;
-
-    display:flex;
-
-    align-items:center;
-    justify-content:center;
-
-    border:0;
-
-    background:transparent;
-
-    cursor:pointer;
-}
-
-.toggle-password svg{
-    width:25px;
-    height:25px;
-
-    fill:none;
-
-    stroke:#64758c;
-
-    stroke-width:2;
-}
-
-
-/* =========================================
-   LOGIN BUTTON
-========================================= */
-
-.login-btn{
-    position:relative;
-
-    width:100%;
-
-    height:
-        clamp(52px,6.7vh,64px);
-
-    margin-top:2px;
-
-    border:0;
-
-    border-radius:12px;
-
-    background:
-        linear-gradient(
-            90deg,
-            #ffd21d,
-            #ffbd00
-        );
-
-    color:var(--navy-dark);
-
-    font-family:"Prompt",sans-serif;
-
-    font-size:
-        clamp(17px,1.4vw,21px);
-
-    font-weight:700;
-
-    cursor:pointer;
-
-    box-shadow:
-        0 9px 22px
-        rgba(255,190,0,.20);
-}
-
-.login-btn:hover{
-    transform:translateY(-1px);
-}
-
-.login-btn:disabled{
-    opacity:.7;
-    cursor:not-allowed;
-    transform:none;
-}
-
-.login-arrow{
-    position:absolute;
-
-    right:11px;
-    top:50%;
-
-    transform:translateY(-50%);
-
-    width:
-        clamp(38px,4.4vh,46px);
-
-    height:
-        clamp(38px,4.4vh,46px);
-
-    border-radius:50%;
-
-    display:flex;
-
-    align-items:center;
-    justify-content:center;
-
-    background:var(--navy);
-
-    color:white;
-
-    font-size:24px;
-}
-
-
-/* =========================================
-   MESSAGE
-========================================= */
-
-.message{
-    display:none;
-
-    margin-top:10px;
-
-    padding:9px 12px;
-
-    border-radius:9px;
-
-    text-align:center;
-
-    font-size:13px;
-}
-
-.message.error{
-    display:block;
-
-    color:#a22626;
-
-    background:#fff0f0;
-
-    border:1px solid #ffd1d1;
-}
-
-.message.success{
-    display:block;
-
-    color:#176438;
-
-    background:#effbf3;
-
-    border:1px solid #c9efd6;
-}
-
-
-/* =========================================
-   ADMIN ONLY
-========================================= */
-
-.admin-only{
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    gap:10px;
-
-    margin-top:
-        clamp(11px,1.5vh,19px);
-
-    color:#314c70;
-
-    font-size:
-        clamp(12px,1vw,15px);
-
-    font-weight:500;
-}
-
-.admin-only::before,
-.admin-only::after{
-    content:"";
-
-    flex:1;
-
-    height:1px;
-
-    background:#cad6e4;
-}
-
-
-/* =========================================
-   HOME
-========================================= */
-
-.home-link{
-    margin-top:
-        clamp(8px,1.2vh,15px);
-
-    text-align:center;
-}
-
-.home-link a{
-    color:var(--navy);
-
-    font-size:
-        clamp(13px,1vw,16px);
-
-    font-weight:600;
-
-    text-decoration:underline;
-}
-
-.home-icon{
-    margin-right:5px;
-
-    text-decoration:none;
-}
-
-.copyright{
-    margin-top:
-        clamp(9px,1.2vh,15px);
-
-    color:#9aa6b4;
-
-    text-align:center;
-
-    font-size:10px;
-
-    line-height:1.4;
-}
-
-
-/* =========================================
-   SHORT LAPTOP SCREENS
-   IMPORTANT: fixes 100% browser zoom
-========================================= */
-
-@media (min-width:761px) and (max-height:760px){
-
-    .page{
-        min-height:560px;
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>SANTE SYSTEM | Admin Login</title>
+
+  <!-- Prompt Font -->
+  <link rel="preconnect" href="https://eur02.safelinks.protection.outlook.com/?url=https%3A%2F%2Ffonts.googleapis.com%2F&data=05%7C02%7Cwaleephon.hannaphachewin%40basf.com%7Cc1bfca988e3f45c36f8708df2103a5a3%7Cecaa386bc8df4ce0ad01740cbdb5ba55%7C0%7C0%7C639265971712937827%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=yRkzVCBDbi9P%2Bw%2BBhN%2FZSOfAHxmmOANI9xVucMZfmws%3D&reserved=0">
+  <link rel="preconnect" href="https://eur02.safelinks.protection.outlook.com/?url=https%3A%2F%2Ffonts.gstatic.com%2F&data=05%7C02%7Cwaleephon.hannaphachewin%40basf.com%7Cc1bfca988e3f45c36f8708df2103a5a3%7Cecaa386bc8df4ce0ad01740cbdb5ba55%7C0%7C0%7C639265971712957124%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=vH7Fm000XzLSedA%2Bd2AP5ef4CgTyM6bMnxZ2s6QfOrI%3D&reserved=0" crossorigin>
+  <link href="https://eur02.safelinks.protection.outlook.com/?url=https%3A%2F%2Ffonts.googleapis.com%2Fcss2%3Ffamily%3DPrompt%3Awght%40300%3B400%3B500%3B600%3B700%26display%3Dswap&data=05%7C02%7Cwaleephon.hannaphachewin%40basf.com%7Cc1bfca988e3f45c36f8708df2103a5a3%7Cecaa386bc8df4ce0ad01740cbdb5ba55%7C0%7C0%7C639265971712969916%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=70hikt880hQOfwtBYIjrKkwmI31n2GR57eDG%2FHwMpdk%3D&reserved=0" rel="stylesheet">
+
+  <!-- Supabase -->
+  <script src="https://eur02.safelinks.protection.outlook.com/?url=https%3A%2F%2Fcdn.jsdelivr.net%2Fnpm%2F%40supabase%2Fsupabase-js%402&data=05%7C02%7Cwaleephon.hannaphachewin%40basf.com%7Cc1bfca988e3f45c36f8708df2103a5a3%7Cecaa386bc8df4ce0ad01740cbdb5ba55%7C0%7C0%7C639265971712982832%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=6oxRnj4c%2FjLMW%2FUC5ccRBuoZgotilDSgAvjQzqjlYcw%3D&reserved=0"></script>
+
+  <style>
+    :root {
+      --navy: #062c5e;
+      --navy-dark: #031f43;
+      --navy-light: #0d4d8b;
+      --yellow: #ffc400;
+      --yellow-light: #ffd94d;
+      --white: #ffffff;
+      --soft-bg: #f4f8fc;
+      --text: #092d5c;
+      --muted: #6f7f92;
+      --border: #d9e2ec;
+      --danger: #c62828;
+      --success: #15803d;
     }
 
-    .welcome-area{
-        top:4vh;
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
-
-    .welcome-th{
-        font-size:36px;
-    }
-
-    .welcome-en{
-        font-size:32px;
-    }
-
-    .slogan{
-        font-size:16px;
-    }
-
-    .slogan-thai{
-        font-size:14px;
-    }
-
-    .artwork-wrap{
-        height:64%;
-    }
-
-    .login-card{
-        padding:
-            15px
-            38px
-            17px;
-
-        border-radius:24px;
-    }
-
-    .mini-symbol{
-        height:55px;
-    }
-
-    .system-title{
-        font-size:32px;
-    }
-
-    .title-line{
-        margin:5px auto;
-    }
-
-    .system-subtitle{
-        font-size:14px;
-    }
-
-    .system-subtitle-en{
-        font-size:13px;
-    }
-
-    .login-form{
-        margin-top:10px;
-    }
-
-    .field{
-        margin-bottom:8px;
-    }
-
-    .field-label{
-        margin-bottom:4px;
-        font-size:13px;
-    }
-
-    .form-input{
-        height:44px;
-        font-size:13px;
-    }
-
-    .login-btn{
-        height:47px;
-        font-size:16px;
-    }
-
-    .login-arrow{
-        width:34px;
-        height:34px;
-        font-size:20px;
-    }
-
-    .admin-only{
-        margin-top:8px;
-        font-size:11px;
-    }
-
-    .home-link{
-        margin-top:6px;
-    }
-
-    .home-link a{
-        font-size:12px;
-    }
-
-    .copyright{
-        margin-top:6px;
-        font-size:9px;
-    }
-}
-
-
-/* =========================================
-   TABLET
-========================================= */
-
-@media (max-width:1000px) and (min-width:761px){
-
-    .page{
-        grid-template-columns:45% 55%;
-    }
-
-    .welcome-th{
-        font-size:35px;
-    }
-
-    .welcome-en{
-        font-size:31px;
-    }
-
-    .slogan{
-        font-size:14px;
-        white-space:normal;
-    }
-
-    .slogan-thai{
-        font-size:13px;
-    }
-
-    .artwork-wrap{
-        height:60%;
-    }
-
-    .login-panel{
-        padding:20px;
-    }
-}
-
-
-/* =========================================
-   MOBILE
-========================================= */
-
-@media (max-width:760px){
 
     html,
-    body{
-        overflow:auto;
+    body {
+      width: 100%;
+      min-height: 100%;
+      font-family: "Prompt", sans-serif;
+      background: #f5f8fc;
+      color: var(--text);
     }
 
-    .page{
-        display:block;
-
-        height:auto;
-
-        min-height:100dvh;
-
-        overflow:visible;
+    body {
+      min-height: 100vh;
     }
 
-    .brand-panel{
-        height:420px;
+    .page {
+      width: 100%;
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(460px, 0.95fr);
+      overflow: hidden;
     }
 
-    .welcome-area{
-        top:25px;
+    /* =========================
+       LEFT / BRAND SIDE
+    ========================== */
+
+    .brand-panel {
+      min-height: 100vh;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      background:
+        radial-gradient(
+          circle at 20% 20%,
+          rgba(35, 116, 188, 0.55),
+          transparent 34%
+        ),
+        linear-gradient(
+          145deg,
+          #073b76 0%,
+          #052e61 48%,
+          #031f43 100%
+        );
     }
 
-    .welcome-th{
-        font-size:31px;
+    .brand-panel::before {
+      content: "";
+      position: absolute;
+      width: 430px;
+      height: 430px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 50%;
+      left: -170px;
+      top: 110px;
     }
 
-    .welcome-en{
-        font-size:27px;
+    .brand-panel::after {
+      content: "";
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      border: 1px solid rgba(255, 196, 0, 0.10);
+      border-radius: 50%;
+      right: -130px;
+      top: -90px;
     }
 
-    .welcome-line{
-        width:65px;
-        height:3px;
-        margin:8px auto;
+    .brand-copy {
+      position: relative;
+      z-index: 5;
+      padding: clamp(28px, 4.2vh, 48px)
+               clamp(32px, 5vw, 74px)
+               10px;
+      color: white;
     }
 
-    .slogan{
-        font-size:13px;
-        white-space:normal;
+    .welcome-th {
+      font-size: clamp(27px, 2.5vw, 42px);
+      font-weight: 600;
+      line-height: 1.15;
+      letter-spacing: -0.4px;
     }
 
-    .slogan-thai{
-        font-size:12px;
+    .welcome-en {
+      margin-top: 2px;
+      font-size: clamp(20px, 1.8vw, 30px);
+      color: var(--yellow);
+      font-weight: 500;
     }
 
-    .white-wave{
-        bottom:8%;
-        height:47%;
+    .motto-en {
+      margin-top: clamp(14px, 2vh, 22px);
+      font-size: clamp(16px, 1.35vw, 22px);
+      font-weight: 600;
+      color: white;
+      letter-spacing: 0.4px;
     }
 
-    .artwork-wrap{
-        height:60%;
+    .motto-th {
+      margin-top: 4px;
+      font-size: clamp(13px, 1vw, 16px);
+      color: rgba(255,255,255,0.86);
+      font-weight: 300;
     }
 
-    .artwork{
-        max-width:86%;
+    .yellow-line {
+      margin-top: 15px;
+      width: 76px;
+      height: 4px;
+      background: var(--yellow);
+      border-radius: 20px;
     }
 
-    .login-panel{
-        height:auto;
+    /* Artwork area */
 
-        min-height:auto;
-
-        padding:
-            22px
-            13px
-            30px;
-
-        overflow:visible;
+    .artwork-area {
+      position: relative;
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      z-index: 2;
     }
 
-    .login-panel::before,
-    .login-panel::after{
-        display:none;
+    .white-wave {
+      position: absolute;
+      width: 135%;
+      height: 82%;
+      left: -18%;
+      bottom: -24%;
+      background:
+        linear-gradient(
+          150deg,
+          #f8fcff 0%,
+          #e8f4ff 65%,
+          #ffffff 100%
+        );
+      border-radius: 48% 55% 0 0 / 25% 32% 0 0;
+      transform: rotate(-3deg);
+      z-index: 1;
     }
 
-    .login-card{
-        max-height:none;
-
-        overflow:visible;
-
-        padding:
-            20px
-            19px
-            25px;
-
-        border-radius:23px;
+    .blue-wave {
+      position: absolute;
+      width: 130%;
+      height: 115px;
+      left: -10%;
+      bottom: -55px;
+      background: #07386f;
+      border-radius: 50% 50% 0 0;
+      transform: rotate(2deg);
+      z-index: 2;
     }
 
-    .mini-symbol{
-        height:65px;
+    .yellow-wave {
+      position: absolute;
+      width: 135%;
+      height: 20px;
+      left: -12%;
+      bottom: 49px;
+      background: var(--yellow);
+      border-radius: 50%;
+      transform: rotate(2deg);
+      z-index: 3;
     }
 
-    .system-title{
-        font-size:31px;
+    .artwork {
+      position: relative;
+      z-index: 4;
+      display: block;
+      width: min(90%, 780px);
+      max-height: min(64vh, 650px);
+      object-fit: contain;
+      object-position: center bottom;
+      margin: 0 auto -3px;
+      filter: drop-shadow(0 18px 18px rgba(0, 27, 61, 0.13));
     }
 
-    .system-subtitle{
-        font-size:15px;
+    /* =========================
+       RIGHT / LOGIN
+    ========================== */
+
+    .login-panel {
+      min-height: 100vh;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: clamp(20px, 3vw, 48px);
+      background:
+        radial-gradient(
+          circle at 100% 100%,
+          rgba(13, 77, 139, 0.08),
+          transparent 35%
+        ),
+        #f7f9fc;
     }
 
-    .system-subtitle-en{
-        font-size:14px;
+    .login-panel::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 170px;
+      height: 16px;
+      background: var(--yellow);
+      clip-path: polygon(18% 0,100% 0,100% 100%,0 100%);
     }
 
-    .login-form{
-        margin-top:20px;
+    .login-panel::after {
+      content: "";
+      position: absolute;
+      top: 16px;
+      right: 0;
+      width: 205px;
+      height: 7px;
+      background: var(--navy);
+      clip-path: polygon(18% 0,100% 0,100% 100%,0 100%);
     }
 
-    .form-input{
-        height:55px;
+    .login-card {
+      width: min(100%, 560px);
+      background: rgba(255,255,255,0.98);
+      border: 1px solid rgba(7, 56, 111, 0.08);
+      border-radius: 28px;
+      padding: clamp(24px, 4vh, 42px)
+               clamp(25px, 3.5vw, 48px);
+      box-shadow:
+        0 22px 60px rgba(5, 45, 91, 0.10),
+        0 4px 15px rgba(5, 45, 91, 0.04);
     }
 
-    .login-btn{
-        height:57px;
+    .language-row {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 3px;
     }
-}
 
-</style>
+    .language-switch {
+      display: flex;
+      align-items: center;
+      padding: 4px;
+      background: #edf2f8;
+      border-radius: 100px;
+    }
+
+    .lang-btn {
+      border: 0;
+      background: transparent;
+      font-family: inherit;
+      color: #53657a;
+      padding: 7px 13px;
+      border-radius: 100px;
+      cursor: pointer;
+      font-size: 13px;
+      transition: 0.2s ease;
+    }
+
+    .lang-btn.active {
+      color: white;
+      background: var(--navy);
+      box-shadow: 0 3px 10px rgba(6, 44, 94, 0.18);
+    }
+
+    .system-brand {
+      text-align: center;
+      margin-bottom: clamp(17px, 2.5vh, 27px);
+    }
+
+    .mini-logo {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+      height: 58px;
+      margin-bottom: 8px;
+    }
+
+    .mini-logo span {
+      display: block;
+      width: 13px;
+      border-radius: 20px;
+      background: linear-gradient(
+        180deg,
+        #ffd630,
+        #ffbd00
+      );
+    }
+
+    .mini-logo span:nth-child(1) {
+      height: 27px;
+    }
+
+    .mini-logo span:nth-child(2) {
+      height: 43px;
+    }
+
+    .mini-logo span:nth-child(3) {
+      height: 58px;
+    }
+
+    .mini-logo span:nth-child(4) {
+      height: 43px;
+    }
+
+    .mini-logo span:nth-child(5) {
+      height: 27px;
+    }
+
+    .system-title {
+      font-size: clamp(28px, 2.5vw, 40px);
+      line-height: 1;
+      color: var(--navy);
+      font-weight: 700;
+      letter-spacing: -1px;
+    }
+
+    .system-subtitle {
+      margin-top: 9px;
+      font-size: 15px;
+      line-height: 1.5;
+      color: #334d6c;
+      font-weight: 400;
+    }
+
+    .admin-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      margin-top: 9px;
+      padding: 6px 12px;
+      background: #fff7d9;
+      color: #8b6800;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .admin-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--yellow);
+    }
+
+    .form-group {
+      margin-bottom: 14px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 7px;
+      font-size: 14px;
+      color: var(--navy);
+      font-weight: 500;
+    }
+
+    .input-wrap {
+      position: relative;
+    }
+
+    input {
+      width: 100%;
+      height: 52px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 0 46px 0 15px;
+      font-family: inherit;
+      font-size: 14px;
+      color: var(--navy);
+      outline: none;
+      background: #fff;
+      transition: 0.2s ease;
+    }
+
+    input:focus {
+      border-color: #8baed1;
+      box-shadow: 0 0 0 4px rgba(13, 77, 139, 0.07);
+    }
+
+    input::placeholder {
+      color: #a2adba;
+    }
+
+    .password-toggle {
+      position: absolute;
+      top: 50%;
+      right: 14px;
+      transform: translateY(-50%);
+      border: 0;
+      background: transparent;
+      color: #718096;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 18px;
+    }
+
+    .login-button {
+      width: 100%;
+      height: 54px;
+      margin-top: 6px;
+      border: none;
+      border-radius: 13px;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--navy);
+      background:
+        linear-gradient(
+          90deg,
+          #ffcb05,
+          #ffc000
+        );
+      box-shadow: 0 10px 24px rgba(255, 196, 0, 0.22);
+      transition: 0.2s ease;
+    }
+
+    .login-button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 13px 27px rgba(255, 196, 0, 0.28);
+    }
+
+    .login-button:disabled {
+      cursor: not-allowed;
+      opacity: 0.65;
+      transform: none;
+    }
+
+    .message {
+      display: none;
+      margin-top: 11px;
+      padding: 9px 12px;
+      border-radius: 9px;
+      font-size: 12px;
+      text-align: center;
+    }
+
+    .message.error {
+      display: block;
+      background: #fff0f0;
+      color: var(--danger);
+      border: 1px solid #ffd4d4;
+    }
+
+    .message.success {
+      display: block;
+      background: #edf9f1;
+      color: var(--success);
+      border: 1px solid #cbeed7;
+    }
+
+    .admin-only {
+      margin-top: 17px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 12px;
+      color: #65768b;
+    }
+
+    .admin-only::before,
+    .admin-only::after {
+      content: "";
+      height: 1px;
+      flex: 1;
+      background: #e0e6ee;
+    }
+
+    .home-link {
+      display: block;
+      width: fit-content;
+      margin: 13px auto 0;
+      color: var(--navy);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .home-link:hover {
+      text-decoration: underline;
+    }
+
+    .copyright {
+      margin-top: 13px;
+      text-align: center;
+      font-size: 10px;
+      color: #9aa7b5;
+    }
+
+    /* =========================
+       LAPTOP HEIGHT FIX
+       important for 100% zoom
+    ========================== */
+
+    @media (min-width: 901px) and (max-height: 760px) {
+
+      .brand-copy {
+        padding-top: 22px;
+      }
+
+      .welcome-th {
+        font-size: 28px;
+      }
+
+      .welcome-en {
+        font-size: 21px;
+      }
+
+      .motto-en {
+        margin-top: 10px;
+        font-size: 16px;
+      }
+
+      .motto-th {
+        font-size: 12px;
+      }
+
+      .yellow-line {
+        margin-top: 9px;
+      }
+
+      .artwork {
+        max-height: 58vh;
+        width: min(84%, 650px);
+      }
+
+      .login-panel {
+        padding: 18px 30px;
+      }
+
+      .login-card {
+        padding: 19px 35px;
+        border-radius: 23px;
+      }
+
+      .mini-logo {
+        height: 44px;
+        margin-bottom: 5px;
+      }
+
+      .mini-logo span {
+        width: 10px;
+      }
+
+      .mini-logo span:nth-child(1),
+      .mini-logo span:nth-child(5) {
+        height: 21px;
+      }
+
+      .mini-logo span:nth-child(2),
+      .mini-logo span:nth-child(4) {
+        height: 33px;
+      }
+
+      .mini-logo span:nth-child(3) {
+        height: 44px;
+      }
+
+      .system-title {
+        font-size: 30px;
+      }
+
+      .system-subtitle {
+        margin-top: 5px;
+        font-size: 13px;
+      }
+
+      .admin-label {
+        margin-top: 5px;
+        padding: 4px 10px;
+      }
+
+      .system-brand {
+        margin-bottom: 12px;
+      }
+
+      .form-group {
+        margin-bottom: 9px;
+      }
+
+      label {
+        margin-bottom: 4px;
+        font-size: 12px;
+      }
+
+      input {
+        height: 43px;
+      }
+
+      .login-button {
+        height: 45px;
+        margin-top: 2px;
+        font-size: 15px;
+      }
+
+      .admin-only {
+        margin-top: 10px;
+      }
+
+      .home-link {
+        margin-top: 8px;
+      }
+
+      .copyright {
+        margin-top: 7px;
+      }
+    }
+
+    /* =========================
+       TABLET
+    ========================== */
+
+    @media (max-width: 900px) {
+
+      body {
+        overflow: auto;
+      }
+
+      .page {
+        display: block;
+        min-height: 100vh;
+        overflow: visible;
+      }
+
+      .brand-panel {
+        min-height: 520px;
+      }
+
+      .brand-copy {
+        text-align: center;
+        padding: 35px 25px 0;
+      }
+
+      .yellow-line {
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .artwork {
+        max-height: 360px;
+        width: min(86%, 600px);
+      }
+
+      .login-panel {
+        min-height: auto;
+        padding: 45px 20px 55px;
+      }
+
+      .login-card {
+        max-width: 580px;
+      }
+    }
+
+    /* =========================
+       MOBILE
+    ========================== */
+
+    @media (max-width: 560px) {
+
+      .brand-panel {
+        min-height: 420px;
+      }
+
+      .brand-copy {
+        padding-top: 28px;
+      }
+
+      .welcome-th {
+        font-size: 27px;
+      }
+
+      .welcome-en {
+        font-size: 20px;
+      }
+
+      .motto-en {
+        font-size: 14px;
+        margin-top: 12px;
+      }
+
+      .motto-th {
+        font-size: 11px;
+      }
+
+      .artwork {
+        max-height: 280px;
+        width: 95%;
+      }
+
+      .login-panel {
+        padding: 30px 13px 40px;
+      }
+
+      .login-card {
+        padding: 22px 18px 25px;
+        border-radius: 20px;
+      }
+
+      .system-title {
+        font-size: 29px;
+      }
+
+      .system-subtitle {
+        font-size: 13px;
+      }
+    }
+
+  </style>
 </head>
-
 
 <body>
 
 <div class="page">
 
+  <!-- LEFT -->
+  <section class="brand-panel">
 
-<!-- ======================================
-     LEFT
-======================================= -->
+    <div class="brand-copy">
 
-<section class="brand-panel">
+      <div class="welcome-th"
+           data-th="ยินดีต้อนรับ"
+           data-en="Welcome">
+        ยินดีต้อนรับ
+      </div>
 
-    <div class="welcome-area">
+      <div class="welcome-en"
+           data-th="Welcome"
+           data-en="SANTE Admin System">
+        Welcome
+      </div>
 
-        <div
-            class="welcome-th"
-            data-th="ยินดีต้อนรับ"
-            data-en="Welcome"
-        >
-            ยินดีต้อนรับ
-        </div>
+      <div class="motto-en">
+        TRUST IN SAFETY. TRUST IN SANTE.
+      </div>
 
-        <div
-            class="welcome-en"
-            data-th="Welcome"
-            data-en="SANTE SYSTEM"
-        >
-            Welcome
-        </div>
+      <div class="motto-th"
+           data-th="เชื่อมั่นในความปลอดภัย เชื่อมั่นในซานเต้"
+           data-en="Safety you can trust. SANTE you can trust.">
+        เชื่อมั่นในความปลอดภัย เชื่อมั่นในซานเต้
+      </div>
 
-        <div class="welcome-line"></div>
-
-
-        <div class="slogan">
-
-            TRUST IN SAFETY.
-            <span class="slogan-yellow">
-                TRUST IN SANTE.
-            </span>
-
-        </div>
-
-
-        <div
-            class="slogan-thai"
-            data-th="เชื่อมั่นในความปลอดภัย &nbsp;&nbsp; เชื่อมั่นในซานเต้"
-            data-en="Confidence in Safety &nbsp;&nbsp; Confidence in SANTE"
-        >
-            เชื่อมั่นในความปลอดภัย
-            &nbsp;&nbsp;
-            <span class="highlight">
-                เชื่อมั่นในซานเต้
-            </span>
-        </div>
+      <div class="yellow-line"></div>
 
     </div>
 
+    <div class="artwork-area">
 
-    <div class="white-wave"></div>
+      <div class="white-wave"></div>
+      <div class="yellow-wave"></div>
+      <div class="blue-wave"></div>
 
-    <div class="factory"></div>
-
-    <div class="yellow-wave"></div>
-
-    <div class="bottom-navy"></div>
-
-
-    <div class="artwork-wrap">
-
-        <img
-            src="sante-admin-artwork.png"
-            class="artwork"
-            alt="SANTE Consulting Mascot"
-        >
+      <!-- ภาพที่คุณ Upload ใน GitHub -->
+      <img
+        class="artwork"
+        src="sante-admin-artwork.png"
+        alt="SANTE Admin Mascot"
+      >
 
     </div>
 
-</section>
+  </section>
 
 
+  <!-- RIGHT -->
+  <section class="login-panel">
 
-<!-- ======================================
-     RIGHT
-======================================= -->
+    <div class="login-card">
 
-<main class="login-panel">
-
-
-<div class="login-card">
-
-
-<!-- LANGUAGE -->
-
-<div class="language-row">
-
-    <div class="language-switch">
-
-        <button
-            type="button"
-            id="thaiButton"
+      <div class="language-row">
+        <div class="language-switch">
+          <button
             class="lang-btn active"
-            onclick="setLanguage('th')"
-        >
+            id="btnTH"
+            type="button"
+            onclick="setLanguage('th')">
             🇹🇭 ไทย
-        </button>
+          </button>
+
+          <button
+            class="lang-btn"
+            id="btnEN"
+            type="button"
+            onclick="setLanguage('en')">
+            🇬🇧 EN
+          </button>
+        </div>
+      </div>
+
+      <div class="system-brand">
+
+        <div class="mini-logo">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+
+        <div class="system-title">
+          SANTE SYSTEM
+        </div>
+
+        <div
+          class="system-subtitle"
+          data-th="ระบบบริหารจัดการ<br>SANTE Consulting"
+          data-en="Administration System<br>SANTE Consulting">
+          ระบบบริหารจัดการ<br>
+          SANTE Consulting
+        </div>
+
+        <div class="admin-label">
+          <span class="admin-dot"></span>
+          <span
+            data-th="ADMINISTRATOR"
+            data-en="ADMINISTRATOR">
+            ADMINISTRATOR
+          </span>
+        </div>
+
+      </div>
+
+
+      <form id="loginForm">
+
+        <div class="form-group">
+
+          <label
+            for="email"
+            data-th="อีเมล"
+            data-en="Email">
+            อีเมล
+          </label>
+
+          <div class="input-wrap">
+            <input
+              type="email"
+              id="email"
+              autocomplete="email"
+              placeholder="example@santeconsulting.co.th"
+              required
+            >
+          </div>
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label
+            for="password"
+            data-th="รหัสผ่าน"
+            data-en="Password">
+            รหัสผ่าน
+          </label>
+
+          <div class="input-wrap">
+
+            <input
+              type="password"
+              id="password"
+              autocomplete="current-password"
+              placeholder="กรุณากรอกรหัสผ่าน"
+              required
+            >
+
+            <button
+              type="button"
+              class="password-toggle"
+              onclick="togglePassword()"
+              aria-label="Show password">
+              👁
+            </button>
+
+          </div>
+
+        </div>
+
 
         <button
-            type="button"
-            id="englishButton"
-            class="lang-btn"
-            onclick="setLanguage('en')"
-        >
-            🇬🇧 EN
+          type="submit"
+          class="login-button"
+          id="loginButton"
+          data-th="เข้าสู่ระบบ →"
+          data-en="Sign in →">
+          เข้าสู่ระบบ →
         </button>
 
+
+        <div
+          id="loginMessage"
+          class="message">
+        </div>
+
+      </form>
+
+
+      <div
+        class="admin-only"
+        data-th="🔒 เฉพาะผู้ดูแลระบบเท่านั้น"
+        data-en="🔒 Administrators only">
+        🔒 เฉพาะผู้ดูแลระบบเท่านั้น
+      </div>
+
+
+      <a
+        class="home-link"
+        href="index.html"
+        data-th="⌂ กลับหน้าหลัก"
+        data-en="⌂ Back to home">
+        ⌂ กลับหน้าหลัก
+      </a>
+
+
+      <div class="copyright">
+        © 2026 SANTE CONSULTING CO., LTD.
+      </div>
+
     </div>
 
-</div>
-
-
-
-<!-- LOGO -->
-
-<div class="card-logo">
-
-    <div class="mini-symbol">
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-    </div>
-
-
-    <h1 class="system-title">
-        SANTE SYSTEM
-    </h1>
-
-
-    <div class="title-line"></div>
-
-
-    <div
-        class="system-subtitle"
-        data-th="ระบบบริหารจัดการ"
-        data-en="Management System"
-    >
-        ระบบบริหารจัดการ
-    </div>
-
-
-    <div class="system-subtitle-en">
-        SANTE Consulting
-    </div>
+  </section>
 
 </div>
-
-
-
-<!-- LOGIN -->
-
-<form
-    id="loginForm"
-    class="login-form"
->
-
-
-<!-- EMAIL -->
-
-<div class="field">
-
-<label
-    for="email"
-    class="field-label"
->
-
-<span class="field-icon">
-
-<svg viewBox="0 0 24 24">
-    <rect
-        x="3"
-        y="5"
-        width="18"
-        height="14"
-        rx="2"
-    ></rect>
-
-    <path d="M3 7l9 6 9-6"></path>
-</svg>
-
-</span>
-
-
-<span
-    data-th="อีเมล"
-    data-en="Email"
->
-    อีเมล
-</span>
-
-</label>
-
-
-<input
-    id="email"
-    class="form-input"
-    type="email"
-    autocomplete="email"
-    placeholder="example@santeconsulting.co.th"
-    required
->
-
-</div>
-
-
-
-<!-- PASSWORD -->
-
-<div class="field">
-
-<label
-    for="password"
-    class="field-label"
->
-
-<span class="field-icon">
-
-<svg viewBox="0 0 24 24">
-
-    <rect
-        x="5"
-        y="10"
-        width="14"
-        height="11"
-        rx="2"
-    ></rect>
-
-    <path
-        d="M8 10V7a4 4 0 0 1 8 0v3"
-    ></path>
-
-</svg>
-
-</span>
-
-
-<span
-    data-th="รหัสผ่าน"
-    data-en="Password"
->
-    รหัสผ่าน
-</span>
-
-</label>
-
-
-<div class="input-wrap">
-
-<input
-    id="password"
-    class="form-input password-input"
-    type="password"
-    autocomplete="current-password"
-    placeholder="กรุณากรอกรหัสผ่าน"
-    required
->
-
-
-<button
-    type="button"
-    class="toggle-password"
-    onclick="togglePassword()"
-    aria-label="Show password"
->
-
-<svg viewBox="0 0 24 24">
-
-    <path
-        d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12z"
-    ></path>
-
-    <circle
-        cx="12"
-        cy="12"
-        r="3"
-    ></circle>
-
-</svg>
-
-</button>
-
-</div>
-
-</div>
-
-
-
-<!-- LOGIN BUTTON -->
-
-<button
-    id="loginButton"
-    class="login-btn"
-    type="submit"
->
-
-<span
-    id="loginButtonText"
-    data-th="เข้าสู่ระบบ"
-    data-en="Sign In"
->
-    เข้าสู่ระบบ
-</span>
-
-
-<span class="login-arrow">
-    →
-</span>
-
-</button>
-
-
-
-<div
-    id="message"
-    class="message"
-></div>
-
-
-</form>
-
-
-
-<!-- ADMIN ONLY -->
-
-<div class="admin-only">
-
-<span>🔒</span>
-
-<span
-    data-th="เฉพาะผู้ดูแลระบบเท่านั้น"
-    data-en="Administrators only"
->
-    เฉพาะผู้ดูแลระบบเท่านั้น
-</span>
-
-</div>
-
-
-
-<!-- HOME -->
-
-<div class="home-link">
-
-<a href="index.html">
-
-<span class="home-icon">
-    ⌂
-</span>
-
-<span
-    data-th="กลับหน้าหลัก"
-    data-en="Back to Home"
->
-    กลับหน้าหลัก
-</span>
-
-</a>
-
-</div>
-
-
-
-<div class="copyright">
-
-© 2026 SANTE CONSULTING CO., LTD.<br>
-All rights reserved.
-
-</div>
-
-
-</div>
-
-</main>
-
-</div>
-
 
 
 <script>
 
-/* =========================================
-   SUPABASE
-========================================= */
+  /* ======================================
+     SUPABASE
+  ====================================== */
 
-const SUPABASE_URL =
-"https://eur02.safelinks.protection.outlook.com/?url=https%3A%2F%2Fcyegjwerxlxhczrfiurz.supabase.co%2F&data=05%7C02%7Cwaleephon.hannaphachewin%40basf.com%7C6341282af7fc4fed304908df2102ade2%7Cecaa386bc8df4ce0ad01740cbdb5ba55%7C0%7C0%7C639265967536052656%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=rR7CRtkQHvpQG23D7bSo2JVPrNA7qo5KCf5rSm1HBvU%3D&reserved=0";
+  const SUPABASE_URL =
+    "https://eur02.safelinks.protection.outlook.com/?url=https%3A%2F%2Fcyegjwerxlxhczrfiurz.supabase.co%2F&data=05%7C02%7Cwaleephon.hannaphachewin%40basf.com%7Cc1bfca988e3f45c36f8708df2103a5a3%7Cecaa386bc8df4ce0ad01740cbdb5ba55%7C0%7C0%7C639265971712995353%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=e3UslBEBxvJObnqY2jHLYc28tX1PjW06Gp6gQHwE9v4%3D&reserved=0";
 
-const SUPABASE_PUBLISHABLE_KEY =
-"sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF";
+  const SUPABASE_PUBLISHABLE_KEY =
+    "sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF";
 
-
-const supabaseClient =
-window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_PUBLISHABLE_KEY
-);
-
+  const supabaseClient =
+    window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_PUBLISHABLE_KEY
+    );
 
 
-/* =========================================
-   LANGUAGE
-========================================= */
+  /* ======================================
+     LANGUAGE
+  ====================================== */
 
-let currentLanguage = "th";
+  let currentLanguage = "th";
 
-
-function setLanguage(language){
+  function setLanguage(language) {
 
     currentLanguage = language;
 
+    document.documentElement.lang = language;
 
     document
-    .getElementById("thaiButton")
-    .classList.toggle(
+      .getElementById("btnTH")
+      .classList.toggle(
         "active",
         language === "th"
-    );
-
+      );
 
     document
-    .getElementById("englishButton")
-    .classList.toggle(
+      .getElementById("btnEN")
+      .classList.toggle(
         "active",
         language === "en"
-    );
-
-
-    document
-    .querySelectorAll("[data-th]")
-    .forEach(element => {
-
-        element.innerHTML =
-        element.getAttribute(
-            language === "th"
-            ? "data-th"
-            : "data-en"
-        );
-
-    });
-
+      );
 
     document
-    .getElementById("password")
-    .placeholder =
-        language === "th"
+      .querySelectorAll("[data-th]")
+      .forEach(element => {
+
+        const text =
+          language === "th"
+            ? element.dataset.th
+            : element.dataset.en;
+
+        element.innerHTML = text;
+
+      });
+
+
+    const password =
+      document.getElementById("password");
+
+    password.placeholder =
+      language === "th"
         ? "กรุณากรอกรหัสผ่าน"
         : "Enter your password";
 
-}
+  }
 
 
+  /* ======================================
+     PASSWORD
+  ====================================== */
 
-/* =========================================
-   PASSWORD
-========================================= */
-
-function togglePassword(){
+  function togglePassword() {
 
     const password =
-    document.getElementById("password");
-
+      document.getElementById("password");
 
     password.type =
-        password.type === "password"
+      password.type === "password"
         ? "text"
         : "password";
 
-}
+  }
 
 
+  /* ======================================
+     MESSAGE
+  ====================================== */
 
-/* =========================================
-   MESSAGE
-========================================= */
+  function showMessage(message, type) {
 
-function showMessage(text,type){
+    const box =
+      document.getElementById("loginMessage");
 
-    const message =
-    document.getElementById("message");
+    box.textContent = message;
 
-    message.textContent = text;
+    box.className =
+      "message " + type;
 
-    message.className =
-        "message " + type;
-
-}
-
-
-function clearMessage(){
-
-    const message =
-    document.getElementById("message");
-
-    message.textContent = "";
-
-    message.className =
-        "message";
-
-}
+  }
 
 
+  /* ======================================
+     LOGIN
+  ====================================== */
 
-/* =========================================
-   LOGIN
-========================================= */
+  document
+    .getElementById("loginForm")
+    .addEventListener(
+      "submit",
+      async function(event) {
 
-document
-.getElementById("loginForm")
-.addEventListener(
-"submit",
-async function(event){
+        event.preventDefault();
 
-    event.preventDefault();
+        const email =
+          document
+            .getElementById("email")
+            .value
+            .trim();
 
-    clearMessage();
+        const password =
+          document
+            .getElementById("password")
+            .value;
 
-
-    const email =
-    document
-    .getElementById("email")
-    .value
-    .trim();
-
-
-    const password =
-    document
-    .getElementById("password")
-    .value;
-
-
-    const loginButton =
-    document.getElementById(
-        "loginButton"
-    );
+        const button =
+          document.getElementById(
+            "loginButton"
+          );
 
 
-    const loginButtonText =
-    document.getElementById(
-        "loginButtonText"
-    );
+        button.disabled = true;
+
+        button.textContent =
+          currentLanguage === "th"
+            ? "กำลังตรวจสอบ..."
+            : "Checking...";
 
 
-    loginButton.disabled = true;
+        document
+          .getElementById("loginMessage")
+          .className = "message";
 
 
-    loginButtonText.textContent =
-        currentLanguage === "th"
-        ? "กำลังเข้าสู่ระบบ..."
-        : "Signing in...";
+        try {
 
+          /* LOGIN */
 
-    try{
-
-
-        /* AUTH */
-
-        const {
+          const {
             data,
             error
-        } =
-        await supabaseClient.auth
-        .signInWithPassword({
-            email,
-            password
-        });
+          } =
+            await supabaseClient.auth
+              .signInWithPassword({
+                email,
+                password
+              });
 
 
-        if(error){
+          if (error) {
+
             throw error;
-        }
+
+          }
 
 
-        if(!data.user){
+          if (!data.user) {
+
             throw new Error(
-                "USER_NOT_FOUND"
+              "LOGIN_FAILED"
             );
-        }
+
+          }
 
 
+          /* CHECK STAFF PERMISSION */
 
-        /* STAFF CHECK */
-
-        const {
-            data:staffAccess,
-            error:staffError
-        } =
-        await supabaseClient.rpc(
-            "is_staff"
-        );
-
-
-        if(staffError){
-
-            await supabaseClient.auth
-            .signOut();
-
-            throw staffError;
-
-        }
+          const {
+            data: staffAllowed,
+            error: roleError
+          } =
+            await supabaseClient.rpc(
+              "is_staff"
+            );
 
 
-        if(staffAccess !== true){
+          if (roleError) {
 
             await supabaseClient.auth
-            .signOut();
+              .signOut();
 
+            throw roleError;
+
+          }
+
+
+          if (staffAllowed !== true) {
+
+            await supabaseClient.auth
+              .signOut();
 
             showMessage(
-
-                currentLanguage === "th"
-
-                ? "บัญชีนี้ไม่มีสิทธิ์เข้าถึงระบบผู้ดูแล"
-
+              currentLanguage === "th"
+                ? "บัญชีนี้ไม่มีสิทธิ์เข้าสู่ระบบผู้ดูแล"
                 : "This account does not have administrator access.",
-
-                "error"
-
+              "error"
             );
+
+            button.disabled = false;
+
+            button.textContent =
+              currentLanguage === "th"
+                ? "เข้าสู่ระบบ →"
+                : "Sign in →";
 
             return;
 
-        }
+          }
 
 
+          /* SUCCESS */
 
-        /* SUCCESS */
-
-        showMessage(
-
+          showMessage(
             currentLanguage === "th"
-            ? "เข้าสู่ระบบสำเร็จ"
-            : "Login successful",
-
+              ? "เข้าสู่ระบบสำเร็จ"
+              : "Login successful",
             "success"
-
-        );
-
-
-        setTimeout(
-            function(){
-
-                window.location.href =
-                    "admin.html";
-
-            },
-            400
-        );
+          );
 
 
-    }
+          /*
+             PART ต่อไปเราจะสร้าง
+             admin-dashboard.html
+          */
 
-    catch(error){
-
-        console.error(error);
-
-
-        let text;
-
-
-        if(
-            error.message &&
-            error.message
-            .toLowerCase()
-            .includes("invalid login")
-        ){
-
-            text =
-                currentLanguage === "th"
-                ? "อีเมลหรือรหัสผ่านไม่ถูกต้อง"
-                : "Invalid email or password";
-
-        }
-
-        else{
-
-            text =
-                currentLanguage === "th"
-                ? "ไม่สามารถเข้าสู่ระบบได้ กรุณาลองใหม่อีกครั้ง"
-                : "Unable to sign in. Please try again.";
-
-        }
-
-
-        showMessage(
-            text,
-            "error"
-        );
-
-    }
-
-    finally{
-
-        loginButton.disabled = false;
-
-
-        loginButtonText.textContent =
-            currentLanguage === "th"
-            ? "เข้าสู่ระบบ"
-            : "Sign In";
-
-    }
-
-}
-);
-
-
-
-/* =========================================
-   EXISTING SESSION
-========================================= */
-
-async function checkExistingSession(){
-
-    const {data} =
-    await supabaseClient.auth
-    .getSession();
-
-
-    if(
-        data &&
-        data.session
-    ){
-
-        const {
-            data:staffAccess
-        } =
-        await supabaseClient.rpc(
-            "is_staff"
-        );
-
-
-        if(staffAccess === true){
+          setTimeout(() => {
 
             window.location.href =
-                "admin.html";
+              "admin-dashboard.html";
+
+          }, 500);
+
 
         }
 
+        catch (error) {
+
+          console.error(error);
+
+          showMessage(
+            currentLanguage === "th"
+              ? "อีเมลหรือรหัสผ่านไม่ถูกต้อง หรือไม่สามารถเข้าสู่ระบบได้"
+              : "Incorrect email/password or unable to sign in.",
+            "error"
+          );
+
+          button.disabled = false;
+
+          button.textContent =
+            currentLanguage === "th"
+              ? "เข้าสู่ระบบ →"
+              : "Sign in →";
+
+        }
+
+      }
+    );
+
+
+  /* ======================================
+     IF ALREADY LOGGED IN
+  ====================================== */
+
+  async function checkExistingSession() {
+
+    const {
+      data
+    } =
+      await supabaseClient.auth
+        .getSession();
+
+
+    if (!data.session) {
+
+      return;
+
     }
 
-}
+
+    const {
+      data: staffAllowed
+    } =
+      await supabaseClient.rpc(
+        "is_staff"
+      );
 
 
-checkExistingSession();
+    if (staffAllowed === true) {
+
+      window.location.href =
+        "admin-dashboard.html";
+
+    }
+
+  }
+
+
+  checkExistingSession();
 
 </script>
 
