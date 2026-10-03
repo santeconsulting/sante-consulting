@@ -7,12 +7,15 @@
   <title>SANTE SYSTEM | Admin Dashboard</title>
 
   <!-- Prompt Font -->
-  <link rel="preconnect" href="https://eur02.safelinks.protection.outlook.com/?url=https%3A%2F%2Ffonts.googleapis.com%2F&data=05%7C02%7Cwaleephon.hannaphachewin%40basf.com%7C5834883103de4b1cfba108df21004fcc%7Cecaa386bc8df4ce0ad01740cbdb5ba55%7C0%7C0%7C639265957379302993%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=gzqL9XClEDyayqo%2FmJCptqdKrFXL1%2Btb5AThhtMukhA%3D&reserved=0">
-  <link rel="preconnect" href="https://eur02.safelinks.protection.outlook.com/?url=https%3A%2F%2Ffonts.gstatic.com%2F&data=05%7C02%7Cwaleephon.hannaphachewin%40basf.com%7C5834883103de4b1cfba108df21004fcc%7Cecaa386bc8df4ce0ad01740cbdb5ba55%7C0%7C0%7C639265957379325589%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=Iy2Xshs4lA99e1%2FtbXUjXE%2BYsYQLXh0bT4TkdNlweDM%3D&reserved=0" crossorigin>
-  <link href="https://eur02.safelinks.protection.outlook.com/?url=https%3A%2F%2Ffonts.googleapis.com%2Fcss2%3Ffamily%3DPrompt%3Awght%40300%3B400%3B500%3B600%3B700%26display%3Dswap&data=05%7C02%7Cwaleephon.hannaphachewin%40basf.com%7C5834883103de4b1cfba108df21004fcc%7Cecaa386bc8df4ce0ad01740cbdb5ba55%7C0%7C0%7C639265957379339122%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=aFoaN%2FYW9I7zMigsaB8pm4yMsdZbZabgH72%2BZRrgD0Q%3D&reserved=0" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
 
-  <!-- Supabase -->
-  <script src="https://eur02.safelinks.protection.outlook.com/?url=https%3A%2F%2Fcdn.jsdelivr.net%2Fnpm%2F%40supabase%2Fsupabase-js%402&data=05%7C02%7Cwaleephon.hannaphachewin%40basf.com%7C5834883103de4b1cfba108df21004fcc%7Cecaa386bc8df4ce0ad01740cbdb5ba55%7C0%7C0%7C639265957379352079%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=CyWCkCVqC9xGQIwzVMQM4%2BDXDiWSK2Q8PyfireYDwnk%3D&reserved=0"></script>
+  <!-- Supabase JS -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
     :root {
@@ -20,7 +23,6 @@
       --navy-dark: #051f3e;
       --navy-light: #123f70;
       --yellow: #ffc400;
-      --yellow-dark: #eeb700;
       --bg: #f4f6f9;
       --white: #ffffff;
       --text: #182230;
@@ -34,7 +36,8 @@
       box-sizing: border-box;
     }
 
-    html, body {
+    html,
+    body {
       margin: 0;
       min-height: 100%;
       font-family: "Prompt", sans-serif;
@@ -42,80 +45,138 @@
       color: var(--text);
     }
 
-    button, input {
+    button,
+    input {
       font-family: "Prompt", sans-serif;
     }
 
-    /* Loading */
+    /* =========================
+       LOADING
+    ========================= */
 
     #loadingScreen {
       position: fixed;
       inset: 0;
       z-index: 9999;
+
       background: var(--navy);
       color: white;
+
       display: flex;
       align-items: center;
       justify-content: center;
       flex-direction: column;
+
       gap: 15px;
+      padding: 20px;
     }
 
     .loader {
       width: 42px;
       height: 42px;
+
       border: 4px solid rgba(255,255,255,.2);
       border-top-color: var(--yellow);
       border-radius: 50%;
+
       animation: spin .8s linear infinite;
     }
 
     @keyframes spin {
-      to { transform: rotate(360deg); }
+      to {
+        transform: rotate(360deg);
+      }
     }
 
-    /* Layout */
+    .auth-error {
+      display: none;
+
+      max-width: 680px;
+
+      background: white;
+      color: var(--danger);
+
+      padding: 16px 18px;
+      border-radius: 10px;
+
+      font-size: 13px;
+      line-height: 1.6;
+      text-align: center;
+
+      white-space: pre-line;
+    }
+
+    /* =========================
+       APP
+    ========================= */
 
     .app {
       display: none;
       min-height: 100vh;
     }
 
+    /* =========================
+       SIDEBAR
+    ========================= */
+
     .sidebar {
       width: 270px;
-      background: linear-gradient(180deg, var(--navy), var(--navy-dark));
+
+      background:
+        linear-gradient(
+          180deg,
+          var(--navy),
+          var(--navy-dark)
+        );
+
       color: white;
+
       position: fixed;
+
       left: 0;
       top: 0;
       bottom: 0;
+
       z-index: 1000;
+
       padding: 24px 18px;
+
       overflow-y: auto;
     }
 
     .brand {
       padding: 5px 12px 24px;
-      border-bottom: 1px solid rgba(255,255,255,.10);
+
+      border-bottom:
+        1px solid rgba(255,255,255,.10);
+
       margin-bottom: 20px;
     }
 
     .brand-title {
       font-size: 25px;
       font-weight: 700;
+
       color: var(--yellow);
+
       letter-spacing: .5px;
     }
 
     .brand-sub {
       font-size: 12px;
-      color: rgba(255,255,255,.68);
+
+      color:
+        rgba(255,255,255,.68);
+
       margin-top: 3px;
     }
 
     .menu-title {
       padding: 5px 12px 8px;
-      color: rgba(255,255,255,.45);
+
+      color:
+        rgba(255,255,255,.45);
+
       font-size: 10px;
       letter-spacing: 1px;
     }
@@ -128,81 +189,123 @@
 
     .menu-item {
       width: 100%;
+
       border: 0;
-      color: rgba(255,255,255,.83);
+
+      color:
+        rgba(255,255,255,.83);
+
       background: transparent;
+
       border-radius: 9px;
+
       padding: 11px 12px;
+
       display: flex;
       align-items: center;
+
       gap: 11px;
+
       text-align: left;
+
       cursor: pointer;
+
       font-size: 13px;
+
       transition: .2s;
     }
 
     .menu-item:hover,
     .menu-item.active {
-      background: rgba(255,255,255,.10);
+      background:
+        rgba(255,255,255,.10);
+
       color: white;
     }
 
     .menu-item.active {
-      border-left: 3px solid var(--yellow);
+      border-left:
+        3px solid var(--yellow);
     }
 
     .menu-icon {
       width: 25px;
+
       text-align: center;
+
       font-size: 17px;
     }
 
+    /* =========================
+       MAIN
+    ========================= */
+
     .main {
       margin-left: 270px;
-      width: calc(100% - 270px);
+
+      width:
+        calc(100% - 270px);
+
       min-height: 100vh;
     }
 
-    /* Header */
+    /* =========================
+       HEADER
+    ========================= */
 
     .header {
       height: 76px;
+
       background: white;
-      border-bottom: 1px solid var(--border);
+
+      border-bottom:
+        1px solid var(--border);
+
       display: flex;
       align-items: center;
       justify-content: space-between;
+
       padding: 0 30px;
+
       position: sticky;
+
       top: 0;
+
       z-index: 500;
     }
 
     .header-left {
       display: flex;
       align-items: center;
+
       gap: 14px;
     }
 
     .mobile-menu {
       display: none;
+
       border: 0;
       background: transparent;
+
       font-size: 24px;
+
       color: var(--navy);
+
       cursor: pointer;
     }
 
     .page-title {
       font-size: 19px;
+
       color: var(--navy);
+
       font-weight: 600;
     }
 
     .header-user {
       display: flex;
       align-items: center;
+
       gap: 12px;
     }
 
@@ -212,75 +315,116 @@
 
     .user-email {
       font-size: 12px;
+
       color: var(--text);
+
       font-weight: 500;
     }
 
     .user-role {
       font-size: 10px;
+
       color: var(--muted);
+
       margin-top: 2px;
     }
 
     .avatar {
       width: 38px;
       height: 38px;
+
       border-radius: 50%;
+
       background: var(--navy);
+
       color: var(--yellow);
+
       display: flex;
       align-items: center;
       justify-content: center;
+
       font-weight: 700;
     }
 
     .logout {
-      border: 1px solid var(--border);
+      border:
+        1px solid var(--border);
+
       background: white;
+
       border-radius: 8px;
+
       padding: 8px 12px;
+
       color: var(--danger);
+
       cursor: pointer;
+
       font-size: 12px;
     }
 
-    /* Content */
+    /* =========================
+       CONTENT
+    ========================= */
 
     .content {
       padding: 30px;
+
       max-width: 1500px;
+
       margin: 0 auto;
     }
 
     .welcome {
-      background: linear-gradient(135deg, var(--navy), var(--navy-light));
+      background:
+        linear-gradient(
+          135deg,
+          var(--navy),
+          var(--navy-light)
+        );
+
       border-radius: 16px;
+
       padding: 28px 30px;
+
       color: white;
+
       position: relative;
+
       overflow: hidden;
+
       margin-bottom: 25px;
     }
 
     .welcome::after {
       content: "";
+
       width: 220px;
       height: 220px;
-      background: rgba(255,196,0,.12);
+
+      background:
+        rgba(255,196,0,.12);
+
       border-radius: 50%;
+
       position: absolute;
+
       right: -50px;
       top: -100px;
     }
 
     .welcome h1 {
       margin: 0 0 7px;
+
       font-size: 26px;
     }
 
     .welcome p {
       margin: 0;
-      color: rgba(255,255,255,.75);
+
+      color:
+        rgba(255,255,255,.75);
+
       font-size: 13px;
     }
 
@@ -290,145 +434,221 @@
 
     .section-title {
       margin: 28px 0 14px;
+
       font-size: 16px;
+
       color: var(--navy);
+
       font-weight: 600;
     }
 
-    /* Stats */
+    /* =========================
+       STATS
+    ========================= */
 
     .stats {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+
+      grid-template-columns:
+        repeat(4, 1fr);
+
       gap: 15px;
     }
 
     .stat {
       background: white;
-      border: 1px solid var(--border);
+
+      border:
+        1px solid var(--border);
+
       border-radius: 13px;
+
       padding: 20px;
     }
 
     .stat-label {
       color: var(--muted);
+
       font-size: 12px;
     }
 
     .stat-value {
       margin-top: 6px;
+
       color: var(--navy);
+
       font-size: 25px;
+
       font-weight: 700;
     }
 
     .stat-note {
       font-size: 10px;
+
       color: #9aa4b1;
+
       margin-top: 3px;
     }
 
-    /* Module cards */
+    /* =========================
+       MODULES
+    ========================= */
 
     .modules {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+
+      grid-template-columns:
+        repeat(4, 1fr);
+
       gap: 15px;
     }
 
     .module-card {
-      border: 1px solid var(--border);
+      border:
+        1px solid var(--border);
+
       background: white;
+
       border-radius: 14px;
+
       padding: 20px;
+
       min-height: 155px;
+
       transition: .2s;
+
       cursor: pointer;
     }
 
     .module-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 25px rgba(20,40,70,.07);
+      transform:
+        translateY(-2px);
+
+      box-shadow:
+        0 10px 25px
+        rgba(20,40,70,.07);
+
       border-color: #cad3df;
     }
 
     .module-icon {
       width: 43px;
       height: 43px;
+
       border-radius: 10px;
+
       background: #f2f5f9;
+
       display: flex;
       align-items: center;
       justify-content: center;
+
       font-size: 21px;
+
       margin-bottom: 13px;
     }
 
     .module-name {
       font-size: 14px;
+
       color: var(--navy);
+
       font-weight: 600;
     }
 
     .module-description {
       font-size: 11px;
+
       color: var(--muted);
+
       line-height: 1.6;
+
       margin-top: 6px;
     }
 
     .coming {
       display: inline-block;
+
       margin-top: 10px;
+
       background: #fff8dd;
+
       color: #8b6900;
+
       border-radius: 20px;
+
       padding: 3px 8px;
+
       font-size: 9px;
     }
 
     .ready {
       background: #edf9f1;
+
       color: var(--success);
     }
 
     .security-box {
       margin-top: 25px;
+
       background: white;
-      border: 1px solid var(--border);
-      border-left: 4px solid var(--yellow);
+
+      border:
+        1px solid var(--border);
+
+      border-left:
+        4px solid var(--yellow);
+
       border-radius: 10px;
+
       padding: 17px 20px;
+
       font-size: 11px;
+
       color: var(--muted);
+
       line-height: 1.7;
     }
 
-    /* Tablet */
+    /* =========================
+       TABLET
+    ========================= */
 
     @media (max-width: 1150px) {
+
       .stats,
       .modules {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns:
+          repeat(2, 1fr);
       }
+
     }
 
-    /* Mobile */
+    /* =========================
+       MOBILE
+    ========================= */
 
     @media (max-width: 760px) {
 
       .sidebar {
-        transform: translateX(-100%);
+        transform:
+          translateX(-100%);
+
         transition: .25s;
-        box-shadow: 10px 0 30px rgba(0,0,0,.15);
+
+        box-shadow:
+          10px 0 30px
+          rgba(0,0,0,.15);
       }
 
       .sidebar.open {
-        transform: translateX(0);
+        transform:
+          translateX(0);
       }
 
       .main {
         margin-left: 0;
+
         width: 100%;
       }
 
@@ -438,6 +658,7 @@
 
       .header {
         height: 68px;
+
         padding: 0 15px;
       }
 
@@ -454,7 +675,8 @@
       }
 
       .content {
-        padding: 18px 15px 30px;
+        padding:
+          18px 15px 30px;
       }
 
       .welcome {
@@ -469,6 +691,7 @@
       .modules {
         grid-template-columns: 1fr;
       }
+
     }
 
   </style>
@@ -476,68 +699,170 @@
 
 <body>
 
-  <!-- AUTH CHECK -->
+  <!-- =========================
+       AUTH LOADING
+  ========================== -->
+
   <div id="loadingScreen">
-    <div class="loader"></div>
-    <div>กำลังตรวจสอบสิทธิ์...</div>
+
+    <div
+      class="loader"
+      id="loader"
+    ></div>
+
+    <div id="loadingText">
+      กำลังตรวจสอบสิทธิ์...
+    </div>
+
+    <div
+      id="authError"
+      class="auth-error"
+    ></div>
+
   </div>
 
-  <div class="app" id="app">
+
+  <!-- =========================
+       APP
+  ========================== -->
+
+  <div
+    class="app"
+    id="app"
+  >
 
     <!-- SIDEBAR -->
-    <aside class="sidebar" id="sidebar">
+
+    <aside
+      class="sidebar"
+      id="sidebar"
+    >
 
       <div class="brand">
-        <div class="brand-title">SANTE</div>
-        <div class="brand-sub">SYSTEM ADMIN</div>
+
+        <div class="brand-title">
+          SANTE
+        </div>
+
+        <div class="brand-sub">
+          SYSTEM ADMIN
+        </div>
+
       </div>
 
-      <div class="menu-title">MAIN</div>
+
+      <div class="menu-title">
+        MAIN
+      </div>
+
 
       <nav class="menu">
 
-        <button class="menu-item active">
-          <span class="menu-icon">⌂</span>
+        <button
+          class="menu-item active"
+          type="button"
+        >
+          <span class="menu-icon">
+            ⌂
+          </span>
+
           Dashboard
         </button>
 
-        <button class="menu-item" data-module="questions">
-          <span class="menu-icon">✎</span>
+
+        <button
+          class="menu-item"
+          data-module="questions"
+          type="button"
+        >
+          <span class="menu-icon">
+            ✎
+          </span>
+
           Question Import
         </button>
 
-        <button class="menu-item">
-          <span class="menu-icon">▣</span>
+
+        <button
+          class="menu-item"
+          type="button"
+        >
+          <span class="menu-icon">
+            ▣
+          </span>
+
           Courses
         </button>
 
-        <button class="menu-item">
-          <span class="menu-icon">◷</span>
+
+        <button
+          class="menu-item"
+          type="button"
+        >
+          <span class="menu-icon">
+            ◷
+          </span>
+
           Training
         </button>
 
-        <button class="menu-item">
-          <span class="menu-icon">✓</span>
+
+        <button
+          class="menu-item"
+          type="button"
+        >
+          <span class="menu-icon">
+            ✓
+          </span>
+
           Certificates
         </button>
 
-        <button class="menu-item">
-          <span class="menu-icon">⚙</span>
+
+        <button
+          class="menu-item"
+          type="button"
+        >
+          <span class="menu-icon">
+            ⚙
+          </span>
+
           Service Jobs
         </button>
 
-        <button class="menu-item">
-          <span class="menu-icon">▤</span>
+
+        <button
+          class="menu-item"
+          type="button"
+        >
+          <span class="menu-icon">
+            ▤
+          </span>
+
           Quotations
         </button>
 
-        <button class="menu-item">
-          <span class="menu-icon">฿</span>
+
+        <button
+          class="menu-item"
+          type="button"
+        >
+          <span class="menu-icon">
+            ฿
+          </span>
+
           Finance
         </button>
 
-        <button class="menu-item">
-          <span class="menu-icon">♙</span>
+
+        <button
+          class="menu-item"
+          type="button"
+        >
+          <span class="menu-icon">
+            ♙
+          </span>
+
           Users
         </button>
 
@@ -547,7 +872,10 @@
 
 
     <!-- MAIN -->
+
     <div class="main">
+
+      <!-- HEADER -->
 
       <header class="header">
 
@@ -571,6 +899,7 @@
         <div class="header-user">
 
           <div class="user-text">
+
             <div
               class="user-email"
               id="userEmail"
@@ -581,7 +910,9 @@
             <div class="user-role">
               Authorized Staff
             </div>
+
           </div>
+
 
           <div
             class="avatar"
@@ -589,6 +920,7 @@
           >
             S
           </div>
+
 
           <button
             class="logout"
@@ -602,6 +934,8 @@
 
       </header>
 
+
+      <!-- CONTENT -->
 
       <main class="content">
 
@@ -629,51 +963,70 @@
         <section class="stats">
 
           <div class="stat">
+
             <div class="stat-label">
               System Status
             </div>
+
             <div class="stat-value">
               Online
             </div>
+
             <div class="stat-note">
               Supabase + Netlify
             </div>
+
           </div>
 
+
           <div class="stat">
+
             <div class="stat-label">
               Exam-prep Courses
             </div>
+
             <div class="stat-value">
               5
             </div>
+
             <div class="stat-note">
               Initial configuration
             </div>
+
           </div>
 
+
           <div class="stat">
+
             <div class="stat-label">
               Exam Sets
             </div>
+
             <div class="stat-value">
               18
             </div>
+
             <div class="stat-note">
               Fixed question sets
             </div>
+
           </div>
 
+
           <div class="stat">
+
             <div class="stat-label">
               Planned Questions
             </div>
+
             <div class="stat-value">
               1,800
             </div>
+
             <div class="stat-note">
               Across 5 courses
             </div>
+
           </div>
 
         </section>
@@ -690,7 +1043,10 @@
             class="module-card"
             id="questionImportCard"
           >
-            <div class="module-icon">✎</div>
+
+            <div class="module-icon">
+              ✎
+            </div>
 
             <div class="module-name">
               Question Import
@@ -704,12 +1060,15 @@
             <span class="coming ready">
               NEXT
             </span>
+
           </div>
 
 
           <div class="module-card">
 
-            <div class="module-icon">▣</div>
+            <div class="module-icon">
+              ▣
+            </div>
 
             <div class="module-name">
               Courses
@@ -729,7 +1088,9 @@
 
           <div class="module-card">
 
-            <div class="module-icon">◷</div>
+            <div class="module-icon">
+              ◷
+            </div>
 
             <div class="module-name">
               Training
@@ -749,7 +1110,9 @@
 
           <div class="module-card">
 
-            <div class="module-icon">✓</div>
+            <div class="module-icon">
+              ✓
+            </div>
 
             <div class="module-name">
               Certificates
@@ -769,7 +1132,9 @@
 
           <div class="module-card">
 
-            <div class="module-icon">⚙</div>
+            <div class="module-icon">
+              ⚙
+            </div>
 
             <div class="module-name">
               Service Jobs
@@ -789,7 +1154,9 @@
 
           <div class="module-card">
 
-            <div class="module-icon">▤</div>
+            <div class="module-icon">
+              ▤
+            </div>
 
             <div class="module-name">
               Quotations
@@ -809,7 +1176,9 @@
 
           <div class="module-card">
 
-            <div class="module-icon">฿</div>
+            <div class="module-icon">
+              ฿
+            </div>
 
             <div class="module-name">
               Finance
@@ -829,7 +1198,9 @@
 
           <div class="module-card">
 
-            <div class="module-icon">♙</div>
+            <div class="module-icon">
+              ♙
+            </div>
 
             <div class="module-name">
               Users
@@ -850,11 +1221,14 @@
 
 
         <div class="security-box">
+
           🔒 ระบบนี้ตรวจสอบ Session และสิทธิ์จาก
           Supabase ก่อนเปิด Dashboard ทุกครั้ง
+
           การซ่อนเมนูบนหน้าเว็บไม่ใช่กลไกความปลอดภัยหลัก —
           สิทธิ์จริงยังถูกควบคุมด้วย Database,
           RLS และ RPC ของ SANTE SYSTEM
+
         </div>
 
       </main>
@@ -864,292 +1238,353 @@
   </div>
 
 
-<script>
+  <!-- =========================
+       JAVASCRIPT
+  ========================== -->
 
-  /* ============================
-     SUPABASE
-  ============================ */
+  <script>
 
-  const SUPABASE_URL =
-    "https://eur02.safelinks.protection.outlook.com/?url=https%3A%2F%2Fcyegjwerxlxhczrfiurz.supabase.co%2F&data=05%7C02%7Cwaleephon.hannaphachewin%40basf.com%7C5834883103de4b1cfba108df21004fcc%7Cecaa386bc8df4ce0ad01740cbdb5ba55%7C0%7C0%7C639265957379365816%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=r9yFTM11S8pgeXo8nVK2p2TPe76rJagGmIobnS%2FPxs4%3D&reserved=0";
+    /* =========================
+       SUPABASE
+    ========================== */
 
-  const SUPABASE_PUBLISHABLE_KEY =
-    "sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF";
+    const SUPABASE_URL =
+      "https://cyegjwerxlxhczrfiurz.supabase.co";
 
-  const supabaseClient =
-    window.supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_PUBLISHABLE_KEY
-    );
+    const SUPABASE_PUBLISHABLE_KEY =
+      "sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF";
 
 
-  const loadingScreen =
-    document.getElementById("loadingScreen");
-
-  const app =
-    document.getElementById("app");
-
-  const userEmail =
-    document.getElementById("userEmail");
-
-  const avatar =
-    document.getElementById("avatar");
-
-
-  /* ============================
-     PROTECT ADMIN PAGE
-  ============================ */
-
-  async function protectAdminPage() {
-
-    try {
-
-      /*
-        1. Check Supabase session
-      */
-
-      const {
-        data: sessionData,
-        error: sessionError
-      } =
-        await supabaseClient
-          .auth
-          .getSession();
+    const supabaseClient =
+      window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_PUBLISHABLE_KEY,
+        {
+          auth: {
+            persistSession: true,
+            autoRefreshToken: true,
+            detectSessionInUrl: true
+          }
+        }
+      );
 
 
-      if (
-        sessionError ||
-        !sessionData.session
-      ) {
+    /* =========================
+       ELEMENTS
+    ========================== */
 
-        window.location.replace(
-          "admin-login.html"
-        );
+    const loadingScreen =
+      document.getElementById(
+        "loadingScreen"
+      );
 
-        return;
+    const loadingText =
+      document.getElementById(
+        "loadingText"
+      );
 
-      }
+    const loader =
+      document.getElementById(
+        "loader"
+      );
 
+    const authError =
+      document.getElementById(
+        "authError"
+      );
 
-      /*
-        2. Check staff permission
-        from database
-      */
+    const app =
+      document.getElementById(
+        "app"
+      );
 
-      const {
-        data: staffAllowed,
-        error: staffError
-      } =
-        await supabaseClient
-          .rpc("is_staff");
+    const userEmail =
+      document.getElementById(
+        "userEmail"
+      );
 
-
-      if (
-        staffError ||
-        staffAllowed !== true
-      ) {
-
-        await supabaseClient
-          .auth
-          .signOut();
-
-        window.location.replace(
-          "admin-login.html"
-        );
-
-        return;
-
-      }
+    const avatar =
+      document.getElementById(
+        "avatar"
+      );
 
 
-      /*
-        3. Authorized
-      */
+    /* =========================
+       ERROR
+    ========================== */
 
-      const user =
-        sessionData.session.user;
-
-
-      userEmail.textContent =
-        user.email || "SANTE Admin";
-
-
-      if (user.email) {
-
-        avatar.textContent =
-          user.email
-            .charAt(0)
-            .toUpperCase();
-
-      }
-
-
-      loadingScreen.style.display =
-        "none";
-
-      app.style.display =
-        "block";
-
-
-    } catch (error) {
+    function showAuthError(
+      stage,
+      error
+    ) {
 
       console.error(
-        "Admin authorization error:",
+        stage,
         error
       );
 
-      await supabaseClient
-        .auth
-        .signOut();
 
-      window.location.replace(
-        "admin-login.html"
-      );
+      loader.style.display =
+        "none";
+
+
+      loadingText.textContent =
+        "ไม่สามารถเปิด Admin Dashboard ได้";
+
+
+      authError.style.display =
+        "block";
+
+
+      const detail =
+        error?.message ||
+        String(
+          error ||
+          "Unknown error"
+        );
+
+
+      authError.textContent =
+        stage +
+        ": " +
+        detail;
 
     }
 
-  }
 
+    /* =========================
+       PROTECT ADMIN
+    ========================== */
 
-  /* ============================
-     LOGOUT
-  ============================ */
+    async function protectAdminPage() {
 
-  document
-    .getElementById("logoutButton")
-    .addEventListener(
-      "click",
-      async () => {
-
-        const button =
-          document.getElementById(
-            "logoutButton"
-          );
-
-        button.disabled = true;
-        button.textContent =
-          "กำลังออก...";
-
-
-        await supabaseClient
-          .auth
-          .signOut();
-
-
-        window.location.replace(
-          "admin-login.html"
-        );
-
-      }
-    );
-
-
-  /* ============================
-     MOBILE MENU
-  ============================ */
-
-  const sidebar =
-    document.getElementById("sidebar");
-
-  document
-    .getElementById("mobileMenu")
-    .addEventListener(
-      "click",
-      () => {
-
-        sidebar.classList.toggle(
-          "open"
-        );
-
-      }
-    );
-
-
-  /*
-    Close sidebar when user
-    taps outside on mobile
-  */
-
-  document.addEventListener(
-    "click",
-    event => {
-
-      if (
-        window.innerWidth <= 760 &&
-        sidebar.classList.contains("open") &&
-        !sidebar.contains(event.target) &&
-        !document
-          .getElementById("mobileMenu")
-          .contains(event.target)
-      ) {
-
-        sidebar.classList.remove(
-          "open"
-        );
-
-      }
-
-    }
-  );
-
-
-  /* ============================
-     QUESTION IMPORT
-     NEXT MODULE
-  ============================ */
-
-  document
-    .getElementById(
-      "questionImportCard"
-    )
-    .addEventListener(
-      "click",
-      () => {
+      try {
 
         /*
-          We will create this file
-          after Login test passes.
+          STEP 1
+          ตรวจ Session
         */
 
-        alert(
-          "Question Import จะเปิดใช้งานในขั้นตอนถัดไป"
-        );
-
-      }
-    );
-
-
-  document
-    .querySelector(
-      '[data-module="questions"]'
-    )
-    .addEventListener(
-      "click",
-      () => {
-
-        alert(
-          "Question Import จะเปิดใช้งานในขั้นตอนถัดไป"
-        );
-
-      }
-    );
+        const {
+          data: sessionData,
+          error: sessionError
+        } =
+        await supabaseClient.auth
+          .getSession();
 
 
-  /* ============================
-     AUTH STATE WATCH
-  ============================ */
+        if (sessionError) {
 
-  supabaseClient
-    .auth
-    .onAuthStateChange(
-      (event, session) => {
+          showAuthError(
+            "SESSION ERROR",
+            sessionError
+          );
+
+          return;
+        }
+
 
         if (
-          event === "SIGNED_OUT"
+          !sessionData ||
+          !sessionData.session
         ) {
 
           window.location.replace(
             "admin-login.html"
+          );
+
+          return;
+        }
+
+
+        console.log(
+          "ADMIN SESSION OK",
+          sessionData.session.user.id
+        );
+
+
+        /*
+          STEP 2
+          ตรวจ STAFF / ADMIN
+        */
+
+        const {
+          data: staffAllowed,
+          error: staffError
+        } =
+        await supabaseClient.rpc(
+          "is_staff"
+        );
+
+
+        if (staffError) {
+
+          showAuthError(
+            "RPC ERROR",
+            staffError
+          );
+
+          return;
+        }
+
+
+        console.log(
+          "ADMIN is_staff() =",
+          staffAllowed
+        );
+
+
+        if (
+          staffAllowed !== true
+        ) {
+
+          showAuthError(
+            "PERMISSION ERROR",
+            new Error(
+              "Session exists, but is_staff() returned false."
+            )
+          );
+
+          return;
+        }
+
+
+        /*
+          STEP 3
+          AUTHORIZED
+        */
+
+        const user =
+          sessionData.session.user;
+
+
+        userEmail.textContent =
+          user.email ||
+          "SANTE Admin";
+
+
+        if (user.email) {
+
+          avatar.textContent =
+            user.email
+              .charAt(0)
+              .toUpperCase();
+
+        }
+
+
+        loadingScreen.style.display =
+          "none";
+
+
+        app.style.display =
+          "block";
+
+
+        console.log(
+          "SANTE ADMIN READY"
+        );
+
+
+      } catch (error) {
+
+        showAuthError(
+          "UNEXPECTED ERROR",
+          error
+        );
+
+      }
+
+    }
+
+
+    /* =========================
+       LOGOUT
+    ========================== */
+
+    document
+      .getElementById(
+        "logoutButton"
+      )
+      .addEventListener(
+        "click",
+        async () => {
+
+          const button =
+            document.getElementById(
+              "logoutButton"
+            );
+
+
+          button.disabled =
+            true;
+
+
+          button.textContent =
+            "กำลังออก...";
+
+
+          await supabaseClient.auth
+            .signOut();
+
+
+          window.location.replace(
+            "admin-login.html"
+          );
+
+        }
+      );
+
+
+    /* =========================
+       MOBILE MENU
+    ========================== */
+
+    const sidebar =
+      document.getElementById(
+        "sidebar"
+      );
+
+
+    document
+      .getElementById(
+        "mobileMenu"
+      )
+      .addEventListener(
+        "click",
+        () => {
+
+          sidebar.classList.toggle(
+            "open"
+          );
+
+        }
+      );
+
+
+    document.addEventListener(
+      "click",
+      event => {
+
+        if (
+          window.innerWidth <= 760 &&
+          sidebar.classList.contains(
+            "open"
+          ) &&
+          !sidebar.contains(
+            event.target
+          ) &&
+          !document
+            .getElementById(
+              "mobileMenu"
+            )
+            .contains(
+              event.target
+            )
+        ) {
+
+          sidebar.classList.remove(
+            "open"
           );
 
         }
@@ -1158,9 +1593,74 @@
     );
 
 
-  protectAdminPage();
+    /* =========================
+       QUESTION IMPORT
+    ========================== */
 
-</script>
+    function questionImportNext() {
+
+      alert(
+        "Question Import จะเปิดใช้งานในขั้นตอนถัดไป"
+      );
+
+    }
+
+
+    document
+      .getElementById(
+        "questionImportCard"
+      )
+      .addEventListener(
+        "click",
+        questionImportNext
+      );
+
+
+    document
+      .querySelector(
+        '[data-module="questions"]'
+      )
+      .addEventListener(
+        "click",
+        questionImportNext
+      );
+
+
+    /* =========================
+       AUTH STATE
+    ========================== */
+
+    supabaseClient.auth
+      .onAuthStateChange(
+        (event) => {
+
+          console.log(
+            "AUTH EVENT:",
+            event
+          );
+
+
+          if (
+            event === "SIGNED_OUT"
+          ) {
+
+            window.location.replace(
+              "admin-login.html"
+            );
+
+          }
+
+        }
+      );
+
+
+    /* =========================
+       START
+    ========================== */
+
+    protectAdminPage();
+
+  </script>
 
 </body>
 </html>
