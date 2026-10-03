@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>SANTE SYSTEM | Admin Diagnostic</title>
+  <title>SANTE SYSTEM | Admin Dashboard</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -28,7 +28,6 @@
       --border:#e3e8ef;
       --success:#168447;
       --danger:#c62828;
-      --warning:#a36b00;
     }
 
     *{
@@ -46,13 +45,14 @@
 
     button{
       font-family:"Prompt",sans-serif;
+      cursor:pointer;
     }
 
     /* =========================
-       DIAGNOSTIC SCREEN
+       AUTH GATE
     ========================= */
 
-    #diagnosticScreen{
+    #authGate{
       position:fixed;
       inset:0;
       z-index:99999;
@@ -61,214 +61,142 @@
       align-items:center;
       justify-content:center;
 
-      padding:25px;
+      padding:24px;
 
       background:
         linear-gradient(
           135deg,
-          #051f3e,
-          #082b55,
-          #123f70
+          var(--navy-dark),
+          var(--navy),
+          var(--navy-light)
         );
-
-      overflow:auto;
     }
 
-    .diagnostic-card{
-      width:min(760px,100%);
+    .gate-card{
+      width:min(470px,100%);
       background:#fff;
       border-radius:18px;
-      padding:28px;
+      padding:32px;
+
+      text-align:center;
+
       box-shadow:
         0 25px 60px
         rgba(0,0,0,.25);
     }
 
-    .diagnostic-logo{
-      text-align:center;
-      margin-bottom:20px;
-    }
-
-    .diagnostic-logo h1{
+    .gate-title{
       margin:0;
       color:var(--navy);
-      font-size:30px;
-    }
-
-    .diagnostic-logo p{
-      margin:4px 0 0;
-      color:var(--muted);
-      font-size:12px;
-    }
-
-    .yellow-line{
-      width:90px;
-      height:4px;
-      margin:12px auto 0;
-      border-radius:10px;
-      background:var(--yellow);
-    }
-
-    .diagnostic-title{
-      margin:22px 0 13px;
-      font-size:15px;
-      font-weight:600;
-      color:var(--navy);
-    }
-
-    .step{
-      display:flex;
-      align-items:flex-start;
-      gap:12px;
-
-      padding:12px 14px;
-      margin-bottom:8px;
-
-      border:1px solid var(--border);
-      border-radius:10px;
-
-      background:#fafbfd;
-    }
-
-    .step-icon{
-      flex:0 0 27px;
-      width:27px;
-      height:27px;
-
-      display:flex;
-      align-items:center;
-      justify-content:center;
-
-      border-radius:50%;
-
-      background:#edf1f5;
-      color:#6f7b8a;
-
-      font-size:12px;
+      font-size:29px;
       font-weight:700;
     }
 
-    .step-content{
-      flex:1;
-      min-width:0;
+    .gate-line{
+      width:82px;
+      height:4px;
+
+      margin:
+        11px auto 22px;
+
+      border-radius:20px;
+
+      background:var(--yellow);
     }
 
-    .step-name{
-      font-size:12px;
+    .gate-subtitle{
+      color:var(--navy);
+      font-size:14px;
       font-weight:600;
-      color:var(--text);
     }
 
-    .step-detail{
-      margin-top:2px;
-      font-size:11px;
+    .gate-message{
+      margin-top:7px;
+
       color:var(--muted);
-      line-height:1.55;
-      overflow-wrap:anywhere;
-    }
-
-    .step.success{
-      background:#f3fbf6;
-      border-color:#bfe3ca;
-    }
-
-    .step.success .step-icon{
-      background:#dff3e6;
-      color:var(--success);
-    }
-
-    .step.error{
-      background:#fff5f5;
-      border-color:#efc5c5;
-    }
-
-    .step.error .step-icon{
-      background:#fbe2e2;
-      color:var(--danger);
-    }
-
-    .step.warning{
-      background:#fffaf0;
-      border-color:#ecd59b;
-    }
-
-    .step.warning .step-icon{
-      background:#fff0c4;
-      color:var(--warning);
-    }
-
-    .diagnostic-info{
-      margin-top:16px;
-      padding:12px 14px;
-
-      background:#f2f5f8;
-      border-radius:10px;
-
-      font-size:10px;
+      font-size:11px;
       line-height:1.7;
-      color:#667384;
-
-      overflow-wrap:anywhere;
     }
 
-    .diagnostic-actions{
-      display:flex;
-      flex-wrap:wrap;
-      gap:9px;
-      margin-top:18px;
+    .spinner{
+      width:35px;
+      height:35px;
+
+      margin:
+        21px auto 3px;
+
+      border:
+        4px solid #e7ecf2;
+
+      border-top-color:
+        var(--yellow);
+
+      border-radius:50%;
+
+      animation:
+        spin .8s linear infinite;
     }
 
-    .btn{
-      border:0;
+    @keyframes spin{
+      to{
+        transform:
+          rotate(360deg);
+      }
+    }
+
+    .gate-error{
+      display:none;
+
+      margin-top:17px;
+      padding:12px;
+
+      background:#fff3f3;
+
+      border:
+        1px solid #efc5c5;
+
       border-radius:9px;
-      padding:10px 16px;
-      cursor:pointer;
-      font-size:12px;
-      font-weight:500;
+
+      color:var(--danger);
+
+      font-size:11px;
+      line-height:1.6;
     }
 
-    .btn-primary{
+    .gate-actions{
+      display:none;
+
+      justify-content:center;
+      flex-wrap:wrap;
+
+      gap:8px;
+
+      margin-top:15px;
+    }
+
+    .gate-button{
+      border:0;
+      border-radius:8px;
+
+      padding:
+        9px 14px;
+
+      font-size:11px;
+    }
+
+    .gate-button-primary{
       background:var(--yellow);
       color:var(--navy);
     }
 
-    .btn-navy{
-      background:var(--navy);
-      color:#fff;
-    }
-
-    .btn-light{
+    .gate-button-light{
       background:#edf1f5;
       color:var(--navy);
-    }
-
-    .result{
-      margin-top:16px;
-      padding:14px;
-      border-radius:10px;
-      font-size:12px;
-      font-weight:500;
-      line-height:1.6;
-      display:none;
-    }
-
-    .result.success{
-      display:block;
-      background:#edf9f1;
-      color:var(--success);
-      border:1px solid #bfe3ca;
-    }
-
-    .result.error{
-      display:block;
-      background:#fff3f3;
-      color:var(--danger);
-      border:1px solid #efc5c5;
     }
 
 
     /* =========================
-       DASHBOARD
+       APPLICATION
     ========================= */
 
     #app{
@@ -276,15 +204,24 @@
       min-height:100vh;
     }
 
+
+    /* =========================
+       SIDEBAR
+    ========================= */
+
     .sidebar{
-      width:270px;
       position:fixed;
+
       left:0;
       top:0;
       bottom:0;
+
       z-index:1000;
 
-      padding:24px 18px;
+      width:280px;
+
+      padding:
+        22px 16px;
 
       background:
         linear-gradient(
@@ -294,122 +231,226 @@
         );
 
       color:#fff;
+
       overflow-y:auto;
     }
 
     .brand{
-      padding:5px 12px 24px;
+      display:flex;
+      align-items:center;
+
+      gap:11px;
+
+      padding:
+        4px 10px 20px;
+
       border-bottom:
-        1px solid rgba(255,255,255,.10);
-      margin-bottom:20px;
+        1px solid
+        rgba(255,255,255,.10);
+
+      margin-bottom:16px;
+    }
+
+    .brand-mark{
+      width:42px;
+      height:42px;
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+
+      border-radius:11px;
+
+      background:var(--yellow);
+
+      color:var(--navy);
+
+      font-size:21px;
+      font-weight:700;
     }
 
     .brand-title{
-      font-size:25px;
-      font-weight:700;
       color:var(--yellow);
-      letter-spacing:.5px;
+
+      font-size:22px;
+      font-weight:700;
+
+      line-height:1.1;
     }
 
-    .brand-sub{
-      font-size:12px;
-      color:rgba(255,255,255,.68);
+    .brand-subtitle{
       margin-top:3px;
+
+      color:
+        rgba(255,255,255,.63);
+
+      font-size:10px;
+
+      letter-spacing:.7px;
     }
 
     .menu-title{
-      padding:5px 12px 8px;
-      color:rgba(255,255,255,.45);
-      font-size:10px;
-      letter-spacing:1px;
+      padding:
+        10px 12px 6px;
+
+      color:
+        rgba(255,255,255,.40);
+
+      font-size:9px;
+
+      letter-spacing:1.2px;
     }
 
     .menu{
       display:flex;
       flex-direction:column;
-      gap:5px;
+
+      gap:3px;
     }
 
     .menu-item{
       width:100%;
+
       border:0;
-      color:rgba(255,255,255,.83);
-      background:transparent;
+
       border-radius:9px;
-      padding:11px 12px;
+
+      padding:
+        10px 11px;
 
       display:flex;
       align-items:center;
-      gap:11px;
+
+      gap:10px;
+
+      background:transparent;
+
+      color:
+        rgba(255,255,255,.82);
 
       text-align:left;
-      cursor:pointer;
-      font-size:13px;
+
+      font-size:12px;
     }
 
     .menu-item:hover,
     .menu-item.active{
-      background:rgba(255,255,255,.10);
+      background:
+        rgba(255,255,255,.10);
+
       color:#fff;
     }
 
     .menu-item.active{
-      border-left:3px solid var(--yellow);
+      box-shadow:
+        inset 3px 0 0
+        var(--yellow);
     }
 
     .menu-icon{
       width:25px;
+
       text-align:center;
-      font-size:17px;
+
+      font-size:16px;
     }
+
+    .menu-badge{
+      margin-left:auto;
+
+      padding:
+        3px 6px;
+
+      border-radius:20px;
+
+      background:
+        rgba(255,196,0,.16);
+
+      color:var(--yellow);
+
+      font-size:8px;
+    }
+
+
+    /* =========================
+       MAIN
+    ========================= */
 
     .main{
-      margin-left:270px;
-      width:calc(100% - 270px);
+      width:
+        calc(100% - 280px);
+
       min-height:100vh;
+
+      margin-left:280px;
     }
 
+
+    /* =========================
+       HEADER
+    ========================= */
+
     .header{
-      height:76px;
-      background:#fff;
-      border-bottom:1px solid var(--border);
+      height:74px;
+
+      position:sticky;
+
+      top:0;
+
+      z-index:500;
+
+      padding:
+        0 28px;
 
       display:flex;
       align-items:center;
       justify-content:space-between;
 
-      padding:0 30px;
+      background:#fff;
 
-      position:sticky;
-      top:0;
-      z-index:500;
+      border-bottom:
+        1px solid var(--border);
     }
 
     .header-left{
       display:flex;
       align-items:center;
-      gap:14px;
+
+      gap:12px;
     }
 
     .mobile-menu{
       display:none;
+
       border:0;
+
       background:transparent;
-      font-size:24px;
+
       color:var(--navy);
-      cursor:pointer;
+
+      font-size:24px;
     }
 
     .page-title{
-      font-size:19px;
       color:var(--navy);
+
+      font-size:18px;
       font-weight:600;
+    }
+
+    .page-subtitle{
+      margin-top:2px;
+
+      color:var(--muted);
+
+      font-size:10px;
     }
 
     .header-user{
       display:flex;
       align-items:center;
-      gap:12px;
+
+      gap:10px;
     }
 
     .user-text{
@@ -417,48 +458,80 @@
     }
 
     .user-email{
-      font-size:12px;
-      color:var(--text);
+      font-size:11px;
       font-weight:500;
     }
 
     .user-role{
-      font-size:10px;
-      color:var(--muted);
       margin-top:2px;
+
+      color:var(--muted);
+
+      font-size:9px;
     }
 
     .avatar{
-      width:38px;
-      height:38px;
-      border-radius:50%;
-      background:var(--navy);
-      color:var(--yellow);
+      width:36px;
+      height:36px;
 
       display:flex;
       align-items:center;
       justify-content:center;
 
+      border-radius:50%;
+
+      background:var(--navy);
+
+      color:var(--yellow);
+
       font-weight:700;
     }
 
     .logout{
-      border:1px solid var(--border);
-      background:#fff;
+      padding:
+        8px 11px;
+
+      border:
+        1px solid var(--border);
+
       border-radius:8px;
-      padding:8px 12px;
+
+      background:#fff;
+
       color:var(--danger);
-      cursor:pointer;
-      font-size:12px;
+
+      font-size:11px;
     }
+
+
+    /* =========================
+       CONTENT
+    ========================= */
 
     .content{
-      padding:30px;
-      max-width:1500px;
-      margin:0 auto;
+      max-width:1550px;
+
+      margin:
+        0 auto;
+
+      padding:27px;
     }
 
+
+    /* =========================
+       WELCOME
+    ========================= */
+
     .welcome{
+      position:relative;
+
+      overflow:hidden;
+
+      padding:
+        27px 29px;
+
+      border-radius:16px;
+
       background:
         linear-gradient(
           135deg,
@@ -466,180 +539,405 @@
           var(--navy-light)
         );
 
-      border-radius:16px;
-      padding:28px 30px;
       color:#fff;
-      position:relative;
-      overflow:hidden;
-      margin-bottom:25px;
     }
 
     .welcome::after{
       content:"";
-      width:220px;
-      height:220px;
-      background:rgba(255,196,0,.12);
-      border-radius:50%;
+
       position:absolute;
+
+      width:240px;
+      height:240px;
+
       right:-50px;
-      top:-100px;
+      top:-120px;
+
+      border-radius:50%;
+
+      background:
+        rgba(255,196,0,.12);
     }
 
     .welcome h1{
-      margin:0 0 7px;
-      font-size:26px;
+      margin:
+        0 0 6px;
+
+      font-size:24px;
     }
 
     .welcome p{
       margin:0;
-      color:rgba(255,255,255,.75);
-      font-size:13px;
+
+      color:
+        rgba(255,255,255,.73);
+
+      font-size:12px;
     }
 
     .yellow{
       color:var(--yellow);
     }
 
+    .online-status{
+      display:inline-flex;
+      align-items:center;
+
+      gap:6px;
+
+      margin-top:14px;
+
+      padding:
+        6px 10px;
+
+      border-radius:20px;
+
+      background:
+        rgba(255,255,255,.10);
+
+      font-size:9px;
+    }
+
+    .online-dot{
+      width:7px;
+      height:7px;
+
+      border-radius:50%;
+
+      background:#53d886;
+    }
+
+
+    /* =========================
+       SECTION
+    ========================= */
+
+    .section-head{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+
+      gap:12px;
+
+      margin:
+        24px 0 12px;
+    }
+
     .section-title{
-      margin:28px 0 14px;
-      font-size:16px;
       color:var(--navy);
+
+      font-size:15px;
       font-weight:600;
     }
 
-    .stats{
-      display:grid;
-      grid-template-columns:repeat(4,1fr);
-      gap:15px;
+    .section-note{
+      color:var(--muted);
+
+      font-size:9px;
     }
 
-    .stat{
-      background:#fff;
-      border:1px solid var(--border);
+
+    /* =========================
+       STATS
+    ========================= */
+
+    .stats{
+      display:grid;
+
+      grid-template-columns:
+        repeat(4,1fr);
+
+      gap:13px;
+    }
+
+    .stat-card{
+      padding:18px;
+
+      border:
+        1px solid var(--border);
+
       border-radius:13px;
-      padding:20px;
+
+      background:#fff;
     }
 
     .stat-label{
       color:var(--muted);
-      font-size:12px;
+
+      font-size:10px;
     }
 
     .stat-value{
       margin-top:6px;
+
       color:var(--navy);
-      font-size:25px;
+
+      font-size:23px;
       font-weight:700;
     }
 
     .stat-note{
-      font-size:10px;
       color:#9aa4b1;
-      margin-top:3px;
+
+      font-size:9px;
     }
+
+
+    /* =========================
+       MODULES
+    ========================= */
 
     .modules{
       display:grid;
-      grid-template-columns:repeat(4,1fr);
-      gap:15px;
+
+      grid-template-columns:
+        repeat(4,1fr);
+
+      gap:13px;
     }
 
     .module-card{
-      border:1px solid var(--border);
-      background:#fff;
+      min-height:150px;
+
+      padding:18px;
+
+      border:
+        1px solid var(--border);
+
       border-radius:14px;
-      padding:20px;
-      min-height:155px;
-      transition:.2s;
+
+      background:#fff;
+
       cursor:pointer;
+
+      transition:.2s;
     }
 
     .module-card:hover{
-      transform:translateY(-2px);
+      transform:
+        translateY(-2px);
+
       box-shadow:
         0 10px 25px
         rgba(20,40,70,.07);
     }
 
     .module-icon{
-      width:43px;
-      height:43px;
-      border-radius:10px;
-      background:#f2f5f9;
+      width:40px;
+      height:40px;
 
       display:flex;
       align-items:center;
       justify-content:center;
 
-      font-size:21px;
-      margin-bottom:13px;
+      margin-bottom:11px;
+
+      border-radius:10px;
+
+      background:#f2f5f9;
+
+      font-size:19px;
     }
 
     .module-name{
-      font-size:14px;
       color:var(--navy);
+
+      font-size:13px;
       font-weight:600;
     }
 
     .module-description{
-      font-size:11px;
+      margin-top:5px;
+
       color:var(--muted);
+
+      font-size:10px;
       line-height:1.6;
-      margin-top:6px;
     }
 
-    .coming{
+    .module-tag{
       display:inline-block;
-      margin-top:10px;
-      background:#fff8dd;
-      color:#8b6900;
+
+      margin-top:9px;
+
+      padding:
+        3px 8px;
+
       border-radius:20px;
-      padding:3px 8px;
-      font-size:9px;
+
+      background:#f1f3f6;
+
+      color:#7d8795;
+
+      font-size:8px;
     }
 
-    .ready{
-      background:#edf9f1;
-      color:var(--success);
+    .module-tag.next{
+      background:#fff8dd;
+
+      color:#8b6900;
     }
 
-    .security-box{
-      margin-top:25px;
+
+    /* =========================
+       BOTTOM PANELS
+    ========================= */
+
+    .bottom-grid{
+      display:grid;
+
+      grid-template-columns:
+        1.25fr .75fr;
+
+      gap:13px;
+
+      margin-top:13px;
+    }
+
+    .panel{
+      padding:18px;
+
+      border:
+        1px solid var(--border);
+
+      border-radius:13px;
+
       background:#fff;
-      border:1px solid var(--border);
-      border-left:4px solid var(--yellow);
-      border-radius:10px;
-      padding:17px 20px;
-      font-size:11px;
-      color:var(--muted);
-      line-height:1.7;
     }
 
-    @media(max-width:1150px){
+    .panel-title{
+      margin-bottom:10px;
+
+      color:var(--navy);
+
+      font-size:12px;
+      font-weight:600;
+    }
+
+    .check-row{
+      display:flex;
+      align-items:center;
+
+      gap:9px;
+
+      padding:
+        8px 0;
+
+      border-bottom:
+        1px solid #eef1f5;
+
+      color:var(--muted);
+
+      font-size:10px;
+    }
+
+    .check-row:last-child{
+      border-bottom:0;
+    }
+
+    .check-icon{
+      width:20px;
+      height:20px;
+
+      flex:
+        0 0 20px;
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+
+      border-radius:50%;
+
+      background:#e5f5eb;
+
+      color:var(--success);
+
+      font-size:10px;
+      font-weight:700;
+    }
+
+    .quick-button{
+      width:100%;
+
+      margin-bottom:8px;
+
+      padding:
+        10px 12px;
+
+      border:
+        1px solid var(--border);
+
+      border-radius:9px;
+
+      background:#fafbfd;
+
+      color:var(--navy);
+
+      text-align:left;
+
+      font-size:10px;
+    }
+
+    .quick-button:hover{
+      background:#f4f7fa;
+    }
+
+
+    /* =========================
+       MOBILE OVERLAY
+    ========================= */
+
+    .overlay{
+      display:none;
+
+      position:fixed;
+
+      inset:0;
+
+      z-index:900;
+
+      background:
+        rgba(0,0,0,.30);
+    }
+
+
+    /* =========================
+       RESPONSIVE
+    ========================= */
+
+    @media(max-width:1180px){
+
       .stats,
       .modules{
-        grid-template-columns:repeat(2,1fr);
+        grid-template-columns:
+          repeat(2,1fr);
       }
+
     }
 
-    @media(max-width:760px){
 
-      .diagnostic-card{
-        padding:20px 16px;
-      }
+    @media(max-width:820px){
 
       .sidebar{
-        transform:translateX(-100%);
+        transform:
+          translateX(-100%);
+
         transition:.25s;
       }
 
       .sidebar.open{
-        transform:translateX(0);
+        transform:
+          translateX(0);
+      }
+
+      .overlay.show{
+        display:block;
       }
 
       .main{
-        margin-left:0;
         width:100%;
+
+        margin-left:0;
       }
 
       .mobile-menu{
@@ -648,25 +946,50 @@
 
       .header{
         height:68px;
-        padding:0 15px;
+
+        padding:
+          0 14px;
       }
 
-      .page-title{
-        font-size:15px;
+      .content{
+        padding:
+          17px 14px 28px;
       }
 
       .user-text{
         display:none;
       }
 
-      .content{
-        padding:18px 15px 30px;
+      .bottom-grid{
+        grid-template-columns:
+          1fr;
       }
+
+    }
+
+
+    @media(max-width:560px){
 
       .stats,
       .modules{
-        grid-template-columns:1fr;
+        grid-template-columns:
+          1fr;
       }
+
+      .welcome{
+        padding:
+          22px 20px;
+      }
+
+      .welcome h1{
+        font-size:20px;
+      }
+
+      .logout{
+        padding:
+          7px 8px;
+      }
+
     }
   </style>
 </head>
@@ -674,235 +997,61 @@
 <body>
 
 
-<!-- ========================================
-     DIAGNOSTIC SCREEN
-======================================== -->
+<!-- ================================
+     AUTHORIZATION GATE
+================================ -->
 
-<div id="diagnosticScreen">
+<div id="authGate">
 
-  <div class="diagnostic-card">
+  <div class="gate-card">
 
-    <div class="diagnostic-logo">
+    <h1 class="gate-title">
+      SANTE SYSTEM
+    </h1>
 
-      <h1>
-        SANTE SYSTEM
-      </h1>
+    <div class="gate-line"></div>
 
-      <p>
-        Admin Authentication Diagnostic
-      </p>
-
-      <div class="yellow-line"></div>
-
+    <div class="gate-subtitle">
+      กำลังตรวจสอบสิทธิ์ Admin
     </div>
-
-
-    <div class="diagnostic-title">
-      กำลังตรวจสอบระบบ Admin
-    </div>
-
 
     <div
-      class="step"
-      id="step1"
+      class="gate-message"
+      id="gateMessage"
     >
-
-      <div class="step-icon">
-        1
-      </div>
-
-      <div class="step-content">
-
-        <div class="step-name">
-          Supabase JavaScript Library
-        </div>
-
-        <div
-          class="step-detail"
-          id="detail1"
-        >
-          กำลังตรวจสอบ...
-        </div>
-
-      </div>
-
+      กำลังตรวจสอบ Session และสิทธิ์ Staff/Admin
+      กรุณารอสักครู่
     </div>
 
-
     <div
-      class="step"
-      id="step2"
-    >
-
-      <div class="step-icon">
-        2
-      </div>
-
-      <div class="step-content">
-
-        <div class="step-name">
-          Browser Storage
-        </div>
-
-        <div
-          class="step-detail"
-          id="detail2"
-        >
-          รอตรวจสอบ
-        </div>
-
-      </div>
-
-    </div>
-
-
-    <div
-      class="step"
-      id="step3"
-    >
-
-      <div class="step-icon">
-        3
-      </div>
-
-      <div class="step-content">
-
-        <div class="step-name">
-          Supabase Session
-        </div>
-
-        <div
-          class="step-detail"
-          id="detail3"
-        >
-          รอตรวจสอบ
-        </div>
-
-      </div>
-
-    </div>
-
-
-    <div
-      class="step"
-      id="step4"
-    >
-
-      <div class="step-icon">
-        4
-      </div>
-
-      <div class="step-content">
-
-        <div class="step-name">
-          Authenticated User
-        </div>
-
-        <div
-          class="step-detail"
-          id="detail4"
-        >
-          รอตรวจสอบ
-        </div>
-
-      </div>
-
-    </div>
-
-
-    <div
-      class="step"
-      id="step5"
-    >
-
-      <div class="step-icon">
-        5
-      </div>
-
-      <div class="step-content">
-
-        <div class="step-name">
-          Staff / Admin Permission
-        </div>
-
-        <div
-          class="step-detail"
-          id="detail5"
-        >
-          รอตรวจสอบ
-        </div>
-
-      </div>
-
-    </div>
-
-
-    <div
-      class="step"
-      id="step6"
-    >
-
-      <div class="step-icon">
-        6
-      </div>
-
-      <div class="step-content">
-
-        <div class="step-name">
-          Dashboard Access
-        </div>
-
-        <div
-          class="step-detail"
-          id="detail6"
-        >
-          รอตรวจสอบ
-        </div>
-
-      </div>
-
-    </div>
-
-
-    <div
-      class="result"
-      id="diagnosticResult"
+      class="spinner"
+      id="spinner"
     ></div>
 
+    <div
+      class="gate-error"
+      id="gateError"
+    ></div>
 
     <div
-      class="diagnostic-info"
-      id="browserInfo"
+      class="gate-actions"
+      id="gateActions"
     >
-      กำลังอ่านข้อมูล Browser...
-    </div>
-
-
-    <div class="diagnostic-actions">
 
       <button
-        type="button"
-        class="btn btn-primary"
+        class="gate-button gate-button-primary"
         id="retryButton"
+        type="button"
       >
         ตรวจสอบอีกครั้ง
       </button>
 
       <button
-        type="button"
-        class="btn btn-navy"
-        id="openDashboardButton"
-        style="display:none;"
-      >
-        เปิด Dashboard
-      </button>
-
-      <button
-        type="button"
-        class="btn btn-light"
+        class="gate-button gate-button-light"
         id="loginButton"
+        type="button"
       >
-        กลับหน้า Login
+        ไปหน้า Login
       </button>
 
     </div>
@@ -912,12 +1061,20 @@
 </div>
 
 
+<div
+  class="overlay"
+  id="overlay"
+></div>
 
-<!-- ========================================
-     DASHBOARD
-======================================== -->
+
+<!-- ================================
+     ADMIN APP
+================================ -->
 
 <div id="app">
+
+
+  <!-- SIDEBAR -->
 
   <aside
     class="sidebar"
@@ -926,21 +1083,28 @@
 
     <div class="brand">
 
-      <div class="brand-title">
-        SANTE
+      <div class="brand-mark">
+        S
       </div>
 
-      <div class="brand-sub">
-        SYSTEM ADMIN
+      <div>
+
+        <div class="brand-title">
+          SANTE
+        </div>
+
+        <div class="brand-subtitle">
+          SYSTEM ADMIN
+        </div>
+
       </div>
 
     </div>
 
 
     <div class="menu-title">
-      MAIN
+      OVERVIEW
     </div>
-
 
     <nav class="menu">
 
@@ -955,21 +1119,31 @@
         Dashboard
       </button>
 
+    </nav>
+
+
+    <div class="menu-title">
+      TRAINING & LEARNING
+    </div>
+
+    <nav class="menu">
 
       <button
         class="menu-item"
+        data-coming="Members"
         type="button"
       >
         <span class="menu-icon">
-          ✎
+          ♙
         </span>
 
-        Question Import
+        Members
       </button>
 
 
       <button
         class="menu-item"
+        data-coming="Courses"
         type="button"
       >
         <span class="menu-icon">
@@ -982,18 +1156,50 @@
 
       <button
         class="menu-item"
+        data-coming="Training Sessions"
         type="button"
       >
         <span class="menu-icon">
           ◷
         </span>
 
-        Training
+        Training Sessions
       </button>
 
 
       <button
         class="menu-item"
+        id="questionImportMenu"
+        type="button"
+      >
+        <span class="menu-icon">
+          ✎
+        </span>
+
+        Question Bank / Import
+
+        <span class="menu-badge">
+          NEXT
+        </span>
+      </button>
+
+
+      <button
+        class="menu-item"
+        data-coming="Exams & Results"
+        type="button"
+      >
+        <span class="menu-icon">
+          ☑
+        </span>
+
+        Exams & Results
+      </button>
+
+
+      <button
+        class="menu-item"
+        data-coming="Certificates"
         type="button"
       >
         <span class="menu-icon">
@@ -1003,21 +1209,31 @@
         Certificates
       </button>
 
+    </nav>
+
+
+    <div class="menu-title">
+      SERVICE
+    </div>
+
+    <nav class="menu">
 
       <button
         class="menu-item"
+        data-coming="Services"
         type="button"
       >
         <span class="menu-icon">
           ⚙
         </span>
 
-        Service Jobs
+        Services
       </button>
 
 
       <button
         class="menu-item"
+        data-coming="Quotations"
         type="button"
       >
         <span class="menu-icon">
@@ -1030,25 +1246,61 @@
 
       <button
         class="menu-item"
+        data-coming="Jobs"
+        type="button"
+      >
+        <span class="menu-icon">
+          ◆
+        </span>
+
+        Jobs
+      </button>
+
+    </nav>
+
+
+    <div class="menu-title">
+      OPERATIONS
+    </div>
+
+    <nav class="menu">
+
+      <button
+        class="menu-item"
+        data-coming="Finance & Documents"
         type="button"
       >
         <span class="menu-icon">
           ฿
         </span>
 
-        Finance
+        Finance & Documents
       </button>
 
 
       <button
         class="menu-item"
+        data-coming="Notifications"
         type="button"
       >
         <span class="menu-icon">
-          ♙
+          ✉
         </span>
 
-        Users
+        Notifications
+      </button>
+
+
+      <button
+        class="menu-item"
+        data-coming="System Settings"
+        type="button"
+      >
+        <span class="menu-icon">
+          ⚙
+        </span>
+
+        System Settings
       </button>
 
     </nav>
@@ -1056,9 +1308,12 @@
   </aside>
 
 
+  <!-- MAIN -->
 
   <div class="main">
 
+
+    <!-- HEADER -->
 
     <header class="header">
 
@@ -1072,8 +1327,16 @@
           ☰
         </button>
 
-        <div class="page-title">
-          Admin Dashboard
+        <div>
+
+          <div class="page-title">
+            Admin Dashboard
+          </div>
+
+          <div class="page-subtitle">
+            SANTE Consulting Management System
+          </div>
+
         </div>
 
       </div>
@@ -1118,8 +1381,12 @@
     </header>
 
 
+    <!-- CONTENT -->
 
     <main class="content">
+
+
+      <!-- WELCOME -->
 
       <section class="welcome">
 
@@ -1131,20 +1398,39 @@
         </h1>
 
         <p>
-          ระบบบริหารจัดการ SANTE Consulting
+          ศูนย์บริหารจัดการหลักสูตร การอบรม ข้อสอบ
+          วุฒิบัตร งานบริการ และเอกสารธุรกิจ
         </p>
+
+        <div class="online-status">
+
+          <span class="online-dot"></span>
+
+          Admin authentication verified
+
+        </div>
 
       </section>
 
 
-      <div class="section-title">
-        ภาพรวมระบบ
+      <!-- OVERVIEW -->
+
+      <div class="section-head">
+
+        <div class="section-title">
+          ภาพรวมระบบ
+        </div>
+
+        <div class="section-note">
+          Production foundation status
+        </div>
+
       </div>
 
 
       <section class="stats">
 
-        <div class="stat">
+        <div class="stat-card">
 
           <div class="stat-label">
             System Status
@@ -1155,13 +1441,13 @@
           </div>
 
           <div class="stat-note">
-            Supabase + Netlify
+            Supabase + Cloudflare
           </div>
 
         </div>
 
 
-        <div class="stat">
+        <div class="stat-card">
 
           <div class="stat-label">
             Exam-prep Courses
@@ -1172,16 +1458,16 @@
           </div>
 
           <div class="stat-note">
-            Initial configuration
+            Configured exam-prep courses
           </div>
 
         </div>
 
 
-        <div class="stat">
+        <div class="stat-card">
 
           <div class="stat-label">
-            Exam Sets
+            Fixed Exam Sets
           </div>
 
           <div class="stat-value">
@@ -1189,13 +1475,13 @@
           </div>
 
           <div class="stat-note">
-            Fixed question sets
+            100 questions per set planned
           </div>
 
         </div>
 
 
-        <div class="stat">
+        <div class="stat-card">
 
           <div class="stat-label">
             Planned Questions
@@ -1206,7 +1492,7 @@
           </div>
 
           <div class="stat-note">
-            Across 5 courses
+            Across 5 exam-prep courses
           </div>
 
         </div>
@@ -1214,36 +1500,57 @@
       </section>
 
 
+      <!-- MODULES -->
 
-      <div class="section-title">
-        ระบบจัดการ
+      <div class="section-head">
+
+        <div class="section-title">
+          ระบบจัดการ
+        </div>
+
+        <div class="section-note">
+          เปิดใช้งานทีละโมดูลตามลำดับการพัฒนา
+        </div>
+
       </div>
 
 
       <section class="modules">
 
-        <div class="module-card">
+
+        <!-- QUESTION BANK -->
+
+        <div
+          class="module-card"
+          id="questionImportCard"
+        >
 
           <div class="module-icon">
             ✎
           </div>
 
           <div class="module-name">
-            Question Import
+            Question Bank / Excel Import
           </div>
 
           <div class="module-description">
-            ตรวจสอบและนำเข้าคลังข้อสอบจากไฟล์ Excel
+            ตรวจสอบและนำเข้าคลังข้อสอบผ่าน Admin Session
+            โดยไม่ต้องใช้ SQL Editor
           </div>
 
-          <span class="coming ready">
-            NEXT
+          <span class="module-tag next">
+            NEXT MODULE
           </span>
 
         </div>
 
 
-        <div class="module-card">
+        <!-- COURSES -->
+
+        <div
+          class="module-card"
+          data-coming="Courses"
+        >
 
           <div class="module-icon">
             ▣
@@ -1254,38 +1561,50 @@
           </div>
 
           <div class="module-description">
-            จัดการหลักสูตร ราคา และสิทธิ์การเรียน
+            จัดการหลักสูตร ราคา ระยะเวลาสิทธิ์
+            และเนื้อหาการเรียน
           </div>
 
-          <span class="coming">
-            COMING
+          <span class="module-tag">
+            PLANNED
           </span>
 
         </div>
 
 
-        <div class="module-card">
+        <!-- TRAINING -->
+
+        <div
+          class="module-card"
+          data-coming="Training Sessions"
+        >
 
           <div class="module-icon">
             ◷
           </div>
 
           <div class="module-name">
-            Training
+            Training Sessions
           </div>
 
           <div class="module-description">
-            จัดการรอบอบรม ผู้สมัคร และจำนวนที่นั่ง
+            รอบอบรม ผู้สมัคร จำนวนที่นั่ง
+            วันอบรม และสิทธิ์ทำแบบทดสอบ
           </div>
 
-          <span class="coming">
-            COMING
+          <span class="module-tag">
+            PLANNED
           </span>
 
         </div>
 
 
-        <div class="module-card">
+        <!-- CERTIFICATE -->
+
+        <div
+          class="module-card"
+          data-coming="Certificates"
+        >
 
           <div class="module-icon">
             ✓
@@ -1296,38 +1615,50 @@
           </div>
 
           <div class="module-description">
-            ออกวุฒิบัตรและตรวจสอบ QR Certificate
+            สร้างวุฒิบัตร PDF เลขที่เอกสาร
+            และ QR Verification
           </div>
 
-          <span class="coming">
-            COMING
+          <span class="module-tag">
+            PLANNED
           </span>
 
         </div>
 
 
-        <div class="module-card">
+        <!-- SERVICES -->
+
+        <div
+          class="module-card"
+          data-coming="Services & Jobs"
+        >
 
           <div class="module-icon">
             ⚙
           </div>
 
           <div class="module-name">
-            Service Jobs
+            Services & Jobs
           </div>
 
           <div class="module-description">
-            จัดการงานบริการ และตารางปฏิบัติงาน
+            บริหารงานบริการ ตารางงาน
+            สถานที่ และทีมปฏิบัติงาน
           </div>
 
-          <span class="coming">
-            COMING
+          <span class="module-tag">
+            PLANNED
           </span>
 
         </div>
 
 
-        <div class="module-card">
+        <!-- QUOTATION -->
+
+        <div
+          class="module-card"
+          data-coming="Quotations"
+        >
 
           <div class="module-icon">
             ▤
@@ -1338,53 +1669,66 @@
           </div>
 
           <div class="module-description">
-            ใบเสนอราคา การอนุมัติ และ Revision
+            ใบเสนอราคา การอนุมัติ Revision
+            และสร้าง Job หลังอนุมัติ
           </div>
 
-          <span class="coming">
-            COMING
+          <span class="module-tag">
+            PLANNED
           </span>
 
         </div>
 
 
-        <div class="module-card">
+        <!-- FINANCE -->
+
+        <div
+          class="module-card"
+          data-coming="Finance & Documents"
+        >
 
           <div class="module-icon">
             ฿
           </div>
 
           <div class="module-name">
-            Finance
+            Finance & Documents
           </div>
 
           <div class="module-description">
-            Invoice, Receipt, Tax Invoice และ Payment
+            Payment, Invoice, Receipt/Tax Invoice,
+            VAT และ Withholding Tax
           </div>
 
-          <span class="coming">
-            COMING
+          <span class="module-tag">
+            PLANNED
           </span>
 
         </div>
 
 
-        <div class="module-card">
+        <!-- MEMBERS -->
+
+        <div
+          class="module-card"
+          data-coming="Members & Roles"
+        >
 
           <div class="module-icon">
             ♙
           </div>
 
           <div class="module-name">
-            Users
+            Members & Roles
           </div>
 
           <div class="module-description">
-            สมาชิก สิทธิ์ผู้ใช้งาน และ Admin Roles
+            สมาชิก โปรไฟล์ สิทธิ์ Staff/Admin
+            และการเชื่อม LINE
           </div>
 
-          <span class="coming">
-            COMING
+          <span class="module-tag">
+            PLANNED
           </span>
 
         </div>
@@ -1392,11 +1736,113 @@
       </section>
 
 
-      <div class="security-box">
+      <!-- BOTTOM -->
 
-        🔒 Diagnostic Mode:
-        หน้า Dashboard นี้จะไม่ Redirect กลับ Login อัตโนมัติ
-        เพื่อใช้ตรวจสอบ Session และ Admin Permission
+      <div class="bottom-grid">
+
+
+        <!-- FOUNDATION -->
+
+        <section class="panel">
+
+          <div class="panel-title">
+            System Foundation
+          </div>
+
+
+          <div class="check-row">
+
+            <span class="check-icon">
+              ✓
+            </span>
+
+            Supabase database foundation installed
+
+          </div>
+
+
+          <div class="check-row">
+
+            <span class="check-icon">
+              ✓
+            </span>
+
+            RLS / Admin role permission active
+
+          </div>
+
+
+          <div class="check-row">
+
+            <span class="check-icon">
+              ✓
+            </span>
+
+            Exam and Question Import backend installed
+
+          </div>
+
+
+          <div class="check-row">
+
+            <span class="check-icon">
+              ✓
+            </span>
+
+            Admin Session + is_staff() verified
+
+          </div>
+
+
+          <div class="check-row">
+
+            <span class="check-icon">
+              ✓
+            </span>
+
+            GitHub → Cloudflare deployment active
+
+          </div>
+
+        </section>
+
+
+        <!-- QUICK ACTION -->
+
+        <section class="panel">
+
+          <div class="panel-title">
+            Quick Actions
+          </div>
+
+
+          <button
+            class="quick-button"
+            id="questionImportQuick"
+            type="button"
+          >
+            ✎ เปิด Question Bank / Import
+          </button>
+
+
+          <button
+            class="quick-button"
+            data-coming="Courses"
+            type="button"
+          >
+            ▣ จัดการหลักสูตร
+          </button>
+
+
+          <button
+            class="quick-button"
+            data-coming="Training Sessions"
+            type="button"
+          >
+            ◷ จัดการรอบอบรม
+          </button>
+
+        </section>
 
       </div>
 
@@ -1407,12 +1853,11 @@
 </div>
 
 
-
 <script>
 
-  /* ========================================
-     CONFIG
-  ======================================== */
+  /* ================================
+     SUPABASE CONFIG
+  ================================ */
 
   const SUPABASE_URL =
     "https://cyegjwerxlxhczrfiurz.supabase.co";
@@ -1430,13 +1875,10 @@
   let authorizedUser =
     null;
 
-  let diagnosticPassed =
-    false;
 
-
-  /* ========================================
+  /* ================================
      HELPERS
-  ======================================== */
+  ================================ */
 
   function wait(ms){
 
@@ -1447,118 +1889,6 @@
           ms
         )
     );
-
-  }
-
-
-  function setStep(
-    number,
-    state,
-    detail
-  ){
-
-    const step =
-      document.getElementById(
-        "step" + number
-      );
-
-    const detailElement =
-      document.getElementById(
-        "detail" + number
-      );
-
-
-    step.classList.remove(
-      "success",
-      "error",
-      "warning"
-    );
-
-
-    if(state){
-
-      step.classList.add(
-        state
-      );
-
-    }
-
-
-    detailElement.textContent =
-      detail;
-
-  }
-
-
-  function resetSteps(){
-
-    for(
-      let number = 1;
-      number <= 6;
-      number++
-    ){
-
-      const step =
-        document.getElementById(
-          "step" + number
-        );
-
-      step.classList.remove(
-        "success",
-        "error",
-        "warning"
-      );
-
-
-      document.getElementById(
-        "detail" + number
-      ).textContent =
-        number === 1
-          ? "กำลังตรวจสอบ..."
-          : "รอตรวจสอบ";
-
-    }
-
-
-    const result =
-      document.getElementById(
-        "diagnosticResult"
-      );
-
-    result.className =
-      "result";
-
-    result.textContent =
-      "";
-
-
-    document.getElementById(
-      "openDashboardButton"
-    ).style.display =
-      "none";
-
-
-    diagnosticPassed =
-      false;
-
-  }
-
-
-  function showResult(
-    type,
-    text
-  ){
-
-    const result =
-      document.getElementById(
-        "diagnosticResult"
-      );
-
-    result.className =
-      "result " + type;
-
-    result.textContent =
-      text;
 
   }
 
@@ -1577,66 +1907,101 @@
   }
 
 
-  /* ========================================
-     DIAGNOSTIC
-  ======================================== */
+  /* ================================
+     AUTH GATE
+  ================================ */
 
-  async function runDiagnostic(){
-
-    resetSteps();
-
-
-    /* ========================================
-       Browser Information
-    ======================================== */
+  function resetGate(){
 
     document.getElementById(
-      "browserInfo"
+      "spinner"
+    ).style.display =
+      "block";
+
+
+    document.getElementById(
+      "gateError"
+    ).style.display =
+      "none";
+
+
+    document.getElementById(
+      "gateActions"
+    ).style.display =
+      "none";
+
+
+    document.getElementById(
+      "gateMessage"
     ).textContent =
-      "Page: " +
-      window.location.href +
-      " | Origin: " +
-      window.location.origin +
-      " | Storage Key: " +
-      AUTH_STORAGE_KEY;
+      "กำลังตรวจสอบ Session และสิทธิ์ Staff/Admin กรุณารอสักครู่";
+
+  }
 
 
-    /* ========================================
-       STEP 1
-       SUPABASE LIBRARY
-    ======================================== */
+  function showGateError(
+    message
+  ){
+
+    document.getElementById(
+      "spinner"
+    ).style.display =
+      "none";
+
+
+    document.getElementById(
+      "gateMessage"
+    ).textContent =
+      "ระบบยังไม่สามารถอนุญาตให้เปิด Admin Dashboard ได้";
+
+
+    const errorBox =
+      document.getElementById(
+        "gateError"
+      );
+
+
+    errorBox.textContent =
+      message;
+
+
+    errorBox.style.display =
+      "block";
+
+
+    document.getElementById(
+      "gateActions"
+    ).style.display =
+      "flex";
+
+  }
+
+
+  /* ================================
+     VERIFY ADMIN
+  ================================ */
+
+  async function verifyAdmin(){
+
+    resetGate();
+
+
+    /* SUPABASE LIBRARY */
 
     if(
       !window.supabase
     ){
 
-      setStep(
-        1,
-        "error",
-        "Supabase JavaScript Library ไม่ถูกโหลด"
+      showGateError(
+        "ไม่สามารถโหลด Supabase JavaScript Library ได้"
       );
-
-
-      showResult(
-        "error",
-        "หยุดที่ STEP 1 — ไม่สามารถโหลด Supabase Library ได้"
-      );
-
 
       return;
+
     }
 
 
-    setStep(
-      1,
-      "success",
-      "Supabase JavaScript Library โหลดสำเร็จ"
-    );
-
-
-    /* ========================================
-       CREATE CLIENT
-    ======================================== */
+    /* CREATE CLIENT */
 
     try{
 
@@ -1663,80 +2028,17 @@
 
     }catch(error){
 
-      setStep(
-        1,
-        "error",
+      showGateError(
         "สร้าง Supabase Client ไม่สำเร็จ: " +
         safeError(error)
       );
 
-
-      showResult(
-        "error",
-        "หยุดที่ STEP 1 — CREATE CLIENT ERROR"
-      );
-
-
       return;
+
     }
 
 
-    /* ========================================
-       STEP 2
-       LOCAL STORAGE
-    ======================================== */
-
-    try{
-
-      const storageValue =
-        window.localStorage.getItem(
-          AUTH_STORAGE_KEY
-        );
-
-
-      if(storageValue){
-
-        setStep(
-          2,
-          "success",
-          "พบข้อมูล Session ใน localStorage"
-        );
-
-      }else{
-
-        setStep(
-          2,
-          "warning",
-          "ไม่พบข้อมูลที่ key: " +
-          AUTH_STORAGE_KEY
-        );
-
-      }
-
-    }catch(error){
-
-      setStep(
-        2,
-        "error",
-        "ไม่สามารถอ่าน localStorage: " +
-        safeError(error)
-      );
-
-
-      showResult(
-        "error",
-        "หยุดที่ STEP 2 — Browser Storage มีปัญหา"
-      );
-
-
-      return;
-    }
-
-
-    /* ========================================
-       STEP 3
-       SESSION
-    ======================================== */
+    /* CHECK SESSION */
 
     let activeSession =
       null;
@@ -1778,6 +2080,7 @@
             data.session;
 
           break;
+
         }
 
       }catch(error){
@@ -1788,7 +2091,7 @@
       }
 
 
-      await wait(300);
+      await wait(250);
 
     }
 
@@ -1797,176 +2100,66 @@
       !activeSession
     ){
 
-      setStep(
-        3,
-        "error",
+      showGateError(
         sessionError
-          ? safeError(
+          ? "ไม่พบ Session: " +
+            safeError(
               sessionError
             )
-          : "ไม่พบ Supabase Session หลังตรวจสอบ 8 ครั้ง"
+          : "ไม่พบ Admin Session กรุณาเข้าสู่ระบบใหม่"
       );
-
-
-      setStep(
-        4,
-        "warning",
-        "ไม่ได้ตรวจสอบ เพราะไม่มี Session"
-      );
-
-
-      setStep(
-        5,
-        "warning",
-        "ไม่ได้ตรวจสอบ เพราะไม่มี Session"
-      );
-
-
-      setStep(
-        6,
-        "error",
-        "Dashboard ยังไม่อนุญาต"
-      );
-
-
-      showResult(
-        "error",
-        "หยุดที่ STEP 3 — NO SESSION กรุณาถ่ายภาพหน้านี้ส่งมาให้ผม โดยยังไม่ต้องแก้โค้ดหรือ SQL"
-      );
-
 
       return;
+
     }
 
 
-    setStep(
-      3,
-      "success",
-      "พบ Session — User ID: " +
-      activeSession.user.id
-    );
+    /* VERIFY USER */
 
-
-    /* ========================================
-       STEP 4
-       USER
-    ======================================== */
-
-    let userData;
+    let userResponse;
 
 
     try{
 
-      const response =
+      userResponse =
         await supabaseClient.auth
           .getUser();
 
-
-      if(
-        response.error
-      ){
-
-        setStep(
-          4,
-          "error",
-          safeError(
-            response.error
-          )
-        );
-
-
-        setStep(
-          5,
-          "warning",
-          "ไม่ได้ตรวจสอบ"
-        );
-
-
-        setStep(
-          6,
-          "error",
-          "Dashboard ยังไม่อนุญาต"
-        );
-
-
-        showResult(
-          "error",
-          "หยุดที่ STEP 4 — USER VERIFICATION ERROR"
-        );
-
-
-        return;
-      }
-
-
-      userData =
-        response.data;
-
-
     }catch(error){
 
-      setStep(
-        4,
-        "error",
+      showGateError(
+        "ตรวจสอบผู้ใช้งานไม่สำเร็จ: " +
         safeError(error)
       );
 
-
-      showResult(
-        "error",
-        "หยุดที่ STEP 4 — USER ERROR"
-      );
-
-
       return;
+
     }
 
 
     if(
-      !userData ||
-      !userData.user
+      userResponse.error ||
+      !userResponse.data ||
+      !userResponse.data.user
     ){
 
-      setStep(
-        4,
-        "error",
-        "ไม่พบ authenticated user"
+      showGateError(
+        "ยืนยันผู้ใช้งานไม่สำเร็จ: " +
+        safeError(
+          userResponse.error
+        )
       );
-
-
-      showResult(
-        "error",
-        "หยุดที่ STEP 4 — USER NOT FOUND"
-      );
-
 
       return;
+
     }
 
 
     authorizedUser =
-      userData.user;
+      userResponse.data.user;
 
 
-    setStep(
-      4,
-      "success",
-      "ยืนยัน User สำเร็จ — " +
-      (
-        authorizedUser.email ||
-        authorizedUser.id
-      )
-    );
-
-
-    /* ========================================
-       STEP 5
-       IS STAFF
-    ======================================== */
-
-    let isStaff =
-      false;
-
+    /* VERIFY STAFF / ADMIN */
 
     try{
 
@@ -1981,157 +2174,55 @@
 
       if(error){
 
-        setStep(
-          5,
-          "error",
-          "RPC ERROR: " +
+        showGateError(
+          "ตรวจสอบสิทธิ์ Staff/Admin ไม่สำเร็จ: " +
           safeError(error)
         );
 
-
-        setStep(
-          6,
-          "error",
-          "Dashboard ยังไม่อนุญาต"
-        );
-
-
-        showResult(
-          "error",
-          "หยุดที่ STEP 5 — is_staff() RPC ERROR"
-        );
-
-
         return;
+
       }
 
 
-      isStaff =
-        data;
+      if(
+        data !== true
+      ){
 
+        showGateError(
+          "บัญชีนี้เข้าสู่ระบบได้ แต่ไม่มีสิทธิ์ Staff/Admin"
+        );
+
+        return;
+
+      }
 
     }catch(error){
 
-      setStep(
-        5,
-        "error",
+      showGateError(
+        "ตรวจสอบสิทธิ์ Staff/Admin ไม่สำเร็จ: " +
         safeError(error)
       );
 
-
-      setStep(
-        6,
-        "error",
-        "Dashboard ยังไม่อนุญาต"
-      );
-
-
-      showResult(
-        "error",
-        "หยุดที่ STEP 5 — PERMISSION CHECK ERROR"
-      );
-
-
       return;
+
     }
 
 
-    if(
-      isStaff !== true
-    ){
+    /* AUTH PASSED */
 
-      setStep(
-        5,
-        "error",
-        "is_staff() = false"
-      );
-
-
-      setStep(
-        6,
-        "error",
-        "Dashboard ยังไม่อนุญาต"
-      );
-
-
-      showResult(
-        "error",
-        "หยุดที่ STEP 5 — Session ใช้งานได้ แต่บัญชีไม่มีสิทธิ์ Staff/Admin"
-      );
-
-
-      return;
-    }
-
-
-    setStep(
-      5,
-      "success",
-      "is_staff() = true — Staff/Admin Permission ผ่าน"
-    );
-
-
-    /* ========================================
-       STEP 6
-       DASHBOARD
-    ======================================== */
-
-    setStep(
-      6,
-      "success",
-      "Dashboard Access ผ่านครบทุกขั้นตอน"
-    );
-
-
-    diagnosticPassed =
-      true;
-
-
-    showResult(
-      "success",
-      "สำเร็จครบ 6 ขั้นตอน — Session และสิทธิ์ Admin ทำงานถูกต้อง"
-    );
-
-
-    document.getElementById(
-      "openDashboardButton"
-    ).style.display =
-      "inline-block";
-
-
-    /*
-      Diagnostic Mode:
-      เราจะไม่เปิด Dashboard อัตโนมัติ
-
-      ต้องกดปุ่ม "เปิด Dashboard"
-      เพื่อให้ผู้ใช้เห็นผลครบก่อน
-    */
+    openDashboard();
 
   }
 
 
-  /* ========================================
+  /* ================================
      OPEN DASHBOARD
-  ======================================== */
+  ================================ */
 
   function openDashboard(){
 
-    if(
-      !diagnosticPassed ||
-      !authorizedUser
-    ){
-
-      showResult(
-        "error",
-        "ยังไม่สามารถเปิด Dashboard ได้ เนื่องจาก Diagnostic ยังไม่ผ่าน"
-      );
-
-      return;
-    }
-
-
     const email =
-      authorizedUser.email ||
+      authorizedUser?.email ||
       "SANTE Admin";
 
 
@@ -2150,7 +2241,7 @@
 
 
     document.getElementById(
-      "diagnosticScreen"
+      "authGate"
     ).style.display =
       "none";
 
@@ -2163,23 +2254,15 @@
   }
 
 
-  /* ========================================
-     BUTTONS
-  ======================================== */
+  /* ================================
+     AUTH BUTTONS
+  ================================ */
 
   document.getElementById(
     "retryButton"
   ).addEventListener(
     "click",
-    runDiagnostic
-  );
-
-
-  document.getElementById(
-    "openDashboardButton"
-  ).addEventListener(
-    "click",
-    openDashboard
+    verifyAdmin
   );
 
 
@@ -2189,14 +2272,6 @@
     "click",
     function(){
 
-      /*
-        IMPORTANT:
-        ไม่มี automatic redirect
-
-        Redirect เกิดเมื่อผู้ใช้
-        กดปุ่มนี้เองเท่านั้น
-      */
-
       window.location.href =
         "./admin-login.html";
 
@@ -2204,9 +2279,9 @@
   );
 
 
-  /* ========================================
+  /* ================================
      LOGOUT
-  ======================================== */
+  ================================ */
 
   document.getElementById(
     "logoutButton"
@@ -2222,6 +2297,7 @@
 
       button.disabled =
         true;
+
 
       button.textContent =
         "กำลังออก...";
@@ -2255,14 +2331,34 @@
   );
 
 
-  /* ========================================
-     MOBILE MENU
-  ======================================== */
+  /* ================================
+     MOBILE SIDEBAR
+  ================================ */
 
   const sidebar =
     document.getElementById(
       "sidebar"
     );
+
+
+  const overlay =
+    document.getElementById(
+      "overlay"
+    );
+
+
+  function closeSidebar(){
+
+    sidebar.classList.remove(
+      "open"
+    );
+
+
+    overlay.classList.remove(
+      "show"
+    );
+
+  }
 
 
   document.getElementById(
@@ -2275,30 +2371,96 @@
         "open"
       );
 
+
+      overlay.classList.toggle(
+        "show"
+      );
+
     }
   );
 
 
-  /* ========================================
-     IMPORTANT:
-     NO AUTH REDIRECT
-  ======================================== */
-
-  /*
-    Diagnostic version intentionally
-    DOES NOT use onAuthStateChange()
-    to redirect.
-
-    แม้ Session จะไม่พบ
-    หน้านี้ก็จะค้างอยู่เพื่อแสดง Error
-  */
+  overlay.addEventListener(
+    "click",
+    closeSidebar
+  );
 
 
-  /* ========================================
-     START DIAGNOSTIC
-  ======================================== */
+  /* ================================
+     QUESTION IMPORT
+  ================================ */
 
-  runDiagnostic();
+  function openQuestionImport(){
+
+    window.location.href =
+      "./admin-question-import.html";
+
+  }
+
+
+  document.getElementById(
+    "questionImportMenu"
+  ).addEventListener(
+    "click",
+    openQuestionImport
+  );
+
+
+  document.getElementById(
+    "questionImportCard"
+  ).addEventListener(
+    "click",
+    openQuestionImport
+  );
+
+
+  document.getElementById(
+    "questionImportQuick"
+  ).addEventListener(
+    "click",
+    openQuestionImport
+  );
+
+
+  /* ================================
+     MODULES NOT YET ENABLED
+  ================================ */
+
+  document.querySelectorAll(
+    "[data-coming]"
+  ).forEach(
+    function(element){
+
+      element.addEventListener(
+        "click",
+        function(){
+
+          const moduleName =
+            element.getAttribute(
+              "data-coming"
+            );
+
+
+          alert(
+            moduleName +
+            " จะเปิดใช้งานในขั้นตอนถัดไปของ SANTE SYSTEM"
+          );
+
+
+          closeSidebar();
+
+        }
+      );
+
+    }
+  );
+
+
+  /* ================================
+     START
+  ================================ */
+
+  verifyAdmin();
 
 </script>
 
