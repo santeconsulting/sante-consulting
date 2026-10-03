@@ -8,7 +8,6 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
   <link
     href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap"
     rel="stylesheet"
@@ -27,30 +26,21 @@
       --navy: #112443;
       --navy-dark: #0b172a;
       --navy-soft: #1d467b;
-
       --yellow: #f8c73d;
       --yellow-hover: #edbb28;
-
       --white: #ffffff;
       --bg: #f4f7fb;
-
       --text: #17243b;
       --muted: #7b8799;
-
       --border: #dfe5ee;
-
       --green: #177747;
       --green-bg: #eaf8f0;
-
       --red: #b93636;
       --red-bg: #fff0f0;
-
       --orange: #986400;
       --orange-bg: #fff5dd;
-
       --blue: #245c9c;
       --blue-bg: #edf5ff;
-
       --purple: #62449a;
       --purple-bg: #f3efff;
     }
@@ -82,21 +72,14 @@
       text-decoration: none;
     }
 
-    /* =====================================================
-       HEADER
-    ===================================================== */
-
     .site-header {
       height: 88px;
       padding: 0 6vw;
-
-      background: #ffffff;
+      background: #fff;
       border-bottom: 1px solid #e6eaf0;
-
       display: flex;
       align-items: center;
       justify-content: space-between;
-
       position: sticky;
       top: 0;
       z-index: 100;
@@ -140,7 +123,6 @@
       color: var(--navy);
       font-size: 27px;
       font-weight: 700;
-      letter-spacing: .5px;
     }
 
     .header-right {
@@ -168,27 +150,13 @@
     .logout-button {
       min-height: 42px;
       padding: 9px 17px;
-
-      background: #ffffff;
+      background: #fff;
       color: var(--navy);
-
       border: 1px solid #d6dde7;
       border-radius: 11px;
-
       font-size: 12px;
       font-weight: 500;
-
-      transition: .2s ease;
     }
-
-    .logout-button:hover {
-      border-color: var(--navy);
-      background: #f8fafc;
-    }
-
-    /* =====================================================
-       HERO
-    ===================================================== */
 
     .hero-wrap {
       max-width: 1280px;
@@ -199,57 +167,25 @@
     .hero {
       position: relative;
       overflow: hidden;
-
-      min-height: 295px;
-      padding: 50px 55px;
-
+      min-height: 285px;
+      padding: 48px 55px;
       border-radius: 28px;
-
       background:
-        radial-gradient(
-          circle at 84% 30%,
-          rgba(255,255,255,.08),
-          transparent 32%
-        ),
-        linear-gradient(
-          135deg,
-          #10264b 0%,
-          #173c6f 56%,
-          #245b99 100%
-        );
-
-      box-shadow:
-        0 18px 45px rgba(18,46,84,.14);
-
-      color: #ffffff;
+        radial-gradient(circle at 84% 30%, rgba(255,255,255,.08), transparent 32%),
+        linear-gradient(135deg, #10264b 0%, #173c6f 56%, #245b99 100%);
+      box-shadow: 0 18px 45px rgba(18,46,84,.14);
+      color: #fff;
     }
 
     .hero::before {
       content: "";
       position: absolute;
-
       width: 430px;
       height: 430px;
-
       border-radius: 50%;
       background: rgba(255,255,255,.045);
-
       right: -120px;
       top: -220px;
-    }
-
-    .hero::after {
-      content: "";
-      position: absolute;
-
-      width: 280px;
-      height: 280px;
-
-      border-radius: 50%;
-      background: rgba(248,199,61,.08);
-
-      right: 25%;
-      bottom: -220px;
     }
 
     .hero-content {
@@ -260,17 +196,13 @@
 
     .hero-eyebrow {
       margin-bottom: 13px;
-
       color: var(--yellow);
-
       font-size: 14px;
       font-weight: 600;
-      letter-spacing: .5px;
     }
 
     .hero h1 {
       margin-bottom: 15px;
-
       font-size: clamp(34px, 4vw, 52px);
       line-height: 1.25;
       font-weight: 700;
@@ -278,44 +210,31 @@
 
     .hero-description {
       max-width: 700px;
-
       color: #dce7f6;
-
       font-size: 16px;
       line-height: 1.85;
     }
 
     .hero-member {
       margin-top: 25px;
-
       display: inline-flex;
       flex-direction: column;
-
       padding: 13px 19px;
-
       background: rgba(255,255,255,.08);
-
       border: 1px solid rgba(255,255,255,.15);
       border-radius: 14px;
-
-      backdrop-filter: blur(10px);
     }
 
     .hero-member-label {
-      margin-bottom: 2px;
       color: #b9c7da;
       font-size: 11px;
     }
 
     .hero-member-name {
-      color: #ffffff;
+      color: #fff;
       font-size: 17px;
       font-weight: 600;
     }
-
-    /* =====================================================
-       CONTENT
-    ===================================================== */
 
     .container {
       width: min(1224px, calc(100% - 56px));
@@ -324,12 +243,9 @@
 
     .message {
       display: none;
-
       margin-bottom: 25px;
       padding: 16px 19px;
-
       border-radius: 13px;
-
       font-size: 13px;
       line-height: 1.7;
     }
@@ -356,10 +272,6 @@
       border: 1px solid #eed39a;
     }
 
-    /* =====================================================
-       MEMBER
-    ===================================================== */
-
     .section {
       margin-bottom: 45px;
     }
@@ -368,74 +280,50 @@
       margin-bottom: 20px;
     }
 
-    .section-heading h2 {
-      margin-bottom: 4px;
-
+    .section-heading h2,
+    .training-heading h2 {
       color: var(--navy);
       font-size: 25px;
       font-weight: 700;
     }
 
-    .section-heading p {
+    .section-heading p,
+    .training-heading p {
+      margin-top: 4px;
       color: var(--muted);
       font-size: 13px;
     }
 
     .member-card {
       padding: 25px 28px;
-
-      background: #ffffff;
-
+      background: #fff;
       border: 1px solid var(--border);
       border-radius: 20px;
-
       display: grid;
       grid-template-columns: 1.25fr 1.25fr 1fr;
       gap: 22px;
-
-      box-shadow:
-        0 10px 28px rgba(23,48,82,.045);
+      box-shadow: 0 10px 28px rgba(23,48,82,.045);
     }
 
     .info-label {
       margin-bottom: 5px;
-
       color: #929dab;
       font-size: 11px;
     }
 
     .info-value {
       color: var(--navy);
-
       font-size: 14px;
       font-weight: 500;
-
       overflow-wrap: anywhere;
     }
 
-    /* =====================================================
-       TRAINING HEADER
-    ===================================================== */
-
     .training-heading {
       margin-bottom: 21px;
-
       display: flex;
       align-items: flex-end;
       justify-content: space-between;
       gap: 20px;
-    }
-
-    .training-heading h2 {
-      margin-bottom: 4px;
-
-      color: var(--navy);
-      font-size: 26px;
-    }
-
-    .training-heading p {
-      color: var(--muted);
-      font-size: 13px;
     }
 
     .search-box {
@@ -445,28 +333,14 @@
     .search-input {
       width: 100%;
       height: 45px;
-
       padding: 0 15px;
-
-      background: #ffffff;
+      background: #fff;
       color: var(--text);
-
       border: 1px solid var(--border);
       border-radius: 11px;
-
       outline: none;
-
       font-size: 13px;
     }
-
-    .search-input:focus {
-      border-color: #c8a62f;
-      box-shadow: 0 0 0 3px rgba(248,199,61,.12);
-    }
-
-    /* =====================================================
-       CARDS
-    ===================================================== */
 
     .training-grid {
       display: grid;
@@ -476,23 +350,10 @@
 
     .training-card {
       overflow: hidden;
-
-      background: #ffffff;
-
+      background: #fff;
       border: 1px solid var(--border);
       border-radius: 21px;
-
-      box-shadow:
-        0 10px 30px rgba(25,50,85,.05);
-
-      transition: .2s ease;
-    }
-
-    .training-card:hover {
-      transform: translateY(-2px);
-
-      box-shadow:
-        0 15px 34px rgba(25,50,85,.08);
+      box-shadow: 0 10px 30px rgba(25,50,85,.05);
     }
 
     .card-main {
@@ -501,7 +362,6 @@
 
     .tags {
       margin-bottom: 14px;
-
       display: flex;
       flex-wrap: wrap;
       gap: 7px;
@@ -509,18 +369,12 @@
 
     .tag {
       padding: 5px 10px;
-
       border-radius: 999px;
-
       font-size: 10px;
       font-weight: 500;
     }
 
-    .tag-open {
-      color: var(--green);
-      background: var(--green-bg);
-    }
-
+    .tag-open,
     .tag-free {
       color: var(--green);
       background: var(--green-bg);
@@ -548,7 +402,6 @@
 
     .course-type-name {
       margin-bottom: 4px;
-
       color: #ae8300;
       font-size: 12px;
       font-weight: 600;
@@ -556,12 +409,10 @@
 
     .session-name {
       margin-bottom: 16px;
-
       color: var(--navy);
-
       font-size: 19px;
       line-height: 1.45;
-      font-weight: 650;
+      font-weight: 600;
     }
 
     .details {
@@ -573,7 +424,6 @@
       display: grid;
       grid-template-columns: 92px 1fr;
       gap: 9px;
-
       font-size: 12px;
       line-height: 1.6;
     }
@@ -588,9 +438,7 @@
 
     .card-footer {
       padding: 17px 25px 20px;
-
       border-top: 1px solid #edf0f4;
-
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -604,33 +452,21 @@
 
     .price {
       margin-top: 2px;
-
       color: var(--navy);
-
       font-size: 16px;
-      font-weight: 650;
+      font-weight: 600;
     }
 
     .register-button {
       min-width: 140px;
       min-height: 44px;
-
       padding: 10px 16px;
-
       background: var(--yellow);
       color: #172033;
-
       border: 0;
       border-radius: 11px;
-
       font-size: 12px;
       font-weight: 600;
-
-      transition: .2s ease;
-    }
-
-    .register-button:hover:not(:disabled) {
-      background: var(--yellow-hover);
     }
 
     .register-button.registered {
@@ -652,42 +488,28 @@
       cursor: not-allowed;
     }
 
-    /* =====================================================
-       STATE
-    ===================================================== */
-
     .state-card {
       grid-column: 1 / -1;
-
       padding: 55px 25px;
-
-      background: #ffffff;
-
+      background: #fff;
       border: 1px solid var(--border);
       border-radius: 20px;
-
       text-align: center;
     }
 
     .state-icon {
       width: 58px;
       height: 58px;
-
       margin: 0 auto 15px;
-
       background: #f2f5f9;
-
       border-radius: 50%;
-
       display: grid;
       place-items: center;
-
       font-size: 23px;
     }
 
     .state-title {
       margin-bottom: 5px;
-
       color: var(--navy);
       font-size: 17px;
       font-weight: 600;
@@ -696,25 +518,16 @@
     .state-description {
       color: var(--muted);
       font-size: 12px;
-      line-height: 1.7;
     }
-
-    /* =====================================================
-       REGISTRATION MODAL
-    ===================================================== */
 
     .modal-backdrop {
       position: fixed;
       inset: 0;
-
       display: none;
       align-items: center;
       justify-content: center;
-
       padding: 20px;
-
       background: rgba(7,17,32,.62);
-
       z-index: 500;
     }
 
@@ -723,19 +536,13 @@
     }
 
     .modal {
-      width: min(680px, 100%);
+      width: min(760px, 100%);
       max-height: calc(100vh - 40px);
-
       overflow-y: auto;
-
       padding: 30px;
-
-      background: #ffffff;
-
+      background: #fff;
       border-radius: 22px;
-
-      box-shadow:
-        0 25px 75px rgba(0,0,0,.28);
+      box-shadow: 0 25px 75px rgba(0,0,0,.28);
     }
 
     .modal-top {
@@ -744,20 +551,15 @@
 
     .modal-eyebrow {
       margin-bottom: 6px;
-
       color: #a67d00;
-
       font-size: 11px;
       font-weight: 600;
     }
 
     .modal h3 {
       margin-bottom: 7px;
-
       color: var(--navy);
-
       font-size: 22px;
-      line-height: 1.4;
     }
 
     .modal-description {
@@ -769,49 +571,29 @@
     .selected-session {
       margin-bottom: 23px;
       padding: 14px 16px;
-
       background: #f6f8fb;
-
       border-radius: 12px;
-
       color: var(--navy);
-
       font-size: 13px;
       font-weight: 500;
-      line-height: 1.6;
     }
-
-    /* =====================================================
-       FORM
-    ===================================================== */
 
     .form-section {
       margin-top: 25px;
       padding-top: 23px;
-
       border-top: 1px solid #e8ecf2;
-    }
-
-    .form-section:first-of-type {
-      margin-top: 0;
-      padding-top: 0;
-      border-top: 0;
     }
 
     .form-section-title {
       margin-bottom: 4px;
-
       color: var(--navy);
-
       font-size: 16px;
       font-weight: 600;
     }
 
     .form-section-description {
       margin-bottom: 16px;
-
       color: var(--muted);
-
       font-size: 11px;
       line-height: 1.65;
     }
@@ -828,11 +610,8 @@
 
     .field label {
       display: block;
-
       margin-bottom: 6px;
-
       color: #465569;
-
       font-size: 11px;
       font-weight: 500;
     }
@@ -842,47 +621,59 @@
     }
 
     .field input,
-    .field select {
+    .field select,
+    .field textarea {
       width: 100%;
-      height: 45px;
-
       padding: 0 13px;
-
-      background: #ffffff;
+      background: #fff;
       color: var(--text);
-
       border: 1px solid #d9e0e9;
       border-radius: 10px;
-
       outline: none;
-
       font-size: 12px;
     }
 
-    .field input:focus,
-    .field select:focus {
-      border-color: #c6a42d;
-      box-shadow: 0 0 0 3px rgba(248,199,61,.11);
+    .field input,
+    .field select {
+      height: 45px;
     }
 
-    .field-note {
-      margin-top: 5px;
+    .field textarea {
+      min-height: 82px;
+      padding-top: 11px;
+      padding-bottom: 11px;
+      resize: vertical;
+    }
 
+    .member-snapshot {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      padding: 14px;
+      background: #f7f9fc;
+      border-radius: 12px;
+    }
+
+    .snapshot-label {
       color: #929cab;
-
-      font-size: 10px;
-      line-height: 1.5;
+      font-size: 9px;
     }
 
-    /* =====================================================
-       DOCUMENT OPTIONS
-    ===================================================== */
+    .snapshot-value {
+      margin-top: 2px;
+      color: var(--navy);
+      font-size: 11px;
+      font-weight: 500;
+      overflow-wrap: anywhere;
+    }
 
-    .document-section {
+    .document-section,
+    .billing-section {
       display: none;
     }
 
-    .document-section.show {
+    .document-section.show,
+    .billing-section.show {
       display: block;
     }
 
@@ -892,25 +683,13 @@
     }
 
     .document-option {
-      position: relative;
-
       display: flex;
       align-items: flex-start;
       gap: 12px;
-
       padding: 14px;
-
       border: 1px solid #dfe5ed;
       border-radius: 12px;
-
       cursor: pointer;
-
-      transition: .2s ease;
-    }
-
-    .document-option:hover {
-      border-color: #d1ae34;
-      background: #fffdf7;
     }
 
     .document-option.selected {
@@ -921,85 +700,163 @@
     .document-option input {
       width: 18px;
       height: 18px;
-
       margin-top: 1px;
-
       accent-color: #d6a800;
     }
 
     .document-option-title {
       color: var(--navy);
-
       font-size: 13px;
       font-weight: 600;
     }
 
     .document-option-description {
       margin-top: 3px;
-
       color: var(--muted);
-
       font-size: 10px;
       line-height: 1.55;
     }
 
-    .document-note {
+    .document-note,
+    .billing-note {
       margin-top: 13px;
       padding: 12px 14px;
-
       color: #775600;
       background: #fff8e5;
-
       border: 1px solid #f1dda5;
       border-radius: 10px;
-
       font-size: 10px;
       line-height: 1.7;
     }
 
-    /* =====================================================
-       MEMBER SNAPSHOT
-    ===================================================== */
-
-    .member-snapshot {
+    .billing-profiles {
       display: grid;
-      grid-template-columns: 1fr 1fr;
       gap: 10px;
+      margin-bottom: 15px;
+    }
 
-      padding: 14px;
-
-      background: #f7f9fc;
-
+    .billing-card {
+      padding: 15px;
+      border: 1px solid #dfe5ed;
       border-radius: 12px;
+      cursor: pointer;
+      transition: .15s;
     }
 
-    .snapshot-item {
-      min-width: 0;
+    .billing-card:hover {
+      border-color: #c7a331;
     }
 
-    .snapshot-label {
-      color: #929cab;
+    .billing-card.selected {
+      border-color: #d2aa24;
+      background: #fffaf0;
+      box-shadow: 0 0 0 2px rgba(248,199,61,.10);
+    }
+
+    .billing-card-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .billing-card-name {
+      color: var(--navy);
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .billing-card-badge {
+      flex: none;
+      padding: 4px 8px;
+      color: var(--green);
+      background: var(--green-bg);
+      border-radius: 999px;
       font-size: 9px;
     }
 
-    .snapshot-value {
-      margin-top: 2px;
-
-      color: var(--navy);
-
-      font-size: 11px;
-      font-weight: 500;
-
-      overflow-wrap: anywhere;
+    .billing-card-detail {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.65;
     }
 
-    /* =====================================================
-       MODAL ACTION
-    ===================================================== */
+    .new-billing-button {
+      width: 100%;
+      min-height: 43px;
+      border: 1px dashed #c7a331;
+      border-radius: 11px;
+      background: #fffdf7;
+      color: #775600;
+      font-size: 11px;
+      font-weight: 500;
+    }
+
+    .billing-form {
+      display: none;
+      margin-top: 18px;
+      padding: 18px;
+      background: #f8fafc;
+      border: 1px solid #e2e7ee;
+      border-radius: 14px;
+    }
+
+    .billing-form.show {
+      display: block;
+    }
+
+    .billing-form-title {
+      margin-bottom: 15px;
+      color: var(--navy);
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .billing-type-options {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .billing-type-option {
+      flex: 1;
+      padding: 11px;
+      border: 1px solid #dce2ea;
+      border-radius: 10px;
+      background: #fff;
+      cursor: pointer;
+      text-align: center;
+      font-size: 11px;
+    }
+
+    .billing-type-option.selected {
+      border-color: #d2aa24;
+      background: #fffaf0;
+      color: #775600;
+      font-weight: 600;
+    }
+
+    .billing-type-option input {
+      display: none;
+    }
+
+    .default-check {
+      margin-top: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #526174;
+      font-size: 11px;
+    }
+
+    .default-check input {
+      width: 17px;
+      height: 17px;
+      accent-color: #d6a800;
+    }
 
     .modal-actions {
       margin-top: 26px;
-
       display: flex;
       justify-content: flex-end;
       gap: 10px;
@@ -1007,12 +864,9 @@
 
     .modal-button {
       min-height: 43px;
-
       padding: 10px 18px;
-
       border: 0;
       border-radius: 10px;
-
       font-size: 12px;
       font-weight: 500;
     }
@@ -1033,30 +887,19 @@
       cursor: not-allowed;
     }
 
-    /* =====================================================
-       FOOTER
-    ===================================================== */
-
     footer {
       padding: 33px 25px;
-
       background: var(--navy-dark);
       color: #aeb8c8;
-
       text-align: center;
-
       font-size: 11px;
       line-height: 1.7;
     }
 
     footer strong {
-      color: #ffffff;
+      color: #fff;
       font-weight: 500;
     }
-
-    /* =====================================================
-       RESPONSIVE
-    ===================================================== */
 
     @media (max-width: 900px) {
       .training-grid {
@@ -1074,44 +917,12 @@
         padding: 0 18px;
       }
 
-      .brand {
-        gap: 10px;
-      }
-
       .brand-name {
         font-size: 22px;
       }
 
-      .brand-mark {
-        height: 32px;
-      }
-
-      .brand-mark span {
-        width: 6px;
-      }
-
-      .brand-mark span:nth-child(1),
-      .brand-mark span:nth-child(5) {
-        height: 16px;
-      }
-
-      .brand-mark span:nth-child(2),
-      .brand-mark span:nth-child(4) {
-        height: 25px;
-      }
-
-      .brand-mark span:nth-child(3) {
-        height: 32px;
-      }
-
       .header-user {
         display: none;
-      }
-
-      .logout-button {
-        min-height: 38px;
-        padding: 8px 12px;
-        font-size: 11px;
       }
 
       .hero-wrap {
@@ -1121,9 +932,7 @@
 
       .hero {
         min-height: auto;
-
         padding: 32px 25px;
-
         border-radius: 21px;
       }
 
@@ -1144,15 +953,14 @@
         margin-top: 33px;
       }
 
-      .section-heading h2,
-      .training-heading h2 {
-        font-size: 22px;
+      .member-card,
+      .form-grid,
+      .member-snapshot {
+        grid-template-columns: 1fr;
       }
 
-      .member-card {
-        grid-template-columns: 1fr;
-        gap: 18px;
-        padding: 21px;
+      .field.full {
+        grid-column: auto;
       }
 
       .training-heading {
@@ -1164,40 +972,16 @@
         width: 100%;
       }
 
-      .card-main {
-        padding: 22px 21px 18px;
-      }
-
-      .card-footer {
-        padding: 16px 21px 19px;
-      }
-
       .modal {
         padding: 24px 20px;
       }
 
-      .form-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .field.full {
-        grid-column: auto;
-      }
-
-      .member-snapshot {
-        grid-template-columns: 1fr;
+      .billing-type-options {
+        flex-direction: column;
       }
     }
 
     @media (max-width: 430px) {
-      .hero {
-        padding: 28px 21px;
-      }
-
-      .hero h1 {
-        font-size: 26px;
-      }
-
       .card-footer {
         flex-direction: column;
         align-items: stretch;
@@ -1220,2535 +1004,1971 @@
 
 <body>
 
-  <!-- =====================================================
-       HEADER
-  ====================================================== -->
+<header class="site-header">
+  <a class="brand" href="index.html">
+    <div class="brand-mark">
+      <span></span><span></span><span></span><span></span><span></span>
+    </div>
+    <div class="brand-name">SANTE</div>
+  </a>
 
-  <header class="site-header">
+  <div class="header-right">
+    <div class="header-user">
+      <div id="headerUserName" class="header-user-name">สมาชิก SANTE</div>
+      <div id="headerUserEmail" class="header-user-email"></div>
+    </div>
 
-    <a class="brand" href="index.html">
+    <button type="button" id="logoutButton" class="logout-button">
+      ออกจากระบบ
+    </button>
+  </div>
+</header>
 
-      <div class="brand-mark">
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
+<div class="hero-wrap">
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-eyebrow">SANTE TRAINING</div>
+
+      <h1>สมัครเข้าร่วมการอบรม</h1>
+
+      <div class="hero-description">
+        เลือกรอบการอบรมที่ต้องการ ระบบจะดึงข้อมูลสมาชิกของคุณมาใช้โดยอัตโนมัติ
+        และให้กรอกเฉพาะข้อมูลเพิ่มเติมที่จำเป็น
       </div>
 
-      <div class="brand-name">
-        SANTE
+      <div class="hero-member">
+        <div class="hero-member-label">เข้าสู่ระบบในชื่อ</div>
+        <div id="heroMemberName" class="hero-member-name">กำลังโหลด...</div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<main class="container">
+
+  <div id="messageBox" class="message"></div>
+
+  <section class="section">
+    <div class="section-heading">
+      <h2>ข้อมูลสมาชิก</h2>
+      <p>ข้อมูลส่วนบุคคลดึงจากบัญชีสมาชิกของคุณโดยอัตโนมัติ</p>
+    </div>
+
+    <div class="member-card">
+      <div>
+        <div class="info-label">ชื่อ-นามสกุล</div>
+        <div id="profileName" class="info-value">-</div>
       </div>
 
-    </a>
+      <div>
+        <div class="info-label">อีเมล</div>
+        <div id="profileEmail" class="info-value">-</div>
+      </div>
 
-    <div class="header-right">
+      <div>
+        <div class="info-label">เบอร์โทรศัพท์</div>
+        <div id="profilePhone" class="info-value">-</div>
+      </div>
+    </div>
+  </section>
 
-      <div class="header-user">
+  <section>
+    <div class="training-heading">
+      <div>
+        <h2>รอบอบรมที่เปิดรับสมัคร</h2>
+        <p>เลือกกิจกรรมหรือรอบอบรมที่ต้องการเข้าร่วม</p>
+      </div>
 
-        <div
-          id="headerUserName"
-          class="header-user-name"
+      <div class="search-box">
+        <input
+          type="search"
+          id="searchInput"
+          class="search-input"
+          placeholder="ค้นหาหลักสูตรหรือรอบอบรม"
         >
-          สมาชิก SANTE
+      </div>
+    </div>
+
+    <div id="trainingGrid" class="training-grid">
+      <div class="state-card">
+        <div class="state-icon">…</div>
+        <div class="state-title">กำลังโหลดรอบอบรม</div>
+        <div class="state-description">กรุณารอสักครู่</div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<div id="registrationModal" class="modal-backdrop">
+  <div class="modal">
+
+    <div class="modal-top">
+      <div id="modalTypeLabel" class="modal-eyebrow">SANTE TRAINING</div>
+      <h3>สมัครเข้าร่วมการอบรม</h3>
+      <div class="modal-description">
+        กรุณาตรวจสอบข้อมูลและกรอกข้อมูลเพิ่มเติมสำหรับรอบอบรมนี้
+      </div>
+    </div>
+
+    <div id="selectedSessionBox" class="selected-session">-</div>
+
+    <section class="form-section">
+      <div class="form-section-title">ข้อมูลผู้สมัคร</div>
+      <div class="form-section-description">
+        ดึงจากบัญชีสมาชิก SANTE โดยอัตโนมัติ
+      </div>
+
+      <div class="member-snapshot">
+        <div>
+          <div class="snapshot-label">ชื่อ-นามสกุล</div>
+          <div id="modalMemberName" class="snapshot-value">-</div>
         </div>
 
-        <div
-          id="headerUserEmail"
-          class="header-user-email"
-        ></div>
+        <div>
+          <div class="snapshot-label">อีเมล</div>
+          <div id="modalMemberEmail" class="snapshot-value">-</div>
+        </div>
+
+        <div>
+          <div class="snapshot-label">เบอร์โทรศัพท์</div>
+          <div id="modalMemberPhone" class="snapshot-value">-</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="form-section">
+      <div class="form-section-title">ข้อมูลการทำงาน</div>
+      <div class="form-section-description">
+        ข้อมูลนี้จะบันทึกเป็นข้อมูล ณ วันที่สมัครอบรม
+      </div>
+
+      <div class="form-grid">
+        <div class="field full">
+          <label>
+            บริษัท / หน่วยงาน <span class="required">*</span>
+          </label>
+          <input
+            id="organizationName"
+            type="text"
+            maxlength="250"
+            placeholder="เช่น บริษัท ตัวอย่าง จำกัด"
+          >
+        </div>
+
+        <div class="field">
+          <label>
+            ตำแหน่งงาน <span class="required">*</span>
+          </label>
+          <input
+            id="jobPosition"
+            type="text"
+            maxlength="200"
+            placeholder="เช่น เจ้าหน้าที่ความปลอดภัย"
+          >
+        </div>
+
+        <div class="field">
+          <label>
+            จังหวัด <span class="required">*</span>
+          </label>
+
+          <select id="province">
+            <option value="">เลือกจังหวัด</option>
+            <option>กรุงเทพมหานคร</option>
+            <option>กระบี่</option>
+            <option>กาญจนบุรี</option>
+            <option>กาฬสินธุ์</option>
+            <option>กำแพงเพชร</option>
+            <option>ขอนแก่น</option>
+            <option>จันทบุรี</option>
+            <option>ฉะเชิงเทรา</option>
+            <option>ชลบุรี</option>
+            <option>ชัยนาท</option>
+            <option>ชัยภูมิ</option>
+            <option>ชุมพร</option>
+            <option>เชียงราย</option>
+            <option>เชียงใหม่</option>
+            <option>ตรัง</option>
+            <option>ตราด</option>
+            <option>ตาก</option>
+            <option>นครนายก</option>
+            <option>นครปฐม</option>
+            <option>นครพนม</option>
+            <option>นครราชสีมา</option>
+            <option>นครศรีธรรมราช</option>
+            <option>นครสวรรค์</option>
+            <option>นนทบุรี</option>
+            <option>นราธิวาส</option>
+            <option>น่าน</option>
+            <option>บึงกาฬ</option>
+            <option>บุรีรัมย์</option>
+            <option>ปทุมธานี</option>
+            <option>ประจวบคีรีขันธ์</option>
+            <option>ปราจีนบุรี</option>
+            <option>ปัตตานี</option>
+            <option>พระนครศรีอยุธยา</option>
+            <option>พะเยา</option>
+            <option>พังงา</option>
+            <option>พัทลุง</option>
+            <option>พิจิตร</option>
+            <option>พิษณุโลก</option>
+            <option>เพชรบุรี</option>
+            <option>เพชรบูรณ์</option>
+            <option>แพร่</option>
+            <option>ภูเก็ต</option>
+            <option>มหาสารคาม</option>
+            <option>มุกดาหาร</option>
+            <option>แม่ฮ่องสอน</option>
+            <option>ยโสธร</option>
+            <option>ยะลา</option>
+            <option>ร้อยเอ็ด</option>
+            <option>ระนอง</option>
+            <option>ระยอง</option>
+            <option>ราชบุรี</option>
+            <option>ลพบุรี</option>
+            <option>ลำปาง</option>
+            <option>ลำพูน</option>
+            <option>เลย</option>
+            <option>ศรีสะเกษ</option>
+            <option>สกลนคร</option>
+            <option>สงขลา</option>
+            <option>สตูล</option>
+            <option>สมุทรปราการ</option>
+            <option>สมุทรสงคราม</option>
+            <option>สมุทรสาคร</option>
+            <option>สระแก้ว</option>
+            <option>สระบุรี</option>
+            <option>สิงห์บุรี</option>
+            <option>สุโขทัย</option>
+            <option>สุพรรณบุรี</option>
+            <option>สุราษฎร์ธานี</option>
+            <option>สุรินทร์</option>
+            <option>หนองคาย</option>
+            <option>หนองบัวลำภู</option>
+            <option>อ่างทอง</option>
+            <option>อำนาจเจริญ</option>
+            <option>อุดรธานี</option>
+            <option>อุตรดิตถ์</option>
+            <option>อุทัยธานี</option>
+            <option>อุบลราชธานี</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <section id="documentSection" class="form-section document-section">
+
+      <div class="form-section-title">เอกสารที่ต้องการ</div>
+
+      <div class="form-section-description">
+        สำหรับอบรม (มีค่าใช้จ่าย) สามารถเลือกได้มากกว่า 1 รายการ
+        หรือไม่เลือกเอกสารก็ได้
+      </div>
+
+      <div class="document-options">
+
+        <label class="document-option">
+          <input
+            type="checkbox"
+            class="document-checkbox"
+            value="QUOTATION"
+          >
+          <div>
+            <div class="document-option-title">ใบเสนอราคา</div>
+            <div class="document-option-description">
+              สำหรับใช้ประกอบการอนุมัติภายในองค์กรก่อนชำระเงิน
+            </div>
+          </div>
+        </label>
+
+        <label class="document-option">
+          <input
+            type="checkbox"
+            class="document-checkbox"
+            value="INVOICE"
+          >
+          <div>
+            <div class="document-option-title">ใบแจ้งหนี้</div>
+            <div class="document-option-description">
+              สำหรับใช้ดำเนินการชำระค่าลงทะเบียนอบรม
+            </div>
+          </div>
+        </label>
+
+        <label class="document-option">
+          <input
+            type="checkbox"
+            class="document-checkbox"
+            value="RECEIPT_TAX_INVOICE"
+          >
+          <div>
+            <div class="document-option-title">
+              ใบเสร็จรับเงิน / ใบกำกับภาษี
+            </div>
+            <div class="document-option-description">
+              สามารถแจ้งความต้องการไว้ล่วงหน้าได้
+              ระบบจะออกเอกสารหลังได้รับและยืนยันการชำระเงินจริง
+            </div>
+          </div>
+        </label>
 
       </div>
+
+      <div class="document-note">
+        เมื่อเลือกเอกสารอย่างน้อย 1 รายการ
+        กรุณาเลือกหรือกรอกข้อมูลสำหรับออกเอกสารด้านล่าง
+      </div>
+
+    </section>
+
+    <section id="billingSection" class="form-section billing-section">
+
+      <div class="form-section-title">ข้อมูลสำหรับออกเอกสาร</div>
+
+      <div class="form-section-description">
+        เลือกข้อมูลที่เคยบันทึกไว้ หรือสร้างข้อมูลใหม่
+        ข้อมูลนี้จะถูกเก็บเป็น Snapshot สำหรับการสมัครครั้งนี้
+      </div>
+
+      <div id="billingProfiles" class="billing-profiles"></div>
 
       <button
         type="button"
-        id="logoutButton"
-        class="logout-button"
+        id="newBillingButton"
+        class="new-billing-button"
       >
-        ออกจากระบบ
+        + เพิ่มข้อมูลสำหรับออกเอกสารใหม่
       </button>
 
-    </div>
+      <div id="billingForm" class="billing-form">
 
-  </header>
-
-
-  <!-- =====================================================
-       HERO
-  ====================================================== -->
-
-  <div class="hero-wrap">
-
-    <section class="hero">
-
-      <div class="hero-content">
-
-        <div class="hero-eyebrow">
-          SANTE TRAINING
+        <div class="billing-form-title">
+          ข้อมูลสำหรับออกเอกสาร
         </div>
 
-        <h1>
-          สมัครเข้าร่วมการอบรม
-        </h1>
-
-        <div class="hero-description">
-          เลือกรอบการอบรมที่ต้องการ
-          ระบบจะดึงข้อมูลสมาชิกของคุณมาใช้โดยอัตโนมัติ
-          และให้กรอกเฉพาะข้อมูลเพิ่มเติมที่จำเป็นสำหรับการสมัคร
-        </div>
-
-        <div class="hero-member">
-
-          <div class="hero-member-label">
-            เข้าสู่ระบบในชื่อ
-          </div>
-
-          <div
-            id="heroMemberName"
-            class="hero-member-name"
-          >
-            กำลังโหลด...
-          </div>
-
-        </div>
-
-      </div>
-
-    </section>
-
-  </div>
-
-
-  <!-- =====================================================
-       CONTENT
-  ====================================================== -->
-
-  <main class="container">
-
-    <div
-      id="messageBox"
-      class="message"
-    ></div>
-
-
-    <!-- MEMBER -->
-
-    <section class="section">
-
-      <div class="section-heading">
-
-        <h2>ข้อมูลสมาชิก</h2>
-
-        <p>
-          ข้อมูลส่วนบุคคลจะดึงจากบัญชีสมาชิกของคุณโดยอัตโนมัติ
-        </p>
-
-      </div>
-
-
-      <div class="member-card">
-
-        <div>
-
-          <div class="info-label">
-            ชื่อ-นามสกุล
-          </div>
-
-          <div
-            id="profileName"
-            class="info-value"
-          >
-            -
-          </div>
-
-        </div>
-
-
-        <div>
-
-          <div class="info-label">
-            อีเมล
-          </div>
-
-          <div
-            id="profileEmail"
-            class="info-value"
-          >
-            -
-          </div>
-
-        </div>
-
-
-        <div>
-
-          <div class="info-label">
-            เบอร์โทรศัพท์
-          </div>
-
-          <div
-            id="profilePhone"
-            class="info-value"
-          >
-            -
-          </div>
-
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <!-- TRAINING -->
-
-    <section>
-
-      <div class="training-heading">
-
-        <div>
-
-          <h2>
-            รอบอบรมที่เปิดรับสมัคร
-          </h2>
-
-          <p>
-            เลือกรอบอบรมที่ต้องการเข้าร่วม
-          </p>
-
-        </div>
-
-
-        <div class="search-box">
-
-          <input
-            type="search"
-            id="searchInput"
-            class="search-input"
-            placeholder="ค้นหาหลักสูตรหรือรอบอบรม"
-          >
-
-        </div>
-
-      </div>
-
-
-      <div
-        id="trainingGrid"
-        class="training-grid"
-      >
-
-        <div class="state-card">
-
-          <div class="state-icon">
-            …
-          </div>
-
-          <div class="state-title">
-            กำลังโหลดรอบอบรม
-          </div>
-
-          <div class="state-description">
-            กรุณารอสักครู่
-          </div>
-
-        </div>
-
-      </div>
-
-    </section>
-
-  </main>
-
-
-  <!-- =====================================================
-       REGISTRATION MODAL
-  ====================================================== -->
-
-  <div
-    id="registrationModal"
-    class="modal-backdrop"
-  >
-
-    <div class="modal">
-
-      <div class="modal-top">
-
-        <div
-          id="modalTypeLabel"
-          class="modal-eyebrow"
-        >
-          SANTE TRAINING
-        </div>
-
-        <h3>
-          สมัครเข้าร่วมการอบรม
-        </h3>
-
-        <div class="modal-description">
-          กรุณากรอกข้อมูลเพิ่มเติมสำหรับการสมัครรอบอบรมนี้
-        </div>
-
-      </div>
-
-
-      <div
-        id="selectedSessionBox"
-        class="selected-session"
-      >
-        -
-      </div>
-
-
-      <!-- MEMBER SNAPSHOT -->
-
-      <section class="form-section">
-
-        <div class="form-section-title">
-          ข้อมูลผู้สมัคร
-        </div>
-
-        <div class="form-section-description">
-          ดึงจากบัญชีสมาชิก SANTE โดยอัตโนมัติ
-        </div>
-
-
-        <div class="member-snapshot">
-
-          <div class="snapshot-item">
-
-            <div class="snapshot-label">
-              ชื่อ-นามสกุล
-            </div>
-
-            <div
-              id="modalMemberName"
-              class="snapshot-value"
+        <div class="billing-type-options">
+
+          <label id="billingTypeCompanyBox" class="billing-type-option selected">
+            <input
+              type="radio"
+              name="billingType"
+              value="COMPANY"
+              checked
             >
-              -
-            </div>
+            นิติบุคคล / บริษัท
+          </label>
 
-          </div>
-
-
-          <div class="snapshot-item">
-
-            <div class="snapshot-label">
-              อีเมล
-            </div>
-
-            <div
-              id="modalMemberEmail"
-              class="snapshot-value"
+          <label id="billingTypeIndividualBox" class="billing-type-option">
+            <input
+              type="radio"
+              name="billingType"
+              value="INDIVIDUAL"
             >
-              -
-            </div>
-
-          </div>
-
-
-          <div class="snapshot-item">
-
-            <div class="snapshot-label">
-              เบอร์โทรศัพท์
-            </div>
-
-            <div
-              id="modalMemberPhone"
-              class="snapshot-value"
-            >
-              -
-            </div>
-
-          </div>
+            บุคคล
+          </label>
 
         </div>
-
-      </section>
-
-
-      <!-- WORK INFORMATION -->
-
-      <section class="form-section">
-
-        <div class="form-section-title">
-          ข้อมูลการทำงาน
-        </div>
-
-        <div class="form-section-description">
-          กรุณากรอกข้อมูล ณ วันที่สมัครเข้าร่วมการอบรม
-        </div>
-
 
         <div class="form-grid">
 
           <div class="field full">
-
-            <label for="organizationName">
-              บริษัท / หน่วยงาน
-              <span class="required">*</span>
+            <label>
+              ชื่อสำหรับออกเอกสาร <span class="required">*</span>
             </label>
-
             <input
+              id="billingName"
               type="text"
-              id="organizationName"
               maxlength="250"
-              autocomplete="organization"
-              placeholder="เช่น บริษัท ตัวอย่าง จำกัด"
+              placeholder="ชื่อบริษัท / ชื่อบุคคล"
             >
-
           </div>
 
-
           <div class="field">
-
-            <label for="jobPosition">
-              ตำแหน่งงาน
-              <span class="required">*</span>
-            </label>
-
+            <label>เลขประจำตัวผู้เสียภาษี</label>
             <input
+              id="taxId"
               type="text"
-              id="jobPosition"
-              maxlength="200"
-              autocomplete="organization-title"
-              placeholder="เช่น เจ้าหน้าที่ความปลอดภัย"
+              maxlength="20"
+              inputmode="numeric"
+              placeholder="เลขประจำตัวผู้เสียภาษี"
             >
-
           </div>
-
 
           <div class="field">
+            <label>รหัสสาขา</label>
+            <input
+              id="branchCode"
+              type="text"
+              maxlength="20"
+              placeholder="เช่น 00000"
+            >
+          </div>
 
-            <label for="province">
-              จังหวัด
-              <span class="required">*</span>
+          <div class="field full">
+            <label>ชื่อสาขา</label>
+            <input
+              id="branchName"
+              type="text"
+              maxlength="150"
+              placeholder="เช่น สำนักงานใหญ่"
+            >
+          </div>
+
+          <div class="field full">
+            <label>
+              ที่อยู่สำหรับออกเอกสาร <span class="required">*</span>
             </label>
+            <textarea
+              id="billingAddress"
+              placeholder="เลขที่ อาคาร หมู่ ซอย ถนน"
+            ></textarea>
+          </div>
 
-            <select id="province">
+          <div class="field">
+            <label>แขวง / ตำบล</label>
+            <input
+              id="billingSubdistrict"
+              type="text"
+              maxlength="100"
+            >
+          </div>
 
-              <option value="">
-                เลือกจังหวัด
-              </option>
+          <div class="field">
+            <label>เขต / อำเภอ</label>
+            <input
+              id="billingDistrict"
+              type="text"
+              maxlength="100"
+            >
+          </div>
 
-              <option>กรุงเทพมหานคร</option>
-              <option>กระบี่</option>
-              <option>กาญจนบุรี</option>
-              <option>กาฬสินธุ์</option>
-              <option>กำแพงเพชร</option>
-              <option>ขอนแก่น</option>
-              <option>จันทบุรี</option>
-              <option>ฉะเชิงเทรา</option>
-              <option>ชลบุรี</option>
-              <option>ชัยนาท</option>
-              <option>ชัยภูมิ</option>
-              <option>ชุมพร</option>
-              <option>เชียงราย</option>
-              <option>เชียงใหม่</option>
-              <option>ตรัง</option>
-              <option>ตราด</option>
-              <option>ตาก</option>
-              <option>นครนายก</option>
-              <option>นครปฐม</option>
-              <option>นครพนม</option>
-              <option>นครราชสีมา</option>
-              <option>นครศรีธรรมราช</option>
-              <option>นครสวรรค์</option>
-              <option>นนทบุรี</option>
-              <option>นราธิวาส</option>
-              <option>น่าน</option>
-              <option>บึงกาฬ</option>
-              <option>บุรีรัมย์</option>
-              <option>ปทุมธานี</option>
-              <option>ประจวบคีรีขันธ์</option>
-              <option>ปราจีนบุรี</option>
-              <option>ปัตตานี</option>
-              <option>พระนครศรีอยุธยา</option>
-              <option>พะเยา</option>
-              <option>พังงา</option>
-              <option>พัทลุง</option>
-              <option>พิจิตร</option>
-              <option>พิษณุโลก</option>
-              <option>เพชรบุรี</option>
-              <option>เพชรบูรณ์</option>
-              <option>แพร่</option>
-              <option>ภูเก็ต</option>
-              <option>มหาสารคาม</option>
-              <option>มุกดาหาร</option>
-              <option>แม่ฮ่องสอน</option>
-              <option>ยโสธร</option>
-              <option>ยะลา</option>
-              <option>ร้อยเอ็ด</option>
-              <option>ระนอง</option>
-              <option>ระยอง</option>
-              <option>ราชบุรี</option>
-              <option>ลพบุรี</option>
-              <option>ลำปาง</option>
-              <option>ลำพูน</option>
-              <option>เลย</option>
-              <option>ศรีสะเกษ</option>
-              <option>สกลนคร</option>
-              <option>สงขลา</option>
-              <option>สตูล</option>
-              <option>สมุทรปราการ</option>
-              <option>สมุทรสงคราม</option>
-              <option>สมุทรสาคร</option>
-              <option>สระแก้ว</option>
-              <option>สระบุรี</option>
-              <option>สิงห์บุรี</option>
-              <option>สุโขทัย</option>
-              <option>สุพรรณบุรี</option>
-              <option>สุราษฎร์ธานี</option>
-              <option>สุรินทร์</option>
-              <option>หนองคาย</option>
-              <option>หนองบัวลำภู</option>
-              <option>อ่างทอง</option>
-              <option>อำนาจเจริญ</option>
-              <option>อุดรธานี</option>
-              <option>อุตรดิตถ์</option>
-              <option>อุทัยธานี</option>
-              <option>อุบลราชธานี</option>
+          <div class="field">
+            <label>
+              จังหวัด <span class="required">*</span>
+            </label>
+            <input
+              id="billingProvince"
+              type="text"
+              maxlength="100"
+              placeholder="จังหวัด"
+            >
+          </div>
 
-            </select>
+          <div class="field">
+            <label>
+              รหัสไปรษณีย์ <span class="required">*</span>
+            </label>
+            <input
+              id="billingPostalCode"
+              type="text"
+              maxlength="10"
+              inputmode="numeric"
+              placeholder="เช่น 10110"
+            >
+          </div>
 
+          <div class="field">
+            <label>อีเมลรับเอกสาร</label>
+            <input
+              id="billingEmail"
+              type="email"
+              maxlength="250"
+            >
+          </div>
+
+          <div class="field">
+            <label>เบอร์โทรศัพท์</label>
+            <input
+              id="billingPhone"
+              type="tel"
+              maxlength="30"
+            >
           </div>
 
         </div>
 
-      </section>
+        <label class="default-check">
+          <input id="billingDefault" type="checkbox">
+          บันทึกเป็นข้อมูลออกเอกสารหลักสำหรับครั้งถัดไป
+        </label>
 
-
-      <!-- DOCUMENT REQUEST -->
-
-      <section
-        id="documentSection"
-        class="form-section document-section"
-      >
-
-        <div class="form-section-title">
-          เอกสารที่ต้องการ
+        <div class="billing-note">
+          หากเลือก “ใบเสร็จรับเงิน / ใบกำกับภาษี”
+          ระบบจะกำหนดให้ต้องมีเลขประจำตัวผู้เสียภาษีก่อนสมัคร
         </div>
-
-        <div class="form-section-description">
-          สามารถเลือกได้มากกว่า 1 รายการ
-          หรือไม่เลือกเอกสารก็ได้
-        </div>
-
-
-        <div class="document-options">
-
-          <label class="document-option">
-
-            <input
-              type="checkbox"
-              class="document-checkbox"
-              value="QUOTATION"
-            >
-
-            <div>
-
-              <div class="document-option-title">
-                ใบเสนอราคา
-              </div>
-
-              <div class="document-option-description">
-                สำหรับใช้ประกอบการอนุมัติหรือดำเนินการภายในองค์กรก่อนชำระเงิน
-              </div>
-
-            </div>
-
-          </label>
-
-
-          <label class="document-option">
-
-            <input
-              type="checkbox"
-              class="document-checkbox"
-              value="INVOICE"
-            >
-
-            <div>
-
-              <div class="document-option-title">
-                ใบแจ้งหนี้
-              </div>
-
-              <div class="document-option-description">
-                สำหรับใช้ดำเนินการชำระค่าลงทะเบียนอบรม
-              </div>
-
-            </div>
-
-          </label>
-
-
-          <label class="document-option">
-
-            <input
-              type="checkbox"
-              class="document-checkbox"
-              value="RECEIPT_TAX_INVOICE"
-            >
-
-            <div>
-
-              <div class="document-option-title">
-                ใบเสร็จรับเงิน / ใบกำกับภาษี
-              </div>
-
-              <div class="document-option-description">
-                ระบบจะออกเอกสารหลังตรวจสอบและยืนยันการรับชำระเงินเรียบร้อยแล้ว
-              </div>
-
-            </div>
-
-          </label>
-
-        </div>
-
-
-        <div class="document-note">
-          หากเลือกเอกสารทางการเงิน
-          ระบบจะให้กรอกหรือเลือกข้อมูลสำหรับออกเอกสาร
-          เช่น ชื่อนิติบุคคล เลขประจำตัวผู้เสียภาษี
-          สำนักงานใหญ่/สาขา และที่อยู่สำหรับออกเอกสาร
-          ในขั้นตอนถัดไป
-        </div>
-
-      </section>
-
-
-      <!-- ACTION -->
-
-      <div class="modal-actions">
-
-        <button
-          type="button"
-          id="cancelButton"
-          class="modal-button cancel-button"
-        >
-          ยกเลิก
-        </button>
-
-        <button
-          type="button"
-          id="confirmButton"
-          class="modal-button confirm-button"
-        >
-          ยืนยันสมัครอบรม
-        </button>
 
       </div>
 
+    </section>
+
+    <div class="modal-actions">
+      <button
+        type="button"
+        id="cancelButton"
+        class="modal-button cancel-button"
+      >
+        ยกเลิก
+      </button>
+
+      <button
+        type="button"
+        id="confirmButton"
+        class="modal-button confirm-button"
+      >
+        ยืนยันสมัครอบรม
+      </button>
     </div>
 
   </div>
+</div>
 
+<footer>
+  <strong>SANTE CONSULTING CO., LTD.</strong><br>
+  Safety · Environment · Training
+</footer>
 
-  <!-- =====================================================
-       FOOTER
-  ====================================================== -->
+<script>
+  const SUPABASE_URL =
+    "https://cyegjwerxlxhczrfiurz.supabase.co";
 
-  <footer>
-    <strong>SANTE CONSULTING CO., LTD.</strong>
-    <br>
-    Safety · Environment · Training
-  </footer>
+  const SUPABASE_PUBLISHABLE_KEY =
+    "sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF";
 
+  const MEMBER_AUTH_STORAGE_KEY =
+    "sante-member-auth";
 
-  <!-- =====================================================
-       JAVASCRIPT
-  ====================================================== -->
+  const { createClient } = supabase;
 
-  <script>
-
-    /* =====================================================
-       SUPABASE CONFIG
-    ====================================================== */
-
-    const SUPABASE_URL =
-      "https://cyegjwerxlxhczrfiurz.supabase.co";
-
-    const SUPABASE_PUBLISHABLE_KEY =
-      "sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF";
-
-    const MEMBER_AUTH_STORAGE_KEY =
-      "sante-member-auth";
-
-
-    const { createClient } = supabase;
-
-
-    const db = createClient(
-      SUPABASE_URL,
-      SUPABASE_PUBLISHABLE_KEY,
-      {
-        auth: {
-          storageKey: MEMBER_AUTH_STORAGE_KEY,
-          persistSession: true,
-          autoRefreshToken: true,
-          detectSessionInUrl: true
-        }
+  const db = createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY,
+    {
+      auth: {
+        storageKey: MEMBER_AUTH_STORAGE_KEY,
+        persistSession: true,
+        autoRefreshToken: true,
+        detectSessionInUrl: true
       }
-    );
-
-
-    /* =====================================================
-       STATE
-    ====================================================== */
-
-    let currentUser = null;
-
-    let currentProfile = null;
-
-    let trainingSessions = [];
-
-    let myRegistrations = [];
-
-    let selectedSession = null;
-
-
-    /* =====================================================
-       ELEMENTS
-    ====================================================== */
-
-    const messageBox =
-      document.getElementById("messageBox");
-
-    const trainingGrid =
-      document.getElementById("trainingGrid");
-
-    const searchInput =
-      document.getElementById("searchInput");
-
-    const registrationModal =
-      document.getElementById("registrationModal");
-
-    const selectedSessionBox =
-      document.getElementById("selectedSessionBox");
-
-    const modalTypeLabel =
-      document.getElementById("modalTypeLabel");
-
-    const organizationNameInput =
-      document.getElementById("organizationName");
-
-    const jobPositionInput =
-      document.getElementById("jobPosition");
-
-    const provinceInput =
-      document.getElementById("province");
-
-    const documentSection =
-      document.getElementById("documentSection");
-
-    const confirmButton =
-      document.getElementById("confirmButton");
-
-    const cancelButton =
-      document.getElementById("cancelButton");
-
-    const logoutButton =
-      document.getElementById("logoutButton");
-
-
-    /* =====================================================
-       HELPERS
-    ====================================================== */
-
-    function escapeHtml(value) {
-
-      return String(value ?? "")
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-
     }
+  );
 
+  let currentUser = null;
+  let currentProfile = null;
+  let trainingSessions = [];
+  let myRegistrations = [];
+  let billingProfilesData = [];
+  let selectedSession = null;
+  let selectedBillingProfileId = null;
+  let createNewBilling = false;
 
-    function fullThaiName(profile) {
+  const messageBox = document.getElementById("messageBox");
+  const trainingGrid = document.getElementById("trainingGrid");
+  const searchInput = document.getElementById("searchInput");
 
-      if (!profile) {
-        return "-";
-      }
+  const registrationModal =
+    document.getElementById("registrationModal");
 
-      const title =
-        profile.title_th || "";
+  const selectedSessionBox =
+    document.getElementById("selectedSessionBox");
 
-      const first =
-        profile.firstname_th || "";
+  const modalTypeLabel =
+    document.getElementById("modalTypeLabel");
 
-      const last =
-        profile.lastname_th || "";
+  const organizationNameInput =
+    document.getElementById("organizationName");
 
-      const name =
-        `${title} ${first} ${last}`
-          .replace(/\s+/g, " ")
-          .trim();
+  const jobPositionInput =
+    document.getElementById("jobPosition");
 
-      return name || profile.email || "-";
+  const provinceInput =
+    document.getElementById("province");
 
-    }
+  const documentSection =
+    document.getElementById("documentSection");
 
+  const billingSection =
+    document.getElementById("billingSection");
 
-    function showMessage(type, text) {
+  const billingProfilesContainer =
+    document.getElementById("billingProfiles");
 
-      messageBox.className =
-        "message show " + type;
+  const newBillingButton =
+    document.getElementById("newBillingButton");
 
-      messageBox.textContent = text;
+  const billingForm =
+    document.getElementById("billingForm");
 
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-      });
+  const confirmButton =
+    document.getElementById("confirmButton");
 
-    }
+  const cancelButton =
+    document.getElementById("cancelButton");
 
+  const logoutButton =
+    document.getElementById("logoutButton");
 
-    function clearMessage() {
+  function escapeHtml(value) {
+    return String(value ?? "")
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+  }
 
-      messageBox.className = "message";
-      messageBox.textContent = "";
+  function fullThaiName(profile) {
+    if (!profile) return "-";
 
-    }
+    const name = [
+      profile.title_th,
+      profile.firstname_th,
+      profile.lastname_th
+    ]
+      .filter(Boolean)
+      .join(" ")
+      .replace(/\s+/g, " ")
+      .trim();
 
+    return name || profile.email || "-";
+  }
 
-    function formatDateTime(value) {
+  function showMessage(type, text) {
+    messageBox.className = "message show " + type;
+    messageBox.textContent = text;
 
-      if (!value) {
-        return "-";
-      }
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+  }
 
-      try {
+  function clearMessage() {
+    messageBox.className = "message";
+    messageBox.textContent = "";
+  }
 
-        return new Intl.DateTimeFormat(
-          "th-TH",
-          {
-            dateStyle: "medium",
-            timeStyle: "short",
-            timeZone: "Asia/Bangkok"
-          }
-        ).format(new Date(value));
+  function formatDateTime(value) {
+    if (!value) return "-";
 
-      }
-      catch {
-
-        return "-";
-
-      }
-
-    }
-
-
-    function formatDate(value) {
-
-      if (!value) {
-        return "-";
-      }
-
-      try {
-
-        return new Intl.DateTimeFormat(
-          "th-TH",
-          {
-            dateStyle: "medium",
-            timeZone: "Asia/Bangkok"
-          }
-        ).format(
-          new Date(
-            value + "T00:00:00+07:00"
-          )
-        );
-
-      }
-      catch {
-
-        return "-";
-
-      }
-
-    }
-
-
-    function formatMoney(value) {
-
-      const amount =
-        Number(value || 0);
-
-      if (amount <= 0) {
-        return "ไม่มีค่าใช้จ่าย";
-      }
-
-      return new Intl.NumberFormat(
+    try {
+      return new Intl.DateTimeFormat(
         "th-TH",
         {
-          style: "currency",
-          currency: "THB",
-          minimumFractionDigits: 0,
-          maximumFractionDigits: 2
+          dateStyle: "medium",
+          timeStyle: "short",
+          timeZone: "Asia/Bangkok"
         }
-      ).format(amount);
-
+      ).format(new Date(value));
+    } catch {
+      return "-";
     }
+  }
 
+  function formatDate(value) {
+    if (!value) return "-";
 
-    function deliveryLabel(value) {
-
-      switch (
-        String(value || "").toUpperCase()
-      ) {
-
-        case "ONLINE":
-          return "ออนไลน์";
-
-        case "ONSITE":
-          return "อบรม ณ สถานที่";
-
-        case "HYBRID":
-          return "Hybrid";
-
-        default:
-          return value || "-";
-
-      }
-
-    }
-
-
-    function deliveryClass(value) {
-
-      switch (
-        String(value || "").toUpperCase()
-      ) {
-
-        case "ONLINE":
-          return "tag-online";
-
-        case "ONSITE":
-          return "tag-onsite";
-
-        case "HYBRID":
-          return "tag-hybrid";
-
-        default:
-          return "tag-online";
-
-      }
-
-    }
-
-
-    function isPaidSession(session) {
-
-      return Number(
-        session?.price || 0
-      ) > 0;
-
-    }
-
-
-    function trainingTypeDisplay(session) {
-
-      if (isPaidSession(session)) {
-        return "อบรม (มีค่าใช้จ่าย)";
-      }
-
-      return "Safety SANTE Sharing";
-
-    }
-
-
-    function getRegistration(sessionId) {
-
-      return myRegistrations.find(
-        item =>
-          item.training_session_id ===
-            sessionId
-          &&
-          String(
-            item.registration_status || ""
-          ).toUpperCase() !== "CANCELLED"
+    try {
+      return new Intl.DateTimeFormat(
+        "th-TH",
+        {
+          dateStyle: "medium",
+          timeZone: "Asia/Bangkok"
+        }
+      ).format(
+        new Date(value + "T00:00:00+07:00")
       );
+    } catch {
+      return "-";
+    }
+  }
 
+  function formatMoney(value) {
+    const amount = Number(value || 0);
+
+    if (amount <= 0) {
+      return "ไม่มีค่าใช้จ่าย";
     }
 
-
-    function registrationButtonInfo(
-      registration
-    ) {
-
-      if (!registration) {
-        return null;
+    return new Intl.NumberFormat(
+      "th-TH",
+      {
+        style: "currency",
+        currency: "THB",
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2
       }
+    ).format(amount);
+  }
 
-      const status =
-        String(
-          registration.registration_status || ""
-        ).toUpperCase();
+  function deliveryLabel(value) {
+    switch (String(value || "").toUpperCase()) {
+      case "ONLINE":
+        return "ออนไลน์";
+      case "ONSITE":
+        return "อบรม ณ สถานที่";
+      case "HYBRID":
+        return "Hybrid";
+      default:
+        return value || "-";
+    }
+  }
 
+  function deliveryClass(value) {
+    switch (String(value || "").toUpperCase()) {
+      case "ONLINE":
+        return "tag-online";
+      case "ONSITE":
+        return "tag-onsite";
+      case "HYBRID":
+        return "tag-hybrid";
+      default:
+        return "tag-online";
+    }
+  }
 
-      if (status === "CONFIRMED") {
+  function isPaidSession(session) {
+    return Number(session?.price || 0) > 0;
+  }
 
-        return {
-          text: "สมัครแล้ว",
-          className: "registered"
-        };
+  function trainingTypeDisplay(session) {
+    return isPaidSession(session)
+      ? "อบรม (มีค่าใช้จ่าย)"
+      : "Safety SANTE Sharing";
+  }
 
-      }
+  function getRegistration(sessionId) {
+    return myRegistrations.find(item =>
+      item.training_session_id === sessionId &&
+      String(item.registration_status || "").toUpperCase() !== "CANCELLED"
+    );
+  }
 
+  function registrationButtonInfo(registration) {
+    if (!registration) return null;
 
-      if (status === "PENDING") {
+    const status =
+      String(registration.registration_status || "").toUpperCase();
 
-        return {
-          text: "รอชำระเงิน",
-          className: "pending"
-        };
-
-      }
-
-
+    if (status === "CONFIRMED") {
       return {
         text: "สมัครแล้ว",
         className: "registered"
       };
-
     }
 
-
-    function registrationWindow(session) {
-
-      const today = new Date();
-
-      today.setHours(
-        0,
-        0,
-        0,
-        0
-      );
-
-
-      if (
-        session.registration_open_date
-      ) {
-
-        const open =
-          new Date(
-            session.registration_open_date +
-            "T00:00:00"
-          );
-
-
-        if (today < open) {
-
-          return {
-            allowed: false,
-            text:
-              "เปิดรับสมัคร " +
-              formatDate(
-                session.registration_open_date
-              )
-          };
-
-        }
-
-      }
-
-
-      if (
-        session.registration_close_date
-      ) {
-
-        const close =
-          new Date(
-            session.registration_close_date +
-            "T23:59:59"
-          );
-
-
-        if (today > close) {
-
-          return {
-            allowed: false,
-            text: "ปิดรับสมัครแล้ว"
-          };
-
-        }
-
-      }
-
-
-      if (
-        session.training_start_at
-      ) {
-
-        if (
-          new Date() >=
-          new Date(
-            session.training_start_at
-          )
-        ) {
-
-          return {
-            allowed: false,
-            text: "การอบรมเริ่มแล้ว"
-          };
-
-        }
-
-      }
-
-
+    if (status === "PENDING") {
       return {
-        allowed: true,
-        text: ""
+        text: "รอชำระเงิน",
+        className: "pending"
       };
-
     }
 
-
-    function translateRegistrationError(
-      error
-    ) {
-
-      const text =
-        String(
-          error?.message ||
-          error ||
-          ""
-        ).toUpperCase();
-
-
-      if (
-        text.includes(
-          "ALREADY_REGISTERED"
-        )
-      ) {
-
-        return "คุณสมัครรอบอบรมนี้แล้ว";
-
-      }
-
-
-      if (
-        text.includes(
-          "SESSION_FULL"
-        )
-      ) {
-
-        return "ขออภัย รอบอบรมนี้มีผู้สมัครครบจำนวนแล้ว";
-
-      }
-
-
-      if (
-        text.includes(
-          "ORGANIZATION_REQUIRED"
-        )
-      ) {
-
-        return "กรุณากรอกบริษัทหรือหน่วยงาน";
-
-      }
-
-
-      if (
-        text.includes(
-          "PROVINCE_REQUIRED"
-        )
-      ) {
-
-        return "กรุณาเลือกจังหวัด";
-
-      }
-
-
-      if (
-        text.includes(
-          "JOB_POSITION_REQUIRED"
-        )
-      ) {
-
-        return "กรุณากรอกตำแหน่งงาน";
-
-      }
-
-
-      if (
-        text.includes(
-          "INVALID_DOCUMENT_TYPE"
-        )
-      ) {
-
-        return "ประเภทเอกสารที่เลือกไม่ถูกต้อง";
-
-      }
-
-
-      if (
-        text.includes(
-          "DOCUMENT_REQUEST_NOT_ALLOWED_FOR_FREE_TRAINING"
-        )
-      ) {
-
-        return "Safety SANTE Sharing ไม่รองรับการขอเอกสารทางการเงินในขั้นตอนนี้";
-
-      }
-
-
-      if (
-        text.includes(
-          "REGISTRATION_NOT_OPEN"
-        )
-      ) {
-
-        return "รอบอบรมนี้ไม่ได้เปิดรับสมัครในขณะนี้";
-
-      }
-
-
-      if (
-        text.includes(
-          "REGISTRATION_NOT_STARTED"
-        )
-      ) {
-
-        return "รอบอบรมนี้ยังไม่ถึงวันเปิดรับสมัคร";
-
-      }
-
-
-      if (
-        text.includes(
-          "REGISTRATION_CLOSED"
-        )
-      ) {
-
-        return "รอบอบรมนี้ปิดรับสมัครแล้ว";
-
-      }
-
-
-      if (
-        text.includes(
-          "TRAINING_ALREADY_STARTED"
-        )
-      ) {
-
-        return "ไม่สามารถสมัครได้ เนื่องจากการอบรมเริ่มแล้ว";
-
-      }
-
-
-      if (
-        text.includes(
-          "AUTH_REQUIRED"
-        )
-      ) {
-
-        return "กรุณาเข้าสู่ระบบสมาชิกก่อนสมัครอบรม";
-
-      }
-
-
-      if (
-        text.includes(
-          "PROFILE_NOT_FOUND"
-        )
-      ) {
-
-        return "ไม่พบข้อมูลสมาชิก กรุณาติดต่อ SANTE";
-
-      }
-
-
-      if (
-        text.includes(
-          "ACCOUNT_NOT_ACTIVE"
-        )
-      ) {
-
-        return "บัญชีสมาชิกนี้ไม่อยู่ในสถานะพร้อมใช้งาน";
-
-      }
-
-
-      if (
-        text.includes(
-          "TRAINING_SESSION_NOT_FOUND"
-        )
-      ) {
-
-        return "ไม่พบรอบอบรมที่เลือก";
-
-      }
-
-
-      if (
-        text.includes(
-          "COURSE_NOT_FOUND"
-        )
-      ) {
-
-        return "ไม่พบข้อมูลหลักสูตร";
-
-      }
-
-
-      if (
-        text.includes(
-          "INVALID_SEAT_CAPACITY"
-        )
-      ) {
-
-        return "รอบอบรมนี้ยังไม่ได้กำหนดจำนวนที่นั่งอย่างถูกต้อง";
-
-      }
-
-
-      return (
-        error?.message ||
-        "ไม่สามารถสมัครอบรมได้ กรุณาลองใหม่อีกครั้ง"
+    return {
+      text: "สมัครแล้ว",
+      className: "registered"
+    };
+  }
+
+  function registrationWindow(session) {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    if (session.registration_open_date) {
+      const open = new Date(
+        session.registration_open_date + "T00:00:00"
       );
 
+      if (today < open) {
+        return {
+          allowed: false,
+          text: "เปิดรับสมัคร " +
+            formatDate(session.registration_open_date)
+        };
+      }
     }
 
+    if (session.registration_close_date) {
+      const close = new Date(
+        session.registration_close_date + "T23:59:59"
+      );
 
-    /* =====================================================
-       PROFILE
-    ====================================================== */
-
-    function renderProfile() {
-
-      const name =
-        fullThaiName(currentProfile);
-
-
-      document.getElementById(
-        "headerUserName"
-      ).textContent = name;
-
-
-      document.getElementById(
-        "headerUserEmail"
-      ).textContent =
-        currentProfile?.email || "";
-
-
-      document.getElementById(
-        "heroMemberName"
-      ).textContent = name;
-
-
-      document.getElementById(
-        "profileName"
-      ).textContent = name;
-
-
-      document.getElementById(
-        "profileEmail"
-      ).textContent =
-        currentProfile?.email || "-";
-
-
-      document.getElementById(
-        "profilePhone"
-      ).textContent =
-        currentProfile?.phone || "-";
-
+      if (today > close) {
+        return {
+          allowed: false,
+          text: "ปิดรับสมัครแล้ว"
+        };
+      }
     }
 
-
-    /* =====================================================
-       LOAD MEMBER
-    ====================================================== */
-
-    async function loadMember() {
-
-      const {
-        data: { session },
-        error: sessionError
-      } =
-        await db.auth.getSession();
-
-
-      if (
-        sessionError ||
-        !session ||
-        !session.user
-      ) {
-
-        window.location.replace(
-          "member-login.html"
-        );
-
-        return false;
-
-      }
-
-
-      currentUser =
-        session.user;
-
-
-      const {
-        data: profile,
-        error: profileError
-      } =
-        await db
-          .from("profiles")
-          .select(`
-            id,
-            title_th,
-            firstname_th,
-            lastname_th,
-            title_en,
-            firstname_en,
-            lastname_en,
-            email,
-            phone,
-            account_status
-          `)
-          .eq(
-            "id",
-            currentUser.id
-          )
-          .maybeSingle();
-
-
-      if (profileError) {
-        throw profileError;
-      }
-
-
-      if (!profile) {
-
-        throw new Error(
-          "ไม่พบข้อมูลสมาชิก"
-        );
-
-      }
-
-
-      if (
-        String(
-          profile.account_status || ""
-        ).toUpperCase() !== "ACTIVE"
-      ) {
-
-        await db.auth.signOut();
-
-        window.location.replace(
-          "member-login.html"
-        );
-
-        return false;
-
-      }
-
-
-      currentProfile =
-        profile;
-
-
-      renderProfile();
-
-
-      return true;
-
+    if (
+      session.training_start_at &&
+      new Date() >= new Date(session.training_start_at)
+    ) {
+      return {
+        allowed: false,
+        text: "การอบรมเริ่มแล้ว"
+      };
     }
 
+    return {
+      allowed: true,
+      text: ""
+    };
+  }
 
-    /* =====================================================
-       LOAD MY REGISTRATIONS
-    ====================================================== */
+  function getSelectedDocuments() {
+    if (
+      !selectedSession ||
+      !isPaidSession(selectedSession)
+    ) {
+      return [];
+    }
 
-    async function loadMyRegistrations() {
+    return Array
+      .from(
+        document.querySelectorAll(
+          ".document-checkbox:checked"
+        )
+      )
+      .map(item => item.value);
+  }
 
-      const {
-        data,
-        error
-      } =
-        await db
-          .from(
-            "training_registrations"
-          )
-          .select(`
-            id,
-            training_session_id,
-            registration_status,
-            payment_required,
-            payment_status,
-            organization_name,
-            province,
-            job_position,
-            registered_at,
-            confirmed_at
-          `)
-          .eq(
-            "user_id",
-            currentUser.id
-          )
-          .order(
-            "registered_at",
-            {
-              ascending: false
-            }
+  function needsTaxId() {
+    return getSelectedDocuments()
+      .includes("RECEIPT_TAX_INVOICE");
+  }
+
+  function translateError(error) {
+    const text =
+      String(error?.message || error || "").toUpperCase();
+
+    const map = [
+      ["ALREADY_REGISTERED", "คุณสมัครรอบอบรมนี้แล้ว"],
+      ["SESSION_FULL", "ขออภัย รอบอบรมนี้มีผู้สมัครครบจำนวนแล้ว"],
+      ["ORGANIZATION_REQUIRED", "กรุณากรอกบริษัทหรือหน่วยงาน"],
+      ["PROVINCE_REQUIRED", "กรุณาเลือกจังหวัด"],
+      ["JOB_POSITION_REQUIRED", "กรุณากรอกตำแหน่งงาน"],
+      ["BILLING_PROFILE_REQUIRED", "กรุณาเลือกหรือเพิ่มข้อมูลสำหรับออกเอกสาร"],
+      ["BILLING_PROFILE_NOT_FOUND", "ไม่พบข้อมูลสำหรับออกเอกสารที่เลือก"],
+      ["BILLING_NAME_REQUIRED", "กรุณากรอกชื่อสำหรับออกเอกสาร"],
+      ["BILLING_TYPE_REQUIRED", "กรุณาเลือกประเภทผู้ขอเอกสาร"],
+      ["BILLING_ADDRESS_REQUIRED", "กรุณากรอกที่อยู่สำหรับออกเอกสาร"],
+      ["BILLING_PROVINCE_REQUIRED", "กรุณากรอกจังหวัดสำหรับออกเอกสาร"],
+      ["BILLING_POSTAL_CODE_REQUIRED", "กรุณากรอกรหัสไปรษณีย์สำหรับออกเอกสาร"],
+      ["TAX_ID_REQUIRED_FOR_TAX_INVOICE", "กรุณากรอกเลขประจำตัวผู้เสียภาษีสำหรับใบกำกับภาษี"],
+      ["INVALID_DOCUMENT_TYPE", "ประเภทเอกสารที่เลือกไม่ถูกต้อง"],
+      ["REGISTRATION_NOT_OPEN", "รอบอบรมนี้ไม่ได้เปิดรับสมัครในขณะนี้"],
+      ["REGISTRATION_NOT_STARTED", "รอบอบรมนี้ยังไม่ถึงวันเปิดรับสมัคร"],
+      ["REGISTRATION_CLOSED", "รอบอบรมนี้ปิดรับสมัครแล้ว"],
+      ["TRAINING_ALREADY_STARTED", "ไม่สามารถสมัครได้ เนื่องจากการอบรมเริ่มแล้ว"],
+      ["AUTH_REQUIRED", "กรุณาเข้าสู่ระบบสมาชิก"],
+      ["PROFILE_NOT_FOUND", "ไม่พบข้อมูลสมาชิก กรุณาติดต่อ SANTE"],
+      ["ACCOUNT_NOT_ACTIVE", "บัญชีสมาชิกนี้ไม่อยู่ในสถานะพร้อมใช้งาน"],
+      ["TRAINING_SESSION_NOT_FOUND", "ไม่พบรอบอบรมที่เลือก"],
+      ["COURSE_NOT_FOUND", "ไม่พบข้อมูลหลักสูตร"],
+      ["INVALID_SEAT_CAPACITY", "รอบอบรมนี้ยังไม่ได้กำหนดจำนวนที่นั่งอย่างถูกต้อง"]
+    ];
+
+    for (const [key, message] of map) {
+      if (text.includes(key)) {
+        return message;
+      }
+    }
+
+    return error?.message ||
+      "ไม่สามารถดำเนินการได้ กรุณาลองใหม่อีกครั้ง";
+  }
+
+  function renderProfile() {
+    const name = fullThaiName(currentProfile);
+
+    document.getElementById("headerUserName").textContent = name;
+    document.getElementById("headerUserEmail").textContent =
+      currentProfile?.email || "";
+
+    document.getElementById("heroMemberName").textContent = name;
+    document.getElementById("profileName").textContent = name;
+    document.getElementById("profileEmail").textContent =
+      currentProfile?.email || "-";
+    document.getElementById("profilePhone").textContent =
+      currentProfile?.phone || "-";
+  }
+
+  async function loadMember() {
+    const {
+      data: { session },
+      error
+    } = await db.auth.getSession();
+
+    if (error || !session?.user) {
+      window.location.replace("member-login.html");
+      return false;
+    }
+
+    currentUser = session.user;
+
+    const {
+      data: profile,
+      error: profileError
+    } = await db
+      .from("profiles")
+      .select(`
+        id,
+        title_th,
+        firstname_th,
+        lastname_th,
+        title_en,
+        firstname_en,
+        lastname_en,
+        email,
+        phone,
+        account_status
+      `)
+      .eq("id", currentUser.id)
+      .maybeSingle();
+
+    if (profileError) throw profileError;
+
+    if (!profile) {
+      throw new Error("ไม่พบข้อมูลสมาชิก");
+    }
+
+    if (
+      String(profile.account_status || "").toUpperCase()
+      !== "ACTIVE"
+    ) {
+      await db.auth.signOut();
+      window.location.replace("member-login.html");
+      return false;
+    }
+
+    currentProfile = profile;
+    renderProfile();
+
+    return true;
+  }
+
+  async function loadMyRegistrations() {
+    const { data, error } = await db
+      .from("training_registrations")
+      .select(`
+        id,
+        training_session_id,
+        registration_status,
+        payment_required,
+        payment_status,
+        organization_name,
+        province,
+        job_position,
+        registered_at,
+        confirmed_at
+      `)
+      .eq("user_id", currentUser.id)
+      .order("registered_at", { ascending: false });
+
+    if (error) {
+      console.warn(error);
+      myRegistrations = [];
+      return;
+    }
+
+    myRegistrations = data || [];
+  }
+
+  async function loadTrainingSessions() {
+    const { data, error } = await db
+      .from("training_sessions")
+      .select(`
+        id,
+        course_id,
+        session_name,
+        registration_open_date,
+        registration_close_date,
+        training_start_at,
+        training_end_at,
+        delivery_method,
+        online_platform,
+        venue_name,
+        venue_address,
+        seat_capacity,
+        is_seat_limited,
+        price,
+        session_status,
+        courses (
+          id,
+          course_name_th,
+          course_type
+        )
+      `)
+      .eq("session_status", "OPEN")
+      .order("training_start_at", { ascending: true });
+
+    if (error) throw error;
+
+    trainingSessions = data || [];
+  }
+
+  async function loadBillingProfiles() {
+    const { data, error } = await db
+      .from("billing_profiles")
+      .select(`
+        id,
+        billing_type,
+        billing_name,
+        tax_id,
+        branch_code,
+        branch_name,
+        address_line,
+        subdistrict,
+        district,
+        province,
+        postal_code,
+        country,
+        email,
+        phone,
+        is_default,
+        created_at,
+        updated_at
+      `)
+      .eq("user_id", currentUser.id)
+      .order("is_default", { ascending: false })
+      .order("updated_at", { ascending: false });
+
+    if (error) {
+      console.warn("Billing profile error:", error);
+      billingProfilesData = [];
+      return;
+    }
+
+    billingProfilesData = data || [];
+  }
+
+  function renderTrainingSessions() {
+    const keyword =
+      searchInput.value.trim().toLowerCase();
+
+    const filtered =
+      trainingSessions.filter(session => {
+        const course =
+          session.courses?.course_name_th || "";
+
+        const sessionName =
+          session.session_name || "";
+
+        const type =
+          trainingTypeDisplay(session);
+
+        return (
+          !keyword ||
+          course.toLowerCase().includes(keyword) ||
+          sessionName.toLowerCase().includes(keyword) ||
+          type.toLowerCase().includes(keyword)
+        );
+      });
+
+    if (!filtered.length) {
+      trainingGrid.innerHTML = `
+        <div class="state-card">
+          <div class="state-icon">📅</div>
+          <div class="state-title">ไม่พบรอบอบรม</div>
+          <div class="state-description">
+            ขณะนี้ยังไม่มีรอบอบรมที่เปิดรับสมัคร
+          </div>
+        </div>
+      `;
+      return;
+    }
+
+    trainingGrid.innerHTML =
+      filtered.map(session => {
+        const paid = isPaidSession(session);
+        const typeName = trainingTypeDisplay(session);
+
+        const registration =
+          getRegistration(session.id);
+
+        const buttonInfo =
+          registrationButtonInfo(registration);
+
+        const windowInfo =
+          registrationWindow(session);
+
+        let buttonText =
+          paid ? "สมัครอบรม" : "สมัครเข้าร่วม";
+
+        let buttonClass = "";
+        let disabled = false;
+
+        if (buttonInfo) {
+          buttonText = buttonInfo.text;
+          buttonClass = buttonInfo.className;
+          disabled = true;
+        } else if (!windowInfo.allowed) {
+          buttonText = windowInfo.text;
+          buttonClass = "closed";
+          disabled = true;
+        }
+
+        const courseName =
+          session.courses?.course_name_th ||
+          "หลักสูตรอบรม";
+
+        const delivery =
+          deliveryLabel(session.delivery_method);
+
+        return `
+          <article class="training-card">
+
+            <div class="card-main">
+
+              <div class="tags">
+                <span class="tag tag-open">
+                  เปิดรับสมัคร
+                </span>
+
+                <span class="tag ${deliveryClass(session.delivery_method)}">
+                  ${escapeHtml(delivery)}
+                </span>
+
+                <span class="tag ${paid ? "tag-paid" : "tag-free"}">
+                  ${escapeHtml(typeName)}
+                </span>
+              </div>
+
+              <div class="course-type-name">
+                ${escapeHtml(typeName)}
+              </div>
+
+              <div class="session-name">
+                ${escapeHtml(session.session_name || courseName)}
+              </div>
+
+              <div class="details">
+
+                <div class="detail">
+                  <div class="detail-label">หลักสูตร</div>
+                  <div class="detail-value">
+                    ${escapeHtml(courseName)}
+                  </div>
+                </div>
+
+                <div class="detail">
+                  <div class="detail-label">วันอบรม</div>
+                  <div class="detail-value">
+                    ${escapeHtml(formatDateTime(session.training_start_at))}
+                  </div>
+                </div>
+
+                <div class="detail">
+                  <div class="detail-label">รูปแบบ</div>
+                  <div class="detail-value">
+                    ${escapeHtml(delivery)}
+                  </div>
+                </div>
+
+                <div class="detail">
+                  <div class="detail-label">รับสมัครถึง</div>
+                  <div class="detail-value">
+                    ${escapeHtml(formatDate(session.registration_close_date))}
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <div class="card-footer">
+
+              <div>
+                <div class="price-label">ค่าลงทะเบียน</div>
+                <div class="price">
+                  ${escapeHtml(formatMoney(session.price))}
+                </div>
+              </div>
+
+              <button
+                type="button"
+                class="register-button ${buttonClass}"
+                data-session-id="${escapeHtml(session.id)}"
+                ${disabled ? "disabled" : ""}
+              >
+                ${escapeHtml(buttonText)}
+              </button>
+
+            </div>
+          </article>
+        `;
+      }).join("");
+
+    document
+      .querySelectorAll(".register-button:not(:disabled)")
+      .forEach(button => {
+        button.addEventListener("click", () => {
+          openRegistrationModal(
+            button.dataset.sessionId
           );
+        });
+      });
+  }
 
+  function resetBillingForm() {
+    document.getElementById("billingName").value = "";
+    document.getElementById("taxId").value = "";
+    document.getElementById("branchCode").value = "";
+    document.getElementById("branchName").value = "";
+    document.getElementById("billingAddress").value = "";
+    document.getElementById("billingSubdistrict").value = "";
+    document.getElementById("billingDistrict").value = "";
+    document.getElementById("billingProvince").value = "";
+    document.getElementById("billingPostalCode").value = "";
 
-      if (error) {
+    document.getElementById("billingEmail").value =
+      currentProfile?.email || "";
 
-        console.warn(
-          "Cannot load registrations:",
-          error
-        );
+    document.getElementById("billingPhone").value =
+      currentProfile?.phone || "";
 
-        myRegistrations = [];
+    document.getElementById("billingDefault").checked =
+      billingProfilesData.length === 0;
 
-        return;
+    const companyRadio =
+      document.querySelector(
+        'input[name="billingType"][value="COMPANY"]'
+      );
 
-      }
+    companyRadio.checked = true;
 
+    updateBillingTypeUI();
+  }
 
-      myRegistrations =
-        data || [];
+  function renderBillingProfiles() {
+    if (!billingProfilesData.length) {
+      billingProfilesContainer.innerHTML = `
+        <div class="billing-note" style="margin-top:0">
+          ยังไม่มีข้อมูลสำหรับออกเอกสารที่บันทึกไว้
+          กรุณาเพิ่มข้อมูลใหม่
+        </div>
+      `;
 
+      selectedBillingProfileId = null;
+      createNewBilling = true;
+      billingForm.classList.add("show");
+      newBillingButton.textContent =
+        "กำลังสร้างข้อมูลออกเอกสารใหม่";
+
+      return;
     }
 
+    billingProfilesContainer.innerHTML =
+      billingProfilesData.map(profile => {
+        const selected =
+          profile.id === selectedBillingProfileId;
 
-    /* =====================================================
-       LOAD SESSIONS
-    ====================================================== */
+        const address = [
+          profile.address_line,
+          profile.subdistrict,
+          profile.district,
+          profile.province,
+          profile.postal_code
+        ].filter(Boolean).join(" ");
 
-    async function loadTrainingSessions() {
+        const branch = [
+          profile.branch_name,
+          profile.branch_code
+            ? `(${profile.branch_code})`
+            : ""
+        ].filter(Boolean).join(" ");
 
-      const {
-        data,
-        error
-      } =
-        await db
-          .from("training_sessions")
-          .select(`
-            id,
-            course_id,
-            session_name,
-            registration_open_date,
-            registration_close_date,
-            training_start_at,
-            training_end_at,
-            delivery_method,
-            online_platform,
-            venue_name,
-            venue_address,
-            seat_capacity,
-            is_seat_limited,
-            price,
-            session_status,
-            courses (
-              id,
-              course_name_th,
-              course_type
-            )
-          `)
-          .eq(
-            "session_status",
-            "OPEN"
-          )
-          .order(
-            "training_start_at",
-            {
-              ascending: true
-            }
-          );
+        return `
+          <div
+            class="billing-card ${selected ? "selected" : ""}"
+            data-billing-id="${escapeHtml(profile.id)}"
+          >
+            <div class="billing-card-top">
 
+              <div class="billing-card-name">
+                ${escapeHtml(profile.billing_name)}
+              </div>
 
-      if (error) {
-        throw error;
-      }
+              ${
+                profile.is_default
+                  ? `<span class="billing-card-badge">ข้อมูลหลัก</span>`
+                  : ""
+              }
 
-
-      trainingSessions =
-        data || [];
-
-    }
-
-
-    /* =====================================================
-       RENDER SESSIONS
-    ====================================================== */
-
-    function renderTrainingSessions() {
-
-      const keyword =
-        searchInput.value
-          .trim()
-          .toLowerCase();
-
-
-      const filtered =
-        trainingSessions.filter(
-          session => {
-
-            const course =
-              session.courses
-                ?.course_name_th || "";
-
-            const sessionName =
-              session.session_name || "";
-
-            const type =
-              trainingTypeDisplay(
-                session
-              );
-
-
-            return (
-              !keyword ||
-              course
-                .toLowerCase()
-                .includes(keyword) ||
-              sessionName
-                .toLowerCase()
-                .includes(keyword) ||
-              type
-                .toLowerCase()
-                .includes(keyword)
-            );
-
-          }
-        );
-
-
-      if (!filtered.length) {
-
-        trainingGrid.innerHTML = `
-          <div class="state-card">
-
-            <div class="state-icon">
-              📅
             </div>
 
-            <div class="state-title">
-              ไม่พบรอบอบรม
-            </div>
+            <div class="billing-card-detail">
+              ${
+                profile.tax_id
+                  ? `เลขผู้เสียภาษี ${escapeHtml(profile.tax_id)}<br>`
+                  : ""
+              }
 
-            <div class="state-description">
-              ขณะนี้ยังไม่มีรอบอบรมที่เปิดรับสมัคร
-              หรือไม่พบข้อมูลที่ตรงกับการค้นหา
-            </div>
+              ${
+                branch
+                  ? `${escapeHtml(branch)}<br>`
+                  : ""
+              }
 
+              ${escapeHtml(address || "ยังไม่ได้ระบุที่อยู่")}
+            </div>
           </div>
         `;
+      }).join("");
 
-        return;
+    document
+      .querySelectorAll(".billing-card")
+      .forEach(card => {
+        card.addEventListener("click", () => {
+          selectedBillingProfileId =
+            card.dataset.billingId;
 
+          createNewBilling = false;
+          billingForm.classList.remove("show");
+
+          newBillingButton.textContent =
+            "+ เพิ่มข้อมูลสำหรับออกเอกสารใหม่";
+
+          renderBillingProfiles();
+        });
+      });
+  }
+
+  function updateBillingVisibility() {
+    const selectedDocuments =
+      getSelectedDocuments();
+
+    if (
+      selectedSession &&
+      isPaidSession(selectedSession) &&
+      selectedDocuments.length > 0
+    ) {
+      billingSection.classList.add("show");
+
+      if (
+        !selectedBillingProfileId &&
+        !createNewBilling &&
+        billingProfilesData.length
+      ) {
+        const defaultProfile =
+          billingProfilesData.find(x => x.is_default) ||
+          billingProfilesData[0];
+
+        selectedBillingProfileId =
+          defaultProfile.id;
       }
 
-
-      trainingGrid.innerHTML =
-        filtered.map(
-          session => {
-
-            const paid =
-              isPaidSession(session);
-
-
-            const typeName =
-              trainingTypeDisplay(
-                session
-              );
-
-
-            const registration =
-              getRegistration(
-                session.id
-              );
-
-
-            const buttonInfo =
-              registrationButtonInfo(
-                registration
-              );
-
-
-            const windowInfo =
-              registrationWindow(
-                session
-              );
-
-
-            let buttonText =
-              paid
-                ? "สมัครอบรม"
-                : "สมัครเข้าร่วม";
-
-
-            let buttonClass = "";
-
-            let disabled = false;
-
-
-            if (buttonInfo) {
-
-              buttonText =
-                buttonInfo.text;
-
-              buttonClass =
-                buttonInfo.className;
-
-              disabled = true;
-
-            }
-            else if (
-              !windowInfo.allowed
-            ) {
-
-              buttonText =
-                windowInfo.text;
-
-              buttonClass =
-                "closed";
-
-              disabled = true;
-
-            }
-
-
-            const courseName =
-              session.courses
-                ?.course_name_th ||
-              "หลักสูตรอบรม";
-
-
-            const delivery =
-              deliveryLabel(
-                session.delivery_method
-              );
-
-
-            return `
-              <article class="training-card">
-
-                <div class="card-main">
-
-                  <div class="tags">
-
-                    <span class="tag tag-open">
-                      เปิดรับสมัคร
-                    </span>
-
-                    <span
-                      class="tag ${
-                        deliveryClass(
-                          session.delivery_method
-                        )
-                      }"
-                    >
-                      ${escapeHtml(delivery)}
-                    </span>
-
-                    <span
-                      class="tag ${
-                        paid
-                          ? "tag-paid"
-                          : "tag-free"
-                      }"
-                    >
-                      ${escapeHtml(typeName)}
-                    </span>
-
-                  </div>
-
-
-                  <div class="course-type-name">
-                    ${escapeHtml(typeName)}
-                  </div>
-
-
-                  <div class="session-name">
-                    ${escapeHtml(
-                      session.session_name ||
-                      courseName
-                    )}
-                  </div>
-
-
-                  <div class="details">
-
-                    <div class="detail">
-
-                      <div class="detail-label">
-                        หลักสูตร
-                      </div>
-
-                      <div class="detail-value">
-                        ${escapeHtml(courseName)}
-                      </div>
-
-                    </div>
-
-
-                    <div class="detail">
-
-                      <div class="detail-label">
-                        วันอบรม
-                      </div>
-
-                      <div class="detail-value">
-                        ${escapeHtml(
-                          formatDateTime(
-                            session.training_start_at
-                          )
-                        )}
-                      </div>
-
-                    </div>
-
-
-                    <div class="detail">
-
-                      <div class="detail-label">
-                        รูปแบบ
-                      </div>
-
-                      <div class="detail-value">
-                        ${escapeHtml(delivery)}
-                      </div>
-
-                    </div>
-
-
-                    <div class="detail">
-
-                      <div class="detail-label">
-                        รับสมัครถึง
-                      </div>
-
-                      <div class="detail-value">
-                        ${escapeHtml(
-                          formatDate(
-                            session.registration_close_date
-                          )
-                        )}
-                      </div>
-
-                    </div>
-
-                  </div>
-
-                </div>
-
-
-                <div class="card-footer">
-
-                  <div>
-
-                    <div class="price-label">
-                      ค่าลงทะเบียน
-                    </div>
-
-                    <div class="price">
-                      ${escapeHtml(
-                        formatMoney(
-                          session.price
-                        )
-                      )}
-                    </div>
-
-                  </div>
-
-
-                  <button
-                    type="button"
-                    class="
-                      register-button
-                      ${buttonClass}
-                    "
-                    data-session-id="${
-                      escapeHtml(
-                        session.id
-                      )
-                    }"
-                    ${disabled ? "disabled" : ""}
-                  >
-                    ${escapeHtml(buttonText)}
-                  </button>
-
-                </div>
-
-              </article>
-            `;
-
-          }
-        )
-        .join("");
-
-
+      renderBillingProfiles();
+    } else {
+      billingSection.classList.remove("show");
+      selectedBillingProfileId = null;
+      createNewBilling = false;
+      billingForm.classList.remove("show");
+    }
+  }
+
+  function updateBillingTypeUI() {
+    const value =
+      document.querySelector(
+        'input[name="billingType"]:checked'
+      )?.value || "COMPANY";
+
+    document
+      .querySelectorAll(".billing-type-option")
+      .forEach(item => {
+        item.classList.remove("selected");
+      });
+
+    if (value === "COMPANY") {
       document
-        .querySelectorAll(
-          ".register-button:not(:disabled)"
-        )
-        .forEach(
-          button => {
+        .getElementById("billingTypeCompanyBox")
+        .classList.add("selected");
+    } else {
+      document
+        .getElementById("billingTypeIndividualBox")
+        .classList.add("selected");
+    }
+  }
 
-            button.addEventListener(
-              "click",
-              function () {
+  async function openRegistrationModal(sessionId) {
+    clearMessage();
 
-                openRegistrationModal(
-                  this.dataset.sessionId
-                );
+    selectedSession =
+      trainingSessions.find(
+        item => item.id === sessionId
+      );
 
-              }
-            );
-
-          }
-        );
-
+    if (!selectedSession) {
+      showMessage("error", "ไม่พบข้อมูลรอบอบรม");
+      return;
     }
 
+    const paid =
+      isPaidSession(selectedSession);
 
-    /* =====================================================
-       OPEN MODAL
-    ====================================================== */
+    const typeName =
+      trainingTypeDisplay(selectedSession);
 
-    function openRegistrationModal(
-      sessionId
+    const courseName =
+      selectedSession.courses?.course_name_th ||
+      "หลักสูตรอบรม";
+
+    modalTypeLabel.textContent = typeName;
+
+    selectedSessionBox.textContent =
+      `${courseName} — ${selectedSession.session_name || ""}`;
+
+    document.getElementById("modalMemberName").textContent =
+      fullThaiName(currentProfile);
+
+    document.getElementById("modalMemberEmail").textContent =
+      currentProfile?.email || "-";
+
+    document.getElementById("modalMemberPhone").textContent =
+      currentProfile?.phone || "-";
+
+    organizationNameInput.value = "";
+    jobPositionInput.value = "";
+    provinceInput.value = "";
+
+    document
+      .querySelectorAll(".document-checkbox")
+      .forEach(checkbox => {
+        checkbox.checked = false;
+        checkbox
+          .closest(".document-option")
+          ?.classList.remove("selected");
+      });
+
+    selectedBillingProfileId = null;
+    createNewBilling = false;
+
+    billingSection.classList.remove("show");
+    billingForm.classList.remove("show");
+
+    if (paid) {
+      documentSection.classList.add("show");
+
+      await loadBillingProfiles();
+
+      const defaultProfile =
+        billingProfilesData.find(x => x.is_default);
+
+      if (defaultProfile) {
+        selectedBillingProfileId =
+          defaultProfile.id;
+      }
+
+      resetBillingForm();
+      renderBillingProfiles();
+
+      confirmButton.textContent =
+        "ยืนยันข้อมูลการสมัคร";
+    } else {
+      documentSection.classList.remove("show");
+
+      confirmButton.textContent =
+        "ยืนยันสมัครเข้าร่วม";
+    }
+
+    registrationModal.classList.add("show");
+  }
+
+  function closeRegistrationModal() {
+    registrationModal.classList.remove("show");
+    selectedSession = null;
+    selectedBillingProfileId = null;
+    createNewBilling = false;
+  }
+
+  cancelButton.addEventListener(
+    "click",
+    closeRegistrationModal
+  );
+
+  registrationModal.addEventListener(
+    "click",
+    event => {
+      if (event.target === registrationModal) {
+        closeRegistrationModal();
+      }
+    }
+  );
+
+  document
+    .querySelectorAll(".document-checkbox")
+    .forEach(checkbox => {
+      checkbox.addEventListener("change", function () {
+        this
+          .closest(".document-option")
+          ?.classList.toggle(
+            "selected",
+            this.checked
+          );
+
+        updateBillingVisibility();
+      });
+    });
+
+  document
+    .querySelectorAll('input[name="billingType"]')
+    .forEach(radio => {
+      radio.addEventListener(
+        "change",
+        updateBillingTypeUI
+      );
+    });
+
+  newBillingButton.addEventListener(
+    "click",
+    () => {
+      selectedBillingProfileId = null;
+      createNewBilling = true;
+
+      resetBillingForm();
+      billingForm.classList.add("show");
+
+      newBillingButton.textContent =
+        "กำลังสร้างข้อมูลออกเอกสารใหม่";
+
+      renderBillingProfiles();
+    }
+  );
+
+  function validateRegistrationForm() {
+    const organizationName =
+      organizationNameInput.value.trim();
+
+    const jobPosition =
+      jobPositionInput.value.trim();
+
+    const province =
+      provinceInput.value.trim();
+
+    if (!organizationName) {
+      organizationNameInput.focus();
+
+      return {
+        valid: false,
+        message: "กรุณากรอกบริษัทหรือหน่วยงาน"
+      };
+    }
+
+    if (!jobPosition) {
+      jobPositionInput.focus();
+
+      return {
+        valid: false,
+        message: "กรุณากรอกตำแหน่งงาน"
+      };
+    }
+
+    if (!province) {
+      provinceInput.focus();
+
+      return {
+        valid: false,
+        message: "กรุณาเลือกจังหวัด"
+      };
+    }
+
+    return {
+      valid: true,
+      organizationName,
+      jobPosition,
+      province
+    };
+  }
+
+  function validateNewBillingForm() {
+    const billingType =
+      document.querySelector(
+        'input[name="billingType"]:checked'
+      )?.value || "COMPANY";
+
+    const billingName =
+      document.getElementById("billingName").value.trim();
+
+    const taxId =
+      document.getElementById("taxId").value.trim();
+
+    const branchCode =
+      document.getElementById("branchCode").value.trim();
+
+    const branchName =
+      document.getElementById("branchName").value.trim();
+
+    const address =
+      document.getElementById("billingAddress").value.trim();
+
+    const subdistrict =
+      document.getElementById("billingSubdistrict").value.trim();
+
+    const district =
+      document.getElementById("billingDistrict").value.trim();
+
+    const province =
+      document.getElementById("billingProvince").value.trim();
+
+    const postalCode =
+      document.getElementById("billingPostalCode").value.trim();
+
+    const email =
+      document.getElementById("billingEmail").value.trim();
+
+    const phone =
+      document.getElementById("billingPhone").value.trim();
+
+    const isDefault =
+      document.getElementById("billingDefault").checked;
+
+    if (!billingName) {
+      return {
+        valid: false,
+        message: "กรุณากรอกชื่อสำหรับออกเอกสาร"
+      };
+    }
+
+    if (!address) {
+      return {
+        valid: false,
+        message: "กรุณากรอกที่อยู่สำหรับออกเอกสาร"
+      };
+    }
+
+    if (!province) {
+      return {
+        valid: false,
+        message: "กรุณากรอกจังหวัดสำหรับออกเอกสาร"
+      };
+    }
+
+    if (!postalCode) {
+      return {
+        valid: false,
+        message: "กรุณากรอกรหัสไปรษณีย์"
+      };
+    }
+
+    if (needsTaxId() && !taxId) {
+      return {
+        valid: false,
+        message:
+          "กรุณากรอกเลขประจำตัวผู้เสียภาษี เนื่องจากคุณเลือกใบเสร็จรับเงิน/ใบกำกับภาษี"
+      };
+    }
+
+    return {
+      valid: true,
+      billingType,
+      billingName,
+      taxId,
+      branchCode,
+      branchName,
+      address,
+      subdistrict,
+      district,
+      province,
+      postalCode,
+      email,
+      phone,
+      isDefault
+    };
+  }
+
+  async function saveNewBillingProfile() {
+    const form =
+      validateNewBillingForm();
+
+    if (!form.valid) {
+      throw new Error(form.message);
+    }
+
+    const { data, error } =
+      await db.rpc(
+        "save_my_billing_profile",
+        {
+          p_billing_profile_id: null,
+          p_billing_type: form.billingType,
+          p_billing_name: form.billingName,
+          p_tax_id: form.taxId || null,
+          p_branch_code: form.branchCode || null,
+          p_branch_name: form.branchName || null,
+          p_address_line: form.address,
+          p_subdistrict: form.subdistrict || null,
+          p_district: form.district || null,
+          p_province: form.province,
+          p_postal_code: form.postalCode,
+          p_country: "ประเทศไทย",
+          p_email: form.email || null,
+          p_phone: form.phone || null,
+          p_is_default: form.isDefault
+        }
+      );
+
+    if (error) throw error;
+
+    if (!data) {
+      throw new Error(
+        "ไม่สามารถบันทึกข้อมูลสำหรับออกเอกสารได้"
+      );
+    }
+
+    selectedBillingProfileId = data;
+    createNewBilling = false;
+
+    await loadBillingProfiles();
+
+    return data;
+  }
+
+  async function resolveBillingProfile() {
+    const documents =
+      getSelectedDocuments();
+
+    if (!documents.length) {
+      return null;
+    }
+
+    if (createNewBilling) {
+      return await saveNewBillingProfile();
+    }
+
+    if (!selectedBillingProfileId) {
+      throw new Error(
+        "กรุณาเลือกหรือเพิ่มข้อมูลสำหรับออกเอกสาร"
+      );
+    }
+
+    const selected =
+      billingProfilesData.find(
+        item => item.id === selectedBillingProfileId
+      );
+
+    if (!selected) {
+      throw new Error(
+        "ไม่พบข้อมูลสำหรับออกเอกสารที่เลือก"
+      );
+    }
+
+    if (!selected.address_line) {
+      throw new Error(
+        "ข้อมูลออกเอกสารที่เลือกยังไม่มีที่อยู่ กรุณาสร้างข้อมูลใหม่ให้ครบถ้วน"
+      );
+    }
+
+    if (!selected.province) {
+      throw new Error(
+        "ข้อมูลออกเอกสารที่เลือกยังไม่มีจังหวัด กรุณาสร้างข้อมูลใหม่ให้ครบถ้วน"
+      );
+    }
+
+    if (!selected.postal_code) {
+      throw new Error(
+        "ข้อมูลออกเอกสารที่เลือกยังไม่มีรหัสไปรษณีย์ กรุณาสร้างข้อมูลใหม่ให้ครบถ้วน"
+      );
+    }
+
+    if (
+      needsTaxId() &&
+      !selected.tax_id
     ) {
+      throw new Error(
+        "ข้อมูลออกเอกสารที่เลือกยังไม่มีเลขประจำตัวผู้เสียภาษี กรุณาเพิ่มข้อมูลใหม่สำหรับใบกำกับภาษี"
+      );
+    }
+
+    return selectedBillingProfileId;
+  }
+
+  confirmButton.addEventListener(
+    "click",
+    async () => {
+      if (!selectedSession) return;
+
+      const registration =
+        validateRegistrationForm();
+
+      if (!registration.valid) {
+        alert(registration.message);
+        return;
+      }
+
+      const paid =
+        isPaidSession(selectedSession);
+
+      const documentTypes =
+        paid
+          ? getSelectedDocuments()
+          : [];
+
+      confirmButton.disabled = true;
+      confirmButton.textContent = "กำลังบันทึก...";
 
       clearMessage();
 
-
-      selectedSession =
-        trainingSessions.find(
-          item =>
-            item.id === sessionId
-        );
-
-
-      if (!selectedSession) {
-
-        showMessage(
-          "error",
-          "ไม่พบข้อมูลรอบอบรม"
-        );
-
-        return;
-
-      }
-
-
-      const paid =
-        isPaidSession(
-          selectedSession
-        );
-
-
-      const typeName =
-        trainingTypeDisplay(
-          selectedSession
-        );
-
-
-      const courseName =
-        selectedSession.courses
-          ?.course_name_th ||
-        "หลักสูตรอบรม";
-
-
-      modalTypeLabel.textContent =
-        typeName;
-
-
-      selectedSessionBox.textContent =
-        `${courseName} — ${
-          selectedSession.session_name ||
-          ""
-        }`;
-
-
-      document.getElementById(
-        "modalMemberName"
-      ).textContent =
-        fullThaiName(
-          currentProfile
-        );
-
-
-      document.getElementById(
-        "modalMemberEmail"
-      ).textContent =
-        currentProfile?.email || "-";
-
-
-      document.getElementById(
-        "modalMemberPhone"
-      ).textContent =
-        currentProfile?.phone || "-";
-
-
-      /*
-        เคลียร์ค่าจากรอบก่อน
-      */
-
-      organizationNameInput.value = "";
-
-      jobPositionInput.value = "";
-
-      provinceInput.value = "";
-
-
-      document
-        .querySelectorAll(
-          ".document-checkbox"
-        )
-        .forEach(
-          checkbox => {
-
-            checkbox.checked = false;
-
-            checkbox
-              .closest(
-                ".document-option"
-              )
-              ?.classList.remove(
-                "selected"
-              );
-
-          }
-        );
-
-
-      /*
-        แสดงเอกสารเฉพาะ
-        อบรม (มีค่าใช้จ่าย)
-      */
-
-      if (paid) {
-
-        documentSection.classList.add(
-          "show"
-        );
-
-      }
-      else {
-
-        documentSection.classList.remove(
-          "show"
-        );
-
-      }
-
-
-      confirmButton.textContent =
-        paid
-          ? "ยืนยันข้อมูลการสมัคร"
-          : "ยืนยันสมัครเข้าร่วม";
-
-
-      registrationModal.classList.add(
-        "show"
-      );
-
-    }
-
-
-    /* =====================================================
-       CLOSE MODAL
-    ====================================================== */
-
-    function closeRegistrationModal() {
-
-      registrationModal.classList.remove(
-        "show"
-      );
-
-      selectedSession = null;
-
-    }
-
-
-    cancelButton.addEventListener(
-      "click",
-      closeRegistrationModal
-    );
-
-
-    registrationModal.addEventListener(
-      "click",
-      function (event) {
+      try {
+        let billingProfileId = null;
 
         if (
-          event.target ===
-          registrationModal
+          paid &&
+          documentTypes.length > 0
         ) {
-
-          closeRegistrationModal();
-
+          billingProfileId =
+            await resolveBillingProfile();
         }
 
-      }
-    );
+        const { data, error } =
+          await db.rpc(
+            "register_for_training_session",
+            {
+              p_training_session_id:
+                selectedSession.id,
 
+              p_organization_name:
+                registration.organizationName,
 
-    /* =====================================================
-       DOCUMENT UI
-    ====================================================== */
+              p_province:
+                registration.province,
 
-    document
-      .querySelectorAll(
-        ".document-checkbox"
-      )
-      .forEach(
-        checkbox => {
+              p_job_position:
+                registration.jobPosition,
 
-          checkbox.addEventListener(
-            "change",
-            function () {
+              p_document_types:
+                documentTypes,
 
-              this
-                .closest(
-                  ".document-option"
-                )
-                ?.classList.toggle(
-                  "selected",
-                  this.checked
-                );
-
+              p_billing_profile_id:
+                billingProfileId
             }
           );
 
-        }
-      );
+        if (error) throw error;
 
+        const result = data || {};
 
-    function getSelectedDocuments() {
+        closeRegistrationModal();
 
-      if (
-        !selectedSession ||
-        !isPaidSession(
-          selectedSession
-        )
-      ) {
-
-        return [];
-
-      }
-
-
-      return Array
-        .from(
-          document.querySelectorAll(
-            ".document-checkbox:checked"
-          )
-        )
-        .map(
-          checkbox =>
-            checkbox.value
-        );
-
-    }
-
-
-    /* =====================================================
-       VALIDATE FORM
-    ====================================================== */
-
-    function validateRegistrationForm() {
-
-      const organizationName =
-        organizationNameInput.value.trim();
-
-
-      const jobPosition =
-        jobPositionInput.value.trim();
-
-
-      const province =
-        provinceInput.value.trim();
-
-
-      if (!organizationName) {
-
-        organizationNameInput.focus();
-
-        return {
-          valid: false,
-          message:
-            "กรุณากรอกบริษัทหรือหน่วยงาน"
-        };
-
-      }
-
-
-      if (!jobPosition) {
-
-        jobPositionInput.focus();
-
-        return {
-          valid: false,
-          message:
-            "กรุณากรอกตำแหน่งงาน"
-        };
-
-      }
-
-
-      if (!province) {
-
-        provinceInput.focus();
-
-        return {
-          valid: false,
-          message:
-            "กรุณาเลือกจังหวัด"
-        };
-
-      }
-
-
-      return {
-        valid: true,
-        organizationName,
-        jobPosition,
-        province
-      };
-
-    }
-
-
-    /* =====================================================
-       REGISTER
-    ====================================================== */
-
-    confirmButton.addEventListener(
-      "click",
-      async function () {
-
-        if (!selectedSession) {
-          return;
-        }
-
-
-        const validation =
-          validateRegistrationForm();
-
-
-        if (!validation.valid) {
-
-          alert(
-            validation.message
-          );
-
-          return;
-
-        }
-
-
-        const paid =
-          isPaidSession(
-            selectedSession
-          );
-
-
-        const selectedDocuments =
-          getSelectedDocuments();
-
-
-        /*
-          Safety SANTE Sharing
-          ต้องส่ง [] เสมอ
-        */
-
-        const documentTypes =
-          paid
-            ? selectedDocuments
-            : [];
-
-
-        confirmButton.disabled =
-          true;
-
-
-        confirmButton.textContent =
-          "กำลังบันทึก...";
-
-
-        clearMessage();
-
-
-        try {
-
-          const {
-            data,
-            error
-          } =
-            await db.rpc(
-              "register_for_training_session",
-              {
-                p_training_session_id:
-                  selectedSession.id,
-
-                p_organization_name:
-                  validation.organizationName,
-
-                p_province:
-                  validation.province,
-
-                p_job_position:
-                  validation.jobPosition,
-
-                p_document_types:
-                  documentTypes
-              }
-            );
-
-
-          if (error) {
-            throw error;
-          }
-
-
-          const result =
-            data || {};
-
-
-          closeRegistrationModal();
-
-
-          /*
-            FREE / SAFETY SANTE SHARING
-          */
-
-          if (
-            result.registration_status ===
-            "CONFIRMED"
-          ) {
-
-            showMessage(
-              "success",
-              "สมัครเข้าร่วม Safety SANTE Sharing เรียบร้อยแล้ว ระบบยืนยันสิทธิ์การเข้าร่วมให้คุณแล้ว"
-            );
-
-          }
-
-          /*
-            PAID TRAINING
-          */
-
-          else if (
-            result.registration_status ===
-            "PENDING"
-          ) {
-
-            if (
-              documentTypes.length > 0
-            ) {
-
-              showMessage(
-                "warning",
-                "บันทึกการสมัครอบรมเรียบร้อยแล้ว ระบบบันทึกความต้องการเอกสารของคุณแล้ว ขั้นตอนถัดไปคือข้อมูลสำหรับออกเอกสารและการชำระเงิน"
-              );
-
-            }
-            else {
-
-              showMessage(
-                "warning",
-                "บันทึกการสมัครอบรมเรียบร้อยแล้ว กรุณาดำเนินการชำระเงินเพื่อยืนยันที่นั่ง"
-              );
-
-            }
-
-          }
-
-          else {
-
-            showMessage(
-              "success",
-              "บันทึกการสมัครอบรมเรียบร้อยแล้ว"
-            );
-
-          }
-
-
-          /*
-            Reload registration
-          */
-
-          await loadMyRegistrations();
-
-          await loadTrainingSessions();
-
-          renderTrainingSessions();
-
-        }
-        catch (error) {
-
-          console.error(
-            "Registration error:",
-            error
-          );
-
-
-          const translated =
-            translateRegistrationError(
-              error
-            );
-
-
-          closeRegistrationModal();
-
-
+        if (
+          result.registration_status ===
+          "CONFIRMED"
+        ) {
           showMessage(
-            "error",
-            translated
+            "success",
+            "สมัครเข้าร่วม Safety SANTE Sharing เรียบร้อยแล้ว ระบบยืนยันสิทธิ์การเข้าร่วมให้คุณแล้ว"
           );
-
-
-          if (
-            String(
-              error?.message || ""
-            )
-              .toUpperCase()
-              .includes(
-                "ALREADY_REGISTERED"
-              )
-          ) {
-
-            await loadMyRegistrations();
-
-            renderTrainingSessions();
-
+        } else if (
+          result.registration_status ===
+          "PENDING"
+        ) {
+          if (documentTypes.length > 0) {
+            showMessage(
+              "warning",
+              "บันทึกการสมัครอบรมเรียบร้อยแล้ว พร้อมบันทึกความต้องการเอกสารและข้อมูลสำหรับออกเอกสาร ขั้นตอนถัดไปคือการชำระเงินเพื่อยืนยันที่นั่ง"
+            );
+          } else {
+            showMessage(
+              "warning",
+              "บันทึกการสมัครอบรมเรียบร้อยแล้ว กรุณาดำเนินการชำระเงินเพื่อยืนยันที่นั่ง"
+            );
           }
-
-        }
-        finally {
-
-          confirmButton.disabled =
-            false;
-
-          confirmButton.textContent =
-            "ยืนยันสมัครอบรม";
-
-        }
-
-      }
-    );
-
-
-    /* =====================================================
-       SEARCH
-    ====================================================== */
-
-    searchInput.addEventListener(
-      "input",
-      renderTrainingSessions
-    );
-
-
-    /* =====================================================
-       LOGOUT
-    ====================================================== */
-
-    logoutButton.addEventListener(
-      "click",
-      async function () {
-
-        logoutButton.disabled = true;
-
-        logoutButton.textContent =
-          "กำลังออกจากระบบ...";
-
-
-        try {
-
-          await db.auth.signOut();
-
-        }
-        finally {
-
-          window.location.replace(
-            "member-login.html"
+        } else {
+          showMessage(
+            "success",
+            "บันทึกการสมัครอบรมเรียบร้อยแล้ว"
           );
-
         }
 
-      }
-    );
-
-
-    /* =====================================================
-       INITIALIZE
-    ====================================================== */
-
-    async function initialize() {
-
-      try {
-
-        const ready =
-          await loadMember();
-
-
-        if (!ready) {
-          return;
-        }
-
-
-        await Promise.all([
-          loadMyRegistrations(),
-          loadTrainingSessions()
-        ]);
-
+        await loadMyRegistrations();
+        await loadTrainingSessions();
 
         renderTrainingSessions();
 
-      }
-      catch (error) {
+      } catch (error) {
+        console.error(error);
 
-        console.error(
-          "Initialize error:",
-          error
+        alert(
+          translateError(error)
         );
 
+      } finally {
+        confirmButton.disabled = false;
 
-        trainingGrid.innerHTML = `
-          <div class="state-card">
-
-            <div class="state-icon">
-              !
-            </div>
-
-            <div class="state-title">
-              ไม่สามารถโหลดข้อมูลได้
-            </div>
-
-            <div class="state-description">
-              กรุณารีเฟรชหน้าเว็บอีกครั้ง
-            </div>
-
-          </div>
-        `;
-
-
-        showMessage(
-          "error",
-          error?.message ||
-          "ไม่สามารถโหลดข้อมูลได้"
-        );
-
+        if (
+          selectedSession &&
+          isPaidSession(selectedSession)
+        ) {
+          confirmButton.textContent =
+            "ยืนยันข้อมูลการสมัคร";
+        } else {
+          confirmButton.textContent =
+            "ยืนยันสมัครเข้าร่วม";
+        }
       }
-
     }
+  );
 
+  searchInput.addEventListener(
+    "input",
+    renderTrainingSessions
+  );
 
-    initialize();
+  logoutButton.addEventListener(
+    "click",
+    async () => {
+      logoutButton.disabled = true;
+      logoutButton.textContent =
+        "กำลังออกจากระบบ...";
 
-  </script>
+      try {
+        await db.auth.signOut();
+      } finally {
+        window.location.replace(
+          "member-login.html"
+        );
+      }
+    }
+  );
+
+  async function initialize() {
+    try {
+      const ready =
+        await loadMember();
+
+      if (!ready) return;
+
+      await Promise.all([
+        loadMyRegistrations(),
+        loadTrainingSessions()
+      ]);
+
+      renderTrainingSessions();
+
+    } catch (error) {
+      console.error(error);
+
+      trainingGrid.innerHTML = `
+        <div class="state-card">
+          <div class="state-icon">!</div>
+          <div class="state-title">
+            ไม่สามารถโหลดข้อมูลได้
+          </div>
+          <div class="state-description">
+            กรุณารีเฟรชหน้าเว็บอีกครั้ง
+          </div>
+        </div>
+      `;
+
+      showMessage(
+        "error",
+        error?.message ||
+        "ไม่สามารถโหลดข้อมูลได้"
+      );
+    }
+  }
+
+  initialize();
+</script>
 
 </body>
 </html>
