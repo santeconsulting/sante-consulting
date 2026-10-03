@@ -7,745 +7,704 @@
   <title>SANTE SYSTEM | Admin Login</title>
 
   <!-- Prompt Font -->
-  <link rel="preconnect" href="https://eur02.safelinks.protection.outlook.com/?url=https%3A%2F%2Ffonts.googleapis.com%2F&data=05%7C02%7Cwaleephon.hannaphachewin%40basf.com%7Cc1bfca988e3f45c36f8708df2103a5a3%7Cecaa386bc8df4ce0ad01740cbdb5ba55%7C0%7C0%7C639265971712937827%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=yRkzVCBDbi9P%2Bw%2BBhN%2FZSOfAHxmmOANI9xVucMZfmws%3D&reserved=0">
-  <link rel="preconnect" href="https://eur02.safelinks.protection.outlook.com/?url=https%3A%2F%2Ffonts.gstatic.com%2F&data=05%7C02%7Cwaleephon.hannaphachewin%40basf.com%7Cc1bfca988e3f45c36f8708df2103a5a3%7Cecaa386bc8df4ce0ad01740cbdb5ba55%7C0%7C0%7C639265971712957124%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=vH7Fm000XzLSedA%2Bd2AP5ef4CgTyM6bMnxZ2s6QfOrI%3D&reserved=0" crossorigin>
-  <link href="https://eur02.safelinks.protection.outlook.com/?url=https%3A%2F%2Ffonts.googleapis.com%2Fcss2%3Ffamily%3DPrompt%3Awght%40300%3B400%3B500%3B600%3B700%26display%3Dswap&data=05%7C02%7Cwaleephon.hannaphachewin%40basf.com%7Cc1bfca988e3f45c36f8708df2103a5a3%7Cecaa386bc8df4ce0ad01740cbdb5ba55%7C0%7C0%7C639265971712969916%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=70hikt880hQOfwtBYIjrKkwmI31n2GR57eDG%2FHwMpdk%3D&reserved=0" rel="stylesheet">
+  <link rel="preconnect" href="https://eur02.safelinks.protection.outlook.com/?url=https%3A%2F%2Ffonts.googleapis.com%2F&data=05%7C02%7Cwaleephon.hannaphachewin%40basf.com%7Cf72a775bdfb94211897508df21048e67%7Cecaa386bc8df4ce0ad01740cbdb5ba55%7C0%7C0%7C639265975590384786%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=x%2FTf7S2KjX6zZgg4TBHVSoqiRapPWFSxSYj9jpjnO%2Bk%3D&reserved=0">
+  <link rel="preconnect" href="https://eur02.safelinks.protection.outlook.com/?url=https%3A%2F%2Ffonts.gstatic.com%2F&data=05%7C02%7Cwaleephon.hannaphachewin%40basf.com%7Cf72a775bdfb94211897508df21048e67%7Cecaa386bc8df4ce0ad01740cbdb5ba55%7C0%7C0%7C639265975590406523%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=G9mqRc%2BW0R76%2FtqxBlK15OY1MpG0ALPjq6A6CY0qgbE%3D&reserved=0" crossorigin>
+  <link href="https://eur02.safelinks.protection.outlook.com/?url=https%3A%2F%2Ffonts.googleapis.com%2Fcss2%3Ffamily%3DPrompt%3Awght%40300%3B400%3B500%3B600%3B700%26display%3Dswap&data=05%7C02%7Cwaleephon.hannaphachewin%40basf.com%7Cf72a775bdfb94211897508df21048e67%7Cecaa386bc8df4ce0ad01740cbdb5ba55%7C0%7C0%7C639265975590420124%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=YFouW%2F6BWDrM6TUIRR%2F6ZcdtN9rfs6VSnoMJxQiEDGo%3D&reserved=0" rel="stylesheet">
 
   <!-- Supabase -->
-  <script src="https://eur02.safelinks.protection.outlook.com/?url=https%3A%2F%2Fcdn.jsdelivr.net%2Fnpm%2F%40supabase%2Fsupabase-js%402&data=05%7C02%7Cwaleephon.hannaphachewin%40basf.com%7Cc1bfca988e3f45c36f8708df2103a5a3%7Cecaa386bc8df4ce0ad01740cbdb5ba55%7C0%7C0%7C639265971712982832%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=6oxRnj4c%2FjLMW%2FUC5ccRBuoZgotilDSgAvjQzqjlYcw%3D&reserved=0"></script>
+  <script src="https://eur02.safelinks.protection.outlook.com/?url=https%3A%2F%2Fcdn.jsdelivr.net%2Fnpm%2F%40supabase%2Fsupabase-js%402&data=05%7C02%7Cwaleephon.hannaphachewin%40basf.com%7Cf72a775bdfb94211897508df21048e67%7Cecaa386bc8df4ce0ad01740cbdb5ba55%7C0%7C0%7C639265975590432885%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=lWb01Zfp7FwWOz7eQmn0j4fT4onws%2BiTTA6Mt%2BdTryA%3D&reserved=0"></script>
 
   <style>
-    :root {
-      --navy: #062c5e;
-      --navy-dark: #031f43;
-      --navy-light: #0d4d8b;
-      --yellow: #ffc400;
-      --yellow-light: #ffd94d;
-      --white: #ffffff;
-      --soft-bg: #f4f8fc;
-      --text: #092d5c;
-      --muted: #6f7f92;
-      --border: #d9e2ec;
-      --danger: #c62828;
-      --success: #15803d;
-    }
-
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
 
+    :root {
+      --navy: #06356b;
+      --navy-dark: #032957;
+      --blue: #075ea7;
+      --yellow: #ffc400;
+      --yellow-light: #ffd84d;
+      --white: #ffffff;
+      --text: #0b315f;
+      --muted: #758399;
+      --border: #d8e1ec;
+    }
+
     html,
     body {
       width: 100%;
       min-height: 100%;
-      font-family: "Prompt", sans-serif;
-      background: #f5f8fc;
-      color: var(--text);
     }
 
     body {
-      min-height: 100vh;
+      font-family: "Prompt", sans-serif;
+      background: #f4f8fc;
+      color: var(--text);
+      overflow-x: hidden;
     }
 
-    .page {
-      width: 100%;
-      min-height: 100vh;
-      display: grid;
-      grid-template-columns: minmax(0, 1.05fr) minmax(460px, 0.95fr);
-      overflow: hidden;
+    button,
+    input {
+      font-family: "Prompt", sans-serif;
     }
 
     /* =========================
-       LEFT / BRAND SIDE
-    ========================== */
+       MAIN LAYOUT
+    ========================= */
 
-    .brand-panel {
-      min-height: 100vh;
-      position: relative;
+    .page {
+      min-height: 100svh;
+      display: grid;
+      grid-template-columns: 53% 47%;
       overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      background:
-        radial-gradient(
-          circle at 20% 20%,
-          rgba(35, 116, 188, 0.55),
-          transparent 34%
-        ),
-        linear-gradient(
-          145deg,
-          #073b76 0%,
-          #052e61 48%,
-          #031f43 100%
-        );
+      background: #fff;
     }
 
-    .brand-panel::before {
-      content: "";
-      position: absolute;
-      width: 430px;
-      height: 430px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 50%;
-      left: -170px;
-      top: 110px;
-    }
+    /* =========================
+       LEFT SIDE
+    ========================= */
 
-    .brand-panel::after {
-      content: "";
-      position: absolute;
-      width: 300px;
-      height: 300px;
-      border: 1px solid rgba(255, 196, 0, 0.10);
-      border-radius: 50%;
-      right: -130px;
-      top: -90px;
-    }
-
-    .brand-copy {
+    .hero {
       position: relative;
+      min-height: 100svh;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 30% 25%,
+          rgba(24, 126, 205, .58) 0%,
+          rgba(24, 126, 205, 0) 38%),
+        linear-gradient(145deg, #075fa9 0%, #064982 35%, #032957 100%);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      width: 780px;
+      height: 780px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.035);
+      top: -510px;
+      left: -200px;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: 620px;
+      height: 620px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,.07);
+      left: -280px;
+      bottom: -330px;
+    }
+
+    .hero-copy {
+      position: absolute;
       z-index: 5;
-      padding: clamp(28px, 4.2vh, 48px)
-               clamp(32px, 5vw, 74px)
-               10px;
-      color: white;
+      top: 7vh;
+      left: 9%;
+      right: 5%;
     }
 
     .welcome-th {
-      font-size: clamp(27px, 2.5vw, 42px);
-      font-weight: 600;
-      line-height: 1.15;
-      letter-spacing: -0.4px;
+      color: white;
+      font-size: clamp(34px, 4.3vw, 68px);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -1px;
     }
 
     .welcome-en {
-      margin-top: 2px;
-      font-size: clamp(20px, 1.8vw, 30px);
       color: var(--yellow);
-      font-weight: 500;
+      font-size: clamp(30px, 3.8vw, 59px);
+      font-weight: 700;
+      line-height: 1.08;
     }
 
-    .motto-en {
-      margin-top: clamp(14px, 2vh, 22px);
-      font-size: clamp(16px, 1.35vw, 22px);
-      font-weight: 600;
-      color: white;
-      letter-spacing: 0.4px;
-    }
-
-    .motto-th {
-      margin-top: 4px;
-      font-size: clamp(13px, 1vw, 16px);
-      color: rgba(255,255,255,0.86);
-      font-weight: 300;
-    }
-
-    .yellow-line {
-      margin-top: 15px;
-      width: 76px;
+    .welcome-line {
+      width: 92px;
       height: 4px;
       background: var(--yellow);
       border-radius: 20px;
+      margin: 18px 0;
     }
 
-    /* Artwork area */
-
-    .artwork-area {
-      position: relative;
-      flex: 1;
-      min-height: 0;
-      display: flex;
-      align-items: flex-end;
-      justify-content: center;
-      z-index: 2;
+    .slogan-en {
+      color: white;
+      font-size: clamp(14px, 1.65vw, 26px);
+      font-weight: 600;
+      letter-spacing: .2px;
     }
 
-    .white-wave {
+    .slogan-en span {
+      color: var(--yellow);
+    }
+
+    .slogan-th {
+      color: white;
+      font-size: clamp(13px, 1.25vw, 20px);
+      margin-top: 3px;
+      font-weight: 500;
+    }
+
+    .slogan-th span {
+      color: var(--yellow);
+      margin-left: 12px;
+    }
+
+    /* White wave area */
+
+    .wave {
       position: absolute;
-      width: 135%;
-      height: 82%;
-      left: -18%;
-      bottom: -24%;
-      background:
-        linear-gradient(
-          150deg,
-          #f8fcff 0%,
-          #e8f4ff 65%,
-          #ffffff 100%
-        );
-      border-radius: 48% 55% 0 0 / 25% 32% 0 0;
-      transform: rotate(-3deg);
       z-index: 1;
-    }
-
-    .blue-wave {
-      position: absolute;
       width: 130%;
-      height: 115px;
-      left: -10%;
-      bottom: -55px;
-      background: #07386f;
-      border-radius: 50% 50% 0 0;
+      height: 60%;
+      left: -12%;
+      bottom: -13%;
+      background: #f9fcff;
+      border-radius: 52% 55% 0 0 / 19% 22% 0 0;
       transform: rotate(2deg);
-      z-index: 2;
+      box-shadow:
+        0 -14px 0 rgba(123,190,247,.35),
+        0 -27px 0 rgba(213,235,255,.85);
     }
 
     .yellow-wave {
       position: absolute;
-      width: 135%;
-      height: 20px;
-      left: -12%;
-      bottom: 49px;
+      z-index: 2;
+      left: -5%;
+      bottom: 2.5%;
+      width: 110%;
+      height: 26px;
       background: var(--yellow);
+      transform: rotate(5deg);
       border-radius: 50%;
-      transform: rotate(2deg);
-      z-index: 3;
     }
 
-    .artwork {
-      position: relative;
+    .navy-wave {
+      position: absolute;
+      z-index: 3;
+      left: -12%;
+      bottom: -11%;
+      width: 120%;
+      height: 19%;
+      background: #003e7e;
+      transform: rotate(3deg);
+      border-radius: 50% 50% 0 0;
+    }
+
+    /* Industrial skyline */
+
+    .skyline {
+      position: absolute;
+      z-index: 2;
+      left: 0;
+      right: 0;
+      bottom: 18%;
+      height: 22%;
+      opacity: .20;
+      background:
+        linear-gradient(
+          to top,
+          #2188db 0 36%,
+          transparent 36%
+        );
+      clip-path: polygon(
+        0 100%, 0 60%, 4% 60%, 4% 25%,
+        7% 25%, 7% 72%, 10% 72%, 10% 48%,
+        13% 48%, 13% 80%, 17% 80%, 17% 40%,
+        19% 40%, 19% 73%, 24% 73%, 24% 53%,
+        28% 53%, 28% 83%, 34% 83%, 34% 36%,
+        37% 36%, 37% 75%, 42% 75%, 42% 57%,
+        47% 57%, 47% 83%, 53% 83%, 53% 45%,
+        57% 45%, 57% 72%, 62% 72%, 62% 31%,
+        65% 31%, 65% 78%, 70% 78%, 70% 50%,
+        74% 50%, 74% 81%, 79% 81%, 79% 38%,
+        82% 38%, 82% 70%, 86% 70%, 86% 55%,
+        91% 55%, 91% 76%, 95% 76%, 95% 46%,
+        98% 46%, 98% 100%
+      );
+    }
+
+    /* Artwork */
+
+    .mascot {
+      position: absolute;
       z-index: 4;
-      display: block;
-      width: min(90%, 780px);
-      max-height: min(64vh, 650px);
+      left: 4%;
+      bottom: 0;
+      width: min(90%, 820px);
+      max-height: 70vh;
       object-fit: contain;
-      object-position: center bottom;
-      margin: 0 auto -3px;
-      filter: drop-shadow(0 18px 18px rgba(0, 27, 61, 0.13));
+      object-position: left bottom;
+      filter: drop-shadow(0 18px 18px rgba(0, 30, 70, .16));
     }
 
     /* =========================
-       RIGHT / LOGIN
-    ========================== */
+       RIGHT SIDE
+    ========================= */
 
-    .login-panel {
-      min-height: 100vh;
+    .login-side {
+      min-height: 100svh;
       position: relative;
       display: flex;
-      align-items: center;
       justify-content: center;
-      padding: clamp(20px, 3vw, 48px);
+      align-items: center;
+      padding: 26px 6%;
       background:
-        radial-gradient(
-          circle at 100% 100%,
-          rgba(13, 77, 139, 0.08),
-          transparent 35%
-        ),
-        #f7f9fc;
+        radial-gradient(circle at 100% 50%, #e5f3ff 0, transparent 38%),
+        #f8fbff;
     }
 
-    .login-panel::before {
+    .login-side::before {
       content: "";
       position: absolute;
       top: 0;
       right: 0;
-      width: 170px;
+      width: 45%;
       height: 16px;
       background: var(--yellow);
-      clip-path: polygon(18% 0,100% 0,100% 100%,0 100%);
+      transform: skewX(-35deg);
+      transform-origin: right top;
     }
 
-    .login-panel::after {
-      content: "";
+    .card {
+      position: relative;
+      width: min(100%, 620px);
+      background: rgba(255,255,255,.96);
+      border-radius: 34px;
+      padding: clamp(30px, 4vh, 48px) clamp(30px, 4vw, 56px);
+      box-shadow: 0 18px 55px rgba(22, 72, 120, .12);
+    }
+
+    /* Language */
+
+    .languages {
       position: absolute;
-      top: 16px;
-      right: 0;
-      width: 205px;
-      height: 7px;
-      background: var(--navy);
-      clip-path: polygon(18% 0,100% 0,100% 100%,0 100%);
-    }
-
-    .login-card {
-      width: min(100%, 560px);
-      background: rgba(255,255,255,0.98);
-      border: 1px solid rgba(7, 56, 111, 0.08);
-      border-radius: 28px;
-      padding: clamp(24px, 4vh, 42px)
-               clamp(25px, 3.5vw, 48px);
-      box-shadow:
-        0 22px 60px rgba(5, 45, 91, 0.10),
-        0 4px 15px rgba(5, 45, 91, 0.04);
-    }
-
-    .language-row {
-      display: flex;
-      justify-content: flex-end;
-      margin-bottom: 3px;
-    }
-
-    .language-switch {
+      top: 22px;
+      right: 24px;
       display: flex;
       align-items: center;
-      padding: 4px;
-      background: #edf2f8;
-      border-radius: 100px;
+      gap: 5px;
+      padding: 5px;
+      background: #f0f5fb;
+      border-radius: 40px;
     }
 
     .lang-btn {
       border: 0;
       background: transparent;
-      font-family: inherit;
-      color: #53657a;
-      padding: 7px 13px;
-      border-radius: 100px;
+      color: var(--navy);
+      padding: 8px 14px;
+      border-radius: 30px;
       cursor: pointer;
-      font-size: 13px;
-      transition: 0.2s ease;
+      font-weight: 500;
+      font-size: 14px;
     }
 
     .lang-btn.active {
-      color: white;
       background: var(--navy);
-      box-shadow: 0 3px 10px rgba(6, 44, 94, 0.18);
+      color: white;
     }
 
-    .system-brand {
+    /* SANTE Logo symbol */
+
+    .brand {
       text-align: center;
-      margin-bottom: clamp(17px, 2.5vh, 27px);
+      padding-top: 32px;
+      margin-bottom: 25px;
     }
 
-    .mini-logo {
+    .brand-symbol {
+      height: 86px;
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 6px;
-      height: 58px;
-      margin-bottom: 8px;
+      gap: 8px;
+      margin-bottom: 12px;
     }
 
-    .mini-logo span {
+    .brand-symbol span {
       display: block;
-      width: 13px;
+      width: 17px;
       border-radius: 20px;
-      background: linear-gradient(
-        180deg,
-        #ffd630,
-        #ffbd00
-      );
+      background: linear-gradient(#ffd636, #ffbf00);
     }
 
-    .mini-logo span:nth-child(1) {
-      height: 27px;
+    .brand-symbol span:nth-child(1),
+    .brand-symbol span:nth-child(5) {
+      height: 40px;
     }
 
-    .mini-logo span:nth-child(2) {
-      height: 43px;
+    .brand-symbol span:nth-child(2),
+    .brand-symbol span:nth-child(4) {
+      height: 62px;
     }
 
-    .mini-logo span:nth-child(3) {
-      height: 58px;
+    .brand-symbol span:nth-child(3) {
+      height: 86px;
     }
 
-    .mini-logo span:nth-child(4) {
-      height: 43px;
-    }
-
-    .mini-logo span:nth-child(5) {
-      height: 27px;
-    }
-
-    .system-title {
-      font-size: clamp(28px, 2.5vw, 40px);
-      line-height: 1;
+    .brand h1 {
       color: var(--navy);
+      font-size: clamp(32px, 3.3vw, 52px);
+      line-height: 1;
       font-weight: 700;
-      letter-spacing: -1px;
+      letter-spacing: .5px;
     }
 
-    .system-subtitle {
-      margin-top: 9px;
-      font-size: 15px;
-      line-height: 1.5;
-      color: #334d6c;
-      font-weight: 400;
+    .brand-divider {
+      width: 110px;
+      height: 3px;
+      margin: 10px auto 8px;
+      background: var(--yellow);
+      border-radius: 20px;
     }
 
-    .admin-label {
+    .system-th {
+      color: var(--navy);
+      font-weight: 600;
+      font-size: 18px;
+    }
+
+    .system-en {
+      color: #657187;
+      font-weight: 500;
+      font-size: 17px;
+    }
+
+    .admin-pill {
       display: inline-flex;
       align-items: center;
-      gap: 7px;
-      margin-top: 9px;
-      padding: 6px 12px;
-      background: #fff7d9;
-      color: #8b6800;
-      border-radius: 100px;
+      gap: 6px;
+      margin-top: 8px;
+      background: #fff7d6;
+      color: #7c5b00;
+      padding: 5px 12px;
+      border-radius: 20px;
       font-size: 12px;
-      font-weight: 500;
     }
 
-    .admin-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: var(--yellow);
+    /* Form */
+
+    .field {
+      margin-bottom: 18px;
     }
 
-    .form-group {
-      margin-bottom: 14px;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 7px;
-      font-size: 14px;
+    .field label {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-weight: 600;
+      font-size: 16px;
+      margin-bottom: 8px;
       color: var(--navy);
-      font-weight: 500;
+    }
+
+    .icon {
+      width: 23px;
+      height: 23px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .input-wrap {
       position: relative;
     }
 
-    input {
+    .input-wrap input {
       width: 100%;
-      height: 52px;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 0 46px 0 15px;
-      font-family: inherit;
-      font-size: 14px;
+      height: 60px;
+      border: 1.5px solid var(--border);
+      border-radius: 13px;
+      padding: 0 18px;
+      font-size: 15px;
       color: var(--navy);
+      background: white;
       outline: none;
-      background: #fff;
-      transition: 0.2s ease;
+      transition: .2s;
     }
 
-    input:focus {
-      border-color: #8baed1;
-      box-shadow: 0 0 0 4px rgba(13, 77, 139, 0.07);
+    .input-wrap input:focus {
+      border-color: #68a9e3;
+      box-shadow: 0 0 0 4px rgba(63, 145, 218, .10);
     }
 
-    input::placeholder {
-      color: #a2adba;
+    .password-input {
+      padding-right: 55px !important;
     }
 
-    .password-toggle {
+    .eye {
       position: absolute;
       top: 50%;
-      right: 14px;
+      right: 16px;
       transform: translateY(-50%);
-      border: 0;
-      background: transparent;
-      color: #718096;
-      cursor: pointer;
-      font-family: inherit;
-      font-size: 18px;
-    }
-
-    .login-button {
-      width: 100%;
-      height: 54px;
-      margin-top: 6px;
       border: none;
-      border-radius: 13px;
+      background: transparent;
       cursor: pointer;
-      font-family: inherit;
-      font-size: 17px;
-      font-weight: 600;
+      font-size: 21px;
+      color: #778399;
+    }
+
+    .login-btn {
+      width: 100%;
+      height: 64px;
+      margin-top: 4px;
+      border: none;
+      border-radius: 14px;
+      cursor: pointer;
+      background: linear-gradient(90deg, #ffc400, #ffd42d);
       color: var(--navy);
-      background:
-        linear-gradient(
-          90deg,
-          #ffcb05,
-          #ffc000
-        );
-      box-shadow: 0 10px 24px rgba(255, 196, 0, 0.22);
-      transition: 0.2s ease;
+      font-weight: 700;
+      font-size: 20px;
+      position: relative;
+      transition: transform .15s, box-shadow .15s;
+      box-shadow: 0 10px 22px rgba(255, 196, 0, .20);
     }
 
-    .login-button:hover {
+    .login-btn:hover {
       transform: translateY(-1px);
-      box-shadow: 0 13px 27px rgba(255, 196, 0, 0.28);
+      box-shadow: 0 13px 26px rgba(255, 196, 0, .27);
     }
 
-    .login-button:disabled {
-      cursor: not-allowed;
-      opacity: 0.65;
-      transform: none;
+    .login-btn:disabled {
+      opacity: .7;
+      cursor: wait;
+    }
+
+    .arrow {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 43px;
+      height: 43px;
+      border-radius: 50%;
+      background: var(--navy);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+    }
+
+    .admin-note {
+      margin-top: 24px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      color: var(--navy);
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .admin-note::before,
+    .admin-note::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: #cad8e7;
+    }
+
+    .home-link {
+      margin-top: 15px;
+      text-align: center;
+    }
+
+    .home-link a {
+      color: var(--navy);
+      font-weight: 600;
+      text-decoration: underline;
     }
 
     .message {
       display: none;
-      margin-top: 11px;
-      padding: 9px 12px;
-      border-radius: 9px;
-      font-size: 12px;
+      margin-top: 14px;
+      padding: 11px 14px;
+      border-radius: 10px;
+      font-size: 13px;
       text-align: center;
     }
 
     .message.error {
       display: block;
       background: #fff0f0;
-      color: var(--danger);
-      border: 1px solid #ffd4d4;
+      color: #b42318;
     }
 
     .message.success {
       display: block;
-      background: #edf9f1;
-      color: var(--success);
-      border: 1px solid #cbeed7;
+      background: #edfdf3;
+      color: #087443;
     }
 
-    .admin-only {
-      margin-top: 17px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      font-size: 12px;
-      color: #65768b;
-    }
-
-    .admin-only::before,
-    .admin-only::after {
-      content: "";
-      height: 1px;
-      flex: 1;
-      background: #e0e6ee;
-    }
-
-    .home-link {
-      display: block;
-      width: fit-content;
-      margin: 13px auto 0;
-      color: var(--navy);
-      text-decoration: none;
-      font-size: 13px;
-      font-weight: 500;
-    }
-
-    .home-link:hover {
-      text-decoration: underline;
-    }
-
-    .copyright {
-      margin-top: 13px;
+    .footer {
+      margin-top: 24px;
       text-align: center;
-      font-size: 10px;
-      color: #9aa7b5;
+      color: #99a4b2;
+      font-size: 11px;
     }
 
     /* =========================
-       LAPTOP HEIGHT FIX
-       important for 100% zoom
-    ========================== */
+       NOTEBOOK / SMALL DESKTOP
+       ทำให้ 100% พอดีจอ
+    ========================= */
 
-    @media (min-width: 901px) and (max-height: 760px) {
+    @media (max-height: 820px) and (min-width: 901px) {
 
-      .brand-copy {
-        padding-top: 22px;
+      .card {
+        padding-top: 25px;
+        padding-bottom: 24px;
       }
 
-      .welcome-th {
-        font-size: 28px;
+      .brand {
+        padding-top: 20px;
+        margin-bottom: 15px;
       }
 
-      .welcome-en {
-        font-size: 21px;
+      .brand-symbol {
+        height: 58px;
+        margin-bottom: 8px;
       }
 
-      .motto-en {
-        margin-top: 10px;
-        font-size: 16px;
+      .brand-symbol span:nth-child(1),
+      .brand-symbol span:nth-child(5) {
+        height: 29px;
       }
 
-      .motto-th {
-        font-size: 12px;
-      }
-
-      .yellow-line {
-        margin-top: 9px;
-      }
-
-      .artwork {
-        max-height: 58vh;
-        width: min(84%, 650px);
-      }
-
-      .login-panel {
-        padding: 18px 30px;
-      }
-
-      .login-card {
-        padding: 19px 35px;
-        border-radius: 23px;
-      }
-
-      .mini-logo {
-        height: 44px;
-        margin-bottom: 5px;
-      }
-
-      .mini-logo span {
-        width: 10px;
-      }
-
-      .mini-logo span:nth-child(1),
-      .mini-logo span:nth-child(5) {
-        height: 21px;
-      }
-
-      .mini-logo span:nth-child(2),
-      .mini-logo span:nth-child(4) {
-        height: 33px;
-      }
-
-      .mini-logo span:nth-child(3) {
-        height: 44px;
-      }
-
-      .system-title {
-        font-size: 30px;
-      }
-
-      .system-subtitle {
-        margin-top: 5px;
-        font-size: 13px;
-      }
-
-      .admin-label {
-        margin-top: 5px;
-        padding: 4px 10px;
-      }
-
-      .system-brand {
-        margin-bottom: 12px;
-      }
-
-      .form-group {
-        margin-bottom: 9px;
-      }
-
-      label {
-        margin-bottom: 4px;
-        font-size: 12px;
-      }
-
-      input {
+      .brand-symbol span:nth-child(2),
+      .brand-symbol span:nth-child(4) {
         height: 43px;
       }
 
-      .login-button {
-        height: 45px;
-        margin-top: 2px;
-        font-size: 15px;
+      .brand-symbol span:nth-child(3) {
+        height: 58px;
       }
 
-      .admin-only {
-        margin-top: 10px;
+      .brand h1 {
+        font-size: 36px;
       }
 
-      .home-link {
-        margin-top: 8px;
+      .field {
+        margin-bottom: 12px;
       }
 
-      .copyright {
-        margin-top: 7px;
+      .input-wrap input {
+        height: 48px;
+      }
+
+      .login-btn {
+        height: 52px;
+      }
+
+      .admin-note {
+        margin-top: 15px;
+      }
+
+      .footer {
+        margin-top: 13px;
+      }
+
+      .mascot {
+        max-height: 62vh;
       }
     }
 
     /* =========================
-       TABLET
-    ========================== */
+       TABLET / MOBILE
+    ========================= */
 
     @media (max-width: 900px) {
 
-      body {
-        overflow: auto;
-      }
-
       .page {
         display: block;
-        min-height: 100vh;
-        overflow: visible;
       }
 
-      .brand-panel {
-        min-height: 520px;
+      .hero {
+        min-height: 590px;
       }
 
-      .brand-copy {
-        text-align: center;
-        padding: 35px 25px 0;
+      .hero-copy {
+        top: 45px;
+        left: 7%;
       }
 
-      .yellow-line {
-        margin-left: auto;
-        margin-right: auto;
+      .mascot {
+        width: 78%;
+        max-height: 430px;
       }
 
-      .artwork {
-        max-height: 360px;
-        width: min(86%, 600px);
-      }
-
-      .login-panel {
+      .login-side {
         min-height: auto;
-        padding: 45px 20px 55px;
+        padding: 45px 20px;
       }
 
-      .login-card {
-        max-width: 580px;
+      .card {
+        max-width: 650px;
       }
     }
-
-    /* =========================
-       MOBILE
-    ========================== */
 
     @media (max-width: 560px) {
 
-      .brand-panel {
-        min-height: 420px;
+      .hero {
+        min-height: 510px;
       }
 
-      .brand-copy {
-        padding-top: 28px;
+      .hero-copy {
+        top: 35px;
+        left: 7%;
       }
 
       .welcome-th {
-        font-size: 27px;
+        font-size: 37px;
       }
 
       .welcome-en {
-        font-size: 20px;
+        font-size: 32px;
       }
 
-      .motto-en {
-        font-size: 14px;
-        margin-top: 12px;
-      }
-
-      .motto-th {
-        font-size: 11px;
-      }
-
-      .artwork {
-        max-height: 280px;
-        width: 95%;
-      }
-
-      .login-panel {
-        padding: 30px 13px 40px;
-      }
-
-      .login-card {
-        padding: 22px 18px 25px;
-        border-radius: 20px;
-      }
-
-      .system-title {
-        font-size: 29px;
-      }
-
-      .system-subtitle {
+      .slogan-en {
         font-size: 13px;
       }
-    }
 
+      .slogan-th {
+        font-size: 12px;
+      }
+
+      .mascot {
+        width: 94%;
+        max-height: 350px;
+      }
+
+      .login-side {
+        padding: 28px 13px;
+      }
+
+      .card {
+        padding: 34px 22px 28px;
+        border-radius: 24px;
+      }
+
+      .languages {
+        top: 14px;
+        right: 14px;
+      }
+
+      .brand {
+        padding-top: 50px;
+      }
+
+      .brand h1 {
+        font-size: 34px;
+      }
+
+      .input-wrap input {
+        height: 55px;
+      }
+    }
   </style>
 </head>
 
@@ -754,82 +713,67 @@
 <div class="page">
 
   <!-- LEFT -->
-  <section class="brand-panel">
+  <section class="hero">
 
-    <div class="brand-copy">
+    <div class="hero-copy">
+      <div class="welcome-th" id="welcomeTh">ยินดีต้อนรับ</div>
+      <div class="welcome-en">Welcome</div>
 
-      <div class="welcome-th"
-           data-th="ยินดีต้อนรับ"
-           data-en="Welcome">
-        ยินดีต้อนรับ
+      <div class="welcome-line"></div>
+
+      <div class="slogan-en">
+        TRUST IN SAFETY.
+        <span>TRUST IN SANTE.</span>
       </div>
 
-      <div class="welcome-en"
-           data-th="Welcome"
-           data-en="SANTE Admin System">
-        Welcome
+      <div class="slogan-th">
+        เชื่อมั่นในความปลอดภัย
+        <span>เชื่อมั่นในซานเต้</span>
       </div>
-
-      <div class="motto-en">
-        TRUST IN SAFETY. TRUST IN SANTE.
-      </div>
-
-      <div class="motto-th"
-           data-th="เชื่อมั่นในความปลอดภัย เชื่อมั่นในซานเต้"
-           data-en="Safety you can trust. SANTE you can trust.">
-        เชื่อมั่นในความปลอดภัย เชื่อมั่นในซานเต้
-      </div>
-
-      <div class="yellow-line"></div>
-
     </div>
 
-    <div class="artwork-area">
+    <div class="wave"></div>
+    <div class="skyline"></div>
+    <div class="yellow-wave"></div>
+    <div class="navy-wave"></div>
 
-      <div class="white-wave"></div>
-      <div class="yellow-wave"></div>
-      <div class="blue-wave"></div>
-
-      <!-- ภาพที่คุณ Upload ใน GitHub -->
-      <img
-        class="artwork"
-        src="sante-admin-artwork.png"
-        alt="SANTE Admin Mascot"
-      >
-
-    </div>
+    <!-- ภาพที่อัปโหลดไว้ใน GitHub -->
+    <img
+      class="mascot"
+      src="sante-admin-artwork.png"
+      alt="SANTE Safety Mascot"
+    >
 
   </section>
 
 
   <!-- RIGHT -->
-  <section class="login-panel">
+  <section class="login-side">
 
-    <div class="login-card">
+    <div class="card">
 
-      <div class="language-row">
-        <div class="language-switch">
-          <button
-            class="lang-btn active"
-            id="btnTH"
-            type="button"
-            onclick="setLanguage('th')">
-            🇹🇭 ไทย
-          </button>
+      <div class="languages">
+        <button
+          class="lang-btn active"
+          id="thaiBtn"
+          type="button"
+          onclick="setLanguage('th')">
+          🇹🇭 ไทย
+        </button>
 
-          <button
-            class="lang-btn"
-            id="btnEN"
-            type="button"
-            onclick="setLanguage('en')">
-            🇬🇧 EN
-          </button>
-        </div>
+        <button
+          class="lang-btn"
+          id="englishBtn"
+          type="button"
+          onclick="setLanguage('en')">
+          🇬🇧 EN
+        </button>
       </div>
 
-      <div class="system-brand">
 
-        <div class="mini-logo">
+      <div class="brand">
+
+        <div class="brand-symbol">
           <span></span>
           <span></span>
           <span></span>
@@ -837,25 +781,20 @@
           <span></span>
         </div>
 
-        <div class="system-title">
-          SANTE SYSTEM
+        <h1>SANTE SYSTEM</h1>
+
+        <div class="brand-divider"></div>
+
+        <div class="system-th" id="systemTitle">
+          ระบบบริหารจัดการ
         </div>
 
-        <div
-          class="system-subtitle"
-          data-th="ระบบบริหารจัดการ<br>SANTE Consulting"
-          data-en="Administration System<br>SANTE Consulting">
-          ระบบบริหารจัดการ<br>
+        <div class="system-en">
           SANTE Consulting
         </div>
 
-        <div class="admin-label">
-          <span class="admin-dot"></span>
-          <span
-            data-th="ADMINISTRATOR"
-            data-en="ADMINISTRATOR">
-            ADMINISTRATOR
-          </span>
+        <div class="admin-pill">
+          ● ADMINISTRATOR
         </div>
 
       </div>
@@ -863,19 +802,17 @@
 
       <form id="loginForm">
 
-        <div class="form-group">
+        <div class="field">
 
-          <label
-            for="email"
-            data-th="อีเมล"
-            data-en="Email">
-            อีเมล
+          <label for="email">
+            <span class="icon">✉</span>
+            <span id="emailLabel">อีเมล</span>
           </label>
 
           <div class="input-wrap">
             <input
-              type="email"
               id="email"
+              type="email"
               autocomplete="email"
               placeholder="example@santeconsulting.co.th"
               required
@@ -885,31 +822,30 @@
         </div>
 
 
-        <div class="form-group">
+        <div class="field">
 
-          <label
-            for="password"
-            data-th="รหัสผ่าน"
-            data-en="Password">
-            รหัสผ่าน
+          <label for="password">
+            <span class="icon">🔒</span>
+            <span id="passwordLabel">รหัสผ่าน</span>
           </label>
 
           <div class="input-wrap">
 
             <input
-              type="password"
               id="password"
+              class="password-input"
+              type="password"
               autocomplete="current-password"
               placeholder="กรุณากรอกรหัสผ่าน"
               required
             >
 
             <button
+              class="eye"
               type="button"
-              class="password-toggle"
-              onclick="togglePassword()"
-              aria-label="Show password">
-              👁
+              id="togglePassword"
+              aria-label="แสดงหรือซ่อนรหัสผ่าน">
+              ◉
             </button>
 
           </div>
@@ -918,42 +854,44 @@
 
 
         <button
-          type="submit"
-          class="login-button"
           id="loginButton"
-          data-th="เข้าสู่ระบบ →"
-          data-en="Sign in →">
-          เข้าสู่ระบบ →
+          class="login-btn"
+          type="submit">
+
+          <span id="loginText">เข้าสู่ระบบ</span>
+
+          <span class="arrow">→</span>
+
         </button>
 
 
         <div
-          id="loginMessage"
+          id="message"
           class="message">
         </div>
 
       </form>
 
 
-      <div
-        class="admin-only"
-        data-th="🔒 เฉพาะผู้ดูแลระบบเท่านั้น"
-        data-en="🔒 Administrators only">
-        🔒 เฉพาะผู้ดูแลระบบเท่านั้น
+      <div class="admin-note">
+        🔒
+        <span id="adminText">
+          เฉพาะผู้ดูแลระบบเท่านั้น
+        </span>
       </div>
 
 
-      <a
-        class="home-link"
-        href="index.html"
-        data-th="⌂ กลับหน้าหลัก"
-        data-en="⌂ Back to home">
-        ⌂ กลับหน้าหลัก
-      </a>
+      <div class="home-link">
+        🏠
+        <a href="index.html" id="homeText">
+          กลับหน้าหลัก
+        </a>
+      </div>
 
 
-      <div class="copyright">
-        © 2026 SANTE CONSULTING CO., LTD.
+      <div class="footer">
+        © 2026 SANTE CONSULTING CO., LTD.<br>
+        ระบบสำหรับผู้ดูแลระบบเท่านั้น
       </div>
 
     </div>
@@ -964,13 +902,14 @@
 
 
 <script>
-
-  /* ======================================
+  /* =========================================
      SUPABASE
-  ====================================== */
+     Publishable key ใช้ใน browser ได้
+     ห้ามใส่ service_role / secret key
+  ========================================= */
 
   const SUPABASE_URL =
-    "https://eur02.safelinks.protection.outlook.com/?url=https%3A%2F%2Fcyegjwerxlxhczrfiurz.supabase.co%2F&data=05%7C02%7Cwaleephon.hannaphachewin%40basf.com%7Cc1bfca988e3f45c36f8708df2103a5a3%7Cecaa386bc8df4ce0ad01740cbdb5ba55%7C0%7C0%7C639265971712995353%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=e3UslBEBxvJObnqY2jHLYc28tX1PjW06Gp6gQHwE9v4%3D&reserved=0";
+    "https://eur02.safelinks.protection.outlook.com/?url=https%3A%2F%2Fcyegjwerxlxhczrfiurz.supabase.co%2F&data=05%7C02%7Cwaleephon.hannaphachewin%40basf.com%7Cf72a775bdfb94211897508df21048e67%7Cecaa386bc8df4ce0ad01740cbdb5ba55%7C0%7C0%7C639265975590445824%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=EmPBoDdm9WRq%2F61p9D7aDYNzmirpCPIXixcty6gVd8c%3D&reserved=0";
 
   const SUPABASE_PUBLISHABLE_KEY =
     "sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF";
@@ -982,9 +921,9 @@
     );
 
 
-  /* ======================================
+  /* =========================================
      LANGUAGE
-  ====================================== */
+  ========================================= */
 
   let currentLanguage = "th";
 
@@ -992,274 +931,277 @@
 
     currentLanguage = language;
 
-    document.documentElement.lang = language;
+    const thaiButton =
+      document.getElementById("thaiBtn");
 
-    document
-      .getElementById("btnTH")
-      .classList.toggle(
-        "active",
-        language === "th"
-      );
+    const englishButton =
+      document.getElementById("englishBtn");
 
-    document
-      .getElementById("btnEN")
-      .classList.toggle(
-        "active",
-        language === "en"
-      );
-
-    document
-      .querySelectorAll("[data-th]")
-      .forEach(element => {
-
-        const text =
-          language === "th"
-            ? element.dataset.th
-            : element.dataset.en;
-
-        element.innerHTML = text;
-
-      });
-
-
-    const password =
-      document.getElementById("password");
-
-    password.placeholder =
+    thaiButton.classList.toggle(
+      "active",
       language === "th"
-        ? "กรุณากรอกรหัสผ่าน"
-        : "Enter your password";
-
-  }
-
-
-  /* ======================================
-     PASSWORD
-  ====================================== */
-
-  function togglePassword() {
-
-    const password =
-      document.getElementById("password");
-
-    password.type =
-      password.type === "password"
-        ? "text"
-        : "password";
-
-  }
-
-
-  /* ======================================
-     MESSAGE
-  ====================================== */
-
-  function showMessage(message, type) {
-
-    const box =
-      document.getElementById("loginMessage");
-
-    box.textContent = message;
-
-    box.className =
-      "message " + type;
-
-  }
-
-
-  /* ======================================
-     LOGIN
-  ====================================== */
-
-  document
-    .getElementById("loginForm")
-    .addEventListener(
-      "submit",
-      async function(event) {
-
-        event.preventDefault();
-
-        const email =
-          document
-            .getElementById("email")
-            .value
-            .trim();
-
-        const password =
-          document
-            .getElementById("password")
-            .value;
-
-        const button =
-          document.getElementById(
-            "loginButton"
-          );
-
-
-        button.disabled = true;
-
-        button.textContent =
-          currentLanguage === "th"
-            ? "กำลังตรวจสอบ..."
-            : "Checking...";
-
-
-        document
-          .getElementById("loginMessage")
-          .className = "message";
-
-
-        try {
-
-          /* LOGIN */
-
-          const {
-            data,
-            error
-          } =
-            await supabaseClient.auth
-              .signInWithPassword({
-                email,
-                password
-              });
-
-
-          if (error) {
-
-            throw error;
-
-          }
-
-
-          if (!data.user) {
-
-            throw new Error(
-              "LOGIN_FAILED"
-            );
-
-          }
-
-
-          /* CHECK STAFF PERMISSION */
-
-          const {
-            data: staffAllowed,
-            error: roleError
-          } =
-            await supabaseClient.rpc(
-              "is_staff"
-            );
-
-
-          if (roleError) {
-
-            await supabaseClient.auth
-              .signOut();
-
-            throw roleError;
-
-          }
-
-
-          if (staffAllowed !== true) {
-
-            await supabaseClient.auth
-              .signOut();
-
-            showMessage(
-              currentLanguage === "th"
-                ? "บัญชีนี้ไม่มีสิทธิ์เข้าสู่ระบบผู้ดูแล"
-                : "This account does not have administrator access.",
-              "error"
-            );
-
-            button.disabled = false;
-
-            button.textContent =
-              currentLanguage === "th"
-                ? "เข้าสู่ระบบ →"
-                : "Sign in →";
-
-            return;
-
-          }
-
-
-          /* SUCCESS */
-
-          showMessage(
-            currentLanguage === "th"
-              ? "เข้าสู่ระบบสำเร็จ"
-              : "Login successful",
-            "success"
-          );
-
-
-          /*
-             PART ต่อไปเราจะสร้าง
-             admin-dashboard.html
-          */
-
-          setTimeout(() => {
-
-            window.location.href =
-              "admin-dashboard.html";
-
-          }, 500);
-
-
-        }
-
-        catch (error) {
-
-          console.error(error);
-
-          showMessage(
-            currentLanguage === "th"
-              ? "อีเมลหรือรหัสผ่านไม่ถูกต้อง หรือไม่สามารถเข้าสู่ระบบได้"
-              : "Incorrect email/password or unable to sign in.",
-            "error"
-          );
-
-          button.disabled = false;
-
-          button.textContent =
-            currentLanguage === "th"
-              ? "เข้าสู่ระบบ →"
-              : "Sign in →";
-
-        }
-
-      }
+    );
+
+    englishButton.classList.toggle(
+      "active",
+      language === "en"
     );
 
 
-  /* ======================================
-     IF ALREADY LOGGED IN
-  ====================================== */
+    if (language === "th") {
+
+      document.getElementById("systemTitle")
+        .textContent = "ระบบบริหารจัดการ";
+
+      document.getElementById("emailLabel")
+        .textContent = "อีเมล";
+
+      document.getElementById("passwordLabel")
+        .textContent = "รหัสผ่าน";
+
+      document.getElementById("password")
+        .placeholder = "กรุณากรอกรหัสผ่าน";
+
+      document.getElementById("loginText")
+        .textContent = "เข้าสู่ระบบ";
+
+      document.getElementById("adminText")
+        .textContent = "เฉพาะผู้ดูแลระบบเท่านั้น";
+
+      document.getElementById("homeText")
+        .textContent = "กลับหน้าหลัก";
+
+    } else {
+
+      document.getElementById("systemTitle")
+        .textContent = "Management System";
+
+      document.getElementById("emailLabel")
+        .textContent = "Email";
+
+      document.getElementById("passwordLabel")
+        .textContent = "Password";
+
+      document.getElementById("password")
+        .placeholder = "Enter your password";
+
+      document.getElementById("loginText")
+        .textContent = "Sign In";
+
+      document.getElementById("adminText")
+        .textContent = "Administrators only";
+
+      document.getElementById("homeText")
+        .textContent = "Back to home";
+
+    }
+  }
+
+
+  /* =========================================
+     PASSWORD SHOW / HIDE
+  ========================================= */
+
+  document
+    .getElementById("togglePassword")
+    .addEventListener("click", function () {
+
+      const password =
+        document.getElementById("password");
+
+      if (password.type === "password") {
+
+        password.type = "text";
+        this.textContent = "○";
+
+      } else {
+
+        password.type = "password";
+        this.textContent = "◉";
+
+      }
+
+    });
+
+
+  /* =========================================
+     MESSAGE
+  ========================================= */
+
+  function showMessage(text, type) {
+
+    const message =
+      document.getElementById("message");
+
+    message.textContent = text;
+    message.className = "message " + type;
+
+  }
+
+
+  /* =========================================
+     ADMIN LOGIN
+  ========================================= */
+
+  document
+    .getElementById("loginForm")
+    .addEventListener("submit", async function (event) {
+
+      event.preventDefault();
+
+      const email =
+        document.getElementById("email")
+          .value
+          .trim();
+
+      const password =
+        document.getElementById("password")
+          .value;
+
+      const button =
+        document.getElementById("loginButton");
+
+      const loginText =
+        document.getElementById("loginText");
+
+
+      button.disabled = true;
+
+      loginText.textContent =
+        currentLanguage === "th"
+          ? "กำลังเข้าสู่ระบบ..."
+          : "Signing in...";
+
+
+      try {
+
+        /* LOGIN */
+
+        const {
+          data,
+          error
+        } =
+        await supabaseClient.auth.signInWithPassword({
+          email: email,
+          password: password
+        });
+
+
+        if (error) {
+          throw error;
+        }
+
+
+        if (!data.user) {
+          throw new Error("LOGIN_FAILED");
+        }
+
+
+        /*
+          ตรวจสิทธิ์จาก Database จริง
+          ไม่ได้ตรวจจากหน้า HTML อย่างเดียว
+        */
+
+        const {
+          data: staffAllowed,
+          error: roleError
+        } =
+        await supabaseClient.rpc("is_staff");
+
+
+        if (roleError) {
+
+          await supabaseClient.auth.signOut();
+
+          throw new Error(
+            "ไม่สามารถตรวจสอบสิทธิ์ผู้ดูแลระบบได้"
+          );
+
+        }
+
+
+        if (staffAllowed !== true) {
+
+          await supabaseClient.auth.signOut();
+
+          showMessage(
+            currentLanguage === "th"
+              ? "บัญชีนี้ไม่มีสิทธิ์เข้าสู่ระบบผู้ดูแล"
+              : "This account does not have administrator access.",
+            "error"
+          );
+
+          return;
+
+        }
+
+
+        showMessage(
+          currentLanguage === "th"
+            ? "เข้าสู่ระบบสำเร็จ"
+            : "Login successful",
+          "success"
+        );
+
+
+        /*
+          ขั้นต่อไปเราจะสร้าง admin-dashboard.html
+        */
+
+        setTimeout(function () {
+
+          window.location.href =
+            "admin-dashboard.html";
+
+        }, 500);
+
+
+      } catch (error) {
+
+        console.error(error);
+
+        showMessage(
+          currentLanguage === "th"
+            ? "อีเมลหรือรหัสผ่านไม่ถูกต้อง หรือบัญชีไม่มีสิทธิ์เข้าใช้งาน"
+            : "Incorrect email/password or unauthorized account.",
+          "error"
+        );
+
+      } finally {
+
+        button.disabled = false;
+
+        loginText.textContent =
+          currentLanguage === "th"
+            ? "เข้าสู่ระบบ"
+            : "Sign In";
+
+      }
+
+    });
+
+
+  /* =========================================
+     ALREADY LOGGED IN
+  ========================================= */
 
   async function checkExistingSession() {
 
     const {
-      data
+      data: { session }
     } =
-      await supabaseClient.auth
-        .getSession();
+    await supabaseClient.auth.getSession();
 
 
-    if (!data.session) {
-
+    if (!session) {
       return;
-
     }
 
 
     const {
       data: staffAllowed
     } =
-      await supabaseClient.rpc(
-        "is_staff"
-      );
+    await supabaseClient.rpc("is_staff");
 
 
     if (staffAllowed === true) {
