@@ -1,0 +1,1564 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>SANTE SYSTEM | Admin Dashboard</title>
+
+  <link rel="preconnect" href="https://eur02.safelinks.protection.outlook.com/?url=https%3A%2F%2Ffonts.googleapis.com%2F&data=05%7C02%7Cwaleephon.hannaphachewin%40basf.com%7Cc16aa536c32d472dd8e308df210d4fd9%7Cecaa386bc8df4ce0ad01740cbdb5ba55%7C0%7C0%7C639266013761600115%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=bCjkyycmOfT69ZcMYSpnkIfk1Yw8FOG8rF9f7Naoaag%3D&reserved=0">
+  <link rel="preconnect" href="https://eur02.safelinks.protection.outlook.com/?url=https%3A%2F%2Ffonts.gstatic.com%2F&data=05%7C02%7Cwaleephon.hannaphachewin%40basf.com%7Cc16aa536c32d472dd8e308df210d4fd9%7Cecaa386bc8df4ce0ad01740cbdb5ba55%7C0%7C0%7C639266013761618587%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=jMlP3k7SYlgE8kyg4C7LRHLaY3iU0m2VjQ9t0mdxKbk%3D&reserved=0" crossorigin>
+  <link href="https://eur02.safelinks.protection.outlook.com/?url=https%3A%2F%2Ffonts.googleapis.com%2Fcss2%3Ffamily%3DPrompt%3Awght%40300%3B400%3B500%3B600%3B700%26display%3Dswap&data=05%7C02%7Cwaleephon.hannaphachewin%40basf.com%7Cc16aa536c32d472dd8e308df210d4fd9%7Cecaa386bc8df4ce0ad01740cbdb5ba55%7C0%7C0%7C639266013761633547%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=zl%2FneGtdU6GH7vxez5ziB1rtDVrh5bU53qSKpRz1dg0%3D&reserved=0" rel="stylesheet">
+
+  <script src="https://eur02.safelinks.protection.outlook.com/?url=https%3A%2F%2Fcdn.jsdelivr.net%2Fnpm%2F%40supabase%2Fsupabase-js%402&data=05%7C02%7Cwaleephon.hannaphachewin%40basf.com%7Cc16aa536c32d472dd8e308df210d4fd9%7Cecaa386bc8df4ce0ad01740cbdb5ba55%7C0%7C0%7C639266013761646178%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=QrklC3i5Ky72yEucpobzA3pdRhoBUZ5MdHiVwYW0ufc%3D&reserved=0"></script>
+
+  <style>
+    :root{
+      --navy:#062f61;
+      --navy-dark:#03264e;
+      --navy-soft:#0a427d;
+      --yellow:#ffc400;
+      --yellow-soft:#fff6ce;
+      --bg:#f4f7fb;
+      --white:#ffffff;
+      --text:#16365c;
+      --muted:#718096;
+      --border:#e3eaf2;
+      --green:#1c9b67;
+      --red:#d94c4c;
+      --sidebar-width:270px;
+    }
+
+    *{
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
+    }
+
+    html,body{
+      width:100%;
+      min-height:100%;
+    }
+
+    body{
+      font-family:"Prompt",sans-serif;
+      background:var(--bg);
+      color:var(--text);
+    }
+
+    button,
+    input{
+      font-family:"Prompt",sans-serif;
+    }
+
+    /* LOADING */
+
+    .loading-screen{
+      position:fixed;
+      inset:0;
+      z-index:9999;
+      background:white;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex-direction:column;
+      gap:18px;
+    }
+
+    .loader-logo{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:7px;
+      height:65px;
+    }
+
+    .loader-logo span{
+      width:15px;
+      border-radius:20px;
+      background:var(--yellow);
+    }
+
+    .loader-logo span:nth-child(1){height:30px;}
+    .loader-logo span:nth-child(2){height:45px;}
+    .loader-logo span:nth-child(3){height:62px;}
+    .loader-logo span:nth-child(4){height:45px;}
+    .loader-logo span:nth-child(5){height:30px;}
+
+    .loading-screen p{
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    /* APP */
+
+    .app{
+      display:none;
+      min-height:100vh;
+    }
+
+    /* SIDEBAR */
+
+    .sidebar{
+      width:var(--sidebar-width);
+      position:fixed;
+      left:0;
+      top:0;
+      bottom:0;
+      z-index:100;
+
+      background:
+        linear-gradient(
+          180deg,
+          var(--navy-dark),
+          var(--navy)
+        );
+
+      color:white;
+
+      display:flex;
+      flex-direction:column;
+
+      overflow-y:auto;
+    }
+
+    .sidebar-brand{
+      min-height:120px;
+      padding:23px 22px;
+
+      display:flex;
+      align-items:center;
+      gap:15px;
+
+      border-bottom:1px solid rgba(255,255,255,.1);
+    }
+
+    .brand-mark{
+      display:flex;
+      align-items:center;
+      gap:4px;
+      height:44px;
+      flex-shrink:0;
+    }
+
+    .brand-mark span{
+      display:block;
+      width:8px;
+      border-radius:10px;
+      background:var(--yellow);
+    }
+
+    .brand-mark span:nth-child(1){height:20px;}
+    .brand-mark span:nth-child(2){height:31px;}
+    .brand-mark span:nth-child(3){height:42px;}
+    .brand-mark span:nth-child(4){height:31px;}
+    .brand-mark span:nth-child(5){height:20px;}
+
+    .brand-text h1{
+      font-size:19px;
+      line-height:1.1;
+      font-weight:700;
+    }
+
+    .brand-text p{
+      margin-top:5px;
+      font-size:11px;
+      color:rgba(255,255,255,.65);
+    }
+
+    .menu{
+      padding:18px 12px 30px;
+      flex:1;
+    }
+
+    .menu-title{
+      padding:8px 14px;
+      margin-top:8px;
+      font-size:10px;
+      letter-spacing:1.2px;
+      color:rgba(255,255,255,.42);
+    }
+
+    .menu-item{
+      width:100%;
+      min-height:48px;
+
+      display:flex;
+      align-items:center;
+      gap:13px;
+
+      padding:11px 14px;
+      margin:4px 0;
+
+      border:0;
+      border-radius:11px;
+
+      background:transparent;
+      color:rgba(255,255,255,.78);
+
+      font-size:13px;
+      text-align:left;
+      text-decoration:none;
+
+      cursor:pointer;
+
+      transition:.2s;
+    }
+
+    .menu-item:hover{
+      background:rgba(255,255,255,.08);
+      color:white;
+    }
+
+    .menu-item.active{
+      background:var(--yellow);
+      color:var(--navy-dark);
+      font-weight:600;
+    }
+
+    .menu-icon{
+      width:25px;
+      text-align:center;
+      font-size:18px;
+      flex-shrink:0;
+    }
+
+    .sidebar-bottom{
+      padding:16px;
+      border-top:1px solid rgba(255,255,255,.1);
+    }
+
+    .sidebar-user{
+      display:flex;
+      align-items:center;
+      gap:11px;
+    }
+
+    .sidebar-avatar{
+      width:38px;
+      height:38px;
+      border-radius:50%;
+      background:var(--yellow);
+      color:var(--navy);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:700;
+    }
+
+    .sidebar-user-info{
+      overflow:hidden;
+    }
+
+    .sidebar-user-info strong{
+      display:block;
+      font-size:12px;
+    }
+
+    .sidebar-user-info span{
+      display:block;
+      font-size:10px;
+      color:rgba(255,255,255,.55);
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      max-width:160px;
+    }
+
+    /* MAIN */
+
+    .main{
+      margin-left:var(--sidebar-width);
+      min-height:100vh;
+    }
+
+    /* HEADER */
+
+    .header{
+      height:78px;
+
+      background:white;
+      border-bottom:1px solid var(--border);
+
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+
+      padding:0 35px;
+
+      position:sticky;
+      top:0;
+      z-index:50;
+    }
+
+    .header-left{
+      display:flex;
+      align-items:center;
+      gap:15px;
+    }
+
+    .mobile-menu{
+      display:none;
+      border:0;
+      background:transparent;
+      font-size:25px;
+      color:var(--navy);
+      cursor:pointer;
+    }
+
+    .header-title h2{
+      font-size:19px;
+      font-weight:600;
+      color:var(--navy);
+    }
+
+    .header-title p{
+      font-size:11px;
+      color:var(--muted);
+      margin-top:2px;
+    }
+
+    .header-right{
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+
+    .role-badge{
+      padding:6px 12px;
+      border-radius:20px;
+      background:var(--yellow-soft);
+      color:#735b00;
+      font-size:11px;
+      font-weight:600;
+    }
+
+    .logout-button{
+      height:38px;
+      padding:0 15px;
+
+      border:1px solid var(--border);
+      border-radius:9px;
+
+      background:white;
+      color:var(--navy);
+
+      cursor:pointer;
+      font-size:12px;
+    }
+
+    .logout-button:hover{
+      background:#f5f7fa;
+    }
+
+    /* CONTENT */
+
+    .content{
+      padding:30px 35px 50px;
+      max-width:1600px;
+      margin:auto;
+    }
+
+    /* WELCOME */
+
+    .welcome-card{
+      position:relative;
+      overflow:hidden;
+
+      min-height:180px;
+
+      border-radius:20px;
+
+      padding:30px 35px;
+
+      background:
+        linear-gradient(
+          120deg,
+          var(--navy-dark),
+          #07549a
+        );
+
+      color:white;
+
+      display:flex;
+      align-items:center;
+
+      box-shadow:0 10px 35px rgba(3,45,94,.12);
+    }
+
+    .welcome-card::after{
+      content:"";
+      position:absolute;
+      width:350px;
+      height:350px;
+      border-radius:50%;
+      right:-100px;
+      top:-180px;
+      background:rgba(255,255,255,.05);
+    }
+
+    .welcome-card::before{
+      content:"";
+      position:absolute;
+      width:220px;
+      height:220px;
+      border-radius:50%;
+      right:130px;
+      bottom:-170px;
+      background:rgba(255,196,0,.09);
+    }
+
+    .welcome-content{
+      position:relative;
+      z-index:2;
+    }
+
+    .welcome-content small{
+      color:var(--yellow);
+      font-size:12px;
+      font-weight:600;
+    }
+
+    .welcome-content h1{
+      margin-top:6px;
+      font-size:28px;
+      font-weight:600;
+    }
+
+    .welcome-content p{
+      margin-top:8px;
+      max-width:650px;
+      color:rgba(255,255,255,.75);
+      font-size:13px;
+      line-height:1.8;
+    }
+
+    .motto{
+      margin-top:15px;
+      font-size:13px;
+      font-weight:500;
+    }
+
+    .motto span{
+      color:var(--yellow);
+    }
+
+    /* SECTION */
+
+    .section-heading{
+      margin:30px 0 17px;
+
+      display:flex;
+      justify-content:space-between;
+      align-items:end;
+    }
+
+    .section-heading h2{
+      font-size:18px;
+      color:var(--navy);
+    }
+
+    .section-heading p{
+      margin-top:3px;
+      font-size:11px;
+      color:var(--muted);
+    }
+
+    /* STATS */
+
+    .stats{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:17px;
+    }
+
+    .stat-card{
+      background:white;
+      border:1px solid var(--border);
+      border-radius:16px;
+
+      padding:20px;
+
+      min-height:125px;
+
+      display:flex;
+      align-items:center;
+      gap:16px;
+
+      transition:.2s;
+    }
+
+    .stat-card:hover{
+      transform:translateY(-2px);
+      box-shadow:0 8px 25px rgba(14,53,91,.07);
+    }
+
+    .stat-icon{
+      width:52px;
+      height:52px;
+      flex-shrink:0;
+
+      border-radius:14px;
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+
+      background:#f2f6fb;
+
+      font-size:24px;
+    }
+
+    .stat-info span{
+      display:block;
+      color:var(--muted);
+      font-size:11px;
+    }
+
+    .stat-info strong{
+      display:block;
+      margin-top:5px;
+      color:var(--navy);
+      font-size:25px;
+      font-weight:600;
+    }
+
+    /* QUICK MENU */
+
+    .quick-grid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:17px;
+    }
+
+    .quick-card{
+      background:white;
+      border:1px solid var(--border);
+      border-radius:16px;
+
+      min-height:145px;
+      padding:20px;
+
+      text-decoration:none;
+      color:var(--text);
+
+      cursor:pointer;
+
+      transition:.2s;
+    }
+
+    .quick-card:hover{
+      transform:translateY(-3px);
+      border-color:#c8d7e7;
+      box-shadow:0 10px 30px rgba(15,55,95,.08);
+    }
+
+    .quick-icon{
+      width:45px;
+      height:45px;
+
+      border-radius:12px;
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+
+      background:var(--yellow-soft);
+
+      font-size:21px;
+
+      margin-bottom:15px;
+    }
+
+    .quick-card h3{
+      font-size:14px;
+      font-weight:600;
+      color:var(--navy);
+    }
+
+    .quick-card p{
+      margin-top:5px;
+      color:var(--muted);
+      font-size:10.5px;
+      line-height:1.6;
+    }
+
+    .quick-card.disabled{
+      opacity:.55;
+      cursor:default;
+    }
+
+    .quick-card.disabled:hover{
+      transform:none;
+      box-shadow:none;
+    }
+
+    /* SYSTEM STATUS */
+
+    .bottom-grid{
+      display:grid;
+      grid-template-columns:1.3fr .7fr;
+      gap:17px;
+    }
+
+    .panel{
+      background:white;
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:22px;
+    }
+
+    .panel h3{
+      font-size:14px;
+      color:var(--navy);
+      margin-bottom:17px;
+    }
+
+    .status-row{
+      min-height:45px;
+
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+
+      border-bottom:1px solid #eef2f6;
+
+      font-size:11px;
+    }
+
+    .status-row:last-child{
+      border-bottom:0;
+    }
+
+    .status-ok{
+      color:var(--green);
+      font-weight:600;
+    }
+
+    .account-info{
+      display:grid;
+      gap:12px;
+    }
+
+    .account-item{
+      padding:11px 13px;
+      background:#f7f9fc;
+      border-radius:10px;
+    }
+
+    .account-item span{
+      display:block;
+      font-size:9px;
+      color:var(--muted);
+    }
+
+    .account-item strong{
+      display:block;
+      margin-top:3px;
+      font-size:11px;
+      color:var(--navy);
+      word-break:break-word;
+    }
+
+    /* OVERLAY */
+
+    .sidebar-overlay{
+      display:none;
+    }
+
+    /* RESPONSIVE */
+
+    @media(max-width:1200px){
+      .stats,
+      .quick-grid{
+        grid-template-columns:repeat(2,1fr);
+      }
+    }
+
+    @media(max-width:900px){
+
+      .sidebar{
+        transform:translateX(-100%);
+        transition:.25s;
+      }
+
+      .sidebar.open{
+        transform:translateX(0);
+      }
+
+      .sidebar-overlay{
+        position:fixed;
+        inset:0;
+        z-index:90;
+        background:rgba(0,20,45,.45);
+      }
+
+      .sidebar-overlay.show{
+        display:block;
+      }
+
+      .main{
+        margin-left:0;
+      }
+
+      .mobile-menu{
+        display:block;
+      }
+
+      .header{
+        padding:0 20px;
+      }
+
+      .content{
+        padding:22px 20px 40px;
+      }
+
+      .bottom-grid{
+        grid-template-columns:1fr;
+      }
+    }
+
+    @media(max-width:600px){
+
+      .header{
+        height:68px;
+      }
+
+      .header-title p,
+      .role-badge{
+        display:none;
+      }
+
+      .logout-button{
+        padding:0 10px;
+      }
+
+      .welcome-card{
+        padding:25px;
+        min-height:190px;
+      }
+
+      .welcome-content h1{
+        font-size:22px;
+      }
+
+      .stats,
+      .quick-grid{
+        grid-template-columns:1fr;
+      }
+
+      .section-heading{
+        margin-top:24px;
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <!-- LOADING -->
+  <div class="loading-screen" id="loadingScreen">
+
+    <div class="loader-logo">
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+
+    <p>กำลังตรวจสอบสิทธิ์ผู้ใช้งาน...</p>
+
+  </div>
+
+
+  <!-- APP -->
+  <div class="app" id="app">
+
+    <div
+      class="sidebar-overlay"
+      id="sidebarOverlay"
+      onclick="closeSidebar()"
+    ></div>
+
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+
+      <div class="sidebar-brand">
+
+        <div class="brand-mark">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+
+        <div class="brand-text">
+          <h1>SANTE SYSTEM</h1>
+          <p>ADMINISTRATION</p>
+        </div>
+
+      </div>
+
+
+      <nav class="menu">
+
+        <div class="menu-title">MAIN</div>
+
+        <a class="menu-item active" href="admin-dashboard.html">
+          <span class="menu-icon">▦</span>
+          Dashboard
+        </a>
+
+
+        <div class="menu-title">TRAINING & LEARNING</div>
+
+        <button class="menu-item" type="button">
+          <span class="menu-icon">👥</span>
+          สมาชิก
+        </button>
+
+        <button class="menu-item" type="button">
+          <span class="menu-icon">📚</span>
+          หลักสูตร
+        </button>
+
+        <button class="menu-item" type="button">
+          <span class="menu-icon">📅</span>
+          รอบอบรม
+        </button>
+
+        <button class="menu-item" type="button">
+          <span class="menu-icon">📝</span>
+          คลังข้อสอบ
+        </button>
+
+        <a
+          class="menu-item"
+          href="admin-question-import.html"
+        >
+          <span class="menu-icon">⬆</span>
+          นำเข้าข้อสอบ
+        </a>
+
+        <button class="menu-item" type="button">
+          <span class="menu-icon">📊</span>
+          ผลการสอบ
+        </button>
+
+        <button class="menu-item" type="button">
+          <span class="menu-icon">🏅</span>
+          วุฒิบัตร
+        </button>
+
+
+        <div class="menu-title">SERVICE</div>
+
+        <button class="menu-item" type="button">
+          <span class="menu-icon">🛠</span>
+          งานบริการ
+        </button>
+
+        <button class="menu-item" type="button">
+          <span class="menu-icon">📄</span>
+          ใบเสนอราคา
+        </button>
+
+        <button class="menu-item" type="button">
+          <span class="menu-icon">💳</span>
+          การเงิน / การชำระเงิน
+        </button>
+
+
+        <div class="menu-title">SYSTEM</div>
+
+        <button class="menu-item" type="button">
+          <span class="menu-icon">⚙</span>
+          ตั้งค่าระบบ
+        </button>
+
+        <button class="menu-item" type="button">
+          <span class="menu-icon">🕘</span>
+          Audit Log
+        </button>
+
+      </nav>
+
+
+      <div class="sidebar-bottom">
+
+        <div class="sidebar-user">
+
+          <div class="sidebar-avatar">
+            A
+          </div>
+
+          <div class="sidebar-user-info">
+            <strong>Administrator</strong>
+            <span id="sidebarEmail">-</span>
+          </div>
+
+        </div>
+
+      </div>
+
+    </aside>
+
+
+    <!-- MAIN -->
+    <main class="main">
+
+      <!-- HEADER -->
+      <header class="header">
+
+        <div class="header-left">
+
+          <button
+            class="mobile-menu"
+            type="button"
+            onclick="openSidebar()"
+          >
+            ☰
+          </button>
+
+          <div class="header-title">
+            <h2>Admin Dashboard</h2>
+            <p>SANTE Consulting Management System</p>
+          </div>
+
+        </div>
+
+
+        <div class="header-right">
+
+          <div class="role-badge">
+            ● SUPER ADMIN
+          </div>
+
+          <button
+            class="logout-button"
+            type="button"
+            onclick="logout()"
+          >
+            ออกจากระบบ
+          </button>
+
+        </div>
+
+      </header>
+
+
+      <!-- CONTENT -->
+      <div class="content">
+
+        <!-- WELCOME -->
+        <section class="welcome-card">
+
+          <div class="welcome-content">
+
+            <small>SANTE SYSTEM</small>
+
+            <h1>
+              ยินดีต้อนรับสู่ระบบบริหารจัดการ
+            </h1>
+
+            <p id="welcomeUser">
+              กำลังโหลดข้อมูลผู้ดูแลระบบ...
+            </p>
+
+            <div class="motto">
+              TRUST IN SAFETY.
+              <span>TRUST IN SANTE.</span>
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <!-- STATS -->
+        <div class="section-heading">
+
+          <div>
+            <h2>ภาพรวมระบบ</h2>
+            <p>ข้อมูลสำคัญของ SANTE SYSTEM</p>
+          </div>
+
+        </div>
+
+
+        <section class="stats">
+
+          <div class="stat-card">
+
+            <div class="stat-icon">👥</div>
+
+            <div class="stat-info">
+              <span>สมาชิกทั้งหมด</span>
+              <strong id="memberCount">—</strong>
+            </div>
+
+          </div>
+
+
+          <div class="stat-card">
+
+            <div class="stat-icon">📚</div>
+
+            <div class="stat-info">
+              <span>หลักสูตรทั้งหมด</span>
+              <strong id="courseCount">—</strong>
+            </div>
+
+          </div>
+
+
+          <div class="stat-card">
+
+            <div class="stat-icon">📝</div>
+
+            <div class="stat-info">
+              <span>ข้อสอบในคลัง</span>
+              <strong id="questionCount">—</strong>
+            </div>
+
+          </div>
+
+
+          <div class="stat-card">
+
+            <div class="stat-icon">🏅</div>
+
+            <div class="stat-info">
+              <span>วุฒิบัตรที่ออกแล้ว</span>
+              <strong id="certificateCount">—</strong>
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <!-- QUICK ACCESS -->
+        <div class="section-heading">
+
+          <div>
+            <h2>เมนูใช้งานด่วน</h2>
+            <p>เข้าถึงงานที่ใช้งานบ่อย</p>
+          </div>
+
+        </div>
+
+
+        <section class="quick-grid">
+
+          <a
+            class="quick-card"
+            href="admin-question-import.html"
+          >
+
+            <div class="quick-icon">⬆</div>
+
+            <h3>นำเข้าข้อสอบ</h3>
+
+            <p>
+              ตรวจสอบและนำเข้าข้อสอบจาก
+              Question Import Batch
+            </p>
+
+          </a>
+
+
+          <div class="quick-card disabled">
+
+            <div class="quick-icon">📚</div>
+
+            <h3>จัดการหลักสูตร</h3>
+
+            <p>
+              จัดการหลักสูตรอบรมและ
+              Exam Preparation
+            </p>
+
+          </div>
+
+
+          <div class="quick-card disabled">
+
+            <div class="quick-icon">📅</div>
+
+            <h3>จัดการรอบอบรม</h3>
+
+            <p>
+              เปิดรอบอบรม กำหนดที่นั่ง
+              และจัดการผู้สมัคร
+            </p>
+
+          </div>
+
+
+          <div class="quick-card disabled">
+
+            <div class="quick-icon">🏅</div>
+
+            <h3>วุฒิบัตร</h3>
+
+            <p>
+              ตรวจสอบสิทธิ์ ออกวุฒิบัตร
+              และติดตามการจัดส่ง
+            </p>
+
+          </div>
+
+        </section>
+
+
+        <!-- SYSTEM -->
+        <div class="section-heading">
+
+          <div>
+            <h2>สถานะระบบ</h2>
+            <p>สถานะการเชื่อมต่อและบัญชีปัจจุบัน</p>
+          </div>
+
+        </div>
+
+
+        <section class="bottom-grid">
+
+          <div class="panel">
+
+            <h3>System Status</h3>
+
+            <div class="status-row">
+              <span>Supabase Authentication</span>
+              <span class="status-ok">● Connected</span>
+            </div>
+
+            <div class="status-row">
+              <span>Database</span>
+              <span class="status-ok">● Connected</span>
+            </div>
+
+            <div class="status-row">
+              <span>Admin Permission</span>
+              <span class="status-ok">● Authorized</span>
+            </div>
+
+            <div class="status-row">
+              <span>Question Import Engine</span>
+              <span class="status-ok">● Ready</span>
+            </div>
+
+          </div>
+
+
+          <div class="panel">
+
+            <h3>บัญชีผู้ใช้งานปัจจุบัน</h3>
+
+            <div class="account-info">
+
+              <div class="account-item">
+                <span>EMAIL</span>
+                <strong id="accountEmail">-</strong>
+              </div>
+
+              <div class="account-item">
+                <span>USER ID</span>
+                <strong id="accountId">-</strong>
+              </div>
+
+              <div class="account-item">
+                <span>ACCESS</span>
+                <strong>Administrator</strong>
+              </div>
+
+            </div>
+
+          </div>
+
+        </section>
+
+      </div>
+
+    </main>
+
+  </div>
+
+
+<script>
+
+  /* =========================================
+     SUPABASE
+  ========================================= */
+
+  const SUPABASE_URL =
+    "https://eur02.safelinks.protection.outlook.com/?url=https%3A%2F%2Fcyegjwerxlxhczrfiurz.supabase.co%2F&data=05%7C02%7Cwaleephon.hannaphachewin%40basf.com%7Cc16aa536c32d472dd8e308df210d4fd9%7Cecaa386bc8df4ce0ad01740cbdb5ba55%7C0%7C0%7C639266013761658563%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=qwqO0vKot1sIda4W5s2qSc1PvlSP09lOJs3dxCjrJYc%3D&reserved=0";
+
+  const SUPABASE_KEY =
+    "sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF";
+
+  const supabaseClient =
+    window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
+    );
+
+
+  /* =========================================
+     INITIALIZE
+  ========================================= */
+
+  async function initializeDashboard(){
+
+    try{
+
+      /*
+       * 1. ตรวจสอบ Session
+       */
+
+      const {
+        data: sessionData,
+        error: sessionError
+      } =
+      await supabaseClient.auth.getSession();
+
+
+      if(sessionError){
+        throw sessionError;
+      }
+
+
+      const session =
+        sessionData.session;
+
+
+      if(!session){
+
+        window.location.href =
+          "admin-login.html";
+
+        return;
+
+      }
+
+
+      /*
+       * 2. ตรวจสอบ user
+       */
+
+      const user =
+        session.user;
+
+
+      /*
+       * 3. ตรวจสอบ STAFF permission
+       */
+
+      const {
+        data: isStaff,
+        error: staffError
+      } =
+      await supabaseClient.rpc(
+        "is_staff"
+      );
+
+
+      if(staffError){
+        throw staffError;
+      }
+
+
+      if(!isStaff){
+
+        await supabaseClient.auth
+          .signOut();
+
+        alert(
+          "บัญชีนี้ไม่มีสิทธิ์เข้าสู่ระบบผู้ดูแล"
+        );
+
+        window.location.href =
+          "admin-login.html";
+
+        return;
+
+      }
+
+
+      /*
+       * 4. แสดงข้อมูลบัญชี
+       */
+
+      document.getElementById(
+        "sidebarEmail"
+      ).textContent =
+        user.email || "-";
+
+
+      document.getElementById(
+        "accountEmail"
+      ).textContent =
+        user.email || "-";
+
+
+      document.getElementById(
+        "accountId"
+      ).textContent =
+        user.id || "-";
+
+
+      document.getElementById(
+        "welcomeUser"
+      ).textContent =
+        "เข้าสู่ระบบแล้วในชื่อ " +
+        (user.email || "Administrator") +
+        " พร้อมสำหรับการจัดการระบบ SANTE";
+
+
+      /*
+       * 5. โหลด Dashboard Counts
+       */
+
+      await loadDashboardCounts();
+
+
+      /*
+       * 6. เปิดหน้า Dashboard
+       */
+
+      document.getElementById(
+        "loadingScreen"
+      ).style.display = "none";
+
+
+      document.getElementById(
+        "app"
+      ).style.display = "block";
+
+
+    }catch(error){
+
+      console.error(
+        "Dashboard initialization error:",
+        error
+      );
+
+
+      await supabaseClient.auth
+        .signOut();
+
+
+      alert(
+        "ไม่สามารถตรวจสอบสิทธิ์ผู้ดูแลระบบได้ กรุณาเข้าสู่ระบบใหม่"
+      );
+
+
+      window.location.href =
+        "admin-login.html";
+
+    }
+
+  }
+
+
+  /* =========================================
+     DASHBOARD COUNTS
+  ========================================= */
+
+  async function loadDashboardCounts(){
+
+    /*
+     * ใช้ count เท่าที่ RLS อนุญาต
+     * หาก table ใดไม่อนุญาต
+     * Dashboard จะขึ้น "-"
+     * โดยไม่ทำให้ทั้งหน้าพัง
+     */
+
+    await Promise.all([
+
+      loadCount(
+        "profiles",
+        "memberCount"
+      ),
+
+      loadCount(
+        "courses",
+        "courseCount"
+      ),
+
+      loadCount(
+        "questions",
+        "questionCount"
+      ),
+
+      loadCount(
+        "certificates",
+        "certificateCount"
+      )
+
+    ]);
+
+  }
+
+
+  async function loadCount(
+    tableName,
+    elementId
+  ){
+
+    const element =
+      document.getElementById(
+        elementId
+      );
+
+
+    try{
+
+      const {
+        count,
+        error
+      } =
+      await supabaseClient
+        .from(tableName)
+        .select(
+          "*",
+          {
+            count:"exact",
+            head:true
+          }
+        );
+
+
+      if(error){
+
+        console.warn(
+          tableName,
+          error
+        );
+
+        element.textContent = "-";
+
+        return;
+
+      }
+
+
+      element.textContent =
+        Number(
+          count || 0
+        ).toLocaleString("th-TH");
+
+
+    }catch(error){
+
+      console.warn(
+        tableName,
+        error
+      );
+
+      element.textContent = "-";
+
+    }
+
+  }
+
+
+  /* =========================================
+     LOGOUT
+  ========================================= */
+
+  async function logout(){
+
+    try{
+
+      await supabaseClient.auth
+        .signOut();
+
+    }catch(error){
+
+      console.error(
+        "Logout error:",
+        error
+      );
+
+    }
+
+
+    window.location.href =
+      "admin-login.html";
+
+  }
+
+
+  /* =========================================
+     MOBILE SIDEBAR
+  ========================================= */
+
+  function openSidebar(){
+
+    document
+      .getElementById("sidebar")
+      .classList
+      .add("open");
+
+
+    document
+      .getElementById("sidebarOverlay")
+      .classList
+      .add("show");
+
+  }
+
+
+  function closeSidebar(){
+
+    document
+      .getElementById("sidebar")
+      .classList
+      .remove("open");
+
+
+    document
+      .getElementById("sidebarOverlay")
+      .classList
+      .remove("show");
+
+  }
+
+
+  /* =========================================
+     AUTH STATE
+  ========================================= */
+
+  supabaseClient.auth
+    .onAuthStateChange(
+      (event, session) => {
+
+        if(
+          event === "SIGNED_OUT"
+        ){
+
+          window.location.href =
+            "admin-login.html";
+
+        }
+
+      }
+    );
+
+
+  /* =========================================
+     START
+  ========================================= */
+
+  initializeDashboard();
+
+</script>
+
+</body>
+</html>
