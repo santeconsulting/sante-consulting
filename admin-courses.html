@@ -1141,9 +1141,9 @@
 
         <select id="statusFilter" class="field-control">
           <option value="">ทุกสถานะ</option>
-          <option value="ACTIVE">เปิดใช้งาน</option>
+          <option value="OPEN">เปิดใช้งาน</option>
           <option value="DRAFT">ฉบับร่าง</option>
-          <option value="INACTIVE">ปิดใช้งาน</option>
+          <option value="CLOSED">ปิดใช้งาน</option>
         </select>
 
       </section>
@@ -1355,8 +1355,8 @@
                   required
                 >
                   <option value="DRAFT">ฉบับร่าง</option>
-                  <option value="ACTIVE">เปิดใช้งาน</option>
-                  <option value="INACTIVE">ปิดใช้งาน</option>
+                  <option value="OPEN">เปิดใช้งาน</option>
+                  <option value="CLOSED">ปิดใช้งาน</option>
                 </select>
               </div>
 
@@ -1695,7 +1695,7 @@
 
       const active =
         allCourses.filter(
-          course => course.course_status === "ACTIVE"
+          course => course.course_status === "OPEN"
         ).length;
 
       const draft =
@@ -2306,9 +2306,9 @@
     function getStatusName(status) {
 
       const map = {
-        ACTIVE: "เปิดใช้งาน",
+        OPEN: "เปิดใช้งาน",
         DRAFT: "ฉบับร่าง",
-        INACTIVE: "ปิดใช้งาน"
+        CLOSED: "ปิดใช้งาน"
       };
 
       return map[status] || status || "-";
@@ -2318,7 +2318,7 @@
 
     function getStatusClass(status) {
 
-      if (status === "ACTIVE") {
+      if (status === "OPEN") {
         return "status-active";
       }
 
