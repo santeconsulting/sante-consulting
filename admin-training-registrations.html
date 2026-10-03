@@ -1,0 +1,3127 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>SANTE SYSTEM | ผู้สมัครอบรม</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    :root{
+      --navy:#062f61;
+      --navy-dark:#03264e;
+      --navy-soft:#0a427d;
+      --yellow:#ffc400;
+      --yellow-soft:#fff6ce;
+      --bg:#f4f7fb;
+      --white:#ffffff;
+      --text:#16365c;
+      --muted:#718096;
+      --border:#e3eaf2;
+      --green:#1c9b67;
+      --green-soft:#e9f8f2;
+      --red:#d94c4c;
+      --red-soft:#fff0f0;
+      --orange:#d88916;
+      --orange-soft:#fff5df;
+      --blue-soft:#edf5ff;
+      --sidebar-width:296px;
+    }
+
+    *{
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
+    }
+
+    html,body{
+      width:100%;
+      min-height:100%;
+    }
+
+    body{
+      font-family:"Prompt",sans-serif;
+      background:var(--bg);
+      color:var(--text);
+    }
+
+    button,
+    input,
+    select{
+      font-family:"Prompt",sans-serif;
+    }
+
+    button,
+    a{
+      -webkit-tap-highlight-color:transparent;
+    }
+
+    /* ==============================
+       LOADING
+    ============================== */
+
+    .loading-screen{
+      position:fixed;
+      inset:0;
+      z-index:9999;
+      background:white;
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex-direction:column;
+      gap:18px;
+    }
+
+    .loader-logo{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:7px;
+      height:65px;
+    }
+
+    .loader-logo span{
+      width:15px;
+      border-radius:20px;
+      background:var(--yellow);
+    }
+
+    .loader-logo span:nth-child(1){height:30px;}
+    .loader-logo span:nth-child(2){height:45px;}
+    .loader-logo span:nth-child(3){height:62px;}
+    .loader-logo span:nth-child(4){height:45px;}
+    .loader-logo span:nth-child(5){height:30px;}
+
+    .loading-screen p{
+      color:var(--muted);
+      font-size:15px;
+    }
+
+    /* ==============================
+       APP
+    ============================== */
+
+    .app{
+      display:none;
+      min-height:100vh;
+    }
+
+    /* ==============================
+       SIDEBAR
+    ============================== */
+
+    .sidebar{
+      width:var(--sidebar-width);
+      position:fixed;
+      left:0;
+      top:0;
+      bottom:0;
+      z-index:100;
+
+      background:
+        linear-gradient(
+          180deg,
+          var(--navy-dark),
+          var(--navy)
+        );
+
+      color:white;
+
+      display:flex;
+      flex-direction:column;
+
+      overflow-y:auto;
+    }
+
+    .sidebar-brand{
+      min-height:120px;
+      padding:23px 22px;
+
+      display:flex;
+      align-items:center;
+      gap:15px;
+
+      border-bottom:1px solid rgba(255,255,255,.1);
+    }
+
+    .brand-mark{
+      display:flex;
+      align-items:center;
+      gap:4px;
+      height:44px;
+      flex-shrink:0;
+    }
+
+    .brand-mark span{
+      display:block;
+      width:8px;
+      border-radius:10px;
+      background:var(--yellow);
+    }
+
+    .brand-mark span:nth-child(1){height:20px;}
+    .brand-mark span:nth-child(2){height:31px;}
+    .brand-mark span:nth-child(3){height:42px;}
+    .brand-mark span:nth-child(4){height:31px;}
+    .brand-mark span:nth-child(5){height:20px;}
+
+    .brand-text h1{
+      font-size:20px;
+      line-height:1.1;
+      font-weight:700;
+    }
+
+    .brand-text p{
+      margin-top:5px;
+      font-size:11px;
+      color:rgba(255,255,255,.65);
+    }
+
+    .menu{
+      padding:18px 12px 30px;
+      flex:1;
+    }
+
+    .menu-title{
+      padding:8px 14px;
+      margin-top:8px;
+      font-size:10px;
+      letter-spacing:1.2px;
+      color:rgba(255,255,255,.42);
+    }
+
+    .menu-item{
+      width:100%;
+      min-height:50px;
+
+      display:flex;
+      align-items:center;
+      gap:13px;
+
+      padding:11px 14px;
+      margin:4px 0;
+
+      border:0;
+      border-radius:11px;
+
+      background:transparent;
+      color:rgba(255,255,255,.8);
+
+      font-size:14px;
+      text-align:left;
+      text-decoration:none;
+
+      cursor:pointer;
+      transition:.2s;
+    }
+
+    .menu-item:hover{
+      background:rgba(255,255,255,.08);
+      color:white;
+    }
+
+    .menu-item.active{
+      background:var(--yellow);
+      color:var(--navy-dark);
+      font-weight:600;
+    }
+
+    .menu-icon{
+      width:25px;
+      text-align:center;
+      font-size:18px;
+      flex-shrink:0;
+    }
+
+    .sidebar-bottom{
+      padding:16px;
+      border-top:1px solid rgba(255,255,255,.1);
+    }
+
+    .sidebar-user{
+      display:flex;
+      align-items:center;
+      gap:11px;
+    }
+
+    .sidebar-avatar{
+      width:40px;
+      height:40px;
+      border-radius:50%;
+
+      background:var(--yellow);
+      color:var(--navy);
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+
+      font-weight:700;
+    }
+
+    .sidebar-user-info{
+      overflow:hidden;
+    }
+
+    .sidebar-user-info strong{
+      display:block;
+      font-size:13px;
+    }
+
+    .sidebar-user-info span{
+      display:block;
+      font-size:10px;
+      color:rgba(255,255,255,.55);
+
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+
+      max-width:180px;
+    }
+
+    /* ==============================
+       MAIN
+    ============================== */
+
+    .main{
+      margin-left:var(--sidebar-width);
+      min-height:100vh;
+    }
+
+    /* ==============================
+       HEADER
+    ============================== */
+
+    .header{
+      min-height:80px;
+
+      background:white;
+      border-bottom:1px solid var(--border);
+
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+
+      padding:0 34px;
+
+      position:sticky;
+      top:0;
+      z-index:50;
+    }
+
+    .header-left{
+      display:flex;
+      align-items:center;
+      gap:15px;
+    }
+
+    .mobile-menu{
+      display:none;
+      border:0;
+      background:transparent;
+      font-size:25px;
+      color:var(--navy);
+      cursor:pointer;
+    }
+
+    .header-title h2{
+      font-size:21px;
+      font-weight:600;
+      color:var(--navy);
+    }
+
+    .header-title p{
+      font-size:12px;
+      color:var(--muted);
+      margin-top:3px;
+    }
+
+    .header-right{
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+
+    .role-badge{
+      padding:7px 13px;
+      border-radius:20px;
+
+      background:var(--yellow-soft);
+      color:#735b00;
+
+      font-size:11px;
+      font-weight:600;
+    }
+
+    .logout-button{
+      height:40px;
+      padding:0 15px;
+
+      border:1px solid var(--border);
+      border-radius:9px;
+
+      background:white;
+      color:var(--navy);
+
+      cursor:pointer;
+      font-size:13px;
+    }
+
+    .logout-button:hover{
+      background:#f5f7fa;
+    }
+
+    /* ==============================
+       CONTENT
+    ============================== */
+
+    .content{
+      padding:30px 34px 55px;
+      max-width:1650px;
+      margin:auto;
+    }
+
+    /* ==============================
+       PAGE HERO
+    ============================== */
+
+    .page-hero{
+      background:
+        linear-gradient(
+          120deg,
+          var(--navy-dark),
+          #07549a
+        );
+
+      color:white;
+      border-radius:20px;
+
+      padding:28px 32px;
+
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:25px;
+
+      position:relative;
+      overflow:hidden;
+
+      box-shadow:0 10px 35px rgba(3,45,94,.10);
+    }
+
+    .page-hero::after{
+      content:"";
+      position:absolute;
+      width:300px;
+      height:300px;
+      border-radius:50%;
+      right:-100px;
+      top:-160px;
+      background:rgba(255,255,255,.05);
+    }
+
+    .hero-content{
+      position:relative;
+      z-index:2;
+    }
+
+    .hero-content small{
+      color:var(--yellow);
+      font-size:12px;
+      font-weight:600;
+    }
+
+    .hero-content h1{
+      font-size:27px;
+      font-weight:600;
+      margin-top:5px;
+    }
+
+    .hero-content p{
+      margin-top:7px;
+      font-size:13px;
+      color:rgba(255,255,255,.76);
+      line-height:1.8;
+    }
+
+    /* ==============================
+       SECTION
+    ============================== */
+
+    .section-heading{
+      margin:28px 0 16px;
+
+      display:flex;
+      justify-content:space-between;
+      align-items:end;
+      gap:20px;
+    }
+
+    .section-heading h2{
+      font-size:19px;
+      color:var(--navy);
+    }
+
+    .section-heading p{
+      margin-top:4px;
+      font-size:12px;
+      color:var(--muted);
+    }
+
+    /* ==============================
+       STATS
+    ============================== */
+
+    .stats{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:16px;
+    }
+
+    .stat-card{
+      background:white;
+      border:1px solid var(--border);
+      border-radius:16px;
+
+      padding:19px;
+
+      min-height:115px;
+
+      display:flex;
+      align-items:center;
+      gap:15px;
+    }
+
+    .stat-icon{
+      width:50px;
+      height:50px;
+
+      border-radius:13px;
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+
+      background:#f2f6fb;
+      font-size:23px;
+
+      flex-shrink:0;
+    }
+
+    .stat-info span{
+      display:block;
+      font-size:12px;
+      color:var(--muted);
+    }
+
+    .stat-info strong{
+      display:block;
+      margin-top:4px;
+
+      font-size:25px;
+      color:var(--navy);
+      font-weight:600;
+    }
+
+    /* ==============================
+       FILTER
+    ============================== */
+
+    .filter-panel{
+      margin-top:17px;
+
+      background:white;
+      border:1px solid var(--border);
+      border-radius:16px;
+
+      padding:18px;
+
+      display:grid;
+      grid-template-columns:minmax(260px,1.5fr) 1fr 1fr auto;
+      gap:12px;
+      align-items:center;
+    }
+
+    .field{
+      width:100%;
+    }
+
+    .field input,
+    .field select{
+      width:100%;
+      height:44px;
+
+      border:1px solid var(--border);
+      border-radius:10px;
+
+      padding:0 13px;
+
+      background:white;
+      color:var(--text);
+
+      font-size:13px;
+      outline:none;
+    }
+
+    .field input:focus,
+    .field select:focus{
+      border-color:#9bb9d8;
+      box-shadow:0 0 0 3px rgba(6,47,97,.06);
+    }
+
+    .refresh-button{
+      height:44px;
+      border:0;
+      border-radius:10px;
+
+      padding:0 17px;
+
+      background:var(--navy);
+      color:white;
+
+      cursor:pointer;
+      font-size:13px;
+      font-weight:500;
+    }
+
+    .refresh-button:hover{
+      background:var(--navy-soft);
+    }
+
+    /* ==============================
+       SESSION SUMMARY
+    ============================== */
+
+    .session-summary{
+      margin-top:17px;
+
+      background:white;
+      border:1px solid var(--border);
+      border-radius:16px;
+
+      padding:20px 22px;
+
+      display:none;
+    }
+
+    .session-summary.show{
+      display:block;
+    }
+
+    .session-summary-top{
+      display:flex;
+      justify-content:space-between;
+      gap:20px;
+      align-items:flex-start;
+    }
+
+    .session-summary h3{
+      color:var(--navy);
+      font-size:17px;
+      font-weight:600;
+    }
+
+    .session-summary p{
+      margin-top:4px;
+      color:var(--muted);
+      font-size:12px;
+    }
+
+    .session-meta{
+      margin-top:15px;
+
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+    }
+
+    .meta-pill{
+      padding:6px 10px;
+      border-radius:20px;
+
+      background:#f3f6fa;
+      color:#4f6680;
+
+      font-size:11px;
+    }
+
+    .seat-box{
+      min-width:160px;
+      padding:13px 16px;
+
+      background:var(--yellow-soft);
+      border-radius:12px;
+
+      text-align:center;
+    }
+
+    .seat-box span{
+      display:block;
+      color:#7c6500;
+      font-size:11px;
+    }
+
+    .seat-box strong{
+      display:block;
+      margin-top:3px;
+
+      color:var(--navy);
+      font-size:22px;
+    }
+
+    /* ==============================
+       TABLE
+    ============================== */
+
+    .table-card{
+      margin-top:17px;
+
+      background:white;
+      border:1px solid var(--border);
+      border-radius:16px;
+
+      overflow:hidden;
+    }
+
+    .table-header{
+      padding:18px 20px;
+
+      border-bottom:1px solid var(--border);
+
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:20px;
+    }
+
+    .table-header h3{
+      font-size:16px;
+      color:var(--navy);
+    }
+
+    .table-header span{
+      font-size:11px;
+      color:var(--muted);
+    }
+
+    .table-scroll{
+      width:100%;
+      overflow-x:auto;
+    }
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+      min-width:1050px;
+    }
+
+    thead{
+      background:#f7f9fc;
+    }
+
+    th{
+      padding:13px 15px;
+      text-align:left;
+
+      font-size:11px;
+      font-weight:600;
+      color:#61758d;
+
+      border-bottom:1px solid var(--border);
+      white-space:nowrap;
+    }
+
+    td{
+      padding:15px;
+
+      font-size:12px;
+      color:var(--text);
+
+      border-bottom:1px solid #edf1f5;
+      vertical-align:middle;
+    }
+
+    tbody tr:hover{
+      background:#fbfcfe;
+    }
+
+    tbody tr:last-child td{
+      border-bottom:0;
+    }
+
+    .person-name{
+      font-size:13px;
+      font-weight:600;
+      color:var(--navy);
+    }
+
+    .person-sub{
+      margin-top:3px;
+      font-size:10.5px;
+      color:var(--muted);
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+
+      min-height:28px;
+      padding:4px 9px;
+
+      border-radius:20px;
+
+      font-size:10.5px;
+      font-weight:500;
+
+      white-space:nowrap;
+    }
+
+    .badge-green{
+      background:var(--green-soft);
+      color:var(--green);
+    }
+
+    .badge-yellow{
+      background:var(--yellow-soft);
+      color:#806400;
+    }
+
+    .badge-red{
+      background:var(--red-soft);
+      color:var(--red);
+    }
+
+    .badge-orange{
+      background:var(--orange-soft);
+      color:var(--orange);
+    }
+
+    .badge-blue{
+      background:var(--blue-soft);
+      color:#2366a5;
+    }
+
+    .badge-gray{
+      background:#f1f3f6;
+      color:#657382;
+    }
+
+    .empty-state{
+      padding:55px 20px;
+      text-align:center;
+    }
+
+    .empty-icon{
+      font-size:40px;
+      margin-bottom:10px;
+    }
+
+    .empty-state h3{
+      font-size:15px;
+      color:var(--navy);
+    }
+
+    .empty-state p{
+      margin-top:5px;
+      font-size:12px;
+      color:var(--muted);
+    }
+
+    .error-box{
+      display:none;
+
+      margin-top:17px;
+      padding:14px 16px;
+
+      background:var(--red-soft);
+      color:#a83d3d;
+
+      border:1px solid #f2cccc;
+      border-radius:12px;
+
+      font-size:12px;
+      line-height:1.7;
+    }
+
+    .error-box.show{
+      display:block;
+    }
+
+    /* ==============================
+       OVERLAY
+    ============================== */
+
+    .sidebar-overlay{
+      display:none;
+    }
+
+    /* ==============================
+       RESPONSIVE
+    ============================== */
+
+    @media(max-width:1250px){
+      .stats{
+        grid-template-columns:repeat(2,1fr);
+      }
+
+      .filter-panel{
+        grid-template-columns:1fr 1fr;
+      }
+    }
+
+    @media(max-width:900px){
+      .sidebar{
+        transform:translateX(-100%);
+        transition:.25s;
+      }
+
+      .sidebar.open{
+        transform:translateX(0);
+      }
+
+      .sidebar-overlay{
+        position:fixed;
+        inset:0;
+        z-index:90;
+        background:rgba(0,20,45,.45);
+      }
+
+      .sidebar-overlay.show{
+        display:block;
+      }
+
+      .main{
+        margin-left:0;
+      }
+
+      .mobile-menu{
+        display:block;
+      }
+
+      .header{
+        padding:0 20px;
+      }
+
+      .content{
+        padding:22px 20px 45px;
+      }
+    }
+
+    @media(max-width:650px){
+      .header{
+        min-height:68px;
+      }
+
+      .header-title p,
+      .role-badge{
+        display:none;
+      }
+
+      .header-title h2{
+        font-size:17px;
+      }
+
+      .page-hero{
+        padding:24px;
+      }
+
+      .hero-content h1{
+        font-size:22px;
+      }
+
+      .stats{
+        grid-template-columns:1fr;
+      }
+
+      .filter-panel{
+        grid-template-columns:1fr;
+      }
+
+      .session-summary-top{
+        flex-direction:column;
+      }
+
+      .seat-box{
+        width:100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- LOADING -->
+  <div class="loading-screen" id="loadingScreen">
+
+    <div class="loader-logo">
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+
+    <p>กำลังตรวจสอบสิทธิ์ผู้ดูแลระบบ...</p>
+
+  </div>
+
+
+  <!-- APP -->
+  <div class="app" id="app">
+
+    <div
+      class="sidebar-overlay"
+      id="sidebarOverlay"
+      onclick="closeSidebar()"
+    ></div>
+
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+
+      <div class="sidebar-brand">
+
+        <div class="brand-mark">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+
+        <div class="brand-text">
+          <h1>SANTE SYSTEM</h1>
+          <p>ADMINISTRATION</p>
+        </div>
+
+      </div>
+
+
+      <nav class="menu">
+
+        <div class="menu-title">MAIN</div>
+
+        <a class="menu-item" href="admin-dashboard.html">
+          <span class="menu-icon">▦</span>
+          Dashboard
+        </a>
+
+
+        <div class="menu-title">TRAINING & LEARNING</div>
+
+        <button class="menu-item" type="button">
+          <span class="menu-icon">👥</span>
+          สมาชิก
+        </button>
+
+        <a class="menu-item" href="admin-courses.html">
+          <span class="menu-icon">📚</span>
+          หลักสูตร
+        </a>
+
+        <a class="menu-item" href="admin-training-sessions.html">
+          <span class="menu-icon">📅</span>
+          รอบการอบรม
+        </a>
+
+        <a class="menu-item active" href="admin-training-registrations.html">
+          <span class="menu-icon">👤</span>
+          ผู้สมัครอบรม
+        </a>
+
+        <a class="menu-item" href="admin-question-import.html">
+          <span class="menu-icon">📝</span>
+          คลังข้อสอบ
+        </a>
+
+        <a class="menu-item" href="admin-question-import.html">
+          <span class="menu-icon">⬆</span>
+          นำเข้าข้อสอบ
+        </a>
+
+        <button class="menu-item" type="button">
+          <span class="menu-icon">📊</span>
+          ผลการสอบ
+        </button>
+
+        <button class="menu-item" type="button">
+          <span class="menu-icon">🏅</span>
+          วุฒิบัตร
+        </button>
+
+
+        <div class="menu-title">SERVICE</div>
+
+        <button class="menu-item" type="button">
+          <span class="menu-icon">🛠</span>
+          งานบริการ
+        </button>
+
+        <button class="menu-item" type="button">
+          <span class="menu-icon">📄</span>
+          ใบเสนอราคา
+        </button>
+
+        <button class="menu-item" type="button">
+          <span class="menu-icon">💳</span>
+          การเงิน / การชำระเงิน
+        </button>
+
+
+        <div class="menu-title">SYSTEM</div>
+
+        <button class="menu-item" type="button">
+          <span class="menu-icon">⚙</span>
+          ตั้งค่าระบบ
+        </button>
+
+        <button class="menu-item" type="button">
+          <span class="menu-icon">🕘</span>
+          Audit Log
+        </button>
+
+      </nav>
+
+
+      <div class="sidebar-bottom">
+
+        <div class="sidebar-user">
+
+          <div class="sidebar-avatar">
+            A
+          </div>
+
+          <div class="sidebar-user-info">
+            <strong>Administrator</strong>
+            <span id="sidebarEmail">-</span>
+          </div>
+
+        </div>
+
+      </div>
+
+    </aside>
+
+
+    <!-- MAIN -->
+    <main class="main">
+
+      <!-- HEADER -->
+      <header class="header">
+
+        <div class="header-left">
+
+          <button
+            class="mobile-menu"
+            type="button"
+            onclick="openSidebar()"
+          >
+            ☰
+          </button>
+
+          <div class="header-title">
+            <h2>ผู้สมัครอบรม</h2>
+            <p>จัดการและตรวจสอบรายชื่อผู้สมัครในแต่ละรอบการอบรม</p>
+          </div>
+
+        </div>
+
+
+        <div class="header-right">
+
+          <div class="role-badge">
+            ● SUPER ADMIN
+          </div>
+
+          <button
+            class="logout-button"
+            type="button"
+            onclick="logout()"
+          >
+            ออกจากระบบ
+          </button>
+
+        </div>
+
+      </header>
+
+
+      <!-- CONTENT -->
+      <div class="content">
+
+        <!-- HERO -->
+        <section class="page-hero">
+
+          <div class="hero-content">
+
+            <small>SANTE TRAINING</small>
+
+            <h1>จัดการผู้สมัครอบรม</h1>
+
+            <p>
+              ตรวจสอบรายชื่อผู้สมัคร สถานะการลงทะเบียน
+              สถานะการชำระเงิน และจำนวนที่นั่งของแต่ละรอบการอบรม
+            </p>
+
+          </div>
+
+        </section>
+
+
+        <!-- OVERVIEW -->
+        <div class="section-heading">
+
+          <div>
+            <h2>ภาพรวมผู้สมัคร</h2>
+            <p>ข้อมูลจากระบบลงทะเบียนอบรมของ SANTE</p>
+          </div>
+
+        </div>
+
+
+        <section class="stats">
+
+          <div class="stat-card">
+
+            <div class="stat-icon">👥</div>
+
+            <div class="stat-info">
+              <span>ผู้สมัครทั้งหมด</span>
+              <strong id="totalCount">—</strong>
+            </div>
+
+          </div>
+
+
+          <div class="stat-card">
+
+            <div class="stat-icon">✓</div>
+
+            <div class="stat-info">
+              <span>ยืนยันแล้ว</span>
+              <strong id="confirmedCount">—</strong>
+            </div>
+
+          </div>
+
+
+          <div class="stat-card">
+
+            <div class="stat-icon">⏳</div>
+
+            <div class="stat-info">
+              <span>รอดำเนินการ</span>
+              <strong id="pendingCount">—</strong>
+            </div>
+
+          </div>
+
+
+          <div class="stat-card">
+
+            <div class="stat-icon">💳</div>
+
+            <div class="stat-info">
+              <span>ชำระเงินแล้ว</span>
+              <strong id="paidCount">—</strong>
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <!-- FILTER -->
+        <div class="section-heading">
+
+          <div>
+            <h2>ค้นหาและกรองข้อมูล</h2>
+            <p>เลือกรอบการอบรมหรือค้นหาผู้สมัคร</p>
+          </div>
+
+        </div>
+
+
+        <section class="filter-panel">
+
+          <div class="field">
+            <input
+              type="search"
+              id="searchInput"
+              placeholder="ค้นหาชื่อ อีเมล โทรศัพท์ หรือหน่วยงาน..."
+              oninput="applyFilters()"
+            >
+          </div>
+
+
+          <div class="field">
+            <select
+              id="sessionFilter"
+              onchange="handleSessionChange()"
+            >
+              <option value="">ทุกรอบการอบรม</option>
+            </select>
+          </div>
+
+
+          <div class="field">
+            <select
+              id="statusFilter"
+              onchange="applyFilters()"
+            >
+              <option value="">ทุกสถานะการสมัคร</option>
+              <option value="CONFIRMED">ยืนยันแล้ว</option>
+              <option value="PENDING">รอดำเนินการ</option>
+              <option value="REGISTERED">ลงทะเบียนแล้ว</option>
+              <option value="CANCELLED">ยกเลิก</option>
+            </select>
+          </div>
+
+
+          <button
+            class="refresh-button"
+            type="button"
+            onclick="refreshData()"
+          >
+            ↻ รีเฟรชข้อมูล
+          </button>
+
+        </section>
+
+
+        <!-- ERROR -->
+        <div class="error-box" id="errorBox"></div>
+
+
+        <!-- SESSION SUMMARY -->
+        <section
+          class="session-summary"
+          id="sessionSummary"
+        >
+
+          <div class="session-summary-top">
+
+            <div>
+
+              <h3 id="selectedSessionName">
+                -
+              </h3>
+
+              <p id="selectedCourseName">
+                -
+              </p>
+
+              <div
+                class="session-meta"
+                id="sessionMeta"
+              ></div>
+
+            </div>
+
+
+            <div class="seat-box">
+
+              <span>ที่นั่งยืนยัน / จำนวนทั้งหมด</span>
+
+              <strong id="seatDisplay">
+                -
+              </strong>
+
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <!-- TABLE -->
+        <section class="table-card">
+
+          <div class="table-header">
+
+            <div>
+              <h3>รายชื่อผู้สมัครอบรม</h3>
+              <span id="resultText">
+                กำลังโหลดข้อมูล...
+              </span>
+            </div>
+
+          </div>
+
+
+          <div
+            class="table-scroll"
+            id="tableContainer"
+          >
+
+            <table>
+
+              <thead>
+                <tr>
+                  <th>ผู้สมัคร</th>
+                  <th>รอบการอบรม</th>
+                  <th>หน่วยงาน</th>
+                  <th>โทรศัพท์</th>
+                  <th>วันที่สมัคร</th>
+                  <th>สถานะสมัคร</th>
+                  <th>การชำระเงิน</th>
+                </tr>
+              </thead>
+
+              <tbody id="registrationTableBody">
+              </tbody>
+
+            </table>
+
+          </div>
+
+
+          <div
+            class="empty-state"
+            id="emptyState"
+            style="display:none;"
+          >
+
+            <div class="empty-icon">👥</div>
+
+            <h3>ยังไม่พบผู้สมัครอบรม</h3>
+
+            <p>
+              เมื่อมีสมาชิกสมัครรอบการอบรม
+              รายชื่อจะปรากฏในหน้านี้
+            </p>
+
+          </div>
+
+        </section>
+
+      </div>
+
+    </main>
+
+  </div>
+
+
+<script>
+
+  /* =========================================
+     SUPABASE
+  ========================================= */
+
+  const SUPABASE_URL =
+    "https://cyegjwerxlxhczrfiurz.supabase.co";
+
+  const SUPABASE_KEY =
+    "sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF";
+
+  const AUTH_STORAGE_KEY =
+    "sante-admin-auth";
+
+
+  const supabaseClient =
+    window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY,
+      {
+        auth:{
+          persistSession:true,
+          autoRefreshToken:true,
+          detectSessionInUrl:true,
+          storageKey:AUTH_STORAGE_KEY
+        }
+      }
+    );
+
+
+  /* =========================================
+     STATE
+  ========================================= */
+
+  let currentUser = null;
+
+  let sessions = [];
+
+  let registrations = [];
+
+  let filteredRegistrations = [];
+
+
+  /* =========================================
+     INITIALIZE
+  ========================================= */
+
+  async function initializePage(){
+
+    try{
+
+      /*
+       * 1. ตรวจสอบ Session
+       */
+
+      const {
+        data:sessionData,
+        error:sessionError
+      } =
+      await supabaseClient.auth.getSession();
+
+
+      if(sessionError){
+        throw sessionError;
+      }
+
+
+      const session =
+        sessionData.session;
+
+
+      if(!session){
+
+        window.location.href =
+          "admin-login.html";
+
+        return;
+
+      }
+
+
+      currentUser =
+        session.user;
+
+
+      /*
+       * 2. ตรวจสอบสิทธิ์ Admin / Staff
+       */
+
+      const {
+        data:isStaff,
+        error:staffError
+      } =
+      await supabaseClient.rpc(
+        "is_staff"
+      );
+
+
+      if(staffError){
+        throw staffError;
+      }
+
+
+      if(!isStaff){
+
+        await supabaseClient.auth.signOut();
+
+        alert(
+          "บัญชีนี้ไม่มีสิทธิ์เข้าสู่ระบบผู้ดูแล"
+        );
+
+        window.location.href =
+          "admin-login.html";
+
+        return;
+
+      }
+
+
+      /*
+       * 3. แสดงบัญชี Admin
+       */
+
+      document.getElementById(
+        "sidebarEmail"
+      ).textContent =
+        currentUser.email || "-";
+
+
+      /*
+       * 4. โหลดข้อมูล
+       */
+
+      await loadAllData();
+
+
+      /*
+       * 5. เปิดหน้า
+       */
+
+      document.getElementById(
+        "loadingScreen"
+      ).style.display =
+        "none";
+
+
+      document.getElementById(
+        "app"
+      ).style.display =
+        "block";
+
+
+    }catch(error){
+
+      console.error(
+        "Initialization error:",
+        error
+      );
+
+
+      showError(
+        "ไม่สามารถโหลดหน้าผู้สมัครอบรมได้: " +
+        getErrorMessage(error)
+      );
+
+
+      document.getElementById(
+        "loadingScreen"
+      ).style.display =
+        "none";
+
+
+      document.getElementById(
+        "app"
+      ).style.display =
+        "block";
+
+    }
+
+  }
+
+
+  /* =========================================
+     LOAD ALL DATA
+  ========================================= */
+
+  async function loadAllData(){
+
+    hideError();
+
+
+    await loadSessions();
+
+    await loadRegistrations();
+
+    populateSessionFilter();
+
+    updateStatistics();
+
+    applyFilters();
+
+  }
+
+
+  /* =========================================
+     LOAD SESSIONS
+  ========================================= */
+
+  async function loadSessions(){
+
+    const {
+      data,
+      error
+    } =
+    await supabaseClient
+      .from("training_sessions")
+      .select(`
+        id,
+        course_id,
+        session_code,
+        session_name,
+        registration_open_date,
+        registration_close_date,
+        training_start_at,
+        training_end_at,
+        delivery_method,
+        seat_capacity,
+        is_seat_limited,
+        price,
+        session_status,
+        courses (
+          id,
+          course_name_th,
+          course_type
+        )
+      `)
+      .order(
+        "training_start_at",
+        {
+          ascending:false,
+          nullsFirst:false
+        }
+      );
+
+
+    if(error){
+      throw error;
+    }
+
+
+    sessions =
+      data || [];
+
+  }
+
+
+  /* =========================================
+     LOAD REGISTRATIONS
+  ========================================= */
+
+  async function loadRegistrations(){
+
+    const {
+      data,
+      error
+    } =
+    await supabaseClient
+      .from("training_registrations")
+      .select(`
+        id,
+        training_session_id,
+        user_id,
+        registration_status,
+        payment_required,
+        payment_status,
+        participant_title_th,
+        participant_firstname_th,
+        participant_lastname_th,
+        participant_email,
+        participant_phone,
+        organization_name,
+        registered_at,
+        confirmed_at,
+        created_at,
+        updated_at
+      `)
+      .order(
+        "registered_at",
+        {
+          ascending:false,
+          nullsFirst:false
+        }
+      );
+
+
+    if(error){
+      throw error;
+    }
+
+
+    registrations =
+      data || [];
+
+  }
+
+
+  /* =========================================
+     SESSION FILTER
+  ========================================= */
+
+  function populateSessionFilter(){
+
+    const select =
+      document.getElementById(
+        "sessionFilter"
+      );
+
+
+    const currentValue =
+      select.value;
+
+
+    select.innerHTML =
+      '<option value="">ทุกรอบการอบรม</option>';
+
+
+    sessions.forEach(
+      session => {
+
+        const option =
+          document.createElement(
+            "option"
+          );
+
+
+        option.value =
+          session.id;
+
+
+        const courseName =
+          getCourseName(session);
+
+
+        const sessionName =
+          session.session_name ||
+          "รอบการอบรม";
+
+
+        option.textContent =
+          courseName +
+          " — " +
+          sessionName;
+
+
+        select.appendChild(
+          option
+        );
+
+      }
+    );
+
+
+    if(
+      currentValue &&
+      sessions.some(
+        session =>
+          session.id === currentValue
+      )
+    ){
+
+      select.value =
+        currentValue;
+
+    }
+
+  }
+
+
+  /* =========================================
+     FILTER
+  ========================================= */
+
+  function handleSessionChange(){
+
+    applyFilters();
+
+    updateSessionSummary();
+
+  }
+
+
+  function applyFilters(){
+
+    const search =
+      document
+        .getElementById(
+          "searchInput"
+        )
+        .value
+        .trim()
+        .toLowerCase();
+
+
+    const sessionId =
+      document
+        .getElementById(
+          "sessionFilter"
+        )
+        .value;
+
+
+    const status =
+      document
+        .getElementById(
+          "statusFilter"
+        )
+        .value;
+
+
+    filteredRegistrations =
+      registrations.filter(
+        registration => {
+
+          /*
+           * Session
+           */
+
+          if(
+            sessionId &&
+            registration.training_session_id !==
+              sessionId
+          ){
+            return false;
+          }
+
+
+          /*
+           * Status
+           */
+
+          if(
+            status &&
+            normalizeStatus(
+              registration.registration_status
+            ) !== status
+          ){
+            return false;
+          }
+
+
+          /*
+           * Search
+           */
+
+          if(search){
+
+            const session =
+              findSession(
+                registration.training_session_id
+              );
+
+
+            const haystack =
+              [
+                registration.participant_title_th,
+                registration.participant_firstname_th,
+                registration.participant_lastname_th,
+                registration.participant_email,
+                registration.participant_phone,
+                registration.organization_name,
+                session?.session_name,
+                getCourseName(session)
+              ]
+              .filter(Boolean)
+              .join(" ")
+              .toLowerCase();
+
+
+            if(
+              !haystack.includes(
+                search
+              )
+            ){
+              return false;
+            }
+
+          }
+
+
+          return true;
+
+        }
+      );
+
+
+    renderTable();
+
+    updateSessionSummary();
+
+  }
+
+
+  /* =========================================
+     STATISTICS
+  ========================================= */
+
+  function updateStatistics(){
+
+    const total =
+      registrations.length;
+
+
+    const confirmed =
+      registrations.filter(
+        item =>
+          normalizeStatus(
+            item.registration_status
+          ) === "CONFIRMED"
+      ).length;
+
+
+    const pending =
+      registrations.filter(
+        item => {
+
+          const status =
+            normalizeStatus(
+              item.registration_status
+            );
+
+
+          return (
+            status === "PENDING" ||
+            status === "REGISTERED"
+          );
+
+        }
+      ).length;
+
+
+    const paid =
+      registrations.filter(
+        item =>
+          normalizeStatus(
+            item.payment_status
+          ) === "PAID"
+      ).length;
+
+
+    document.getElementById(
+      "totalCount"
+    ).textContent =
+      formatNumber(total);
+
+
+    document.getElementById(
+      "confirmedCount"
+    ).textContent =
+      formatNumber(confirmed);
+
+
+    document.getElementById(
+      "pendingCount"
+    ).textContent =
+      formatNumber(pending);
+
+
+    document.getElementById(
+      "paidCount"
+    ).textContent =
+      formatNumber(paid);
+
+  }
+
+
+  /* =========================================
+     SESSION SUMMARY
+  ========================================= */
+
+  function updateSessionSummary(){
+
+    const sessionId =
+      document
+        .getElementById(
+          "sessionFilter"
+        )
+        .value;
+
+
+    const summary =
+      document.getElementById(
+        "sessionSummary"
+      );
+
+
+    if(!sessionId){
+
+      summary.classList.remove(
+        "show"
+      );
+
+      return;
+
+    }
+
+
+    const session =
+      findSession(sessionId);
+
+
+    if(!session){
+
+      summary.classList.remove(
+        "show"
+      );
+
+      return;
+
+    }
+
+
+    summary.classList.add(
+      "show"
+    );
+
+
+    document.getElementById(
+      "selectedSessionName"
+    ).textContent =
+      session.session_name ||
+      "รอบการอบรม";
+
+
+    document.getElementById(
+      "selectedCourseName"
+    ).textContent =
+      getCourseName(session);
+
+
+    /*
+     * จำนวนที่นั่งยืนยัน
+     */
+
+    const confirmedSeats =
+      registrations.filter(
+        registration =>
+          registration.training_session_id ===
+            session.id &&
+          normalizeStatus(
+            registration.registration_status
+          ) === "CONFIRMED"
+      ).length;
+
+
+    let seatText =
+      formatNumber(
+        confirmedSeats
+      );
+
+
+    if(
+      session.is_seat_limited &&
+      session.seat_capacity != null
+    ){
+
+      seatText +=
+        " / " +
+        formatNumber(
+          session.seat_capacity
+        );
+
+    }else{
+
+      seatText +=
+        " / ไม่จำกัด";
+
+    }
+
+
+    document.getElementById(
+      "seatDisplay"
+    ).textContent =
+      seatText;
+
+
+    /*
+     * Meta
+     */
+
+    const meta =
+      document.getElementById(
+        "sessionMeta"
+      );
+
+
+    meta.innerHTML = "";
+
+
+    addMetaPill(
+      meta,
+      "สถานะ: " +
+      sessionStatusText(
+        session.session_status
+      )
+    );
+
+
+    addMetaPill(
+      meta,
+      "รูปแบบ: " +
+      deliveryText(
+        session.delivery_method
+      )
+    );
+
+
+    if(
+      session.training_start_at
+    ){
+
+      addMetaPill(
+        meta,
+        "วันอบรม: " +
+        formatDateTime(
+          session.training_start_at
+        )
+      );
+
+    }
+
+
+    if(
+      Number(session.price || 0) > 0
+    ){
+
+      addMetaPill(
+        meta,
+        "ราคา: " +
+        formatMoney(
+          session.price
+        )
+      );
+
+    }else{
+
+      addMetaPill(
+        meta,
+        "ไม่มีค่าใช้จ่าย"
+      );
+
+    }
+
+  }
+
+
+  function addMetaPill(
+    container,
+    text
+  ){
+
+    const element =
+      document.createElement(
+        "span"
+      );
+
+
+    element.className =
+      "meta-pill";
+
+
+    element.textContent =
+      text;
+
+
+    container.appendChild(
+      element
+    );
+
+  }
+
+
+  /* =========================================
+     TABLE
+  ========================================= */
+
+  function renderTable(){
+
+    const tbody =
+      document.getElementById(
+        "registrationTableBody"
+      );
+
+
+    const tableContainer =
+      document.getElementById(
+        "tableContainer"
+      );
+
+
+    const emptyState =
+      document.getElementById(
+        "emptyState"
+      );
+
+
+    const resultText =
+      document.getElementById(
+        "resultText"
+      );
+
+
+    tbody.innerHTML = "";
+
+
+    resultText.textContent =
+      "แสดง " +
+      formatNumber(
+        filteredRegistrations.length
+      ) +
+      " รายการ";
+
+
+    if(
+      filteredRegistrations.length === 0
+    ){
+
+      tableContainer.style.display =
+        "none";
+
+
+      emptyState.style.display =
+        "block";
+
+
+      return;
+
+    }
+
+
+    tableContainer.style.display =
+      "block";
+
+
+    emptyState.style.display =
+      "none";
+
+
+    filteredRegistrations.forEach(
+      registration => {
+
+        const row =
+          document.createElement(
+            "tr"
+          );
+
+
+        const session =
+          findSession(
+            registration.training_session_id
+          );
+
+
+        /*
+         * ผู้สมัคร
+         */
+
+        const personCell =
+          document.createElement(
+            "td"
+          );
+
+
+        const personName =
+          document.createElement(
+            "div"
+          );
+
+
+        personName.className =
+          "person-name";
+
+
+        personName.textContent =
+          getParticipantName(
+            registration
+          );
+
+
+        const personSub =
+          document.createElement(
+            "div"
+          );
+
+
+        personSub.className =
+          "person-sub";
+
+
+        personSub.textContent =
+          registration.participant_email ||
+          "-";
+
+
+        personCell.appendChild(
+          personName
+        );
+
+
+        personCell.appendChild(
+          personSub
+        );
+
+
+        row.appendChild(
+          personCell
+        );
+
+
+        /*
+         * รอบ
+         */
+
+        const sessionCell =
+          document.createElement(
+            "td"
+          );
+
+
+        const sessionName =
+          document.createElement(
+            "div"
+          );
+
+
+        sessionName.className =
+          "person-name";
+
+
+        sessionName.textContent =
+          session?.session_name ||
+          "-";
+
+
+        const courseName =
+          document.createElement(
+            "div"
+          );
+
+
+        courseName.className =
+          "person-sub";
+
+
+        courseName.textContent =
+          getCourseName(
+            session
+          );
+
+
+        sessionCell.appendChild(
+          sessionName
+        );
+
+
+        sessionCell.appendChild(
+          courseName
+        );
+
+
+        row.appendChild(
+          sessionCell
+        );
+
+
+        /*
+         * Organization
+         */
+
+        row.appendChild(
+          createTextCell(
+            registration.organization_name ||
+            "-"
+          )
+        );
+
+
+        /*
+         * Phone
+         */
+
+        row.appendChild(
+          createTextCell(
+            registration.participant_phone ||
+            "-"
+          )
+        );
+
+
+        /*
+         * Registered
+         */
+
+        row.appendChild(
+          createTextCell(
+            formatDateTime(
+              registration.registered_at ||
+              registration.created_at
+            )
+          )
+        );
+
+
+        /*
+         * Registration status
+         */
+
+        const registrationStatusCell =
+          document.createElement(
+            "td"
+          );
+
+
+        registrationStatusCell.appendChild(
+          createRegistrationBadge(
+            registration.registration_status
+          )
+        );
+
+
+        row.appendChild(
+          registrationStatusCell
+        );
+
+
+        /*
+         * Payment
+         */
+
+        const paymentCell =
+          document.createElement(
+            "td"
+          );
+
+
+        paymentCell.appendChild(
+          createPaymentBadge(
+            registration
+          )
+        );
+
+
+        row.appendChild(
+          paymentCell
+        );
+
+
+        tbody.appendChild(
+          row
+        );
+
+      }
+    );
+
+  }
+
+
+  function createTextCell(
+    text
+  ){
+
+    const td =
+      document.createElement(
+        "td"
+      );
+
+
+    td.textContent =
+      text;
+
+
+    return td;
+
+  }
+
+
+  /* =========================================
+     BADGES
+  ========================================= */
+
+  function createRegistrationBadge(
+    status
+  ){
+
+    const normalized =
+      normalizeStatus(
+        status
+      );
+
+
+    const badge =
+      document.createElement(
+        "span"
+      );
+
+
+    badge.className =
+      "badge";
+
+
+    switch(normalized){
+
+      case "CONFIRMED":
+
+        badge.classList.add(
+          "badge-green"
+        );
+
+        badge.textContent =
+          "ยืนยันแล้ว";
+
+        break;
+
+
+      case "CANCELLED":
+
+        badge.classList.add(
+          "badge-red"
+        );
+
+        badge.textContent =
+          "ยกเลิก";
+
+        break;
+
+
+      case "REGISTERED":
+
+        badge.classList.add(
+          "badge-blue"
+        );
+
+        badge.textContent =
+          "ลงทะเบียนแล้ว";
+
+        break;
+
+
+      case "PENDING":
+
+        badge.classList.add(
+          "badge-yellow"
+        );
+
+        badge.textContent =
+          "รอดำเนินการ";
+
+        break;
+
+
+      default:
+
+        badge.classList.add(
+          "badge-gray"
+        );
+
+        badge.textContent =
+          status ||
+          "ไม่ระบุ";
+
+    }
+
+
+    return badge;
+
+  }
+
+
+  function createPaymentBadge(
+    registration
+  ){
+
+    const badge =
+      document.createElement(
+        "span"
+      );
+
+
+    badge.className =
+      "badge";
+
+
+    /*
+     * รอบฟรี
+     */
+
+    if(
+      !registration.payment_required
+    ){
+
+      badge.classList.add(
+        "badge-gray"
+      );
+
+      badge.textContent =
+        "ไม่ต้องชำระเงิน";
+
+
+      return badge;
+
+    }
+
+
+    const status =
+      normalizeStatus(
+        registration.payment_status
+      );
+
+
+    switch(status){
+
+      case "PAID":
+
+        badge.classList.add(
+          "badge-green"
+        );
+
+        badge.textContent =
+          "ชำระเงินแล้ว";
+
+        break;
+
+
+      case "FAILED":
+
+        badge.classList.add(
+          "badge-red"
+        );
+
+        badge.textContent =
+          "ชำระไม่สำเร็จ";
+
+        break;
+
+
+      case "REFUNDED":
+
+        badge.classList.add(
+          "badge-orange"
+        );
+
+        badge.textContent =
+          "คืนเงินแล้ว";
+
+        break;
+
+
+      case "PENDING":
+
+        badge.classList.add(
+          "badge-yellow"
+        );
+
+        badge.textContent =
+          "รอชำระเงิน";
+
+        break;
+
+
+      default:
+
+        badge.classList.add(
+          "badge-yellow"
+        );
+
+        badge.textContent =
+          "รอชำระเงิน";
+
+    }
+
+
+    return badge;
+
+  }
+
+
+  /* =========================================
+     HELPERS
+  ========================================= */
+
+  function findSession(
+    sessionId
+  ){
+
+    return sessions.find(
+      session =>
+        session.id === sessionId
+    ) || null;
+
+  }
+
+
+  function getCourseName(
+    session
+  ){
+
+    if(!session){
+      return "-";
+    }
+
+
+    if(
+      session.courses &&
+      session.courses.course_name_th
+    ){
+
+      return session.courses.course_name_th;
+
+    }
+
+
+    return "หลักสูตร";
+
+  }
+
+
+  function getParticipantName(
+    registration
+  ){
+
+    const parts =
+      [
+        registration.participant_title_th,
+        registration.participant_firstname_th,
+        registration.participant_lastname_th
+      ]
+      .filter(Boolean);
+
+
+    if(parts.length){
+      return parts.join(" ");
+    }
+
+
+    return (
+      registration.participant_email ||
+      "ไม่ระบุชื่อ"
+    );
+
+  }
+
+
+  function normalizeStatus(
+    value
+  ){
+
+    return String(
+      value || ""
+    )
+    .trim()
+    .toUpperCase();
+
+  }
+
+
+  function formatNumber(
+    value
+  ){
+
+    return Number(
+      value || 0
+    ).toLocaleString(
+      "th-TH"
+    );
+
+  }
+
+
+  function formatMoney(
+    value
+  ){
+
+    return Number(
+      value || 0
+    ).toLocaleString(
+      "th-TH",
+      {
+        minimumFractionDigits:2,
+        maximumFractionDigits:2
+      }
+    ) + " บาท";
+
+  }
+
+
+  function formatDateTime(
+    value
+  ){
+
+    if(!value){
+      return "-";
+    }
+
+
+    const date =
+      new Date(value);
+
+
+    if(
+      Number.isNaN(
+        date.getTime()
+      )
+    ){
+      return "-";
+    }
+
+
+    return date.toLocaleString(
+      "th-TH",
+      {
+        year:"numeric",
+        month:"short",
+        day:"numeric",
+        hour:"2-digit",
+        minute:"2-digit"
+      }
+    );
+
+  }
+
+
+  function sessionStatusText(
+    status
+  ){
+
+    switch(
+      normalizeStatus(status)
+    ){
+
+      case "DRAFT":
+        return "ฉบับร่าง";
+
+      case "OPEN":
+        return "เปิดรับสมัคร";
+
+      case "CLOSED":
+        return "ปิดรับสมัคร";
+
+      case "COMPLETED":
+        return "เสร็จสิ้น";
+
+      case "CANCELLED":
+        return "ยกเลิก";
+
+      default:
+        return status || "-";
+
+    }
+
+  }
+
+
+  function deliveryText(
+    value
+  ){
+
+    switch(
+      normalizeStatus(value)
+    ){
+
+      case "ONLINE":
+        return "ออนไลน์";
+
+      case "ONSITE":
+        return "อบรม ณ สถานที่";
+
+      case "HYBRID":
+        return "ออนไลน์และสถานที่";
+
+      default:
+        return value || "-";
+
+    }
+
+  }
+
+
+  function getErrorMessage(
+    error
+  ){
+
+    if(!error){
+      return "เกิดข้อผิดพลาด";
+    }
+
+
+    return (
+      error.message ||
+      error.details ||
+      error.hint ||
+      String(error)
+    );
+
+  }
+
+
+  /* =========================================
+     ERROR
+  ========================================= */
+
+  function showError(
+    message
+  ){
+
+    const box =
+      document.getElementById(
+        "errorBox"
+      );
+
+
+    box.textContent =
+      message;
+
+
+    box.classList.add(
+      "show"
+    );
+
+  }
+
+
+  function hideError(){
+
+    const box =
+      document.getElementById(
+        "errorBox"
+      );
+
+
+    box.textContent = "";
+
+
+    box.classList.remove(
+      "show"
+    );
+
+  }
+
+
+  /* =========================================
+     REFRESH
+  ========================================= */
+
+  async function refreshData(){
+
+    const button =
+      document.querySelector(
+        ".refresh-button"
+      );
+
+
+    const originalText =
+      button.textContent;
+
+
+    button.disabled =
+      true;
+
+
+    button.textContent =
+      "กำลังโหลด...";
+
+
+    try{
+
+      await loadAllData();
+
+    }catch(error){
+
+      console.error(
+        "Refresh error:",
+        error
+      );
+
+
+      showError(
+        "ไม่สามารถรีเฟรชข้อมูลได้: " +
+        getErrorMessage(error)
+      );
+
+    }finally{
+
+      button.disabled =
+        false;
+
+
+      button.textContent =
+        originalText;
+
+    }
+
+  }
+
+
+  /* =========================================
+     LOGOUT
+  ========================================= */
+
+  async function logout(){
+
+    try{
+
+      await supabaseClient.auth.signOut();
+
+    }catch(error){
+
+      console.error(
+        "Logout error:",
+        error
+      );
+
+    }
+
+
+    window.location.href =
+      "admin-login.html";
+
+  }
+
+
+  /* =========================================
+     MOBILE SIDEBAR
+  ========================================= */
+
+  function openSidebar(){
+
+    document
+      .getElementById(
+        "sidebar"
+      )
+      .classList
+      .add(
+        "open"
+      );
+
+
+    document
+      .getElementById(
+        "sidebarOverlay"
+      )
+      .classList
+      .add(
+        "show"
+      );
+
+  }
+
+
+  function closeSidebar(){
+
+    document
+      .getElementById(
+        "sidebar"
+      )
+      .classList
+      .remove(
+        "open"
+      );
+
+
+    document
+      .getElementById(
+        "sidebarOverlay"
+      )
+      .classList
+      .remove(
+        "show"
+      );
+
+  }
+
+
+  /* =========================================
+     AUTH STATE
+  ========================================= */
+
+  supabaseClient.auth.onAuthStateChange(
+    (event, session) => {
+
+      if(
+        event === "SIGNED_OUT"
+      ){
+
+        window.location.href =
+          "admin-login.html";
+
+      }
+
+    }
+  );
+
+
+  /* =========================================
+     START
+  ========================================= */
+
+  initializePage();
+
+</script>
+
+</body>
+</html>
