@@ -4,22 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>SANTE SYSTEM | Admin Dashboard</title>
+  <title>SANTE SYSTEM | Admin Diagnostic</title>
 
-  <!-- Prompt Font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
   <link
     href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap"
     rel="stylesheet"
   >
 
-  <!-- Supabase JS -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
-
     :root{
       --navy:#082b55;
       --navy-dark:#051f3e;
@@ -30,8 +26,9 @@
       --text:#182230;
       --muted:#748092;
       --border:#e3e8ef;
+      --success:#168447;
       --danger:#c62828;
-      --success:#16803c;
+      --warning:#a36b00;
     }
 
     *{
@@ -47,114 +44,247 @@
       color:var(--text);
     }
 
-    button,
-    input{
+    button{
       font-family:"Prompt",sans-serif;
     }
 
-
     /* =========================
-       LOADING / AUTH CHECK
+       DIAGNOSTIC SCREEN
     ========================= */
 
-    #loadingScreen{
+    #diagnosticScreen{
       position:fixed;
       inset:0;
-      z-index:9999;
-
-      background:var(--navy);
-      color:#fff;
+      z-index:99999;
 
       display:flex;
       align-items:center;
       justify-content:center;
-      flex-direction:column;
 
-      gap:15px;
-      padding:20px;
+      padding:25px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #051f3e,
+          #082b55,
+          #123f70
+        );
+
+      overflow:auto;
     }
 
-    .loader{
-      width:42px;
-      height:42px;
+    .diagnostic-card{
+      width:min(760px,100%);
+      background:#fff;
+      border-radius:18px;
+      padding:28px;
+      box-shadow:
+        0 25px 60px
+        rgba(0,0,0,.25);
+    }
 
-      border:4px solid rgba(255,255,255,.2);
-      border-top-color:var(--yellow);
+    .diagnostic-logo{
+      text-align:center;
+      margin-bottom:20px;
+    }
+
+    .diagnostic-logo h1{
+      margin:0;
+      color:var(--navy);
+      font-size:30px;
+    }
+
+    .diagnostic-logo p{
+      margin:4px 0 0;
+      color:var(--muted);
+      font-size:12px;
+    }
+
+    .yellow-line{
+      width:90px;
+      height:4px;
+      margin:12px auto 0;
+      border-radius:10px;
+      background:var(--yellow);
+    }
+
+    .diagnostic-title{
+      margin:22px 0 13px;
+      font-size:15px;
+      font-weight:600;
+      color:var(--navy);
+    }
+
+    .step{
+      display:flex;
+      align-items:flex-start;
+      gap:12px;
+
+      padding:12px 14px;
+      margin-bottom:8px;
+
+      border:1px solid var(--border);
+      border-radius:10px;
+
+      background:#fafbfd;
+    }
+
+    .step-icon{
+      flex:0 0 27px;
+      width:27px;
+      height:27px;
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
 
       border-radius:50%;
 
-      animation:spin .8s linear infinite;
-    }
-
-    @keyframes spin{
-      to{
-        transform:rotate(360deg);
-      }
-    }
-
-    .auth-error{
-      display:none;
-
-      width:min(680px,92vw);
-
-      background:#fff;
-      color:var(--danger);
-
-      padding:18px 20px;
-
-      border-radius:12px;
-
-      font-size:13px;
-      line-height:1.7;
-
-      text-align:center;
-    }
-
-    .auth-actions{
-      display:none;
-      gap:10px;
-      margin-top:4px;
-    }
-
-    .auth-button{
-      border:0;
-      border-radius:9px;
-
-      padding:10px 18px;
+      background:#edf1f5;
+      color:#6f7b8a;
 
       font-size:12px;
-      font-weight:500;
-
-      cursor:pointer;
+      font-weight:700;
     }
 
-    .auth-button.primary{
+    .step-content{
+      flex:1;
+      min-width:0;
+    }
+
+    .step-name{
+      font-size:12px;
+      font-weight:600;
+      color:var(--text);
+    }
+
+    .step-detail{
+      margin-top:2px;
+      font-size:11px;
+      color:var(--muted);
+      line-height:1.55;
+      overflow-wrap:anywhere;
+    }
+
+    .step.success{
+      background:#f3fbf6;
+      border-color:#bfe3ca;
+    }
+
+    .step.success .step-icon{
+      background:#dff3e6;
+      color:var(--success);
+    }
+
+    .step.error{
+      background:#fff5f5;
+      border-color:#efc5c5;
+    }
+
+    .step.error .step-icon{
+      background:#fbe2e2;
+      color:var(--danger);
+    }
+
+    .step.warning{
+      background:#fffaf0;
+      border-color:#ecd59b;
+    }
+
+    .step.warning .step-icon{
+      background:#fff0c4;
+      color:var(--warning);
+    }
+
+    .diagnostic-info{
+      margin-top:16px;
+      padding:12px 14px;
+
+      background:#f2f5f8;
+      border-radius:10px;
+
+      font-size:10px;
+      line-height:1.7;
+      color:#667384;
+
+      overflow-wrap:anywhere;
+    }
+
+    .diagnostic-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:9px;
+      margin-top:18px;
+    }
+
+    .btn{
+      border:0;
+      border-radius:9px;
+      padding:10px 16px;
+      cursor:pointer;
+      font-size:12px;
+      font-weight:500;
+    }
+
+    .btn-primary{
       background:var(--yellow);
       color:var(--navy);
     }
 
-    .auth-button.secondary{
-      background:#fff;
+    .btn-navy{
+      background:var(--navy);
+      color:#fff;
+    }
+
+    .btn-light{
+      background:#edf1f5;
       color:var(--navy);
+    }
+
+    .result{
+      margin-top:16px;
+      padding:14px;
+      border-radius:10px;
+      font-size:12px;
+      font-weight:500;
+      line-height:1.6;
+      display:none;
+    }
+
+    .result.success{
+      display:block;
+      background:#edf9f1;
+      color:var(--success);
+      border:1px solid #bfe3ca;
+    }
+
+    .result.error{
+      display:block;
+      background:#fff3f3;
+      color:var(--danger);
+      border:1px solid #efc5c5;
     }
 
 
     /* =========================
-       APP
+       DASHBOARD
     ========================= */
 
-    .app{
+    #app{
       display:none;
       min-height:100vh;
     }
 
-
-    /* =========================
-       SIDEBAR
-    ========================= */
-
     .sidebar{
       width:270px;
+      position:fixed;
+      left:0;
+      top:0;
+      bottom:0;
+      z-index:1000;
+
+      padding:24px 18px;
 
       background:
         linear-gradient(
@@ -164,140 +294,85 @@
         );
 
       color:#fff;
-
-      position:fixed;
-
-      left:0;
-      top:0;
-      bottom:0;
-
-      z-index:1000;
-
-      padding:24px 18px;
-
       overflow-y:auto;
     }
 
     .brand{
       padding:5px 12px 24px;
-
       border-bottom:
         1px solid rgba(255,255,255,.10);
-
       margin-bottom:20px;
     }
 
     .brand-title{
       font-size:25px;
       font-weight:700;
-
       color:var(--yellow);
-
       letter-spacing:.5px;
     }
 
     .brand-sub{
       font-size:12px;
-
-      color:
-        rgba(255,255,255,.68);
-
+      color:rgba(255,255,255,.68);
       margin-top:3px;
     }
 
     .menu-title{
       padding:5px 12px 8px;
-
-      color:
-        rgba(255,255,255,.45);
-
+      color:rgba(255,255,255,.45);
       font-size:10px;
-
       letter-spacing:1px;
     }
 
     .menu{
       display:flex;
       flex-direction:column;
-
       gap:5px;
     }
 
     .menu-item{
       width:100%;
-
       border:0;
-
-      color:
-        rgba(255,255,255,.83);
-
+      color:rgba(255,255,255,.83);
       background:transparent;
-
       border-radius:9px;
-
       padding:11px 12px;
 
       display:flex;
       align-items:center;
-
       gap:11px;
 
       text-align:left;
-
       cursor:pointer;
-
       font-size:13px;
-
-      transition:.2s;
     }
 
     .menu-item:hover,
     .menu-item.active{
-      background:
-        rgba(255,255,255,.10);
-
+      background:rgba(255,255,255,.10);
       color:#fff;
     }
 
     .menu-item.active{
-      border-left:
-        3px solid var(--yellow);
+      border-left:3px solid var(--yellow);
     }
 
     .menu-icon{
       width:25px;
-
       text-align:center;
-
       font-size:17px;
     }
 
-
-    /* =========================
-       MAIN
-    ========================= */
-
     .main{
       margin-left:270px;
-
-      width:
-        calc(100% - 270px);
-
+      width:calc(100% - 270px);
       min-height:100vh;
     }
 
-
-    /* =========================
-       HEADER
-    ========================= */
-
     .header{
       height:76px;
-
       background:#fff;
-
-      border-bottom:
-        1px solid var(--border);
+      border-bottom:1px solid var(--border);
 
       display:flex;
       align-items:center;
@@ -306,45 +381,34 @@
       padding:0 30px;
 
       position:sticky;
-
       top:0;
-
       z-index:500;
     }
 
     .header-left{
       display:flex;
       align-items:center;
-
       gap:14px;
     }
 
     .mobile-menu{
       display:none;
-
       border:0;
-
       background:transparent;
-
       font-size:24px;
-
       color:var(--navy);
-
       cursor:pointer;
     }
 
     .page-title{
       font-size:19px;
-
       color:var(--navy);
-
       font-weight:600;
     }
 
     .header-user{
       display:flex;
       align-items:center;
-
       gap:12px;
     }
 
@@ -354,28 +418,21 @@
 
     .user-email{
       font-size:12px;
-
       color:var(--text);
-
       font-weight:500;
     }
 
     .user-role{
       font-size:10px;
-
       color:var(--muted);
-
       margin-top:2px;
     }
 
     .avatar{
       width:38px;
       height:38px;
-
       border-radius:50%;
-
       background:var(--navy);
-
       color:var(--yellow);
 
       display:flex;
@@ -386,32 +443,18 @@
     }
 
     .logout{
-      border:
-        1px solid var(--border);
-
+      border:1px solid var(--border);
       background:#fff;
-
       border-radius:8px;
-
       padding:8px 12px;
-
       color:var(--danger);
-
       cursor:pointer;
-
       font-size:12px;
     }
 
-
-    /* =========================
-       CONTENT
-    ========================= */
-
     .content{
       padding:30px;
-
       max-width:1500px;
-
       margin:0 auto;
     }
 
@@ -424,47 +467,32 @@
         );
 
       border-radius:16px;
-
       padding:28px 30px;
-
       color:#fff;
-
       position:relative;
-
       overflow:hidden;
-
       margin-bottom:25px;
     }
 
     .welcome::after{
       content:"";
-
       width:220px;
       height:220px;
-
-      background:
-        rgba(255,196,0,.12);
-
+      background:rgba(255,196,0,.12);
       border-radius:50%;
-
       position:absolute;
-
       right:-50px;
       top:-100px;
     }
 
     .welcome h1{
       margin:0 0 7px;
-
       font-size:26px;
     }
 
     .welcome p{
       margin:0;
-
-      color:
-        rgba(255,255,255,.75);
-
+      color:rgba(255,255,255,.75);
       font-size:13px;
     }
 
@@ -474,111 +502,69 @@
 
     .section-title{
       margin:28px 0 14px;
-
       font-size:16px;
-
       color:var(--navy);
-
       font-weight:600;
     }
 
-
-    /* =========================
-       STATS
-    ========================= */
-
     .stats{
       display:grid;
-
-      grid-template-columns:
-        repeat(4,1fr);
-
+      grid-template-columns:repeat(4,1fr);
       gap:15px;
     }
 
     .stat{
       background:#fff;
-
-      border:
-        1px solid var(--border);
-
+      border:1px solid var(--border);
       border-radius:13px;
-
       padding:20px;
     }
 
     .stat-label{
       color:var(--muted);
-
       font-size:12px;
     }
 
     .stat-value{
       margin-top:6px;
-
       color:var(--navy);
-
       font-size:25px;
-
       font-weight:700;
     }
 
     .stat-note{
       font-size:10px;
-
       color:#9aa4b1;
-
       margin-top:3px;
     }
 
-
-    /* =========================
-       MODULES
-    ========================= */
-
     .modules{
       display:grid;
-
-      grid-template-columns:
-        repeat(4,1fr);
-
+      grid-template-columns:repeat(4,1fr);
       gap:15px;
     }
 
     .module-card{
-      border:
-        1px solid var(--border);
-
+      border:1px solid var(--border);
       background:#fff;
-
       border-radius:14px;
-
       padding:20px;
-
       min-height:155px;
-
       transition:.2s;
-
       cursor:pointer;
     }
 
     .module-card:hover{
-      transform:
-        translateY(-2px);
-
+      transform:translateY(-2px);
       box-shadow:
         0 10px 25px
         rgba(20,40,70,.07);
-
-      border-color:#cad3df;
     }
 
     .module-icon{
       width:43px;
       height:43px;
-
       border-radius:10px;
-
       background:#f2f5f9;
 
       display:flex;
@@ -586,114 +572,73 @@
       justify-content:center;
 
       font-size:21px;
-
       margin-bottom:13px;
     }
 
     .module-name{
       font-size:14px;
-
       color:var(--navy);
-
       font-weight:600;
     }
 
     .module-description{
       font-size:11px;
-
       color:var(--muted);
-
       line-height:1.6;
-
       margin-top:6px;
     }
 
     .coming{
       display:inline-block;
-
       margin-top:10px;
-
       background:#fff8dd;
-
       color:#8b6900;
-
       border-radius:20px;
-
       padding:3px 8px;
-
       font-size:9px;
     }
 
     .ready{
       background:#edf9f1;
-
       color:var(--success);
     }
 
-
-    /* =========================
-       SECURITY BOX
-    ========================= */
-
     .security-box{
       margin-top:25px;
-
       background:#fff;
-
-      border:
-        1px solid var(--border);
-
-      border-left:
-        4px solid var(--yellow);
-
+      border:1px solid var(--border);
+      border-left:4px solid var(--yellow);
       border-radius:10px;
-
       padding:17px 20px;
-
       font-size:11px;
-
       color:var(--muted);
-
       line-height:1.7;
     }
 
-
-    /* =========================
-       RESPONSIVE
-    ========================= */
-
     @media(max-width:1150px){
-
       .stats,
       .modules{
-        grid-template-columns:
-          repeat(2,1fr);
+        grid-template-columns:repeat(2,1fr);
       }
-
     }
-
 
     @media(max-width:760px){
 
+      .diagnostic-card{
+        padding:20px 16px;
+      }
+
       .sidebar{
-        transform:
-          translateX(-100%);
-
+        transform:translateX(-100%);
         transition:.25s;
-
-        box-shadow:
-          10px 0 30px
-          rgba(0,0,0,.15);
       }
 
       .sidebar.open{
-        transform:
-          translateX(0);
+        transform:translateX(0);
       }
 
       .main{
         margin-left:0;
-
         width:100%;
       }
 
@@ -703,7 +648,6 @@
 
       .header{
         height:68px;
-
         padding:0 15px;
       }
 
@@ -715,79 +659,253 @@
         display:none;
       }
 
-      .logout{
-        padding:7px 9px;
-      }
-
       .content{
-        padding:
-          18px 15px 30px;
-      }
-
-      .welcome{
-        padding:
-          23px 20px;
-      }
-
-      .welcome h1{
-        font-size:21px;
+        padding:18px 15px 30px;
       }
 
       .stats,
       .modules{
         grid-template-columns:1fr;
       }
-
     }
-
   </style>
 </head>
-
 
 <body>
 
 
-<!-- =========================
-     AUTH LOADING
-========================= -->
+<!-- ========================================
+     DIAGNOSTIC SCREEN
+======================================== -->
 
-<div id="loadingScreen">
+<div id="diagnosticScreen">
 
-  <div
-    class="loader"
-    id="loader"
-  ></div>
+  <div class="diagnostic-card">
 
-  <div id="loadingText">
-    กำลังตรวจสอบสิทธิ์ SANTE Admin...
-  </div>
+    <div class="diagnostic-logo">
 
-  <div
-    id="authError"
-    class="auth-error"
-  ></div>
+      <h1>
+        SANTE SYSTEM
+      </h1>
+
+      <p>
+        Admin Authentication Diagnostic
+      </p>
+
+      <div class="yellow-line"></div>
+
+    </div>
 
 
-  <div
-    class="auth-actions"
-    id="authActions"
-  >
+    <div class="diagnostic-title">
+      กำลังตรวจสอบระบบ Admin
+    </div>
 
-    <button
-      type="button"
-      class="auth-button primary"
-      id="retryButton"
+
+    <div
+      class="step"
+      id="step1"
     >
-      ลองอีกครั้ง
-    </button>
 
-    <button
-      type="button"
-      class="auth-button secondary"
-      id="loginPageButton"
+      <div class="step-icon">
+        1
+      </div>
+
+      <div class="step-content">
+
+        <div class="step-name">
+          Supabase JavaScript Library
+        </div>
+
+        <div
+          class="step-detail"
+          id="detail1"
+        >
+          กำลังตรวจสอบ...
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div
+      class="step"
+      id="step2"
     >
-      กลับหน้า Login
-    </button>
+
+      <div class="step-icon">
+        2
+      </div>
+
+      <div class="step-content">
+
+        <div class="step-name">
+          Browser Storage
+        </div>
+
+        <div
+          class="step-detail"
+          id="detail2"
+        >
+          รอตรวจสอบ
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div
+      class="step"
+      id="step3"
+    >
+
+      <div class="step-icon">
+        3
+      </div>
+
+      <div class="step-content">
+
+        <div class="step-name">
+          Supabase Session
+        </div>
+
+        <div
+          class="step-detail"
+          id="detail3"
+        >
+          รอตรวจสอบ
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div
+      class="step"
+      id="step4"
+    >
+
+      <div class="step-icon">
+        4
+      </div>
+
+      <div class="step-content">
+
+        <div class="step-name">
+          Authenticated User
+        </div>
+
+        <div
+          class="step-detail"
+          id="detail4"
+        >
+          รอตรวจสอบ
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div
+      class="step"
+      id="step5"
+    >
+
+      <div class="step-icon">
+        5
+      </div>
+
+      <div class="step-content">
+
+        <div class="step-name">
+          Staff / Admin Permission
+        </div>
+
+        <div
+          class="step-detail"
+          id="detail5"
+        >
+          รอตรวจสอบ
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div
+      class="step"
+      id="step6"
+    >
+
+      <div class="step-icon">
+        6
+      </div>
+
+      <div class="step-content">
+
+        <div class="step-name">
+          Dashboard Access
+        </div>
+
+        <div
+          class="step-detail"
+          id="detail6"
+        >
+          รอตรวจสอบ
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div
+      class="result"
+      id="diagnosticResult"
+    ></div>
+
+
+    <div
+      class="diagnostic-info"
+      id="browserInfo"
+    >
+      กำลังอ่านข้อมูล Browser...
+    </div>
+
+
+    <div class="diagnostic-actions">
+
+      <button
+        type="button"
+        class="btn btn-primary"
+        id="retryButton"
+      >
+        ตรวจสอบอีกครั้ง
+      </button>
+
+      <button
+        type="button"
+        class="btn btn-navy"
+        id="openDashboardButton"
+        style="display:none;"
+      >
+        เปิด Dashboard
+      </button>
+
+      <button
+        type="button"
+        class="btn btn-light"
+        id="loginButton"
+      >
+        กลับหน้า Login
+      </button>
+
+    </div>
 
   </div>
 
@@ -795,17 +913,11 @@
 
 
 
-<!-- =========================
-     APP
-========================= -->
+<!-- ========================================
+     DASHBOARD
+======================================== -->
 
-<div
-  class="app"
-  id="app"
->
-
-
-  <!-- SIDEBAR -->
+<div id="app">
 
   <aside
     class="sidebar"
@@ -846,7 +958,6 @@
 
       <button
         class="menu-item"
-        data-module="questions"
         type="button"
       >
         <span class="menu-icon">
@@ -946,12 +1057,8 @@
 
 
 
-  <!-- MAIN -->
-
   <div class="main">
 
-
-    <!-- HEADER -->
 
     <header class="header">
 
@@ -1012,10 +1119,7 @@
 
 
 
-    <!-- CONTENT -->
-
     <main class="content">
-
 
       <section class="welcome">
 
@@ -1033,15 +1137,12 @@
       </section>
 
 
-
       <div class="section-title">
         ภาพรวมระบบ
       </div>
 
 
-
       <section class="stats">
-
 
         <div class="stat">
 
@@ -1058,7 +1159,6 @@
           </div>
 
         </div>
-
 
 
         <div class="stat">
@@ -1078,7 +1178,6 @@
         </div>
 
 
-
         <div class="stat">
 
           <div class="stat-label">
@@ -1094,7 +1193,6 @@
           </div>
 
         </div>
-
 
 
         <div class="stat">
@@ -1113,7 +1211,6 @@
 
         </div>
 
-
       </section>
 
 
@@ -1123,14 +1220,9 @@
       </div>
 
 
-
       <section class="modules">
 
-
-        <div
-          class="module-card"
-          id="questionImportCard"
-        >
+        <div class="module-card">
 
           <div class="module-icon">
             ✎
@@ -1149,7 +1241,6 @@
           </span>
 
         </div>
-
 
 
         <div class="module-card">
@@ -1173,7 +1264,6 @@
         </div>
 
 
-
         <div class="module-card">
 
           <div class="module-icon">
@@ -1193,7 +1283,6 @@
           </span>
 
         </div>
-
 
 
         <div class="module-card">
@@ -1217,7 +1306,6 @@
         </div>
 
 
-
         <div class="module-card">
 
           <div class="module-icon">
@@ -1237,7 +1325,6 @@
           </span>
 
         </div>
-
 
 
         <div class="module-card">
@@ -1261,7 +1348,6 @@
         </div>
 
 
-
         <div class="module-card">
 
           <div class="module-icon">
@@ -1281,7 +1367,6 @@
           </span>
 
         </div>
-
 
 
         <div class="module-card">
@@ -1304,21 +1389,16 @@
 
         </div>
 
-
       </section>
-
 
 
       <div class="security-box">
 
-        🔒 ระบบนี้ตรวจสอบ Session และสิทธิ์จาก Supabase
-        ก่อนเปิด Dashboard ทุกครั้ง
-
-        สิทธิ์จริงถูกควบคุมด้วย Database,
-        RLS และ RPC ของ SANTE SYSTEM
+        🔒 Diagnostic Mode:
+        หน้า Dashboard นี้จะไม่ Redirect กลับ Login อัตโนมัติ
+        เพื่อใช้ตรวจสอบ Session และ Admin Permission
 
       </div>
-
 
     </main>
 
@@ -1330,9 +1410,9 @@
 
 <script>
 
-  /* =========================
-     SUPABASE CONFIG
-  ========================= */
+  /* ========================================
+     CONFIG
+  ======================================== */
 
   const SUPABASE_URL =
     "https://cyegjwerxlxhczrfiurz.supabase.co";
@@ -1344,589 +1424,840 @@
     "sante-admin-auth";
 
 
-  /* =========================
-     ELEMENTS
-  ========================= */
+  let supabaseClient =
+    null;
 
-  const loadingScreen =
-    document.getElementById(
-      "loadingScreen"
-    );
+  let authorizedUser =
+    null;
 
-  const loadingText =
-    document.getElementById(
-      "loadingText"
-    );
-
-  const loader =
-    document.getElementById(
-      "loader"
-    );
-
-  const authError =
-    document.getElementById(
-      "authError"
-    );
-
-  const authActions =
-    document.getElementById(
-      "authActions"
-    );
-
-  const app =
-    document.getElementById(
-      "app"
-    );
-
-  const userEmail =
-    document.getElementById(
-      "userEmail"
-    );
-
-  const avatar =
-    document.getElementById(
-      "avatar"
-    );
+  let diagnosticPassed =
+    false;
 
 
-  /* =========================
-     SUPABASE LIBRARY CHECK
-  ========================= */
-
-  let supabaseClient = null;
-
-
-  if (!window.supabase) {
-
-    loader.style.display =
-      "none";
-
-    loadingText.textContent =
-      "ไม่สามารถโหลดระบบได้";
-
-    authError.style.display =
-      "block";
-
-    authError.textContent =
-      "LIBRARY ERROR: ไม่สามารถโหลด Supabase JavaScript Library ได้";
-
-    authActions.style.display =
-      "flex";
-
-  } else {
-
-    supabaseClient =
-      window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY,
-        {
-          auth: {
-
-            /*
-              IMPORTANT:
-              ต้องตรงกับ admin-login.html
-            */
-
-            storageKey:
-              AUTH_STORAGE_KEY,
-
-            persistSession:
-              true,
-
-            autoRefreshToken:
-              true,
-
-            detectSessionInUrl:
-              true
-          }
-        }
-      );
-
-  }
-
-
-  /* =========================
+  /* ========================================
      HELPERS
-  ========================= */
+  ======================================== */
 
-  function wait(milliseconds) {
+  function wait(ms){
 
     return new Promise(
       resolve =>
         setTimeout(
           resolve,
-          milliseconds
+          ms
         )
     );
-  }
-
-
-  function resetLoadingUI() {
-
-    loader.style.display =
-      "block";
-
-    loadingText.textContent =
-      "กำลังตรวจสอบสิทธิ์ SANTE Admin...";
-
-    authError.style.display =
-      "none";
-
-    authError.textContent =
-      "";
-
-    authActions.style.display =
-      "none";
 
   }
 
 
-  function showDashboardError(
-    stage,
-    error
-  ) {
+  function setStep(
+    number,
+    state,
+    detail
+  ){
 
-    console.error(
-      stage,
-      error
+    const step =
+      document.getElementById(
+        "step" + number
+      );
+
+    const detailElement =
+      document.getElementById(
+        "detail" + number
+      );
+
+
+    step.classList.remove(
+      "success",
+      "error",
+      "warning"
     );
 
-    loader.style.display =
+
+    if(state){
+
+      step.classList.add(
+        state
+      );
+
+    }
+
+
+    detailElement.textContent =
+      detail;
+
+  }
+
+
+  function resetSteps(){
+
+    for(
+      let number = 1;
+      number <= 6;
+      number++
+    ){
+
+      const step =
+        document.getElementById(
+          "step" + number
+        );
+
+      step.classList.remove(
+        "success",
+        "error",
+        "warning"
+      );
+
+
+      document.getElementById(
+        "detail" + number
+      ).textContent =
+        number === 1
+          ? "กำลังตรวจสอบ..."
+          : "รอตรวจสอบ";
+
+    }
+
+
+    const result =
+      document.getElementById(
+        "diagnosticResult"
+      );
+
+    result.className =
+      "result";
+
+    result.textContent =
+      "";
+
+
+    document.getElementById(
+      "openDashboardButton"
+    ).style.display =
       "none";
 
-    loadingText.textContent =
-      "ไม่สามารถเปิด Admin Dashboard ได้";
 
-    authError.style.display =
-      "block";
+    diagnosticPassed =
+      false;
 
-    authActions.style.display =
-      "flex";
+  }
 
-    const detail =
+
+  function showResult(
+    type,
+    text
+  ){
+
+    const result =
+      document.getElementById(
+        "diagnosticResult"
+      );
+
+    result.className =
+      "result " + type;
+
+    result.textContent =
+      text;
+
+  }
+
+
+  function safeError(error){
+
+    return (
       error?.message ||
       error?.error_description ||
       String(
         error ||
         "Unknown error"
-      );
-
-    authError.textContent =
-      stage +
-      ": " +
-      detail;
-  }
-
-
-  /* =========================
-     GET SESSION WITH RETRY
-  ========================= */
-
-  async function getSessionWithRetry() {
-
-    let lastError = null;
-
-
-    /*
-      เราไม่ redirect ทันที
-
-      ให้ Supabase มีเวลาคืนค่า session
-      จาก localStorage ก่อน
-    */
-
-    for (
-      let attempt = 1;
-      attempt <= 8;
-      attempt++
-    ) {
-
-      console.log(
-        "SESSION CHECK:",
-        attempt
-      );
-
-
-      const {
-        data,
-        error
-      } =
-      await supabaseClient.auth
-        .getSession();
-
-
-      if (error) {
-
-        lastError =
-          error;
-
-        console.error(
-          "SESSION ATTEMPT ERROR",
-          attempt,
-          error
-        );
-
-      } else if (
-        data &&
-        data.session
-      ) {
-
-        console.log(
-          "SESSION FOUND:",
-          data.session.user.id
-        );
-
-        return {
-          session:
-            data.session,
-
-          error:
-            null
-        };
-
-      }
-
-
-      await wait(250);
-
-    }
-
-
-    return {
-      session:
-        null,
-
-      error:
-        lastError
-    };
+      )
+    );
 
   }
 
 
-  /* =========================
-     PROTECT ADMIN PAGE
-  ========================= */
+  /* ========================================
+     DIAGNOSTIC
+  ======================================== */
 
-  async function protectAdminPage() {
+  async function runDiagnostic(){
 
-    if (!supabaseClient) {
+    resetSteps();
+
+
+    /* ========================================
+       Browser Information
+    ======================================== */
+
+    document.getElementById(
+      "browserInfo"
+    ).textContent =
+      "Page: " +
+      window.location.href +
+      " | Origin: " +
+      window.location.origin +
+      " | Storage Key: " +
+      AUTH_STORAGE_KEY;
+
+
+    /* ========================================
+       STEP 1
+       SUPABASE LIBRARY
+    ======================================== */
+
+    if(
+      !window.supabase
+    ){
+
+      setStep(
+        1,
+        "error",
+        "Supabase JavaScript Library ไม่ถูกโหลด"
+      );
+
+
+      showResult(
+        "error",
+        "หยุดที่ STEP 1 — ไม่สามารถโหลด Supabase Library ได้"
+      );
+
+
       return;
     }
 
 
-    resetLoadingUI();
+    setStep(
+      1,
+      "success",
+      "Supabase JavaScript Library โหลดสำเร็จ"
+    );
 
 
-    try {
+    /* ========================================
+       CREATE CLIENT
+    ======================================== */
 
-      /* =========================
-         STEP 1
-         RECOVER SESSION
-      ========================= */
+    try{
 
-      loadingText.textContent =
-        "กำลังตรวจสอบ Session...";
+      supabaseClient =
+        window.supabase.createClient(
+          SUPABASE_URL,
+          SUPABASE_KEY,
+          {
+            auth:{
+              storageKey:
+                AUTH_STORAGE_KEY,
 
+              persistSession:
+                true,
 
-      const {
-        session,
-        error: sessionError
-      } =
-      await getSessionWithRetry();
+              autoRefreshToken:
+                true,
 
-
-      if (sessionError) {
-
-        showDashboardError(
-          "SESSION ERROR",
-          sessionError
+              detectSessionInUrl:
+                true
+            }
+          }
         );
 
-        return;
-      }
+    }catch(error){
 
-
-      /*
-        ไม่มี session จริง ๆ หลัง retry แล้ว
-
-        ไม่เด้งกลับทันทีแบบเวอร์ชันเก่า
-        แต่แสดงสถานะให้เห็นก่อน
-      */
-
-      if (!session) {
-
-        showDashboardError(
-          "NO SESSION",
-          new Error(
-            "ไม่พบ SANTE Admin session ใน Browser นี้ กรุณากลับหน้า Login แล้วเข้าสู่ระบบอีกครั้ง"
-          )
-        );
-
-        return;
-      }
-
-
-      console.log(
-        "ADMIN SESSION OK:",
-        session.user.id
+      setStep(
+        1,
+        "error",
+        "สร้าง Supabase Client ไม่สำเร็จ: " +
+        safeError(error)
       );
 
 
-      /* =========================
-         STEP 2
-         VERIFY USER
-      ========================= */
-
-      loadingText.textContent =
-        "กำลังตรวจสอบบัญชีผู้ใช้...";
-
-
-      const {
-        data: userData,
-        error: userError
-      } =
-      await supabaseClient.auth
-        .getUser();
-
-
-      if (userError) {
-
-        showDashboardError(
-          "USER ERROR",
-          userError
-        );
-
-        return;
-      }
-
-
-      if (
-        !userData ||
-        !userData.user
-      ) {
-
-        showDashboardError(
-          "USER ERROR",
-          new Error(
-            "Session exists but Supabase could not verify the current user."
-          )
-        );
-
-        return;
-      }
-
-
-      console.log(
-        "USER VERIFIED:",
-        userData.user.id
+      showResult(
+        "error",
+        "หยุดที่ STEP 1 — CREATE CLIENT ERROR"
       );
 
 
-      /* =========================
-         STEP 3
-         STAFF / ADMIN RPC
-      ========================= */
+      return;
+    }
 
-      loadingText.textContent =
-        "กำลังตรวจสอบสิทธิ์ Admin...";
 
+    /* ========================================
+       STEP 2
+       LOCAL STORAGE
+    ======================================== */
+
+    try{
+
+      const storageValue =
+        window.localStorage.getItem(
+          AUTH_STORAGE_KEY
+        );
+
+
+      if(storageValue){
+
+        setStep(
+          2,
+          "success",
+          "พบข้อมูล Session ใน localStorage"
+        );
+
+      }else{
+
+        setStep(
+          2,
+          "warning",
+          "ไม่พบข้อมูลที่ key: " +
+          AUTH_STORAGE_KEY
+        );
+
+      }
+
+    }catch(error){
+
+      setStep(
+        2,
+        "error",
+        "ไม่สามารถอ่าน localStorage: " +
+        safeError(error)
+      );
+
+
+      showResult(
+        "error",
+        "หยุดที่ STEP 2 — Browser Storage มีปัญหา"
+      );
+
+
+      return;
+    }
+
+
+    /* ========================================
+       STEP 3
+       SESSION
+    ======================================== */
+
+    let activeSession =
+      null;
+
+    let sessionError =
+      null;
+
+
+    for(
+      let attempt = 1;
+      attempt <= 8;
+      attempt++
+    ){
+
+      try{
+
+        const {
+          data,
+          error
+        } =
+        await supabaseClient.auth
+          .getSession();
+
+
+        if(error){
+
+          sessionError =
+            error;
+
+        }
+
+
+        if(
+          data &&
+          data.session
+        ){
+
+          activeSession =
+            data.session;
+
+          break;
+        }
+
+      }catch(error){
+
+        sessionError =
+          error;
+
+      }
+
+
+      await wait(300);
+
+    }
+
+
+    if(
+      !activeSession
+    ){
+
+      setStep(
+        3,
+        "error",
+        sessionError
+          ? safeError(
+              sessionError
+            )
+          : "ไม่พบ Supabase Session หลังตรวจสอบ 8 ครั้ง"
+      );
+
+
+      setStep(
+        4,
+        "warning",
+        "ไม่ได้ตรวจสอบ เพราะไม่มี Session"
+      );
+
+
+      setStep(
+        5,
+        "warning",
+        "ไม่ได้ตรวจสอบ เพราะไม่มี Session"
+      );
+
+
+      setStep(
+        6,
+        "error",
+        "Dashboard ยังไม่อนุญาต"
+      );
+
+
+      showResult(
+        "error",
+        "หยุดที่ STEP 3 — NO SESSION กรุณาถ่ายภาพหน้านี้ส่งมาให้ผม โดยยังไม่ต้องแก้โค้ดหรือ SQL"
+      );
+
+
+      return;
+    }
+
+
+    setStep(
+      3,
+      "success",
+      "พบ Session — User ID: " +
+      activeSession.user.id
+    );
+
+
+    /* ========================================
+       STEP 4
+       USER
+    ======================================== */
+
+    let userData;
+
+
+    try{
+
+      const response =
+        await supabaseClient.auth
+          .getUser();
+
+
+      if(
+        response.error
+      ){
+
+        setStep(
+          4,
+          "error",
+          safeError(
+            response.error
+          )
+        );
+
+
+        setStep(
+          5,
+          "warning",
+          "ไม่ได้ตรวจสอบ"
+        );
+
+
+        setStep(
+          6,
+          "error",
+          "Dashboard ยังไม่อนุญาต"
+        );
+
+
+        showResult(
+          "error",
+          "หยุดที่ STEP 4 — USER VERIFICATION ERROR"
+        );
+
+
+        return;
+      }
+
+
+      userData =
+        response.data;
+
+
+    }catch(error){
+
+      setStep(
+        4,
+        "error",
+        safeError(error)
+      );
+
+
+      showResult(
+        "error",
+        "หยุดที่ STEP 4 — USER ERROR"
+      );
+
+
+      return;
+    }
+
+
+    if(
+      !userData ||
+      !userData.user
+    ){
+
+      setStep(
+        4,
+        "error",
+        "ไม่พบ authenticated user"
+      );
+
+
+      showResult(
+        "error",
+        "หยุดที่ STEP 4 — USER NOT FOUND"
+      );
+
+
+      return;
+    }
+
+
+    authorizedUser =
+      userData.user;
+
+
+    setStep(
+      4,
+      "success",
+      "ยืนยัน User สำเร็จ — " +
+      (
+        authorizedUser.email ||
+        authorizedUser.id
+      )
+    );
+
+
+    /* ========================================
+       STEP 5
+       IS STAFF
+    ======================================== */
+
+    let isStaff =
+      false;
+
+
+    try{
 
       const {
-        data: staffAllowed,
-        error: staffError
+        data,
+        error
       } =
       await supabaseClient.rpc(
         "is_staff"
       );
 
 
-      if (staffError) {
+      if(error){
 
-        /*
-          สำคัญ:
-          RPC error ไม่ signOut
-          เพราะ session อาจยังถูกต้อง
-        */
-
-        showDashboardError(
-          "RPC ERROR",
-          staffError
+        setStep(
+          5,
+          "error",
+          "RPC ERROR: " +
+          safeError(error)
         );
+
+
+        setStep(
+          6,
+          "error",
+          "Dashboard ยังไม่อนุญาต"
+        );
+
+
+        showResult(
+          "error",
+          "หยุดที่ STEP 5 — is_staff() RPC ERROR"
+        );
+
 
         return;
       }
 
 
-      console.log(
-        "is_staff() =",
-        staffAllowed
+      isStaff =
+        data;
+
+
+    }catch(error){
+
+      setStep(
+        5,
+        "error",
+        safeError(error)
       );
 
 
-      /* =========================
-         STEP 4
-         PERMISSION
-      ========================= */
-
-      if (
-        staffAllowed !== true
-      ) {
-
-        /*
-          Session มีอยู่
-          แต่ role ไม่ผ่านจริง
-
-          ไม่ลบ session อัตโนมัติ
-          เพื่อให้เห็น error ชัด ๆ
-        */
-
-        showDashboardError(
-          "PERMISSION ERROR",
-          new Error(
-            "บัญชีเข้าสู่ระบบสำเร็จ แต่ is_staff() ไม่อนุญาตให้เปิด Admin Dashboard"
-          )
-        );
-
-        return;
-      }
-
-
-      /* =========================
-         STEP 5
-         OPEN DASHBOARD
-      ========================= */
-
-      const user =
-        userData.user;
-
-
-      userEmail.textContent =
-        user.email ||
-        "SANTE Admin";
-
-
-      if (user.email) {
-
-        avatar.textContent =
-          user.email
-            .charAt(0)
-            .toUpperCase();
-
-      }
-
-
-      console.log(
-        "SANTE ADMIN AUTHORIZED"
+      setStep(
+        6,
+        "error",
+        "Dashboard ยังไม่อนุญาต"
       );
 
 
-      loadingScreen.style.display =
-        "none";
-
-
-      app.style.display =
-        "block";
-
-
-    } catch (error) {
-
-      showDashboardError(
-        "UNEXPECTED ERROR",
-        error
+      showResult(
+        "error",
+        "หยุดที่ STEP 5 — PERMISSION CHECK ERROR"
       );
 
+
+      return;
     }
+
+
+    if(
+      isStaff !== true
+    ){
+
+      setStep(
+        5,
+        "error",
+        "is_staff() = false"
+      );
+
+
+      setStep(
+        6,
+        "error",
+        "Dashboard ยังไม่อนุญาต"
+      );
+
+
+      showResult(
+        "error",
+        "หยุดที่ STEP 5 — Session ใช้งานได้ แต่บัญชีไม่มีสิทธิ์ Staff/Admin"
+      );
+
+
+      return;
+    }
+
+
+    setStep(
+      5,
+      "success",
+      "is_staff() = true — Staff/Admin Permission ผ่าน"
+    );
+
+
+    /* ========================================
+       STEP 6
+       DASHBOARD
+    ======================================== */
+
+    setStep(
+      6,
+      "success",
+      "Dashboard Access ผ่านครบทุกขั้นตอน"
+    );
+
+
+    diagnosticPassed =
+      true;
+
+
+    showResult(
+      "success",
+      "สำเร็จครบ 6 ขั้นตอน — Session และสิทธิ์ Admin ทำงานถูกต้อง"
+    );
+
+
+    document.getElementById(
+      "openDashboardButton"
+    ).style.display =
+      "inline-block";
+
+
+    /*
+      Diagnostic Mode:
+      เราจะไม่เปิด Dashboard อัตโนมัติ
+
+      ต้องกดปุ่ม "เปิด Dashboard"
+      เพื่อให้ผู้ใช้เห็นผลครบก่อน
+    */
 
   }
 
 
-  /* =========================
-     RETRY
-  ========================= */
+  /* ========================================
+     OPEN DASHBOARD
+  ======================================== */
 
-  document
-    .getElementById(
-      "retryButton"
-    )
-    .addEventListener(
-      "click",
-      function() {
+  function openDashboard(){
 
-        protectAdminPage();
+    if(
+      !diagnosticPassed ||
+      !authorizedUser
+    ){
 
-      }
-    );
+      showResult(
+        "error",
+        "ยังไม่สามารถเปิด Dashboard ได้ เนื่องจาก Diagnostic ยังไม่ผ่าน"
+      );
 
-
-  /* =========================
-     BACK TO LOGIN
-  ========================= */
-
-  document
-    .getElementById(
-      "loginPageButton"
-    )
-    .addEventListener(
-      "click",
-      function() {
-
-        window.location.href =
-          "./admin-login.html";
-
-      }
-    );
+      return;
+    }
 
 
-  /* =========================
+    const email =
+      authorizedUser.email ||
+      "SANTE Admin";
+
+
+    document.getElementById(
+      "userEmail"
+    ).textContent =
+      email;
+
+
+    document.getElementById(
+      "avatar"
+    ).textContent =
+      email
+        .charAt(0)
+        .toUpperCase();
+
+
+    document.getElementById(
+      "diagnosticScreen"
+    ).style.display =
+      "none";
+
+
+    document.getElementById(
+      "app"
+    ).style.display =
+      "block";
+
+  }
+
+
+  /* ========================================
+     BUTTONS
+  ======================================== */
+
+  document.getElementById(
+    "retryButton"
+  ).addEventListener(
+    "click",
+    runDiagnostic
+  );
+
+
+  document.getElementById(
+    "openDashboardButton"
+  ).addEventListener(
+    "click",
+    openDashboard
+  );
+
+
+  document.getElementById(
+    "loginButton"
+  ).addEventListener(
+    "click",
+    function(){
+
+      /*
+        IMPORTANT:
+        ไม่มี automatic redirect
+
+        Redirect เกิดเมื่อผู้ใช้
+        กดปุ่มนี้เองเท่านั้น
+      */
+
+      window.location.href =
+        "./admin-login.html";
+
+    }
+  );
+
+
+  /* ========================================
      LOGOUT
-  ========================= */
+  ======================================== */
 
-  document
-    .getElementById(
-      "logoutButton"
-    )
-    .addEventListener(
-      "click",
-      async function() {
+  document.getElementById(
+    "logoutButton"
+  ).addEventListener(
+    "click",
+    async function(){
 
-        const button =
-          document.getElementById(
-            "logoutButton"
-          );
+      const button =
+        document.getElementById(
+          "logoutButton"
+        );
 
 
-        button.disabled =
-          true;
+      button.disabled =
+        true;
+
+      button.textContent =
+        "กำลังออก...";
 
 
-        button.textContent =
-          "กำลังออก...";
+      try{
 
-
-        try {
+        if(
+          supabaseClient
+        ){
 
           await supabaseClient.auth
             .signOut();
 
-        } catch (error) {
-
-          console.error(
-            "LOGOUT ERROR",
-            error
-          );
-
         }
 
+      }catch(error){
 
-        window.location.href =
-          "./admin-login.html";
+        console.error(
+          "LOGOUT ERROR",
+          error
+        );
 
       }
-    );
 
 
-  /* =========================
+      window.location.href =
+        "./admin-login.html";
+
+    }
+  );
+
+
+  /* ========================================
      MOBILE MENU
-  ========================= */
+  ======================================== */
 
   const sidebar =
     document.getElementById(
@@ -1934,141 +2265,40 @@
     );
 
 
-  document
-    .getElementById(
-      "mobileMenu"
-    )
-    .addEventListener(
-      "click",
-      function() {
-
-        sidebar.classList.toggle(
-          "open"
-        );
-
-      }
-    );
-
-
-  document.addEventListener(
+  document.getElementById(
+    "mobileMenu"
+  ).addEventListener(
     "click",
-    function(event) {
+    function(){
 
-      const mobileMenu =
-        document.getElementById(
-          "mobileMenu"
-        );
-
-
-      if (
-        window.innerWidth <= 760 &&
-        sidebar.classList.contains(
-          "open"
-        ) &&
-        !sidebar.contains(
-          event.target
-        ) &&
-        !mobileMenu.contains(
-          event.target
-        )
-      ) {
-
-        sidebar.classList.remove(
-          "open"
-        );
-
-      }
+      sidebar.classList.toggle(
+        "open"
+      );
 
     }
   );
 
 
-  /* =========================
-     QUESTION IMPORT
-  ========================= */
+  /* ========================================
+     IMPORTANT:
+     NO AUTH REDIRECT
+  ======================================== */
 
-  function questionImportNext() {
+  /*
+    Diagnostic version intentionally
+    DOES NOT use onAuthStateChange()
+    to redirect.
 
-    alert(
-      "Question Import จะเปิดใช้งานในขั้นตอนถัดไป"
-    );
-
-  }
-
-
-  document
-    .getElementById(
-      "questionImportCard"
-    )
-    .addEventListener(
-      "click",
-      questionImportNext
-    );
+    แม้ Session จะไม่พบ
+    หน้านี้ก็จะค้างอยู่เพื่อแสดง Error
+  */
 
 
-  document
-    .querySelector(
-      '[data-module="questions"]'
-    )
-    .addEventListener(
-      "click",
-      questionImportNext
-    );
+  /* ========================================
+     START DIAGNOSTIC
+  ======================================== */
 
-
-  /* =========================
-     AUTH STATE
-  ========================= */
-
-  if (supabaseClient) {
-
-    supabaseClient.auth
-      .onAuthStateChange(
-        function(
-          event,
-          session
-        ) {
-
-          console.log(
-            "AUTH EVENT:",
-            event,
-            session
-              ? "SESSION EXISTS"
-              : "NO SESSION"
-          );
-
-
-          /*
-            Redirect เฉพาะ SIGNED_OUT จริง ๆ
-
-            ไม่ redirect จาก INITIAL_SESSION
-            หรือ TOKEN_REFRESHED
-          */
-
-          if (
-            event === "SIGNED_OUT"
-          ) {
-
-            window.location.href =
-              "./admin-login.html";
-
-          }
-
-        }
-      );
-
-  }
-
-
-  /* =========================
-     START
-  ========================= */
-
-  if (supabaseClient) {
-
-    protectAdminPage();
-
-  }
+  runDiagnostic();
 
 </script>
 
