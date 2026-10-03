@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>SANTE SYSTEM | Admin Dashboard</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -19,20 +18,17 @@
       --navy-light:#123f70;
       --yellow:#ffc400;
       --bg:#f4f6f9;
-      --white:#ffffff;
+      --white:#fff;
       --text:#182230;
       --muted:#748092;
       --border:#e3e8ef;
-      --success:#168447;
-      --danger:#c62828;
+      --green:#168447;
+      --red:#c62828;
     }
 
-    *{
-      box-sizing:border-box;
-    }
+    *{box-sizing:border-box}
 
-    html,
-    body{
+    html,body{
       margin:0;
       min-height:100%;
       font-family:"Prompt",sans-serif;
@@ -40,12 +36,9 @@
       color:var(--text);
     }
 
-    button{
-      font-family:"Prompt",sans-serif;
-      cursor:pointer;
-    }
+    button{font-family:inherit;cursor:pointer}
 
-    /* AUTH GATE */
+    /* AUTH */
 
     #authGate{
       position:fixed;
@@ -55,46 +48,40 @@
       align-items:center;
       justify-content:center;
       padding:24px;
-      background:linear-gradient(
-        135deg,
-        var(--navy-dark),
-        var(--navy),
-        var(--navy-light)
-      );
+      background:linear-gradient(135deg,var(--navy-dark),var(--navy),var(--navy-light));
     }
 
-    .gate-card{
+    .gate{
       width:min(470px,100%);
       padding:32px;
-      border-radius:18px;
+      border-radius:20px;
       background:#fff;
       text-align:center;
       box-shadow:0 25px 60px rgba(0,0,0,.25);
     }
 
-    .gate-title{
+    .gate h1{
       margin:0;
       color:var(--navy);
       font-size:29px;
-      font-weight:700;
     }
 
     .gate-line{
       width:82px;
       height:4px;
-      margin:11px auto 22px;
+      margin:12px auto 22px;
       border-radius:20px;
       background:var(--yellow);
     }
 
-    .gate-subtitle{
+    .gate-title{
       color:var(--navy);
       font-size:14px;
       font-weight:600;
     }
 
     .gate-message{
-      margin-top:7px;
+      margin-top:8px;
       color:var(--muted);
       font-size:11px;
       line-height:1.7;
@@ -103,32 +90,30 @@
     .spinner{
       width:35px;
       height:35px;
-      margin:21px auto 3px;
+      margin:22px auto 3px;
       border:4px solid #e7ecf2;
       border-top-color:var(--yellow);
       border-radius:50%;
-      animation:spin .8s linear infinite;
+      animation:spin .75s linear infinite;
     }
 
     @keyframes spin{
-      to{
-        transform:rotate(360deg);
-      }
+      to{transform:rotate(360deg)}
     }
 
-    .gate-error{
+    #gateError{
       display:none;
-      margin-top:17px;
+      margin-top:16px;
       padding:12px;
       border:1px solid #efc5c5;
       border-radius:9px;
       background:#fff3f3;
-      color:var(--danger);
+      color:var(--red);
       font-size:11px;
-      line-height:1.6;
+      line-height:1.7;
     }
 
-    .gate-actions{
+    #gateActions{
       display:none;
       justify-content:center;
       flex-wrap:wrap;
@@ -143,12 +128,12 @@
       font-size:11px;
     }
 
-    .gate-button-primary{
+    .gate-primary{
       background:var(--yellow);
       color:var(--navy);
     }
 
-    .gate-button-light{
+    .gate-light{
       background:#edf1f5;
       color:var(--navy);
     }
@@ -164,18 +149,14 @@
 
     .sidebar{
       position:fixed;
-      left:0;
       top:0;
       bottom:0;
+      left:0;
       z-index:1000;
       width:280px;
       padding:22px 16px;
       overflow-y:auto;
-      background:linear-gradient(
-        180deg,
-        var(--navy),
-        var(--navy-dark)
-      );
+      background:linear-gradient(180deg,var(--navy),var(--navy-dark));
       color:#fff;
     }
 
@@ -185,7 +166,7 @@
       gap:11px;
       padding:4px 10px 20px;
       margin-bottom:16px;
-      border-bottom:1px solid rgba(255,255,255,.10);
+      border-bottom:1px solid rgba(255,255,255,.1);
     }
 
     .brand-mark{
@@ -201,14 +182,14 @@
       font-weight:700;
     }
 
-    .brand-title{
+    .brand-name{
       color:var(--yellow);
       font-size:22px;
       font-weight:700;
       line-height:1.1;
     }
 
-    .brand-subtitle{
+    .brand-sub{
       margin-top:3px;
       color:rgba(255,255,255,.63);
       font-size:10px;
@@ -217,9 +198,9 @@
 
     .menu-title{
       padding:10px 12px 6px;
-      color:rgba(255,255,255,.40);
+      color:rgba(255,255,255,.4);
       font-size:9px;
-      letter-spacing:1.2px;
+      letter-spacing:1.1px;
     }
 
     .menu{
@@ -244,7 +225,7 @@
 
     .menu-item:hover,
     .menu-item.active{
-      background:rgba(255,255,255,.10);
+      background:rgba(255,255,255,.1);
       color:#fff;
     }
 
@@ -258,7 +239,7 @@
       font-size:16px;
     }
 
-    .menu-badge{
+    .badge{
       margin-left:auto;
       padding:3px 6px;
       border-radius:20px;
@@ -275,8 +256,6 @@
       margin-left:280px;
     }
 
-    /* HEADER */
-
     .header{
       position:sticky;
       top:0;
@@ -290,11 +269,16 @@
       background:#fff;
     }
 
-    .header-left{
+    .header-left,
+    .header-right,
+    .user-area{
       display:flex;
       align-items:center;
-      gap:12px;
     }
+
+    .header-left{gap:12px}
+    .header-right{gap:12px}
+    .user-area{gap:10px}
 
     .mobile-menu{
       display:none;
@@ -310,31 +294,24 @@
       font-weight:600;
     }
 
-    .page-subtitle{
+    .page-sub{
       margin-top:2px;
       color:var(--muted);
       font-size:10px;
     }
 
-    .header-right{
-      display:flex;
-      align-items:center;
-      gap:13px;
-    }
+    /* LANGUAGE */
 
-    /* LANGUAGE SWITCH */
-
-    .language-switch{
+    .language{
       display:flex;
-      align-items:center;
       padding:3px;
       border:1px solid var(--border);
       border-radius:9px;
       background:#f6f8fa;
     }
 
-    .language-button{
-      min-width:38px;
+    .lang-button{
+      min-width:40px;
       padding:6px 9px;
       border:0;
       border-radius:6px;
@@ -344,21 +321,12 @@
       font-weight:600;
     }
 
-    .language-button.active{
+    .lang-button.active{
       background:var(--navy);
       color:#fff;
-      box-shadow:0 2px 6px rgba(8,43,85,.15);
     }
 
-    .header-user{
-      display:flex;
-      align-items:center;
-      gap:10px;
-    }
-
-    .user-text{
-      text-align:right;
-    }
+    .user-text{text-align:right}
 
     .user-email{
       font-size:11px;
@@ -366,7 +334,6 @@
     }
 
     .user-role{
-      margin-top:2px;
       color:var(--muted);
       font-size:9px;
     }
@@ -388,7 +355,7 @@
       border:1px solid var(--border);
       border-radius:8px;
       background:#fff;
-      color:var(--danger);
+      color:var(--red);
       font-size:11px;
     }
 
@@ -396,7 +363,7 @@
 
     .content{
       max-width:1550px;
-      margin:0 auto;
+      margin:auto;
       padding:27px;
     }
 
@@ -405,15 +372,11 @@
       overflow:hidden;
       padding:27px 29px;
       border-radius:16px;
-      background:linear-gradient(
-        135deg,
-        var(--navy),
-        var(--navy-light)
-      );
+      background:linear-gradient(135deg,var(--navy),var(--navy-light));
       color:#fff;
     }
 
-    .welcome::after{
+    .welcome:after{
       content:"";
       position:absolute;
       width:240px;
@@ -435,22 +398,20 @@
       font-size:12px;
     }
 
-    .yellow{
-      color:var(--yellow);
-    }
+    .yellow{color:var(--yellow)}
 
-    .online-status{
+    .verified{
       display:inline-flex;
       align-items:center;
       gap:6px;
       margin-top:14px;
       padding:6px 10px;
       border-radius:20px;
-      background:rgba(255,255,255,.10);
+      background:rgba(255,255,255,.1);
       font-size:9px;
     }
 
-    .online-dot{
+    .dot{
       width:7px;
       height:7px;
       border-radius:50%;
@@ -476,13 +437,14 @@
       font-size:9px;
     }
 
-    .stats{
+    .stats,
+    .modules{
       display:grid;
       grid-template-columns:repeat(4,1fr);
       gap:13px;
     }
 
-    .stat-card{
+    .card{
       padding:18px;
       border:1px solid var(--border);
       border-radius:13px;
@@ -506,23 +468,13 @@
       font-size:9px;
     }
 
-    .modules{
-      display:grid;
-      grid-template-columns:repeat(4,1fr);
-      gap:13px;
-    }
-
-    .module-card{
+    .module{
       min-height:150px;
-      padding:18px;
-      border:1px solid var(--border);
-      border-radius:14px;
-      background:#fff;
       cursor:pointer;
       transition:.2s;
     }
 
-    .module-card:hover{
+    .module:hover{
       transform:translateY(-2px);
       box-shadow:0 10px 25px rgba(20,40,70,.07);
     }
@@ -545,14 +497,14 @@
       font-weight:600;
     }
 
-    .module-description{
+    .module-desc{
       margin-top:5px;
       color:var(--muted);
       font-size:10px;
       line-height:1.6;
     }
 
-    .module-tag{
+    .tag{
       display:inline-block;
       margin-top:9px;
       padding:3px 8px;
@@ -562,23 +514,16 @@
       font-size:8px;
     }
 
-    .module-tag.next{
+    .tag.next{
       background:#fff8dd;
       color:#8b6900;
     }
 
-    .bottom-grid{
+    .bottom{
       display:grid;
       grid-template-columns:1.25fr .75fr;
       gap:13px;
       margin-top:13px;
-    }
-
-    .panel{
-      padding:18px;
-      border:1px solid var(--border);
-      border-radius:13px;
-      background:#fff;
     }
 
     .panel-title{
@@ -598,11 +543,9 @@
       font-size:10px;
     }
 
-    .check-row:last-child{
-      border-bottom:0;
-    }
+    .check-row:last-child{border:0}
 
-    .check-icon{
+    .check{
       width:20px;
       height:20px;
       flex:0 0 20px;
@@ -611,12 +554,12 @@
       justify-content:center;
       border-radius:50%;
       background:#e5f5eb;
-      color:var(--success);
+      color:var(--green);
       font-size:10px;
       font-weight:700;
     }
 
-    .quick-button{
+    .quick{
       width:100%;
       margin-bottom:8px;
       padding:10px 12px;
@@ -628,21 +571,16 @@
       font-size:10px;
     }
 
-    .quick-button:hover{
-      background:#f4f7fa;
-    }
-
     .overlay{
       display:none;
       position:fixed;
       inset:0;
       z-index:900;
-      background:rgba(0,0,0,.30);
+      background:rgba(0,0,0,.3);
     }
 
     @media(max-width:1180px){
-      .stats,
-      .modules{
+      .stats,.modules{
         grid-template-columns:repeat(2,1fr);
       }
     }
@@ -653,22 +591,15 @@
         transition:.25s;
       }
 
-      .sidebar.open{
-        transform:translateX(0);
-      }
-
-      .overlay.show{
-        display:block;
-      }
+      .sidebar.open{transform:none}
+      .overlay.show{display:block}
 
       .main{
         width:100%;
         margin-left:0;
       }
 
-      .mobile-menu{
-        display:block;
-      }
+      .mobile-menu{display:block}
 
       .header{
         height:68px;
@@ -679,32 +610,28 @@
         padding:17px 14px 28px;
       }
 
-      .user-text{
-        display:none;
-      }
+      .user-text{display:none}
 
-      .bottom-grid{
+      .bottom{
         grid-template-columns:1fr;
       }
     }
 
     @media(max-width:620px){
-      .language-switch{
-        order:-1;
-      }
+      .header-right{gap:5px}
 
-      .header-right{
-        gap:6px;
+      .lang-button{
+        min-width:34px;
+        padding:6px;
       }
 
       .logout{
-        padding:7px 8px;
+        padding:7px;
       }
     }
 
     @media(max-width:560px){
-      .stats,
-      .modules{
+      .stats,.modules{
         grid-template-columns:1fr;
       }
 
@@ -721,712 +648,1418 @@
 
 <body>
 
-  <!-- AUTH GATE -->
+<div id="authGate">
+  <div class="gate">
 
-  <div id="authGate">
-    <div class="gate-card">
+    <h1>SANTE SYSTEM</h1>
 
-      <h1 class="gate-title">
-        SANTE SYSTEM
-      </h1>
+    <div class="gate-line"></div>
 
-      <div class="gate-line"></div>
-
-      <div class="gate-subtitle" id="gateSubtitle">
-        กำลังตรวจสอบสิทธิ์ผู้ดูแลระบบ
-      </div>
-
-      <div class="gate-message" id="gateMessage">
-        กำลังตรวจสอบ Session และสิทธิ์ Staff/Admin กรุณารอสักครู่
-      </div>
-
-      <div class="spinner" id="spinner"></div>
-
-      <div class="gate-error" id="gateError"></div>
-
-      <div class="gate-actions" id="gateActions">
-
-        <button
-          class="gate-button gate-button-primary"
-          id="retryButton"
-          type="button"
-        >
-          ตรวจสอบอีกครั้ง
-        </button>
-
-        <button
-          class="gate-button gate-button-light"
-          id="loginButton"
-          type="button"
-        >
-          ไปหน้าเข้าสู่ระบบ
-        </button>
-
-      </div>
-
+    <div class="gate-title">
+      กำลังตรวจสอบสิทธิ์ผู้ดูแลระบบ
     </div>
+
+    <div class="gate-message" id="gateMessage">
+      กรุณารอสักครู่
+    </div>
+
+    <div class="spinner" id="spinner"></div>
+
+    <div id="gateError"></div>
+
+    <div id="gateActions">
+      <button class="gate-button gate-primary" id="retryButton">
+        ลองอีกครั้ง
+      </button>
+
+      <button class="gate-button gate-light" id="loginButton">
+        เข้าสู่ระบบ
+      </button>
+    </div>
+
   </div>
+</div>
 
 
-  <div class="overlay" id="overlay"></div>
+<div class="overlay" id="overlay"></div>
 
 
-  <!-- APP -->
+<div id="app">
 
-  <div id="app">
+  <aside class="sidebar" id="sidebar">
 
-    <!-- SIDEBAR -->
+    <div class="brand">
+      <div class="brand-mark">S</div>
 
-    <aside class="sidebar" id="sidebar">
+      <div>
+        <div class="brand-name">SANTE</div>
+        <div class="brand-sub">SYSTEM ADMIN</div>
+      </div>
+    </div>
 
-      <div class="brand">
 
-        <div class="brand-mark">
-          S
-        </div>
+    <div class="menu-title" data-i18n="overviewGroup">
+      ภาพรวม
+    </div>
+
+    <nav class="menu">
+
+      <button class="menu-item active">
+        <span class="menu-icon">⌂</span>
+        <span data-i18n="dashboard">แดชบอร์ด</span>
+      </button>
+
+    </nav>
+
+
+    <div class="menu-title" data-i18n="learningGroup">
+      การอบรมและการเรียนรู้
+    </div>
+
+    <nav class="menu">
+
+      <button class="menu-item" data-coming="members">
+        <span class="menu-icon">♙</span>
+        <span data-i18n="members">สมาชิก</span>
+      </button>
+
+      <button class="menu-item" data-coming="courses">
+        <span class="menu-icon">▣</span>
+        <span data-i18n="courses">หลักสูตร</span>
+      </button>
+
+      <button class="menu-item" data-coming="training">
+        <span class="menu-icon">◷</span>
+        <span data-i18n="training">รอบการอบรม</span>
+      </button>
+
+      <button class="menu-item" id="importMenu">
+        <span class="menu-icon">✎</span>
+        <span data-i18n="questionBank">
+          คลังข้อสอบ / นำเข้า Excel
+        </span>
+        <span class="badge">NEXT</span>
+      </button>
+
+      <button class="menu-item" data-coming="exams">
+        <span class="menu-icon">☑</span>
+        <span data-i18n="exams">ข้อสอบและผลสอบ</span>
+      </button>
+
+      <button class="menu-item" data-coming="certificates">
+        <span class="menu-icon">✓</span>
+        <span data-i18n="certificates">วุฒิบัตร</span>
+      </button>
+
+    </nav>
+
+
+    <div class="menu-title" data-i18n="serviceGroup">
+      งานบริการ
+    </div>
+
+    <nav class="menu">
+
+      <button class="menu-item" data-coming="services">
+        <span class="menu-icon">⚙</span>
+        <span data-i18n="services">บริการ</span>
+      </button>
+
+      <button class="menu-item" data-coming="quotations">
+        <span class="menu-icon">▤</span>
+        <span data-i18n="quotations">ใบเสนอราคา</span>
+      </button>
+
+      <button class="menu-item" data-coming="jobs">
+        <span class="menu-icon">◆</span>
+        <span data-i18n="jobs">งาน</span>
+      </button>
+
+    </nav>
+
+
+    <div class="menu-title" data-i18n="operationsGroup">
+      การดำเนินงาน
+    </div>
+
+    <nav class="menu">
+
+      <button class="menu-item" data-coming="finance">
+        <span class="menu-icon">฿</span>
+        <span data-i18n="finance">การเงินและเอกสาร</span>
+      </button>
+
+      <button class="menu-item" data-coming="notifications">
+        <span class="menu-icon">✉</span>
+        <span data-i18n="notifications">การแจ้งเตือน</span>
+      </button>
+
+      <button class="menu-item" data-coming="settings">
+        <span class="menu-icon">⚙</span>
+        <span data-i18n="settings">ตั้งค่าระบบ</span>
+      </button>
+
+    </nav>
+
+  </aside>
+
+
+  <div class="main">
+
+    <header class="header">
+
+      <div class="header-left">
+
+        <button class="mobile-menu" id="mobileMenu">
+          ☰
+        </button>
 
         <div>
-          <div class="brand-title">
-            SANTE
+          <div class="page-title" data-i18n="dashboard">
+            แดชบอร์ด
           </div>
 
-          <div class="brand-subtitle">
-            SYSTEM ADMIN
+          <div class="page-sub" data-i18n="systemName">
+            ระบบบริหารจัดการ SANTE Consulting
           </div>
         </div>
 
       </div>
 
 
-      <div
-        class="menu-title"
-        data-i18n="menuOverview"
-      >
-        ภาพรวม
-      </div>
+      <div class="header-right">
 
-      <nav class="menu">
+        <div class="language">
 
-        <button
-          class="menu-item active"
-          type="button"
-        >
-          <span class="menu-icon">⌂</span>
-
-          <span data-i18n="dashboard">
-            แดชบอร์ด
-          </span>
-        </button>
-
-      </nav>
-
-
-      <div
-        class="menu-title"
-        data-i18n="menuLearning"
-      >
-        การอบรมและการเรียนรู้
-      </div>
-
-      <nav class="menu">
-
-        <button
-          class="menu-item"
-          data-coming-key="members"
-          type="button"
-        >
-          <span class="menu-icon">♙</span>
-
-          <span data-i18n="members">
-            สมาชิก
-          </span>
-        </button>
-
-
-        <button
-          class="menu-item"
-          data-coming-key="courses"
-          type="button"
-        >
-          <span class="menu-icon">▣</span>
-
-          <span data-i18n="courses">
-            หลักสูตร
-          </span>
-        </button>
-
-
-        <button
-          class="menu-item"
-          data-coming-key="trainingSessions"
-          type="button"
-        >
-          <span class="menu-icon">◷</span>
-
-          <span data-i18n="trainingSessions">
-            รอบการอบรม
-          </span>
-        </button>
-
-
-        <button
-          class="menu-item"
-          id="questionImportMenu"
-          type="button"
-        >
-          <span class="menu-icon">✎</span>
-
-          <span data-i18n="questionBank">
-            คลังข้อสอบ / นำเข้า Excel
-          </span>
-
-          <span class="menu-badge">
-            NEXT
-          </span>
-        </button>
-
-
-        <button
-          class="menu-item"
-          data-coming-key="exams"
-          type="button"
-        >
-          <span class="menu-icon">☑</span>
-
-          <span data-i18n="exams">
-            ข้อสอบและผลสอบ
-          </span>
-        </button>
-
-
-        <button
-          class="menu-item"
-          data-coming-key="certificates"
-          type="button"
-        >
-          <span class="menu-icon">✓</span>
-
-          <span data-i18n="certificates">
-            วุฒิบัตร
-          </span>
-        </button>
-
-      </nav>
-
-
-      <div
-        class="menu-title"
-        data-i18n="menuService"
-      >
-        งานบริการ
-      </div>
-
-      <nav class="menu">
-
-        <button
-          class="menu-item"
-          data-coming-key="services"
-          type="button"
-        >
-          <span class="menu-icon">⚙</span>
-
-          <span data-i18n="services">
-            บริการ
-          </span>
-        </button>
-
-
-        <button
-          class="menu-item"
-          data-coming-key="quotations"
-          type="button"
-        >
-          <span class="menu-icon">▤</span>
-
-          <span data-i18n="quotations">
-            ใบเสนอราคา
-          </span>
-        </button>
-
-
-        <button
-          class="menu-item"
-          data-coming-key="jobs"
-          type="button"
-        >
-          <span class="menu-icon">◆</span>
-
-          <span data-i18n="jobs">
-            งาน
-          </span>
-        </button>
-
-      </nav>
-
-
-      <div
-        class="menu-title"
-        data-i18n="menuOperations"
-      >
-        การดำเนินงาน
-      </div>
-
-      <nav class="menu">
-
-        <button
-          class="menu-item"
-          data-coming-key="finance"
-          type="button"
-        >
-          <span class="menu-icon">฿</span>
-
-          <span data-i18n="finance">
-            การเงินและเอกสาร
-          </span>
-        </button>
-
-
-        <button
-          class="menu-item"
-          data-coming-key="notifications"
-          type="button"
-        >
-          <span class="menu-icon">✉</span>
-
-          <span data-i18n="notifications">
-            การแจ้งเตือน
-          </span>
-        </button>
-
-
-        <button
-          class="menu-item"
-          data-coming-key="settings"
-          type="button"
-        >
-          <span class="menu-icon">⚙</span>
-
-          <span data-i18n="settings">
-            ตั้งค่าระบบ
-          </span>
-        </button>
-
-      </nav>
-
-    </aside>
-
-
-    <!-- MAIN -->
-
-    <div class="main">
-
-      <!-- HEADER -->
-
-      <header class="header">
-
-        <div class="header-left">
-
-          <button
-            class="mobile-menu"
-            id="mobileMenu"
-            type="button"
-          >
-            ☰
+          <button class="lang-button active" id="langTH">
+            TH
           </button>
 
-          <div>
-
-            <div
-              class="page-title"
-              data-i18n="dashboard"
-            >
-              แดชบอร์ด
-            </div>
-
-            <div
-              class="page-subtitle"
-              data-i18n="managementSystem"
-            >
-              ระบบบริหารจัดการ SANTE Consulting
-            </div>
-
-          </div>
+          <button class="lang-button" id="langEN">
+            EN
+          </button>
 
         </div>
 
 
-        <div class="header-right">
+        <div class="user-area">
 
-          <!-- LANGUAGE -->
+          <div class="user-text">
+            <div class="user-email" id="userEmail">-</div>
 
-          <div class="language-switch">
-
-            <button
-              class="language-button active"
-              id="langTH"
-              type="button"
-            >
-              TH
-            </button>
-
-            <button
-              class="language-button"
-              id="langEN"
-              type="button"
-            >
-              EN
-            </button>
-
+            <div class="user-role" data-i18n="authorized">
+              ผู้ดูแลระบบ
+            </div>
           </div>
 
-
-          <!-- USER -->
-
-          <div class="header-user">
-
-            <div class="user-text">
-
-              <div
-                class="user-email"
-                id="userEmail"
-              >
-                -
-              </div>
-
-              <div
-                class="user-role"
-                data-i18n="authorizedStaff"
-              >
-                ผู้ดูแลระบบที่ได้รับอนุญาต
-              </div>
-
-            </div>
-
-
-            <div
-              class="avatar"
-              id="avatar"
-            >
-              S
-            </div>
-
-
-            <button
-              class="logout"
-              id="logoutButton"
-              type="button"
-              data-i18n="logout"
-            >
-              ออกจากระบบ
-            </button>
-
+          <div class="avatar" id="avatar">
+            S
           </div>
+
+          <button class="logout" id="logoutButton">
+            <span data-i18n="logout">ออกจากระบบ</span>
+          </button>
 
         </div>
 
-      </header>
+      </div>
+
+    </header>
 
 
-      <!-- CONTENT -->
+    <main class="content">
 
-      <main class="content">
+      <section class="welcome">
 
-        <!-- WELCOME -->
+        <h1>
+          <span data-i18n="welcome">ยินดีต้อนรับสู่</span>
+          <span class="yellow">SANTE SYSTEM</span>
+        </h1>
 
-        <section class="welcome">
+        <p data-i18n="welcomeDesc">
+          ศูนย์บริหารจัดการหลักสูตร การอบรม ข้อสอบ วุฒิบัตร งานบริการ และเอกสารธุรกิจ
+        </p>
 
-          <h1>
-            <span data-i18n="welcome">
-              ยินดีต้อนรับสู่
+        <div class="verified">
+          <span class="dot"></span>
+          <span data-i18n="verified">
+            ยืนยันสิทธิ์ผู้ดูแลระบบแล้ว
+          </span>
+        </div>
+
+      </section>
+
+
+      <div class="section-head">
+        <div class="section-title" data-i18n="overview">
+          ภาพรวมระบบ
+        </div>
+
+        <div class="section-note">
+          Production
+        </div>
+      </div>
+
+
+      <section class="stats">
+
+        <div class="card">
+          <div class="stat-label" data-i18n="status">
+            สถานะระบบ
+          </div>
+
+          <div class="stat-value" data-i18n="online">
+            ออนไลน์
+          </div>
+
+          <div class="stat-note">
+            Supabase + Cloudflare
+          </div>
+        </div>
+
+
+        <div class="card">
+          <div class="stat-label" data-i18n="examCourses">
+            หลักสูตรเตรียมสอบ
+          </div>
+
+          <div class="stat-value">5</div>
+
+          <div class="stat-note" data-i18n="configured">
+            ตั้งค่าแล้ว
+          </div>
+        </div>
+
+
+        <div class="card">
+          <div class="stat-label" data-i18n="examSets">
+            ชุดข้อสอบ
+          </div>
+
+          <div class="stat-value">18</div>
+
+          <div class="stat-note" data-i18n="setPlan">
+            วางแผน 100 ข้อต่อชุด
+          </div>
+        </div>
+
+
+        <div class="card">
+          <div class="stat-label" data-i18n="questions">
+            จำนวนข้อสอบตามแผน
+          </div>
+
+          <div class="stat-value">1,800</div>
+
+          <div class="stat-note" data-i18n="fiveCourses">
+            รวม 5 หลักสูตร
+          </div>
+        </div>
+
+      </section>
+
+
+      <div class="section-head">
+        <div class="section-title" data-i18n="management">
+          ระบบจัดการ
+        </div>
+
+        <div class="section-note" data-i18n="development">
+          เปิดใช้งานตามลำดับการพัฒนา
+        </div>
+      </div>
+
+
+      <section class="modules">
+
+        <div class="card module" id="importCard">
+
+          <div class="module-icon">✎</div>
+
+          <div class="module-name" data-i18n="questionBank">
+            คลังข้อสอบ / นำเข้า Excel
+          </div>
+
+          <div class="module-desc" data-i18n="questionDesc">
+            ตรวจสอบและนำเข้าคลังข้อสอบผ่านระบบ Admin
+          </div>
+
+          <span class="tag next" data-i18n="next">
+            โมดูลถัดไป
+          </span>
+
+        </div>
+
+
+        <div class="card module" data-coming="courses">
+
+          <div class="module-icon">▣</div>
+
+          <div class="module-name" data-i18n="courses">
+            หลักสูตร
+          </div>
+
+          <div class="module-desc" data-i18n="courseDesc">
+            จัดการหลักสูตร ราคา ระยะเวลาสิทธิ์ และเนื้อหา
+          </div>
+
+          <span class="tag" data-i18n="planned">
+            วางแผนแล้ว
+          </span>
+
+        </div>
+
+
+        <div class="card module" data-coming="training">
+
+          <div class="module-icon">◷</div>
+
+          <div class="module-name" data-i18n="training">
+            รอบการอบรม
+          </div>
+
+          <div class="module-desc" data-i18n="trainingDesc">
+            จัดการรอบอบรม ผู้สมัคร จำนวนที่นั่ง และแบบทดสอบ
+          </div>
+
+          <span class="tag" data-i18n="planned">
+            วางแผนแล้ว
+          </span>
+
+        </div>
+
+
+        <div class="card module" data-coming="certificates">
+
+          <div class="module-icon">✓</div>
+
+          <div class="module-name" data-i18n="certificates">
+            วุฒิบัตร
+          </div>
+
+          <div class="module-desc" data-i18n="certDesc">
+            สร้างวุฒิบัตร PDF เลขที่เอกสาร และ QR Verification
+          </div>
+
+          <span class="tag" data-i18n="planned">
+            วางแผนแล้ว
+          </span>
+
+        </div>
+
+
+        <div class="card module" data-coming="services">
+
+          <div class="module-icon">⚙</div>
+
+          <div class="module-name" data-i18n="servicesJobs">
+            งานบริการและงาน
+          </div>
+
+          <div class="module-desc" data-i18n="servicesDesc">
+            บริหารงานบริการ ตารางงาน สถานที่ และทีมงาน
+          </div>
+
+          <span class="tag" data-i18n="planned">
+            วางแผนแล้ว
+          </span>
+
+        </div>
+
+
+        <div class="card module" data-coming="quotations">
+
+          <div class="module-icon">▤</div>
+
+          <div class="module-name" data-i18n="quotations">
+            ใบเสนอราคา
+          </div>
+
+          <div class="module-desc" data-i18n="quoteDesc">
+            จัดการใบเสนอราคา Revision การอนุมัติ และสร้าง Job
+          </div>
+
+          <span class="tag" data-i18n="planned">
+            วางแผนแล้ว
+          </span>
+
+        </div>
+
+
+        <div class="card module" data-coming="finance">
+
+          <div class="module-icon">฿</div>
+
+          <div class="module-name" data-i18n="finance">
+            การเงินและเอกสาร
+          </div>
+
+          <div class="module-desc" data-i18n="financeDesc">
+            Payment, Invoice, Receipt/Tax Invoice, VAT และ WHT
+          </div>
+
+          <span class="tag" data-i18n="planned">
+            วางแผนแล้ว
+          </span>
+
+        </div>
+
+
+        <div class="card module" data-coming="members">
+
+          <div class="module-icon">♙</div>
+
+          <div class="module-name" data-i18n="membersRoles">
+            สมาชิกและสิทธิ์
+          </div>
+
+          <div class="module-desc" data-i18n="memberDesc">
+            จัดการสมาชิก โปรไฟล์ สิทธิ์ Staff/Admin และ LINE
+          </div>
+
+          <span class="tag" data-i18n="planned">
+            วางแผนแล้ว
+          </span>
+
+        </div>
+
+      </section>
+
+
+      <div class="bottom">
+
+        <section class="card">
+
+          <div class="panel-title" data-i18n="foundation">
+            ระบบพื้นฐาน
+          </div>
+
+          <div class="check-row">
+            <span class="check">✓</span>
+            <span data-i18n="dbReady">
+              โครงสร้างฐานข้อมูล Supabase พร้อมใช้งาน
             </span>
+          </div>
 
-            <span class="yellow">
-              SANTE SYSTEM
+          <div class="check-row">
+            <span class="check">✓</span>
+            <span data-i18n="rlsReady">
+              RLS และสิทธิ์ Admin พร้อมใช้งาน
             </span>
-          </h1>
+          </div>
 
-          <p data-i18n="welcomeDescription">
-            ศูนย์บริหารจัดการหลักสูตร การอบรม ข้อสอบ วุฒิบัตร งานบริการ และเอกสารธุรกิจ
-          </p>
-
-          <div class="online-status">
-
-            <span class="online-dot"></span>
-
-            <span data-i18n="authVerified">
-              ยืนยันสิทธิ์ผู้ดูแลระบบแล้ว
+          <div class="check-row">
+            <span class="check">✓</span>
+            <span data-i18n="examReady">
+              Exam และ Question Import Backend พร้อมใช้งาน
             </span>
+          </div>
 
+          <div class="check-row">
+            <span class="check">✓</span>
+            <span data-i18n="authReady">
+              Admin Authentication ผ่านการตรวจสอบแล้ว
+            </span>
+          </div>
+
+          <div class="check-row">
+            <span class="check">✓</span>
+            <span>
+              GitHub → Cloudflare
+            </span>
           </div>
 
         </section>
 
 
-        <!-- OVERVIEW -->
+        <section class="card">
 
-        <div class="section-head">
-
-          <div
-            class="section-title"
-            data-i18n="systemOverview"
-          >
-            ภาพรวมระบบ
+          <div class="panel-title" data-i18n="quick">
+            เมนูลัด
           </div>
 
-          <div
-            class="section-note"
-            data-i18n="productionStatus"
-          >
-            สถานะระบบ Production
-          </div>
+          <button class="quick" id="importQuick">
+            ✎
+            <span data-i18n="openImport">
+              เปิดคลังข้อสอบ / นำเข้า Excel
+            </span>
+          </button>
 
-        </div>
+          <button class="quick" data-coming="courses">
+            ▣
+            <span data-i18n="manageCourses">
+              จัดการหลักสูตร
+            </span>
+          </button>
 
-
-        <section class="stats">
-
-          <div class="stat-card">
-
-            <div
-              class="stat-label"
-              data-i18n="systemStatus"
-            >
-              สถานะระบบ
-            </div>
-
-            <div
-              class="stat-value"
-              data-i18n="online"
-            >
-              ออนไลน์
-            </div>
-
-            <div class="stat-note">
-              Supabase + Cloudflare
-            </div>
-
-          </div>
-
-
-          <div class="stat-card">
-
-            <div
-              class="stat-label"
-              data-i18n="examPrepCourses"
-            >
-              หลักสูตรเตรียมสอบ
-            </div>
-
-            <div class="stat-value">
-              5
-            </div>
-
-            <div
-              class="stat-note"
-              data-i18n="configuredCourses"
-            >
-              หลักสูตรที่ตั้งค่าไว้
-            </div>
-
-          </div>
-
-
-          <div class="stat-card">
-
-            <div
-              class="stat-label"
-              data-i18n="fixedExamSets"
-            >
-              ชุดข้อสอบ
-            </div>
-
-            <div class="stat-value">
-              18
-            </div>
-
-            <div
-              class="stat-note"
-              data-i18n="questionsPerSet"
-            >
-              วางแผน 100 ข้อต่อชุด
-            </div>
-
-          </div>
-
-
-          <div class="stat-card">
-
-            <div
-              class="stat-label"
-              data-i18n="plannedQuestions"
-            >
-              จำนวนข้อสอบตามแผน
-            </div>
-
-            <div class="stat-value">
-              1,800
-            </div>
-
-            <div
-              class="stat-note"
-              data-i18n="acrossCourses"
-            >
-              รวม 5 หลักสูตรเตรียมสอบ
-            </div>
-
-          </div>
+          <button class="quick" data-coming="training">
+            ◷
+            <span data-i18n="manageTraining">
+              จัดการรอบการอบรม
+            </span>
+          </button>
 
         </section>
 
+      </div>
 
-        <!-- MANAGEMENT -->
+    </main>
 
-        <div class="section-head">
+  </div>
 
-          <div
-            class="section-title"
-            data-i18n="managementModules"
-          >
-            ระบบจัดการ
-          </div>
-
-          <div
-            class="section-note"
-            data-i18n="modulesNote"
-          >
-            เปิดใช้งานทีละโมดูลตามลำดับการพัฒนา
-          </div>
-
-        </div>
+</div>
 
 
-        <section class="modules">
+<script>
 
-          <!-- QUESTION BANK -->
+const SUPABASE_URL =
+  "https://cyegjwerxlxhczrfiurz.supabase.co";
 
-          <div
-            class="module-card"
-            id="questionImportCard"
-          >
+const SUPABASE_KEY =
+  "sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF";
 
-            <div class="module-icon">
-              ✎
-            </div>
+const AUTH_STORAGE_KEY =
+  "sante-admin-auth";
 
-            <div
-              class="module-name"
-              data-i18n="questionBank"
-            >
-              คลังข้อสอบ / นำเข้า Excel
-            </div>
-
-            <div
-              class="module-description"
-              data-i18n="questionBankDescription"
-            >
-              ตรวจสอบและนำเข้าคลังข้อสอบผ่าน Admin Session โดยไม่ต้องใช้ SQL Editor
-            </div>
-
-            <span
-              class="module-tag next"
-              data-i18n="nextModule"
-            >
-              โมดูลถัดไป
-            </span>
-
-          </div>
+const LANGUAGE_STORAGE_KEY =
+  "sante-admin-language";
 
 
-          <!-- COURSES -->
-
-          <div
-            class="module-card"
-            data-coming-key="courses"
-          >
-
-            <div class="module-icon">
-              ▣
-            </div>
-
-            <div
-              class="module-name"
-              data-i18n="courses"
-            >
-              หลักสูตร
-            </div>
-
-            <div
-              class="module-description"
-              data-i18n="coursesDescription"
-            >
-              จัดการหลักสูตร ราคา ระยะเวลาสิทธิ์ และเนื้อหาการเรียน
-            </div>
-
-            <span
-              class="module-tag"
-              data-i18n="planned"
-            >
-              วางแผนแล้ว
-            </span>
-
-          </div>
+let supabaseClient = null;
+let authorizedUser = null;
 
 
-          <!-- TRAINING -->
+/* ===============================
+   TRANSLATION
+=============================== */
 
-          <div
-            class="module-card"
-            data-coming-key="trainingSessions"
-          >
+const translations = {
 
-            <div class="module-icon">
-              ◷
-            </div>
+  th:{
+    overviewGroup:"ภาพรวม",
+    learningGroup:"การอบรมและการเรียนรู้",
+    serviceGroup:"งานบริการ",
+    operationsGroup:"การดำเนินงาน",
 
-            <div
-              class="module-name"
-              data-i18n="trainingSessions"
-            >
-              รอบการอบรม
-            </div>
+    dashboard:"แดชบอร์ด",
+    systemName:"ระบบบริหารจัดการ SANTE Consulting",
 
-            <div
-              class="module-description"
-              data-i18n="trainingDescription"
-            >
-              จัดการรอบอบรม ผู้สมัคร จำนวนที่นั่ง วันอบรม และสิทธิ์ทำแบบทดสอบ
-            </div>
+    members:"สมาชิก",
+    courses:"หลักสูตร",
+    training:"รอบการอบรม",
+    questionBank:"คลังข้อสอบ / นำเข้า Excel",
+    exams:"ข้อสอบและผลสอบ",
+    certificates:"วุฒิบัตร",
+    services:"บริการ",
+    quotations:"ใบเสนอราคา",
+    jobs:"งาน",
+    finance:"การเงินและเอกสาร",
+    notifications:"การแจ้งเตือน",
+    settings:"ตั้งค่าระบบ",
 
-            <span
-              class="module-tag"
-              data-i18n="planned"
-            >
-              วางแผนแล้ว
-            </span>
+    authorized:"ผู้ดูแลระบบ",
+    logout:"ออกจากระบบ",
 
-          </div>
+    welcome:"ยินดีต้อนรับสู่",
+
+    welcomeDesc:
+      "ศูนย์บริหารจัดการหลักสูตร การอบรม ข้อสอบ วุฒิบัตร งานบริการ และเอกสารธุรกิจ",
+
+    verified:"ยืนยันสิทธิ์ผู้ดูแลระบบแล้ว",
+
+    overview:"ภาพรวมระบบ",
+    status:"สถานะระบบ",
+    online:"ออนไลน์",
+
+    examCourses:"หลักสูตรเตรียมสอบ",
+    configured:"ตั้งค่าแล้ว",
+
+    examSets:"ชุดข้อสอบ",
+    setPlan:"วางแผน 100 ข้อต่อชุด",
+
+    questions:"จำนวนข้อสอบตามแผน",
+    fiveCourses:"รวม 5 หลักสูตร",
+
+    management:"ระบบจัดการ",
+    development:"เปิดใช้งานตามลำดับการพัฒนา",
+
+    questionDesc:
+      "ตรวจสอบและนำเข้าคลังข้อสอบผ่านระบบ Admin",
+
+    next:"โมดูลถัดไป",
+    planned:"วางแผนแล้ว",
+
+    courseDesc:
+      "จัดการหลักสูตร ราคา ระยะเวลาสิทธิ์ และเนื้อหา",
+
+    trainingDesc:
+      "จัดการรอบอบรม ผู้สมัคร จำนวนที่นั่ง และแบบทดสอบ",
+
+    certDesc:
+      "สร้างวุฒิบัตร PDF เลขที่เอกสาร และ QR Verification",
+
+    servicesJobs:"งานบริการและงาน",
+
+    servicesDesc:
+      "บริหารงานบริการ ตารางงาน สถานที่ และทีมงาน",
+
+    quoteDesc:
+      "จัดการใบเสนอราคา Revision การอนุมัติ และสร้าง Job",
+
+    financeDesc:
+      "Payment, Invoice, Receipt/Tax Invoice, VAT และ WHT",
+
+    membersRoles:"สมาชิกและสิทธิ์",
+
+    memberDesc:
+      "จัดการสมาชิก โปรไฟล์ สิทธิ์ Staff/Admin และ LINE",
+
+    foundation:"ระบบพื้นฐาน",
+
+    dbReady:
+      "โครงสร้างฐานข้อมูล Supabase พร้อมใช้งาน",
+
+    rlsReady:
+      "RLS และสิทธิ์ Admin พร้อมใช้งาน",
+
+    examReady:
+      "Exam และ Question Import Backend พร้อมใช้งาน",
+
+    authReady:
+      "Admin Authentication ผ่านการตรวจสอบแล้ว",
+
+    quick:"เมนูลัด",
+
+    openImport:
+      "เปิดคลังข้อสอบ / นำเข้า Excel",
+
+    manageCourses:
+      "จัดการหลักสูตร",
+
+    manageTraining:
+      "จัดการรอบการอบรม",
+
+    coming:
+      "โมดูลนี้กำลังพัฒนา"
+  },
 
 
-          <!-- CERTIFICATE -->
+  en:{
+    overviewGroup:"OVERVIEW",
+    learningGroup:"TRAINING & LEARNING",
+    serviceGroup:"SERVICE",
+    operationsGroup:"OPERATIONS",
 
-          <div
-            class="module-card"
-            data-coming-key="certificates"
-          >
+    dashboard:"Dashboard",
+    systemName:"SANTE Consulting Management System",
 
-            <div class="module-icon">
-              ✓
-            </div>
+    members:"Members",
+    courses:"Courses",
+    training:"Training Sessions",
+    questionBank:"Question Bank / Excel Import",
+    exams:"Exams & Results",
+    certificates:"Certificates",
+    services:"Services",
+    quotations:"Quotations",
+    jobs:"Jobs",
+    finance:"Finance & Documents",
+    notifications:"Notifications",
+    settings:"System Settings",
 
-            <div
-              class="module-name"
-              data-i18n="certificates"
-            >
-              วุฒิบัตร
-            </div>
+    authorized:"Authorized Staff",
+    logout:"Logout",
 
-            <div
-              class="module-description"
-              data-i18n="certificateDescription"
-            >
-              สร้างวุฒิบัตร PDF เลขที่เ
+    welcome:"Welcome to",
+
+    welcomeDesc:
+      "Central management for courses, training, examinations, certificates, services and business documents",
+
+    verified:"Admin authentication verified",
+
+    overview:"System Overview",
+    status:"System Status",
+    online:"Online",
+
+    examCourses:"Exam-prep Courses",
+    configured:"Configured courses",
+
+    examSets:"Fixed Exam Sets",
+    setPlan:"100 questions per set planned",
+
+    questions:"Planned Questions",
+    fiveCourses:"Across 5 exam-prep courses",
+
+    management:"Management Modules",
+    development:"Modules enabled according to development plan",
+
+    questionDesc:
+      "Validate and import examination questions through the Admin system",
+
+    next:"NEXT MODULE",
+    planned:"PLANNED",
+
+    courseDesc:
+      "Manage courses, pricing, access periods and content",
+
+    trainingDesc:
+      "Manage sessions, registrations, seats and examinations",
+
+    certDesc:
+      "Generate certificate PDFs, document numbers and QR verification",
+
+    servicesJobs:"Services & Jobs",
+
+    servicesDesc:
+      "Manage services, schedules, locations and teams",
+
+    quoteDesc:
+      "Manage quotations, revisions, approvals and jobs",
+
+    financeDesc:
+      "Payments, invoices, receipts/tax invoices, VAT and WHT",
+
+    membersRoles:"Members & Roles",
+
+    memberDesc:
+      "Manage members, profiles, Staff/Admin roles and LINE",
+
+    foundation:"System Foundation",
+
+    dbReady:
+      "Supabase database foundation ready",
+
+    rlsReady:
+      "RLS and Admin permissions ready",
+
+    examReady:
+      "Exam and Question Import backend ready",
+
+    authReady:
+      "Admin authentication verified",
+
+    quick:"Quick Actions",
+
+    openImport:
+      "Open Question Bank / Excel Import",
+
+    manageCourses:
+      "Manage Courses",
+
+    manageTraining:
+      "Manage Training Sessions",
+
+    coming:
+      "This module is under development"
+  }
+
+};
+
+
+/* ===============================
+   LANGUAGE
+=============================== */
+
+function currentLanguage(){
+
+  return localStorage.getItem(
+    LANGUAGE_STORAGE_KEY
+  ) || "th";
+
+}
+
+
+function setLanguage(lang){
+
+  if(lang !== "th" && lang !== "en"){
+    lang = "th";
+  }
+
+  localStorage.setItem(
+    LANGUAGE_STORAGE_KEY,
+    lang
+  );
+
+  document.documentElement.lang =
+    lang;
+
+  document
+    .querySelectorAll("[data-i18n]")
+    .forEach(function(element){
+
+      const key =
+        element.dataset.i18n;
+
+      if(translations[lang][key]){
+        element.textContent =
+          translations[lang][key];
+      }
+
+    });
+
+  document
+    .getElementById("langTH")
+    .classList.toggle(
+      "active",
+      lang === "th"
+    );
+
+  document
+    .getElementById("langEN")
+    .classList.toggle(
+      "active",
+      lang === "en"
+    );
+
+}
+
+
+/* ===============================
+   TIMEOUT
+=============================== */
+
+function withTimeout(
+  promise,
+  milliseconds,
+  message
+){
+
+  let timer;
+
+  const timeout =
+    new Promise(
+      function(_,reject){
+
+        timer =
+          setTimeout(
+            function(){
+
+              reject(
+                new Error(message)
+              );
+
+            },
+            milliseconds
+          );
+
+      }
+    );
+
+  return Promise
+    .race([
+      promise,
+      timeout
+    ])
+    .finally(
+      function(){
+
+        clearTimeout(timer);
+
+      }
+    );
+
+}
+
+
+/* ===============================
+   ERROR
+=============================== */
+
+function showError(message){
+
+  document
+    .getElementById("spinner")
+    .style.display =
+      "none";
+
+  document
+    .getElementById("gateMessage")
+    .textContent =
+      "ไม่สามารถเปิด Admin Dashboard ได้";
+
+  const box =
+    document.getElementById(
+      "gateError"
+    );
+
+  box.textContent =
+    message;
+
+  box.style.display =
+    "block";
+
+  document
+    .getElementById("gateActions")
+    .style.display =
+      "flex";
+
+}
+
+
+/* ===============================
+   AUTH
+=============================== */
+
+async function verifyAdmin(){
+
+  document
+    .getElementById("spinner")
+    .style.display =
+      "block";
+
+  document
+    .getElementById("gateError")
+    .style.display =
+      "none";
+
+  document
+    .getElementById("gateActions")
+    .style.display =
+      "none";
+
+
+  if(!window.supabase){
+
+    showError(
+      "ไม่สามารถโหลด Supabase Library ได้ กรุณาลอง Refresh หน้าอีกครั้ง"
+    );
+
+    return;
+
+  }
+
+
+  try{
+
+    supabaseClient =
+      window.supabase.createClient(
+
+        SUPABASE_URL,
+
+        SUPABASE_KEY,
+
+        {
+          auth:{
+            storageKey:
+              AUTH_STORAGE_KEY,
+
+            persistSession:
+              true,
+
+            autoRefreshToken:
+              true,
+
+            detectSessionInUrl:
+              true
+          }
+        }
+
+      );
+
+
+    /* SESSION */
+
+    document
+      .getElementById("gateMessage")
+      .textContent =
+        "กำลังตรวจสอบ Session...";
+
+
+    const sessionResult =
+      await withTimeout(
+
+        supabaseClient
+          .auth
+          .getSession(),
+
+        8000,
+
+        "การตรวจสอบ Session ใช้เวลานานเกินไป"
+
+      );
+
+
+    if(sessionResult.error){
+
+      throw sessionResult.error;
+
+    }
+
+
+    if(
+      !sessionResult.data ||
+      !sessionResult.data.session
+    ){
+
+      window.location.replace(
+        "./admin-login.html"
+      );
+
+      return;
+
+    }
+
+
+    /* USER */
+
+    document
+      .getElementById("gateMessage")
+      .textContent =
+        "กำลังยืนยันบัญชีผู้ดูแลระบบ...";
+
+
+    const userResult =
+      await withTimeout(
+
+        supabaseClient
+          .auth
+          .getUser(),
+
+        8000,
+
+        "การยืนยันบัญชีใช้เวลานานเกินไป"
+
+      );
+
+
+    if(userResult.error){
+
+      throw userResult.error;
+
+    }
+
+
+    if(
+      !userResult.data ||
+      !userResult.data.user
+    ){
+
+      window.location.replace(
+        "./admin-login.html"
+      );
+
+      return;
+
+    }
+
+
+    authorizedUser =
+      userResult.data.user;
+
+
+    /* STAFF */
+
+    document
+      .getElementById("gateMessage")
+      .textContent =
+        "กำลังตรวจสอบสิทธิ์ Staff/Admin...";
+
+
+    const staffResult =
+      await withTimeout(
+
+        supabaseClient.rpc(
+          "is_staff"
+        ),
+
+        8000,
+
+        "การตรวจสอบสิทธิ์ใช้เวลานานเกินไป"
+
+      );
+
+
+    if(staffResult.error){
+
+      throw staffResult.error;
+
+    }
+
+
+    if(
+      staffResult.data !== true
+    ){
+
+      showError(
+        "บัญชีนี้เข้าสู่ระบบได้ แต่ไม่มีสิทธิ์ Staff/Admin"
+      );
+
+      return;
+
+    }
+
+
+    /* SUCCESS */
+
+    openDashboard();
+
+
+  }catch(error){
+
+    console.error(
+      "ADMIN AUTH ERROR:",
+      error
+    );
+
+    showError(
+      error?.message ||
+      "เกิดข้อผิดพลาดในการตรวจสอบสิทธิ์"
+    );
+
+  }
+
+}
+
+
+/* ===============================
+   DASHBOARD
+=============================== */
+
+function openDashboard(){
+
+  const email =
+    authorizedUser?.email ||
+    "SANTE Admin";
+
+  document
+    .getElementById("userEmail")
+    .textContent =
+      email;
+
+  document
+    .getElementById("avatar")
+    .textContent =
+      email
+        .charAt(0)
+        .toUpperCase();
+
+  setLanguage(
+    currentLanguage()
+  );
+
+  document
+    .getElementById("authGate")
+    .style.display =
+      "none";
+
+  document
+    .getElementById("app")
+    .style.display =
+      "block";
+
+}
+
+
+/* ===============================
+   BUTTONS
+=============================== */
+
+document
+  .getElementById("retryButton")
+  .addEventListener(
+    "click",
+    verifyAdmin
+  );
+
+
+document
+  .getElementById("loginButton")
+  .addEventListener(
+    "click",
+    function(){
+
+      window.location.replace(
+        "./admin-login.html"
+      );
+
+    }
+  );
+
+
+document
+  .getElementById("langTH")
+  .addEventListener(
+    "click",
+    function(){
+
+      setLanguage("th");
+
+    }
+  );
+
+
+document
+  .getElementById("langEN")
+  .addEventListener(
+    "click",
+    function(){
+
+      setLanguage("en");
+
+    }
+  );
+
+
+/* LOGOUT */
+
+document
+  .getElementById("logoutButton")
+  .addEventListener(
+    "click",
+    async function(){
+
+      try{
+
+        if(supabaseClient){
+
+          await withTimeout(
+
+            supabaseClient
+              .auth
+              .signOut(),
+
+            5000,
+
+            "Logout timeout"
+
+          );
+
+        }
+
+      }catch(error){
+
+        console.error(
+          error
+        );
+
+      }
+
+      window.location.replace(
+        "./admin-login.html"
+      );
+
+    }
+  );
+
+
+/* MOBILE */
+
+const sidebar =
+  document.getElementById(
+    "sidebar"
+  );
+
+const overlay =
+  document.getElementById(
+    "overlay"
+  );
+
+
+document
+  .getElementById("mobileMenu")
+  .addEventListener(
+    "click",
+    function(){
+
+      sidebar
+        .classList
+        .toggle("open");
+
+      overlay
+        .classList
+        .toggle("show");
+
+    }
+  );
+
+
+overlay.addEventListener(
+  "click",
+  function(){
+
+    sidebar
+      .classList
+      .remove("open");
+
+    overlay
+      .classList
+      .remove("show");
+
+  }
+);
+
+
+/* QUESTION IMPORT */
+
+function openImport(){
+
+  window.location.href =
+    "./admin-question-import.html";
+
+}
+
+
+document
+  .getElementById("importMenu")
+  .addEventListener(
+    "click",
+    openImport
+  );
+
+
+document
+  .getElementById("importCard")
+  .addEventListener(
+    "click",
+    openImport
+  );
+
+
+document
+  .getElementById("importQuick")
+  .addEventListener(
+    "click",
+    openImport
+  );
+
+
+/* COMING SOON */
+
+document
+  .querySelectorAll(
+    "[data-coming]"
+  )
+  .forEach(
+    function(element){
+
+      element.addEventListener(
+        "click",
+        function(){
+
+          const lang =
+            currentLanguage();
+
+          alert(
+            translations[lang].coming
+          );
+
+        }
+      );
+
+    }
+  );
+
+
+/* ===============================
+   START
+=============================== */
+
+setLanguage(
+  currentLanguage()
+);
+
+verifyAdmin();
+
+</script>
+
+</body>
+</html>
