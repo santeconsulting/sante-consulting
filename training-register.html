@@ -1353,7 +1353,7 @@
             <input
               type="radio"
               name="billingType"
-              value="COMPANY"
+              value="ORGANIZATION"
               checked
             >
             นิติบุคคล / บริษัท
@@ -2233,7 +2233,7 @@
 
     const companyRadio =
       document.querySelector(
-        'input[name="billingType"][value="COMPANY"]'
+        'input[name="billingType"][value="ORGANIZATION"]'
       );
 
     companyRadio.checked = true;
@@ -2372,7 +2372,7 @@
     const value =
       document.querySelector(
         'input[name="billingType"]:checked'
-      )?.value || "COMPANY";
+      )?.value || "ORGANIZATION";
 
     document
       .querySelectorAll(".billing-type-option")
@@ -2380,7 +2380,7 @@
         item.classList.remove("selected");
       });
 
-    if (value === "COMPANY") {
+    if (value === "ORGANIZATION") {
       document
         .getElementById("billingTypeCompanyBox")
         .classList.add("selected");
@@ -2585,7 +2585,7 @@
     const billingType =
       document.querySelector(
         'input[name="billingType"]:checked'
-      )?.value || "COMPANY";
+      )?.value || "ORGANIZATION";
 
     const billingName =
       document.getElementById("billingName").value.trim();
