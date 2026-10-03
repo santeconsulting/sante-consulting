@@ -9,6 +9,7 @@
   <!-- Prompt Font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
   <link
     href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap"
     rel="stylesheet"
@@ -18,109 +19,142 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
-    :root {
-      --navy: #082b55;
-      --navy-dark: #051f3e;
-      --navy-light: #123f70;
-      --yellow: #ffc400;
-      --bg: #f4f6f9;
-      --white: #ffffff;
-      --text: #182230;
-      --muted: #748092;
-      --border: #e3e8ef;
-      --danger: #c62828;
-      --success: #16803c;
+
+    :root{
+      --navy:#082b55;
+      --navy-dark:#051f3e;
+      --navy-light:#123f70;
+      --yellow:#ffc400;
+      --bg:#f4f6f9;
+      --white:#ffffff;
+      --text:#182230;
+      --muted:#748092;
+      --border:#e3e8ef;
+      --danger:#c62828;
+      --success:#16803c;
     }
 
-    * {
-      box-sizing: border-box;
+    *{
+      box-sizing:border-box;
     }
 
     html,
-    body {
-      margin: 0;
-      min-height: 100%;
-      font-family: "Prompt", sans-serif;
-      background: var(--bg);
-      color: var(--text);
+    body{
+      margin:0;
+      min-height:100%;
+      font-family:"Prompt",sans-serif;
+      background:var(--bg);
+      color:var(--text);
     }
 
     button,
-    input {
-      font-family: "Prompt", sans-serif;
+    input{
+      font-family:"Prompt",sans-serif;
     }
+
 
     /* =========================
-       LOADING
+       LOADING / AUTH CHECK
     ========================= */
 
-    #loadingScreen {
-      position: fixed;
-      inset: 0;
-      z-index: 9999;
+    #loadingScreen{
+      position:fixed;
+      inset:0;
+      z-index:9999;
 
-      background: var(--navy);
-      color: white;
+      background:var(--navy);
+      color:#fff;
 
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex-direction:column;
 
-      gap: 15px;
-      padding: 20px;
+      gap:15px;
+      padding:20px;
     }
 
-    .loader {
-      width: 42px;
-      height: 42px;
+    .loader{
+      width:42px;
+      height:42px;
 
-      border: 4px solid rgba(255,255,255,.2);
-      border-top-color: var(--yellow);
-      border-radius: 50%;
+      border:4px solid rgba(255,255,255,.2);
+      border-top-color:var(--yellow);
 
-      animation: spin .8s linear infinite;
+      border-radius:50%;
+
+      animation:spin .8s linear infinite;
     }
 
-    @keyframes spin {
-      to {
-        transform: rotate(360deg);
+    @keyframes spin{
+      to{
+        transform:rotate(360deg);
       }
     }
 
-    .auth-error {
-      display: none;
+    .auth-error{
+      display:none;
 
-      max-width: 680px;
+      width:min(680px,92vw);
 
-      background: white;
-      color: var(--danger);
+      background:#fff;
+      color:var(--danger);
 
-      padding: 16px 18px;
-      border-radius: 10px;
+      padding:18px 20px;
 
-      font-size: 13px;
-      line-height: 1.6;
-      text-align: center;
+      border-radius:12px;
 
-      white-space: pre-line;
+      font-size:13px;
+      line-height:1.7;
+
+      text-align:center;
     }
+
+    .auth-actions{
+      display:none;
+      gap:10px;
+      margin-top:4px;
+    }
+
+    .auth-button{
+      border:0;
+      border-radius:9px;
+
+      padding:10px 18px;
+
+      font-size:12px;
+      font-weight:500;
+
+      cursor:pointer;
+    }
+
+    .auth-button.primary{
+      background:var(--yellow);
+      color:var(--navy);
+    }
+
+    .auth-button.secondary{
+      background:#fff;
+      color:var(--navy);
+    }
+
 
     /* =========================
        APP
     ========================= */
 
-    .app {
-      display: none;
-      min-height: 100vh;
+    .app{
+      display:none;
+      min-height:100vh;
     }
+
 
     /* =========================
        SIDEBAR
     ========================= */
 
-    .sidebar {
-      width: 270px;
+    .sidebar{
+      width:270px;
 
       background:
         linear-gradient(
@@ -129,253 +163,259 @@
           var(--navy-dark)
         );
 
-      color: white;
+      color:#fff;
 
-      position: fixed;
+      position:fixed;
 
-      left: 0;
-      top: 0;
-      bottom: 0;
+      left:0;
+      top:0;
+      bottom:0;
 
-      z-index: 1000;
+      z-index:1000;
 
-      padding: 24px 18px;
+      padding:24px 18px;
 
-      overflow-y: auto;
+      overflow-y:auto;
     }
 
-    .brand {
-      padding: 5px 12px 24px;
+    .brand{
+      padding:5px 12px 24px;
 
       border-bottom:
         1px solid rgba(255,255,255,.10);
 
-      margin-bottom: 20px;
+      margin-bottom:20px;
     }
 
-    .brand-title {
-      font-size: 25px;
-      font-weight: 700;
+    .brand-title{
+      font-size:25px;
+      font-weight:700;
 
-      color: var(--yellow);
+      color:var(--yellow);
 
-      letter-spacing: .5px;
+      letter-spacing:.5px;
     }
 
-    .brand-sub {
-      font-size: 12px;
+    .brand-sub{
+      font-size:12px;
 
       color:
         rgba(255,255,255,.68);
 
-      margin-top: 3px;
+      margin-top:3px;
     }
 
-    .menu-title {
-      padding: 5px 12px 8px;
+    .menu-title{
+      padding:5px 12px 8px;
 
       color:
         rgba(255,255,255,.45);
 
-      font-size: 10px;
-      letter-spacing: 1px;
+      font-size:10px;
+
+      letter-spacing:1px;
     }
 
-    .menu {
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
+    .menu{
+      display:flex;
+      flex-direction:column;
+
+      gap:5px;
     }
 
-    .menu-item {
-      width: 100%;
+    .menu-item{
+      width:100%;
 
-      border: 0;
+      border:0;
 
       color:
         rgba(255,255,255,.83);
 
-      background: transparent;
+      background:transparent;
 
-      border-radius: 9px;
+      border-radius:9px;
 
-      padding: 11px 12px;
+      padding:11px 12px;
 
-      display: flex;
-      align-items: center;
+      display:flex;
+      align-items:center;
 
-      gap: 11px;
+      gap:11px;
 
-      text-align: left;
+      text-align:left;
 
-      cursor: pointer;
+      cursor:pointer;
 
-      font-size: 13px;
+      font-size:13px;
 
-      transition: .2s;
+      transition:.2s;
     }
 
     .menu-item:hover,
-    .menu-item.active {
+    .menu-item.active{
       background:
         rgba(255,255,255,.10);
 
-      color: white;
+      color:#fff;
     }
 
-    .menu-item.active {
+    .menu-item.active{
       border-left:
         3px solid var(--yellow);
     }
 
-    .menu-icon {
-      width: 25px;
+    .menu-icon{
+      width:25px;
 
-      text-align: center;
+      text-align:center;
 
-      font-size: 17px;
+      font-size:17px;
     }
+
 
     /* =========================
        MAIN
     ========================= */
 
-    .main {
-      margin-left: 270px;
+    .main{
+      margin-left:270px;
 
       width:
         calc(100% - 270px);
 
-      min-height: 100vh;
+      min-height:100vh;
     }
+
 
     /* =========================
        HEADER
     ========================= */
 
-    .header {
-      height: 76px;
+    .header{
+      height:76px;
 
-      background: white;
+      background:#fff;
 
       border-bottom:
         1px solid var(--border);
 
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
 
-      padding: 0 30px;
+      padding:0 30px;
 
-      position: sticky;
+      position:sticky;
 
-      top: 0;
+      top:0;
 
-      z-index: 500;
+      z-index:500;
     }
 
-    .header-left {
-      display: flex;
-      align-items: center;
+    .header-left{
+      display:flex;
+      align-items:center;
 
-      gap: 14px;
+      gap:14px;
     }
 
-    .mobile-menu {
-      display: none;
+    .mobile-menu{
+      display:none;
 
-      border: 0;
-      background: transparent;
+      border:0;
 
-      font-size: 24px;
+      background:transparent;
 
-      color: var(--navy);
+      font-size:24px;
 
-      cursor: pointer;
+      color:var(--navy);
+
+      cursor:pointer;
     }
 
-    .page-title {
-      font-size: 19px;
+    .page-title{
+      font-size:19px;
 
-      color: var(--navy);
+      color:var(--navy);
 
-      font-weight: 600;
+      font-weight:600;
     }
 
-    .header-user {
-      display: flex;
-      align-items: center;
+    .header-user{
+      display:flex;
+      align-items:center;
 
-      gap: 12px;
+      gap:12px;
     }
 
-    .user-text {
-      text-align: right;
+    .user-text{
+      text-align:right;
     }
 
-    .user-email {
-      font-size: 12px;
+    .user-email{
+      font-size:12px;
 
-      color: var(--text);
+      color:var(--text);
 
-      font-weight: 500;
+      font-weight:500;
     }
 
-    .user-role {
-      font-size: 10px;
+    .user-role{
+      font-size:10px;
 
-      color: var(--muted);
+      color:var(--muted);
 
-      margin-top: 2px;
+      margin-top:2px;
     }
 
-    .avatar {
-      width: 38px;
-      height: 38px;
+    .avatar{
+      width:38px;
+      height:38px;
 
-      border-radius: 50%;
+      border-radius:50%;
 
-      background: var(--navy);
+      background:var(--navy);
 
-      color: var(--yellow);
+      color:var(--yellow);
 
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display:flex;
+      align-items:center;
+      justify-content:center;
 
-      font-weight: 700;
+      font-weight:700;
     }
 
-    .logout {
+    .logout{
       border:
         1px solid var(--border);
 
-      background: white;
+      background:#fff;
 
-      border-radius: 8px;
+      border-radius:8px;
 
-      padding: 8px 12px;
+      padding:8px 12px;
 
-      color: var(--danger);
+      color:var(--danger);
 
-      cursor: pointer;
+      cursor:pointer;
 
-      font-size: 12px;
+      font-size:12px;
     }
+
 
     /* =========================
        CONTENT
     ========================= */
 
-    .content {
-      padding: 30px;
+    .content{
+      padding:30px;
 
-      max-width: 1500px;
+      max-width:1500px;
 
-      margin: 0 auto;
+      margin:0 auto;
     }
 
-    .welcome {
+    .welcome{
       background:
         linear-gradient(
           135deg,
@@ -383,144 +423,146 @@
           var(--navy-light)
         );
 
-      border-radius: 16px;
+      border-radius:16px;
 
-      padding: 28px 30px;
+      padding:28px 30px;
 
-      color: white;
+      color:#fff;
 
-      position: relative;
+      position:relative;
 
-      overflow: hidden;
+      overflow:hidden;
 
-      margin-bottom: 25px;
+      margin-bottom:25px;
     }
 
-    .welcome::after {
-      content: "";
+    .welcome::after{
+      content:"";
 
-      width: 220px;
-      height: 220px;
+      width:220px;
+      height:220px;
 
       background:
         rgba(255,196,0,.12);
 
-      border-radius: 50%;
+      border-radius:50%;
 
-      position: absolute;
+      position:absolute;
 
-      right: -50px;
-      top: -100px;
+      right:-50px;
+      top:-100px;
     }
 
-    .welcome h1 {
-      margin: 0 0 7px;
+    .welcome h1{
+      margin:0 0 7px;
 
-      font-size: 26px;
+      font-size:26px;
     }
 
-    .welcome p {
-      margin: 0;
+    .welcome p{
+      margin:0;
 
       color:
         rgba(255,255,255,.75);
 
-      font-size: 13px;
+      font-size:13px;
     }
 
-    .yellow {
-      color: var(--yellow);
+    .yellow{
+      color:var(--yellow);
     }
 
-    .section-title {
-      margin: 28px 0 14px;
+    .section-title{
+      margin:28px 0 14px;
 
-      font-size: 16px;
+      font-size:16px;
 
-      color: var(--navy);
+      color:var(--navy);
 
-      font-weight: 600;
+      font-weight:600;
     }
+
 
     /* =========================
        STATS
     ========================= */
 
-    .stats {
-      display: grid;
+    .stats{
+      display:grid;
 
       grid-template-columns:
-        repeat(4, 1fr);
+        repeat(4,1fr);
 
-      gap: 15px;
+      gap:15px;
     }
 
-    .stat {
-      background: white;
+    .stat{
+      background:#fff;
 
       border:
         1px solid var(--border);
 
-      border-radius: 13px;
+      border-radius:13px;
 
-      padding: 20px;
+      padding:20px;
     }
 
-    .stat-label {
-      color: var(--muted);
+    .stat-label{
+      color:var(--muted);
 
-      font-size: 12px;
+      font-size:12px;
     }
 
-    .stat-value {
-      margin-top: 6px;
+    .stat-value{
+      margin-top:6px;
 
-      color: var(--navy);
+      color:var(--navy);
 
-      font-size: 25px;
+      font-size:25px;
 
-      font-weight: 700;
+      font-weight:700;
     }
 
-    .stat-note {
-      font-size: 10px;
+    .stat-note{
+      font-size:10px;
 
-      color: #9aa4b1;
+      color:#9aa4b1;
 
-      margin-top: 3px;
+      margin-top:3px;
     }
+
 
     /* =========================
        MODULES
     ========================= */
 
-    .modules {
-      display: grid;
+    .modules{
+      display:grid;
 
       grid-template-columns:
-        repeat(4, 1fr);
+        repeat(4,1fr);
 
-      gap: 15px;
+      gap:15px;
     }
 
-    .module-card {
+    .module-card{
       border:
         1px solid var(--border);
 
-      background: white;
+      background:#fff;
 
-      border-radius: 14px;
+      border-radius:14px;
 
-      padding: 20px;
+      padding:20px;
 
-      min-height: 155px;
+      min-height:155px;
 
-      transition: .2s;
+      transition:.2s;
 
-      cursor: pointer;
+      cursor:pointer;
     }
 
-    .module-card:hover {
+    .module-card:hover{
       transform:
         translateY(-2px);
 
@@ -528,70 +570,75 @@
         0 10px 25px
         rgba(20,40,70,.07);
 
-      border-color: #cad3df;
+      border-color:#cad3df;
     }
 
-    .module-icon {
-      width: 43px;
-      height: 43px;
+    .module-icon{
+      width:43px;
+      height:43px;
 
-      border-radius: 10px;
+      border-radius:10px;
 
-      background: #f2f5f9;
+      background:#f2f5f9;
 
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display:flex;
+      align-items:center;
+      justify-content:center;
 
-      font-size: 21px;
+      font-size:21px;
 
-      margin-bottom: 13px;
+      margin-bottom:13px;
     }
 
-    .module-name {
-      font-size: 14px;
+    .module-name{
+      font-size:14px;
 
-      color: var(--navy);
+      color:var(--navy);
 
-      font-weight: 600;
+      font-weight:600;
     }
 
-    .module-description {
-      font-size: 11px;
+    .module-description{
+      font-size:11px;
 
-      color: var(--muted);
+      color:var(--muted);
 
-      line-height: 1.6;
+      line-height:1.6;
 
-      margin-top: 6px;
+      margin-top:6px;
     }
 
-    .coming {
-      display: inline-block;
+    .coming{
+      display:inline-block;
 
-      margin-top: 10px;
+      margin-top:10px;
 
-      background: #fff8dd;
+      background:#fff8dd;
 
-      color: #8b6900;
+      color:#8b6900;
 
-      border-radius: 20px;
+      border-radius:20px;
 
-      padding: 3px 8px;
+      padding:3px 8px;
 
-      font-size: 9px;
+      font-size:9px;
     }
 
-    .ready {
-      background: #edf9f1;
+    .ready{
+      background:#edf9f1;
 
-      color: var(--success);
+      color:var(--success);
     }
 
-    .security-box {
-      margin-top: 25px;
 
-      background: white;
+    /* =========================
+       SECURITY BOX
+    ========================= */
+
+    .security-box{
+      margin-top:25px;
+
+      background:#fff;
 
       border:
         1px solid var(--border);
@@ -599,97 +646,96 @@
       border-left:
         4px solid var(--yellow);
 
-      border-radius: 10px;
+      border-radius:10px;
 
-      padding: 17px 20px;
+      padding:17px 20px;
 
-      font-size: 11px;
+      font-size:11px;
 
-      color: var(--muted);
+      color:var(--muted);
 
-      line-height: 1.7;
+      line-height:1.7;
     }
 
+
     /* =========================
-       TABLET
+       RESPONSIVE
     ========================= */
 
-    @media (max-width: 1150px) {
+    @media(max-width:1150px){
 
       .stats,
-      .modules {
+      .modules{
         grid-template-columns:
-          repeat(2, 1fr);
+          repeat(2,1fr);
       }
 
     }
 
-    /* =========================
-       MOBILE
-    ========================= */
 
-    @media (max-width: 760px) {
+    @media(max-width:760px){
 
-      .sidebar {
+      .sidebar{
         transform:
           translateX(-100%);
 
-        transition: .25s;
+        transition:.25s;
 
         box-shadow:
           10px 0 30px
           rgba(0,0,0,.15);
       }
 
-      .sidebar.open {
+      .sidebar.open{
         transform:
           translateX(0);
       }
 
-      .main {
-        margin-left: 0;
+      .main{
+        margin-left:0;
 
-        width: 100%;
+        width:100%;
       }
 
-      .mobile-menu {
-        display: block;
+      .mobile-menu{
+        display:block;
       }
 
-      .header {
-        height: 68px;
+      .header{
+        height:68px;
 
-        padding: 0 15px;
+        padding:0 15px;
       }
 
-      .page-title {
-        font-size: 15px;
+      .page-title{
+        font-size:15px;
       }
 
-      .user-text {
-        display: none;
+      .user-text{
+        display:none;
       }
 
-      .logout {
-        padding: 7px 9px;
+      .logout{
+        padding:7px 9px;
       }
 
-      .content {
+      .content{
         padding:
           18px 15px 30px;
       }
 
-      .welcome {
-        padding: 23px 20px;
+      .welcome{
+        padding:
+          23px 20px;
       }
 
-      .welcome h1 {
-        font-size: 21px;
+      .welcome h1{
+        font-size:21px;
       }
 
       .stats,
-      .modules {
-        grid-template-columns: 1fr;
+      .modules{
+        grid-template-columns:1fr;
       }
 
     }
@@ -697,970 +743,1334 @@
   </style>
 </head>
 
+
 <body>
 
-  <!-- =========================
-       AUTH LOADING
-  ========================== -->
 
-  <div id="loadingScreen">
+<!-- =========================
+     AUTH LOADING
+========================= -->
 
-    <div
-      class="loader"
-      id="loader"
-    ></div>
-
-    <div id="loadingText">
-      กำลังตรวจสอบสิทธิ์...
-    </div>
-
-    <div
-      id="authError"
-      class="auth-error"
-    ></div>
-
-  </div>
-
-
-  <!-- =========================
-       APP
-  ========================== -->
+<div id="loadingScreen">
 
   <div
-    class="app"
-    id="app"
+    class="loader"
+    id="loader"
+  ></div>
+
+  <div id="loadingText">
+    กำลังตรวจสอบสิทธิ์ SANTE Admin...
+  </div>
+
+  <div
+    id="authError"
+    class="auth-error"
+  ></div>
+
+
+  <div
+    class="auth-actions"
+    id="authActions"
   >
 
-    <!-- SIDEBAR -->
-
-    <aside
-      class="sidebar"
-      id="sidebar"
+    <button
+      type="button"
+      class="auth-button primary"
+      id="retryButton"
     >
-
-      <div class="brand">
-
-        <div class="brand-title">
-          SANTE
-        </div>
-
-        <div class="brand-sub">
-          SYSTEM ADMIN
-        </div>
-
-      </div>
-
-
-      <div class="menu-title">
-        MAIN
-      </div>
-
-
-      <nav class="menu">
-
-        <button
-          class="menu-item active"
-          type="button"
-        >
-          <span class="menu-icon">
-            ⌂
-          </span>
-
-          Dashboard
-        </button>
-
-
-        <button
-          class="menu-item"
-          data-module="questions"
-          type="button"
-        >
-          <span class="menu-icon">
-            ✎
-          </span>
-
-          Question Import
-        </button>
-
-
-        <button
-          class="menu-item"
-          type="button"
-        >
-          <span class="menu-icon">
-            ▣
-          </span>
-
-          Courses
-        </button>
-
-
-        <button
-          class="menu-item"
-          type="button"
-        >
-          <span class="menu-icon">
-            ◷
-          </span>
-
-          Training
-        </button>
-
-
-        <button
-          class="menu-item"
-          type="button"
-        >
-          <span class="menu-icon">
-            ✓
-          </span>
-
-          Certificates
-        </button>
-
-
-        <button
-          class="menu-item"
-          type="button"
-        >
-          <span class="menu-icon">
-            ⚙
-          </span>
-
-          Service Jobs
-        </button>
-
-
-        <button
-          class="menu-item"
-          type="button"
-        >
-          <span class="menu-icon">
-            ▤
-          </span>
-
-          Quotations
-        </button>
-
-
-        <button
-          class="menu-item"
-          type="button"
-        >
-          <span class="menu-icon">
-            ฿
-          </span>
-
-          Finance
-        </button>
-
-
-        <button
-          class="menu-item"
-          type="button"
-        >
-          <span class="menu-icon">
-            ♙
-          </span>
-
-          Users
-        </button>
-
-      </nav>
-
-    </aside>
-
-
-    <!-- MAIN -->
-
-    <div class="main">
-
-      <!-- HEADER -->
-
-      <header class="header">
-
-        <div class="header-left">
-
-          <button
-            class="mobile-menu"
-            id="mobileMenu"
-            type="button"
-          >
-            ☰
-          </button>
-
-          <div class="page-title">
-            Admin Dashboard
-          </div>
-
-        </div>
-
-
-        <div class="header-user">
-
-          <div class="user-text">
-
-            <div
-              class="user-email"
-              id="userEmail"
-            >
-              -
-            </div>
-
-            <div class="user-role">
-              Authorized Staff
-            </div>
-
-          </div>
-
-
-          <div
-            class="avatar"
-            id="avatar"
-          >
-            S
-          </div>
-
-
-          <button
-            class="logout"
-            id="logoutButton"
-            type="button"
-          >
-            ออกจากระบบ
-          </button>
-
-        </div>
-
-      </header>
-
-
-      <!-- CONTENT -->
-
-      <main class="content">
-
-        <section class="welcome">
-
-          <h1>
-            ยินดีต้อนรับสู่
-            <span class="yellow">
-              SANTE SYSTEM
-            </span>
-          </h1>
-
-          <p>
-            ระบบบริหารจัดการ SANTE Consulting
-          </p>
-
-        </section>
-
-
-        <div class="section-title">
-          ภาพรวมระบบ
-        </div>
-
-
-        <section class="stats">
-
-          <div class="stat">
-
-            <div class="stat-label">
-              System Status
-            </div>
-
-            <div class="stat-value">
-              Online
-            </div>
-
-            <div class="stat-note">
-              Supabase + Netlify
-            </div>
-
-          </div>
-
-
-          <div class="stat">
-
-            <div class="stat-label">
-              Exam-prep Courses
-            </div>
-
-            <div class="stat-value">
-              5
-            </div>
-
-            <div class="stat-note">
-              Initial configuration
-            </div>
-
-          </div>
-
-
-          <div class="stat">
-
-            <div class="stat-label">
-              Exam Sets
-            </div>
-
-            <div class="stat-value">
-              18
-            </div>
-
-            <div class="stat-note">
-              Fixed question sets
-            </div>
-
-          </div>
-
-
-          <div class="stat">
-
-            <div class="stat-label">
-              Planned Questions
-            </div>
-
-            <div class="stat-value">
-              1,800
-            </div>
-
-            <div class="stat-note">
-              Across 5 courses
-            </div>
-
-          </div>
-
-        </section>
-
-
-        <div class="section-title">
-          ระบบจัดการ
-        </div>
-
-
-        <section class="modules">
-
-          <div
-            class="module-card"
-            id="questionImportCard"
-          >
-
-            <div class="module-icon">
-              ✎
-            </div>
-
-            <div class="module-name">
-              Question Import
-            </div>
-
-            <div class="module-description">
-              ตรวจสอบและนำเข้าคลังข้อสอบ
-              จากไฟล์ Excel
-            </div>
-
-            <span class="coming ready">
-              NEXT
-            </span>
-
-          </div>
-
-
-          <div class="module-card">
-
-            <div class="module-icon">
-              ▣
-            </div>
-
-            <div class="module-name">
-              Courses
-            </div>
-
-            <div class="module-description">
-              จัดการหลักสูตร ราคา
-              และสิทธิ์การเรียน
-            </div>
-
-            <span class="coming">
-              COMING
-            </span>
-
-          </div>
-
-
-          <div class="module-card">
-
-            <div class="module-icon">
-              ◷
-            </div>
-
-            <div class="module-name">
-              Training
-            </div>
-
-            <div class="module-description">
-              จัดการรอบอบรม ผู้สมัคร
-              และจำนวนที่นั่ง
-            </div>
-
-            <span class="coming">
-              COMING
-            </span>
-
-          </div>
-
-
-          <div class="module-card">
-
-            <div class="module-icon">
-              ✓
-            </div>
-
-            <div class="module-name">
-              Certificates
-            </div>
-
-            <div class="module-description">
-              ออกวุฒิบัตรและตรวจสอบ
-              QR Certificate
-            </div>
-
-            <span class="coming">
-              COMING
-            </span>
-
-          </div>
-
-
-          <div class="module-card">
-
-            <div class="module-icon">
-              ⚙
-            </div>
-
-            <div class="module-name">
-              Service Jobs
-            </div>
-
-            <div class="module-description">
-              จัดการงานบริการ
-              และตารางปฏิบัติงาน
-            </div>
-
-            <span class="coming">
-              COMING
-            </span>
-
-          </div>
-
-
-          <div class="module-card">
-
-            <div class="module-icon">
-              ▤
-            </div>
-
-            <div class="module-name">
-              Quotations
-            </div>
-
-            <div class="module-description">
-              ใบเสนอราคา การอนุมัติ
-              และ Revision
-            </div>
-
-            <span class="coming">
-              COMING
-            </span>
-
-          </div>
-
-
-          <div class="module-card">
-
-            <div class="module-icon">
-              ฿
-            </div>
-
-            <div class="module-name">
-              Finance
-            </div>
-
-            <div class="module-description">
-              Invoice, Receipt,
-              Tax Invoice และ Payment
-            </div>
-
-            <span class="coming">
-              COMING
-            </span>
-
-          </div>
-
-
-          <div class="module-card">
-
-            <div class="module-icon">
-              ♙
-            </div>
-
-            <div class="module-name">
-              Users
-            </div>
-
-            <div class="module-description">
-              สมาชิก สิทธิ์ผู้ใช้งาน
-              และ Admin Roles
-            </div>
-
-            <span class="coming">
-              COMING
-            </span>
-
-          </div>
-
-        </section>
-
-
-        <div class="security-box">
-
-          🔒 ระบบนี้ตรวจสอบ Session และสิทธิ์จาก
-          Supabase ก่อนเปิด Dashboard ทุกครั้ง
-
-          การซ่อนเมนูบนหน้าเว็บไม่ใช่กลไกความปลอดภัยหลัก —
-          สิทธิ์จริงยังถูกควบคุมด้วย Database,
-          RLS และ RPC ของ SANTE SYSTEM
-
-        </div>
-
-      </main>
-
-    </div>
+      ลองอีกครั้ง
+    </button>
+
+    <button
+      type="button"
+      class="auth-button secondary"
+      id="loginPageButton"
+    >
+      กลับหน้า Login
+    </button>
 
   </div>
 
-
-  <!-- =========================
-       JAVASCRIPT
-  ========================== -->
-
-  <script>
-
-    /* =========================
-       SUPABASE
-    ========================== */
-
-    const SUPABASE_URL =
-      "https://cyegjwerxlxhczrfiurz.supabase.co";
-
-    const SUPABASE_PUBLISHABLE_KEY =
-      "sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF";
+</div>
 
 
-    const supabaseClient =
+
+<!-- =========================
+     APP
+========================= -->
+
+<div
+  class="app"
+  id="app"
+>
+
+
+  <!-- SIDEBAR -->
+
+  <aside
+    class="sidebar"
+    id="sidebar"
+  >
+
+    <div class="brand">
+
+      <div class="brand-title">
+        SANTE
+      </div>
+
+      <div class="brand-sub">
+        SYSTEM ADMIN
+      </div>
+
+    </div>
+
+
+    <div class="menu-title">
+      MAIN
+    </div>
+
+
+    <nav class="menu">
+
+      <button
+        class="menu-item active"
+        type="button"
+      >
+        <span class="menu-icon">
+          ⌂
+        </span>
+
+        Dashboard
+      </button>
+
+
+      <button
+        class="menu-item"
+        data-module="questions"
+        type="button"
+      >
+        <span class="menu-icon">
+          ✎
+        </span>
+
+        Question Import
+      </button>
+
+
+      <button
+        class="menu-item"
+        type="button"
+      >
+        <span class="menu-icon">
+          ▣
+        </span>
+
+        Courses
+      </button>
+
+
+      <button
+        class="menu-item"
+        type="button"
+      >
+        <span class="menu-icon">
+          ◷
+        </span>
+
+        Training
+      </button>
+
+
+      <button
+        class="menu-item"
+        type="button"
+      >
+        <span class="menu-icon">
+          ✓
+        </span>
+
+        Certificates
+      </button>
+
+
+      <button
+        class="menu-item"
+        type="button"
+      >
+        <span class="menu-icon">
+          ⚙
+        </span>
+
+        Service Jobs
+      </button>
+
+
+      <button
+        class="menu-item"
+        type="button"
+      >
+        <span class="menu-icon">
+          ▤
+        </span>
+
+        Quotations
+      </button>
+
+
+      <button
+        class="menu-item"
+        type="button"
+      >
+        <span class="menu-icon">
+          ฿
+        </span>
+
+        Finance
+      </button>
+
+
+      <button
+        class="menu-item"
+        type="button"
+      >
+        <span class="menu-icon">
+          ♙
+        </span>
+
+        Users
+      </button>
+
+    </nav>
+
+  </aside>
+
+
+
+  <!-- MAIN -->
+
+  <div class="main">
+
+
+    <!-- HEADER -->
+
+    <header class="header">
+
+      <div class="header-left">
+
+        <button
+          class="mobile-menu"
+          id="mobileMenu"
+          type="button"
+        >
+          ☰
+        </button>
+
+        <div class="page-title">
+          Admin Dashboard
+        </div>
+
+      </div>
+
+
+      <div class="header-user">
+
+        <div class="user-text">
+
+          <div
+            class="user-email"
+            id="userEmail"
+          >
+            -
+          </div>
+
+          <div class="user-role">
+            Authorized Staff
+          </div>
+
+        </div>
+
+
+        <div
+          class="avatar"
+          id="avatar"
+        >
+          S
+        </div>
+
+
+        <button
+          class="logout"
+          id="logoutButton"
+          type="button"
+        >
+          ออกจากระบบ
+        </button>
+
+      </div>
+
+    </header>
+
+
+
+    <!-- CONTENT -->
+
+    <main class="content">
+
+
+      <section class="welcome">
+
+        <h1>
+          ยินดีต้อนรับสู่
+          <span class="yellow">
+            SANTE SYSTEM
+          </span>
+        </h1>
+
+        <p>
+          ระบบบริหารจัดการ SANTE Consulting
+        </p>
+
+      </section>
+
+
+
+      <div class="section-title">
+        ภาพรวมระบบ
+      </div>
+
+
+
+      <section class="stats">
+
+
+        <div class="stat">
+
+          <div class="stat-label">
+            System Status
+          </div>
+
+          <div class="stat-value">
+            Online
+          </div>
+
+          <div class="stat-note">
+            Supabase + Netlify
+          </div>
+
+        </div>
+
+
+
+        <div class="stat">
+
+          <div class="stat-label">
+            Exam-prep Courses
+          </div>
+
+          <div class="stat-value">
+            5
+          </div>
+
+          <div class="stat-note">
+            Initial configuration
+          </div>
+
+        </div>
+
+
+
+        <div class="stat">
+
+          <div class="stat-label">
+            Exam Sets
+          </div>
+
+          <div class="stat-value">
+            18
+          </div>
+
+          <div class="stat-note">
+            Fixed question sets
+          </div>
+
+        </div>
+
+
+
+        <div class="stat">
+
+          <div class="stat-label">
+            Planned Questions
+          </div>
+
+          <div class="stat-value">
+            1,800
+          </div>
+
+          <div class="stat-note">
+            Across 5 courses
+          </div>
+
+        </div>
+
+
+      </section>
+
+
+
+      <div class="section-title">
+        ระบบจัดการ
+      </div>
+
+
+
+      <section class="modules">
+
+
+        <div
+          class="module-card"
+          id="questionImportCard"
+        >
+
+          <div class="module-icon">
+            ✎
+          </div>
+
+          <div class="module-name">
+            Question Import
+          </div>
+
+          <div class="module-description">
+            ตรวจสอบและนำเข้าคลังข้อสอบจากไฟล์ Excel
+          </div>
+
+          <span class="coming ready">
+            NEXT
+          </span>
+
+        </div>
+
+
+
+        <div class="module-card">
+
+          <div class="module-icon">
+            ▣
+          </div>
+
+          <div class="module-name">
+            Courses
+          </div>
+
+          <div class="module-description">
+            จัดการหลักสูตร ราคา และสิทธิ์การเรียน
+          </div>
+
+          <span class="coming">
+            COMING
+          </span>
+
+        </div>
+
+
+
+        <div class="module-card">
+
+          <div class="module-icon">
+            ◷
+          </div>
+
+          <div class="module-name">
+            Training
+          </div>
+
+          <div class="module-description">
+            จัดการรอบอบรม ผู้สมัคร และจำนวนที่นั่ง
+          </div>
+
+          <span class="coming">
+            COMING
+          </span>
+
+        </div>
+
+
+
+        <div class="module-card">
+
+          <div class="module-icon">
+            ✓
+          </div>
+
+          <div class="module-name">
+            Certificates
+          </div>
+
+          <div class="module-description">
+            ออกวุฒิบัตรและตรวจสอบ QR Certificate
+          </div>
+
+          <span class="coming">
+            COMING
+          </span>
+
+        </div>
+
+
+
+        <div class="module-card">
+
+          <div class="module-icon">
+            ⚙
+          </div>
+
+          <div class="module-name">
+            Service Jobs
+          </div>
+
+          <div class="module-description">
+            จัดการงานบริการ และตารางปฏิบัติงาน
+          </div>
+
+          <span class="coming">
+            COMING
+          </span>
+
+        </div>
+
+
+
+        <div class="module-card">
+
+          <div class="module-icon">
+            ▤
+          </div>
+
+          <div class="module-name">
+            Quotations
+          </div>
+
+          <div class="module-description">
+            ใบเสนอราคา การอนุมัติ และ Revision
+          </div>
+
+          <span class="coming">
+            COMING
+          </span>
+
+        </div>
+
+
+
+        <div class="module-card">
+
+          <div class="module-icon">
+            ฿
+          </div>
+
+          <div class="module-name">
+            Finance
+          </div>
+
+          <div class="module-description">
+            Invoice, Receipt, Tax Invoice และ Payment
+          </div>
+
+          <span class="coming">
+            COMING
+          </span>
+
+        </div>
+
+
+
+        <div class="module-card">
+
+          <div class="module-icon">
+            ♙
+          </div>
+
+          <div class="module-name">
+            Users
+          </div>
+
+          <div class="module-description">
+            สมาชิก สิทธิ์ผู้ใช้งาน และ Admin Roles
+          </div>
+
+          <span class="coming">
+            COMING
+          </span>
+
+        </div>
+
+
+      </section>
+
+
+
+      <div class="security-box">
+
+        🔒 ระบบนี้ตรวจสอบ Session และสิทธิ์จาก Supabase
+        ก่อนเปิด Dashboard ทุกครั้ง
+
+        สิทธิ์จริงถูกควบคุมด้วย Database,
+        RLS และ RPC ของ SANTE SYSTEM
+
+      </div>
+
+
+    </main>
+
+  </div>
+
+</div>
+
+
+
+<script>
+
+  /* =========================
+     SUPABASE CONFIG
+  ========================= */
+
+  const SUPABASE_URL =
+    "https://cyegjwerxlxhczrfiurz.supabase.co";
+
+  const SUPABASE_KEY =
+    "sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF";
+
+  const AUTH_STORAGE_KEY =
+    "sante-admin-auth";
+
+
+  /* =========================
+     ELEMENTS
+  ========================= */
+
+  const loadingScreen =
+    document.getElementById(
+      "loadingScreen"
+    );
+
+  const loadingText =
+    document.getElementById(
+      "loadingText"
+    );
+
+  const loader =
+    document.getElementById(
+      "loader"
+    );
+
+  const authError =
+    document.getElementById(
+      "authError"
+    );
+
+  const authActions =
+    document.getElementById(
+      "authActions"
+    );
+
+  const app =
+    document.getElementById(
+      "app"
+    );
+
+  const userEmail =
+    document.getElementById(
+      "userEmail"
+    );
+
+  const avatar =
+    document.getElementById(
+      "avatar"
+    );
+
+
+  /* =========================
+     SUPABASE LIBRARY CHECK
+  ========================= */
+
+  let supabaseClient = null;
+
+
+  if (!window.supabase) {
+
+    loader.style.display =
+      "none";
+
+    loadingText.textContent =
+      "ไม่สามารถโหลดระบบได้";
+
+    authError.style.display =
+      "block";
+
+    authError.textContent =
+      "LIBRARY ERROR: ไม่สามารถโหลด Supabase JavaScript Library ได้";
+
+    authActions.style.display =
+      "flex";
+
+  } else {
+
+    supabaseClient =
       window.supabase.createClient(
         SUPABASE_URL,
-        SUPABASE_PUBLISHABLE_KEY,
+        SUPABASE_KEY,
         {
           auth: {
-            persistSession: true,
-            autoRefreshToken: true,
-            detectSessionInUrl: true
+
+            /*
+              IMPORTANT:
+              ต้องตรงกับ admin-login.html
+            */
+
+            storageKey:
+              AUTH_STORAGE_KEY,
+
+            persistSession:
+              true,
+
+            autoRefreshToken:
+              true,
+
+            detectSessionInUrl:
+              true
           }
         }
       );
 
-
-    /* =========================
-       ELEMENTS
-    ========================== */
-
-    const loadingScreen =
-      document.getElementById(
-        "loadingScreen"
-      );
-
-    const loadingText =
-      document.getElementById(
-        "loadingText"
-      );
-
-    const loader =
-      document.getElementById(
-        "loader"
-      );
-
-    const authError =
-      document.getElementById(
-        "authError"
-      );
-
-    const app =
-      document.getElementById(
-        "app"
-      );
-
-    const userEmail =
-      document.getElementById(
-        "userEmail"
-      );
-
-    const avatar =
-      document.getElementById(
-        "avatar"
-      );
+  }
 
 
-    /* =========================
-       ERROR
-    ========================== */
+  /* =========================
+     HELPERS
+  ========================= */
 
-    function showAuthError(
+  function wait(milliseconds) {
+
+    return new Promise(
+      resolve =>
+        setTimeout(
+          resolve,
+          milliseconds
+        )
+    );
+  }
+
+
+  function resetLoadingUI() {
+
+    loader.style.display =
+      "block";
+
+    loadingText.textContent =
+      "กำลังตรวจสอบสิทธิ์ SANTE Admin...";
+
+    authError.style.display =
+      "none";
+
+    authError.textContent =
+      "";
+
+    authActions.style.display =
+      "none";
+
+  }
+
+
+  function showDashboardError(
+    stage,
+    error
+  ) {
+
+    console.error(
       stage,
       error
+    );
+
+    loader.style.display =
+      "none";
+
+    loadingText.textContent =
+      "ไม่สามารถเปิด Admin Dashboard ได้";
+
+    authError.style.display =
+      "block";
+
+    authActions.style.display =
+      "flex";
+
+    const detail =
+      error?.message ||
+      error?.error_description ||
+      String(
+        error ||
+        "Unknown error"
+      );
+
+    authError.textContent =
+      stage +
+      ": " +
+      detail;
+  }
+
+
+  /* =========================
+     GET SESSION WITH RETRY
+  ========================= */
+
+  async function getSessionWithRetry() {
+
+    let lastError = null;
+
+
+    /*
+      เราไม่ redirect ทันที
+
+      ให้ Supabase มีเวลาคืนค่า session
+      จาก localStorage ก่อน
+    */
+
+    for (
+      let attempt = 1;
+      attempt <= 8;
+      attempt++
     ) {
 
-      console.error(
-        stage,
-        error
+      console.log(
+        "SESSION CHECK:",
+        attempt
       );
 
 
-      loader.style.display =
-        "none";
+      const {
+        data,
+        error
+      } =
+      await supabaseClient.auth
+        .getSession();
 
 
-      loadingText.textContent =
-        "ไม่สามารถเปิด Admin Dashboard ได้";
+      if (error) {
 
+        lastError =
+          error;
 
-      authError.style.display =
-        "block";
-
-
-      const detail =
-        error?.message ||
-        String(
-          error ||
-          "Unknown error"
-        );
-
-
-      authError.textContent =
-        stage +
-        ": " +
-        detail;
-
-    }
-
-
-    /* =========================
-       PROTECT ADMIN
-    ========================== */
-
-    async function protectAdminPage() {
-
-      try {
-
-        /*
-          STEP 1
-          ตรวจ Session
-        */
-
-        const {
-          data: sessionData,
-          error: sessionError
-        } =
-        await supabaseClient.auth
-          .getSession();
-
-
-        if (sessionError) {
-
-          showAuthError(
-            "SESSION ERROR",
-            sessionError
-          );
-
-          return;
-        }
-
-
-        if (
-          !sessionData ||
-          !sessionData.session
-        ) {
-
-          window.location.replace(
-            "admin-login.html"
-          );
-
-          return;
-        }
-
-
-        console.log(
-          "ADMIN SESSION OK",
-          sessionData.session.user.id
-        );
-
-
-        /*
-          STEP 2
-          ตรวจ STAFF / ADMIN
-        */
-
-        const {
-          data: staffAllowed,
-          error: staffError
-        } =
-        await supabaseClient.rpc(
-          "is_staff"
-        );
-
-
-        if (staffError) {
-
-          showAuthError(
-            "RPC ERROR",
-            staffError
-          );
-
-          return;
-        }
-
-
-        console.log(
-          "ADMIN is_staff() =",
-          staffAllowed
-        );
-
-
-        if (
-          staffAllowed !== true
-        ) {
-
-          showAuthError(
-            "PERMISSION ERROR",
-            new Error(
-              "Session exists, but is_staff() returned false."
-            )
-          );
-
-          return;
-        }
-
-
-        /*
-          STEP 3
-          AUTHORIZED
-        */
-
-        const user =
-          sessionData.session.user;
-
-
-        userEmail.textContent =
-          user.email ||
-          "SANTE Admin";
-
-
-        if (user.email) {
-
-          avatar.textContent =
-            user.email
-              .charAt(0)
-              .toUpperCase();
-
-        }
-
-
-        loadingScreen.style.display =
-          "none";
-
-
-        app.style.display =
-          "block";
-
-
-        console.log(
-          "SANTE ADMIN READY"
-        );
-
-
-      } catch (error) {
-
-        showAuthError(
-          "UNEXPECTED ERROR",
+        console.error(
+          "SESSION ATTEMPT ERROR",
+          attempt,
           error
         );
 
+      } else if (
+        data &&
+        data.session
+      ) {
+
+        console.log(
+          "SESSION FOUND:",
+          data.session.user.id
+        );
+
+        return {
+          session:
+            data.session,
+
+          error:
+            null
+        };
+
       }
+
+
+      await wait(250);
 
     }
 
 
-    /* =========================
-       LOGOUT
-    ========================== */
+    return {
+      session:
+        null,
 
-    document
-      .getElementById(
-        "logoutButton"
-      )
-      .addEventListener(
-        "click",
-        async () => {
+      error:
+        lastError
+    };
 
-          const button =
-            document.getElementById(
-              "logoutButton"
-            );
+  }
 
 
-          button.disabled =
-            true;
+  /* =========================
+     PROTECT ADMIN PAGE
+  ========================= */
+
+  async function protectAdminPage() {
+
+    if (!supabaseClient) {
+      return;
+    }
 
 
-          button.textContent =
-            "กำลังออก...";
+    resetLoadingUI();
 
 
-          await supabaseClient.auth
-            .signOut();
+    try {
+
+      /* =========================
+         STEP 1
+         RECOVER SESSION
+      ========================= */
+
+      loadingText.textContent =
+        "กำลังตรวจสอบ Session...";
 
 
-          window.location.replace(
-            "admin-login.html"
-          );
+      const {
+        session,
+        error: sessionError
+      } =
+      await getSessionWithRetry();
 
-        }
+
+      if (sessionError) {
+
+        showDashboardError(
+          "SESSION ERROR",
+          sessionError
+        );
+
+        return;
+      }
+
+
+      /*
+        ไม่มี session จริง ๆ หลัง retry แล้ว
+
+        ไม่เด้งกลับทันทีแบบเวอร์ชันเก่า
+        แต่แสดงสถานะให้เห็นก่อน
+      */
+
+      if (!session) {
+
+        showDashboardError(
+          "NO SESSION",
+          new Error(
+            "ไม่พบ SANTE Admin session ใน Browser นี้ กรุณากลับหน้า Login แล้วเข้าสู่ระบบอีกครั้ง"
+          )
+        );
+
+        return;
+      }
+
+
+      console.log(
+        "ADMIN SESSION OK:",
+        session.user.id
       );
 
 
-    /* =========================
-       MOBILE MENU
-    ========================== */
+      /* =========================
+         STEP 2
+         VERIFY USER
+      ========================= */
 
-    const sidebar =
-      document.getElementById(
-        "sidebar"
+      loadingText.textContent =
+        "กำลังตรวจสอบบัญชีผู้ใช้...";
+
+
+      const {
+        data: userData,
+        error: userError
+      } =
+      await supabaseClient.auth
+        .getUser();
+
+
+      if (userError) {
+
+        showDashboardError(
+          "USER ERROR",
+          userError
+        );
+
+        return;
+      }
+
+
+      if (
+        !userData ||
+        !userData.user
+      ) {
+
+        showDashboardError(
+          "USER ERROR",
+          new Error(
+            "Session exists but Supabase could not verify the current user."
+          )
+        );
+
+        return;
+      }
+
+
+      console.log(
+        "USER VERIFIED:",
+        userData.user.id
       );
 
 
-    document
-      .getElementById(
-        "mobileMenu"
-      )
-      .addEventListener(
-        "click",
-        () => {
+      /* =========================
+         STEP 3
+         STAFF / ADMIN RPC
+      ========================= */
 
-          sidebar.classList.toggle(
-            "open"
-          );
+      loadingText.textContent =
+        "กำลังตรวจสอบสิทธิ์ Admin...";
 
-        }
+
+      const {
+        data: staffAllowed,
+        error: staffError
+      } =
+      await supabaseClient.rpc(
+        "is_staff"
       );
 
 
-    document.addEventListener(
+      if (staffError) {
+
+        /*
+          สำคัญ:
+          RPC error ไม่ signOut
+          เพราะ session อาจยังถูกต้อง
+        */
+
+        showDashboardError(
+          "RPC ERROR",
+          staffError
+        );
+
+        return;
+      }
+
+
+      console.log(
+        "is_staff() =",
+        staffAllowed
+      );
+
+
+      /* =========================
+         STEP 4
+         PERMISSION
+      ========================= */
+
+      if (
+        staffAllowed !== true
+      ) {
+
+        /*
+          Session มีอยู่
+          แต่ role ไม่ผ่านจริง
+
+          ไม่ลบ session อัตโนมัติ
+          เพื่อให้เห็น error ชัด ๆ
+        */
+
+        showDashboardError(
+          "PERMISSION ERROR",
+          new Error(
+            "บัญชีเข้าสู่ระบบสำเร็จ แต่ is_staff() ไม่อนุญาตให้เปิด Admin Dashboard"
+          )
+        );
+
+        return;
+      }
+
+
+      /* =========================
+         STEP 5
+         OPEN DASHBOARD
+      ========================= */
+
+      const user =
+        userData.user;
+
+
+      userEmail.textContent =
+        user.email ||
+        "SANTE Admin";
+
+
+      if (user.email) {
+
+        avatar.textContent =
+          user.email
+            .charAt(0)
+            .toUpperCase();
+
+      }
+
+
+      console.log(
+        "SANTE ADMIN AUTHORIZED"
+      );
+
+
+      loadingScreen.style.display =
+        "none";
+
+
+      app.style.display =
+        "block";
+
+
+    } catch (error) {
+
+      showDashboardError(
+        "UNEXPECTED ERROR",
+        error
+      );
+
+    }
+
+  }
+
+
+  /* =========================
+     RETRY
+  ========================= */
+
+  document
+    .getElementById(
+      "retryButton"
+    )
+    .addEventListener(
       "click",
-      event => {
+      function() {
 
-        if (
-          window.innerWidth <= 760 &&
-          sidebar.classList.contains(
-            "open"
-          ) &&
-          !sidebar.contains(
-            event.target
-          ) &&
-          !document
-            .getElementById(
-              "mobileMenu"
-            )
-            .contains(
-              event.target
-            )
-        ) {
-
-          sidebar.classList.remove(
-            "open"
-          );
-
-        }
+        protectAdminPage();
 
       }
     );
 
 
-    /* =========================
-       QUESTION IMPORT
-    ========================== */
+  /* =========================
+     BACK TO LOGIN
+  ========================= */
 
-    function questionImportNext() {
+  document
+    .getElementById(
+      "loginPageButton"
+    )
+    .addEventListener(
+      "click",
+      function() {
 
-      alert(
-        "Question Import จะเปิดใช้งานในขั้นตอนถัดไป"
-      );
+        window.location.href =
+          "./admin-login.html";
+
+      }
+    );
+
+
+  /* =========================
+     LOGOUT
+  ========================= */
+
+  document
+    .getElementById(
+      "logoutButton"
+    )
+    .addEventListener(
+      "click",
+      async function() {
+
+        const button =
+          document.getElementById(
+            "logoutButton"
+          );
+
+
+        button.disabled =
+          true;
+
+
+        button.textContent =
+          "กำลังออก...";
+
+
+        try {
+
+          await supabaseClient.auth
+            .signOut();
+
+        } catch (error) {
+
+          console.error(
+            "LOGOUT ERROR",
+            error
+          );
+
+        }
+
+
+        window.location.href =
+          "./admin-login.html";
+
+      }
+    );
+
+
+  /* =========================
+     MOBILE MENU
+  ========================= */
+
+  const sidebar =
+    document.getElementById(
+      "sidebar"
+    );
+
+
+  document
+    .getElementById(
+      "mobileMenu"
+    )
+    .addEventListener(
+      "click",
+      function() {
+
+        sidebar.classList.toggle(
+          "open"
+        );
+
+      }
+    );
+
+
+  document.addEventListener(
+    "click",
+    function(event) {
+
+      const mobileMenu =
+        document.getElementById(
+          "mobileMenu"
+        );
+
+
+      if (
+        window.innerWidth <= 760 &&
+        sidebar.classList.contains(
+          "open"
+        ) &&
+        !sidebar.contains(
+          event.target
+        ) &&
+        !mobileMenu.contains(
+          event.target
+        )
+      ) {
+
+        sidebar.classList.remove(
+          "open"
+        );
+
+      }
 
     }
+  );
 
 
-    document
-      .getElementById(
-        "questionImportCard"
-      )
-      .addEventListener(
-        "click",
-        questionImportNext
-      );
+  /* =========================
+     QUESTION IMPORT
+  ========================= */
+
+  function questionImportNext() {
+
+    alert(
+      "Question Import จะเปิดใช้งานในขั้นตอนถัดไป"
+    );
+
+  }
 
 
-    document
-      .querySelector(
-        '[data-module="questions"]'
-      )
-      .addEventListener(
-        "click",
-        questionImportNext
-      );
+  document
+    .getElementById(
+      "questionImportCard"
+    )
+    .addEventListener(
+      "click",
+      questionImportNext
+    );
 
 
-    /* =========================
-       AUTH STATE
-    ========================== */
+  document
+    .querySelector(
+      '[data-module="questions"]'
+    )
+    .addEventListener(
+      "click",
+      questionImportNext
+    );
+
+
+  /* =========================
+     AUTH STATE
+  ========================= */
+
+  if (supabaseClient) {
 
     supabaseClient.auth
       .onAuthStateChange(
-        (event) => {
+        function(
+          event,
+          session
+        ) {
 
           console.log(
             "AUTH EVENT:",
-            event
+            event,
+            session
+              ? "SESSION EXISTS"
+              : "NO SESSION"
           );
 
+
+          /*
+            Redirect เฉพาะ SIGNED_OUT จริง ๆ
+
+            ไม่ redirect จาก INITIAL_SESSION
+            หรือ TOKEN_REFRESHED
+          */
 
           if (
             event === "SIGNED_OUT"
           ) {
 
-            window.location.replace(
-              "admin-login.html"
-            );
+            window.location.href =
+              "./admin-login.html";
 
           }
 
         }
       );
 
+  }
 
-    /* =========================
-       START
-    ========================== */
+
+  /* =========================
+     START
+  ========================= */
+
+  if (supabaseClient) {
 
     protectAdminPage();
 
-  </script>
+  }
+
+</script>
 
 </body>
 </html>
