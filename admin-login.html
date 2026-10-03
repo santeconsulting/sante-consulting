@@ -6,11 +6,16 @@
 
   <title>SANTE SYSTEM | Admin Login</title>
 
-  <link rel="preconnect" href="https://eur02.safelinks.protection.outlook.com/?url=https%3A%2F%2Ffonts.googleapis.com%2F&data=05%7C02%7Cwaleephon.hannaphachewin%40basf.com%7C9901a3f612e942f72eae08df210ba73e%7Cecaa386bc8df4ce0ad01740cbdb5ba55%7C0%7C0%7C639266006071280751%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=l3c%2BTOYfr6iNgUS0u6Fc%2Fy2u98XoOERBhVbwNEcCHVc%3D&reserved=0">
-  <link rel="preconnect" href="https://eur02.safelinks.protection.outlook.com/?url=https%3A%2F%2Ffonts.gstatic.com%2F&data=05%7C02%7Cwaleephon.hannaphachewin%40basf.com%7C9901a3f612e942f72eae08df210ba73e%7Cecaa386bc8df4ce0ad01740cbdb5ba55%7C0%7C0%7C639266006071301633%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=TWQ66Ci49Cc8EPn3tojeD64WZJFlLQjqvJjYMf%2FYzrU%3D&reserved=0" crossorigin>
-  <link href="https://eur02.safelinks.protection.outlook.com/?url=https%3A%2F%2Ffonts.googleapis.com%2Fcss2%3Ffamily%3DPrompt%3Awght%40300%3B400%3B500%3B600%3B700%26display%3Dswap&data=05%7C02%7Cwaleephon.hannaphachewin%40basf.com%7C9901a3f612e942f72eae08df210ba73e%7Cecaa386bc8df4ce0ad01740cbdb5ba55%7C0%7C0%7C639266006071314307%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=M7%2FY2ECbs0Y3mr7Yv6WQMIoia1qTFH2CqD9971BuZSU%3D&reserved=0" rel="stylesheet">
+  <!-- Prompt Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
 
-  <script src="https://eur02.safelinks.protection.outlook.com/?url=https%3A%2F%2Fcdn.jsdelivr.net%2Fnpm%2F%40supabase%2Fsupabase-js%402&data=05%7C02%7Cwaleephon.hannaphachewin%40basf.com%7C9901a3f612e942f72eae08df210ba73e%7Cecaa386bc8df4ce0ad01740cbdb5ba55%7C0%7C0%7C639266006071327130%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=phf7Aq4hSP6Zui%2BI6Nd4DudfaWTZgeUFtgzzrdFyk44%3D&reserved=0"></script>
+  <!-- Supabase JS -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
     :root{
@@ -138,8 +143,6 @@
       border-radius:20px;
       background:var(--yellow);
     }
-
-    /* MOTTO ขยายใหญ่ขึ้น */
 
     .slogan{
       font-size:clamp(20px,1.75vw,29px);
@@ -439,7 +442,7 @@
     }
 
     /* =========================
-       BRAND / REAL LOGO
+       BRAND
     ========================= */
 
     .brand{
@@ -686,15 +689,16 @@
     }
 
     .message{
-      min-height:18px;
-
-      margin-top:6px;
-
+      min-height:20px;
+      margin-top:8px;
       text-align:center;
-
       color:#d43838;
-
       font-size:12px;
+      line-height:1.45;
+    }
+
+    .message.success{
+      color:#168447;
     }
 
     /* =========================
@@ -918,7 +922,6 @@
         height:55px;
       }
     }
-
   </style>
 </head>
 
@@ -1152,7 +1155,7 @@
   ========================= */
 
   const SUPABASE_URL =
-    "https://eur02.safelinks.protection.outlook.com/?url=https%3A%2F%2Fcyegjwerxlxhczrfiurz.supabase.co%2F&data=05%7C02%7Cwaleephon.hannaphachewin%40basf.com%7C9901a3f612e942f72eae08df210ba73e%7Cecaa386bc8df4ce0ad01740cbdb5ba55%7C0%7C0%7C639266006071343726%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=0k6CAlHf3%2B%2FPW9HtRWmoGrsB34%2FLHlVrVY0wUtTVHfc%3D&reserved=0";
+    "https://cyegjwerxlxhczrfiurz.supabase.co";
 
   const SUPABASE_KEY =
     "sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF";
@@ -1160,7 +1163,14 @@
   const supabaseClient =
     window.supabase.createClient(
       SUPABASE_URL,
-      SUPABASE_KEY
+      SUPABASE_KEY,
+      {
+        auth:{
+          persistSession:true,
+          autoRefreshToken:true,
+          detectSessionInUrl:true
+        }
+      }
     );
 
 
@@ -1307,6 +1317,29 @@
 
 
   /* =========================
+     ERROR HELPER
+  ========================= */
+
+  function showError(stage, error){
+
+    console.error(stage, error);
+
+    const message =
+      document.getElementById("message");
+
+    const detail =
+      error?.message ||
+      error?.error_description ||
+      String(error || "Unknown error");
+
+    message.classList.remove("success");
+
+    message.textContent =
+      stage + ": " + detail;
+  }
+
+
+  /* =========================
      LOGIN
   ========================= */
 
@@ -1340,6 +1373,7 @@
 
 
         message.textContent = "";
+        message.classList.remove("success");
 
         button.disabled = true;
 
@@ -1351,23 +1385,103 @@
 
         try{
 
+          /* =========================
+             STEP 1 : AUTH
+          ========================= */
+
           const {
-            data,
-            error
+            data: authData,
+            error: authError
           } =
           await supabaseClient.auth
             .signInWithPassword({
-              email,
-              password
+              email:email,
+              password:password
             });
 
 
-          if(error){
-            throw error;
+          if(authError){
+
+            showError(
+              "AUTH ERROR",
+              authError
+            );
+
+            return;
           }
 
 
-          /* ตรวจสอบสิทธิ์ STAFF / ADMIN */
+          if(
+            !authData ||
+            !authData.user ||
+            !authData.session
+          ){
+
+            showError(
+              "AUTH ERROR",
+              new Error(
+                "Login succeeded but no user/session was returned."
+              )
+            );
+
+            return;
+          }
+
+
+          console.log(
+            "AUTH OK",
+            authData.user
+          );
+
+
+          /* =========================
+             STEP 2 : SESSION
+          ========================= */
+
+          const {
+            data: sessionData,
+            error: sessionError
+          } =
+          await supabaseClient.auth
+            .getSession();
+
+
+          if(sessionError){
+
+            showError(
+              "SESSION ERROR",
+              sessionError
+            );
+
+            return;
+          }
+
+
+          if(
+            !sessionData ||
+            !sessionData.session
+          ){
+
+            showError(
+              "SESSION ERROR",
+              new Error(
+                "No active Supabase session."
+              )
+            );
+
+            return;
+          }
+
+
+          console.log(
+            "SESSION OK",
+            sessionData.session.user.id
+          );
+
+
+          /* =========================
+             STEP 3 : IS STAFF RPC
+          ========================= */
 
           const {
             data: isStaff,
@@ -1379,38 +1493,81 @@
 
 
           if(staffError){
-            throw staffError;
-          }
 
-
-          if(!isStaff){
-
-            await supabaseClient.auth
-              .signOut();
-
-            message.textContent =
-              currentLanguage === "th"
-                ? "บัญชีนี้ไม่มีสิทธิ์เข้าสู่ระบบผู้ดูแล"
-                : "This account does not have administrator access.";
+            showError(
+              "RPC ERROR",
+              staffError
+            );
 
             return;
           }
 
 
-          /* LOGIN SUCCESS */
+          console.log(
+            "is_staff() =",
+            isStaff
+          );
 
-          window.location.href =
-            "admin-dashboard.html";
+
+          /* =========================
+             STEP 4 : PERMISSION
+          ========================= */
+
+          if(isStaff !== true){
+
+            await supabaseClient.auth
+              .signOut();
+
+            message.classList.remove(
+              "success"
+            );
+
+            message.textContent =
+              currentLanguage === "th"
+                ? "PERMISSION ERROR: เข้าสู่ระบบสำเร็จ แต่บัญชีนี้ไม่ได้รับสิทธิ์ STAFF / ADMIN"
+                : "PERMISSION ERROR: Login succeeded, but this account does not have STAFF / ADMIN access.";
+
+            return;
+          }
+
+
+          /* =========================
+             SUCCESS
+          ========================= */
+
+          message.classList.add(
+            "success"
+          );
+
+          message.textContent =
+            currentLanguage === "th"
+              ? "เข้าสู่ระบบสำเร็จ กำลังเปิด SANTE Admin..."
+              : "Login successful. Opening SANTE Admin...";
+
+
+          /*
+            IMPORTANT:
+            Repository currently contains admin.html
+          */
+
+          setTimeout(
+            function(){
+
+              window.location.replace(
+                "admin.html"
+              );
+
+            },
+            350
+          );
 
 
         }catch(error){
 
-          console.error(error);
-
-          message.textContent =
-            currentLanguage === "th"
-              ? "อีเมลหรือรหัสผ่านไม่ถูกต้อง หรือไม่สามารถเข้าสู่ระบบได้"
-              : "Invalid email or password, or unable to sign in.";
+          showError(
+            "UNEXPECTED ERROR",
+            error
+          );
 
         }finally{
 
