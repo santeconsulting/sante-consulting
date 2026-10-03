@@ -6,705 +6,882 @@
 
   <title>SANTE SYSTEM | Admin Login</title>
 
-  <!-- Prompt Font -->
-  <link rel="preconnect" href="https://eur02.safelinks.protection.outlook.com/?url=https%3A%2F%2Ffonts.googleapis.com%2F&data=05%7C02%7Cwaleephon.hannaphachewin%40basf.com%7Cf72a775bdfb94211897508df21048e67%7Cecaa386bc8df4ce0ad01740cbdb5ba55%7C0%7C0%7C639265975590384786%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=x%2FTf7S2KjX6zZgg4TBHVSoqiRapPWFSxSYj9jpjnO%2Bk%3D&reserved=0">
-  <link rel="preconnect" href="https://eur02.safelinks.protection.outlook.com/?url=https%3A%2F%2Ffonts.gstatic.com%2F&data=05%7C02%7Cwaleephon.hannaphachewin%40basf.com%7Cf72a775bdfb94211897508df21048e67%7Cecaa386bc8df4ce0ad01740cbdb5ba55%7C0%7C0%7C639265975590406523%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=G9mqRc%2BW0R76%2FtqxBlK15OY1MpG0ALPjq6A6CY0qgbE%3D&reserved=0" crossorigin>
-  <link href="https://eur02.safelinks.protection.outlook.com/?url=https%3A%2F%2Ffonts.googleapis.com%2Fcss2%3Ffamily%3DPrompt%3Awght%40300%3B400%3B500%3B600%3B700%26display%3Dswap&data=05%7C02%7Cwaleephon.hannaphachewin%40basf.com%7Cf72a775bdfb94211897508df21048e67%7Cecaa386bc8df4ce0ad01740cbdb5ba55%7C0%7C0%7C639265975590420124%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=YFouW%2F6BWDrM6TUIRR%2F6ZcdtN9rfs6VSnoMJxQiEDGo%3D&reserved=0" rel="stylesheet">
+  <link rel="preconnect" href="https://eur02.safelinks.protection.outlook.com/?url=https%3A%2F%2Ffonts.googleapis.com%2F&data=05%7C02%7Cwaleephon.hannaphachewin%40basf.com%7C0277730517a84db69a9408df2106a071%7Cecaa386bc8df4ce0ad01740cbdb5ba55%7C0%7C0%7C639265984509187059%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=GPhdZYY3J2sGZa6pVGnIh%2Fc4ic%2BItR2Rxrro5Oy9EVQ%3D&reserved=0">
+  <link rel="preconnect" href="https://eur02.safelinks.protection.outlook.com/?url=https%3A%2F%2Ffonts.gstatic.com%2F&data=05%7C02%7Cwaleephon.hannaphachewin%40basf.com%7C0277730517a84db69a9408df2106a071%7Cecaa386bc8df4ce0ad01740cbdb5ba55%7C0%7C0%7C639265984509206425%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=3IrrMlgnoaUcGhhU5QHmZTLtNknpx0t80Av0tAbUUIs%3D&reserved=0" crossorigin>
+  <link href="https://eur02.safelinks.protection.outlook.com/?url=https%3A%2F%2Ffonts.googleapis.com%2Fcss2%3Ffamily%3DPrompt%3Awght%40300%3B400%3B500%3B600%3B700%26display%3Dswap&data=05%7C02%7Cwaleephon.hannaphachewin%40basf.com%7C0277730517a84db69a9408df2106a071%7Cecaa386bc8df4ce0ad01740cbdb5ba55%7C0%7C0%7C639265984509221832%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=oxPIyO2sB%2BOUqViyJkt9HCFMb3ft0pzfxZOVIfH2oFo%3D&reserved=0" rel="stylesheet">
 
-  <!-- Supabase -->
-  <script src="https://eur02.safelinks.protection.outlook.com/?url=https%3A%2F%2Fcdn.jsdelivr.net%2Fnpm%2F%40supabase%2Fsupabase-js%402&data=05%7C02%7Cwaleephon.hannaphachewin%40basf.com%7Cf72a775bdfb94211897508df21048e67%7Cecaa386bc8df4ce0ad01740cbdb5ba55%7C0%7C0%7C639265975590432885%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=lWb01Zfp7FwWOz7eQmn0j4fT4onws%2BiTTA6Mt%2BdTryA%3D&reserved=0"></script>
+  <script src="https://eur02.safelinks.protection.outlook.com/?url=https%3A%2F%2Fcdn.jsdelivr.net%2Fnpm%2F%40supabase%2Fsupabase-js%402&data=05%7C02%7Cwaleephon.hannaphachewin%40basf.com%7C0277730517a84db69a9408df2106a071%7Cecaa386bc8df4ce0ad01740cbdb5ba55%7C0%7C0%7C639265984509234819%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=xVZSbZfxZQXdVAm%2B19%2Bf5TfH4h1cJpLyzwC27kaOy1g%3D&reserved=0"></script>
 
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
+    :root{
+      --navy:#06366c;
+      --navy-dark:#032d5e;
+      --blue:#0877bd;
+      --yellow:#ffc400;
+      --yellow-light:#ffd83d;
+      --white:#ffffff;
+      --text:#073568;
+      --muted:#66758a;
+      --border:#d6e0ec;
     }
 
-    :root {
-      --navy: #06356b;
-      --navy-dark: #032957;
-      --blue: #075ea7;
-      --yellow: #ffc400;
-      --yellow-light: #ffd84d;
-      --white: #ffffff;
-      --text: #0b315f;
-      --muted: #758399;
-      --border: #d8e1ec;
+    *{
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
     }
 
     html,
-    body {
-      width: 100%;
-      min-height: 100%;
+    body{
+      width:100%;
+      min-height:100%;
     }
 
-    body {
-      font-family: "Prompt", sans-serif;
-      background: #f4f8fc;
-      color: var(--text);
-      overflow-x: hidden;
+    body{
+      font-family:"Prompt",sans-serif;
+      background:#f5f8fc;
+      color:var(--text);
     }
 
-    button,
-    input {
-      font-family: "Prompt", sans-serif;
+    /* ==============================
+       MAIN
+    ============================== */
+
+    .page{
+      width:100%;
+      min-height:100vh;
+      display:grid;
+      grid-template-columns:52% 48%;
+      overflow:hidden;
     }
 
-    /* =========================
-       MAIN LAYOUT
-    ========================= */
-
-    .page {
-      min-height: 100svh;
-      display: grid;
-      grid-template-columns: 53% 47%;
-      overflow: hidden;
-      background: #fff;
-    }
-
-    /* =========================
+    /* ==============================
        LEFT SIDE
-    ========================= */
+    ============================== */
 
-    .hero {
-      position: relative;
-      min-height: 100svh;
-      overflow: hidden;
-      background:
-        radial-gradient(circle at 30% 25%,
-          rgba(24, 126, 205, .58) 0%,
-          rgba(24, 126, 205, 0) 38%),
-        linear-gradient(145deg, #075fa9 0%, #064982 35%, #032957 100%);
-    }
+    .visual{
+      position:relative;
+      min-height:100vh;
+      overflow:hidden;
 
-    .hero::before {
-      content: "";
-      position: absolute;
-      width: 780px;
-      height: 780px;
-      border-radius: 50%;
-      background: rgba(255,255,255,.035);
-      top: -510px;
-      left: -200px;
-    }
-
-    .hero::after {
-      content: "";
-      position: absolute;
-      width: 620px;
-      height: 620px;
-      border-radius: 50%;
-      border: 1px solid rgba(255,255,255,.07);
-      left: -280px;
-      bottom: -330px;
-    }
-
-    .hero-copy {
-      position: absolute;
-      z-index: 5;
-      top: 7vh;
-      left: 9%;
-      right: 5%;
-    }
-
-    .welcome-th {
-      color: white;
-      font-size: clamp(34px, 4.3vw, 68px);
-      font-weight: 700;
-      line-height: 1.05;
-      letter-spacing: -1px;
-    }
-
-    .welcome-en {
-      color: var(--yellow);
-      font-size: clamp(30px, 3.8vw, 59px);
-      font-weight: 700;
-      line-height: 1.08;
-    }
-
-    .welcome-line {
-      width: 92px;
-      height: 4px;
-      background: var(--yellow);
-      border-radius: 20px;
-      margin: 18px 0;
-    }
-
-    .slogan-en {
-      color: white;
-      font-size: clamp(14px, 1.65vw, 26px);
-      font-weight: 600;
-      letter-spacing: .2px;
-    }
-
-    .slogan-en span {
-      color: var(--yellow);
-    }
-
-    .slogan-th {
-      color: white;
-      font-size: clamp(13px, 1.25vw, 20px);
-      margin-top: 3px;
-      font-weight: 500;
-    }
-
-    .slogan-th span {
-      color: var(--yellow);
-      margin-left: 12px;
-    }
-
-    /* White wave area */
-
-    .wave {
-      position: absolute;
-      z-index: 1;
-      width: 130%;
-      height: 60%;
-      left: -12%;
-      bottom: -13%;
-      background: #f9fcff;
-      border-radius: 52% 55% 0 0 / 19% 22% 0 0;
-      transform: rotate(2deg);
-      box-shadow:
-        0 -14px 0 rgba(123,190,247,.35),
-        0 -27px 0 rgba(213,235,255,.85);
-    }
-
-    .yellow-wave {
-      position: absolute;
-      z-index: 2;
-      left: -5%;
-      bottom: 2.5%;
-      width: 110%;
-      height: 26px;
-      background: var(--yellow);
-      transform: rotate(5deg);
-      border-radius: 50%;
-    }
-
-    .navy-wave {
-      position: absolute;
-      z-index: 3;
-      left: -12%;
-      bottom: -11%;
-      width: 120%;
-      height: 19%;
-      background: #003e7e;
-      transform: rotate(3deg);
-      border-radius: 50% 50% 0 0;
-    }
-
-    /* Industrial skyline */
-
-    .skyline {
-      position: absolute;
-      z-index: 2;
-      left: 0;
-      right: 0;
-      bottom: 18%;
-      height: 22%;
-      opacity: .20;
       background:
         linear-gradient(
-          to top,
-          #2188db 0 36%,
-          transparent 36%
+          145deg,
+          #07386f 0%,
+          #064d91 45%,
+          #087fc0 100%
         );
-      clip-path: polygon(
-        0 100%, 0 60%, 4% 60%, 4% 25%,
-        7% 25%, 7% 72%, 10% 72%, 10% 48%,
-        13% 48%, 13% 80%, 17% 80%, 17% 40%,
-        19% 40%, 19% 73%, 24% 73%, 24% 53%,
-        28% 53%, 28% 83%, 34% 83%, 34% 36%,
-        37% 36%, 37% 75%, 42% 75%, 42% 57%,
-        47% 57%, 47% 83%, 53% 83%, 53% 45%,
-        57% 45%, 57% 72%, 62% 72%, 62% 31%,
-        65% 31%, 65% 78%, 70% 78%, 70% 50%,
-        74% 50%, 74% 81%, 79% 81%, 79% 38%,
-        82% 38%, 82% 70%, 86% 70%, 86% 55%,
-        91% 55%, 91% 76%, 95% 76%, 95% 46%,
-        98% 46%, 98% 100%
+    }
+
+    .visual::before{
+      content:"";
+      position:absolute;
+      width:520px;
+      height:520px;
+      border-radius:50%;
+      left:-300px;
+      top:-250px;
+      background:rgba(255,255,255,.035);
+    }
+
+    .visual::after{
+      content:"";
+      position:absolute;
+      width:700px;
+      height:700px;
+      border-radius:50%;
+      right:-400px;
+      top:-400px;
+      background:rgba(255,255,255,.04);
+    }
+
+    /* welcome text */
+
+    .welcome{
+      position:absolute;
+      z-index:5;
+
+      top:7vh;
+      left:0;
+      width:100%;
+
+      text-align:center;
+      color:white;
+      padding:0 30px;
+    }
+
+    .welcome h1{
+      font-size:clamp(42px,4.5vw,72px);
+      font-weight:700;
+      line-height:1;
+      letter-spacing:-1px;
+    }
+
+    .welcome h2{
+      margin-top:4px;
+
+      font-size:clamp(36px,4vw,64px);
+      font-weight:700;
+      line-height:1;
+
+      color:var(--yellow);
+    }
+
+    .welcome-line{
+      width:75px;
+      height:4px;
+
+      margin:24px auto 18px;
+
+      border-radius:5px;
+      background:var(--yellow);
+    }
+
+    .slogan{
+      font-size:clamp(18px,1.65vw,27px);
+      font-weight:600;
+      letter-spacing:.2px;
+    }
+
+    .slogan span{
+      color:var(--yellow);
+    }
+
+    .slogan-th{
+      margin-top:5px;
+
+      font-size:clamp(16px,1.45vw,23px);
+      font-weight:400;
+    }
+
+    .slogan-th span{
+      color:var(--yellow);
+    }
+
+    /* white wave */
+
+    .white-wave{
+      position:absolute;
+
+      z-index:1;
+
+      left:-10%;
+      bottom:-10%;
+
+      width:125%;
+      height:67%;
+
+      background:white;
+
+      border-radius:
+        52% 48% 0 0 /
+        17% 20% 0 0;
+
+      transform:rotate(-1.5deg);
+    }
+
+    .light-wave{
+      position:absolute;
+
+      z-index:2;
+
+      left:-10%;
+      bottom:0;
+
+      width:125%;
+      height:56%;
+
+      background:
+        linear-gradient(
+          to bottom,
+          rgba(215,237,255,.85),
+          rgba(255,255,255,.2)
+        );
+
+      clip-path:polygon(
+        0 14%,
+        18% 6%,
+        39% 12%,
+        58% 4%,
+        78% 10%,
+        100% 1%,
+        100% 100%,
+        0 100%
       );
     }
 
-    /* Artwork */
+    /* skyline */
 
-    .mascot {
-      position: absolute;
-      z-index: 4;
-      left: 4%;
-      bottom: 0;
-      width: min(90%, 820px);
-      max-height: 70vh;
-      object-fit: contain;
-      object-position: left bottom;
-      filter: drop-shadow(0 18px 18px rgba(0, 30, 70, .16));
-    }
+    .skyline{
+      position:absolute;
 
-    /* =========================
-       RIGHT SIDE
-    ========================= */
+      z-index:3;
 
-    .login-side {
-      min-height: 100svh;
-      position: relative;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 26px 6%;
+      left:0;
+      bottom:12%;
+
+      width:100%;
+      height:23%;
+
+      opacity:.45;
+
       background:
-        radial-gradient(circle at 100% 50%, #e5f3ff 0, transparent 38%),
-        #f8fbff;
+        linear-gradient(
+          to top,
+          #85bce7 0 5%,
+          transparent 5%
+        );
     }
 
-    .login-side::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 45%;
-      height: 16px;
-      background: var(--yellow);
-      transform: skewX(-35deg);
-      transform-origin: right top;
+    .skyline::before{
+      content:"";
+
+      position:absolute;
+      left:0;
+      right:0;
+      bottom:0;
+
+      height:100%;
+
+      background:
+        linear-gradient(
+          90deg,
+
+          transparent 0 5%,
+          #8fc4ea 5% 7%,
+          transparent 7% 10%,
+
+          #8fc4ea 10% 12%,
+          transparent 12% 16%,
+
+          #8fc4ea 16% 19%,
+          transparent 19% 23%,
+
+          #8fc4ea 23% 25%,
+          transparent 25% 31%,
+
+          #8fc4ea 31% 34%,
+          transparent 34% 39%,
+
+          #8fc4ea 39% 42%,
+          transparent 42% 48%,
+
+          #8fc4ea 48% 51%,
+          transparent 51% 57%,
+
+          #8fc4ea 57% 60%,
+          transparent 60% 68%,
+
+          #8fc4ea 68% 71%,
+          transparent 71% 76%,
+
+          #8fc4ea 76% 79%,
+          transparent 79% 86%,
+
+          #8fc4ea 86% 89%,
+          transparent 89%
+        );
     }
 
-    .card {
-      position: relative;
-      width: min(100%, 620px);
-      background: rgba(255,255,255,.96);
-      border-radius: 34px;
-      padding: clamp(30px, 4vh, 48px) clamp(30px, 4vw, 56px);
-      box-shadow: 0 18px 55px rgba(22, 72, 120, .12);
+    /* mascot */
+
+    .mascot{
+      position:absolute;
+
+      z-index:6;
+
+      width:min(53vw,650px);
+
+      left:50%;
+      bottom:-2%;
+
+      transform:translateX(-50%);
+
+      object-fit:contain;
+
+      filter:
+        drop-shadow(0 20px 20px rgba(0,35,70,.20));
     }
 
-    /* Language */
+    /* bottom ribbon */
 
-    .languages {
-      position: absolute;
-      top: 22px;
-      right: 24px;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      padding: 5px;
-      background: #f0f5fb;
-      border-radius: 40px;
+    .ribbon{
+      position:absolute;
+
+      z-index:5;
+
+      left:-4%;
+      bottom:-5%;
+
+      width:110%;
+      height:18%;
+
+      background:var(--navy);
+
+      border-radius:50% 50% 0 0 / 35% 35% 0 0;
+
+      transform:rotate(2deg);
     }
 
-    .lang-btn {
-      border: 0;
-      background: transparent;
-      color: var(--navy);
-      padding: 8px 14px;
-      border-radius: 30px;
-      cursor: pointer;
-      font-weight: 500;
-      font-size: 14px;
+    .ribbon::before{
+      content:"";
+
+      position:absolute;
+
+      left:0;
+      top:-14px;
+
+      width:100%;
+      height:13px;
+
+      background:var(--yellow);
+
+      border-radius:50%;
     }
 
-    .lang-btn.active {
-      background: var(--navy);
-      color: white;
+    /* ==============================
+       RIGHT SIDE
+    ============================== */
+
+    .login-side{
+      position:relative;
+
+      min-height:100vh;
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+
+      padding:30px 7%;
+
+      background:
+        linear-gradient(
+          135deg,
+          #ffffff 0%,
+          #f7fbff 100%
+        );
     }
 
-    /* SANTE Logo symbol */
+    .top-accent{
+      position:absolute;
 
-    .brand {
-      text-align: center;
-      padding-top: 32px;
-      margin-bottom: 25px;
+      right:0;
+      top:0;
+
+      width:34%;
+      height:18px;
+
+      background:var(--yellow);
+
+      transform:skewX(-38deg);
+      transform-origin:right;
     }
 
-    .brand-symbol {
-      height: 86px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 12px;
+    .login-card{
+      width:100%;
+      max-width:620px;
     }
 
-    .brand-symbol span {
-      display: block;
-      width: 17px;
-      border-radius: 20px;
-      background: linear-gradient(#ffd636, #ffbf00);
+    /* language */
+
+    .language{
+      display:flex;
+      justify-content:flex-end;
+
+      margin-bottom:22px;
     }
 
-    .brand-symbol span:nth-child(1),
-    .brand-symbol span:nth-child(5) {
-      height: 40px;
+    .language-box{
+      padding:6px;
+
+      border-radius:40px;
+
+      background:#f0f4f8;
+
+      display:flex;
+      gap:5px;
     }
 
-    .brand-symbol span:nth-child(2),
-    .brand-symbol span:nth-child(4) {
-      height: 62px;
+    .lang{
+      border:0;
+      background:transparent;
+
+      padding:8px 16px;
+
+      border-radius:25px;
+
+      font-family:"Prompt",sans-serif;
+      font-size:14px;
+
+      cursor:pointer;
+
+      color:var(--text);
     }
 
-    .brand-symbol span:nth-child(3) {
-      height: 86px;
+    .lang.active{
+      background:var(--navy);
+      color:white;
     }
 
-    .brand h1 {
-      color: var(--navy);
-      font-size: clamp(32px, 3.3vw, 52px);
-      line-height: 1;
-      font-weight: 700;
-      letter-spacing: .5px;
+    /* logo */
+
+    .brand{
+      text-align:center;
+      margin-bottom:30px;
     }
 
-    .brand-divider {
-      width: 110px;
-      height: 3px;
-      margin: 10px auto 8px;
-      background: var(--yellow);
-      border-radius: 20px;
+    .brand-symbol{
+      height:96px;
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+
+      margin-bottom:13px;
     }
 
-    .system-th {
-      color: var(--navy);
-      font-weight: 600;
-      font-size: 18px;
+    .brand-symbol span{
+      display:block;
+
+      width:24px;
+
+      border-radius:30px;
+
+      background:
+        linear-gradient(
+          to bottom,
+          var(--yellow-light),
+          var(--yellow)
+        );
     }
 
-    .system-en {
-      color: #657187;
-      font-weight: 500;
-      font-size: 17px;
+    .brand-symbol span:nth-child(1){
+      height:50px;
     }
 
-    .admin-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      margin-top: 8px;
-      background: #fff7d6;
-      color: #7c5b00;
-      padding: 5px 12px;
-      border-radius: 20px;
-      font-size: 12px;
+    .brand-symbol span:nth-child(2){
+      height:73px;
     }
 
-    /* Form */
-
-    .field {
-      margin-bottom: 18px;
+    .brand-symbol span:nth-child(3){
+      height:95px;
     }
 
-    .field label {
-      display: flex;
-      align-items: center;
-      gap: 9px;
-      font-weight: 600;
-      font-size: 16px;
-      margin-bottom: 8px;
-      color: var(--navy);
+    .brand-symbol span:nth-child(4){
+      height:73px;
     }
 
-    .icon {
-      width: 23px;
-      height: 23px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
+    .brand-symbol span:nth-child(5){
+      height:50px;
     }
 
-    .input-wrap {
-      position: relative;
+    .brand h1{
+      font-size:clamp(38px,3.4vw,57px);
+      font-weight:700;
+
+      letter-spacing:-1px;
+
+      color:var(--navy);
     }
 
-    .input-wrap input {
-      width: 100%;
-      height: 60px;
-      border: 1.5px solid var(--border);
-      border-radius: 13px;
-      padding: 0 18px;
-      font-size: 15px;
-      color: var(--navy);
-      background: white;
-      outline: none;
-      transition: .2s;
+    .brand-line{
+      width:130px;
+      height:4px;
+
+      margin:7px auto 11px;
+
+      border-radius:10px;
+
+      background:var(--yellow);
     }
 
-    .input-wrap input:focus {
-      border-color: #68a9e3;
-      box-shadow: 0 0 0 4px rgba(63, 145, 218, .10);
+    .brand .thai{
+      font-size:20px;
+      font-weight:600;
     }
 
-    .password-input {
-      padding-right: 55px !important;
+    .brand .english{
+      font-size:20px;
+      font-weight:500;
+      color:#53627b;
     }
 
-    .eye {
-      position: absolute;
-      top: 50%;
-      right: 16px;
-      transform: translateY(-50%);
-      border: none;
-      background: transparent;
-      cursor: pointer;
-      font-size: 21px;
-      color: #778399;
+    .admin-badge{
+      display:inline-block;
+
+      margin-top:9px;
+      padding:4px 13px;
+
+      border-radius:20px;
+
+      background:#fff4c7;
+
+      color:#745c00;
+
+      font-size:12px;
+      font-weight:500;
     }
 
-    .login-btn {
-      width: 100%;
-      height: 64px;
-      margin-top: 4px;
-      border: none;
-      border-radius: 14px;
-      cursor: pointer;
-      background: linear-gradient(90deg, #ffc400, #ffd42d);
-      color: var(--navy);
-      font-weight: 700;
-      font-size: 20px;
-      position: relative;
-      transition: transform .15s, box-shadow .15s;
-      box-shadow: 0 10px 22px rgba(255, 196, 0, .20);
+    /* form */
+
+    .form-group{
+      margin-bottom:20px;
     }
 
-    .login-btn:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 13px 26px rgba(255, 196, 0, .27);
+    .form-group label{
+      display:flex;
+      align-items:center;
+      gap:10px;
+
+      margin-bottom:9px;
+
+      font-size:17px;
+      font-weight:600;
     }
 
-    .login-btn:disabled {
-      opacity: .7;
-      cursor: wait;
+    .field{
+      position:relative;
     }
 
-    .arrow {
-      position: absolute;
-      right: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 43px;
-      height: 43px;
-      border-radius: 50%;
-      background: var(--navy);
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 24px;
+    .field input{
+      width:100%;
+      height:62px;
+
+      padding:0 54px 0 20px;
+
+      border:1.5px solid var(--border);
+
+      border-radius:13px;
+
+      outline:none;
+
+      font-family:"Prompt",sans-serif;
+      font-size:16px;
+
+      color:var(--text);
+
+      background:white;
+
+      transition:.2s;
     }
 
-    .admin-note {
-      margin-top: 24px;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      color: var(--navy);
-      font-size: 14px;
-      font-weight: 500;
+    .field input:focus{
+      border-color:#80acd4;
+
+      box-shadow:
+        0 0 0 4px rgba(0,91,160,.07);
     }
 
-    .admin-note::before,
-    .admin-note::after {
-      content: "";
-      flex: 1;
-      height: 1px;
-      background: #cad8e7;
+    .eye{
+      position:absolute;
+
+      right:18px;
+      top:50%;
+
+      transform:translateY(-50%);
+
+      border:0;
+      background:transparent;
+
+      cursor:pointer;
+
+      font-size:22px;
     }
 
-    .home-link {
-      margin-top: 15px;
-      text-align: center;
+    /* login button */
+
+    .login-button{
+      width:100%;
+      height:67px;
+
+      border:0;
+      border-radius:14px;
+
+      margin-top:5px;
+
+      cursor:pointer;
+
+      position:relative;
+
+      font-family:"Prompt",sans-serif;
+      font-size:21px;
+      font-weight:600;
+
+      color:var(--navy-dark);
+
+      background:
+        linear-gradient(
+          90deg,
+          #ffd31a,
+          #ffc000
+        );
+
+      box-shadow:
+        0 9px 25px rgba(255,193,0,.22);
     }
 
-    .home-link a {
-      color: var(--navy);
-      font-weight: 600;
-      text-decoration: underline;
+    .login-button:hover{
+      filter:brightness(1.02);
     }
 
-    .message {
-      display: none;
-      margin-top: 14px;
-      padding: 11px 14px;
-      border-radius: 10px;
-      font-size: 13px;
-      text-align: center;
+    .login-button:disabled{
+      opacity:.65;
+      cursor:not-allowed;
     }
 
-    .message.error {
-      display: block;
-      background: #fff0f0;
-      color: #b42318;
+    .arrow{
+      position:absolute;
+
+      right:11px;
+      top:50%;
+
+      transform:translateY(-50%);
+
+      width:47px;
+      height:47px;
+
+      border-radius:50%;
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+
+      background:var(--navy);
+
+      color:white;
+
+      font-size:27px;
     }
 
-    .message.success {
-      display: block;
-      background: #edfdf3;
-      color: #087443;
+    /* bottom */
+
+    .admin-only{
+      display:flex;
+      align-items:center;
+      gap:15px;
+
+      margin:25px 0 18px;
+
+      font-size:15px;
+      font-weight:500;
     }
 
-    .footer {
-      margin-top: 24px;
-      text-align: center;
-      color: #99a4b2;
-      font-size: 11px;
+    .admin-only::before,
+    .admin-only::after{
+      content:"";
+      flex:1;
+
+      height:1px;
+
+      background:#cbd8e5;
     }
 
-    /* =========================
-       NOTEBOOK / SMALL DESKTOP
-       ทำให้ 100% พอดีจอ
-    ========================= */
+    .home{
+      text-align:center;
+    }
 
-    @media (max-height: 820px) and (min-width: 901px) {
+    .home a{
+      color:var(--navy);
 
-      .card {
-        padding-top: 25px;
-        padding-bottom: 24px;
+      font-weight:600;
+      font-size:16px;
+
+      text-decoration:underline;
+      text-underline-offset:4px;
+    }
+
+    .message{
+      min-height:25px;
+
+      margin-top:13px;
+
+      text-align:center;
+
+      font-size:14px;
+      color:#d43838;
+    }
+
+    /* ==============================
+       LAPTOP HEIGHT
+    ============================== */
+
+    @media(max-height:800px) and (min-width:901px){
+
+      .welcome{
+        top:4vh;
       }
 
-      .brand {
-        padding-top: 20px;
-        margin-bottom: 15px;
+      .welcome h1{
+        font-size:42px;
       }
 
-      .brand-symbol {
-        height: 58px;
-        margin-bottom: 8px;
+      .welcome h2{
+        font-size:36px;
       }
 
-      .brand-symbol span:nth-child(1),
-      .brand-symbol span:nth-child(5) {
-        height: 29px;
+      .welcome-line{
+        margin:13px auto 10px;
       }
 
-      .brand-symbol span:nth-child(2),
-      .brand-symbol span:nth-child(4) {
-        height: 43px;
+      .slogan{
+        font-size:17px;
       }
 
-      .brand-symbol span:nth-child(3) {
-        height: 58px;
+      .slogan-th{
+        font-size:14px;
       }
 
-      .brand h1 {
-        font-size: 36px;
+      .mascot{
+        width:min(46vw,520px);
+        bottom:-6%;
       }
 
-      .field {
-        margin-bottom: 12px;
+      .login-side{
+        padding-top:15px;
+        padding-bottom:15px;
       }
 
-      .input-wrap input {
-        height: 48px;
+      .language{
+        margin-bottom:8px;
       }
 
-      .login-btn {
-        height: 52px;
+      .brand{
+        margin-bottom:14px;
       }
 
-      .admin-note {
-        margin-top: 15px;
+      .brand-symbol{
+        height:58px;
+        margin-bottom:6px;
       }
 
-      .footer {
-        margin-top: 13px;
+      .brand-symbol span{
+        width:16px;
       }
 
-      .mascot {
-        max-height: 62vh;
+      .brand-symbol span:nth-child(1){
+        height:30px;
+      }
+
+      .brand-symbol span:nth-child(2){
+        height:44px;
+      }
+
+      .brand-symbol span:nth-child(3){
+        height:58px;
+      }
+
+      .brand-symbol span:nth-child(4){
+        height:44px;
+      }
+
+      .brand-symbol span:nth-child(5){
+        height:30px;
+      }
+
+      .brand h1{
+        font-size:36px;
+      }
+
+      .brand .thai,
+      .brand .english{
+        font-size:15px;
+      }
+
+      .form-group{
+        margin-bottom:11px;
+      }
+
+      .field input{
+        height:49px;
+      }
+
+      .login-button{
+        height:53px;
+      }
+
+      .arrow{
+        width:38px;
+        height:38px;
+      }
+
+      .admin-only{
+        margin:13px 0 10px;
       }
     }
 
-    /* =========================
+    /* ==============================
        TABLET / MOBILE
-    ========================= */
+    ============================== */
 
-    @media (max-width: 900px) {
+    @media(max-width:900px){
 
-      .page {
-        display: block;
+      .page{
+        display:block;
       }
 
-      .hero {
-        min-height: 590px;
+      .visual{
+        min-height:600px;
       }
 
-      .hero-copy {
-        top: 45px;
-        left: 7%;
+      .login-side{
+        min-height:auto;
+        padding:45px 8% 60px;
       }
 
-      .mascot {
-        width: 78%;
-        max-height: 430px;
+      .login-card{
+        max-width:620px;
       }
 
-      .login-side {
-        min-height: auto;
-        padding: 45px 20px;
-      }
-
-      .card {
-        max-width: 650px;
+      .mascot{
+        width:min(90vw,550px);
       }
     }
 
-    @media (max-width: 560px) {
+    @media(max-width:600px){
 
-      .hero {
-        min-height: 510px;
+      .visual{
+        min-height:530px;
       }
 
-      .hero-copy {
-        top: 35px;
-        left: 7%;
+      .welcome{
+        top:45px;
       }
 
-      .welcome-th {
-        font-size: 37px;
+      .welcome h1{
+        font-size:38px;
       }
 
-      .welcome-en {
-        font-size: 32px;
+      .welcome h2{
+        font-size:34px;
       }
 
-      .slogan-en {
-        font-size: 13px;
+      .slogan{
+        font-size:15px;
       }
 
-      .slogan-th {
-        font-size: 12px;
+      .slogan-th{
+        font-size:13px;
       }
 
-      .mascot {
-        width: 94%;
-        max-height: 350px;
+      .mascot{
+        width:470px;
+        max-width:100%;
       }
 
-      .login-side {
-        padding: 28px 13px;
+      .login-side{
+        padding:35px 22px 50px;
       }
 
-      .card {
-        padding: 34px 22px 28px;
-        border-radius: 24px;
+      .brand h1{
+        font-size:36px;
       }
 
-      .languages {
-        top: 14px;
-        right: 14px;
-      }
-
-      .brand {
-        padding-top: 50px;
-      }
-
-      .brand h1 {
-        font-size: 34px;
-      }
-
-      .input-wrap input {
-        height: 55px;
+      .brand-symbol{
+        transform:scale(.8);
       }
     }
+
   </style>
 </head>
 
@@ -713,36 +890,44 @@
 <div class="page">
 
   <!-- LEFT -->
-  <section class="hero">
+  <section class="visual">
 
-    <div class="hero-copy">
-      <div class="welcome-th" id="welcomeTh">ยินดีต้อนรับ</div>
-      <div class="welcome-en">Welcome</div>
+    <div class="welcome">
+
+      <h1 id="welcomeTitle">
+        ยินดีต้อนรับ
+      </h1>
+
+      <h2 id="welcomeEnglish">
+        Welcome
+      </h2>
 
       <div class="welcome-line"></div>
 
-      <div class="slogan-en">
+      <div class="slogan">
         TRUST IN SAFETY.
         <span>TRUST IN SANTE.</span>
       </div>
 
       <div class="slogan-th">
         เชื่อมั่นในความปลอดภัย
+        &nbsp;&nbsp;
         <span>เชื่อมั่นในซานเต้</span>
       </div>
+
     </div>
 
-    <div class="wave"></div>
+    <div class="white-wave"></div>
+    <div class="light-wave"></div>
     <div class="skyline"></div>
-    <div class="yellow-wave"></div>
-    <div class="navy-wave"></div>
 
-    <!-- ภาพที่อัปโหลดไว้ใน GitHub -->
     <img
-      class="mascot"
       src="sante-admin-artwork.png"
       alt="SANTE Safety Mascot"
+      class="mascot"
     >
+
+    <div class="ribbon"></div>
 
   </section>
 
@@ -750,24 +935,34 @@
   <!-- RIGHT -->
   <section class="login-side">
 
-    <div class="card">
+    <div class="top-accent"></div>
 
-      <div class="languages">
-        <button
-          class="lang-btn active"
-          id="thaiBtn"
-          type="button"
-          onclick="setLanguage('th')">
-          🇹🇭 ไทย
-        </button>
+    <div class="login-card">
 
-        <button
-          class="lang-btn"
-          id="englishBtn"
-          type="button"
-          onclick="setLanguage('en')">
-          🇬🇧 EN
-        </button>
+      <div class="language">
+
+        <div class="language-box">
+
+          <button
+            class="lang active"
+            id="thaiButton"
+            type="button"
+            onclick="setLanguage('th')"
+          >
+            🇹🇭 ไทย
+          </button>
+
+          <button
+            class="lang"
+            id="englishButton"
+            type="button"
+            onclick="setLanguage('en')"
+          >
+            🇬🇧 EN
+          </button>
+
+        </div>
+
       </div>
 
 
@@ -783,17 +978,17 @@
 
         <h1>SANTE SYSTEM</h1>
 
-        <div class="brand-divider"></div>
+        <div class="brand-line"></div>
 
-        <div class="system-th" id="systemTitle">
+        <div class="thai" id="systemThai">
           ระบบบริหารจัดการ
         </div>
 
-        <div class="system-en">
+        <div class="english">
           SANTE Consulting
         </div>
 
-        <div class="admin-pill">
+        <div class="admin-badge">
           ● ADMINISTRATOR
         </div>
 
@@ -802,38 +997,37 @@
 
       <form id="loginForm">
 
-        <div class="field">
+        <div class="form-group">
 
-          <label for="email">
-            <span class="icon">✉</span>
-            <span id="emailLabel">อีเมล</span>
+          <label id="emailLabel">
+            ✉️ อีเมล
           </label>
 
-          <div class="input-wrap">
+          <div class="field">
+
             <input
               id="email"
               type="email"
-              autocomplete="email"
+              autocomplete="username"
               placeholder="example@santeconsulting.co.th"
               required
             >
+
           </div>
 
         </div>
 
 
-        <div class="field">
+        <div class="form-group">
 
-          <label for="password">
-            <span class="icon">🔒</span>
-            <span id="passwordLabel">รหัสผ่าน</span>
+          <label id="passwordLabel">
+            🔒 รหัสผ่าน
           </label>
 
-          <div class="input-wrap">
+          <div class="field">
 
             <input
               id="password"
-              class="password-input"
               type="password"
               autocomplete="current-password"
               placeholder="กรุณากรอกรหัสผ่าน"
@@ -843,9 +1037,10 @@
             <button
               class="eye"
               type="button"
-              id="togglePassword"
-              aria-label="แสดงหรือซ่อนรหัสผ่าน">
-              ◉
+              onclick="togglePassword()"
+              aria-label="Show password"
+            >
+              👁
             </button>
 
           </div>
@@ -855,44 +1050,47 @@
 
         <button
           id="loginButton"
-          class="login-btn"
-          type="submit">
+          class="login-button"
+          type="submit"
+        >
 
-          <span id="loginText">เข้าสู่ระบบ</span>
+          <span id="loginText">
+            เข้าสู่ระบบ
+          </span>
 
-          <span class="arrow">→</span>
+          <span class="arrow">
+            →
+          </span>
 
         </button>
-
-
-        <div
-          id="message"
-          class="message">
-        </div>
 
       </form>
 
 
-      <div class="admin-note">
-        🔒
-        <span id="adminText">
-          เฉพาะผู้ดูแลระบบเท่านั้น
+      <div class="admin-only">
+
+        <span id="adminOnlyText">
+          🔒 เฉพาะผู้ดูแลระบบเท่านั้น
         </span>
+
       </div>
 
 
-      <div class="home-link">
-        🏠
-        <a href="index.html" id="homeText">
-          กลับหน้าหลัก
+      <div class="home">
+
+        <a
+          href="index.html"
+          id="homeText"
+        >
+          🏠 กลับหน้าหลัก
         </a>
+
       </div>
 
-
-      <div class="footer">
-        © 2026 SANTE CONSULTING CO., LTD.<br>
-        ระบบสำหรับผู้ดูแลระบบเท่านั้น
-      </div>
+      <div
+        id="message"
+        class="message"
+      ></div>
 
     </div>
 
@@ -902,40 +1100,39 @@
 
 
 <script>
-  /* =========================================
+
+  /* ==============================
      SUPABASE
-     Publishable key ใช้ใน browser ได้
-     ห้ามใส่ service_role / secret key
-  ========================================= */
+  ============================== */
 
   const SUPABASE_URL =
-    "https://eur02.safelinks.protection.outlook.com/?url=https%3A%2F%2Fcyegjwerxlxhczrfiurz.supabase.co%2F&data=05%7C02%7Cwaleephon.hannaphachewin%40basf.com%7Cf72a775bdfb94211897508df21048e67%7Cecaa386bc8df4ce0ad01740cbdb5ba55%7C0%7C0%7C639265975590445824%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=EmPBoDdm9WRq%2F61p9D7aDYNzmirpCPIXixcty6gVd8c%3D&reserved=0";
+    "https://eur02.safelinks.protection.outlook.com/?url=https%3A%2F%2Fcyegjwerxlxhczrfiurz.supabase.co%2F&data=05%7C02%7Cwaleephon.hannaphachewin%40basf.com%7C0277730517a84db69a9408df2106a071%7Cecaa386bc8df4ce0ad01740cbdb5ba55%7C0%7C0%7C639265984509248307%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=sz7kGoSWUAgJglJxmdUTS8ID%2BT9uiXsW%2FsxsivcpYr0%3D&reserved=0";
 
-  const SUPABASE_PUBLISHABLE_KEY =
+  const SUPABASE_KEY =
     "sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF";
 
   const supabaseClient =
     window.supabase.createClient(
       SUPABASE_URL,
-      SUPABASE_PUBLISHABLE_KEY
+      SUPABASE_KEY
     );
 
 
-  /* =========================================
+  /* ==============================
      LANGUAGE
-  ========================================= */
+  ============================== */
 
   let currentLanguage = "th";
 
-  function setLanguage(language) {
+  function setLanguage(language){
 
     currentLanguage = language;
 
     const thaiButton =
-      document.getElementById("thaiBtn");
+      document.getElementById("thaiButton");
 
     const englishButton =
-      document.getElementById("englishBtn");
+      document.getElementById("englishButton");
 
     thaiButton.classList.toggle(
       "active",
@@ -948,16 +1145,22 @@
     );
 
 
-    if (language === "th") {
+    if(language === "th"){
 
-      document.getElementById("systemTitle")
+      document.getElementById("welcomeTitle")
+        .textContent = "ยินดีต้อนรับ";
+
+      document.getElementById("welcomeEnglish")
+        .textContent = "Welcome";
+
+      document.getElementById("systemThai")
         .textContent = "ระบบบริหารจัดการ";
 
       document.getElementById("emailLabel")
-        .textContent = "อีเมล";
+        .textContent = "✉️ อีเมล";
 
       document.getElementById("passwordLabel")
-        .textContent = "รหัสผ่าน";
+        .textContent = "🔒 รหัสผ่าน";
 
       document.getElementById("password")
         .placeholder = "กรุณากรอกรหัสผ่าน";
@@ -965,256 +1168,192 @@
       document.getElementById("loginText")
         .textContent = "เข้าสู่ระบบ";
 
-      document.getElementById("adminText")
-        .textContent = "เฉพาะผู้ดูแลระบบเท่านั้น";
+      document.getElementById("adminOnlyText")
+        .textContent =
+        "🔒 เฉพาะผู้ดูแลระบบเท่านั้น";
 
       document.getElementById("homeText")
-        .textContent = "กลับหน้าหลัก";
+        .textContent =
+        "🏠 กลับหน้าหลัก";
 
-    } else {
+    }else{
 
-      document.getElementById("systemTitle")
-        .textContent = "Management System";
+      document.getElementById("welcomeTitle")
+        .textContent = "Welcome";
+
+      document.getElementById("welcomeEnglish")
+        .textContent = "SANTE";
+
+      document.getElementById("systemThai")
+        .textContent =
+        "Management System";
 
       document.getElementById("emailLabel")
-        .textContent = "Email";
+        .textContent = "✉️ Email";
 
       document.getElementById("passwordLabel")
-        .textContent = "Password";
+        .textContent = "🔒 Password";
 
       document.getElementById("password")
-        .placeholder = "Enter your password";
+        .placeholder =
+        "Enter your password";
 
       document.getElementById("loginText")
         .textContent = "Sign In";
 
-      document.getElementById("adminText")
-        .textContent = "Administrators only";
+      document.getElementById("adminOnlyText")
+        .textContent =
+        "🔒 Administrators only";
 
       document.getElementById("homeText")
-        .textContent = "Back to home";
+        .textContent =
+        "🏠 Back to Home";
 
     }
-  }
-
-
-  /* =========================================
-     PASSWORD SHOW / HIDE
-  ========================================= */
-
-  document
-    .getElementById("togglePassword")
-    .addEventListener("click", function () {
-
-      const password =
-        document.getElementById("password");
-
-      if (password.type === "password") {
-
-        password.type = "text";
-        this.textContent = "○";
-
-      } else {
-
-        password.type = "password";
-        this.textContent = "◉";
-
-      }
-
-    });
-
-
-  /* =========================================
-     MESSAGE
-  ========================================= */
-
-  function showMessage(text, type) {
-
-    const message =
-      document.getElementById("message");
-
-    message.textContent = text;
-    message.className = "message " + type;
 
   }
 
 
-  /* =========================================
-     ADMIN LOGIN
-  ========================================= */
+  /* ==============================
+     PASSWORD
+  ============================== */
+
+  function togglePassword(){
+
+    const password =
+      document.getElementById("password");
+
+    password.type =
+      password.type === "password"
+      ? "text"
+      : "password";
+
+  }
+
+
+  /* ==============================
+     LOGIN
+  ============================== */
 
   document
     .getElementById("loginForm")
-    .addEventListener("submit", async function (event) {
+    .addEventListener(
+      "submit",
+      async function(event){
 
-      event.preventDefault();
+        event.preventDefault();
 
-      const email =
-        document.getElementById("email")
+        const email =
+          document
+          .getElementById("email")
           .value
           .trim();
 
-      const password =
-        document.getElementById("password")
+        const password =
+          document
+          .getElementById("password")
           .value;
 
-      const button =
-        document.getElementById("loginButton");
+        const message =
+          document.getElementById("message");
 
-      const loginText =
-        document.getElementById("loginText");
+        const button =
+          document.getElementById("loginButton");
+
+        const loginText =
+          document.getElementById("loginText");
 
 
-      button.disabled = true;
+        message.textContent = "";
 
-      loginText.textContent =
-        currentLanguage === "th"
+        button.disabled = true;
+
+        loginText.textContent =
+          currentLanguage === "th"
           ? "กำลังเข้าสู่ระบบ..."
           : "Signing in...";
 
 
-      try {
+        try{
 
-        /* LOGIN */
-
-        const {
-          data,
-          error
-        } =
-        await supabaseClient.auth.signInWithPassword({
-          email: email,
-          password: password
-        });
-
-
-        if (error) {
-          throw error;
-        }
+          const {
+            data,
+            error
+          } =
+          await supabaseClient.auth
+            .signInWithPassword({
+              email,
+              password
+            });
 
 
-        if (!data.user) {
-          throw new Error("LOGIN_FAILED");
-        }
+          if(error){
+            throw error;
+          }
 
 
-        /*
-          ตรวจสิทธิ์จาก Database จริง
-          ไม่ได้ตรวจจากหน้า HTML อย่างเดียว
-        */
+          /*
+            ตรวจสอบสิทธิ์ STAFF / ADMIN
+          */
 
-        const {
-          data: staffAllowed,
-          error: roleError
-        } =
-        await supabaseClient.rpc("is_staff");
-
-
-        if (roleError) {
-
-          await supabaseClient.auth.signOut();
-
-          throw new Error(
-            "ไม่สามารถตรวจสอบสิทธิ์ผู้ดูแลระบบได้"
+          const {
+            data: isStaff,
+            error: staffError
+          } =
+          await supabaseClient.rpc(
+            "is_staff"
           );
 
-        }
+
+          if(staffError){
+            throw staffError;
+          }
 
 
-        if (staffAllowed !== true) {
+          if(!isStaff){
 
-          await supabaseClient.auth.signOut();
+            await supabaseClient.auth
+              .signOut();
 
-          showMessage(
-            currentLanguage === "th"
+            message.textContent =
+              currentLanguage === "th"
               ? "บัญชีนี้ไม่มีสิทธิ์เข้าสู่ระบบผู้ดูแล"
-              : "This account does not have administrator access.",
-            "error"
-          );
+              : "This account does not have administrator access.";
 
-          return;
-
-        }
+            return;
+          }
 
 
-        showMessage(
-          currentLanguage === "th"
-            ? "เข้าสู่ระบบสำเร็จ"
-            : "Login successful",
-          "success"
-        );
-
-
-        /*
-          ขั้นต่อไปเราจะสร้าง admin-dashboard.html
-        */
-
-        setTimeout(function () {
+          /*
+            Login สำเร็จ
+          */
 
           window.location.href =
             "admin-dashboard.html";
 
-        }, 500);
 
+        }catch(error){
 
-      } catch (error) {
+          console.error(error);
 
-        console.error(error);
+          message.textContent =
+            currentLanguage === "th"
+            ? "อีเมลหรือรหัสผ่านไม่ถูกต้อง หรือไม่สามารถเข้าสู่ระบบได้"
+            : "Invalid email or password, or unable to sign in.";
 
-        showMessage(
-          currentLanguage === "th"
-            ? "อีเมลหรือรหัสผ่านไม่ถูกต้อง หรือบัญชีไม่มีสิทธิ์เข้าใช้งาน"
-            : "Incorrect email/password or unauthorized account.",
-          "error"
-        );
+        }finally{
 
-      } finally {
+          button.disabled = false;
 
-        button.disabled = false;
-
-        loginText.textContent =
-          currentLanguage === "th"
+          loginText.textContent =
+            currentLanguage === "th"
             ? "เข้าสู่ระบบ"
             : "Sign In";
 
+        }
+
       }
-
-    });
-
-
-  /* =========================================
-     ALREADY LOGGED IN
-  ========================================= */
-
-  async function checkExistingSession() {
-
-    const {
-      data: { session }
-    } =
-    await supabaseClient.auth.getSession();
-
-
-    if (!session) {
-      return;
-    }
-
-
-    const {
-      data: staffAllowed
-    } =
-    await supabaseClient.rpc("is_staff");
-
-
-    if (staffAllowed === true) {
-
-      window.location.href =
-        "admin-dashboard.html";
-
-    }
-
-  }
-
-
-  checkExistingSession();
+    );
 
 </script>
 
