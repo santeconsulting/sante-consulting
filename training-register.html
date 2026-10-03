@@ -25,28 +25,34 @@
 
     :root {
       --navy: #112443;
-      --navy-dark: #0c192e;
+      --navy-dark: #0b172a;
       --navy-soft: #1d467b;
 
       --yellow: #f8c73d;
-      --yellow-dark: #dba914;
+      --yellow-hover: #edbb28;
 
       --white: #ffffff;
-      --background: #f4f7fb;
+      --bg: #f4f7fb;
 
       --text: #17243b;
       --muted: #7b8799;
 
-      --border: #e0e6ef;
+      --border: #dfe5ee;
 
-      --green: #198754;
+      --green: #177747;
       --green-bg: #eaf8f0;
 
-      --red: #c43c3c;
+      --red: #b93636;
       --red-bg: #fff0f0;
 
-      --orange: #b97800;
-      --orange-bg: #fff7e6;
+      --orange: #986400;
+      --orange-bg: #fff5dd;
+
+      --blue: #245c9c;
+      --blue-bg: #edf5ff;
+
+      --purple: #62449a;
+      --purple-bg: #f3efff;
     }
 
     html {
@@ -54,15 +60,16 @@
     }
 
     body {
-      font-family: "Prompt", sans-serif;
-      background: var(--background);
-      color: var(--text);
       min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Prompt", sans-serif;
     }
 
     button,
     input,
-    select {
+    select,
+    textarea {
       font-family: "Prompt", sans-serif;
     }
 
@@ -75,20 +82,20 @@
       text-decoration: none;
     }
 
-    /* ======================================================
+    /* =====================================================
        HEADER
-    ====================================================== */
+    ===================================================== */
 
     .site-header {
-      height: 92px;
+      height: 88px;
+      padding: 0 6vw;
+
       background: #ffffff;
-      border-bottom: 1px solid #e7ebf1;
+      border-bottom: 1px solid #e6eaf0;
 
       display: flex;
       align-items: center;
       justify-content: space-between;
-
-      padding: 0 6vw;
 
       position: sticky;
       top: 0;
@@ -98,41 +105,35 @@
     .brand {
       display: flex;
       align-items: center;
-      gap: 15px;
+      gap: 14px;
     }
 
     .brand-mark {
       display: flex;
       align-items: center;
-      gap: 5px;
-      height: 42px;
+      gap: 4px;
+      height: 38px;
     }
 
     .brand-mark span {
+      width: 7px;
       display: block;
-      width: 8px;
       border-radius: 999px;
       background: var(--yellow);
     }
 
-    .brand-mark span:nth-child(1) {
-      height: 22px;
+    .brand-mark span:nth-child(1),
+    .brand-mark span:nth-child(5) {
+      height: 20px;
     }
 
-    .brand-mark span:nth-child(2) {
-      height: 34px;
+    .brand-mark span:nth-child(2),
+    .brand-mark span:nth-child(4) {
+      height: 30px;
     }
 
     .brand-mark span:nth-child(3) {
-      height: 42px;
-    }
-
-    .brand-mark span:nth-child(4) {
-      height: 34px;
-    }
-
-    .brand-mark span:nth-child(5) {
-      height: 22px;
+      height: 38px;
     }
 
     .brand-name {
@@ -142,37 +143,39 @@
       letter-spacing: .5px;
     }
 
-    .header-actions {
+    .header-right {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 16px;
     }
 
-    .member-mini {
+    .header-user {
       text-align: right;
-      display: none;
     }
 
-    .member-mini-name {
+    .header-user-name {
+      color: var(--navy);
       font-size: 13px;
       font-weight: 600;
-      color: var(--navy);
     }
 
-    .member-mini-email {
-      font-size: 11px;
+    .header-user-email {
+      margin-top: 1px;
       color: var(--muted);
+      font-size: 11px;
     }
 
     .logout-button {
-      border: 1px solid #d8dee8;
+      min-height: 42px;
+      padding: 9px 17px;
+
       background: #ffffff;
       color: var(--navy);
 
-      padding: 11px 18px;
-      border-radius: 12px;
+      border: 1px solid #d6dde7;
+      border-radius: 11px;
 
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 500;
 
       transition: .2s ease;
@@ -183,13 +186,13 @@
       background: #f8fafc;
     }
 
-    /* ======================================================
+    /* =====================================================
        HERO
-    ====================================================== */
+    ===================================================== */
 
     .hero-wrap {
       max-width: 1280px;
-      margin: 34px auto 0;
+      margin: 30px auto 0;
       padding: 0 28px;
     }
 
@@ -197,40 +200,38 @@
       position: relative;
       overflow: hidden;
 
-      min-height: 330px;
+      min-height: 295px;
+      padding: 50px 55px;
 
       border-radius: 28px;
 
       background:
         radial-gradient(
-          circle at 82% 30%,
+          circle at 84% 30%,
           rgba(255,255,255,.08),
-          transparent 33%
+          transparent 32%
         ),
         linear-gradient(
           135deg,
           #10264b 0%,
-          #173b6e 55%,
-          #245a98 100%
+          #173c6f 56%,
+          #245b99 100%
         );
 
-      color: #ffffff;
-
-      padding: 54px 58px;
-
       box-shadow:
-        0 18px 45px rgba(18, 46, 84, .15);
+        0 18px 45px rgba(18,46,84,.14);
+
+      color: #ffffff;
     }
 
     .hero::before {
       content: "";
       position: absolute;
 
-      width: 480px;
-      height: 480px;
+      width: 430px;
+      height: 430px;
 
       border-radius: 50%;
-
       background: rgba(255,255,255,.045);
 
       right: -120px;
@@ -241,15 +242,14 @@
       content: "";
       position: absolute;
 
-      width: 270px;
-      height: 270px;
+      width: 280px;
+      height: 280px;
 
       border-radius: 50%;
+      background: rgba(248,199,61,.08);
 
-      background: rgba(248,199,61,.10);
-
-      left: 42%;
-      bottom: -180px;
+      right: 25%;
+      bottom: -220px;
     }
 
     .hero-content {
@@ -259,70 +259,78 @@
     }
 
     .hero-eyebrow {
+      margin-bottom: 13px;
+
       color: var(--yellow);
-      font-size: 15px;
+
+      font-size: 14px;
       font-weight: 600;
       letter-spacing: .5px;
-      margin-bottom: 16px;
     }
 
     .hero h1 {
-      font-size: clamp(36px, 4vw, 55px);
+      margin-bottom: 15px;
+
+      font-size: clamp(34px, 4vw, 52px);
       line-height: 1.25;
       font-weight: 700;
-      margin-bottom: 18px;
     }
 
     .hero-description {
+      max-width: 700px;
+
       color: #dce7f6;
-      font-size: 17px;
-      line-height: 1.9;
-      max-width: 670px;
+
+      font-size: 16px;
+      line-height: 1.85;
     }
 
     .hero-member {
-      margin-top: 30px;
+      margin-top: 25px;
 
       display: inline-flex;
       flex-direction: column;
 
-      padding: 16px 22px;
-
-      border: 1px solid rgba(255,255,255,.17);
-      border-radius: 16px;
+      padding: 13px 19px;
 
       background: rgba(255,255,255,.08);
+
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: 14px;
+
       backdrop-filter: blur(10px);
     }
 
     .hero-member-label {
-      color: #aebfd6;
-      font-size: 12px;
-      margin-bottom: 3px;
+      margin-bottom: 2px;
+      color: #b9c7da;
+      font-size: 11px;
     }
 
     .hero-member-name {
-      font-size: 18px;
-      font-weight: 600;
       color: #ffffff;
+      font-size: 17px;
+      font-weight: 600;
     }
 
-    /* ======================================================
-       PAGE CONTENT
-    ====================================================== */
+    /* =====================================================
+       CONTENT
+    ===================================================== */
 
     .container {
       width: min(1224px, calc(100% - 56px));
-      margin: 48px auto 80px;
+      margin: 43px auto 80px;
     }
 
     .message {
       display: none;
-      padding: 17px 20px;
-      border-radius: 14px;
-      margin-bottom: 26px;
 
-      font-size: 14px;
+      margin-bottom: 25px;
+      padding: 16px 19px;
+
+      border-radius: 13px;
+
+      font-size: 13px;
       line-height: 1.7;
     }
 
@@ -330,98 +338,104 @@
       display: block;
     }
 
+    .message.success {
+      color: var(--green);
+      background: var(--green-bg);
+      border: 1px solid #bfe5cf;
+    }
+
     .message.error {
+      color: var(--red);
       background: var(--red-bg);
-      color: #a93232;
       border: 1px solid #f0c4c4;
     }
 
-    .message.success {
-      background: var(--green-bg);
-      color: #147447;
-      border: 1px solid #bfe6cf;
-    }
-
     .message.warning {
+      color: var(--orange);
       background: var(--orange-bg);
-      color: #9a6500;
-      border: 1px solid #f0d49c;
+      border: 1px solid #eed39a;
     }
 
-    /* ======================================================
+    /* =====================================================
        MEMBER
-    ====================================================== */
+    ===================================================== */
 
-    .member-section {
-      margin-bottom: 46px;
+    .section {
+      margin-bottom: 45px;
     }
 
-    .section-title {
-      margin-bottom: 22px;
+    .section-heading {
+      margin-bottom: 20px;
     }
 
-    .section-title h2 {
+    .section-heading h2 {
+      margin-bottom: 4px;
+
       color: var(--navy);
-      font-size: 27px;
+      font-size: 25px;
       font-weight: 700;
-      margin-bottom: 5px;
     }
 
-    .section-title p {
+    .section-heading p {
       color: var(--muted);
-      font-size: 14px;
+      font-size: 13px;
     }
 
     .member-card {
+      padding: 25px 28px;
+
       background: #ffffff;
 
       border: 1px solid var(--border);
-      border-radius: 22px;
-
-      padding: 27px 30px;
+      border-radius: 20px;
 
       display: grid;
-      grid-template-columns: 1.3fr 1.3fr 1fr;
-      gap: 24px;
+      grid-template-columns: 1.25fr 1.25fr 1fr;
+      gap: 22px;
 
       box-shadow:
-        0 10px 28px rgba(23, 48, 82, .05);
+        0 10px 28px rgba(23,48,82,.045);
     }
 
     .info-label {
-      font-size: 12px;
-      color: #909aaa;
-      margin-bottom: 6px;
+      margin-bottom: 5px;
+
+      color: #929dab;
+      font-size: 11px;
     }
 
     .info-value {
       color: var(--navy);
-      font-size: 15px;
+
+      font-size: 14px;
       font-weight: 500;
+
       overflow-wrap: anywhere;
     }
 
-    /* ======================================================
-       TRAINING
-    ====================================================== */
+    /* =====================================================
+       TRAINING HEADER
+    ===================================================== */
 
-    .training-header {
+    .training-heading {
+      margin-bottom: 21px;
+
       display: flex;
-      justify-content: space-between;
       align-items: flex-end;
+      justify-content: space-between;
       gap: 20px;
-      margin-bottom: 22px;
     }
 
-    .training-header h2 {
+    .training-heading h2 {
+      margin-bottom: 4px;
+
       color: var(--navy);
-      font-size: 28px;
-      margin-bottom: 5px;
+      font-size: 26px;
     }
 
-    .training-header p {
+    .training-heading p {
       color: var(--muted);
-      font-size: 14px;
+      font-size: 13px;
     }
 
     .search-box {
@@ -430,87 +444,96 @@
 
     .search-input {
       width: 100%;
-      height: 46px;
-
-      border: 1px solid var(--border);
-      border-radius: 12px;
+      height: 45px;
 
       padding: 0 15px;
 
+      background: #ffffff;
+      color: var(--text);
+
+      border: 1px solid var(--border);
+      border-radius: 11px;
+
       outline: none;
 
-      color: var(--text);
-      background: #ffffff;
+      font-size: 13px;
     }
 
     .search-input:focus {
-      border-color: #b99a31;
+      border-color: #c8a62f;
       box-shadow: 0 0 0 3px rgba(248,199,61,.12);
     }
 
+    /* =====================================================
+       CARDS
+    ===================================================== */
+
     .training-grid {
       display: grid;
-      grid-template-columns:
-        repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 22px;
     }
 
     .training-card {
+      overflow: hidden;
+
       background: #ffffff;
 
       border: 1px solid var(--border);
-      border-radius: 22px;
-
-      overflow: hidden;
+      border-radius: 21px;
 
       box-shadow:
-        0 10px 30px rgba(25, 50, 85, .055);
+        0 10px 30px rgba(25,50,85,.05);
 
-      transition:
-        transform .2s ease,
-        box-shadow .2s ease;
+      transition: .2s ease;
     }
 
     .training-card:hover {
       transform: translateY(-2px);
 
       box-shadow:
-        0 16px 35px rgba(25, 50, 85, .09);
+        0 15px 34px rgba(25,50,85,.08);
     }
 
-    .card-top {
-      padding: 27px 27px 22px;
+    .card-main {
+      padding: 25px 25px 20px;
     }
 
-    .card-tags {
+    .tags {
+      margin-bottom: 14px;
+
       display: flex;
-      align-items: center;
       flex-wrap: wrap;
       gap: 7px;
-
-      margin-bottom: 15px;
     }
 
     .tag {
-      display: inline-flex;
-      align-items: center;
+      padding: 5px 10px;
 
       border-radius: 999px;
 
-      padding: 6px 10px;
-
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 500;
     }
 
     .tag-open {
-      color: #147447;
-      background: #eaf8f0;
+      color: var(--green);
+      background: var(--green-bg);
+    }
+
+    .tag-free {
+      color: var(--green);
+      background: var(--green-bg);
+    }
+
+    .tag-paid {
+      color: var(--orange);
+      background: var(--orange-bg);
     }
 
     .tag-online {
-      color: #245c9c;
-      background: #edf5ff;
+      color: var(--blue);
+      background: var(--blue-bg);
     }
 
     .tag-onsite {
@@ -519,201 +542,166 @@
     }
 
     .tag-hybrid {
-      color: #62449a;
-      background: #f3efff;
+      color: var(--purple);
+      background: var(--purple-bg);
     }
 
-    .tag-free {
-      color: #147447;
-      background: #eaf8f0;
-    }
+    .course-type-name {
+      margin-bottom: 4px;
 
-    .tag-paid {
-      color: #9a6500;
-      background: #fff4d8;
-    }
-
-    .course-name {
-      font-size: 13px;
-      color: #b18500;
+      color: #ae8300;
+      font-size: 12px;
       font-weight: 600;
-      margin-bottom: 5px;
     }
 
     .session-name {
+      margin-bottom: 16px;
+
       color: var(--navy);
-      font-size: 20px;
-      font-weight: 650;
+
+      font-size: 19px;
       line-height: 1.45;
-      margin-bottom: 17px;
+      font-weight: 650;
     }
 
     .details {
       display: grid;
-      gap: 10px;
+      gap: 9px;
     }
 
     .detail {
       display: grid;
-      grid-template-columns: 95px 1fr;
-      gap: 10px;
+      grid-template-columns: 92px 1fr;
+      gap: 9px;
 
-      font-size: 13px;
+      font-size: 12px;
       line-height: 1.6;
     }
 
     .detail-label {
-      color: #939dac;
+      color: #929cab;
     }
 
     .detail-value {
-      color: #475569;
+      color: #465569;
     }
 
-    .seat-progress {
-      margin-top: 18px;
-    }
+    .card-footer {
+      padding: 17px 25px 20px;
 
-    .seat-line {
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-
-      font-size: 11px;
-      color: #8490a0;
-
-      margin-bottom: 7px;
-    }
-
-    .progress-track {
-      height: 7px;
-      border-radius: 999px;
-      overflow: hidden;
-      background: #edf0f4;
-    }
-
-    .progress-bar {
-      height: 100%;
-      background: var(--yellow);
-      border-radius: inherit;
-      transition: width .3s ease;
-    }
-
-    .card-bottom {
       border-top: 1px solid #edf0f4;
-
-      padding: 18px 27px 22px;
 
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 18px;
+      gap: 15px;
     }
 
     .price-label {
-      font-size: 11px;
       color: #919baa;
+      font-size: 10px;
     }
 
-    .price-value {
-      color: var(--navy);
-      font-size: 17px;
-      font-weight: 650;
+    .price {
       margin-top: 2px;
+
+      color: var(--navy);
+
+      font-size: 16px;
+      font-weight: 650;
     }
 
     .register-button {
-      min-width: 145px;
-      min-height: 46px;
+      min-width: 140px;
+      min-height: 44px;
 
-      border: none;
-      border-radius: 12px;
-
-      padding: 11px 17px;
+      padding: 10px 16px;
 
       background: var(--yellow);
       color: #172033;
 
-      font-size: 13px;
+      border: 0;
+      border-radius: 11px;
+
+      font-size: 12px;
       font-weight: 600;
 
       transition: .2s ease;
     }
 
     .register-button:hover:not(:disabled) {
-      background: #edbb28;
-      transform: translateY(-1px);
+      background: var(--yellow-hover);
     }
 
     .register-button.registered {
-      color: #167346;
-      background: #e9f8ef;
+      color: var(--green);
+      background: var(--green-bg);
     }
 
     .register-button.pending {
-      color: #966400;
-      background: #fff3d5;
+      color: var(--orange);
+      background: var(--orange-bg);
     }
 
     .register-button.closed {
-      color: #7f8998;
+      color: #7c8796;
       background: #edf0f4;
     }
 
     .register-button:disabled {
       cursor: not-allowed;
-      transform: none;
     }
 
-    /* ======================================================
-       EMPTY / LOADING
-    ====================================================== */
+    /* =====================================================
+       STATE
+    ===================================================== */
 
     .state-card {
       grid-column: 1 / -1;
 
-      background: #ffffff;
-      border: 1px solid var(--border);
-      border-radius: 22px;
+      padding: 55px 25px;
 
-      padding: 60px 30px;
+      background: #ffffff;
+
+      border: 1px solid var(--border);
+      border-radius: 20px;
 
       text-align: center;
-
-      color: var(--muted);
     }
 
     .state-icon {
-      width: 64px;
-      height: 64px;
+      width: 58px;
+      height: 58px;
+
+      margin: 0 auto 15px;
+
+      background: #f2f5f9;
 
       border-radius: 50%;
-
-      margin: 0 auto 17px;
 
       display: grid;
       place-items: center;
 
-      background: #f2f5f9;
-
-      font-size: 26px;
+      font-size: 23px;
     }
 
     .state-title {
+      margin-bottom: 5px;
+
       color: var(--navy);
-      font-size: 18px;
+      font-size: 17px;
       font-weight: 600;
-      margin-bottom: 6px;
     }
 
     .state-description {
-      font-size: 13px;
+      color: var(--muted);
+      font-size: 12px;
       line-height: 1.7;
     }
 
-    /* ======================================================
-       CONFIRM MODAL
-    ====================================================== */
+    /* =====================================================
+       REGISTRATION MODAL
+    ===================================================== */
 
     .modal-backdrop {
       position: fixed;
@@ -725,7 +713,7 @@
 
       padding: 20px;
 
-      background: rgba(8, 18, 34, .58);
+      background: rgba(7,17,32,.62);
 
       z-index: 500;
     }
@@ -735,108 +723,330 @@
     }
 
     .modal {
-      width: min(470px, 100%);
+      width: min(680px, 100%);
+      max-height: calc(100vh - 40px);
 
-      background: #ffffff;
-      border-radius: 22px;
+      overflow-y: auto;
 
       padding: 30px;
 
+      background: #ffffff;
+
+      border-radius: 22px;
+
       box-shadow:
-        0 25px 70px rgba(0,0,0,.25);
+        0 25px 75px rgba(0,0,0,.28);
     }
 
-    .modal-icon {
-      width: 52px;
-      height: 52px;
+    .modal-top {
+      margin-bottom: 22px;
+    }
 
-      border-radius: 50%;
+    .modal-eyebrow {
+      margin-bottom: 6px;
 
-      display: grid;
-      place-items: center;
+      color: #a67d00;
 
-      background: #fff5d7;
-
-      color: #a97c00;
-
-      font-size: 22px;
-
-      margin-bottom: 18px;
+      font-size: 11px;
+      font-weight: 600;
     }
 
     .modal h3 {
+      margin-bottom: 7px;
+
       color: var(--navy);
-      font-size: 21px;
-      margin-bottom: 8px;
+
+      font-size: 22px;
+      line-height: 1.4;
     }
 
-    .modal p {
+    .modal-description {
       color: var(--muted);
-      font-size: 13px;
-      line-height: 1.75;
+      font-size: 12px;
+      line-height: 1.7;
     }
 
-    .modal-session {
-      margin-top: 18px;
-
-      padding: 15px;
-
-      border-radius: 12px;
+    .selected-session {
+      margin-bottom: 23px;
+      padding: 14px 16px;
 
       background: #f6f8fb;
 
+      border-radius: 12px;
+
       color: var(--navy);
 
       font-size: 13px;
       font-weight: 500;
+      line-height: 1.6;
     }
 
-    .modal-actions {
-      display: flex;
-      justify-content: flex-end;
-      gap: 10px;
+    /* =====================================================
+       FORM
+    ===================================================== */
 
+    .form-section {
       margin-top: 25px;
+      padding-top: 23px;
+
+      border-top: 1px solid #e8ecf2;
     }
 
-    .modal-button {
-      border: none;
-      border-radius: 10px;
+    .form-section:first-of-type {
+      margin-top: 0;
+      padding-top: 0;
+      border-top: 0;
+    }
 
-      padding: 11px 18px;
+    .form-section-title {
+      margin-bottom: 4px;
 
-      font-size: 13px;
+      color: var(--navy);
+
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .form-section-description {
+      margin-bottom: 16px;
+
+      color: var(--muted);
+
+      font-size: 11px;
+      line-height: 1.65;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 15px;
+    }
+
+    .field.full {
+      grid-column: 1 / -1;
+    }
+
+    .field label {
+      display: block;
+
+      margin-bottom: 6px;
+
+      color: #465569;
+
+      font-size: 11px;
       font-weight: 500;
     }
 
-    .modal-cancel {
-      color: #5f6b7a;
+    .required {
+      color: #c63838;
+    }
+
+    .field input,
+    .field select {
+      width: 100%;
+      height: 45px;
+
+      padding: 0 13px;
+
+      background: #ffffff;
+      color: var(--text);
+
+      border: 1px solid #d9e0e9;
+      border-radius: 10px;
+
+      outline: none;
+
+      font-size: 12px;
+    }
+
+    .field input:focus,
+    .field select:focus {
+      border-color: #c6a42d;
+      box-shadow: 0 0 0 3px rgba(248,199,61,.11);
+    }
+
+    .field-note {
+      margin-top: 5px;
+
+      color: #929cab;
+
+      font-size: 10px;
+      line-height: 1.5;
+    }
+
+    /* =====================================================
+       DOCUMENT OPTIONS
+    ===================================================== */
+
+    .document-section {
+      display: none;
+    }
+
+    .document-section.show {
+      display: block;
+    }
+
+    .document-options {
+      display: grid;
+      gap: 10px;
+    }
+
+    .document-option {
+      position: relative;
+
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+
+      padding: 14px;
+
+      border: 1px solid #dfe5ed;
+      border-radius: 12px;
+
+      cursor: pointer;
+
+      transition: .2s ease;
+    }
+
+    .document-option:hover {
+      border-color: #d1ae34;
+      background: #fffdf7;
+    }
+
+    .document-option.selected {
+      border-color: #d2aa24;
+      background: #fffaf0;
+    }
+
+    .document-option input {
+      width: 18px;
+      height: 18px;
+
+      margin-top: 1px;
+
+      accent-color: #d6a800;
+    }
+
+    .document-option-title {
+      color: var(--navy);
+
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .document-option-description {
+      margin-top: 3px;
+
+      color: var(--muted);
+
+      font-size: 10px;
+      line-height: 1.55;
+    }
+
+    .document-note {
+      margin-top: 13px;
+      padding: 12px 14px;
+
+      color: #775600;
+      background: #fff8e5;
+
+      border: 1px solid #f1dda5;
+      border-radius: 10px;
+
+      font-size: 10px;
+      line-height: 1.7;
+    }
+
+    /* =====================================================
+       MEMBER SNAPSHOT
+    ===================================================== */
+
+    .member-snapshot {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+
+      padding: 14px;
+
+      background: #f7f9fc;
+
+      border-radius: 12px;
+    }
+
+    .snapshot-item {
+      min-width: 0;
+    }
+
+    .snapshot-label {
+      color: #929cab;
+      font-size: 9px;
+    }
+
+    .snapshot-value {
+      margin-top: 2px;
+
+      color: var(--navy);
+
+      font-size: 11px;
+      font-weight: 500;
+
+      overflow-wrap: anywhere;
+    }
+
+    /* =====================================================
+       MODAL ACTION
+    ===================================================== */
+
+    .modal-actions {
+      margin-top: 26px;
+
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .modal-button {
+      min-height: 43px;
+
+      padding: 10px 18px;
+
+      border: 0;
+      border-radius: 10px;
+
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .cancel-button {
+      color: #596678;
       background: #edf0f4;
     }
 
-    .modal-confirm {
+    .confirm-button {
       color: #172033;
       background: var(--yellow);
+      font-weight: 600;
     }
 
-    .modal-confirm:disabled {
-      opacity: .65;
+    .confirm-button:disabled {
+      opacity: .6;
       cursor: not-allowed;
     }
 
-    /* ======================================================
+    /* =====================================================
        FOOTER
-    ====================================================== */
+    ===================================================== */
 
     footer {
+      padding: 33px 25px;
+
       background: var(--navy-dark);
       color: #aeb8c8;
 
-      padding: 34px 28px;
-
       text-align: center;
 
-      font-size: 12px;
+      font-size: 11px;
+      line-height: 1.7;
     }
 
     footer strong {
@@ -844,15 +1054,9 @@
       font-weight: 500;
     }
 
-    /* ======================================================
+    /* =====================================================
        RESPONSIVE
-    ====================================================== */
-
-    @media (min-width: 850px) {
-      .member-mini {
-        display: block;
-      }
-    }
+    ===================================================== */
 
     @media (max-width: 900px) {
       .training-grid {
@@ -866,20 +1070,20 @@
 
     @media (max-width: 700px) {
       .site-header {
-        height: 78px;
-        padding: 0 20px;
+        height: 76px;
+        padding: 0 18px;
       }
 
       .brand {
-        gap: 11px;
+        gap: 10px;
       }
 
       .brand-name {
-        font-size: 23px;
+        font-size: 22px;
       }
 
       .brand-mark {
-        height: 34px;
+        height: 32px;
       }
 
       .brand-mark span {
@@ -888,106 +1092,115 @@
 
       .brand-mark span:nth-child(1),
       .brand-mark span:nth-child(5) {
-        height: 18px;
+        height: 16px;
       }
 
       .brand-mark span:nth-child(2),
       .brand-mark span:nth-child(4) {
-        height: 28px;
+        height: 25px;
       }
 
       .brand-mark span:nth-child(3) {
-        height: 34px;
+        height: 32px;
+      }
+
+      .header-user {
+        display: none;
       }
 
       .logout-button {
-        padding: 9px 13px;
-        font-size: 12px;
+        min-height: 38px;
+        padding: 8px 12px;
+        font-size: 11px;
       }
 
       .hero-wrap {
-        margin-top: 18px;
-        padding: 0 15px;
+        margin-top: 16px;
+        padding: 0 14px;
       }
 
       .hero {
         min-height: auto;
-        padding: 35px 28px;
-        border-radius: 22px;
+
+        padding: 32px 25px;
+
+        border-radius: 21px;
       }
 
       .hero h1 {
-        font-size: 31px;
+        font-size: 29px;
       }
 
       .hero-description {
-        font-size: 14px;
-        line-height: 1.8;
+        font-size: 13px;
       }
 
       .hero-member {
         width: 100%;
-        margin-top: 25px;
       }
 
       .container {
-        width: calc(100% - 30px);
-        margin-top: 35px;
+        width: calc(100% - 28px);
+        margin-top: 33px;
       }
 
-      .member-section {
-        margin-bottom: 38px;
-      }
-
-      .section-title h2,
-      .training-header h2 {
-        font-size: 23px;
+      .section-heading h2,
+      .training-heading h2 {
+        font-size: 22px;
       }
 
       .member-card {
         grid-template-columns: 1fr;
-        gap: 20px;
-        padding: 23px;
+        gap: 18px;
+        padding: 21px;
       }
 
-      .training-header {
-        align-items: stretch;
+      .training-heading {
         flex-direction: column;
+        align-items: stretch;
       }
 
       .search-box {
         width: 100%;
       }
 
-      .card-top {
-        padding: 23px 22px 19px;
+      .card-main {
+        padding: 22px 21px 18px;
       }
 
-      .session-name {
-        font-size: 18px;
+      .card-footer {
+        padding: 16px 21px 19px;
       }
 
-      .detail {
-        grid-template-columns: 85px 1fr;
+      .modal {
+        padding: 24px 20px;
       }
 
-      .card-bottom {
-        padding: 17px 22px 20px;
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .field.full {
+        grid-column: auto;
+      }
+
+      .member-snapshot {
+        grid-template-columns: 1fr;
       }
     }
 
     @media (max-width: 430px) {
       .hero {
-        padding: 30px 23px;
+        padding: 28px 21px;
       }
 
       .hero h1 {
-        font-size: 28px;
+        font-size: 26px;
       }
 
-      .card-bottom {
-        align-items: stretch;
+      .card-footer {
         flex-direction: column;
+        align-items: stretch;
       }
 
       .register-button {
@@ -1007,9 +1220,9 @@
 
 <body>
 
-  <!-- ======================================================
+  <!-- =====================================================
        HEADER
-  ======================================================= -->
+  ====================================================== -->
 
   <header class="site-header">
 
@@ -1029,20 +1242,22 @@
 
     </a>
 
-    <div class="header-actions">
+    <div class="header-right">
 
-      <div class="member-mini">
+      <div class="header-user">
+
         <div
-          id="headerMemberName"
-          class="member-mini-name"
+          id="headerUserName"
+          class="header-user-name"
         >
           สมาชิก SANTE
         </div>
 
         <div
-          id="headerMemberEmail"
-          class="member-mini-email"
+          id="headerUserEmail"
+          class="header-user-email"
         ></div>
+
       </div>
 
       <button
@@ -1058,9 +1273,9 @@
   </header>
 
 
-  <!-- ======================================================
+  <!-- =====================================================
        HERO
-  ======================================================= -->
+  ====================================================== -->
 
   <div class="hero-wrap">
 
@@ -1078,7 +1293,8 @@
 
         <div class="hero-description">
           เลือกรอบการอบรมที่ต้องการ
-          ระบบจะใช้ข้อมูลจากบัญชีสมาชิกของคุณในการลงทะเบียนโดยอัตโนมัติ
+          ระบบจะดึงข้อมูลสมาชิกของคุณมาใช้โดยอัตโนมัติ
+          และให้กรอกเฉพาะข้อมูลเพิ่มเติมที่จำเป็นสำหรับการสมัคร
         </div>
 
         <div class="hero-member">
@@ -1103,9 +1319,9 @@
   </div>
 
 
-  <!-- ======================================================
+  <!-- =====================================================
        CONTENT
-  ======================================================= -->
+  ====================================================== -->
 
   <main class="container">
 
@@ -1117,18 +1333,23 @@
 
     <!-- MEMBER -->
 
-    <section class="member-section">
+    <section class="section">
 
-      <div class="section-title">
-        <h2>ข้อมูลผู้สมัคร</h2>
+      <div class="section-heading">
+
+        <h2>ข้อมูลสมาชิก</h2>
+
         <p>
-          ระบบใช้ข้อมูลจากบัญชีสมาชิกของคุณ
+          ข้อมูลส่วนบุคคลจะดึงจากบัญชีสมาชิกของคุณโดยอัตโนมัติ
         </p>
+
       </div>
+
 
       <div class="member-card">
 
         <div>
+
           <div class="info-label">
             ชื่อ-นามสกุล
           </div>
@@ -1139,9 +1360,12 @@
           >
             -
           </div>
+
         </div>
 
+
         <div>
+
           <div class="info-label">
             อีเมล
           </div>
@@ -1152,9 +1376,12 @@
           >
             -
           </div>
+
         </div>
 
+
         <div>
+
           <div class="info-label">
             เบอร์โทรศัพท์
           </div>
@@ -1165,6 +1392,7 @@
           >
             -
           </div>
+
         </div>
 
       </div>
@@ -1176,14 +1404,20 @@
 
     <section>
 
-      <div class="training-header">
+      <div class="training-heading">
 
         <div>
-          <h2>รอบอบรมที่เปิดรับสมัคร</h2>
+
+          <h2>
+            รอบอบรมที่เปิดรับสมัคร
+          </h2>
+
           <p>
-            เลือกรอบอบรมที่คุณต้องการเข้าร่วม
+            เลือกรอบอบรมที่ต้องการเข้าร่วม
           </p>
+
         </div>
+
 
         <div class="search-box">
 
@@ -1227,49 +1461,380 @@
   </main>
 
 
-  <!-- ======================================================
-       MODAL
-  ======================================================= -->
+  <!-- =====================================================
+       REGISTRATION MODAL
+  ====================================================== -->
 
   <div
-    id="confirmModal"
+    id="registrationModal"
     class="modal-backdrop"
   >
 
     <div class="modal">
 
-      <div class="modal-icon">
-        ✓
+      <div class="modal-top">
+
+        <div
+          id="modalTypeLabel"
+          class="modal-eyebrow"
+        >
+          SANTE TRAINING
+        </div>
+
+        <h3>
+          สมัครเข้าร่วมการอบรม
+        </h3>
+
+        <div class="modal-description">
+          กรุณากรอกข้อมูลเพิ่มเติมสำหรับการสมัครรอบอบรมนี้
+        </div>
+
       </div>
 
-      <h3>
-        ยืนยันการสมัครอบรม
-      </h3>
-
-      <p>
-        กรุณาตรวจสอบรอบอบรมก่อนยืนยัน
-        เมื่อสมัครรอบนี้แล้วจะไม่สามารถสมัครรอบเดิมซ้ำได้
-      </p>
 
       <div
-        id="modalSessionName"
-        class="modal-session"
-      ></div>
+        id="selectedSessionBox"
+        class="selected-session"
+      >
+        -
+      </div>
+
+
+      <!-- MEMBER SNAPSHOT -->
+
+      <section class="form-section">
+
+        <div class="form-section-title">
+          ข้อมูลผู้สมัคร
+        </div>
+
+        <div class="form-section-description">
+          ดึงจากบัญชีสมาชิก SANTE โดยอัตโนมัติ
+        </div>
+
+
+        <div class="member-snapshot">
+
+          <div class="snapshot-item">
+
+            <div class="snapshot-label">
+              ชื่อ-นามสกุล
+            </div>
+
+            <div
+              id="modalMemberName"
+              class="snapshot-value"
+            >
+              -
+            </div>
+
+          </div>
+
+
+          <div class="snapshot-item">
+
+            <div class="snapshot-label">
+              อีเมล
+            </div>
+
+            <div
+              id="modalMemberEmail"
+              class="snapshot-value"
+            >
+              -
+            </div>
+
+          </div>
+
+
+          <div class="snapshot-item">
+
+            <div class="snapshot-label">
+              เบอร์โทรศัพท์
+            </div>
+
+            <div
+              id="modalMemberPhone"
+              class="snapshot-value"
+            >
+              -
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- WORK INFORMATION -->
+
+      <section class="form-section">
+
+        <div class="form-section-title">
+          ข้อมูลการทำงาน
+        </div>
+
+        <div class="form-section-description">
+          กรุณากรอกข้อมูล ณ วันที่สมัครเข้าร่วมการอบรม
+        </div>
+
+
+        <div class="form-grid">
+
+          <div class="field full">
+
+            <label for="organizationName">
+              บริษัท / หน่วยงาน
+              <span class="required">*</span>
+            </label>
+
+            <input
+              type="text"
+              id="organizationName"
+              maxlength="250"
+              autocomplete="organization"
+              placeholder="เช่น บริษัท ตัวอย่าง จำกัด"
+            >
+
+          </div>
+
+
+          <div class="field">
+
+            <label for="jobPosition">
+              ตำแหน่งงาน
+              <span class="required">*</span>
+            </label>
+
+            <input
+              type="text"
+              id="jobPosition"
+              maxlength="200"
+              autocomplete="organization-title"
+              placeholder="เช่น เจ้าหน้าที่ความปลอดภัย"
+            >
+
+          </div>
+
+
+          <div class="field">
+
+            <label for="province">
+              จังหวัด
+              <span class="required">*</span>
+            </label>
+
+            <select id="province">
+
+              <option value="">
+                เลือกจังหวัด
+              </option>
+
+              <option>กรุงเทพมหานคร</option>
+              <option>กระบี่</option>
+              <option>กาญจนบุรี</option>
+              <option>กาฬสินธุ์</option>
+              <option>กำแพงเพชร</option>
+              <option>ขอนแก่น</option>
+              <option>จันทบุรี</option>
+              <option>ฉะเชิงเทรา</option>
+              <option>ชลบุรี</option>
+              <option>ชัยนาท</option>
+              <option>ชัยภูมิ</option>
+              <option>ชุมพร</option>
+              <option>เชียงราย</option>
+              <option>เชียงใหม่</option>
+              <option>ตรัง</option>
+              <option>ตราด</option>
+              <option>ตาก</option>
+              <option>นครนายก</option>
+              <option>นครปฐม</option>
+              <option>นครพนม</option>
+              <option>นครราชสีมา</option>
+              <option>นครศรีธรรมราช</option>
+              <option>นครสวรรค์</option>
+              <option>นนทบุรี</option>
+              <option>นราธิวาส</option>
+              <option>น่าน</option>
+              <option>บึงกาฬ</option>
+              <option>บุรีรัมย์</option>
+              <option>ปทุมธานี</option>
+              <option>ประจวบคีรีขันธ์</option>
+              <option>ปราจีนบุรี</option>
+              <option>ปัตตานี</option>
+              <option>พระนครศรีอยุธยา</option>
+              <option>พะเยา</option>
+              <option>พังงา</option>
+              <option>พัทลุง</option>
+              <option>พิจิตร</option>
+              <option>พิษณุโลก</option>
+              <option>เพชรบุรี</option>
+              <option>เพชรบูรณ์</option>
+              <option>แพร่</option>
+              <option>ภูเก็ต</option>
+              <option>มหาสารคาม</option>
+              <option>มุกดาหาร</option>
+              <option>แม่ฮ่องสอน</option>
+              <option>ยโสธร</option>
+              <option>ยะลา</option>
+              <option>ร้อยเอ็ด</option>
+              <option>ระนอง</option>
+              <option>ระยอง</option>
+              <option>ราชบุรี</option>
+              <option>ลพบุรี</option>
+              <option>ลำปาง</option>
+              <option>ลำพูน</option>
+              <option>เลย</option>
+              <option>ศรีสะเกษ</option>
+              <option>สกลนคร</option>
+              <option>สงขลา</option>
+              <option>สตูล</option>
+              <option>สมุทรปราการ</option>
+              <option>สมุทรสงคราม</option>
+              <option>สมุทรสาคร</option>
+              <option>สระแก้ว</option>
+              <option>สระบุรี</option>
+              <option>สิงห์บุรี</option>
+              <option>สุโขทัย</option>
+              <option>สุพรรณบุรี</option>
+              <option>สุราษฎร์ธานี</option>
+              <option>สุรินทร์</option>
+              <option>หนองคาย</option>
+              <option>หนองบัวลำภู</option>
+              <option>อ่างทอง</option>
+              <option>อำนาจเจริญ</option>
+              <option>อุดรธานี</option>
+              <option>อุตรดิตถ์</option>
+              <option>อุทัยธานี</option>
+              <option>อุบลราชธานี</option>
+
+            </select>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- DOCUMENT REQUEST -->
+
+      <section
+        id="documentSection"
+        class="form-section document-section"
+      >
+
+        <div class="form-section-title">
+          เอกสารที่ต้องการ
+        </div>
+
+        <div class="form-section-description">
+          สามารถเลือกได้มากกว่า 1 รายการ
+          หรือไม่เลือกเอกสารก็ได้
+        </div>
+
+
+        <div class="document-options">
+
+          <label class="document-option">
+
+            <input
+              type="checkbox"
+              class="document-checkbox"
+              value="QUOTATION"
+            >
+
+            <div>
+
+              <div class="document-option-title">
+                ใบเสนอราคา
+              </div>
+
+              <div class="document-option-description">
+                สำหรับใช้ประกอบการอนุมัติหรือดำเนินการภายในองค์กรก่อนชำระเงิน
+              </div>
+
+            </div>
+
+          </label>
+
+
+          <label class="document-option">
+
+            <input
+              type="checkbox"
+              class="document-checkbox"
+              value="INVOICE"
+            >
+
+            <div>
+
+              <div class="document-option-title">
+                ใบแจ้งหนี้
+              </div>
+
+              <div class="document-option-description">
+                สำหรับใช้ดำเนินการชำระค่าลงทะเบียนอบรม
+              </div>
+
+            </div>
+
+          </label>
+
+
+          <label class="document-option">
+
+            <input
+              type="checkbox"
+              class="document-checkbox"
+              value="RECEIPT_TAX_INVOICE"
+            >
+
+            <div>
+
+              <div class="document-option-title">
+                ใบเสร็จรับเงิน / ใบกำกับภาษี
+              </div>
+
+              <div class="document-option-description">
+                ระบบจะออกเอกสารหลังตรวจสอบและยืนยันการรับชำระเงินเรียบร้อยแล้ว
+              </div>
+
+            </div>
+
+          </label>
+
+        </div>
+
+
+        <div class="document-note">
+          หากเลือกเอกสารทางการเงิน
+          ระบบจะให้กรอกหรือเลือกข้อมูลสำหรับออกเอกสาร
+          เช่น ชื่อนิติบุคคล เลขประจำตัวผู้เสียภาษี
+          สำนักงานใหญ่/สาขา และที่อยู่สำหรับออกเอกสาร
+          ในขั้นตอนถัดไป
+        </div>
+
+      </section>
+
+
+      <!-- ACTION -->
 
       <div class="modal-actions">
 
         <button
           type="button"
-          id="cancelRegisterButton"
-          class="modal-button modal-cancel"
+          id="cancelButton"
+          class="modal-button cancel-button"
         >
           ยกเลิก
         </button>
 
         <button
           type="button"
-          id="confirmRegisterButton"
-          class="modal-button modal-confirm"
+          id="confirmButton"
+          class="modal-button confirm-button"
         >
           ยืนยันสมัครอบรม
         </button>
@@ -1281,9 +1846,9 @@
   </div>
 
 
-  <!-- ======================================================
+  <!-- =====================================================
        FOOTER
-  ======================================================= -->
+  ====================================================== -->
 
   <footer>
     <strong>SANTE CONSULTING CO., LTD.</strong>
@@ -1292,15 +1857,15 @@
   </footer>
 
 
-  <!-- ======================================================
+  <!-- =====================================================
        JAVASCRIPT
-  ======================================================= -->
+  ====================================================== -->
 
   <script>
 
-    /* ======================================================
-       SUPABASE
-    ======================================================= */
+    /* =====================================================
+       SUPABASE CONFIG
+    ====================================================== */
 
     const SUPABASE_URL =
       "https://cyegjwerxlxhczrfiurz.supabase.co";
@@ -1329,9 +1894,9 @@
     );
 
 
-    /* ======================================================
+    /* =====================================================
        STATE
-    ======================================================= */
+    ====================================================== */
 
     let currentUser = null;
 
@@ -1344,9 +1909,12 @@
     let selectedSession = null;
 
 
-    /* ======================================================
+    /* =====================================================
        ELEMENTS
-    ======================================================= */
+    ====================================================== */
+
+    const messageBox =
+      document.getElementById("messageBox");
 
     const trainingGrid =
       document.getElementById("trainingGrid");
@@ -1354,32 +1922,40 @@
     const searchInput =
       document.getElementById("searchInput");
 
-    const messageBox =
-      document.getElementById("messageBox");
+    const registrationModal =
+      document.getElementById("registrationModal");
 
-    const confirmModal =
-      document.getElementById("confirmModal");
+    const selectedSessionBox =
+      document.getElementById("selectedSessionBox");
 
-    const modalSessionName =
-      document.getElementById("modalSessionName");
+    const modalTypeLabel =
+      document.getElementById("modalTypeLabel");
 
-    const confirmRegisterButton =
-      document.getElementById(
-        "confirmRegisterButton"
-      );
+    const organizationNameInput =
+      document.getElementById("organizationName");
 
-    const cancelRegisterButton =
-      document.getElementById(
-        "cancelRegisterButton"
-      );
+    const jobPositionInput =
+      document.getElementById("jobPosition");
+
+    const provinceInput =
+      document.getElementById("province");
+
+    const documentSection =
+      document.getElementById("documentSection");
+
+    const confirmButton =
+      document.getElementById("confirmButton");
+
+    const cancelButton =
+      document.getElementById("cancelButton");
 
     const logoutButton =
       document.getElementById("logoutButton");
 
 
-    /* ======================================================
+    /* =====================================================
        HELPERS
-    ======================================================= */
+    ====================================================== */
 
     function escapeHtml(value) {
 
@@ -1389,6 +1965,31 @@
         .replaceAll(">", "&gt;")
         .replaceAll('"', "&quot;")
         .replaceAll("'", "&#039;");
+
+    }
+
+
+    function fullThaiName(profile) {
+
+      if (!profile) {
+        return "-";
+      }
+
+      const title =
+        profile.title_th || "";
+
+      const first =
+        profile.firstname_th || "";
+
+      const last =
+        profile.lastname_th || "";
+
+      const name =
+        `${title} ${first} ${last}`
+          .replace(/\s+/g, " ")
+          .trim();
+
+      return name || profile.email || "-";
 
     }
 
@@ -1411,33 +2012,7 @@
     function clearMessage() {
 
       messageBox.className = "message";
-
       messageBox.textContent = "";
-
-    }
-
-
-    function fullThaiName(profile) {
-
-      if (!profile) {
-        return "-";
-      }
-
-      const title =
-        profile.title_th || "";
-
-      const firstname =
-        profile.firstname_th || "";
-
-      const lastname =
-        profile.lastname_th || "";
-
-      const name =
-        `${title} ${firstname} ${lastname}`
-          .replace(/\s+/g, " ")
-          .trim();
-
-      return name || profile.email || "-";
 
     }
 
@@ -1459,7 +2034,8 @@
           }
         ).format(new Date(value));
 
-      } catch {
+      }
+      catch {
 
         return "-";
 
@@ -1483,10 +2059,13 @@
             timeZone: "Asia/Bangkok"
           }
         ).format(
-          new Date(value + "T00:00:00+07:00")
+          new Date(
+            value + "T00:00:00+07:00"
+          )
         );
 
-      } catch {
+      }
+      catch {
 
         return "-";
 
@@ -1563,11 +2142,33 @@
     }
 
 
+    function isPaidSession(session) {
+
+      return Number(
+        session?.price || 0
+      ) > 0;
+
+    }
+
+
+    function trainingTypeDisplay(session) {
+
+      if (isPaidSession(session)) {
+        return "อบรม (มีค่าใช้จ่าย)";
+      }
+
+      return "Safety SANTE Sharing";
+
+    }
+
+
     function getRegistration(sessionId) {
 
       return myRegistrations.find(
         item =>
-          item.training_session_id === sessionId &&
+          item.training_session_id ===
+            sessionId
+          &&
           String(
             item.registration_status || ""
           ).toUpperCase() !== "CANCELLED"
@@ -1576,7 +2177,9 @@
     }
 
 
-    function registrationButtonInfo(registration) {
+    function registrationButtonInfo(
+      registration
+    ) {
 
       if (!registration) {
         return null;
@@ -1601,7 +2204,7 @@
       if (status === "PENDING") {
 
         return {
-          text: "รอดำเนินการ",
+          text: "รอชำระเงิน",
           className: "pending"
         };
 
@@ -1618,19 +2221,26 @@
 
     function registrationWindow(session) {
 
-      const today =
-        new Date();
+      const today = new Date();
 
-      today.setHours(0, 0, 0, 0);
+      today.setHours(
+        0,
+        0,
+        0,
+        0
+      );
 
 
-      if (session.registration_open_date) {
+      if (
+        session.registration_open_date
+      ) {
 
         const open =
           new Date(
             session.registration_open_date +
             "T00:00:00"
           );
+
 
         if (today < open) {
 
@@ -1648,13 +2258,16 @@
       }
 
 
-      if (session.registration_close_date) {
+      if (
+        session.registration_close_date
+      ) {
 
         const close =
           new Date(
             session.registration_close_date +
             "T23:59:59"
           );
+
 
         if (today > close) {
 
@@ -1668,11 +2281,15 @@
       }
 
 
-      if (session.training_start_at) {
+      if (
+        session.training_start_at
+      ) {
 
         if (
           new Date() >=
-          new Date(session.training_start_at)
+          new Date(
+            session.training_start_at
+          )
         ) {
 
           return {
@@ -1693,7 +2310,9 @@
     }
 
 
-    function translateRegistrationError(error) {
+    function translateRegistrationError(
+      error
+    ) {
 
       const text =
         String(
@@ -1704,16 +2323,20 @@
 
 
       if (
-        text.includes("ALREADY_REGISTERED")
+        text.includes(
+          "ALREADY_REGISTERED"
+        )
       ) {
 
-        return "คุณสมัครรอบอบรมนี้แล้ว ไม่สามารถสมัครรอบเดิมซ้ำได้";
+        return "คุณสมัครรอบอบรมนี้แล้ว";
 
       }
 
 
       if (
-        text.includes("SESSION_FULL")
+        text.includes(
+          "SESSION_FULL"
+        )
       ) {
 
         return "ขออภัย รอบอบรมนี้มีผู้สมัครครบจำนวนแล้ว";
@@ -1722,7 +2345,64 @@
 
 
       if (
-        text.includes("REGISTRATION_NOT_OPEN")
+        text.includes(
+          "ORGANIZATION_REQUIRED"
+        )
+      ) {
+
+        return "กรุณากรอกบริษัทหรือหน่วยงาน";
+
+      }
+
+
+      if (
+        text.includes(
+          "PROVINCE_REQUIRED"
+        )
+      ) {
+
+        return "กรุณาเลือกจังหวัด";
+
+      }
+
+
+      if (
+        text.includes(
+          "JOB_POSITION_REQUIRED"
+        )
+      ) {
+
+        return "กรุณากรอกตำแหน่งงาน";
+
+      }
+
+
+      if (
+        text.includes(
+          "INVALID_DOCUMENT_TYPE"
+        )
+      ) {
+
+        return "ประเภทเอกสารที่เลือกไม่ถูกต้อง";
+
+      }
+
+
+      if (
+        text.includes(
+          "DOCUMENT_REQUEST_NOT_ALLOWED_FOR_FREE_TRAINING"
+        )
+      ) {
+
+        return "Safety SANTE Sharing ไม่รองรับการขอเอกสารทางการเงินในขั้นตอนนี้";
+
+      }
+
+
+      if (
+        text.includes(
+          "REGISTRATION_NOT_OPEN"
+        )
       ) {
 
         return "รอบอบรมนี้ไม่ได้เปิดรับสมัครในขณะนี้";
@@ -1731,7 +2411,9 @@
 
 
       if (
-        text.includes("REGISTRATION_NOT_STARTED")
+        text.includes(
+          "REGISTRATION_NOT_STARTED"
+        )
       ) {
 
         return "รอบอบรมนี้ยังไม่ถึงวันเปิดรับสมัคร";
@@ -1740,7 +2422,9 @@
 
 
       if (
-        text.includes("REGISTRATION_CLOSED")
+        text.includes(
+          "REGISTRATION_CLOSED"
+        )
       ) {
 
         return "รอบอบรมนี้ปิดรับสมัครแล้ว";
@@ -1749,7 +2433,9 @@
 
 
       if (
-        text.includes("TRAINING_ALREADY_STARTED")
+        text.includes(
+          "TRAINING_ALREADY_STARTED"
+        )
       ) {
 
         return "ไม่สามารถสมัครได้ เนื่องจากการอบรมเริ่มแล้ว";
@@ -1758,7 +2444,9 @@
 
 
       if (
-        text.includes("AUTH_REQUIRED")
+        text.includes(
+          "AUTH_REQUIRED"
+        )
       ) {
 
         return "กรุณาเข้าสู่ระบบสมาชิกก่อนสมัครอบรม";
@@ -1767,7 +2455,9 @@
 
 
       if (
-        text.includes("PROFILE_NOT_FOUND")
+        text.includes(
+          "PROFILE_NOT_FOUND"
+        )
       ) {
 
         return "ไม่พบข้อมูลสมาชิก กรุณาติดต่อ SANTE";
@@ -1776,7 +2466,9 @@
 
 
       if (
-        text.includes("ACCOUNT_NOT_ACTIVE")
+        text.includes(
+          "ACCOUNT_NOT_ACTIVE"
+        )
       ) {
 
         return "บัญชีสมาชิกนี้ไม่อยู่ในสถานะพร้อมใช้งาน";
@@ -1796,7 +2488,20 @@
 
 
       if (
-        text.includes("INVALID_SEAT_CAPACITY")
+        text.includes(
+          "COURSE_NOT_FOUND"
+        )
+      ) {
+
+        return "ไม่พบข้อมูลหลักสูตร";
+
+      }
+
+
+      if (
+        text.includes(
+          "INVALID_SEAT_CAPACITY"
+        )
       ) {
 
         return "รอบอบรมนี้ยังไม่ได้กำหนดจำนวนที่นั่งอย่างถูกต้อง";
@@ -1812,9 +2517,9 @@
     }
 
 
-    /* ======================================================
+    /* =====================================================
        PROFILE
-    ======================================================= */
+    ====================================================== */
 
     function renderProfile() {
 
@@ -1823,19 +2528,19 @@
 
 
       document.getElementById(
-        "heroMemberName"
+        "headerUserName"
       ).textContent = name;
 
 
       document.getElementById(
-        "headerMemberName"
-      ).textContent = name;
-
-
-      document.getElementById(
-        "headerMemberEmail"
+        "headerUserEmail"
       ).textContent =
         currentProfile?.email || "";
+
+
+      document.getElementById(
+        "heroMemberName"
+      ).textContent = name;
 
 
       document.getElementById(
@@ -1857,9 +2562,9 @@
     }
 
 
-    /* ======================================================
+    /* =====================================================
        LOAD MEMBER
-    ======================================================= */
+    ====================================================== */
 
     async function loadMember() {
 
@@ -1895,20 +2600,18 @@
       } =
         await db
           .from("profiles")
-          .select(
-            `
-              id,
-              title_th,
-              firstname_th,
-              lastname_th,
-              title_en,
-              firstname_en,
-              lastname_en,
-              email,
-              phone,
-              account_status
-            `
-          )
+          .select(`
+            id,
+            title_th,
+            firstname_th,
+            lastname_th,
+            title_en,
+            firstname_en,
+            lastname_en,
+            email,
+            phone,
+            account_status
+          `)
           .eq(
             "id",
             currentUser.id
@@ -1917,9 +2620,7 @@
 
 
       if (profileError) {
-
         throw profileError;
-
       }
 
 
@@ -1961,9 +2662,9 @@
     }
 
 
-    /* ======================================================
-       LOAD REGISTRATIONS
-    ======================================================= */
+    /* =====================================================
+       LOAD MY REGISTRATIONS
+    ====================================================== */
 
     async function loadMyRegistrations() {
 
@@ -1972,18 +2673,21 @@
         error
       } =
         await db
-          .from("training_registrations")
-          .select(
-            `
-              id,
-              training_session_id,
-              registration_status,
-              payment_required,
-              payment_status,
-              registered_at,
-              confirmed_at
-            `
+          .from(
+            "training_registrations"
           )
+          .select(`
+            id,
+            training_session_id,
+            registration_status,
+            payment_required,
+            payment_status,
+            organization_name,
+            province,
+            job_position,
+            registered_at,
+            confirmed_at
+          `)
           .eq(
             "user_id",
             currentUser.id
@@ -1998,15 +2702,10 @@
 
       if (error) {
 
-        console.error(
-          "Load registrations:",
+        console.warn(
+          "Cannot load registrations:",
           error
         );
-
-        /*
-          ไม่ block หน้า เพราะ RPC ยังสามารถ
-          ป้องกัน duplicate ฝั่ง server ได้
-        */
 
         myRegistrations = [];
 
@@ -2021,9 +2720,9 @@
     }
 
 
-    /* ======================================================
-       LOAD TRAINING SESSIONS
-    ======================================================= */
+    /* =====================================================
+       LOAD SESSIONS
+    ====================================================== */
 
     async function loadTrainingSessions() {
 
@@ -2033,30 +2732,28 @@
       } =
         await db
           .from("training_sessions")
-          .select(
-            `
+          .select(`
+            id,
+            course_id,
+            session_name,
+            registration_open_date,
+            registration_close_date,
+            training_start_at,
+            training_end_at,
+            delivery_method,
+            online_platform,
+            venue_name,
+            venue_address,
+            seat_capacity,
+            is_seat_limited,
+            price,
+            session_status,
+            courses (
               id,
-              course_id,
-              session_name,
-              registration_open_date,
-              registration_close_date,
-              training_start_at,
-              training_end_at,
-              delivery_method,
-              online_platform,
-              venue_name,
-              venue_address,
-              seat_capacity,
-              is_seat_limited,
-              price,
-              session_status,
-              courses (
-                id,
-                course_name_th,
-                course_type
-              )
-            `
-          )
+              course_name_th,
+              course_type
+            )
+          `)
           .eq(
             "session_status",
             "OPEN"
@@ -2070,9 +2767,7 @@
 
 
       if (error) {
-
         throw error;
-
       }
 
 
@@ -2082,89 +2777,9 @@
     }
 
 
-    /* ======================================================
-       COUNT CONFIRMED SEATS
-       ใช้เพื่อแสดงผลเท่านั้น
-       การกันที่นั่งจริงทำใน RPC
-    ======================================================= */
-
-    async function loadSeatCounts() {
-
-      if (!trainingSessions.length) {
-        return;
-      }
-
-
-      const ids =
-        trainingSessions.map(
-          item => item.id
-        );
-
-
-      const {
-        data,
-        error
-      } =
-        await db
-          .from("training_registrations")
-          .select(
-            `
-              training_session_id,
-              registration_status
-            `
-          )
-          .in(
-            "training_session_id",
-            ids
-          )
-          .eq(
-            "registration_status",
-            "CONFIRMED"
-          );
-
-
-      if (error) {
-
-        console.warn(
-          "Seat count unavailable:",
-          error
-        );
-
-        return;
-
-      }
-
-
-      const counts = {};
-
-
-      for (const item of data || []) {
-
-        counts[item.training_session_id] =
-          (
-            counts[
-              item.training_session_id
-            ] || 0
-          ) + 1;
-
-      }
-
-
-      trainingSessions =
-        trainingSessions.map(
-          session => ({
-            ...session,
-            confirmed_count:
-              counts[session.id] || 0
-          })
-        );
-
-    }
-
-
-    /* ======================================================
-       RENDER TRAINING
-    ======================================================= */
+    /* =====================================================
+       RENDER SESSIONS
+    ====================================================== */
 
     function renderTrainingSessions() {
 
@@ -2178,19 +2793,28 @@
         trainingSessions.filter(
           session => {
 
-            const courseName =
+            const course =
               session.courses
                 ?.course_name_th || "";
 
             const sessionName =
               session.session_name || "";
 
+            const type =
+              trainingTypeDisplay(
+                session
+              );
+
+
             return (
               !keyword ||
-              courseName
+              course
                 .toLowerCase()
                 .includes(keyword) ||
               sessionName
+                .toLowerCase()
+                .includes(keyword) ||
+              type
                 .toLowerCase()
                 .includes(keyword)
             );
@@ -2213,8 +2837,8 @@
             </div>
 
             <div class="state-description">
-              ขณะนี้ไม่มีรอบอบรมที่ตรงกับการค้นหา
-              หรือยังไม่มีรอบที่เปิดรับสมัคร
+              ขณะนี้ยังไม่มีรอบอบรมที่เปิดรับสมัคร
+              หรือไม่พบข้อมูลที่ตรงกับการค้นหา
             </div>
 
           </div>
@@ -2228,6 +2852,16 @@
       trainingGrid.innerHTML =
         filtered.map(
           session => {
+
+            const paid =
+              isPaidSession(session);
+
+
+            const typeName =
+              trainingTypeDisplay(
+                session
+              );
+
 
             const registration =
               getRegistration(
@@ -2247,78 +2881,15 @@
               );
 
 
-            const price =
-              Number(
-                session.price || 0
-              );
-
-
-            const confirmed =
-              Number(
-                session.confirmed_count || 0
-              );
-
-
-            const capacity =
-              Number(
-                session.seat_capacity || 0
-              );
-
-
-            let seatHtml = "";
-
-
-            if (
-              session.is_seat_limited &&
-              capacity > 0
-            ) {
-
-              const percent =
-                Math.min(
-                  100,
-                  Math.round(
-                    (
-                      confirmed /
-                      capacity
-                    ) * 100
-                  )
-                );
-
-
-              seatHtml = `
-                <div class="seat-progress">
-
-                  <div class="seat-line">
-                    <span>
-                      ผู้สมัครยืนยันแล้ว
-                    </span>
-
-                    <span>
-                      ${confirmed} / ${capacity} คน
-                    </span>
-                  </div>
-
-                  <div class="progress-track">
-                    <div
-                      class="progress-bar"
-                      style="width:${percent}%"
-                    ></div>
-                  </div>
-
-                </div>
-              `;
-
-            }
-
-
             let buttonText =
-              "สมัครอบรม";
+              paid
+                ? "สมัครอบรม"
+                : "สมัครเข้าร่วม";
 
-            let buttonClass =
-              "";
 
-            let disabled =
-              false;
+            let buttonClass = "";
+
+            let disabled = false;
 
 
             if (buttonInfo) {
@@ -2332,7 +2903,9 @@
               disabled = true;
 
             }
-            else if (!windowInfo.allowed) {
+            else if (
+              !windowInfo.allowed
+            ) {
 
               buttonText =
                 windowInfo.text;
@@ -2343,34 +2916,6 @@
               disabled = true;
 
             }
-            else if (
-              session.is_seat_limited &&
-              price <= 0 &&
-              capacity > 0 &&
-              confirmed >= capacity
-            ) {
-
-              buttonText =
-                "ที่นั่งเต็ม";
-
-              buttonClass =
-                "closed";
-
-              disabled = true;
-
-            }
-
-
-            const delivery =
-              deliveryLabel(
-                session.delivery_method
-              );
-
-
-            const deliveryCss =
-              deliveryClass(
-                session.delivery_method
-              );
 
 
             const courseName =
@@ -2379,38 +2924,48 @@
               "หลักสูตรอบรม";
 
 
+            const delivery =
+              deliveryLabel(
+                session.delivery_method
+              );
+
+
             return `
               <article class="training-card">
 
-                <div class="card-top">
+                <div class="card-main">
 
-                  <div class="card-tags">
+                  <div class="tags">
 
                     <span class="tag tag-open">
                       เปิดรับสมัคร
                     </span>
 
-                    <span class="tag ${deliveryCss}">
+                    <span
+                      class="tag ${
+                        deliveryClass(
+                          session.delivery_method
+                        )
+                      }"
+                    >
                       ${escapeHtml(delivery)}
                     </span>
 
-                    <span class="tag ${
-                      price <= 0
-                        ? "tag-free"
-                        : "tag-paid"
-                    }">
-                      ${
-                        price <= 0
-                          ? "ไม่มีค่าใช้จ่าย"
-                          : "มีค่าใช้จ่าย"
-                      }
+                    <span
+                      class="tag ${
+                        paid
+                          ? "tag-paid"
+                          : "tag-free"
+                      }"
+                    >
+                      ${escapeHtml(typeName)}
                     </span>
 
                   </div>
 
 
-                  <div class="course-name">
-                    ${escapeHtml(courseName)}
+                  <div class="course-type-name">
+                    ${escapeHtml(typeName)}
                   </div>
 
 
@@ -2425,6 +2980,20 @@
                   <div class="details">
 
                     <div class="detail">
+
+                      <div class="detail-label">
+                        หลักสูตร
+                      </div>
+
+                      <div class="detail-value">
+                        ${escapeHtml(courseName)}
+                      </div>
+
+                    </div>
+
+
+                    <div class="detail">
+
                       <div class="detail-label">
                         วันอบรม
                       </div>
@@ -2436,10 +3005,12 @@
                           )
                         )}
                       </div>
+
                     </div>
 
 
                     <div class="detail">
+
                       <div class="detail-label">
                         รูปแบบ
                       </div>
@@ -2447,48 +3018,12 @@
                       <div class="detail-value">
                         ${escapeHtml(delivery)}
                       </div>
+
                     </div>
 
 
-                    ${
-                      String(
-                        session.delivery_method || ""
-                      ).toUpperCase() === "ONLINE"
-                      ?
-                      `
-                        <div class="detail">
-                          <div class="detail-label">
-                            ระบบ
-                          </div>
-
-                          <div class="detail-value">
-                            ${escapeHtml(
-                              session.online_platform ||
-                              "ออนไลน์"
-                            )}
-                          </div>
-                        </div>
-                      `
-                      :
-                      `
-                        <div class="detail">
-                          <div class="detail-label">
-                            สถานที่
-                          </div>
-
-                          <div class="detail-value">
-                            ${escapeHtml(
-                              session.venue_name ||
-                              session.venue_address ||
-                              "-"
-                            )}
-                          </div>
-                        </div>
-                      `
-                    }
-
-
                     <div class="detail">
+
                       <div class="detail-label">
                         รับสมัครถึง
                       </div>
@@ -2500,28 +3035,30 @@
                           )
                         )}
                       </div>
+
                     </div>
 
                   </div>
 
-
-                  ${seatHtml}
-
                 </div>
 
 
-                <div class="card-bottom">
+                <div class="card-footer">
 
                   <div>
+
                     <div class="price-label">
                       ค่าลงทะเบียน
                     </div>
 
-                    <div class="price-value">
+                    <div class="price">
                       ${escapeHtml(
-                        formatMoney(price)
+                        formatMoney(
+                          session.price
+                        )
                       )}
                     </div>
+
                   </div>
 
 
@@ -2532,7 +3069,9 @@
                       ${buttonClass}
                     "
                     data-session-id="${
-                      escapeHtml(session.id)
+                      escapeHtml(
+                        session.id
+                      )
                     }"
                     ${disabled ? "disabled" : ""}
                   >
@@ -2560,7 +3099,7 @@
               "click",
               function () {
 
-                openConfirmModal(
+                openRegistrationModal(
                   this.dataset.sessionId
                 );
 
@@ -2573,11 +3112,13 @@
     }
 
 
-    /* ======================================================
-       MODAL
-    ======================================================= */
+    /* =====================================================
+       OPEN MODAL
+    ====================================================== */
 
-    function openConfirmModal(sessionId) {
+    function openRegistrationModal(
+      sessionId
+    ) {
 
       clearMessage();
 
@@ -2601,29 +3142,128 @@
       }
 
 
+      const paid =
+        isPaidSession(
+          selectedSession
+        );
+
+
+      const typeName =
+        trainingTypeDisplay(
+          selectedSession
+        );
+
+
       const courseName =
         selectedSession.courses
           ?.course_name_th ||
         "หลักสูตรอบรม";
 
 
-      modalSessionName.textContent =
+      modalTypeLabel.textContent =
+        typeName;
+
+
+      selectedSessionBox.textContent =
         `${courseName} — ${
           selectedSession.session_name ||
           ""
         }`;
 
 
-      confirmModal.classList.add(
+      document.getElementById(
+        "modalMemberName"
+      ).textContent =
+        fullThaiName(
+          currentProfile
+        );
+
+
+      document.getElementById(
+        "modalMemberEmail"
+      ).textContent =
+        currentProfile?.email || "-";
+
+
+      document.getElementById(
+        "modalMemberPhone"
+      ).textContent =
+        currentProfile?.phone || "-";
+
+
+      /*
+        เคลียร์ค่าจากรอบก่อน
+      */
+
+      organizationNameInput.value = "";
+
+      jobPositionInput.value = "";
+
+      provinceInput.value = "";
+
+
+      document
+        .querySelectorAll(
+          ".document-checkbox"
+        )
+        .forEach(
+          checkbox => {
+
+            checkbox.checked = false;
+
+            checkbox
+              .closest(
+                ".document-option"
+              )
+              ?.classList.remove(
+                "selected"
+              );
+
+          }
+        );
+
+
+      /*
+        แสดงเอกสารเฉพาะ
+        อบรม (มีค่าใช้จ่าย)
+      */
+
+      if (paid) {
+
+        documentSection.classList.add(
+          "show"
+        );
+
+      }
+      else {
+
+        documentSection.classList.remove(
+          "show"
+        );
+
+      }
+
+
+      confirmButton.textContent =
+        paid
+          ? "ยืนยันข้อมูลการสมัคร"
+          : "ยืนยันสมัครเข้าร่วม";
+
+
+      registrationModal.classList.add(
         "show"
       );
 
     }
 
 
-    function closeConfirmModal() {
+    /* =====================================================
+       CLOSE MODAL
+    ====================================================== */
 
-      confirmModal.classList.remove(
+    function closeRegistrationModal() {
+
+      registrationModal.classList.remove(
         "show"
       );
 
@@ -2632,21 +3272,22 @@
     }
 
 
-    cancelRegisterButton.addEventListener(
+    cancelButton.addEventListener(
       "click",
-      closeConfirmModal
+      closeRegistrationModal
     );
 
 
-    confirmModal.addEventListener(
+    registrationModal.addEventListener(
       "click",
       function (event) {
 
         if (
-          event.target === confirmModal
+          event.target ===
+          registrationModal
         ) {
 
-          closeConfirmModal();
+          closeRegistrationModal();
 
         }
 
@@ -2654,11 +3295,137 @@
     );
 
 
-    /* ======================================================
-       REGISTER VIA RPC
-    ======================================================= */
+    /* =====================================================
+       DOCUMENT UI
+    ====================================================== */
 
-    confirmRegisterButton.addEventListener(
+    document
+      .querySelectorAll(
+        ".document-checkbox"
+      )
+      .forEach(
+        checkbox => {
+
+          checkbox.addEventListener(
+            "change",
+            function () {
+
+              this
+                .closest(
+                  ".document-option"
+                )
+                ?.classList.toggle(
+                  "selected",
+                  this.checked
+                );
+
+            }
+          );
+
+        }
+      );
+
+
+    function getSelectedDocuments() {
+
+      if (
+        !selectedSession ||
+        !isPaidSession(
+          selectedSession
+        )
+      ) {
+
+        return [];
+
+      }
+
+
+      return Array
+        .from(
+          document.querySelectorAll(
+            ".document-checkbox:checked"
+          )
+        )
+        .map(
+          checkbox =>
+            checkbox.value
+        );
+
+    }
+
+
+    /* =====================================================
+       VALIDATE FORM
+    ====================================================== */
+
+    function validateRegistrationForm() {
+
+      const organizationName =
+        organizationNameInput.value.trim();
+
+
+      const jobPosition =
+        jobPositionInput.value.trim();
+
+
+      const province =
+        provinceInput.value.trim();
+
+
+      if (!organizationName) {
+
+        organizationNameInput.focus();
+
+        return {
+          valid: false,
+          message:
+            "กรุณากรอกบริษัทหรือหน่วยงาน"
+        };
+
+      }
+
+
+      if (!jobPosition) {
+
+        jobPositionInput.focus();
+
+        return {
+          valid: false,
+          message:
+            "กรุณากรอกตำแหน่งงาน"
+        };
+
+      }
+
+
+      if (!province) {
+
+        provinceInput.focus();
+
+        return {
+          valid: false,
+          message:
+            "กรุณาเลือกจังหวัด"
+        };
+
+      }
+
+
+      return {
+        valid: true,
+        organizationName,
+        jobPosition,
+        province
+      };
+
+    }
+
+
+    /* =====================================================
+       REGISTER
+    ====================================================== */
+
+    confirmButton.addEventListener(
       "click",
       async function () {
 
@@ -2667,29 +3434,54 @@
         }
 
 
-        const sessionId =
-          selectedSession.id;
+        const validation =
+          validateRegistrationForm();
 
 
-        confirmRegisterButton.disabled =
+        if (!validation.valid) {
+
+          alert(
+            validation.message
+          );
+
+          return;
+
+        }
+
+
+        const paid =
+          isPaidSession(
+            selectedSession
+          );
+
+
+        const selectedDocuments =
+          getSelectedDocuments();
+
+
+        /*
+          Safety SANTE Sharing
+          ต้องส่ง [] เสมอ
+        */
+
+        const documentTypes =
+          paid
+            ? selectedDocuments
+            : [];
+
+
+        confirmButton.disabled =
           true;
 
-        confirmRegisterButton.textContent =
-          "กำลังสมัคร...";
+
+        confirmButton.textContent =
+          "กำลังบันทึก...";
 
 
         clearMessage();
 
 
         try {
-
-          /*
-            สำคัญ:
-            ไม่ INSERT training_registrations
-            จาก Browser โดยตรงอีกแล้ว
-
-            ใช้ RPC ที่สร้างใน Registration-3A
-          */
 
           const {
             data,
@@ -2699,24 +3491,38 @@
               "register_for_training_session",
               {
                 p_training_session_id:
-                  sessionId
+                  selectedSession.id,
+
+                p_organization_name:
+                  validation.organizationName,
+
+                p_province:
+                  validation.province,
+
+                p_job_position:
+                  validation.jobPosition,
+
+                p_document_types:
+                  documentTypes
               }
             );
 
 
           if (error) {
-
             throw error;
-
           }
-
-
-          closeConfirmModal();
 
 
           const result =
             data || {};
 
+
+          closeRegistrationModal();
+
+
+          /*
+            FREE / SAFETY SANTE SHARING
+          */
 
           if (
             result.registration_status ===
@@ -2725,21 +3531,41 @@
 
             showMessage(
               "success",
-              "สมัครอบรมสำเร็จ และยืนยันสิทธิ์เข้าร่วมอบรมเรียบร้อยแล้ว"
+              "สมัครเข้าร่วม Safety SANTE Sharing เรียบร้อยแล้ว ระบบยืนยันสิทธิ์การเข้าร่วมให้คุณแล้ว"
             );
 
           }
+
+          /*
+            PAID TRAINING
+          */
+
           else if (
             result.registration_status ===
             "PENDING"
           ) {
 
-            showMessage(
-              "warning",
-              "บันทึกการสมัครเรียบร้อยแล้ว กรุณาดำเนินการชำระเงินเพื่อยืนยันสิทธิ์"
-            );
+            if (
+              documentTypes.length > 0
+            ) {
+
+              showMessage(
+                "warning",
+                "บันทึกการสมัครอบรมเรียบร้อยแล้ว ระบบบันทึกความต้องการเอกสารของคุณแล้ว ขั้นตอนถัดไปคือข้อมูลสำหรับออกเอกสารและการชำระเงิน"
+              );
+
+            }
+            else {
+
+              showMessage(
+                "warning",
+                "บันทึกการสมัครอบรมเรียบร้อยแล้ว กรุณาดำเนินการชำระเงินเพื่อยืนยันที่นั่ง"
+              );
+
+            }
 
           }
+
           else {
 
             showMessage(
@@ -2751,15 +3577,12 @@
 
 
           /*
-            โหลดข้อมูลใหม่ทันที
-            ปุ่มจะเปลี่ยนเป็น สมัครแล้ว
+            Reload registration
           */
 
           await loadMyRegistrations();
 
           await loadTrainingSessions();
-
-          await loadSeatCounts();
 
           renderTrainingSessions();
 
@@ -2772,21 +3595,20 @@
           );
 
 
-          closeConfirmModal();
+          const translated =
+            translateRegistrationError(
+              error
+            );
+
+
+          closeRegistrationModal();
 
 
           showMessage(
             "error",
-            translateRegistrationError(
-              error
-            )
+            translated
           );
 
-
-          /*
-            หาก Server บอกว่าสมัครแล้ว
-            โหลดข้อมูลใหม่เพื่อ sync UI
-          */
 
           if (
             String(
@@ -2807,10 +3629,10 @@
         }
         finally {
 
-          confirmRegisterButton.disabled =
+          confirmButton.disabled =
             false;
 
-          confirmRegisterButton.textContent =
+          confirmButton.textContent =
             "ยืนยันสมัครอบรม";
 
         }
@@ -2819,9 +3641,9 @@
     );
 
 
-    /* ======================================================
+    /* =====================================================
        SEARCH
-    ======================================================= */
+    ====================================================== */
 
     searchInput.addEventListener(
       "input",
@@ -2829,9 +3651,9 @@
     );
 
 
-    /* ======================================================
+    /* =====================================================
        LOGOUT
-    ======================================================= */
+    ====================================================== */
 
     logoutButton.addEventListener(
       "click",
@@ -2860,19 +3682,19 @@
     );
 
 
-    /* ======================================================
+    /* =====================================================
        INITIALIZE
-    ======================================================= */
+    ====================================================== */
 
     async function initialize() {
 
       try {
 
-        const memberReady =
+        const ready =
           await loadMember();
 
 
-        if (!memberReady) {
+        if (!ready) {
           return;
         }
 
@@ -2881,9 +3703,6 @@
           loadMyRegistrations(),
           loadTrainingSessions()
         ]);
-
-
-        await loadSeatCounts();
 
 
         renderTrainingSessions();
