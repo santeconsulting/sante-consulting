@@ -6,11 +6,11 @@
 
   <title>SANTE SYSTEM | Admin Dashboard</title>
 
-  <link rel="preconnect" href="https://eur02.safelinks.protection.outlook.com/?url=https%3A%2F%2Ffonts.googleapis.com%2F&data=05%7C02%7Cwaleephon.hannaphachewin%40basf.com%7Cc16aa536c32d472dd8e308df210d4fd9%7Cecaa386bc8df4ce0ad01740cbdb5ba55%7C0%7C0%7C639266013761600115%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=bCjkyycmOfT69ZcMYSpnkIfk1Yw8FOG8rF9f7Naoaag%3D&reserved=0">
-  <link rel="preconnect" href="https://eur02.safelinks.protection.outlook.com/?url=https%3A%2F%2Ffonts.gstatic.com%2F&data=05%7C02%7Cwaleephon.hannaphachewin%40basf.com%7Cc16aa536c32d472dd8e308df210d4fd9%7Cecaa386bc8df4ce0ad01740cbdb5ba55%7C0%7C0%7C639266013761618587%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=jMlP3k7SYlgE8kyg4C7LRHLaY3iU0m2VjQ9t0mdxKbk%3D&reserved=0" crossorigin>
-  <link href="https://eur02.safelinks.protection.outlook.com/?url=https%3A%2F%2Ffonts.googleapis.com%2Fcss2%3Ffamily%3DPrompt%3Awght%40300%3B400%3B500%3B600%3B700%26display%3Dswap&data=05%7C02%7Cwaleephon.hannaphachewin%40basf.com%7Cc16aa536c32d472dd8e308df210d4fd9%7Cecaa386bc8df4ce0ad01740cbdb5ba55%7C0%7C0%7C639266013761633547%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=zl%2FneGtdU6GH7vxez5ziB1rtDVrh5bU53qSKpRz1dg0%3D&reserved=0" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com/">
+  <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-  <script src="https://eur02.safelinks.protection.outlook.com/?url=https%3A%2F%2Fcdn.jsdelivr.net%2Fnpm%2F%40supabase%2Fsupabase-js%402&data=05%7C02%7Cwaleephon.hannaphachewin%40basf.com%7Cc16aa536c32d472dd8e308df210d4fd9%7Cecaa386bc8df4ce0ad01740cbdb5ba55%7C0%7C0%7C639266013761646178%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=QrklC3i5Ky72yEucpobzA3pdRhoBUZ5MdHiVwYW0ufc%3D&reserved=0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
     :root{
@@ -821,15 +821,15 @@
           สมาชิก
         </button>
 
-        <button class="menu-item" type="button">
+        <a class="menu-item" href="admin-courses.html">
           <span class="menu-icon">📚</span>
           หลักสูตร
-        </button>
+        </a>
 
-        <button class="menu-item" type="button">
+        <a class="menu-item" href="admin-training-sessions.html">
           <span class="menu-icon">📅</span>
           รอบอบรม
-        </button>
+        </a>
 
         <button class="menu-item" type="button">
           <span class="menu-icon">📝</span>
@@ -1072,7 +1072,7 @@
           </a>
 
 
-          <div class="quick-card disabled">
+          <a class="quick-card" href="admin-courses.html">
 
             <div class="quick-icon">📚</div>
 
@@ -1083,10 +1083,10 @@
               Exam Preparation
             </p>
 
-          </div>
+          </a>
 
 
-          <div class="quick-card disabled">
+          <a class="quick-card" href="admin-training-sessions.html">
 
             <div class="quick-icon">📅</div>
 
@@ -1097,7 +1097,7 @@
               และจัดการผู้สมัคร
             </p>
 
-          </div>
+          </a>
 
 
           <div class="quick-card disabled">
@@ -1197,7 +1197,7 @@
   ========================================= */
 
   const SUPABASE_URL =
-    "https://eur02.safelinks.protection.outlook.com/?url=https%3A%2F%2Fcyegjwerxlxhczrfiurz.supabase.co%2F&data=05%7C02%7Cwaleephon.hannaphachewin%40basf.com%7Cc16aa536c32d472dd8e308df210d4fd9%7Cecaa386bc8df4ce0ad01740cbdb5ba55%7C0%7C0%7C639266013761658563%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=qwqO0vKot1sIda4W5s2qSc1PvlSP09lOJs3dxCjrJYc%3D&reserved=0";
+    "https://cyegjwerxlxhczrfiurz.supabase.co";
 
   const SUPABASE_KEY =
     "sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF";
