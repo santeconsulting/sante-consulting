@@ -2485,8 +2485,23 @@
       }
 
 
+      /*
+       * หน้า “รอบการอบรม” ใช้เฉพาะหลักสูตรที่เป็นการอบรมแบบมีรอบ
+       * EXAM_PREP เป็นคอร์สติวสอบ/สิทธิ์ใช้งาน 1 ปี จึงไม่ควรสร้าง training_session
+       */
+      const SESSION_COURSE_TYPES = [
+        "FREE_TRAINING",
+        "PAID_TRAINING",
+        "INHOUSE_TRAINING"
+      ];
+
       allCourses =
-        data || [];
+        (data || []).filter(
+          course =>
+            SESSION_COURSE_TYPES.includes(
+              course.course_type
+            )
+        );
 
 
       populateCourseSelects();
