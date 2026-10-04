@@ -186,25 +186,10 @@
       border: 1px dashed #ccd3df;
       border-radius: 12px;
       padding: 25px;
-      text-align: center;
       background: #fafbfc;
     }
 
-    .payment-placeholder strong {
-      display: block;
-      color: #071b3a;
-      margin-bottom: 8px;
-    }
-
-    .payment-placeholder p {
-      margin: 0;
-      color: #667085;
-      font-size: 14px;
-      line-height: 1.7;
-    }
-
     .bank-box {
-      text-align: left;
       max-width: 520px;
       margin: 0 auto;
     }
@@ -270,7 +255,7 @@
     .upload-note {
       color: #7a8497;
       font-size: 13px;
-      line-height: 1.6;
+      line-height: 1.7;
     }
 
     #fileInput {
@@ -312,6 +297,7 @@
       border: none;
       border-radius: 10px;
       padding: 14px 20px;
+      font-family: "Prompt", sans-serif;
       font-size: 15px;
       font-weight: 600;
       cursor: pointer;
@@ -362,10 +348,6 @@
       color: #28559a;
       border: 1px solid #d4e2ff;
     }
-
-    /* ==========================================
-       LOCKED SLIP
-    ========================================== */
 
     .slip-locked {
       display: none;
@@ -481,6 +463,10 @@
     }
 
     @media (max-width: 680px) {
+      .topbar {
+        padding: 0 16px;
+      }
+
       .container {
         margin-top: 24px;
       }
@@ -556,9 +542,7 @@
 
   <div id="mainContent" class="hidden">
 
-    <!-- ==========================================
-         PAYMENT SUMMARY
-    =========================================== -->
+    <!-- PAYMENT SUMMARY -->
 
     <section class="card">
 
@@ -634,13 +618,10 @@
         </div>
 
       </div>
-
     </section>
 
 
-    <!-- ==========================================
-         PAYMENT CHANNEL
-    =========================================== -->
+    <!-- PAYMENT CHANNEL -->
 
     <section class="card">
 
@@ -693,13 +674,10 @@
         </div>
 
       </div>
-
     </section>
 
 
-    <!-- ==========================================
-         SLIP
-    =========================================== -->
+    <!-- PAYMENT SLIP -->
 
     <section class="card" id="slipCard">
 
@@ -709,7 +687,7 @@
 
       <div class="card-body">
 
-        <!-- UPLOAD MODE -->
+        <!-- ยังไม่มีสลิป -->
 
         <div id="uploadMode">
 
@@ -730,9 +708,10 @@
               รองรับ JPG, PNG, WEBP และ PDF
               <br>
               ขนาดไม่เกิน 5 MB
-              <br>
+              <br><br>
               กรุณาตรวจสอบไฟล์ให้ถูกต้องก่อนส่ง
-              เนื่องจากสามารถส่งหลักฐานได้ 1 ครั้งต่อรายการชำระเงิน
+              <br>
+              หลักฐานสามารถส่งได้ 1 ครั้งต่อรายการชำระเงิน
             </div>
 
           </div>
@@ -775,7 +754,7 @@
         </div>
 
 
-        <!-- LOCKED MODE -->
+        <!-- มีสลิปแล้ว -->
 
         <div
           id="lockedMode"
@@ -786,6 +765,7 @@
             ✓
           </div>
 
+
           <div
             class="locked-title"
             id="lockedTitle"
@@ -793,18 +773,19 @@
             ส่งหลักฐานการชำระเงินแล้ว
           </div>
 
+
           <div
             class="locked-description"
             id="lockedDescription"
           >
             ระบบได้รับหลักฐานการชำระเงินของคุณแล้ว
-            ขณะนี้อยู่ระหว่างรอผู้ดูแลระบบตรวจสอบ
           </div>
 
 
           <div class="slip-details">
 
             <div class="slip-detail-row">
+
               <div class="slip-detail-label">
                 ไฟล์ที่ส่ง
               </div>
@@ -815,10 +796,12 @@
               >
                 -
               </div>
+
             </div>
 
 
             <div class="slip-detail-row">
+
               <div class="slip-detail-label">
                 วันที่ส่ง
               </div>
@@ -829,6 +812,7 @@
               >
                 -
               </div>
+
             </div>
 
           </div>
@@ -838,12 +822,19 @@
             id="waitingBox"
             class="waiting-box"
           >
-            รอตรวจสอบการชำระเงิน
+            <strong>
+              รอตรวจสอบการชำระเงิน
+            </strong>
+
             <br>
-            เมื่อผู้ดูแลระบบตรวจสอบหลักฐานและยืนยันว่ารายการถูกต้อง
-            สถานะการชำระเงินจะเปลี่ยนเป็น
+
+            ผู้ดูแลระบบจะตรวจสอบหลักฐานการชำระเงินของคุณ
+
+            <br>
+
+            เมื่อรายการได้รับการอนุมัติ
+            สถานะจะเปลี่ยนเป็น
             <strong>“ชำระเงินแล้ว”</strong>
-            และระบบจึงจะยืนยันสิทธิ์การอบรม
           </div>
 
 
@@ -851,10 +842,14 @@
             id="paidBox"
             class="paid-box hidden"
           >
-            ✓ การชำระเงินได้รับการตรวจสอบและยืนยันเรียบร้อยแล้ว
+            <strong>
+              ✓ ชำระเงินแล้ว
+            </strong>
+
             <br>
-            สถานะรายการนี้คือ
-            <strong>“ชำระเงินแล้ว”</strong>
+
+            ผู้ดูแลระบบตรวจสอบและยืนยัน
+            การชำระเงินรายการนี้เรียบร้อยแล้ว
           </div>
 
         </div>
@@ -864,10 +859,15 @@
     </section>
 
 
-    <div class="footer-note" id="footerNote">
-      การส่งหลักฐานการชำระเงินยังไม่ถือว่าเป็นการยืนยันที่นั่ง
+    <div
+      class="footer-note"
+      id="footerNote"
+    >
+      การส่งหลักฐานการชำระเงิน
+      ยังไม่ถือว่าเป็นการยืนยันที่นั่ง
       <br>
-      ระบบจะยืนยันสิทธิ์หลังผู้ดูแลระบบตรวจสอบและอนุมัติการชำระเงินเรียบร้อยแล้ว
+      ระบบจะยืนยันสิทธิ์หลังผู้ดูแลระบบ
+      ตรวจสอบและอนุมัติการชำระเงินเรียบร้อยแล้ว
     </div>
 
   </div>
@@ -887,18 +887,16 @@
     "sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF";
 
 
+  /*
+    สำคัญ:
+    ใช้ Auth รูปแบบเดียวกับ payment.html เดิม
+    ห้ามกำหนด storageKey ใหม่ในหน้านี้
+  */
+
   const sb =
     window.supabase.createClient(
       SUPABASE_URL,
-      SUPABASE_KEY,
-      {
-        auth: {
-          storageKey: "sante-member-auth",
-          persistSession: true,
-          autoRefreshToken: true,
-          detectSessionInUrl: true
-        }
-      }
+      SUPABASE_KEY
     );
 
 
@@ -918,80 +916,125 @@
   ====================================================== */
 
   const loadingBox =
-    document.getElementById("loadingBox");
+    document.getElementById(
+      "loadingBox"
+    );
 
   const mainContent =
-    document.getElementById("mainContent");
+    document.getElementById(
+      "mainContent"
+    );
 
   const paymentNo =
-    document.getElementById("paymentNo");
+    document.getElementById(
+      "paymentNo"
+    );
 
   const paymentStatus =
-    document.getElementById("paymentStatus");
+    document.getElementById(
+      "paymentStatus"
+    );
 
   const courseName =
-    document.getElementById("courseName");
+    document.getElementById(
+      "courseName"
+    );
 
   const sessionName =
-    document.getElementById("sessionName");
+    document.getElementById(
+      "sessionName"
+    );
 
   const paymentAmount =
-    document.getElementById("paymentAmount");
-
-  const slipCard =
-    document.getElementById("slipCard");
+    document.getElementById(
+      "paymentAmount"
+    );
 
   const uploadMode =
-    document.getElementById("uploadMode");
+    document.getElementById(
+      "uploadMode"
+    );
 
   const lockedMode =
-    document.getElementById("lockedMode");
+    document.getElementById(
+      "lockedMode"
+    );
 
   const uploadArea =
-    document.getElementById("uploadArea");
+    document.getElementById(
+      "uploadArea"
+    );
 
   const fileInput =
-    document.getElementById("fileInput");
+    document.getElementById(
+      "fileInput"
+    );
 
   const selectedFileBox =
-    document.getElementById("selectedFile");
+    document.getElementById(
+      "selectedFile"
+    );
 
   const previewWrap =
-    document.getElementById("previewWrap");
+    document.getElementById(
+      "previewWrap"
+    );
 
   const submitSlipBtn =
-    document.getElementById("submitSlipBtn");
+    document.getElementById(
+      "submitSlipBtn"
+    );
 
   const messageBox =
-    document.getElementById("messageBox");
+    document.getElementById(
+      "messageBox"
+    );
 
   const lockedTitle =
-    document.getElementById("lockedTitle");
+    document.getElementById(
+      "lockedTitle"
+    );
 
   const lockedDescription =
-    document.getElementById("lockedDescription");
+    document.getElementById(
+      "lockedDescription"
+    );
 
   const submittedFilename =
-    document.getElementById("submittedFilename");
+    document.getElementById(
+      "submittedFilename"
+    );
 
   const submittedDate =
-    document.getElementById("submittedDate");
+    document.getElementById(
+      "submittedDate"
+    );
 
   const waitingBox =
-    document.getElementById("waitingBox");
+    document.getElementById(
+      "waitingBox"
+    );
 
   const paidBox =
-    document.getElementById("paidBox");
+    document.getElementById(
+      "paidBox"
+    );
 
   const footerNote =
-    document.getElementById("footerNote");
+    document.getElementById(
+      "footerNote"
+    );
 
 
   /* ======================================================
      UI HELPERS
   ====================================================== */
 
-  function showMessage(type, text) {
+  function showMessage(
+    type,
+    text
+  ) {
+
     messageBox.className =
       "message " + type;
 
@@ -1001,6 +1044,7 @@
 
 
   function clearMessage() {
+
     messageBox.className =
       "message";
 
@@ -1009,7 +1053,10 @@
   }
 
 
-  function formatMoney(value) {
+  function formatMoney(
+    value
+  ) {
+
     return new Intl.NumberFormat(
       "th-TH",
       {
@@ -1023,13 +1070,18 @@
   }
 
 
-  function formatDateTime(value) {
+  function formatDateTime(
+    value
+  ) {
+
     if (!value) {
       return "-";
     }
 
+
     const date =
       new Date(value);
+
 
     if (
       Number.isNaN(
@@ -1038,6 +1090,7 @@
     ) {
       return "-";
     }
+
 
     return new Intl.DateTimeFormat(
       "th-TH",
@@ -1050,7 +1103,7 @@
 
 
   /*
-    IMPORTANT:
+    STATUS ที่สมาชิกเห็น
 
     PENDING + ไม่มี Slip
       = รอชำระเงิน
@@ -1064,13 +1117,17 @@
 
   function renderStatus(
     status,
-    hasSlip = false
+    hasSlip
   ) {
 
     paymentStatus.className =
       "status";
 
-    if (status === "VERIFIED") {
+
+    if (
+      status ===
+      "VERIFIED"
+    ) {
 
       paymentStatus.textContent =
         "ชำระเงินแล้ว";
@@ -1083,7 +1140,10 @@
     }
 
 
-    if (status === "FAILED") {
+    if (
+      status ===
+      "FAILED"
+    ) {
 
       paymentStatus.textContent =
         "การชำระเงินไม่สำเร็จ";
@@ -1119,10 +1179,12 @@
 
 
   function getPaymentId() {
+
     const params =
       new URLSearchParams(
         window.location.search
       );
+
 
     return params.get(
       "payment"
@@ -1131,13 +1193,13 @@
 
 
   /* ======================================================
-     LOGIN
+     AUTH
   ====================================================== */
 
   async function requireLogin() {
 
     const {
-      data: { session },
+      data,
       error
     } =
     await sb.auth.getSession();
@@ -1145,7 +1207,7 @@
 
     if (
       error ||
-      !session
+      !data?.session
     ) {
 
       window.location.href =
@@ -1156,14 +1218,236 @@
 
 
     currentUser =
-      session.user;
+      data.session.user;
+
 
     return true;
   }
 
 
   /* ======================================================
-     PAYMENT
+     LOAD EXISTING SLIP
+  ====================================================== */
+
+  async function loadExistingSlip() {
+
+    existingSlip =
+      null;
+
+
+    if (
+      !currentPayment ||
+      !currentUser
+    ) {
+
+      return null;
+    }
+
+
+    const {
+      data,
+      error
+    } =
+    await sb
+      .from(
+        "payment_slips"
+      )
+      .select(`
+        id,
+        payment_id,
+        user_id,
+        original_filename,
+        slip_status,
+        submitted_at
+      `)
+      .eq(
+        "payment_id",
+        currentPayment.id
+      )
+      .eq(
+        "user_id",
+        currentUser.id
+      )
+      .maybeSingle();
+
+
+    if (error) {
+
+      console.error(
+        "Load slip error:",
+        error
+      );
+
+      throw error;
+    }
+
+
+    existingSlip =
+      data || null;
+
+
+    return existingSlip;
+  }
+
+
+  /* ======================================================
+     RENDER SLIP
+  ====================================================== */
+
+  function renderSlipState() {
+
+    if (!currentPayment) {
+      return;
+    }
+
+
+    /*
+      VERIFIED
+    */
+
+    if (
+      currentPayment.payment_status ===
+      "VERIFIED"
+    ) {
+
+      uploadMode.classList.add(
+        "hidden"
+      );
+
+
+      lockedMode.classList.add(
+        "show"
+      );
+
+
+      lockedTitle.textContent =
+        "ชำระเงินแล้ว";
+
+
+      lockedDescription.textContent =
+        "ผู้ดูแลระบบตรวจสอบและยืนยันการชำระเงินเรียบร้อยแล้ว";
+
+
+      submittedFilename.textContent =
+        existingSlip?.original_filename ||
+        "หลักฐานการชำระเงิน";
+
+
+      submittedDate.textContent =
+        formatDateTime(
+          existingSlip?.submitted_at
+        );
+
+
+      waitingBox.classList.add(
+        "hidden"
+      );
+
+
+      paidBox.classList.remove(
+        "hidden"
+      );
+
+
+      footerNote.textContent =
+        "การชำระเงินรายการนี้ได้รับการตรวจสอบและยืนยันเรียบร้อยแล้ว";
+
+
+      return;
+    }
+
+
+    /*
+      มี Slip แล้ว
+      ห้าม Upload ซ้ำ
+    */
+
+    if (existingSlip) {
+
+      selectedFile =
+        null;
+
+
+      fileInput.value =
+        "";
+
+
+      uploadMode.classList.add(
+        "hidden"
+      );
+
+
+      lockedMode.classList.add(
+        "show"
+      );
+
+
+      lockedTitle.textContent =
+        "ส่งหลักฐานการชำระเงินแล้ว";
+
+
+      lockedDescription.textContent =
+        "ระบบได้รับหลักฐานการชำระเงินของคุณแล้ว ขณะนี้อยู่ระหว่างรอผู้ดูแลระบบตรวจสอบ";
+
+
+      submittedFilename.textContent =
+        existingSlip.original_filename ||
+        "หลักฐานการชำระเงิน";
+
+
+      submittedDate.textContent =
+        formatDateTime(
+          existingSlip.submitted_at
+        );
+
+
+      waitingBox.classList.remove(
+        "hidden"
+      );
+
+
+      paidBox.classList.add(
+        "hidden"
+      );
+
+
+      return;
+    }
+
+
+    /*
+      ยังไม่มี Slip
+    */
+
+    uploadMode.classList.remove(
+      "hidden"
+    );
+
+
+    lockedMode.classList.remove(
+      "show"
+    );
+
+
+    selectedFile =
+      null;
+
+
+    fileInput.value =
+      "";
+
+
+    submitSlipBtn.disabled =
+      true;
+
+
+    submitSlipBtn.textContent =
+      "ส่งหลักฐานการชำระเงิน";
+  }
+
+
+  /* ======================================================
+     LOAD PAYMENT
   ====================================================== */
 
   async function loadPayment() {
@@ -1175,14 +1459,14 @@
     if (!paymentId) {
 
       loadingBox.innerHTML =
-        '<div class="loading">ไม่พบรายการชำระเงิน</div>';
+        '<div class="loading">ไม่พบเลขอ้างอิงรายการชำระเงิน</div>';
 
       return;
     }
 
 
     /*
-      สมาชิกอ่านได้เฉพาะ Payment ของตัวเอง
+      PAYMENT OWNERSHIP
     */
 
     const {
@@ -1190,7 +1474,9 @@
       error: paymentError
     } =
     await sb
-      .from("payments")
+      .from(
+        "payments"
+      )
       .select(`
         id,
         payment_no,
@@ -1214,8 +1500,10 @@
     if (paymentError) {
 
       console.error(
+        "Payment query error:",
         paymentError
       );
+
 
       loadingBox.innerHTML =
         '<div class="loading">ไม่สามารถโหลดข้อมูลการชำระเงินได้</div>';
@@ -1246,7 +1534,9 @@
       error: itemError
     } =
     await sb
-      .from("order_items")
+      .from(
+        "order_items"
+      )
       .select(`
         training_session_id,
         course_id,
@@ -1261,18 +1551,26 @@
 
 
     if (itemError) {
+
       console.error(
+        "Order item error:",
         itemError
       );
+
     }
 
 
     let courseText =
       item?.description || "-";
 
+
     let sessionText =
       "-";
 
+
+    /* ====================================================
+       TRAINING SESSION
+    ==================================================== */
 
     if (
       item?.training_session_id
@@ -1280,10 +1578,12 @@
 
       const {
         data: trainingSession,
-        error: sessionError
+        error: trainingError
       } =
       await sb
-        .from("training_sessions")
+        .from(
+          "training_sessions"
+        )
         .select(`
           session_name,
           course_id
@@ -1295,10 +1595,13 @@
         .maybeSingle();
 
 
-      if (sessionError) {
+      if (trainingError) {
+
         console.error(
-          sessionError
+          "Training session error:",
+          trainingError
         );
+
       }
 
 
@@ -1318,7 +1621,9 @@
             error: courseError
           } =
           await sb
-            .from("courses")
+            .from(
+              "courses"
+            )
             .select(
               "course_name_th"
             )
@@ -1330,9 +1635,12 @@
 
 
           if (courseError) {
+
             console.error(
+              "Course error:",
               courseError
             );
+
           }
 
 
@@ -1352,14 +1660,22 @@
     }
 
 
+    /* ====================================================
+       DISPLAY PAYMENT
+    ==================================================== */
+
     paymentNo.textContent =
-      payment.payment_no || "-";
+      payment.payment_no ||
+      "-";
+
 
     courseName.textContent =
       courseText;
 
+
     sessionName.textContent =
       sessionText;
+
 
     paymentAmount.textContent =
       formatMoney(
@@ -1368,12 +1684,26 @@
 
 
     /*
-      สำคัญ:
-      โหลด Slip ก่อน Render Status
-      เพราะ PENDING + Slip = รอตรวจสอบ
+      โหลด Slip ก่อน
+      เพื่อแยก:
+      PENDING = รอชำระ
+      PENDING + Slip = รอตรวจสอบ
     */
 
-    await loadExistingSlip();
+    try {
+
+      await loadExistingSlip();
+
+    } catch (error) {
+
+      console.error(error);
+
+
+      loadingBox.innerHTML =
+        '<div class="loading">ไม่สามารถตรวจสอบหลักฐานการชำระเงินได้ กรุณาลองใหม่อีกครั้ง</div>';
+
+      return;
+    }
 
 
     renderStatus(
@@ -1389,6 +1719,7 @@
       "hidden"
     );
 
+
     mainContent.classList.remove(
       "hidden"
     );
@@ -1396,212 +1727,7 @@
 
 
   /* ======================================================
-     LOAD EXISTING SLIP
-  ====================================================== */
-
-  async function loadExistingSlip() {
-
-    existingSlip =
-      null;
-
-
-    if (
-      !currentPayment ||
-      !currentUser
-    ) {
-      return null;
-    }
-
-
-    const {
-      data,
-      error
-    } =
-    await sb
-      .from("payment_slips")
-      .select(`
-        id,
-        payment_id,
-        user_id,
-        original_filename,
-        slip_status,
-        submitted_at
-      `)
-      .eq(
-        "payment_id",
-        currentPayment.id
-      )
-      .eq(
-        "user_id",
-        currentUser.id
-      )
-      .maybeSingle();
-
-
-    if (error) {
-
-      console.error(
-        "Load payment slip error:",
-        error
-      );
-
-      throw error;
-    }
-
-
-    existingSlip =
-      data || null;
-
-
-    return existingSlip;
-  }
-
-
-  /* ======================================================
-     RENDER SLIP STATE
-  ====================================================== */
-
-  function renderSlipState() {
-
-    if (
-      !currentPayment
-    ) {
-      return;
-    }
-
-
-    /*
-      VERIFIED:
-      แสดงว่าชำระเงินแล้ว
-      ไม่เปิด Upload อีก
-    */
-
-    if (
-      currentPayment.payment_status ===
-      "VERIFIED"
-    ) {
-
-      uploadMode.classList.add(
-        "hidden"
-      );
-
-      lockedMode.classList.add(
-        "show"
-      );
-
-
-      lockedTitle.textContent =
-        "ชำระเงินแล้ว";
-
-
-      lockedDescription.textContent =
-        "ผู้ดูแลระบบตรวจสอบและยืนยันการชำระเงินเรียบร้อยแล้ว";
-
-
-      submittedFilename.textContent =
-        existingSlip?.original_filename ||
-        "หลักฐานการชำระเงิน";
-
-
-      submittedDate.textContent =
-        formatDateTime(
-          existingSlip?.submitted_at
-        );
-
-
-      waitingBox.classList.add(
-        "hidden"
-      );
-
-      paidBox.classList.remove(
-        "hidden"
-      );
-
-
-      footerNote.innerHTML =
-        "การชำระเงินรายการนี้ได้รับการตรวจสอบและยืนยันเรียบร้อยแล้ว";
-
-      return;
-    }
-
-
-    /*
-      มี Slip แล้ว:
-      LOCK ทันที
-    */
-
-    if (existingSlip) {
-
-      selectedFile =
-        null;
-
-      fileInput.value =
-        "";
-
-      uploadMode.classList.add(
-        "hidden"
-      );
-
-      lockedMode.classList.add(
-        "show"
-      );
-
-
-      lockedTitle.textContent =
-        "ส่งหลักฐานการชำระเงินแล้ว";
-
-
-      lockedDescription.textContent =
-        "ระบบได้รับหลักฐานการชำระเงินของคุณแล้ว ขณะนี้อยู่ระหว่างรอผู้ดูแลระบบตรวจสอบ";
-
-
-      submittedFilename.textContent =
-        existingSlip.original_filename ||
-        "หลักฐานการชำระเงิน";
-
-
-      submittedDate.textContent =
-        formatDateTime(
-          existingSlip.submitted_at
-        );
-
-
-      waitingBox.classList.remove(
-        "hidden"
-      );
-
-      paidBox.classList.add(
-        "hidden"
-      );
-
-      return;
-    }
-
-
-    /*
-      ยังไม่มี Slip
-    */
-
-    uploadMode.classList.remove(
-      "hidden"
-    );
-
-    lockedMode.classList.remove(
-      "show"
-    );
-
-    waitingBox.classList.remove(
-      "hidden"
-    );
-
-    paidBox.classList.add(
-      "hidden"
-    );
-  }
-
-
-  /* ======================================================
-     FILE SELECTION
+     SELECT FILE
   ====================================================== */
 
   uploadArea.addEventListener(
@@ -1609,8 +1735,8 @@
     function () {
 
       /*
-        ถ้ามี Slip แล้ว
         ห้ามเปิด File Picker
+        ถ้ามี Slip แล้ว
       */
 
       if (
@@ -1619,6 +1745,7 @@
         currentPayment?.payment_status ===
           "VERIFIED"
       ) {
+
         return;
       }
 
@@ -1635,7 +1762,9 @@
       clearMessage();
 
 
-      if (existingSlip) {
+      if (
+        existingSlip
+      ) {
 
         fileInput.value =
           "";
@@ -1656,8 +1785,10 @@
         selectedFile =
           null;
 
+
         submitSlipBtn.disabled =
           true;
+
 
         return;
       }
@@ -1680,8 +1811,10 @@
         fileInput.value =
           "";
 
+
         selectedFile =
           null;
+
 
         submitSlipBtn.disabled =
           true;
@@ -1691,6 +1824,7 @@
           "error",
           "รองรับเฉพาะ JPG, PNG, WEBP และ PDF"
         );
+
 
         return;
       }
@@ -1708,8 +1842,10 @@
         fileInput.value =
           "";
 
+
         selectedFile =
           null;
+
 
         submitSlipBtn.disabled =
           true;
@@ -1719,6 +1855,7 @@
           "error",
           "ไฟล์ต้องมีขนาดไม่เกิน 5 MB"
         );
+
 
         return;
       }
@@ -1745,6 +1882,7 @@
 
       previewWrap.innerHTML =
         "";
+
 
       previewWrap.style.display =
         "block";
@@ -1882,9 +2020,14 @@
 
   async function submitSlip() {
 
+    /*
+      กัน Double Click
+    */
+
     if (
       submittingSlip
     ) {
+
       return;
     }
 
@@ -1894,12 +2037,13 @@
       !currentPayment ||
       !currentUser
     ) {
+
       return;
     }
 
 
     /*
-      VERIFIED แล้ว
+      Payment ผ่านแล้ว
       ห้าม Upload
     */
 
@@ -1914,11 +2058,11 @@
     }
 
 
-    clearMessage();
-
-
     submittingSlip =
       true;
+
+
+    clearMessage();
 
 
     submitSlipBtn.disabled =
@@ -1935,22 +2079,23 @@
 
     try {
 
-      /*
-        SECURITY CHECK #1
-
-        ก่อน Upload:
-        Query Database ใหม่ทุกครั้ง
-        เพื่อป้องกันกรณีเปิดหลาย Tab
-      */
+      /* ==================================================
+         SECURITY CHECK #1
+         ตรวจ DB ก่อน Upload ทุกครั้ง
+      ================================================== */
 
       const {
         data: slipBeforeUpload,
         error: slipCheckError
       } =
       await sb
-        .from("payment_slips")
+        .from(
+          "payment_slips"
+        )
         .select(`
           id,
+          payment_id,
+          user_id,
           original_filename,
           slip_status,
           submitted_at
@@ -1966,12 +2111,22 @@
         .maybeSingle();
 
 
-      if (slipCheckError) {
+      if (
+        slipCheckError
+      ) {
+
         throw slipCheckError;
       }
 
 
-      if (slipBeforeUpload) {
+      /*
+        มี Slip อยู่แล้ว
+        ไม่ Upload ใหม่
+      */
+
+      if (
+        slipBeforeUpload
+      ) {
 
         existingSlip =
           slipBeforeUpload;
@@ -1993,6 +2148,7 @@
 
         renderSlipState();
 
+
         return;
       }
 
@@ -2007,13 +2163,13 @@
         );
 
 
-      /*
-        STORAGE PATH
+      /* ==================================================
+         STORAGE PATH
 
-        USER_UUID/
-          PAYMENT_UUID/
-            FILE_UUID.ext
-      */
+         USER_UUID/
+           PAYMENT_UUID/
+             FILE_UUID.ext
+      ================================================== */
 
       storagePath =
         currentUser.id +
@@ -2024,6 +2180,10 @@
         "." +
         extension;
 
+
+      /* ==================================================
+         UPLOAD STORAGE
+      ================================================== */
 
       const {
         error: uploadError
@@ -2049,27 +2209,29 @@
         );
 
 
-      if (uploadError) {
+      if (
+        uploadError
+      ) {
+
         throw uploadError;
       }
 
 
-      /*
-        INSERT METADATA
+      /* ==================================================
+         INSERT PAYMENT SLIP
 
-        Database UNIQUE INDEX:
-        payment_slips_one_per_payment_uidx
-
-        จะเป็นด่านสุดท้าย
-        ป้องกัน 1 Payment มีหลาย Slip
-      */
+         UNIQUE INDEX ที่เราสร้างแล้ว:
+         1 payment = 1 slip
+      ================================================== */
 
       const {
         data: insertedSlip,
         error: dbError
       } =
       await sb
-        .from("payment_slips")
+        .from(
+          "payment_slips"
+        )
         .insert({
 
           payment_id:
@@ -2111,11 +2273,17 @@
         .single();
 
 
-      if (dbError) {
+      /* ==================================================
+         DATABASE INSERT FAILED
+      ================================================== */
+
+      if (
+        dbError
+      ) {
 
         /*
-          DB Insert ไม่สำเร็จ
-          ลบไฟล์ที่เพิ่ง Upload
+          ลบ Storage File
+          ที่เพิ่ง Upload
           ป้องกัน Orphan File
         */
 
@@ -2130,9 +2298,8 @@
 
 
         /*
-          ถ้าเป็น Duplicate
+          PostgreSQL duplicate key
           แปลว่ามี Slip อยู่แล้ว
-          ให้โหลดของเดิมกลับมา
         */
 
         if (
@@ -2151,6 +2318,7 @@
 
           renderSlipState();
 
+
           return;
         }
 
@@ -2159,10 +2327,9 @@
       }
 
 
-      /*
-        สำเร็จ:
-        LOCK ทันที
-      */
+      /* ==================================================
+         SUCCESS
+      ================================================== */
 
       existingSlip =
         insertedSlip;
@@ -2192,6 +2359,14 @@
         "none";
 
 
+      /*
+        Payment ยังเป็น PENDING
+        เพราะ Admin ยังไม่ได้อนุมัติ
+
+        แต่หน้า Member แสดง
+        "รอตรวจสอบการชำระเงิน"
+      */
+
       renderStatus(
         currentPayment.payment_status,
         true
@@ -2204,15 +2379,14 @@
     } catch (error) {
 
       console.error(
-        "Submit payment slip error:",
+        "Submit slip error:",
         error
       );
 
 
       /*
-        ถ้า Upload สำเร็จแต่มี Error ก่อน DB Insert
-        และยังไม่มีการ rollback
-        พยายามตรวจสถานะอีกครั้ง
+        ตรวจอีกครั้งว่า
+        จริง ๆ แล้ว DB มี Slip หรือยัง
       */
 
       try {
@@ -2220,11 +2394,13 @@
         await loadExistingSlip();
 
       } catch (_) {
-        // ไม่ทำอะไร
+        /* ignore */
       }
 
 
-      if (existingSlip) {
+      if (
+        existingSlip
+      ) {
 
         renderStatus(
           currentPayment.payment_status,
@@ -2233,6 +2409,7 @@
 
 
         renderSlipState();
+
 
         return;
       }
@@ -2251,6 +2428,7 @@
 
       submitSlipBtn.disabled =
         !selectedFile;
+
 
     } finally {
 
@@ -2277,7 +2455,10 @@
       await requireLogin();
 
 
-    if (!loggedIn) {
+    if (
+      !loggedIn
+    ) {
+
       return;
     }
 
