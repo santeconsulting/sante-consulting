@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>สมัครเข้าร่วมการอบรม | SANTE</title>
-  <!-- SANTE Paid -> Payment direct navigation fix -->
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -2071,21 +2070,6 @@ html,body,button,input,select,textarea{font-family:"Prompt",sans-serif!important
     };
   }
 
-  function openPaymentPage(paymentId) {
-    if (!paymentId) {
-      throw new Error("ไม่พบรายการชำระเงิน กรุณาลองใหม่อีกครั้ง");
-    }
-
-    const paymentUrl = new URL("payment.html", window.location.href);
-    paymentUrl.searchParams.set("payment", paymentId);
-
-    // เก็บไว้เป็น fallback เผื่อ query string ถูกตัดระหว่าง navigation/cache
-    sessionStorage.setItem("sante-pending-payment-id", paymentId);
-
-    // Paid Training ต้องไป Payment โดยตรง ไม่ผ่าน Member Home
-    window.location.assign(paymentUrl.href);
-  }
-
   async function goToPaymentForRegistration(registrationId, button = null) {
     if (!registrationId) {
       throw new Error("ไม่พบเลขอ้างอิงการสมัครอบรม");
@@ -2114,7 +2098,14 @@ html,body,button,input,select,textarea{font-family:"Prompt",sans-serif!important
         throw new Error("ไม่พบรายการชำระเงิน กรุณาลองใหม่อีกครั้ง");
       }
 
-      openPaymentPage(paymentResult.payment_id);
+      sessionStorage.setItem(
+        "sante-pending-payment-id",
+        String(paymentResult.payment_id)
+      );
+
+      window.location.href =
+        "payment.html?payment=" +
+        encodeURIComponent(paymentResult.payment_id);
     } catch (error) {
       console.error("Payment redirect error:", error);
 
@@ -2308,30 +2299,17 @@ html,body,button,input,select,textarea{font-family:"Prompt",sans-serif!important
   }
 
   async function loadMyRegistrations() {
-    const { data, error } = await db
-      .from("training_registrations")
-      .select(`
-        id,
-        training_session_id,
-        registration_status,
-        payment_required,
-        payment_status,
-        organization_name,
-        province,
-        job_position,
-        registered_at,
-        confirmed_at
-      `)
-      .eq("user_id", currentUser.id)
-      .order("registered_at", { ascending: false });
+    const { data, error } = await db.rpc(
+      "get_my_training_registrations"
+    );
 
     if (error) {
-      console.warn(error);
+      console.warn("Registration RPC error:", error);
       myRegistrations = [];
       return;
     }
 
-    myRegistrations = data || [];
+    myRegistrations = Array.isArray(data) ? data : [];
   }
 
   async function loadTrainingSessions() {
@@ -3306,23 +3284,17 @@ html,body,button,input,select,textarea{font-family:"Prompt",sans-serif!important
             result.id ||
             result.training_registration_id;
 
-          // Fallback: บางเวอร์ชันของ RPC สมัครอบรมไม่ได้คืน registration_id
+          // Fallback แบบปลอดภัย: อ่าน registration ของสมาชิกผ่าน RPC
           if (!registrationId) {
-            const { data: registrationRow, error: registrationLookupError } =
-              await db
-                .from("training_registrations")
-                .select("id")
-                .eq("user_id", currentUser.id)
-                .eq("training_session_id", selectedSession.id)
-                .neq("registration_status", "CANCELLED")
-                .order("created_at", { ascending: false })
-                .limit(1)
-                .maybeSingle();
+            const {
+              data: registrationRow,
+              error: registrationLookupError
+            } = await db.rpc(
+              "get_my_training_registration",
+              { p_training_session_id: selectedSession.id }
+            );
 
-            if (registrationLookupError) {
-              throw registrationLookupError;
-            }
-
+            if (registrationLookupError) throw registrationLookupError;
             registrationId = registrationRow?.id || null;
           }
 
@@ -3359,7 +3331,17 @@ html,body,button,input,select,textarea{font-family:"Prompt",sans-serif!important
             );
           }
 
-          openPaymentPage(paymentResult.payment_id);
+          sessionStorage.setItem(
+            "sante-pending-payment-id",
+            String(paymentResult.payment_id)
+          );
+
+          window.location.replace(
+            "payment.html?payment=" +
+            encodeURIComponent(
+              paymentResult.payment_id
+            )
+          );
 
           return;
         }
@@ -3412,16 +3394,13 @@ html,body,button,input,select,textarea{font-family:"Prompt",sans-serif!important
           errorText.includes("ALREADY_REGISTERED")
         ) {
           try {
-            const { data: existingRegistration, error: existingError } =
-              await db
-                .from("training_registrations")
-                .select("id")
-                .eq("user_id", currentUser.id)
-                .eq("training_session_id", selectedSession.id)
-                .neq("registration_status", "CANCELLED")
-                .order("created_at", { ascending: false })
-                .limit(1)
-                .maybeSingle();
+            const {
+              data: existingRegistration,
+              error: existingError
+            } = await db.rpc(
+              "get_my_training_registration",
+              { p_training_session_id: selectedSession.id }
+            );
 
             if (existingError) throw existingError;
 
