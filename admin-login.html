@@ -2,12 +2,17 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>SANTE SYSTEM | Admin Login</title>
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+  >
+
+  <title>SANTE Admin | เข้าสู่ระบบ</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
   <link
     href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap"
     rel="stylesheet"
@@ -16,1195 +21,1487 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
-    :root{
-      --navy:#002b5c;
-      --navy-2:#003d78;
-      --blue:#006fb7;
-      --yellow:#ffc400;
-      --yellow-light:#ffd84a;
-      --white:#ffffff;
-      --text:#052f60;
-      --muted:#65748a;
-      --border:#d7e1ec;
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
-    *{
-      box-sizing:border-box;
-      margin:0;
-      padding:0;
+    :root {
+      --navy: #082d69;
+      --navy-dark: #061f4d;
+      --yellow: #ffc629;
+      --yellow-dark: #efa900;
+
+      --text: #092b61;
+      --muted: #6f82a0;
+
+      --line: #d8e5f0;
+
+      --white: #ffffff;
+      --soft-blue: #f7fbfe;
+
+      --success: #167847;
+      --danger: #b72d2d;
     }
 
-    html,body{
-      width:100%;
-      height:100%;
+    html {
+      width: 100%;
+      min-height: 100%;
     }
 
-    body{
-      font-family:"Prompt",sans-serif;
-      background:#f6f9fc;
-      color:var(--text);
-      overflow:hidden;
+    body {
+      width: 100%;
+      min-height: 100vh;
+      min-height: 100dvh;
+
+      overflow-x: hidden;
+
+      font-family: "Prompt", sans-serif;
+
+      color: var(--text);
+      background: var(--soft-blue);
     }
 
-    .page{
-      width:100%;
-      height:100vh;
-      display:grid;
-      grid-template-columns:53% 47%;
-      overflow:hidden;
+    button,
+    input {
+      font-family: "Prompt", sans-serif;
     }
 
-    /* LEFT */
-
-    .visual{
-      position:relative;
-      height:100vh;
-      overflow:hidden;
-
-      background:
-        radial-gradient(
-          circle at 5% 8%,
-          rgba(18,111,184,.30),
-          transparent 35%
-        ),
-        linear-gradient(
-          145deg,
-          #00254f 0%,
-          #00396f 48%,
-          #006eaf 100%
-        );
+    button {
+      -webkit-tap-highlight-color: transparent;
     }
 
-    .visual::before{
-      content:"";
-      position:absolute;
-      width:620px;
-      height:620px;
-      border-radius:50%;
-      left:-380px;
-      top:-330px;
-      background:rgba(255,255,255,.035);
+    img {
+      display: block;
+      max-width: 100%;
     }
 
-    .visual::after{
-      content:"";
-      position:absolute;
-      width:680px;
-      height:680px;
-      border-radius:50%;
-      right:-440px;
-      top:-430px;
-      background:rgba(255,255,255,.035);
+
+    /* =========================================================
+       MAIN LAYOUT
+    ========================================================= */
+
+    .shell {
+      width: 100%;
+      min-height: 100vh;
+      min-height: 100dvh;
+
+      display: grid;
+
+      grid-template-columns:
+        minmax(0, 1.05fr)
+        minmax(520px, 0.95fr);
     }
 
-    .welcome{
-      position:absolute;
-      z-index:10;
-      top:4.5vh;
-      left:0;
-      width:100%;
-      padding:0 28px;
-      text-align:center;
-      color:#fff;
-    }
 
-    .welcome h1{
-      font-size:clamp(40px,4vw,64px);
-      font-weight:700;
-      line-height:1;
-      letter-spacing:-1px;
-    }
+    /* =========================================================
+       LEFT VISUAL
+    ========================================================= */
 
-    .welcome h2{
-      margin-top:3px;
-      font-size:clamp(34px,3.5vw,55px);
-      font-weight:700;
-      line-height:1.05;
-      color:var(--yellow);
-    }
+    .visual {
+      position: relative;
 
-    .welcome-line{
-      width:78px;
-      height:4px;
-      margin:16px auto 15px;
-      border-radius:20px;
-      background:var(--yellow);
-    }
+      min-width: 0;
+      min-height: 100vh;
+      min-height: 100dvh;
 
-    .slogan{
-      font-size:clamp(20px,1.75vw,29px);
-      font-weight:600;
-      line-height:1.3;
-      white-space:nowrap;
-    }
+      overflow: hidden;
 
-    .slogan .yellow{
-      color:var(--yellow);
-    }
-
-    .slogan-th{
-      margin-top:5px;
-      font-size:clamp(17px,1.45vw,23px);
-      font-weight:400;
-      line-height:1.3;
-      white-space:nowrap;
-    }
-
-    .slogan-th .yellow{
-      color:var(--yellow);
-      font-weight:500;
-    }
-
-    .white-wave{
-      position:absolute;
-      z-index:1;
-      left:-10%;
-      bottom:-9%;
-      width:125%;
-      height:64%;
-      background:#fff;
-      border-radius:53% 47% 0 0 / 15% 18% 0 0;
-      transform:rotate(-1deg);
-    }
-
-    .light-wave{
-      position:absolute;
-      z-index:2;
-      left:-8%;
-      bottom:0;
-      width:122%;
-      height:52%;
+      padding:
+        clamp(34px, 5vw, 78px);
 
       background:
         linear-gradient(
-          to bottom,
-          rgba(220,241,255,.82),
-          rgba(255,255,255,.08)
+          135deg,
+          #dff2ff 0%,
+          #eef8ff 35%,
+          #fff6e6 68%,
+          #ffffff 100%
         );
-
-      clip-path:polygon(
-        0 13%,
-        17% 5%,
-        38% 11%,
-        57% 4%,
-        77% 10%,
-        100% 2%,
-        100% 100%,
-        0 100%
-      );
     }
 
-    .skyline{
-      position:absolute;
-      z-index:3;
-      left:0;
-      bottom:9%;
-      width:100%;
-      height:23%;
-      opacity:.32;
+
+    /* =========================================================
+       LOGO
+    ========================================================= */
+
+    .logo {
+      position: relative;
+      z-index: 5;
+
+      width: 130px;
+      height: auto;
+
+      object-fit: contain;
     }
 
-    .skyline::before{
-      content:"";
-      position:absolute;
-      inset:0;
+
+    /* =========================================================
+       LEFT CONTENT
+    ========================================================= */
+
+    .copy {
+      position: relative;
+      z-index: 4;
+
+      max-width: 650px;
+
+      margin-top:
+        clamp(28px, 5vh, 70px);
+    }
+
+    .copy h1 {
+      color: var(--navy);
+
+      font-size:
+        clamp(42px, 4.6vw, 70px);
+
+      font-weight: 700;
+
+      line-height: 1.08;
+
+      letter-spacing: -1.5px;
+    }
+
+    .copy h1 span {
+      color: var(--yellow-dark);
+    }
+
+    .thai {
+      margin:
+        12px
+        0
+        20px;
+
+      color: var(--navy);
+
+      font-size:
+        clamp(20px, 2vw, 30px);
+
+      font-weight: 700;
+
+      line-height: 1.45;
+    }
+
+
+    /* =========================================================
+       BADGE
+    ========================================================= */
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+
+      gap: 9px;
+
+      margin-top: 18px;
+
+      padding:
+        9px
+        15px;
+
+      border: 1px solid #dce8f2;
+      border-radius: 999px;
+
+      background: #ffffff;
+
+      color: var(--navy);
+
+      font-size: 14px;
+      font-weight: 600;
+
+      box-shadow:
+        0 8px 25px
+        rgba(8, 45, 105, 0.05);
+    }
+
+    .badge::before {
+      content: "";
+
+      width: 10px;
+      height: 10px;
+
+      flex: 0 0 10px;
+
+      border-radius: 50%;
+
+      background: #1b9b67;
+    }
+
+
+    /* =========================================================
+       DESCRIPTION
+    ========================================================= */
+
+    .desc {
+      max-width: 600px;
+
+      margin-top: 16px;
+
+      color: #536f94;
+
+      font-size:
+        clamp(15px, 1.2vw, 18px);
+
+      font-weight: 400;
+
+      line-height: 1.8;
+    }
+
+
+    /* =========================================================
+       FEATURES
+    ========================================================= */
+
+    .checks {
+      display: grid;
+
+      gap: 12px;
+
+      margin-top: 22px;
+
+      color: var(--navy);
+
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    .checks div {
+      display: flex;
+      align-items: center;
+
+      line-height: 1.55;
+    }
+
+    .checks div::before {
+      content: "✓";
+
+      display: inline-grid;
+      place-items: center;
+
+      width: 27px;
+      height: 27px;
+
+      flex: 0 0 27px;
+
+      margin-right: 10px;
+
+      border-radius: 50%;
+
+      background: var(--yellow);
+
+      color: var(--navy);
+
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+
+    /* =========================================================
+       MASCOT
+    ========================================================= */
+
+    .mascot {
+      position: absolute;
+
+      right: -2%;
+      bottom: -3%;
+
+      z-index: 1;
+
+      width:
+        min(48%, 500px);
+
+      max-height: 48vh;
+
+      object-fit: contain;
+      object-position: right bottom;
+
+      pointer-events: none;
+    }
+
+
+    /* =========================================================
+       LOGIN SIDE
+    ========================================================= */
+
+    .login-side {
+      min-width: 0;
+
+      display: grid;
+      place-items: center;
+
+      padding: 36px;
+
+      background:
+        rgba(255, 255, 255, 0.97);
+    }
+
+
+    /* =========================================================
+       LOGIN CARD
+    ========================================================= */
+
+    .card {
+      width:
+        min(100%, 620px);
+
+      padding:
+        clamp(28px, 4vw, 54px);
+
+      border:
+        1px solid
+        var(--line);
+
+      border-radius: 28px;
+
+      background: #ffffff;
+
+      box-shadow:
+        0 24px 70px
+        rgba(8, 45, 105, 0.09);
+    }
+
+    .eyebrow {
+      color: #bd8500;
+
+      font-size: 14px;
+      font-weight: 700;
+
+      letter-spacing: 0.5px;
+    }
+
+    .card h2 {
+      margin:
+        8px
+        0
+        12px;
+
+      color: var(--navy);
+
+      font-size:
+        clamp(30px, 3vw, 46px);
+
+      font-weight: 700;
+
+      line-height: 1.3;
+    }
+
+    .intro {
+      margin-bottom: 25px;
+
+      color: var(--muted);
+
+      font-size: 15px;
+      font-weight: 400;
+
+      line-height: 1.75;
+    }
+
+
+    /* =========================================================
+       FORM
+    ========================================================= */
+
+    .field {
+      margin-top: 17px;
+    }
+
+    .field label {
+      display: block;
+
+      margin-bottom: 8px;
+
+      color: var(--navy);
+
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .field input {
+      width: 100%;
+      height: 58px;
+
+      padding:
+        0
+        17px;
+
+      border:
+        1px solid
+        #cfdeec;
+
+      border-radius: 13px;
+
+      outline: none;
+
+      background: #ffffff;
+
+      color: var(--navy);
+
+      font-size: 15px;
+      font-weight: 400;
+
+      transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+    }
+
+    .field input::placeholder {
+      color: #9aaabd;
+    }
+
+    .field input:focus {
+      border-color: #4d8ee6;
+
+      box-shadow:
+        0 0 0 4px
+        rgba(77, 142, 230, 0.10);
+    }
+
+
+    /* =========================================================
+       PASSWORD
+    ========================================================= */
+
+    .pw {
+      position: relative;
+    }
+
+    .pw input {
+      padding-right: 78px;
+    }
+
+    .eye {
+      position: absolute;
+
+      top: 50%;
+      right: 10px;
+
+      transform:
+        translateY(-50%);
+
+      min-width: 54px;
+      min-height: 38px;
+
+      padding:
+        0
+        8px;
+
+      border: 0;
+      border-radius: 8px;
+
+      background: transparent;
+
+      color: var(--navy);
+
+      font-size: 13px;
+      font-weight: 600;
+
+      cursor: pointer;
+    }
+
+    .eye:hover {
+      background: #f2f7fc;
+    }
+
+
+    /* =========================================================
+       LOGIN BUTTON
+    ========================================================= */
+
+    .login {
+      width: 100%;
+      height: 58px;
+
+      margin-top: 22px;
+
+      border: 0;
+      border-radius: 13px;
 
       background:
         linear-gradient(
-          90deg,
-          transparent 0 4%,
-          #75b6e4 4% 6%,
-          transparent 6% 9%,
-          #75b6e4 9% 11%,
-          transparent 11% 15%,
-          #75b6e4 15% 18%,
-          transparent 18% 22%,
-          #75b6e4 22% 25%,
-          transparent 25% 30%,
-          #75b6e4 30% 33%,
-          transparent 33% 38%,
-          #75b6e4 38% 41%,
-          transparent 41% 47%,
-          #75b6e4 47% 50%,
-          transparent 50% 56%,
-          #75b6e4 56% 59%,
-          transparent 59% 65%,
-          #75b6e4 65% 68%,
-          transparent 68% 74%,
-          #75b6e4 74% 77%,
-          transparent 77% 83%,
-          #75b6e4 83% 86%,
-          transparent 86% 91%,
-          #75b6e4 91% 94%,
-          transparent 94%
+          135deg,
+          #ffd13e,
+          #ffbd16
         );
+
+      color: #092b61;
+
+      font-size: 16px;
+      font-weight: 700;
+
+      cursor: pointer;
+
+      box-shadow:
+        0 10px 25px
+        rgba(255, 190, 22, 0.20);
+
+      transition:
+        transform 0.15s ease,
+        box-shadow 0.15s ease,
+        opacity 0.15s ease;
     }
 
-    .mascot{
-      position:absolute;
-      z-index:7;
-      left:50%;
-      bottom:1%;
-      width:min(58vw,710px);
-      max-height:65vh;
-      transform:translateX(-50%);
-      object-fit:contain;
-      object-position:center bottom;
-      filter:drop-shadow(0 18px 20px rgba(0,30,65,.18));
+    .login:hover:not(:disabled) {
+      transform:
+        translateY(-1px);
+
+      box-shadow:
+        0 13px 30px
+        rgba(255, 190, 22, 0.28);
     }
 
-    .ribbon{
-      position:absolute;
-      z-index:5;
-      left:-5%;
-      bottom:-7%;
-      width:112%;
-      height:17%;
-      background:linear-gradient(90deg,#00254f,#003c75);
-      border-radius:50% 50% 0 0 / 35% 35% 0 0;
-      transform:rotate(1.5deg);
+    .login:active:not(:disabled) {
+      transform:
+        translateY(0);
     }
 
-    .ribbon::before{
-      content:"";
-      position:absolute;
-      left:0;
-      top:-12px;
-      width:100%;
-      height:12px;
-      border-radius:50%;
-      background:var(--yellow);
+    .login:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
     }
 
-    /* RIGHT */
 
-    .login-side{
-      position:relative;
-      height:100vh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:clamp(14px,2vh,26px) clamp(35px,6vw,90px);
-      background:linear-gradient(135deg,#fff 0%,#f7fbff 100%);
-      overflow:hidden;
+    /* =========================================================
+       MESSAGE
+    ========================================================= */
+
+    .message {
+      min-height: 0;
+
+      margin-top: 14px;
+
+      padding: 0;
+
+      color: var(--danger);
+
+      font-size: 13px;
+      font-weight: 400;
+
+      line-height: 1.6;
     }
 
-    .top-accent{
-      position:absolute;
-      right:0;
-      top:0;
-      width:34%;
-      height:14px;
-      background:var(--yellow);
-      transform:skewX(-38deg);
-      transform-origin:right;
+    .message:not(:empty) {
+      padding:
+        12px
+        14px;
+
+      border-radius: 10px;
+
+      background: #fff1f1;
     }
 
-    .login-card{
-      width:100%;
-      max-width:600px;
+    .message.success {
+      padding:
+        12px
+        14px;
+
+      border-radius: 10px;
+
+      background: #ecfbf3;
+
+      color: var(--success);
     }
 
-    .language{
-      display:flex;
-      justify-content:flex-end;
-      margin-bottom:8px;
+
+    /* =========================================================
+       LINKS
+    ========================================================= */
+
+    .links {
+      display: grid;
+
+      grid-template-columns:
+        1fr
+        1fr;
+
+      gap: 12px;
+
+      margin-top: 24px;
     }
 
-    .language-box{
-      display:flex;
-      gap:4px;
-      padding:5px;
-      border-radius:40px;
-      background:#eef3f8;
+    .link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      min-height: 68px;
+
+      padding:
+        12px
+        15px;
+
+      border:
+        1px solid
+        var(--line);
+
+      border-radius: 14px;
+
+      background: #ffffff;
+
+      color: var(--text);
+
+      text-align: center;
+      text-decoration: none;
+
+      font-size: 13px;
+      font-weight: 600;
+
+      line-height: 1.45;
+
+      transition:
+        border-color 0.15s ease,
+        background 0.15s ease;
     }
 
-    .lang{
-      border:0;
-      background:transparent;
-      padding:7px 15px;
-      border-radius:25px;
-      font-family:"Prompt",sans-serif;
-      font-size:13px;
-      color:var(--text);
-      cursor:pointer;
+    .link:hover {
+      border-color: #aac7e3;
+
+      background: #f7fbff;
     }
 
-    .lang.active{
-      color:#fff;
-      background:var(--navy);
+
+    /* =========================================================
+       NOTICE
+    ========================================================= */
+
+    .notice {
+      margin-top: 22px;
+
+      padding:
+        14px
+        16px;
+
+      border-radius: 13px;
+
+      background: #f0f7ff;
+
+      color: #68809f;
+
+      text-align: center;
+
+      font-size: 12px;
+      font-weight: 400;
+
+      line-height: 1.65;
     }
 
-    .brand{
-      text-align:center;
-      margin-bottom:16px;
-    }
 
-    .company-logo{
-      display:block;
-      width:min(330px,68%);
-      max-height:150px;
-      margin:0 auto 8px;
-      object-fit:contain;
-      object-position:center;
-    }
+    /* =========================================================
+       TABLET
+       981px - 1200px
+    ========================================================= */
 
-    .brand h1{
-      font-size:clamp(32px,3vw,50px);
-      font-weight:700;
-      line-height:1;
-      letter-spacing:-1px;
-      color:var(--navy);
-    }
+    @media (max-width: 1200px) and (min-width: 981px) {
 
-    .brand-line{
-      width:120px;
-      height:3px;
-      margin:7px auto 8px;
-      border-radius:10px;
-      background:var(--yellow);
-    }
-
-    .brand .thai{
-      font-size:clamp(15px,1.3vw,19px);
-      font-weight:600;
-      line-height:1.3;
-    }
-
-    .brand .english{
-      margin-top:1px;
-      font-size:clamp(14px,1.25vw,18px);
-      font-weight:500;
-      line-height:1.3;
-      color:#59677e;
-    }
-
-    .admin-badge{
-      display:inline-block;
-      margin-top:6px;
-      padding:3px 12px;
-      border-radius:20px;
-      background:#fff2b7;
-      color:#705700;
-      font-size:11px;
-      font-weight:500;
-    }
-
-    .form-group{
-      margin-bottom:12px;
-    }
-
-    .form-group label{
-      display:flex;
-      align-items:center;
-      gap:8px;
-      margin-bottom:5px;
-      font-size:15px;
-      font-weight:600;
-    }
-
-    .field{
-      position:relative;
-    }
-
-    .field input{
-      width:100%;
-      height:52px;
-      padding:0 52px 0 18px;
-      border:1.5px solid var(--border);
-      border-radius:12px;
-      outline:none;
-      background:#fff;
-      font-family:"Prompt",sans-serif;
-      font-size:15px;
-      color:var(--text);
-      transition:.2s;
-    }
-
-    .field input:focus{
-      border-color:#78a9d2;
-      box-shadow:0 0 0 4px rgba(0,91,160,.07);
-    }
-
-    .eye{
-      position:absolute;
-      right:17px;
-      top:50%;
-      transform:translateY(-50%);
-      border:0;
-      background:transparent;
-      cursor:pointer;
-      font-size:20px;
-    }
-
-    .login-button{
-      position:relative;
-      width:100%;
-      height:56px;
-      margin-top:2px;
-      border:0;
-      border-radius:13px;
-      background:linear-gradient(90deg,#ffd22b,var(--yellow));
-      box-shadow:0 8px 20px rgba(255,196,0,.20);
-      color:var(--navy);
-      font-family:"Prompt",sans-serif;
-      font-size:19px;
-      font-weight:600;
-      cursor:pointer;
-    }
-
-    .login-button:disabled{
-      opacity:.65;
-      cursor:not-allowed;
-    }
-
-    .arrow{
-      position:absolute;
-      right:9px;
-      top:50%;
-      transform:translateY(-50%);
-      width:40px;
-      height:40px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      border-radius:50%;
-      background:var(--navy);
-      color:#fff;
-      font-size:23px;
-    }
-
-    .admin-only{
-      display:flex;
-      align-items:center;
-      gap:13px;
-      margin:12px 0 8px;
-      font-size:13px;
-      font-weight:500;
-    }
-
-    .admin-only::before,
-    .admin-only::after{
-      content:"";
-      flex:1;
-      height:1px;
-      background:#cbd8e5;
-    }
-
-    .home{
-      text-align:center;
-    }
-
-    .home a{
-      color:var(--navy);
-      font-size:14px;
-      font-weight:600;
-      text-decoration:underline;
-      text-underline-offset:4px;
-    }
-
-    .message{
-      min-height:20px;
-      margin-top:8px;
-      text-align:center;
-      color:#d43838;
-      font-size:12px;
-      line-height:1.45;
-    }
-
-    .message.success{
-      color:#168447;
-    }
-
-    @media (min-width:901px) and (max-height:850px){
-      .welcome{top:3.2vh}
-      .welcome h1{font-size:43px}
-      .welcome h2{font-size:37px}
-      .welcome-line{margin:10px auto 9px}
-      .slogan{font-size:18px}
-      .slogan-th{font-size:15px}
-
-      .mascot{
-        width:min(55vw,630px);
-        max-height:64vh;
-        bottom:1%;
+      .shell {
+        grid-template-columns:
+          minmax(0, 0.95fr)
+          minmax(480px, 1.05fr);
       }
 
-      .login-side{
-        padding:10px clamp(35px,5vw,72px);
+      .visual {
+        padding: 40px;
       }
 
-      .language{margin-bottom:3px}
-
-      .company-logo{
-        width:min(260px,58%);
-        max-height:94px;
-        margin-bottom:5px;
+      .copy h1 {
+        font-size: 48px;
       }
 
-      .brand{margin-bottom:9px}
-      .brand h1{font-size:34px}
-      .brand-line{margin:4px auto 5px}
-
-      .brand .thai,
-      .brand .english{
-        font-size:13px;
+      .thai {
+        font-size: 21px;
       }
 
-      .admin-badge{
-        margin-top:4px;
-        font-size:9px;
+      .desc {
+        font-size: 14px;
       }
 
-      .form-group{margin-bottom:8px}
-
-      .form-group label{
-        margin-bottom:3px;
-        font-size:13px;
+      .checks {
+        font-size: 13px;
       }
 
-      .field input{
-        height:44px;
-        font-size:13px;
+      .mascot {
+        width: 45%;
       }
 
-      .login-button{
-        height:47px;
-        font-size:16px;
+      .login-side {
+        padding: 28px;
       }
 
-      .arrow{
-        width:34px;
-        height:34px;
-        font-size:19px;
-      }
-
-      .admin-only{
-        margin:7px 0 5px;
-        font-size:11px;
-      }
-
-      .home a{font-size:12px}
     }
 
-    @media(max-width:900px){
-      html,body{height:auto}
 
-      body{
-        overflow:auto;
-        overflow-x:hidden;
+    /* =========================================================
+       TABLET / SMALL LAPTOP
+       <= 980px
+    ========================================================= */
+
+    @media (max-width: 980px) {
+
+      .shell {
+        display: block;
       }
 
-      .page{
-        display:block;
-        height:auto;
+      .visual {
+        min-height: 390px;
+
+        padding:
+          28px
+          30px;
       }
 
-      .visual{
-        height:650px;
+      .logo {
+        width: 112px;
       }
 
-      .mascot{
-        width:min(90vw,600px);
-        max-height:470px;
-        bottom:0;
+      .copy {
+        max-width: 68%;
+
+        margin-top: 20px;
       }
 
-      .login-side{
-        height:auto;
-        min-height:700px;
-        padding:40px 8% 55px;
+      .copy h1 {
+        font-size: 42px;
+
+        line-height: 1.1;
       }
 
-      .company-logo{
-        width:min(310px,70%);
+      .thai {
+        margin:
+          9px
+          0
+          12px;
+
+        font-size: 21px;
       }
+
+      .badge {
+        margin-top: 10px;
+      }
+
+      .desc {
+        margin-top: 12px;
+
+        font-size: 13px;
+
+        line-height: 1.65;
+      }
+
+      .checks {
+        gap: 8px;
+
+        margin-top: 14px;
+
+        font-size: 13px;
+      }
+
+      .checks div::before {
+        width: 23px;
+        height: 23px;
+
+        flex-basis: 23px;
+      }
+
+      .mascot {
+        width: 37%;
+
+        right: 0;
+        bottom: -5%;
+
+        max-height: 330px;
+      }
+
+      .login-side {
+        padding:
+          32px
+          18px
+          45px;
+      }
+
+      .card {
+        width:
+          min(100%, 680px);
+      }
+
     }
 
-    @media(max-width:600px){
-      .visual{height:550px}
 
-      .welcome{
-        top:30px;
-        padding:0 14px;
+    /* =========================================================
+       MOBILE
+       <= 600px
+    ========================================================= */
+
+    @media (max-width: 600px) {
+
+      .visual {
+        min-height: 310px;
+
+        padding:
+          22px
+          20px;
       }
 
-      .welcome h1{font-size:36px}
-      .welcome h2{font-size:31px}
-
-      .slogan{
-        font-size:14px;
-        white-space:normal;
+      .logo {
+        width: 96px;
       }
 
-      .slogan-th{
-        font-size:12px;
-        white-space:normal;
+      .copy {
+        max-width: 76%;
+
+        margin-top: 14px;
       }
 
-      .mascot{
-        width:490px;
-        max-width:105%;
-        max-height:390px;
+      .copy h1 {
+        font-size: 31px;
+
+        line-height: 1.1;
+
+        letter-spacing: -0.7px;
       }
 
-      .login-side{
-        min-height:auto;
-        padding:30px 21px 45px;
+      .thai {
+        margin:
+          7px
+          0;
+
+        font-size: 16px;
+
+        line-height: 1.45;
       }
 
-      .company-logo{
-        width:min(280px,75%);
+      .badge {
+        margin-top: 10px;
+
+        padding:
+          7px
+          10px;
+
+        gap: 7px;
+
+        font-size: 11px;
       }
 
-      .brand h1{font-size:34px}
-      .field input{height:53px}
-      .login-button{height:55px}
+      .badge::before {
+        width: 8px;
+        height: 8px;
+
+        flex-basis: 8px;
+      }
+
+      .desc {
+        max-width: 95%;
+
+        margin-top: 10px;
+
+        font-size: 12px;
+
+        line-height: 1.6;
+      }
+
+      .checks {
+        display: none;
+      }
+
+      .mascot {
+        width: 43%;
+
+        right: -6%;
+        bottom: -2%;
+
+        max-height: 230px;
+      }
+
+      .login-side {
+        padding:
+          16px
+          12px
+          30px;
+      }
+
+      .card {
+        width: 100%;
+
+        padding:
+          24px
+          18px;
+
+        border-radius: 20px;
+      }
+
+      .eyebrow {
+        font-size: 12px;
+      }
+
+      .card h2 {
+        margin-top: 6px;
+
+        font-size: 29px;
+
+        line-height: 1.3;
+      }
+
+      .intro {
+        margin-bottom: 21px;
+
+        font-size: 13px;
+
+        line-height: 1.7;
+      }
+
+      .field {
+        margin-top: 15px;
+      }
+
+      .field label {
+        font-size: 14px;
+      }
+
+      .field input {
+        height: 54px;
+
+        font-size: 16px;
+      }
+
+      .login {
+        height: 54px;
+
+        font-size: 15px;
+      }
+
+      .links {
+        grid-template-columns: 1fr;
+
+        gap: 9px;
+
+        margin-top: 20px;
+      }
+
+      .link {
+        min-height: 54px;
+
+        font-size: 13px;
+      }
+
+      .notice {
+        margin-top: 18px;
+
+        font-size: 11px;
+      }
+
     }
+
+
+    /* =========================================================
+       SMALL MOBILE
+       <= 374px
+    ========================================================= */
+
+    @media (max-width: 374px) {
+
+      .visual {
+        min-height: 285px;
+
+        padding:
+          18px
+          16px;
+      }
+
+      .logo {
+        width: 88px;
+      }
+
+      .copy {
+        max-width: 78%;
+
+        margin-top: 11px;
+      }
+
+      .copy h1 {
+        font-size: 27px;
+      }
+
+      .thai {
+        font-size: 14px;
+      }
+
+      .desc {
+        font-size: 11px;
+      }
+
+      .mascot {
+        width: 45%;
+
+        right: -8%;
+      }
+
+      .login-side {
+        padding:
+          12px
+          10px
+          24px;
+      }
+
+      .card {
+        padding:
+          21px
+          15px;
+      }
+
+      .card h2 {
+        font-size: 26px;
+      }
+
+    }
+
+
+    /* =========================================================
+       LARGE DESKTOP
+    ========================================================= */
+
+    @media (min-width: 1600px) {
+
+      .visual {
+        padding:
+          70px
+          max(70px, calc((100vw - 1550px) / 2));
+      }
+
+      .card {
+        width: 640px;
+      }
+
+      .field input {
+        font-size: 16px;
+      }
+
+      .intro {
+        font-size: 16px;
+      }
+
+    }
+
   </style>
 </head>
 
+
 <body>
 
-<div class="page">
-
-  <section class="visual">
-
-    <div class="welcome">
-
-      <h1 id="welcomeTitle">
-        ยินดีต้อนรับ
-      </h1>
-
-      <h2 id="welcomeEnglish">
-        Welcome
-      </h2>
-
-      <div class="welcome-line"></div>
-
-      <div class="slogan">
-        TRUST IN SAFETY.
-        <span class="yellow">
-          TRUST IN SANTE.
-        </span>
-      </div>
-
-      <div class="slogan-th">
-        เชื่อมั่นในความปลอดภัย
-        &nbsp;&nbsp;
-        <span class="yellow">
-          เชื่อมั่นในซานเต้
-        </span>
-      </div>
-
-    </div>
-
-    <div class="white-wave"></div>
-    <div class="light-wave"></div>
-    <div class="skyline"></div>
-
-    <img
-      src="sante-admin-artwork.png"
-      alt="SANTE Safety Mascot"
-      class="mascot"
-    >
-
-    <div class="ribbon"></div>
-
-  </section>
+  <main class="shell">
 
 
-  <section class="login-side">
+    <!-- =======================================================
+         LEFT SIDE
+    ======================================================== -->
 
-    <div class="top-accent"></div>
+    <section class="visual">
 
-    <div class="login-card">
+      <img
+        src="SANTE-logo.png"
+        class="logo"
+        alt="SANTE Consulting"
+      >
 
-      <div class="language">
 
-        <div class="language-box">
+      <div class="copy">
 
-          <button
-            class="lang active"
-            id="thaiButton"
-            type="button"
-            onclick="setLanguage('th')"
-          >
-            🇹🇭 ไทย
-          </button>
+        <h1>
+          Trust in Safety.<br>
+          Trust in <span>SANTE.</span>
+        </h1>
 
-          <button
-            class="lang"
-            id="englishButton"
-            type="button"
-            onclick="setLanguage('en')"
-          >
-            🇬🇧 EN
-          </button>
+
+        <div class="thai">
+          เชื่อมั่นในความปลอดภัย เชื่อมั่นในซานเต้
+        </div>
+
+
+        <div class="badge">
+          SANTE Admin
+        </div>
+
+
+        <p class="desc">
+          ระบบบริหารจัดการหลักสูตร สมาชิก การสอบ
+          งานบริการ เอกสาร การชำระเงิน
+          และการตั้งค่าระบบของ SANTE
+        </p>
+
+
+        <div class="checks">
+
+          <div>
+            จัดการหลักสูตร การสอบ และสมาชิก
+          </div>
+
+          <div>
+            ตรวจสอบเอกสารและการชำระเงิน
+          </div>
+
+          <div>
+            ติดตามงานบริการ เอกสาร และรายงานสถิติ
+          </div>
 
         </div>
 
       </div>
 
 
-      <div class="brand">
+      <img
+        src="SANTE-mascot.png"
+        class="mascot"
+        alt="SANTE Mascot"
+      >
 
-        <img
-          src="SANTE-logo.png"
-          alt="SANTE Consulting Company Logo"
-          class="company-logo"
-        >
+    </section>
 
-        <h1>SANTE SYSTEM</h1>
 
-        <div class="brand-line"></div>
+    <!-- =======================================================
+         LOGIN SIDE
+    ======================================================== -->
 
-        <div class="thai" id="systemThai">
-          ระบบบริหารจัดการ
+    <section class="login-side">
+
+      <div class="card">
+
+
+        <div class="eyebrow">
+          SANTE ADMIN
         </div>
 
-        <div class="english">
-          SANTE Consulting
-        </div>
 
-        <div class="admin-badge">
-          ● ADMINISTRATOR
-        </div>
-
-      </div>
+        <h2>
+          เข้าสู่ระบบผู้ดูแลระบบ
+        </h2>
 
 
-      <form id="loginForm">
+        <p class="intro">
+          เข้าสู่ระบบเพื่อบริหารจัดการหลักสูตร สมาชิก
+          การสอบ งานบริการ เอกสาร การชำระเงิน
+          และตั้งค่าระบบของ SANTE
+        </p>
 
-        <div class="form-group">
 
-          <label id="emailLabel">
-            ✉️ อีเมล
-          </label>
+        <!-- ===================================================
+             LOGIN FORM
+        ==================================================== -->
+
+        <form id="loginForm">
 
           <div class="field">
+
+            <label for="email">
+              อีเมล *
+            </label>
 
             <input
               id="email"
               type="email"
               autocomplete="username"
-              placeholder="example@santeconsulting.co.th"
+              placeholder="admin@santeconsulting.co.th"
               required
             >
 
           </div>
 
-        </div>
-
-
-        <div class="form-group">
-
-          <label id="passwordLabel">
-            🔒 รหัสผ่าน
-          </label>
 
           <div class="field">
 
-            <input
-              id="password"
-              type="password"
-              autocomplete="current-password"
-              placeholder="กรุณากรอกรหัสผ่าน"
-              required
-            >
+            <label for="password">
+              รหัสผ่าน *
+            </label>
 
-            <button
-              class="eye"
-              type="button"
-              onclick="togglePassword()"
-              aria-label="Show password"
-            >
-              👁
-            </button>
+
+            <div class="pw">
+
+              <input
+                id="password"
+                type="password"
+                autocomplete="current-password"
+                placeholder="กรอกรหัสผ่าน"
+                required
+              >
+
+
+              <button
+                class="eye"
+                type="button"
+                id="eye"
+              >
+                แสดง
+              </button>
+
+            </div>
 
           </div>
+
+
+          <button
+            id="loginButton"
+            class="login"
+            type="submit"
+          >
+
+            <span id="loginText">
+              เข้าสู่ระบบ
+            </span>
+
+          </button>
+
+        </form>
+
+
+        <!-- ===================================================
+             MESSAGE
+        ==================================================== -->
+
+        <div
+          id="message"
+          class="message"
+        ></div>
+
+
+        <!-- ===================================================
+             LINKS
+        ==================================================== -->
+
+        <div class="links">
+
+          <a
+            class="link"
+            href="member-login.html"
+          >
+            เข้าสู่ระบบสมาชิก
+          </a>
+
+
+          <a
+            class="link"
+            href="index.html"
+          >
+            กลับหน้าหลัก SANTE
+          </a>
 
         </div>
 
 
-        <button
-          id="loginButton"
-          class="login-button"
-          type="submit"
-        >
-
-          <span id="loginText">
-            เข้าสู่ระบบ
-          </span>
-
-          <span class="arrow">
-            →
-          </span>
-
-        </button>
-
-      </form>
+        <div class="notice">
+          ระบบนี้สำหรับผู้ดูแลระบบเท่านั้น
+          บัญชีผู้ใช้งานจะถูกตรวจสอบสิทธิ์
+          STAFF / ADMIN ก่อนเข้าสู่ Dashboard
+        </div>
 
 
-      <div class="admin-only">
-        <span id="adminOnlyText">
-          🔒 เฉพาะผู้ดูแลระบบเท่านั้น
-        </span>
       </div>
 
+    </section>
 
-      <div class="home">
-        <a href="index.html" id="homeText">
-          🏠 กลับหน้าหลัก
-        </a>
-      </div>
+  </main>
 
 
-      <div
-        id="message"
-        class="message"
-      ></div>
+  <script>
 
-    </div>
+    /* =========================================================
+       SUPABASE
+    ========================================================= */
 
-  </section>
-
-</div>
+    const SUPABASE_URL =
+      "https://cyegjwerxlxhczrfiurz.supabase.co";
 
 
-<script>
-
-  /* =========================
-     SUPABASE CONFIG
-  ========================= */
-
-  const SUPABASE_URL =
-    "https://cyegjwerxlxhczrfiurz.supabase.co";
-
-  const SUPABASE_KEY =
-    "sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF";
-
-  const AUTH_STORAGE_KEY =
-    "sante-admin-auth";
+    const SUPABASE_KEY =
+      "sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF";
 
 
-  if (!window.supabase) {
-    document.getElementById("message").textContent =
-      "SYSTEM ERROR: ไม่สามารถโหลด Supabase library ได้";
-    throw new Error("Supabase library failed to load.");
-  }
-
-
-  const supabaseClient =
-    window.supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_KEY,
-      {
-        auth: {
-          storageKey: AUTH_STORAGE_KEY,
-          persistSession: true,
-          autoRefreshToken: true,
-          detectSessionInUrl: true
+    const supabaseClient =
+      window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY,
+        {
+          auth: {
+            storageKey: "sante-admin-auth",
+            persistSession: true,
+            autoRefreshToken: true,
+            detectSessionInUrl: true
+          }
         }
+      );
+
+
+    /* =========================================================
+       ELEMENTS
+    ========================================================= */
+
+    const form =
+      document.getElementById(
+        "loginForm"
+      );
+
+
+    const email =
+      document.getElementById(
+        "email"
+      );
+
+
+    const password =
+      document.getElementById(
+        "password"
+      );
+
+
+    const button =
+      document.getElementById(
+        "loginButton"
+      );
+
+
+    const loginText =
+      document.getElementById(
+        "loginText"
+      );
+
+
+    const message =
+      document.getElementById(
+        "message"
+      );
+
+
+    const eyeButton =
+      document.getElementById(
+        "eye"
+      );
+
+
+    /* =========================================================
+       SHOW / HIDE PASSWORD
+    ========================================================= */
+
+    eyeButton.addEventListener(
+      "click",
+      function () {
+
+        const isHidden =
+          password.type ===
+          "password";
+
+
+        password.type =
+          isHidden
+            ? "text"
+            : "password";
+
+
+        eyeButton.textContent =
+          isHidden
+            ? "ซ่อน"
+            : "แสดง";
+
       }
     );
 
 
-  /* =========================
-     LANGUAGE
-  ========================= */
+    /* =========================================================
+       ERROR
+    ========================================================= */
 
-  let currentLanguage = "th";
+    function showError(error) {
 
-
-  function setLanguage(language) {
-
-    currentLanguage = language;
-
-    const thaiButton =
-      document.getElementById("thaiButton");
-
-    const englishButton =
-      document.getElementById("englishButton");
+      message.classList.remove(
+        "success"
+      );
 
 
-    thaiButton.classList.toggle(
-      "active",
-      language === "th"
-    );
-
-    englishButton.classList.toggle(
-      "active",
-      language === "en"
-    );
+      let text =
+        error?.message ||
+        String(error);
 
 
-    if (language === "th") {
+      if (
+        text
+          .toLowerCase()
+          .includes(
+            "invalid login credentials"
+          )
+      ) {
 
-      document.getElementById("welcomeTitle").textContent =
-        "ยินดีต้อนรับ";
+        text =
+          "อีเมลหรือรหัสผ่านไม่ถูกต้อง";
 
-      document.getElementById("welcomeEnglish").textContent =
-        "Welcome";
+      }
 
-      document.getElementById("systemThai").textContent =
-        "ระบบบริหารจัดการ";
 
-      document.getElementById("emailLabel").textContent =
-        "✉️ อีเมล";
+      message.textContent =
+        text;
 
-      document.getElementById("passwordLabel").textContent =
-        "🔒 รหัสผ่าน";
-
-      document.getElementById("password").placeholder =
-        "กรุณากรอกรหัสผ่าน";
-
-      document.getElementById("loginText").textContent =
-        "เข้าสู่ระบบ";
-
-      document.getElementById("adminOnlyText").textContent =
-        "🔒 เฉพาะผู้ดูแลระบบเท่านั้น";
-
-      document.getElementById("homeText").textContent =
-        "🏠 กลับหน้าหลัก";
-
-    } else {
-
-      document.getElementById("welcomeTitle").textContent =
-        "Welcome";
-
-      document.getElementById("welcomeEnglish").textContent =
-        "SANTE";
-
-      document.getElementById("systemThai").textContent =
-        "Management System";
-
-      document.getElementById("emailLabel").textContent =
-        "✉️ Email";
-
-      document.getElementById("passwordLabel").textContent =
-        "🔒 Password";
-
-      document.getElementById("password").placeholder =
-        "Enter your password";
-
-      document.getElementById("loginText").textContent =
-        "Sign In";
-
-      document.getElementById("adminOnlyText").textContent =
-        "🔒 Administrators only";
-
-      document.getElementById("homeText").textContent =
-        "🏠 Back to Home";
     }
-  }
 
 
-  /* =========================
-     PASSWORD
-  ========================= */
+    /* =========================================================
+       LOGIN
+    ========================================================= */
 
-  function togglePassword() {
-
-    const password =
-      document.getElementById("password");
-
-    password.type =
-      password.type === "password"
-        ? "text"
-        : "password";
-  }
-
-
-  /* =========================
-     HELPERS
-  ========================= */
-
-  function showError(stage, error) {
-
-    console.error(stage, error);
-
-    const message =
-      document.getElementById("message");
-
-    const detail =
-      error?.message ||
-      error?.error_description ||
-      String(error || "Unknown error");
-
-    message.classList.remove("success");
-
-    message.textContent =
-      stage + ": " + detail;
-  }
-
-
-  function wait(milliseconds) {
-
-    return new Promise(
-      resolve =>
-        setTimeout(
-          resolve,
-          milliseconds
-        )
-    );
-  }
-
-
-  /* =========================
-     LOGIN
-  ========================= */
-
-  document
-    .getElementById("loginForm")
-    .addEventListener(
+    form.addEventListener(
       "submit",
-      async function(event) {
+      async function (event) {
 
         event.preventDefault();
 
-        const email =
-          document
-            .getElementById("email")
-            .value
-            .trim();
-
-        const password =
-          document
-            .getElementById("password")
-            .value;
-
-        const message =
-          document.getElementById("message");
-
-        const button =
-          document.getElementById("loginButton");
-
-        const loginText =
-          document.getElementById("loginText");
-
 
         message.textContent = "";
-        message.classList.remove("success");
+
+        message.classList.remove(
+          "success"
+        );
+
 
         button.disabled = true;
 
         loginText.textContent =
-          currentLanguage === "th"
-            ? "กำลังเข้าสู่ระบบ..."
-            : "Signing in...";
-
-
-        let shouldRestoreButton = true;
+          "กำลังเข้าสู่ระบบ...";
 
 
         try {
 
-          /* STEP 1 — LOGIN */
+          /* -----------------------------------------
+             1. LOGIN
+          ----------------------------------------- */
 
           const {
-            data: authData,
-            error: authError
+            data,
+            error
           } =
           await supabaseClient.auth
             .signInWithPassword({
-              email: email,
-              password: password
+              email:
+                email.value.trim(),
+
+              password:
+                password.value
             });
 
 
-          if (authError) {
-
-            showError(
-              "AUTH ERROR",
-              authError
-            );
-
-            return;
+          if (error) {
+            throw error;
           }
 
 
-          if (!authData?.user || !authData?.session) {
-
-            showError(
-              "AUTH ERROR",
-              new Error(
-                "Login succeeded but no user/session was returned."
-              )
-            );
-
-            return;
-          }
-
-
-          console.log(
-            "AUTH OK:",
-            authData.user.id
-          );
-
-
-          /* STEP 2 — VERIFY STORED SESSION */
-
-          let activeSession = null;
-
-          for (
-            let attempt = 1;
-            attempt <= 5;
-            attempt++
+          if (
+            !data?.user ||
+            !data?.session
           ) {
 
-            const {
-              data: sessionData,
-              error: sessionError
-            } =
-            await supabaseClient.auth
-              .getSession();
-
-
-            if (sessionError) {
-
-              showError(
-                "SESSION ERROR",
-                sessionError
-              );
-
-              return;
-            }
-
-
-            if (sessionData?.session) {
-
-              activeSession =
-                sessionData.session;
-
-              break;
-            }
-
-
-            await wait(150);
-          }
-
-
-          if (!activeSession) {
-
-            showError(
-              "SESSION ERROR",
-              new Error(
-                "Supabase session was not available after login."
-              )
+            throw new Error(
+              "ไม่พบ Session หลังเข้าสู่ระบบ"
             );
 
-            return;
           }
 
 
-          console.log(
-            "SESSION OK:",
-            activeSession.user.id
-          );
-
-
-          /* STEP 3 — STAFF PERMISSION */
+          /* -----------------------------------------
+             2. VERIFY STAFF PERMISSION
+          ----------------------------------------- */
 
           const {
             data: isStaff,
@@ -1216,20 +1513,8 @@
 
 
           if (staffError) {
-
-            showError(
-              "RPC ERROR",
-              staffError
-            );
-
-            return;
+            throw staffError;
           }
-
-
-          console.log(
-            "is_staff() =",
-            isStaff
-          );
 
 
           if (isStaff !== true) {
@@ -1237,80 +1522,138 @@
             await supabaseClient.auth
               .signOut();
 
-            message.classList.remove(
-              "success"
+
+            throw new Error(
+              "บัญชีนี้ไม่มีสิทธิ์ STAFF / ADMIN"
             );
 
-            message.textContent =
-              currentLanguage === "th"
-                ? "PERMISSION ERROR: บัญชีนี้ไม่มีสิทธิ์ STAFF / ADMIN"
-                : "PERMISSION ERROR: This account does not have STAFF / ADMIN access.";
-
-            return;
           }
 
 
-          /* STEP 4 — SUCCESS */
+          /* -----------------------------------------
+             3. SUCCESS
+          ----------------------------------------- */
 
           message.classList.add(
             "success"
           );
 
+
           message.textContent =
-            currentLanguage === "th"
-              ? "เข้าสู่ระบบสำเร็จ กำลังเปิด SANTE Admin..."
-              : "Login successful. Opening SANTE Admin...";
+            "เข้าสู่ระบบสำเร็จ กำลังเปิด SANTE Admin...";
 
 
           loginText.textContent =
-            currentLanguage === "th"
-              ? "เข้าสู่ระบบสำเร็จ"
-              : "Login successful";
+            "เข้าสู่ระบบสำเร็จ";
 
 
-          /*
-            Keep the button locked while moving
-            to the dashboard.
-          */
+          setTimeout(
+            function () {
 
-          shouldRestoreButton = false;
+              window.location.replace(
+                "admin.html"
+              );
 
-
-          /*
-            Small settling period after the
-            session has been verified.
-          */
-
-          await wait(500);
+            },
+            350
+          );
 
 
-          window.location.href =
-            "./admin.html";
+        }
+        catch (error) {
 
-
-        } catch (error) {
-
-          showError(
-            "UNEXPECTED ERROR",
+          console.error(
+            "Admin login:",
             error
           );
 
-        } finally {
 
-          if (shouldRestoreButton) {
+          showError(
+            error
+          );
 
-            button.disabled = false;
 
-            loginText.textContent =
-              currentLanguage === "th"
-                ? "เข้าสู่ระบบ"
-                : "Sign In";
-          }
+          button.disabled = false;
+
+          loginText.textContent =
+            "เข้าสู่ระบบ";
+
         }
+
       }
     );
 
-</script>
+
+    /* =========================================================
+       EXISTING ADMIN SESSION
+    ========================================================= */
+
+    async function checkExistingSession() {
+
+      try {
+
+        const {
+          data: {
+            session
+          }
+        } =
+        await supabaseClient.auth
+          .getSession();
+
+
+        if (!session) {
+          return;
+        }
+
+
+        const {
+          data: isStaff,
+          error
+        } =
+        await supabaseClient.rpc(
+          "is_staff"
+        );
+
+
+        if (error) {
+
+          console.warn(
+            "Permission check:",
+            error
+          );
+
+          return;
+        }
+
+
+        if (isStaff === true) {
+
+          window.location.replace(
+            "admin.html"
+          );
+
+        }
+
+      }
+      catch (error) {
+
+        console.warn(
+          "Existing session:",
+          error
+        );
+
+      }
+
+    }
+
+
+    /* =========================================================
+       START
+    ========================================================= */
+
+    checkExistingSession();
+
+  </script>
 
 </body>
 </html>
