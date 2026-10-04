@@ -1027,14 +1027,29 @@
       .brand{flex:1 1 auto;min-width:0}.brand-logo{width:132px;height:52px}.header-right{gap:7px}.header-user{display:none}
       .logout-button{min-height:38px;padding:0 10px;border-radius:9px;font-size:11px}
       .hero-wrap{width:100%;margin:10px 0 0;padding:0 12px}.desktop-training-hero{display:none}
-      .mobile-training-hero{min-height:315px;position:relative;display:flex;flex-direction:column;overflow:hidden;padding:20px 20px 0;border-radius:20px;background:linear-gradient(145deg,#eaf7ff 0%,#fff 58%,#fff4c9 100%);box-shadow:0 8px 25px rgba(11,45,103,.07)}
+      .mobile-training-hero{min-height:300px;position:relative;display:flex;flex-direction:column;overflow:hidden;padding:20px 20px 0;border-radius:20px;background:linear-gradient(145deg,#eaf7ff 0%,#fff 58%,#fff4c9 100%);box-shadow:0 8px 25px rgba(11,45,103,.07)}
       .mobile-training-copy{position:relative;z-index:4}.mobile-training-copy .hero-eyebrow{width:max-content;margin:0;padding:6px 12px;border-radius:999px;background:var(--yellow);color:var(--navy);font-size:11px}
       .mobile-training-copy h1{margin:13px 0 0;color:var(--navy);font-size:clamp(27px,8vw,34px);line-height:1.23}.mobile-training-copy h1 span{color:#087df0}
       .mobile-training-copy>p{max-width:340px;margin-top:7px;color:#637b9a;font-size:12.5px;line-height:1.65}
       .mobile-training-copy .hero-member{width:100%;margin-top:10px;padding:10px 12px;background:rgba(255,255,255,.72);border:1px solid #dce7f2;border-radius:12px}
       .mobile-training-copy .hero-member-label{color:#7b8799}.mobile-training-copy .hero-member-name{color:var(--navy);font-size:14px}
-      .mobile-training-visual{height:132px;min-height:132px;position:relative;z-index:2;flex:none;display:block;margin:8px -20px 0;overflow:hidden;background:#eef8ff}
-      .mobile-training-visual img{width:200%;max-width:none;height:132px;display:block;object-fit:cover;object-position:center center;transform:translateX(-50%)}
+      .mobile-training-visual{
+        height:126px;
+        min-height:126px;
+        position:relative;
+        z-index:2;
+        flex:none;
+        display:block;
+        margin:10px -20px 0;
+        overflow:hidden;
+        background:
+          linear-gradient(90deg,rgba(234,247,255,.10),rgba(255,255,255,.02)),
+          url("sante-member-hero.png");
+        background-size:220% auto;
+        background-position:78% 55%;
+        background-repeat:no-repeat;
+      }
+      .mobile-training-visual img{display:none !important}
       .container{width:100%;margin:24px 0 0;padding:0 12px calc(35px + env(safe-area-inset-bottom))}
       .section{margin-bottom:28px}.section-heading{margin-bottom:13px}.section-heading h2,.training-heading h2{font-size:21px}
       .section-heading p,.training-heading p{font-size:11.5px;line-height:1.55}
@@ -1052,16 +1067,6 @@
     @media (max-width:374px){.brand-logo{width:118px}.hero-wrap,.container{padding-left:10px;padding-right:10px}.mobile-training-copy h1{font-size:26px}}
 
   
-    @media (max-width:767px){
-      .mobile-training-visual img{
-        width:200% !important;
-        max-width:none !important;
-        height:132px !important;
-        object-fit:cover !important;
-        object-position:center center !important;
-        transform:translateX(-50%) !important;
-      }
-    }
 
   </style>
 </head>
