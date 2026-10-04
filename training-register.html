@@ -1033,8 +1033,8 @@
       .mobile-training-copy>p{max-width:340px;margin-top:7px;color:#637b9a;font-size:12.5px;line-height:1.65}
       .mobile-training-copy .hero-member{width:100%;margin-top:10px;padding:10px 12px;background:rgba(255,255,255,.72);border:1px solid #dce7f2;border-radius:12px}
       .mobile-training-copy .hero-member-label{color:#7b8799}.mobile-training-copy .hero-member-name{color:var(--navy);font-size:14px}
-      .mobile-training-visual{height:118px;min-height:118px;position:relative;z-index:2;flex:none;display:flex;align-items:center;justify-content:center;margin:6px -20px 0;overflow:hidden}
-      .mobile-training-visual img{width:100%;height:118px;display:block;object-fit:cover;object-position:center;transform:scale(1.85);transform-origin:78% 53%}
+      .mobile-training-visual{height:132px;min-height:132px;position:relative;z-index:2;flex:none;display:block;margin:8px -20px 0;overflow:hidden;background:#eef8ff}
+      .mobile-training-visual img{width:200%;max-width:none;height:132px;display:block;object-fit:cover;object-position:center center;transform:translateX(-50%)}
       .container{width:100%;margin:24px 0 0;padding:0 12px calc(35px + env(safe-area-inset-bottom))}
       .section{margin-bottom:28px}.section-heading{margin-bottom:13px}.section-heading h2,.training-heading h2{font-size:21px}
       .section-heading p,.training-heading p{font-size:11.5px;line-height:1.55}
@@ -1050,6 +1050,18 @@
       .modal-button{width:100%;min-height:46px;font-size:13px}
     }
     @media (max-width:374px){.brand-logo{width:118px}.hero-wrap,.container{padding-left:10px;padding-right:10px}.mobile-training-copy h1{font-size:26px}}
+
+  
+    @media (max-width:767px){
+      .mobile-training-visual img{
+        width:200% !important;
+        max-width:none !important;
+        height:132px !important;
+        object-fit:cover !important;
+        object-position:center center !important;
+        transform:translateX(-50%) !important;
+      }
+    }
 
   </style>
 </head>
