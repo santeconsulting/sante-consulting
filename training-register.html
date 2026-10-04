@@ -1057,9 +1057,9 @@
 .brand{display:flex;align-items:center}.brand-logo{display:block;width:176px;height:auto;object-fit:contain}
 .header-right{display:flex;align-items:center;gap:16px}.home-button,.logout-button{min-height:46px;padding:0 20px;background:#fff;color:#112443;border:1px solid #d8e1ec;border-radius:14px;font-size:14px;font-weight:600;display:inline-flex;align-items:center;justify-content:center}
 .home-button:hover,.logout-button:hover{background:#f7f9fc}.header-user{text-align:right}.header-user-name{font-size:14px;font-weight:700;color:#112443}.header-user-email{font-size:12px;color:#78869a;margin-top:2px}
-.hero-wrap{width:min(1480px,calc(100% - 64px));max-width:none;margin:32px auto 0;padding:0}.hero{min-height:0;padding:0;background:none;border-radius:28px;box-shadow:0 18px 45px rgba(18,46,84,.10);overflow:hidden}.hero::before{display:none}.desktop-training-hero{display:block;width:100%;height:auto;max-height:430px;object-fit:cover;border-radius:28px}.mobile-training-hero{display:none;background:linear-gradient(145deg,#112443,#1d4f86);border-radius:22px;overflow:hidden;color:#fff}.mobile-training-copy{padding:25px 22px 8px}.mobile-training-badge{display:inline-flex;padding:6px 10px;border-radius:999px;background:rgba(248,199,61,.15);color:#f8c73d;font-size:11px;font-weight:700}.mobile-training-copy h1{font-size:29px;line-height:1.3;margin:12px 0 8px}.mobile-training-copy p{font-size:13px;line-height:1.7;color:#dce7f6}.mobile-training-visual{height:190px;overflow:hidden}.mobile-training-visual img{width:100%;height:100%;object-fit:cover;object-position:center}.mobile-member{margin-top:13px;font-size:12px;color:#c8d7e9}.mobile-member strong{color:#fff;font-size:14px}
+.hero-wrap{width:min(1480px,calc(100% - 64px));max-width:none;margin:32px auto 0;padding:0}.hero{min-height:0;padding:0;background:none;border-radius:28px;box-shadow:0 18px 45px rgba(18,46,84,.10);overflow:hidden}.hero::before{display:none}.desktop-training-hero{display:block;width:100%;height:auto;max-height:430px;object-fit:cover;border-radius:28px}.mobile-training-hero{display:none;background:linear-gradient(145deg,#112443,#1d4f86);border-radius:22px;overflow:hidden;color:#fff}.mobile-training-copy{padding:25px 22px 8px}.mobile-training-badge{display:inline-flex;padding:6px 10px;border-radius:999px;background:rgba(248,199,61,.15);color:#f8c73d;font-size:11px;font-weight:700}.mobile-training-copy h1{font-size:29px;line-height:1.3;margin:12px 0 8px}.mobile-training-copy p{font-size:13px;line-height:1.7;color:#dce7f6}.mobile-training-visual{height:auto;overflow:hidden;background:#112443}.mobile-training-visual img{display:block;width:100%;height:auto;object-fit:contain;object-position:center}.mobile-member{margin-top:13px;font-size:12px;color:#c8d7e9}.mobile-member strong{color:#fff;font-size:14px}
 @media(max-width:900px){.site-header{height:76px;padding:0 18px}.brand-logo{width:140px}.header-user{display:none}.home-button,.logout-button{min-height:40px;padding:0 13px;font-size:12px}.header-right{gap:8px}.hero-wrap{width:calc(100% - 28px);margin-top:18px}.desktop-training-hero{display:none}.mobile-training-hero{display:block}.hero{box-shadow:0 12px 30px rgba(18,46,84,.10);border-radius:22px}}
-@media(max-width:480px){.site-header{padding:0 12px}.brand-logo{width:118px}.home-button{display:none}.logout-button{padding:0 11px;font-size:11px}.hero-wrap{width:calc(100% - 20px);margin-top:12px}.mobile-training-copy{padding:21px 18px 6px}.mobile-training-copy h1{font-size:25px}.mobile-training-visual{height:165px}}
+@media(max-width:480px){.site-header{padding:0 12px}.brand-logo{width:118px}.home-button{display:none}.logout-button{padding:0 11px;font-size:11px}.hero-wrap{width:calc(100% - 20px);margin-top:12px}.mobile-training-copy{padding:21px 18px 6px}.mobile-training-copy h1{font-size:25px}.mobile-training-visual{height:auto}}
 @media(min-width:1600px){.brand-logo{width:190px}.header-user-name{font-size:15px}.header-user-email{font-size:13px}}
 
 
@@ -1226,6 +1226,18 @@ html,body,button,input,select,textarea{font-family:"Prompt",sans-serif!important
  .section-heading h2,.training-heading h2{font-size:22px!important}.section-heading p,.training-heading p{font-size:13px!important}
  .modal-backdrop{padding:8px!important}.modal{max-height:calc(100dvh - 16px)!important;padding:19px 16px 22px!important;border-radius:18px!important}
  .modal h3{font-size:21px!important}.modal-description{font-size:12px!important}.selected-session{font-size:13px!important}
+}
+
+
+/* ===== SANTE MOBILE HERO — SHOW COMPLETE IMAGE ===== */
+@media (max-width:900px){
+  .mobile-training-hero{display:block!important;overflow:hidden!important}
+  .mobile-training-visual{width:100%!important;height:auto!important;min-height:0!important;overflow:visible!important;background:#112443!important}
+  .mobile-training-visual img{display:block!important;width:100%!important;height:auto!important;max-width:100%!important;max-height:none!important;object-fit:contain!important;object-position:center center!important}
+}
+@media (max-width:480px){
+  .mobile-training-visual{height:auto!important}
+  .mobile-training-visual img{width:100%!important;height:auto!important;object-fit:contain!important}
 }
 
 </style>
