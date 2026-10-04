@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>สมัครเข้าร่วมการอบรม | SANTE</title>
 
@@ -999,298 +999,17 @@
         width: 100%;
       }
     }
-  
-    /* SANTE responsive master */
-    html,body{width:100%;overflow-x:hidden}
-    body{background:linear-gradient(180deg,#fff 0%,#f7fbfe 35%,#eef7fc 100%)}
-    .site-header{height:82px;padding:0 max(28px,calc((100vw - 1480px)/2));background:rgba(255,255,255,.97);box-shadow:0 3px 16px rgba(11,45,103,.04)}
-    .brand-logo{width:220px;height:68px;display:block;object-fit:contain;object-position:left center}
-    .hero-wrap{max-width:1480px;margin:24px auto 0;padding:0 24px}
-    .desktop-training-hero{overflow:hidden;border-radius:28px;background:#fff;box-shadow:0 10px 30px rgba(11,45,103,.07)}
-    .desktop-training-hero img{width:100%;height:auto;display:block}
-    .mobile-training-hero{display:none}
-    .container{width:min(1432px,calc(100% - 48px));margin:30px auto 70px}
-    .document-decision{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:14px 0 16px}
-    .decision-option{display:flex;align-items:flex-start;gap:11px;padding:15px;border:1px solid #dfe5ed;border-radius:12px;background:#fff;cursor:pointer}
-    .decision-option.selected{border-color:#d2aa24;background:#fffaf0;box-shadow:0 0 0 2px rgba(248,199,61,.10)}
-    .decision-option input{width:18px;height:18px;margin-top:2px;accent-color:#d6a800;flex:none}
-    .decision-option strong{display:block;color:var(--navy);font-size:13px}
-    .decision-option small{display:block;margin-top:3px;color:var(--muted);font-size:10px;line-height:1.55}
-    .document-choices{display:none}.document-choices.show{display:block}
-    @media (min-width:768px) and (max-width:1023px){
-      .site-header{height:76px;padding:0 24px}.brand-logo{width:180px;height:62px}
-      .hero-wrap{margin-top:18px;padding:0 18px}.desktop-training-hero{border-radius:22px}
-      .container{width:calc(100% - 36px);margin-top:28px}.training-grid{grid-template-columns:1fr}
-    }
-    @media (max-width:767px){
-      .site-header{height:auto;min-height:64px;padding:7px max(12px,env(safe-area-inset-right)) 7px max(12px,env(safe-area-inset-left));gap:8px}
-      .brand{flex:1 1 auto;min-width:0}.brand-logo{width:132px;height:52px}.header-right{gap:7px}.header-user{display:none}
-      .logout-button{min-height:38px;padding:0 10px;border-radius:9px;font-size:11px}
-      .hero-wrap{width:100%;margin:10px 0 0;padding:0 12px}.desktop-training-hero{display:none}
-      .mobile-training-hero{min-height:300px;position:relative;display:flex;flex-direction:column;overflow:hidden;padding:20px 20px 0;border-radius:20px;background:linear-gradient(145deg,#eaf7ff 0%,#fff 58%,#fff4c9 100%);box-shadow:0 8px 25px rgba(11,45,103,.07)}
-      .mobile-training-copy{position:relative;z-index:4}.mobile-training-copy .hero-eyebrow{width:max-content;margin:0;padding:6px 12px;border-radius:999px;background:var(--yellow);color:var(--navy);font-size:11px}
-      .mobile-training-copy h1{margin:13px 0 0;color:var(--navy);font-size:clamp(27px,8vw,34px);line-height:1.23}.mobile-training-copy h1 span{color:#087df0}
-      .mobile-training-copy>p{max-width:340px;margin-top:7px;color:#637b9a;font-size:12.5px;line-height:1.65}
-      .mobile-training-copy .hero-member{width:100%;margin-top:10px;padding:10px 12px;background:rgba(255,255,255,.72);border:1px solid #dce7f2;border-radius:12px}
-      .mobile-training-copy .hero-member-label{color:#7b8799}.mobile-training-copy .hero-member-name{color:var(--navy);font-size:14px}
-      .mobile-training-visual{
-        position:relative;
-        z-index:2;
-        flex:none;
-        display:block;
-        margin:12px -20px 0;
-        overflow:hidden;
-        background:#fff;
-      }
-      .mobile-training-visual img{
-        width:100%;
-        height:auto;
-        display:block !important;
-        object-fit:contain;
-        object-position:center;
-        transform:none !important;
-      }
-      .container{width:100%;margin:24px 0 0;padding:0 12px calc(35px + env(safe-area-inset-bottom))}
-      .section{margin-bottom:28px}.section-heading{margin-bottom:13px}.section-heading h2,.training-heading h2{font-size:21px}
-      .section-heading p,.training-heading p{font-size:11.5px;line-height:1.55}
-      .member-card{grid-template-columns:1fr;gap:12px;padding:16px;border-radius:17px}
-      .training-heading{display:block;margin-bottom:13px}.search-box{width:100%;margin-top:12px}.search-input{height:44px;font-size:13px}
-      .training-grid{grid-template-columns:1fr;gap:12px}.training-card{border-radius:17px}.card-main{padding:17px 16px 14px}
-      .session-name{margin-bottom:13px;font-size:17px}.detail{grid-template-columns:78px minmax(0,1fr);gap:7px;font-size:11.5px}
-      .card-footer{padding:14px 16px 16px;flex-direction:column;align-items:stretch}.register-button{width:100%;min-height:44px;font-size:13px}
-      .modal-backdrop{align-items:flex-end;padding:0}.modal{width:100%;max-height:92dvh;padding:20px 14px calc(18px + env(safe-area-inset-bottom));border-radius:22px 22px 0 0}
-      .modal h3{font-size:20px}.form-section{margin-top:20px;padding-top:18px}.form-grid,.member-snapshot,.document-decision{grid-template-columns:1fr}.field.full{grid-column:auto}
-      .field input,.field select{height:46px;font-size:13px}.field textarea{font-size:13px}.billing-type-options{flex-direction:column}
-      .modal-actions{position:sticky;bottom:0;z-index:5;margin:24px -14px -18px;padding:12px 14px calc(12px + env(safe-area-inset-bottom));background:rgba(255,255,255,.97);border-top:1px solid #e8ecf2;flex-direction:column-reverse}
-      .modal-button{width:100%;min-height:46px;font-size:13px}
-    }
-    @media (max-width:374px){.brand-logo{width:118px}.hero-wrap,.container{padding-left:10px;padding-right:10px}.mobile-training-copy h1{font-size:26px}}
-
-  
-
-  
-    /* =========================================================
-       DESKTOP READABILITY TUNING
-       เพิ่มขนาดตัวอักษรสำหรับจอคอม โดยไม่กระทบ Mobile
-    ========================================================= */
-    @media (min-width:1024px){
-      body{
-        font-size:16px;
-      }
-
-      .site-header{
-        min-height:92px;
-      }
-
-      .brand-logo{
-        width:235px;
-        height:72px;
-      }
-
-      .header-user-name{
-        font-size:16px;
-        line-height:1.35;
-      }
-
-      .header-user-email{
-        font-size:14px;
-        line-height:1.4;
-      }
-
-      .logout-button{
-        min-height:48px;
-        padding:0 22px;
-        font-size:15px;
-        border-radius:12px;
-      }
-
-      .container{
-        width:min(1640px,calc(100% - 80px));
-        margin-top:38px;
-      }
-
-      .section-heading h2,
-      .training-heading h2{
-        font-size:30px;
-        line-height:1.25;
-      }
-
-      .section-heading p,
-      .training-heading p{
-        margin-top:7px;
-        font-size:16px;
-        line-height:1.6;
-      }
-
-      .search-box{
-        width:380px;
-      }
-
-      .search-input{
-        height:52px;
-        padding:0 18px;
-        font-size:15px;
-        border-radius:12px;
-      }
-
-      .training-grid{
-        gap:26px;
-      }
-
-      .training-card{
-        border-radius:22px;
-      }
-
-      .card-main{
-        padding:28px 30px 24px;
-      }
-
-      .tags{
-        gap:9px;
-        margin-bottom:18px;
-      }
-
-      .tag,
-      .course-type-name{
-        font-size:13px;
-        line-height:1.3;
-      }
-
-      .session-name{
-        margin-top:8px;
-        margin-bottom:22px;
-        font-size:23px;
-        line-height:1.4;
-      }
-
-      .detail{
-        grid-template-columns:112px minmax(0,1fr);
-        gap:10px 16px;
-        font-size:15px;
-        line-height:1.55;
-      }
-
-      .detail-label{
-        font-size:14px;
-      }
-
-      .detail-value{
-        font-size:15px;
-      }
-
-      .card-footer{
-        padding:20px 30px 22px;
-      }
-
-      .price-label{
-        font-size:13px;
-      }
-
-      .price{
-        margin-top:3px;
-        font-size:24px;
-      }
-
-      .register-button{
-        min-width:160px;
-        min-height:50px;
-        padding:0 24px;
-        font-size:15px;
-        border-radius:12px;
-      }
-
-      .member-card{
-        padding:26px 30px;
-        border-radius:20px;
-      }
-
-      .info-label{
-        font-size:13px;
-      }
-
-      .info-value{
-        margin-top:5px;
-        font-size:17px;
-      }
-
-      .modal{
-        font-size:15px;
-      }
-
-      .modal h3{
-        font-size:25px;
-      }
-
-      .form-section-title{
-        font-size:18px;
-      }
-
-      .form-section-description,
-      .document-note{
-        font-size:13px;
-        line-height:1.6;
-      }
-
-      .field label{
-        font-size:13px;
-      }
-
-      .field input,
-      .field select{
-        min-height:48px;
-        font-size:15px;
-      }
-
-      .field textarea{
-        font-size:15px;
-      }
-
-      .modal-button{
-        min-height:48px;
-        font-size:15px;
-      }
-    }
-
-    @media (min-width:1600px){
-      .container{
-        width:min(1680px,calc(100% - 110px));
-      }
-
-      .section-heading h2,
-      .training-heading h2{
-        font-size:32px;
-      }
-
-      .section-heading p,
-      .training-heading p{
-        font-size:17px;
-      }
-
-      .session-name{
-        font-size:25px;
-      }
-
-      .detail{
-        font-size:16px;
-      }
-
-      .detail-label{
-        font-size:15px;
-      }
-
-      .detail-value{
-        font-size:16px;
-      }
-    }
-
   </style>
 </head>
 
 <body>
 
 <header class="site-header">
-  <a class="brand" href="member-home.html" aria-label="กลับหน้าหลักสมาชิก">
-    <img src="sante%20(en)-logo.png" alt="SANTE Consulting" class="brand-logo">
+  <a class="brand" href="index.html">
+    <div class="brand-mark">
+      <span></span><span></span><span></span><span></span><span></span>
+    </div>
+    <div class="brand-name">SANTE</div>
   </a>
 
   <div class="header-right">
@@ -1306,21 +1025,21 @@
 </header>
 
 <div class="hero-wrap">
-  <section class="desktop-training-hero">
-    <img src="sante-mobile-hero.png" alt="Trust in Safety. Trust in SANTE.">
-  </section>
-  <section class="mobile-training-hero">
-    <div class="mobile-training-copy">
+  <section class="hero">
+    <div class="hero-content">
       <div class="hero-eyebrow">SANTE TRAINING</div>
-      <h1>สมัครเข้าร่วม<br><span>การอบรม</span></h1>
-      <p>เลือกรอบอบรมที่ต้องการ ระบบจะดึงข้อมูลสมาชิกของคุณมาใช้โดยอัตโนมัติ และให้กรอกเฉพาะข้อมูลเพิ่มเติมที่จำเป็น</p>
+
+      <h1>สมัครเข้าร่วมการอบรม</h1>
+
+      <div class="hero-description">
+        เลือกรอบการอบรมที่ต้องการ ระบบจะดึงข้อมูลสมาชิกของคุณมาใช้โดยอัตโนมัติ
+        และให้กรอกเฉพาะข้อมูลเพิ่มเติมที่จำเป็น
+      </div>
+
       <div class="hero-member">
         <div class="hero-member-label">เข้าสู่ระบบในชื่อ</div>
         <div id="heroMemberName" class="hero-member-name">กำลังโหลด...</div>
       </div>
-    </div>
-    <div class="mobile-training-visual">
-      <img src="sante-mobile-hero.png" alt="Trust in Safety. Trust in SANTE.">
     </div>
   </section>
 </div>
@@ -1540,21 +1259,13 @@
 
     <section id="documentSection" class="form-section document-section">
 
-      <div class="form-section-title">ต้องการเอกสารทางบัญชีหรือไม่?</div>
+      <div class="form-section-title">เอกสารที่ต้องการ</div>
+
       <div class="form-section-description">
-        หากไม่ต้องการเอกสาร ระบบจะข้ามข้อมูลออกเอกสารและไปหน้าชำระเงินหลังสมัครสำเร็จ
+        สำหรับอบรม (มีค่าใช้จ่าย) สามารถเลือกได้มากกว่า 1 รายการ
+        หรือไม่เลือกเอกสารก็ได้
       </div>
-      <div class="document-decision">
-        <label class="decision-option selected">
-          <input type="radio" name="documentNeed" value="NO" checked>
-          <span><strong>ไม่ต้องการเอกสาร</strong><small>สมัครและไปหน้าชำระเงินได้ทันที</small></span>
-        </label>
-        <label class="decision-option">
-          <input type="radio" name="documentNeed" value="YES">
-          <span><strong>ต้องการเอกสาร</strong><small>เลือกประเภทเอกสารและข้อมูลสำหรับออกเอกสาร</small></span>
-        </label>
-      </div>
-      <div id="documentChoices" class="document-choices">
+
       <div class="document-options">
 
         <label class="document-option">
@@ -1605,9 +1316,10 @@
       </div>
 
       <div class="document-note">
-        เลือกเอกสารอย่างน้อย 1 รายการ แล้วเลือกหรือกรอกข้อมูลสำหรับออกเอกสารด้านล่าง
+        เมื่อเลือกเอกสารอย่างน้อย 1 รายการ
+        กรุณาเลือกหรือกรอกข้อมูลสำหรับออกเอกสารด้านล่าง
       </div>
-      </div>
+
     </section>
 
     <section id="billingSection" class="form-section billing-section">
@@ -1878,12 +1590,6 @@
   const billingSection =
     document.getElementById("billingSection");
 
-  const documentChoices =
-    document.getElementById("documentChoices");
-
-  const documentNeedRadios =
-    document.querySelectorAll('input[name="documentNeed"]');
-
   const billingProfilesContainer =
     document.getElementById("billingProfiles");
 
@@ -2022,7 +1728,16 @@
   }
 
   function isPaidSession(session) {
-    return String(session?.courses?.course_type || "").toUpperCase() === "PAID_TRAINING";
+    const courseType = String(
+      session?.courses?.course_type || ""
+    ).toUpperCase();
+
+    // ใช้ course_type เป็นหลัก และใช้ราคาเป็น fallback
+    // เพื่อไม่ให้ Paid Training หลุดไปเข้า Free flow หาก relation courses โหลดช้าหรือไม่ครบ
+    return (
+      courseType === "PAID_TRAINING" ||
+      (courseType !== "FREE_TRAINING" && Number(session?.price || 0) > 0)
+    );
   }
 
   function trainingTypeDisplay(session) {
@@ -2053,7 +1768,18 @@
       };
     }
 
-    if (status === "PENDING" && isPaidSession(session)) {
+    const paymentStatus =
+      String(registration.payment_status || "").toUpperCase();
+
+    const waitingForPayment =
+      isPaidSession(session) &&
+      paymentStatus !== "VERIFIED" &&
+      paymentStatus !== "PAID" &&
+      status !== "CANCELLED";
+
+    // Paid Training ที่ยังไม่ชำระ ต้องกลับมาชำระเงินต่อได้เสมอ
+    // ไม่บังคับให้สมัครใหม่ และไม่ต้องลบประวัติการสมัคร
+    if (waitingForPayment) {
       return {
         text: "ชำระเงิน",
         className: "pending",
@@ -2122,6 +1848,61 @@
     }
   }
 
+  async function findRegistrationForSession(sessionId) {
+    // ใช้ข้อมูลที่โหลดไว้ก่อน เพื่อลด request
+    const cached = getRegistration(sessionId);
+    if (cached?.id) return cached;
+
+    const { data, error } = await db
+      .from("training_registrations")
+      .select(`
+        id,
+        training_session_id,
+        registration_status,
+        payment_required,
+        payment_status,
+        registered_at
+      `)
+      .eq("user_id", currentUser.id)
+      .eq("training_session_id", sessionId)
+      .neq("registration_status", "CANCELLED")
+      .order("registered_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    if (error) throw error;
+    return data || null;
+  }
+
+  async function continuePaidTrainingPayment(
+    session,
+    preferredRegistrationId = null,
+    button = null
+  ) {
+    if (!session || !isPaidSession(session)) {
+      throw new Error("รายการนี้ไม่ใช่รอบอบรมแบบมีค่าใช้จ่าย");
+    }
+
+    let registrationId = preferredRegistrationId;
+
+    if (!registrationId) {
+      const registration =
+        await findRegistrationForSession(session.id);
+      registrationId = registration?.id || null;
+    }
+
+    if (!registrationId) {
+      throw new Error(
+        "ไม่พบเลขอ้างอิงการสมัครสำหรับสร้างรายการชำระเงิน"
+      );
+    }
+
+    await goToPaymentForRegistration(
+      registrationId,
+      button
+    );
+  }
+
   function registrationWindow(session) {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -2169,31 +1950,21 @@
     };
   }
 
-  function wantsAccountingDocuments() {
-    return document.querySelector('input[name="documentNeed"]:checked')?.value === "YES";
-  }
-
   function getSelectedDocuments() {
-    if (!selectedSession || !isPaidSession(selectedSession) || !wantsAccountingDocuments()) {
+    if (
+      !selectedSession ||
+      !isPaidSession(selectedSession)
+    ) {
       return [];
     }
-    return Array.from(document.querySelectorAll(".document-checkbox:checked")).map(item => item.value);
-  }
 
-  function updateDocumentDecisionUI() {
-    document.querySelectorAll(".decision-option").forEach(box => {
-      const radio = box.querySelector('input[name="documentNeed"]');
-      box.classList.toggle("selected", Boolean(radio?.checked));
-    });
-    const wants = wantsAccountingDocuments();
-    documentChoices.classList.toggle("show", wants);
-    if (!wants) {
-      document.querySelectorAll(".document-checkbox").forEach(checkbox => {
-        checkbox.checked = false;
-        checkbox.closest(".document-option")?.classList.remove("selected");
-      });
-    }
-    updateBillingVisibility();
+    return Array
+      .from(
+        document.querySelectorAll(
+          ".document-checkbox:checked"
+        )
+      )
+      .map(item => item.value);
   }
 
   function needsTaxId() {
@@ -2825,10 +2596,6 @@
           ?.classList.remove("selected");
       });
 
-    const documentNoRadio = document.querySelector('input[name="documentNeed"][value="NO"]');
-    if (documentNoRadio) documentNoRadio.checked = true;
-    documentChoices.classList.remove("show");
-
     selectedBillingProfileId = null;
     createNewBilling = false;
 
@@ -2850,10 +2617,9 @@
 
       resetBillingForm();
       renderBillingProfiles();
-      updateDocumentDecisionUI();
 
       confirmButton.textContent =
-        "ยืนยันข้อมูลการสมัครและไปชำระเงิน";
+        "ยืนยันข้อมูลการสมัคร";
     } else {
       documentSection.classList.remove("show");
 
@@ -2884,10 +2650,6 @@
       }
     }
   );
-
-  documentNeedRadios.forEach(radio => {
-    radio.addEventListener("change", updateDocumentDecisionUI);
-  });
 
   document
     .querySelectorAll(".document-checkbox")
@@ -3196,11 +2958,6 @@
           ? getSelectedDocuments()
           : [];
 
-      if (paid && wantsAccountingDocuments() && documentTypes.length === 0) {
-        alert("กรุณาเลือกเอกสารที่ต้องการอย่างน้อย 1 รายการ");
-        return;
-      }
-
       confirmButton.disabled = true;
       confirmButton.textContent = "กำลังบันทึก...";
 
@@ -3247,73 +3004,23 @@
 
         /*
           PAID TRAINING:
-          หลังสมัครสำเร็จ ให้สร้าง Order + Payment
-          แล้วไปหน้าชำระเงินทันที
+          สมัครสำเร็จแล้วต้องไป Payment เสมอ
+          รองรับทั้ง RPC ที่คืน registration_id และ RPC ที่ไม่คืน id
         */
         if (paid) {
-          let registrationId =
+          const registrationId =
             result.registration_id ||
             result.id ||
-            result.training_registration_id;
-
-          // Fallback: บางเวอร์ชันของ RPC สมัครอบรมไม่ได้คืน registration_id
-          if (!registrationId) {
-            const { data: registrationRow, error: registrationLookupError } =
-              await db
-                .from("training_registrations")
-                .select("id")
-                .eq("user_id", currentUser.id)
-                .eq("training_session_id", selectedSession.id)
-                .neq("registration_status", "CANCELLED")
-                .order("created_at", { ascending: false })
-                .limit(1)
-                .maybeSingle();
-
-            if (registrationLookupError) {
-              throw registrationLookupError;
-            }
-
-            registrationId = registrationRow?.id || null;
-          }
-
-          if (!registrationId) {
-            throw new Error(
-              "สมัครอบรมสำเร็จ แต่ไม่พบเลขอ้างอิงการสมัครสำหรับสร้างรายการชำระเงิน"
-            );
-          }
+            result.training_registration_id ||
+            null;
 
           confirmButton.textContent =
-            "กำลังสร้างรายการชำระเงิน...";
+            "กำลังเปิดหน้าชำระเงิน...";
 
-          const {
-            data: paymentData,
-            error: paymentError
-          } = await db.rpc(
-            "create_training_payment",
-            {
-              p_training_registration_id:
-                registrationId
-            }
-          );
-
-          if (paymentError) {
-            throw paymentError;
-          }
-
-          const paymentResult =
-            paymentData || {};
-
-          if (!paymentResult.payment_id) {
-            throw new Error(
-              "สร้างรายการชำระเงินไม่สำเร็จ กรุณาลองใหม่อีกครั้ง"
-            );
-          }
-
-          window.location.replace(
-            "payment.html?payment=" +
-            encodeURIComponent(
-              paymentResult.payment_id
-            )
+          await continuePaidTrainingPayment(
+            selectedSession,
+            registrationId,
+            confirmButton
           );
 
           return;
@@ -3359,9 +3066,41 @@
       } catch (error) {
         console.error(error);
 
-        alert(
-          translateError(error)
-        );
+        const errorText =
+          String(error?.message || error || "").toUpperCase();
+
+        // กรณีสมาชิกเคยสมัคร Paid Training แล้ว
+        // ไม่ให้จบที่ ALREADY_REGISTERED แต่พาไปชำระรายการเดิมต่อทันที
+        if (
+          paid &&
+          errorText.includes("ALREADY_REGISTERED")
+        ) {
+          try {
+            confirmButton.textContent =
+              "กำลังเปิดหน้าชำระเงิน...";
+
+            await continuePaidTrainingPayment(
+              selectedSession,
+              null,
+              confirmButton
+            );
+
+            return;
+          } catch (paymentResumeError) {
+            console.error(
+              "Resume payment error:",
+              paymentResumeError
+            );
+
+            alert(
+              translateError(paymentResumeError)
+            );
+          }
+        } else {
+          alert(
+            translateError(error)
+          );
+        }
 
       } finally {
         confirmButton.disabled = false;
@@ -3371,7 +3110,7 @@
           isPaidSession(selectedSession)
         ) {
           confirmButton.textContent =
-            "ยืนยันข้อมูลการสมัครและไปชำระเงิน";
+            "ยืนยันข้อมูลการสมัคร";
         } else {
           confirmButton.textContent =
             "ยืนยันสมัครเข้าร่วม";
