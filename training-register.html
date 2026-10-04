@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>สมัครเข้าร่วมการอบรม | SANTE</title>
+  <!-- SANTE Paid -> Payment direct navigation fix -->
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -2070,6 +2071,21 @@ html,body,button,input,select,textarea{font-family:"Prompt",sans-serif!important
     };
   }
 
+  function openPaymentPage(paymentId) {
+    if (!paymentId) {
+      throw new Error("ไม่พบรายการชำระเงิน กรุณาลองใหม่อีกครั้ง");
+    }
+
+    const paymentUrl = new URL("payment.html", window.location.href);
+    paymentUrl.searchParams.set("payment", paymentId);
+
+    // เก็บไว้เป็น fallback เผื่อ query string ถูกตัดระหว่าง navigation/cache
+    sessionStorage.setItem("sante-pending-payment-id", paymentId);
+
+    // Paid Training ต้องไป Payment โดยตรง ไม่ผ่าน Member Home
+    window.location.assign(paymentUrl.href);
+  }
+
   async function goToPaymentForRegistration(registrationId, button = null) {
     if (!registrationId) {
       throw new Error("ไม่พบเลขอ้างอิงการสมัครอบรม");
@@ -2098,9 +2114,7 @@ html,body,button,input,select,textarea{font-family:"Prompt",sans-serif!important
         throw new Error("ไม่พบรายการชำระเงิน กรุณาลองใหม่อีกครั้ง");
       }
 
-      window.location.href =
-        "payment.html?payment=" +
-        encodeURIComponent(paymentResult.payment_id);
+      openPaymentPage(paymentResult.payment_id);
     } catch (error) {
       console.error("Payment redirect error:", error);
 
@@ -3345,12 +3359,7 @@ html,body,button,input,select,textarea{font-family:"Prompt",sans-serif!important
             );
           }
 
-          window.location.replace(
-            "payment.html?payment=" +
-            encodeURIComponent(
-              paymentResult.payment_id
-            )
-          );
+          openPaymentPage(paymentResult.payment_id);
 
           return;
         }
