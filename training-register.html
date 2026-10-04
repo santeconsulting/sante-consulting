@@ -2847,6 +2847,60 @@
 
         const result = data || {};
 
+        /*
+          PAID TRAINING:
+          หลังสมัครสำเร็จ ให้สร้าง Order + Payment
+          แล้วไปหน้าชำระเงินทันที
+        */
+        if (paid) {
+          const registrationId =
+            result.registration_id ||
+            result.id ||
+            result.training_registration_id;
+
+          if (!registrationId) {
+            throw new Error(
+              "สมัครอบรมสำเร็จ แต่ไม่พบเลขอ้างอิงการสมัครสำหรับสร้างรายการชำระเงิน"
+            );
+          }
+
+          confirmButton.textContent =
+            "กำลังสร้างรายการชำระเงิน...";
+
+          const {
+            data: paymentData,
+            error: paymentError
+          } = await db.rpc(
+            "create_training_payment",
+            {
+              p_training_registration_id:
+                registrationId
+            }
+          );
+
+          if (paymentError) {
+            throw paymentError;
+          }
+
+          const paymentResult =
+            paymentData || {};
+
+          if (!paymentResult.payment_id) {
+            throw new Error(
+              "สร้างรายการชำระเงินไม่สำเร็จ กรุณาลองใหม่อีกครั้ง"
+            );
+          }
+
+          window.location.replace(
+            "payment.html?payment=" +
+            encodeURIComponent(
+              paymentResult.payment_id
+            )
+          );
+
+          return;
+        }
+
         closeRegistrationModal();
 
         if (
