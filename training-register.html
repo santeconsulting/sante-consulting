@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
   <title>สมัครเข้าร่วมการอบรม | SANTE</title>
 
@@ -999,17 +999,66 @@
         width: 100%;
       }
     }
+  
+    /* SANTE responsive master */
+    html,body{width:100%;overflow-x:hidden}
+    body{background:linear-gradient(180deg,#fff 0%,#f7fbfe 35%,#eef7fc 100%)}
+    .site-header{height:82px;padding:0 max(28px,calc((100vw - 1480px)/2));background:rgba(255,255,255,.97);box-shadow:0 3px 16px rgba(11,45,103,.04)}
+    .brand-logo{width:220px;height:68px;display:block;object-fit:contain;object-position:left center}
+    .hero-wrap{max-width:1480px;margin:24px auto 0;padding:0 24px}
+    .desktop-training-hero{overflow:hidden;border-radius:28px;background:#fff;box-shadow:0 10px 30px rgba(11,45,103,.07)}
+    .desktop-training-hero img{width:100%;height:auto;display:block}
+    .mobile-training-hero{display:none}
+    .container{width:min(1432px,calc(100% - 48px));margin:30px auto 70px}
+    .document-decision{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:14px 0 16px}
+    .decision-option{display:flex;align-items:flex-start;gap:11px;padding:15px;border:1px solid #dfe5ed;border-radius:12px;background:#fff;cursor:pointer}
+    .decision-option.selected{border-color:#d2aa24;background:#fffaf0;box-shadow:0 0 0 2px rgba(248,199,61,.10)}
+    .decision-option input{width:18px;height:18px;margin-top:2px;accent-color:#d6a800;flex:none}
+    .decision-option strong{display:block;color:var(--navy);font-size:13px}
+    .decision-option small{display:block;margin-top:3px;color:var(--muted);font-size:10px;line-height:1.55}
+    .document-choices{display:none}.document-choices.show{display:block}
+    @media (min-width:768px) and (max-width:1023px){
+      .site-header{height:76px;padding:0 24px}.brand-logo{width:180px;height:62px}
+      .hero-wrap{margin-top:18px;padding:0 18px}.desktop-training-hero{border-radius:22px}
+      .container{width:calc(100% - 36px);margin-top:28px}.training-grid{grid-template-columns:1fr}
+    }
+    @media (max-width:767px){
+      .site-header{height:auto;min-height:64px;padding:7px max(12px,env(safe-area-inset-right)) 7px max(12px,env(safe-area-inset-left));gap:8px}
+      .brand{flex:1 1 auto;min-width:0}.brand-logo{width:118px;height:50px}.header-right{gap:7px}.header-user{display:none}
+      .logout-button{min-height:38px;padding:0 10px;border-radius:9px;font-size:11px}
+      .hero-wrap{width:100%;margin:10px 0 0;padding:0 12px}.desktop-training-hero{display:none}
+      .mobile-training-hero{min-height:390px;position:relative;display:flex;flex-direction:column;overflow:hidden;padding:23px 20px 0;border-radius:20px;background:linear-gradient(145deg,#eaf7ff 0%,#fff 58%,#fff4c9 100%);box-shadow:0 8px 25px rgba(11,45,103,.07)}
+      .mobile-training-copy{position:relative;z-index:4}.mobile-training-copy .hero-eyebrow{width:max-content;margin:0;padding:6px 12px;border-radius:999px;background:var(--yellow);color:var(--navy);font-size:11px}
+      .mobile-training-copy h1{margin:13px 0 0;color:var(--navy);font-size:clamp(27px,8vw,34px);line-height:1.23}.mobile-training-copy h1 span{color:#087df0}
+      .mobile-training-copy>p{max-width:320px;margin-top:9px;color:#637b9a;font-size:12.5px;line-height:1.65}
+      .mobile-training-copy .hero-member{width:100%;margin-top:13px;padding:10px 12px;background:rgba(255,255,255,.72);border:1px solid #dce7f2;border-radius:12px}
+      .mobile-training-copy .hero-member-label{color:#7b8799}.mobile-training-copy .hero-member-name{color:var(--navy);font-size:14px}
+      .mobile-training-visual{min-height:150px;position:relative;z-index:2;flex:1;display:flex;align-items:flex-end;margin:5px -20px 0;overflow:hidden}
+      .mobile-training-visual img{width:100%;height:175px;display:block;object-fit:cover;object-position:76% center}
+      .container{width:100%;margin:24px 0 0;padding:0 12px calc(35px + env(safe-area-inset-bottom))}
+      .section{margin-bottom:28px}.section-heading{margin-bottom:13px}.section-heading h2,.training-heading h2{font-size:21px}
+      .section-heading p,.training-heading p{font-size:11.5px;line-height:1.55}
+      .member-card{grid-template-columns:1fr;gap:12px;padding:16px;border-radius:17px}
+      .training-heading{display:block;margin-bottom:13px}.search-box{width:100%;margin-top:12px}.search-input{height:44px;font-size:13px}
+      .training-grid{grid-template-columns:1fr;gap:12px}.training-card{border-radius:17px}.card-main{padding:17px 16px 14px}
+      .session-name{margin-bottom:13px;font-size:17px}.detail{grid-template-columns:78px minmax(0,1fr);gap:7px;font-size:11.5px}
+      .card-footer{padding:14px 16px 16px;flex-direction:column;align-items:stretch}.register-button{width:100%;min-height:44px;font-size:13px}
+      .modal-backdrop{align-items:flex-end;padding:0}.modal{width:100%;max-height:92dvh;padding:20px 14px calc(18px + env(safe-area-inset-bottom));border-radius:22px 22px 0 0}
+      .modal h3{font-size:20px}.form-section{margin-top:20px;padding-top:18px}.form-grid,.member-snapshot,.document-decision{grid-template-columns:1fr}.field.full{grid-column:auto}
+      .field input,.field select{height:46px;font-size:13px}.field textarea{font-size:13px}.billing-type-options{flex-direction:column}
+      .modal-actions{position:sticky;bottom:0;z-index:5;margin:24px -14px -18px;padding:12px 14px calc(12px + env(safe-area-inset-bottom));background:rgba(255,255,255,.97);border-top:1px solid #e8ecf2;flex-direction:column-reverse}
+      .modal-button{width:100%;min-height:46px;font-size:13px}
+    }
+    @media (max-width:374px){.brand-logo{width:104px}.hero-wrap,.container{padding-left:10px;padding-right:10px}.mobile-training-copy h1{font-size:26px}}
+
   </style>
 </head>
 
 <body>
 
 <header class="site-header">
-  <a class="brand" href="index.html">
-    <div class="brand-mark">
-      <span></span><span></span><span></span><span></span><span></span>
-    </div>
-    <div class="brand-name">SANTE</div>
+  <a class="brand" href="member-home.html" aria-label="กลับหน้าหลักสมาชิก">
+    <img src="sante%20(en)-logo.png" alt="SANTE Consulting" class="brand-logo">
   </a>
 
   <div class="header-right">
@@ -1025,21 +1074,21 @@
 </header>
 
 <div class="hero-wrap">
-  <section class="hero">
-    <div class="hero-content">
+  <section class="desktop-training-hero">
+    <img src="sante-member-hero.png" alt="SANTE Training">
+  </section>
+  <section class="mobile-training-hero">
+    <div class="mobile-training-copy">
       <div class="hero-eyebrow">SANTE TRAINING</div>
-
-      <h1>สมัครเข้าร่วมการอบรม</h1>
-
-      <div class="hero-description">
-        เลือกรอบการอบรมที่ต้องการ ระบบจะดึงข้อมูลสมาชิกของคุณมาใช้โดยอัตโนมัติ
-        และให้กรอกเฉพาะข้อมูลเพิ่มเติมที่จำเป็น
-      </div>
-
+      <h1>สมัครเข้าร่วม<br><span>การอบรม</span></h1>
+      <p>เลือกรอบอบรมที่ต้องการ ระบบจะดึงข้อมูลสมาชิกของคุณมาใช้โดยอัตโนมัติ และให้กรอกเฉพาะข้อมูลเพิ่มเติมที่จำเป็น</p>
       <div class="hero-member">
         <div class="hero-member-label">เข้าสู่ระบบในชื่อ</div>
         <div id="heroMemberName" class="hero-member-name">กำลังโหลด...</div>
       </div>
+    </div>
+    <div class="mobile-training-visual">
+      <img src="sante-member-hero.png" alt="SANTE Training">
     </div>
   </section>
 </div>
@@ -1259,13 +1308,21 @@
 
     <section id="documentSection" class="form-section document-section">
 
-      <div class="form-section-title">เอกสารที่ต้องการ</div>
-
+      <div class="form-section-title">ต้องการเอกสารทางบัญชีหรือไม่?</div>
       <div class="form-section-description">
-        สำหรับอบรม (มีค่าใช้จ่าย) สามารถเลือกได้มากกว่า 1 รายการ
-        หรือไม่เลือกเอกสารก็ได้
+        หากไม่ต้องการเอกสาร ระบบจะข้ามข้อมูลออกเอกสารและไปหน้าชำระเงินหลังสมัครสำเร็จ
       </div>
-
+      <div class="document-decision">
+        <label class="decision-option selected">
+          <input type="radio" name="documentNeed" value="NO" checked>
+          <span><strong>ไม่ต้องการเอกสาร</strong><small>สมัครและไปหน้าชำระเงินได้ทันที</small></span>
+        </label>
+        <label class="decision-option">
+          <input type="radio" name="documentNeed" value="YES">
+          <span><strong>ต้องการเอกสาร</strong><small>เลือกประเภทเอกสารและข้อมูลสำหรับออกเอกสาร</small></span>
+        </label>
+      </div>
+      <div id="documentChoices" class="document-choices">
       <div class="document-options">
 
         <label class="document-option">
@@ -1316,10 +1373,9 @@
       </div>
 
       <div class="document-note">
-        เมื่อเลือกเอกสารอย่างน้อย 1 รายการ
-        กรุณาเลือกหรือกรอกข้อมูลสำหรับออกเอกสารด้านล่าง
+        เลือกเอกสารอย่างน้อย 1 รายการ แล้วเลือกหรือกรอกข้อมูลสำหรับออกเอกสารด้านล่าง
       </div>
-
+      </div>
     </section>
 
     <section id="billingSection" class="form-section billing-section">
@@ -1589,6 +1645,12 @@
 
   const billingSection =
     document.getElementById("billingSection");
+
+  const documentChoices =
+    document.getElementById("documentChoices");
+
+  const documentNeedRadios =
+    document.querySelectorAll('input[name="documentNeed"]');
 
   const billingProfilesContainer =
     document.getElementById("billingProfiles");
@@ -1875,21 +1937,31 @@
     };
   }
 
+  function wantsAccountingDocuments() {
+    return document.querySelector('input[name="documentNeed"]:checked')?.value === "YES";
+  }
+
   function getSelectedDocuments() {
-    if (
-      !selectedSession ||
-      !isPaidSession(selectedSession)
-    ) {
+    if (!selectedSession || !isPaidSession(selectedSession) || !wantsAccountingDocuments()) {
       return [];
     }
+    return Array.from(document.querySelectorAll(".document-checkbox:checked")).map(item => item.value);
+  }
 
-    return Array
-      .from(
-        document.querySelectorAll(
-          ".document-checkbox:checked"
-        )
-      )
-      .map(item => item.value);
+  function updateDocumentDecisionUI() {
+    document.querySelectorAll(".decision-option").forEach(box => {
+      const radio = box.querySelector('input[name="documentNeed"]');
+      box.classList.toggle("selected", Boolean(radio?.checked));
+    });
+    const wants = wantsAccountingDocuments();
+    documentChoices.classList.toggle("show", wants);
+    if (!wants) {
+      document.querySelectorAll(".document-checkbox").forEach(checkbox => {
+        checkbox.checked = false;
+        checkbox.closest(".document-option")?.classList.remove("selected");
+      });
+    }
+    updateBillingVisibility();
   }
 
   function needsTaxId() {
@@ -2521,6 +2593,10 @@
           ?.classList.remove("selected");
       });
 
+    const documentNoRadio = document.querySelector('input[name="documentNeed"][value="NO"]');
+    if (documentNoRadio) documentNoRadio.checked = true;
+    documentChoices.classList.remove("show");
+
     selectedBillingProfileId = null;
     createNewBilling = false;
 
@@ -2542,9 +2618,10 @@
 
       resetBillingForm();
       renderBillingProfiles();
+      updateDocumentDecisionUI();
 
       confirmButton.textContent =
-        "ยืนยันข้อมูลการสมัคร";
+        "ยืนยันข้อมูลการสมัครและไปชำระเงิน";
     } else {
       documentSection.classList.remove("show");
 
@@ -2575,6 +2652,10 @@
       }
     }
   );
+
+  documentNeedRadios.forEach(radio => {
+    radio.addEventListener("change", updateDocumentDecisionUI);
+  });
 
   document
     .querySelectorAll(".document-checkbox")
@@ -2883,6 +2964,11 @@
           ? getSelectedDocuments()
           : [];
 
+      if (paid && wantsAccountingDocuments() && documentTypes.length === 0) {
+        alert("กรุณาเลือกเอกสารที่ต้องการอย่างน้อย 1 รายการ");
+        return;
+      }
+
       confirmButton.disabled = true;
       confirmButton.textContent = "กำลังบันทึก...";
 
@@ -3053,7 +3139,7 @@
           isPaidSession(selectedSession)
         ) {
           confirmButton.textContent =
-            "ยืนยันข้อมูลการสมัคร";
+            "ยืนยันข้อมูลการสมัครและไปชำระเงิน";
         } else {
           confirmButton.textContent =
             "ยืนยันสมัครเข้าร่วม";
