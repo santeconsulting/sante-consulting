@@ -667,23 +667,62 @@
       overflow-wrap: anywhere;
     }
 
-    .document-preference { display: none; }
-    .document-preference.show { display: block; }
-    .document-choice-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin-top:14px; }
-    .document-choice { display:flex; align-items:flex-start; gap:10px; padding:15px; border:1px solid #dfe5ed; border-radius:12px; cursor:pointer; background:#fff; }
-    .document-choice.selected { border-color:#d2aa24; background:#fffaf0; }
-    .document-choice input { width:18px; height:18px; margin-top:2px; accent-color:#d6a800; }
-    .document-choice-title { color:var(--navy); font-size:13px; font-weight:600; }
-    .document-choice-description { margin-top:3px; color:var(--muted); font-size:10px; line-height:1.55; }
-
+    .document-decision-section,
     .document-section,
     .billing-section {
       display: none;
     }
 
+    .document-decision-section.show,
     .document-section.show,
     .billing-section.show {
       display: block;
+    }
+
+    .document-decision-options {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .document-decision-option {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      min-height: 84px;
+      padding: 15px;
+      border: 1px solid #dfe5ed;
+      border-radius: 12px;
+      background: #fff;
+      cursor: pointer;
+      transition: .15s ease;
+    }
+
+    .document-decision-option.selected {
+      border-color: #d2aa24;
+      background: #fffaf0;
+      box-shadow: 0 0 0 2px rgba(248,199,61,.10);
+    }
+
+    .document-decision-option input {
+      width: 18px;
+      height: 18px;
+      margin-top: 2px;
+      accent-color: #d6a800;
+      flex: none;
+    }
+
+    .document-decision-title {
+      color: var(--navy);
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .document-decision-description {
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.55;
     }
 
     .document-options {
@@ -989,7 +1028,7 @@
         flex-direction: column;
       }
 
-      .document-choice-grid {
+      .document-decision-options {
         grid-template-columns: 1fr;
       }
     }
@@ -1270,30 +1309,46 @@
       </div>
     </section>
 
-    <section id="documentPreference" class="form-section document-preference">
+    <section id="documentDecisionSection" class="form-section document-decision-section">
+
       <div class="form-section-title">ต้องการเอกสารทางบัญชีหรือไม่?</div>
+
       <div class="form-section-description">
-        หากไม่ต้องการเอกสาร ระบบจะข้ามข้อมูลออกเอกสารและไปหน้าชำระเงินหลังสมัครสำเร็จ
+        สำหรับอบรม (มีค่าใช้จ่าย) กรุณาเลือกก่อนว่าต้องการเอกสารทางบัญชีหรือไม่
       </div>
-      <div class="document-choice-grid">
-        <label id="documentNoBox" class="document-choice selected">
-          <input type="radio" name="documentPreference" value="NO" checked>
-          <div><div class="document-choice-title">ไม่ต้องการเอกสาร</div><div class="document-choice-description">สมัครและไปหน้าชำระเงินได้ทันที</div></div>
+
+      <div class="document-decision-options">
+
+        <label id="documentNeedNoBox" class="document-decision-option selected">
+          <input id="documentNeedNo" type="radio" name="documentNeed" value="NO" checked>
+          <div>
+            <div class="document-decision-title">ไม่ต้องการเอกสาร</div>
+            <div class="document-decision-description">
+              สมัครอบรมและไปหน้าชำระเงินได้ทันที โดยไม่ต้องกรอกข้อมูลออกเอกสาร
+            </div>
+          </div>
         </label>
-        <label id="documentYesBox" class="document-choice">
-          <input type="radio" name="documentPreference" value="YES">
-          <div><div class="document-choice-title">ต้องการเอกสาร</div><div class="document-choice-description">เลือกประเภทเอกสารและข้อมูลสำหรับออกเอกสาร</div></div>
+
+        <label id="documentNeedYesBox" class="document-decision-option">
+          <input id="documentNeedYes" type="radio" name="documentNeed" value="YES">
+          <div>
+            <div class="document-decision-title">ต้องการเอกสาร</div>
+            <div class="document-decision-description">
+              เลือกประเภทเอกสาร และเลือกหรือเพิ่มข้อมูลสำหรับออกเอกสาร
+            </div>
+          </div>
         </label>
+
       </div>
     </section>
 
     <section id="documentSection" class="form-section document-section">
 
-      <div class="form-section-title">เอกสารที่ต้องการ</div>
+      <div class="form-section-title">เลือกเอกสารที่ต้องการ</div>
 
       <div class="form-section-description">
-        สำหรับอบรม (มีค่าใช้จ่าย) สามารถเลือกได้มากกว่า 1 รายการ
-        หรือไม่เลือกเอกสารก็ได้
+        เลือกได้มากกว่า 1 รายการ และเมื่อเลือก “ต้องการเอกสาร”
+        กรุณาเลือกอย่างน้อย 1 รายการ
       </div>
 
       <div class="document-options">
@@ -1591,6 +1646,7 @@
   let selectedSession = null;
   let selectedBillingProfileId = null;
   let createNewBilling = false;
+  let wantsDocuments = false;
 
   const messageBox = document.getElementById("messageBox");
   const trainingGrid = document.getElementById("trainingGrid");
@@ -1614,9 +1670,23 @@
   const provinceInput =
     document.getElementById("province");
 
-  const documentPreference = document.getElementById("documentPreference");
+  const documentDecisionSection =
+    document.getElementById("documentDecisionSection");
+
   const documentSection =
     document.getElementById("documentSection");
+
+  const documentNeedNo =
+    document.getElementById("documentNeedNo");
+
+  const documentNeedYes =
+    document.getElementById("documentNeedYes");
+
+  const documentNeedNoBox =
+    document.getElementById("documentNeedNoBox");
+
+  const documentNeedYesBox =
+    document.getElementById("documentNeedYesBox");
 
   const billingSection =
     document.getElementById("billingSection");
@@ -1759,16 +1829,7 @@
   }
 
   function isPaidSession(session) {
-    const courseType = String(
-      session?.courses?.course_type || ""
-    ).toUpperCase();
-
-    // ใช้ course_type เป็นหลัก และใช้ราคาเป็น fallback
-    // เพื่อไม่ให้ Paid Training หลุดไปเข้า Free flow หาก relation courses โหลดช้าหรือไม่ครบ
-    return (
-      courseType === "PAID_TRAINING" ||
-      (courseType !== "FREE_TRAINING" && Number(session?.price || 0) > 0)
-    );
+    return String(session?.courses?.course_type || "").toUpperCase() === "PAID_TRAINING";
   }
 
   function trainingTypeDisplay(session) {
@@ -1793,23 +1854,25 @@
     const paymentStatus =
       String(registration.payment_status || "").toUpperCase();
 
-    /*
-      สำคัญ: Paid Training ต้องตรวจสถานะการชำระเงินก่อนสถานะ Registration
-      เพราะ Registration เดิมบางรายการอาจเป็น CONFIRMED จากข้อมูลทดสอบ/เวอร์ชันเก่า
-      แต่ถ้ายังไม่ VERIFIED/PAID ต้องให้สมาชิกกลับมาชำระเงินต่อได้
-    */
-    const waitingForPayment =
-      isPaidSession(session) &&
-      paymentStatus !== "VERIFIED" &&
-      paymentStatus !== "PAID" &&
-      status !== "CANCELLED";
+    if (isPaidSession(session)) {
+      const paymentCompleted =
+        paymentStatus === "VERIFIED" ||
+        paymentStatus === "PAID";
 
-    if (waitingForPayment) {
+      if (!paymentCompleted) {
+        return {
+          text: "ชำระเงิน",
+          className: "pending",
+          action: "payment",
+          disabled: false
+        };
+      }
+
       return {
-        text: "ชำระเงิน",
-        className: "pending",
-        action: "payment",
-        disabled: false
+        text: "สมัครแล้ว",
+        className: "registered",
+        action: "none",
+        disabled: true
       };
     }
 
@@ -1882,61 +1945,6 @@
     }
   }
 
-  async function findRegistrationForSession(sessionId) {
-    // ใช้ข้อมูลที่โหลดไว้ก่อน เพื่อลด request
-    const cached = getRegistration(sessionId);
-    if (cached?.id) return cached;
-
-    const { data, error } = await db
-      .from("training_registrations")
-      .select(`
-        id,
-        training_session_id,
-        registration_status,
-        payment_required,
-        payment_status,
-        registered_at
-      `)
-      .eq("user_id", currentUser.id)
-      .eq("training_session_id", sessionId)
-      .neq("registration_status", "CANCELLED")
-      .order("registered_at", { ascending: false })
-      .limit(1)
-      .maybeSingle();
-
-    if (error) throw error;
-    return data || null;
-  }
-
-  async function continuePaidTrainingPayment(
-    session,
-    preferredRegistrationId = null,
-    button = null
-  ) {
-    if (!session || !isPaidSession(session)) {
-      throw new Error("รายการนี้ไม่ใช่รอบอบรมแบบมีค่าใช้จ่าย");
-    }
-
-    let registrationId = preferredRegistrationId;
-
-    if (!registrationId) {
-      const registration =
-        await findRegistrationForSession(session.id);
-      registrationId = registration?.id || null;
-    }
-
-    if (!registrationId) {
-      throw new Error(
-        "ไม่พบเลขอ้างอิงการสมัครสำหรับสร้างรายการชำระเงิน"
-      );
-    }
-
-    await goToPaymentForRegistration(
-      registrationId,
-      button
-    );
-  }
-
   function registrationWindow(session) {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -1988,7 +1996,7 @@
     if (
       !selectedSession ||
       !isPaidSession(selectedSession) ||
-      document.querySelector('input[name="documentPreference"]:checked')?.value !== "YES"
+      !wantsDocuments
     ) {
       return [];
     }
@@ -2525,6 +2533,56 @@
       });
   }
 
+  function resetDocumentDecision() {
+    wantsDocuments = false;
+
+    documentNeedNo.checked = true;
+    documentNeedYes.checked = false;
+
+    documentNeedNoBox.classList.add("selected");
+    documentNeedYesBox.classList.remove("selected");
+
+    documentSection.classList.remove("show");
+    billingSection.classList.remove("show");
+
+    document
+      .querySelectorAll(".document-checkbox")
+      .forEach(checkbox => {
+        checkbox.checked = false;
+        checkbox.closest(".document-option")?.classList.remove("selected");
+      });
+
+    selectedBillingProfileId = null;
+    createNewBilling = false;
+    billingForm.classList.remove("show");
+  }
+
+  function updateDocumentDecisionUI() {
+    wantsDocuments = documentNeedYes.checked === true;
+
+    documentNeedNoBox.classList.toggle("selected", !wantsDocuments);
+    documentNeedYesBox.classList.toggle("selected", wantsDocuments);
+
+    if (wantsDocuments) {
+      documentSection.classList.add("show");
+      updateBillingVisibility();
+    } else {
+      documentSection.classList.remove("show");
+
+      document
+        .querySelectorAll(".document-checkbox")
+        .forEach(checkbox => {
+          checkbox.checked = false;
+          checkbox.closest(".document-option")?.classList.remove("selected");
+        });
+
+      billingSection.classList.remove("show");
+      selectedBillingProfileId = null;
+      createNewBilling = false;
+      billingForm.classList.remove("show");
+    }
+  }
+
   function updateBillingVisibility() {
     const selectedDocuments =
       getSelectedDocuments();
@@ -2532,6 +2590,7 @@
     if (
       selectedSession &&
       isPaidSession(selectedSession) &&
+      wantsDocuments &&
       selectedDocuments.length > 0
     ) {
       billingSection.classList.add("show");
@@ -2634,36 +2693,22 @@
     selectedBillingProfileId = null;
     createNewBilling = false;
 
+    documentDecisionSection.classList.remove("show");
+    documentSection.classList.remove("show");
     billingSection.classList.remove("show");
     billingForm.classList.remove("show");
 
     if (paid) {
-      documentPreference.classList.add("show");
-      document.querySelector('input[name="documentPreference"][value="NO"]').checked = true;
-      document.querySelector('input[name="documentPreference"][value="YES"]').checked = false;
-      document.getElementById("documentNoBox").classList.add("selected");
-      document.getElementById("documentYesBox").classList.remove("selected");
-      documentSection.classList.remove("show");
+      documentDecisionSection.classList.add("show");
+      resetDocumentDecision();
 
       await loadBillingProfiles();
-
-      const defaultProfile =
-        billingProfilesData.find(x => x.is_default);
-
-      if (defaultProfile) {
-        selectedBillingProfileId =
-          defaultProfile.id;
-      }
-
       resetBillingForm();
-      renderBillingProfiles();
 
       confirmButton.textContent =
         "ยืนยันข้อมูลการสมัคร";
     } else {
-      documentPreference.classList.remove("show");
-      documentSection.classList.remove("show");
-
+      wantsDocuments = false;
       confirmButton.textContent =
         "ยืนยันสมัครเข้าร่วม";
     }
@@ -2692,26 +2737,15 @@
     }
   );
 
-  document
-    .querySelectorAll('input[name="documentPreference"]')
-    .forEach(radio => {
-      radio.addEventListener("change", () => {
-        const wantsDocuments = document.querySelector('input[name="documentPreference"]:checked')?.value === "YES";
-        document.getElementById("documentYesBox").classList.toggle("selected", wantsDocuments);
-        document.getElementById("documentNoBox").classList.toggle("selected", !wantsDocuments);
+  documentNeedNo.addEventListener(
+    "change",
+    updateDocumentDecisionUI
+  );
 
-        if (wantsDocuments) {
-          documentSection.classList.add("show");
-        } else {
-          documentSection.classList.remove("show");
-          document.querySelectorAll(".document-checkbox").forEach(cb => {
-            cb.checked = false;
-            cb.closest(".document-option")?.classList.remove("selected");
-          });
-        }
-        updateBillingVisibility();
-      });
-    });
+  documentNeedYes.addEventListener(
+    "change",
+    updateDocumentDecisionUI
+  );
 
   document
     .querySelectorAll(".document-checkbox")
@@ -3016,9 +3050,18 @@
         isPaidSession(selectedSession);
 
       const documentTypes =
-        paid
+        paid && wantsDocuments
           ? getSelectedDocuments()
           : [];
+
+      if (
+        paid &&
+        wantsDocuments &&
+        documentTypes.length === 0
+      ) {
+        alert("กรุณาเลือกเอกสารอย่างน้อย 1 รายการ");
+        return;
+      }
 
       confirmButton.disabled = true;
       confirmButton.textContent = "กำลังบันทึก...";
@@ -3066,23 +3109,73 @@
 
         /*
           PAID TRAINING:
-          สมัครสำเร็จแล้วต้องไป Payment เสมอ
-          รองรับทั้ง RPC ที่คืน registration_id และ RPC ที่ไม่คืน id
+          หลังสมัครสำเร็จ ให้สร้าง Order + Payment
+          แล้วไปหน้าชำระเงินทันที
         */
         if (paid) {
-          const registrationId =
+          let registrationId =
             result.registration_id ||
             result.id ||
-            result.training_registration_id ||
-            null;
+            result.training_registration_id;
+
+          // Fallback: บางเวอร์ชันของ RPC สมัครอบรมไม่ได้คืน registration_id
+          if (!registrationId) {
+            const { data: registrationRow, error: registrationLookupError } =
+              await db
+                .from("training_registrations")
+                .select("id")
+                .eq("user_id", currentUser.id)
+                .eq("training_session_id", selectedSession.id)
+                .neq("registration_status", "CANCELLED")
+                .order("created_at", { ascending: false })
+                .limit(1)
+                .maybeSingle();
+
+            if (registrationLookupError) {
+              throw registrationLookupError;
+            }
+
+            registrationId = registrationRow?.id || null;
+          }
+
+          if (!registrationId) {
+            throw new Error(
+              "สมัครอบรมสำเร็จ แต่ไม่พบเลขอ้างอิงการสมัครสำหรับสร้างรายการชำระเงิน"
+            );
+          }
 
           confirmButton.textContent =
-            "กำลังเปิดหน้าชำระเงิน...";
+            "กำลังสร้างรายการชำระเงิน...";
 
-          await continuePaidTrainingPayment(
-            selectedSession,
-            registrationId,
-            confirmButton
+          const {
+            data: paymentData,
+            error: paymentError
+          } = await db.rpc(
+            "create_training_payment",
+            {
+              p_training_registration_id:
+                registrationId
+            }
+          );
+
+          if (paymentError) {
+            throw paymentError;
+          }
+
+          const paymentResult =
+            paymentData || {};
+
+          if (!paymentResult.payment_id) {
+            throw new Error(
+              "สร้างรายการชำระเงินไม่สำเร็จ กรุณาลองใหม่อีกครั้ง"
+            );
+          }
+
+          window.location.replace(
+            "payment.html?payment=" +
+            encodeURIComponent(
+              paymentResult.payment_id
+            )
           );
 
           return;
@@ -3131,38 +3224,48 @@
         const errorText =
           String(error?.message || error || "").toUpperCase();
 
-        // กรณีสมาชิกเคยสมัคร Paid Training แล้ว
-        // ไม่ให้จบที่ ALREADY_REGISTERED แต่พาไปชำระรายการเดิมต่อทันที
         if (
           paid &&
           errorText.includes("ALREADY_REGISTERED")
         ) {
           try {
+            const { data: existingRegistration, error: existingError } =
+              await db
+                .from("training_registrations")
+                .select("id")
+                .eq("user_id", currentUser.id)
+                .eq("training_session_id", selectedSession.id)
+                .neq("registration_status", "CANCELLED")
+                .order("created_at", { ascending: false })
+                .limit(1)
+                .maybeSingle();
+
+            if (existingError) throw existingError;
+
+            if (!existingRegistration?.id) {
+              throw new Error(
+                "พบว่าคุณเคยสมัครรอบนี้แล้ว แต่ไม่พบเลขอ้างอิงการสมัคร"
+              );
+            }
+
             confirmButton.textContent =
               "กำลังเปิดหน้าชำระเงิน...";
 
-            await continuePaidTrainingPayment(
-              selectedSession,
-              null,
-              confirmButton
+            await goToPaymentForRegistration(
+              existingRegistration.id
             );
 
             return;
           } catch (paymentResumeError) {
-            console.error(
-              "Resume payment error:",
-              paymentResumeError
-            );
-
-            alert(
-              translateError(paymentResumeError)
-            );
+            console.error("Resume payment error:", paymentResumeError);
+            alert(translateError(paymentResumeError));
+            return;
           }
-        } else {
-          alert(
-            translateError(error)
-          );
         }
+
+        alert(
+          translateError(error)
+        );
 
       } finally {
         confirmButton.disabled = false;
