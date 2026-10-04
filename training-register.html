@@ -2853,10 +2853,30 @@
           แล้วไปหน้าชำระเงินทันที
         */
         if (paid) {
-          const registrationId =
+          let registrationId =
             result.registration_id ||
             result.id ||
             result.training_registration_id;
+
+          // Fallback: บางเวอร์ชันของ RPC สมัครอบรมไม่ได้คืน registration_id
+          if (!registrationId) {
+            const { data: registrationRow, error: registrationLookupError } =
+              await db
+                .from("training_registrations")
+                .select("id")
+                .eq("user_id", currentUser.id)
+                .eq("training_session_id", selectedSession.id)
+                .neq("registration_status", "CANCELLED")
+                .order("created_at", { ascending: false })
+                .limit(1)
+                .maybeSingle();
+
+            if (registrationLookupError) {
+              throw registrationLookupError;
+            }
+
+            registrationId = registrationRow?.id || null;
+          }
 
           if (!registrationId) {
             throw new Error(
