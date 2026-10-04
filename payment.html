@@ -26,6 +26,25 @@
     @media(max-width:900px){.page{width:min(100% - 28px,760px);margin-top:20px}.hero{padding:26px 25px;border-radius:20px}.hero h1{font-size:27px}.hero-step{display:none}.content.show{grid-template-columns:1fr}.right-column{display:flex;flex-direction:column}.bank-card{order:1}.slip-card{order:2}}
     @media(max-width:600px){.topbar{height:auto;min-height:64px;padding:7px 12px;gap:8px}.brand{flex:1 1 auto;min-width:0}.brand-logo{width:118px;height:50px}.member-area{flex:0 1 auto;gap:7px}.member-copy{display:none}.logout-button{min-height:38px;padding:0 10px;border-radius:9px;font-size:11px}.page{width:calc(100% - 22px);margin:14px auto 45px}.hero{padding:22px 20px;border-radius:17px}.hero small{font-size:12px}.hero h1{font-size:24px}.hero p{font-size:13px}.card{border-radius:17px;margin-bottom:14px}.card-head{padding:16px 17px;font-size:17px}.card-body{padding:17px}.summary-grid{grid-template-columns:1fr;gap:15px}.field-value{font-size:14px}.amount-box{align-items:flex-end}.amount{font-size:25px}.bank-row{grid-template-columns:1fr;gap:3px}.bank-value{margin-bottom:8px;font-size:15px}.bank-number{font-size:23px}.upload-area{padding:22px 14px}.page-actions{display:grid;grid-template-columns:1fr}.action-link{width:100%}}
   </style>
+
+<style>
+/* SANTE MEMBER VISUAL SYSTEM — Payment */
+body{background:linear-gradient(180deg,#fff 0%,#f6fbff 45%,#eef7fc 100%)!important}
+.page{width:min(1520px,calc(100% - 80px))!important;margin:0 auto!important;padding:34px 0 60px!important}
+.member-desktop-hero{width:100%;overflow:hidden;border-radius:28px;background:#fff;box-shadow:0 8px 25px rgba(11,45,103,.07);padding:12px;margin-bottom:28px}
+.member-desktop-hero img{display:block;width:100%;height:auto;border-radius:23px}
+.member-mobile-hero{display:none}
+.hero{background:#fff!important;color:#082d69!important;border:1px solid #d8e5f1!important;border-radius:20px!important;box-shadow:0 8px 25px rgba(11,45,103,.045)!important;padding:24px 28px!important}
+.hero-kicker{color:#087df0!important}.hero p{color:#7084a4!important}.step{background:#e8f3ff!important;border-color:#d4e8fb!important;color:#082d69!important}
+.content-grid{gap:20px!important}.card{border-color:#d8e5f1!important;border-radius:20px!important;box-shadow:0 8px 25px rgba(11,45,103,.045)!important}
+@media(max-width:1024px){.page{width:calc(100% - 36px)!important;padding-top:18px!important}}
+@media(max-width:767px){
+.page{width:100%!important;padding:10px 12px 35px!important}.member-desktop-hero{display:none}.member-mobile-hero{display:block;padding:23px 20px;margin-bottom:18px;border-radius:20px;background:linear-gradient(145deg,#eaf7ff 0%,#fff 58%,#fff4c9 100%);box-shadow:0 8px 25px rgba(11,45,103,.07)}
+.member-mobile-hero span{display:inline-flex;padding:6px 10px;border-radius:999px;background:#fff;color:#087df0;font-size:10px;font-weight:700}.member-mobile-hero h2{margin-top:12px;font-size:26px;line-height:1.3}.member-mobile-hero p{margin-top:7px;color:#7084a4;font-size:12px;line-height:1.65}
+.hero{padding:18px!important;border-radius:17px!important}.hero h1{font-size:22px!important}.step{margin-top:12px!important}.card{border-radius:17px!important}
+}
+</style>
+
 </head>
 <body>
 <header class="topbar">
@@ -42,6 +61,14 @@
 </header>
 
 <main class="page">
+  <section class="member-desktop-hero">
+    <img src="sante-member-hero.png" alt="Trust in Safety. Trust in SANTE.">
+  </section>
+  <section class="member-mobile-hero">
+    <span>SANTE MEMBER</span>
+    <h2>ชำระค่าลงทะเบียนอบรม</h2>
+    <p>ตรวจสอบรายละเอียด ยอดชำระ และหลักฐานการชำระเงินของคุณ</p>
+  </section>
   <section class="hero">
     <div><small>SANTE PAYMENT</small><h1>ชำระค่าลงทะเบียนอบรม</h1><p>ตรวจสอบรายละเอียดและยอดชำระ ก่อนส่งหลักฐานการชำระเงิน</p></div>
     <div class="hero-step">สมัครอบรม ✓ &nbsp;→&nbsp; ชำระเงิน</div>
