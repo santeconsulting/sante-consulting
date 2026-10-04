@@ -667,6 +667,15 @@
       overflow-wrap: anywhere;
     }
 
+    .document-preference { display: none; }
+    .document-preference.show { display: block; }
+    .document-choice-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin-top:14px; }
+    .document-choice { display:flex; align-items:flex-start; gap:10px; padding:15px; border:1px solid #dfe5ed; border-radius:12px; cursor:pointer; background:#fff; }
+    .document-choice.selected { border-color:#d2aa24; background:#fffaf0; }
+    .document-choice input { width:18px; height:18px; margin-top:2px; accent-color:#d6a800; }
+    .document-choice-title { color:var(--navy); font-size:13px; font-weight:600; }
+    .document-choice-description { margin-top:3px; color:var(--muted); font-size:10px; line-height:1.55; }
+
     .document-section,
     .billing-section {
       display: none;
@@ -979,6 +988,10 @@
       .billing-type-options {
         flex-direction: column;
       }
+
+      .document-choice-grid {
+        grid-template-columns: 1fr;
+      }
     }
 
     @media (max-width: 430px) {
@@ -1254,6 +1267,23 @@
             <option>อุบลราชธานี</option>
           </select>
         </div>
+      </div>
+    </section>
+
+    <section id="documentPreference" class="form-section document-preference">
+      <div class="form-section-title">ต้องการเอกสารทางบัญชีหรือไม่?</div>
+      <div class="form-section-description">
+        หากไม่ต้องการเอกสาร ระบบจะข้ามข้อมูลออกเอกสารและไปหน้าชำระเงินหลังสมัครสำเร็จ
+      </div>
+      <div class="document-choice-grid">
+        <label id="documentNoBox" class="document-choice selected">
+          <input type="radio" name="documentPreference" value="NO" checked>
+          <div><div class="document-choice-title">ไม่ต้องการเอกสาร</div><div class="document-choice-description">สมัครและไปหน้าชำระเงินได้ทันที</div></div>
+        </label>
+        <label id="documentYesBox" class="document-choice">
+          <input type="radio" name="documentPreference" value="YES">
+          <div><div class="document-choice-title">ต้องการเอกสาร</div><div class="document-choice-description">เลือกประเภทเอกสารและข้อมูลสำหรับออกเอกสาร</div></div>
+        </label>
       </div>
     </section>
 
@@ -1584,6 +1614,7 @@
   const provinceInput =
     document.getElementById("province");
 
+  const documentPreference = document.getElementById("documentPreference");
   const documentSection =
     document.getElementById("documentSection");
 
@@ -1956,7 +1987,8 @@
   function getSelectedDocuments() {
     if (
       !selectedSession ||
-      !isPaidSession(selectedSession)
+      !isPaidSession(selectedSession) ||
+      document.querySelector('input[name="documentPreference"]:checked')?.value !== "YES"
     ) {
       return [];
     }
@@ -2606,7 +2638,12 @@
     billingForm.classList.remove("show");
 
     if (paid) {
-      documentSection.classList.add("show");
+      documentPreference.classList.add("show");
+      document.querySelector('input[name="documentPreference"][value="NO"]').checked = true;
+      document.querySelector('input[name="documentPreference"][value="YES"]').checked = false;
+      document.getElementById("documentNoBox").classList.add("selected");
+      document.getElementById("documentYesBox").classList.remove("selected");
+      documentSection.classList.remove("show");
 
       await loadBillingProfiles();
 
@@ -2624,6 +2661,7 @@
       confirmButton.textContent =
         "ยืนยันข้อมูลการสมัคร";
     } else {
+      documentPreference.classList.remove("show");
       documentSection.classList.remove("show");
 
       confirmButton.textContent =
@@ -2653,6 +2691,27 @@
       }
     }
   );
+
+  document
+    .querySelectorAll('input[name="documentPreference"]')
+    .forEach(radio => {
+      radio.addEventListener("change", () => {
+        const wantsDocuments = document.querySelector('input[name="documentPreference"]:checked')?.value === "YES";
+        document.getElementById("documentYesBox").classList.toggle("selected", wantsDocuments);
+        document.getElementById("documentNoBox").classList.toggle("selected", !wantsDocuments);
+
+        if (wantsDocuments) {
+          documentSection.classList.add("show");
+        } else {
+          documentSection.classList.remove("show");
+          document.querySelectorAll(".document-checkbox").forEach(cb => {
+            cb.checked = false;
+            cb.closest(".document-option")?.classList.remove("selected");
+          });
+        }
+        updateBillingVisibility();
+      });
+    });
 
   document
     .querySelectorAll(".document-checkbox")
