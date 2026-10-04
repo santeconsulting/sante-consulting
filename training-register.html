@@ -1728,7 +1728,7 @@
   }
 
   function isPaidSession(session) {
-    return Number(session?.price || 0) > 0;
+    return String(session?.courses?.course_type || "").toUpperCase() === "PAID_TRAINING";
   }
 
   function trainingTypeDisplay(session) {
@@ -1744,7 +1744,7 @@
     );
   }
 
-  function registrationButtonInfo(registration) {
+  function registrationButtonInfo(registration, session) {
     if (!registration) return null;
 
     const status =
@@ -1753,21 +1753,79 @@
     if (status === "CONFIRMED") {
       return {
         text: "สมัครแล้ว",
-        className: "registered"
+        className: "registered",
+        action: "none",
+        disabled: true
+      };
+    }
+
+    if (status === "PENDING" && isPaidSession(session)) {
+      return {
+        text: "ชำระเงิน",
+        className: "pending",
+        action: "payment",
+        disabled: false
       };
     }
 
     if (status === "PENDING") {
       return {
-        text: "รอชำระเงิน",
-        className: "pending"
+        text: "รอยืนยัน",
+        className: "pending",
+        action: "none",
+        disabled: true
       };
     }
 
     return {
       text: "สมัครแล้ว",
-      className: "registered"
+      className: "registered",
+      action: "none",
+      disabled: true
     };
+  }
+
+  async function goToPaymentForRegistration(registrationId, button = null) {
+    if (!registrationId) {
+      throw new Error("ไม่พบเลขอ้างอิงการสมัครอบรม");
+    }
+
+    const oldText = button?.textContent || "ชำระเงิน";
+
+    if (button) {
+      button.disabled = true;
+      button.textContent = "กำลังเปิดหน้าชำระเงิน...";
+    }
+
+    try {
+      const { data, error } = await db.rpc(
+        "create_training_payment",
+        {
+          p_training_registration_id: registrationId
+        }
+      );
+
+      if (error) throw error;
+
+      const paymentResult = data || {};
+
+      if (!paymentResult.payment_id) {
+        throw new Error("ไม่พบรายการชำระเงิน กรุณาลองใหม่อีกครั้ง");
+      }
+
+      window.location.href =
+        "payment.html?payment=" +
+        encodeURIComponent(paymentResult.payment_id);
+    } catch (error) {
+      console.error("Payment redirect error:", error);
+
+      if (button) {
+        button.disabled = false;
+        button.textContent = oldText;
+      }
+
+      throw error;
+    }
   }
 
   function registrationWindow(session) {
@@ -2089,7 +2147,7 @@
           getRegistration(session.id);
 
         const buttonInfo =
-          registrationButtonInfo(registration);
+          registrationButtonInfo(registration, session);
 
         const windowInfo =
           registrationWindow(session);
@@ -2103,7 +2161,7 @@
         if (buttonInfo) {
           buttonText = buttonInfo.text;
           buttonClass = buttonInfo.className;
-          disabled = true;
+          disabled = buttonInfo.disabled;
         } else if (!windowInfo.allowed) {
           buttonText = windowInfo.text;
           buttonClass = "closed";
@@ -2190,6 +2248,8 @@
                 type="button"
                 class="register-button ${buttonClass}"
                 data-session-id="${escapeHtml(session.id)}"
+                data-registration-id="${escapeHtml(registration?.id || "")}"
+                data-action="${escapeHtml(buttonInfo?.action || "register")}"
                 ${disabled ? "disabled" : ""}
               >
                 ${escapeHtml(buttonText)}
@@ -2203,7 +2263,27 @@
     document
       .querySelectorAll(".register-button:not(:disabled)")
       .forEach(button => {
-        button.addEventListener("click", () => {
+        button.addEventListener("click", async () => {
+          const action = button.dataset.action || "register";
+
+          if (action === "payment") {
+            clearMessage();
+
+            try {
+              await goToPaymentForRegistration(
+                button.dataset.registrationId,
+                button
+              );
+            } catch (error) {
+              showMessage(
+                "error",
+                translateError(error)
+              );
+            }
+
+            return;
+          }
+
           openRegistrationModal(
             button.dataset.sessionId
           );
