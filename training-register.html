@@ -1759,32 +1759,35 @@
     const status =
       String(registration.registration_status || "").toUpperCase();
 
-    if (status === "CONFIRMED") {
-      return {
-        text: "สมัครแล้ว",
-        className: "registered",
-        action: "none",
-        disabled: true
-      };
-    }
-
     const paymentStatus =
       String(registration.payment_status || "").toUpperCase();
 
+    /*
+      สำคัญ: Paid Training ต้องตรวจสถานะการชำระเงินก่อนสถานะ Registration
+      เพราะ Registration เดิมบางรายการอาจเป็น CONFIRMED จากข้อมูลทดสอบ/เวอร์ชันเก่า
+      แต่ถ้ายังไม่ VERIFIED/PAID ต้องให้สมาชิกกลับมาชำระเงินต่อได้
+    */
     const waitingForPayment =
       isPaidSession(session) &&
       paymentStatus !== "VERIFIED" &&
       paymentStatus !== "PAID" &&
       status !== "CANCELLED";
 
-    // Paid Training ที่ยังไม่ชำระ ต้องกลับมาชำระเงินต่อได้เสมอ
-    // ไม่บังคับให้สมัครใหม่ และไม่ต้องลบประวัติการสมัคร
     if (waitingForPayment) {
       return {
         text: "ชำระเงิน",
         className: "pending",
         action: "payment",
         disabled: false
+      };
+    }
+
+    if (status === "CONFIRMED") {
+      return {
+        text: "สมัครแล้ว",
+        className: "registered",
+        action: "none",
+        disabled: true
       };
     }
 
