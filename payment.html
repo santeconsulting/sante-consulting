@@ -1,0 +1,1369 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>ชำระเงิน | SANTE Consulting</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Prompt", sans-serif;
+      background: #f5f7fb;
+      color: #172033;
+    }
+
+    .topbar {
+      background: #071b3a;
+      color: #ffffff;
+      min-height: 72px;
+      display: flex;
+      align-items: center;
+      padding: 0 24px;
+    }
+
+    .topbar-inner {
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand {
+      font-size: 21px;
+      font-weight: 700;
+      letter-spacing: .2px;
+    }
+
+    .brand span {
+      color: #f4c542;
+    }
+
+    .back-link {
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 14px;
+      opacity: .9;
+    }
+
+    .container {
+      width: calc(100% - 32px);
+      max-width: 900px;
+      margin: 36px auto 60px;
+    }
+
+    .page-title {
+      margin-bottom: 24px;
+    }
+
+    .page-title h1 {
+      margin: 0 0 6px;
+      font-size: 28px;
+      color: #071b3a;
+    }
+
+    .page-title p {
+      margin: 0;
+      color: #667085;
+      font-size: 15px;
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 8px 28px rgba(7, 27, 58, .08);
+      border: 1px solid #e9edf5;
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+
+    .card-header {
+      padding: 18px 22px;
+      border-bottom: 1px solid #edf0f5;
+      font-size: 18px;
+      font-weight: 600;
+      color: #071b3a;
+    }
+
+    .card-body {
+      padding: 22px;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px 30px;
+    }
+
+    .field-label {
+      font-size: 13px;
+      color: #7a8497;
+      margin-bottom: 5px;
+    }
+
+    .field-value {
+      font-size: 15px;
+      font-weight: 500;
+      color: #1c2638;
+      word-break: break-word;
+    }
+
+    .amount-box {
+      margin-top: 22px;
+      background: #f7f9fc;
+      border-radius: 12px;
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .amount-label {
+      color: #667085;
+      font-size: 15px;
+    }
+
+    .amount {
+      color: #071b3a;
+      font-size: 28px;
+      font-weight: 700;
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 7px 12px;
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .status.pending {
+      background: #fff6d8;
+      color: #8a6500;
+    }
+
+    .status.verified {
+      background: #e7f8ef;
+      color: #16794b;
+    }
+
+    .status.failed {
+      background: #feecec;
+      color: #b42318;
+    }
+
+    .payment-placeholder {
+      border: 1px dashed #ccd3df;
+      border-radius: 12px;
+      padding: 25px;
+      text-align: center;
+      background: #fafbfc;
+    }
+
+    .payment-placeholder strong {
+      display: block;
+      color: #071b3a;
+      margin-bottom: 8px;
+    }
+
+    .payment-placeholder p {
+      margin: 0;
+      color: #667085;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .upload-area {
+      border: 2px dashed #ccd3df;
+      border-radius: 14px;
+      padding: 28px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: .2s ease;
+      background: #fbfcfe;
+    }
+
+    .upload-area:hover {
+      border-color: #071b3a;
+      background: #f7f9fc;
+    }
+
+    .upload-icon {
+      font-size: 34px;
+      margin-bottom: 10px;
+    }
+
+    .upload-title {
+      font-weight: 600;
+      color: #071b3a;
+      margin-bottom: 5px;
+    }
+
+    .upload-note {
+      color: #7a8497;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    #fileInput {
+      display: none;
+    }
+
+    .selected-file {
+      margin-top: 16px;
+      display: none;
+      padding: 14px 16px;
+      background: #f7f9fc;
+      border-radius: 10px;
+      font-size: 14px;
+    }
+
+    .preview-wrap {
+      display: none;
+      margin-top: 18px;
+      text-align: center;
+    }
+
+    .preview-wrap img {
+      max-width: 100%;
+      max-height: 420px;
+      border-radius: 12px;
+      border: 1px solid #e3e7ef;
+    }
+
+    .pdf-preview {
+      padding: 18px;
+      background: #f7f9fc;
+      border-radius: 10px;
+      color: #344054;
+    }
+
+    .btn {
+      width: 100%;
+      border: none;
+      border-radius: 10px;
+      padding: 14px 20px;
+      font-family: "Prompt", sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: .2s ease;
+    }
+
+    .btn-primary {
+      background: #071b3a;
+      color: #ffffff;
+      margin-top: 20px;
+    }
+
+    .btn-primary:hover {
+      background: #0c2a58;
+    }
+
+    .btn-primary:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+    }
+
+    .message {
+      display: none;
+      margin-top: 16px;
+      border-radius: 10px;
+      padding: 14px 16px;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .message.success {
+      display: block;
+      background: #eaf8f0;
+      color: #176b46;
+      border: 1px solid #c8ecd8;
+    }
+
+    .message.error {
+      display: block;
+      background: #fff0f0;
+      color: #a52727;
+      border: 1px solid #ffd3d3;
+    }
+
+    .message.info {
+      display: block;
+      background: #eef4ff;
+      color: #28559a;
+      border: 1px solid #d4e2ff;
+    }
+
+    .loading {
+      min-height: 300px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #667085;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .footer-note {
+      text-align: center;
+      margin-top: 28px;
+      color: #98a2b3;
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    @media (max-width: 680px) {
+      .container {
+        margin-top: 24px;
+      }
+
+      .summary-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+      }
+
+      .page-title h1 {
+        font-size: 23px;
+      }
+
+      .amount-box {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .amount {
+        font-size: 25px;
+      }
+
+      .card-header,
+      .card-body {
+        padding-left: 17px;
+        padding-right: 17px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      SANTE <span>Consulting</span>
+    </div>
+
+    <a href="javascript:history.back()" class="back-link">
+      ← กลับ
+    </a>
+  </div>
+</header>
+
+
+<main class="container">
+
+  <div class="page-title">
+    <h1>ชำระเงิน</h1>
+    <p>ตรวจสอบรายละเอียดและส่งหลักฐานการชำระเงิน</p>
+  </div>
+
+
+  <div id="loadingBox" class="card">
+    <div class="loading">
+      กำลังโหลดข้อมูลการชำระเงิน...
+    </div>
+  </div>
+
+
+  <div id="mainContent" class="hidden">
+
+    <!-- PAYMENT SUMMARY -->
+
+    <section class="card">
+
+      <div class="card-header">
+        รายละเอียดการชำระเงิน
+      </div>
+
+      <div class="card-body">
+
+        <div class="summary-grid">
+
+          <div>
+            <div class="field-label">เลขที่รายการชำระเงิน</div>
+            <div class="field-value" id="paymentNo">-</div>
+          </div>
+
+          <div>
+            <div class="field-label">สถานะ</div>
+            <div>
+              <span id="paymentStatus" class="status pending">
+                รอชำระเงิน
+              </span>
+            </div>
+          </div>
+
+          <div>
+            <div class="field-label">หลักสูตร</div>
+            <div class="field-value" id="courseName">-</div>
+          </div>
+
+          <div>
+            <div class="field-label">รอบอบรม</div>
+            <div class="field-value" id="sessionName">-</div>
+          </div>
+
+        </div>
+
+        <div class="amount-box">
+          <div class="amount-label">
+            ยอดที่ต้องชำระ
+          </div>
+
+          <div class="amount" id="paymentAmount">
+            ฿0.00
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- PAYMENT CHANNEL -->
+
+    <section class="card">
+
+      <div class="card-header">
+        ช่องทางการชำระเงิน
+      </div>
+
+      <div class="card-body">
+
+        <div class="payment-placeholder">
+
+          <strong>
+            ข้อมูลบัญชีรับชำระเงิน
+          </strong>
+
+          <p>
+            ระบบกำลังเตรียมช่องทางการชำระเงินของ SANTE Consulting
+            <br>
+            ข้อมูลบัญชีหรือ QR Code จะถูกกำหนดจากระบบส่วนกลาง
+            โดยไม่ฝังเลขบัญชีไว้ในหน้าเว็บไซต์
+          </p>
+
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- SLIP -->
+
+    <section class="card" id="slipCard">
+
+      <div class="card-header">
+        แนบหลักฐานการชำระเงิน
+      </div>
+
+      <div class="card-body">
+
+        <div
+          class="upload-area"
+          id="uploadArea"
+          onclick="document.getElementById('fileInput').click()"
+        >
+
+          <div class="upload-icon">📎</div>
+
+          <div class="upload-title">
+            เลือกรูปสลิปหรือไฟล์ PDF
+          </div>
+
+          <div class="upload-note">
+            รองรับ JPG, PNG, WEBP และ PDF
+            <br>
+            ขนาดไม่เกิน 5 MB
+          </div>
+
+        </div>
+
+
+        <input
+          type="file"
+          id="fileInput"
+          accept="image/jpeg,image/png,image/webp,application/pdf"
+        >
+
+
+        <div class="selected-file" id="selectedFile"></div>
+
+
+        <div class="preview-wrap" id="previewWrap"></div>
+
+
+        <button
+          class="btn btn-primary"
+          id="submitSlipBtn"
+          disabled
+        >
+          ส่งหลักฐานการชำระเงิน
+        </button>
+
+
+        <div id="messageBox" class="message"></div>
+
+      </div>
+    </section>
+
+
+    <div class="footer-note">
+      การส่งหลักฐานการชำระเงินยังไม่ถือว่าเป็นการยืนยันที่นั่ง
+      <br>
+      ระบบจะยืนยันสิทธิ์หลังการชำระเงินได้รับการตรวจสอบสำเร็จ
+    </div>
+
+  </div>
+
+</main>
+
+
+<script>
+  const SUPABASE_URL =
+    "https://cyegjwerxlxhczrfiurz.supabase.co";
+
+  const SUPABASE_KEY =
+    "sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF";
+
+  const sb = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+
+  let currentUser = null;
+  let currentPayment = null;
+  let selectedFile = null;
+
+
+  const loadingBox =
+    document.getElementById("loadingBox");
+
+  const mainContent =
+    document.getElementById("mainContent");
+
+  const paymentNo =
+    document.getElementById("paymentNo");
+
+  const paymentStatus =
+    document.getElementById("paymentStatus");
+
+  const courseName =
+    document.getElementById("courseName");
+
+  const sessionName =
+    document.getElementById("sessionName");
+
+  const paymentAmount =
+    document.getElementById("paymentAmount");
+
+  const fileInput =
+    document.getElementById("fileInput");
+
+  const selectedFileBox =
+    document.getElementById("selectedFile");
+
+  const previewWrap =
+    document.getElementById("previewWrap");
+
+  const submitSlipBtn =
+    document.getElementById("submitSlipBtn");
+
+  const messageBox =
+    document.getElementById("messageBox");
+
+  const slipCard =
+    document.getElementById("slipCard");
+
+
+  function showMessage(type, text) {
+
+    messageBox.className = "message " + type;
+    messageBox.textContent = text;
+
+  }
+
+
+  function clearMessage() {
+
+    messageBox.className = "message";
+    messageBox.textContent = "";
+
+  }
+
+
+  function formatMoney(value) {
+
+    return new Intl.NumberFormat(
+      "th-TH",
+      {
+        style: "currency",
+        currency: "THB",
+        minimumFractionDigits: 2
+      }
+    ).format(Number(value || 0));
+
+  }
+
+
+  function translateStatus(status) {
+
+    switch (status) {
+
+      case "VERIFIED":
+        return "ชำระเงินสำเร็จ";
+
+      case "FAILED":
+        return "การชำระเงินไม่สำเร็จ";
+
+      case "PENDING":
+      default:
+        return "รอชำระเงิน";
+
+    }
+
+  }
+
+
+  function renderStatus(status) {
+
+    paymentStatus.textContent =
+      translateStatus(status);
+
+    paymentStatus.className = "status";
+
+    if (status === "VERIFIED") {
+
+      paymentStatus.classList.add("verified");
+
+    } else if (status === "FAILED") {
+
+      paymentStatus.classList.add("failed");
+
+    } else {
+
+      paymentStatus.classList.add("pending");
+
+    }
+
+  }
+
+
+  function getPaymentId() {
+
+    const params =
+      new URLSearchParams(window.location.search);
+
+    return params.get("payment");
+
+  }
+
+
+  async function requireLogin() {
+
+    const {
+      data: { session },
+      error
+    } = await sb.auth.getSession();
+
+
+    if (error || !session) {
+
+      window.location.href =
+        "member-login.html";
+
+      return false;
+
+    }
+
+
+    currentUser = session.user;
+
+    return true;
+
+  }
+
+
+  async function loadPayment() {
+
+    const paymentId = getPaymentId();
+
+
+    if (!paymentId) {
+
+      loadingBox.innerHTML =
+        '<div class="loading">ไม่พบรายการชำระเงิน</div>';
+
+      return;
+
+    }
+
+
+    /*
+      Query ผ่าน ownership ของ payments.user_id
+      ไม่อนุญาตให้สมาชิกเปิด payment ของคนอื่น
+    */
+
+    const {
+      data: payment,
+      error: paymentError
+    } = await sb
+      .from("payments")
+      .select(`
+        id,
+        payment_no,
+        order_id,
+        user_id,
+        amount,
+        currency,
+        payment_status
+      `)
+      .eq("id", paymentId)
+      .eq("user_id", currentUser.id)
+      .maybeSingle();
+
+
+    if (paymentError) {
+
+      console.error(paymentError);
+
+      loadingBox.innerHTML =
+        '<div class="loading">ไม่สามารถโหลดข้อมูลการชำระเงินได้</div>';
+
+      return;
+
+    }
+
+
+    if (!payment) {
+
+      loadingBox.innerHTML =
+        '<div class="loading">ไม่พบรายการชำระเงิน หรือคุณไม่มีสิทธิ์เข้าถึงรายการนี้</div>';
+
+      return;
+
+    }
+
+
+    currentPayment = payment;
+
+
+    /*
+      ดึง Order Item แยก
+      เพื่อไม่พึ่ง nested relationship หลายชั้น
+    */
+
+    const {
+      data: item,
+      error: itemError
+    } = await sb
+      .from("order_items")
+      .select(`
+        training_session_id,
+        course_id,
+        description
+      `)
+      .eq("order_id", payment.order_id)
+      .limit(1)
+      .maybeSingle();
+
+
+    if (itemError) {
+
+      console.error(itemError);
+
+    }
+
+
+    let courseText =
+      item?.description || "-";
+
+    let sessionText = "-";
+
+
+    if (item?.training_session_id) {
+
+      const {
+        data: trainingSession
+      } = await sb
+        .from("training_sessions")
+        .select(`
+          session_name,
+          course_id
+        `)
+        .eq(
+          "id",
+          item.training_session_id
+        )
+        .maybeSingle();
+
+
+      if (trainingSession) {
+
+        sessionText =
+          trainingSession.session_name || "-";
+
+
+        if (trainingSession.course_id) {
+
+          const {
+            data: course
+          } = await sb
+            .from("courses")
+            .select("course_name_th")
+            .eq(
+              "id",
+              trainingSession.course_id
+            )
+            .maybeSingle();
+
+
+          if (course?.course_name_th) {
+
+            courseText =
+              course.course_name_th;
+
+          }
+
+        }
+
+      }
+
+    }
+
+
+    paymentNo.textContent =
+      payment.payment_no || "-";
+
+    courseName.textContent =
+      courseText;
+
+    sessionName.textContent =
+      sessionText;
+
+    paymentAmount.textContent =
+      formatMoney(payment.amount);
+
+    renderStatus(payment.payment_status);
+
+
+    /*
+      ถ้าชำระสำเร็จแล้ว
+      ไม่ต้องให้ Upload Slip ใหม่
+    */
+
+    if (
+      payment.payment_status === "VERIFIED"
+    ) {
+
+      slipCard.classList.add("hidden");
+
+    } else {
+
+      await loadExistingSlip();
+
+    }
+
+
+    loadingBox.classList.add("hidden");
+
+    mainContent.classList.remove("hidden");
+
+  }
+
+
+  async function loadExistingSlip() {
+
+    const {
+      data,
+      error
+    } = await sb
+      .from("payment_slips")
+      .select(`
+        id,
+        original_filename,
+        slip_status,
+        submitted_at
+      `)
+      .eq(
+        "payment_id",
+        currentPayment.id
+      )
+      .eq(
+        "user_id",
+        currentUser.id
+      )
+      .order(
+        "submitted_at",
+        { ascending: false }
+      )
+      .limit(1)
+      .maybeSingle();
+
+
+    if (error) {
+
+      console.error(error);
+
+      return;
+
+    }
+
+
+    if (!data) {
+
+      return;
+
+    }
+
+
+    showMessage(
+      "success",
+      "ได้รับหลักฐานการชำระเงินแล้ว"
+    );
+
+
+    selectedFileBox.style.display =
+      "block";
+
+    selectedFileBox.innerHTML =
+      "ไฟล์ล่าสุด: " +
+      (
+        data.original_filename ||
+        "หลักฐานการชำระเงิน"
+      );
+
+
+    submitSlipBtn.textContent =
+      "ส่งหลักฐานใหม่";
+
+  }
+
+
+  fileInput.addEventListener(
+    "change",
+    function () {
+
+      clearMessage();
+
+      const file =
+        fileInput.files?.[0];
+
+
+      if (!file) {
+
+        selectedFile = null;
+
+        submitSlipBtn.disabled = true;
+
+        return;
+
+      }
+
+
+      const allowedTypes = [
+        "image/jpeg",
+        "image/png",
+        "image/webp",
+        "application/pdf"
+      ];
+
+
+      if (
+        !allowedTypes.includes(file.type)
+      ) {
+
+        fileInput.value = "";
+
+        selectedFile = null;
+
+        submitSlipBtn.disabled = true;
+
+        showMessage(
+          "error",
+          "รองรับเฉพาะ JPG, PNG, WEBP และ PDF"
+        );
+
+        return;
+
+      }
+
+
+      const maxSize =
+        5 * 1024 * 1024;
+
+
+      if (file.size > maxSize) {
+
+        fileInput.value = "";
+
+        selectedFile = null;
+
+        submitSlipBtn.disabled = true;
+
+        showMessage(
+          "error",
+          "ไฟล์ต้องมีขนาดไม่เกิน 5 MB"
+        );
+
+        return;
+
+      }
+
+
+      selectedFile = file;
+
+      selectedFileBox.style.display =
+        "block";
+
+      selectedFileBox.textContent =
+        file.name +
+        " (" +
+        (
+          file.size /
+          1024 /
+          1024
+        ).toFixed(2) +
+        " MB)";
+
+
+      previewWrap.innerHTML = "";
+
+      previewWrap.style.display =
+        "block";
+
+
+      if (
+        file.type.startsWith("image/")
+      ) {
+
+        const img =
+          document.createElement("img");
+
+        img.src =
+          URL.createObjectURL(file);
+
+        img.alt =
+          "ตัวอย่างสลิป";
+
+        previewWrap.appendChild(img);
+
+      } else {
+
+        previewWrap.innerHTML =
+          '<div class="pdf-preview">📄 ' +
+          file.name +
+          "</div>";
+
+      }
+
+
+      submitSlipBtn.disabled = false;
+
+    }
+  );
+
+
+  function extensionFromFile(file) {
+
+    const name =
+      file.name || "";
+
+    const parts =
+      name.split(".");
+
+    if (parts.length > 1) {
+
+      return parts
+        .pop()
+        .toLowerCase();
+
+    }
+
+
+    switch (file.type) {
+
+      case "image/jpeg":
+        return "jpg";
+
+      case "image/png":
+        return "png";
+
+      case "image/webp":
+        return "webp";
+
+      case "application/pdf":
+        return "pdf";
+
+      default:
+        return "bin";
+
+    }
+
+  }
+
+
+  function createUuid() {
+
+    if (
+      window.crypto &&
+      typeof crypto.randomUUID === "function"
+    ) {
+
+      return crypto.randomUUID();
+
+    }
+
+
+    return (
+      Date.now().toString(36) +
+      "-" +
+      Math.random()
+        .toString(36)
+        .slice(2)
+    );
+
+  }
+
+
+  async function submitSlip() {
+
+    if (
+      !selectedFile ||
+      !currentPayment ||
+      !currentUser
+    ) {
+
+      return;
+
+    }
+
+
+    clearMessage();
+
+    submitSlipBtn.disabled = true;
+
+    submitSlipBtn.textContent =
+      "กำลังส่งหลักฐาน...";
+
+
+    try {
+
+      const extension =
+        extensionFromFile(
+          selectedFile
+        );
+
+
+      /*
+        Storage path:
+
+        USER_UUID/
+          PAYMENT_UUID/
+            RANDOM_UUID.ext
+      */
+
+      const storagePath =
+        currentUser.id +
+        "/" +
+        currentPayment.id +
+        "/" +
+        createUuid() +
+        "." +
+        extension;
+
+
+      const {
+        error: uploadError
+      } = await sb
+        .storage
+        .from("payment-slips")
+        .upload(
+          storagePath,
+          selectedFile,
+          {
+            cacheControl: "3600",
+            upsert: false,
+            contentType:
+              selectedFile.type
+          }
+        );
+
+
+      if (uploadError) {
+
+        throw uploadError;
+
+      }
+
+
+      /*
+        หลัง Upload สำเร็จ
+        บันทึกเฉพาะ metadata/path
+        ลง Database
+      */
+
+      const {
+        error: dbError
+      } = await sb
+        .from("payment_slips")
+        .insert({
+
+          payment_id:
+            currentPayment.id,
+
+          user_id:
+            currentUser.id,
+
+          storage_provider:
+            "SUPABASE",
+
+          storage_bucket:
+            "payment-slips",
+
+          storage_path:
+            storagePath,
+
+          original_filename:
+            selectedFile.name,
+
+          mime_type:
+            selectedFile.type,
+
+          file_size:
+            selectedFile.size,
+
+          slip_status:
+            "SUBMITTED"
+
+        });
+
+
+      if (dbError) {
+
+        /*
+          ถ้า Database insert ไม่สำเร็จ
+          ลบไฟล์ที่เพิ่ง Upload
+          ป้องกัน orphan file
+        */
+
+        await sb
+          .storage
+          .from("payment-slips")
+          .remove([
+            storagePath
+          ]);
+
+
+        throw dbError;
+
+      }
+
+
+      showMessage(
+        "success",
+        "ส่งหลักฐานการชำระเงินเรียบร้อยแล้ว ระบบได้รับไฟล์ของคุณแล้ว"
+      );
+
+
+      selectedFile = null;
+
+      fileInput.value = "";
+
+      previewWrap.innerHTML = "";
+
+      previewWrap.style.display =
+        "none";
+
+
+      submitSlipBtn.textContent =
+        "ส่งหลักฐานใหม่";
+
+      submitSlipBtn.disabled = true;
+
+
+      await loadExistingSlip();
+
+    } catch (error) {
+
+      console.error(error);
+
+      showMessage(
+        "error",
+        error?.message ||
+        "ไม่สามารถส่งหลักฐานการชำระเงินได้ กรุณาลองใหม่อีกครั้ง"
+      );
+
+
+      submitSlipBtn.textContent =
+        "ส่งหลักฐานการชำระเงิน";
+
+      submitSlipBtn.disabled =
+        !selectedFile;
+
+    }
+
+  }
+
+
+  submitSlipBtn.addEventListener(
+    "click",
+    submitSlip
+  );
+
+
+  async function init() {
+
+    const loggedIn =
+      await requireLogin();
+
+
+    if (!loggedIn) {
+
+      return;
+
+    }
+
+
+    await loadPayment();
+
+  }
+
+
+  init();
+</script>
+
+</body>
+</html>
