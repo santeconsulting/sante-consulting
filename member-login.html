@@ -8,8 +8,11 @@
     content="width=device-width, initial-scale=1, viewport-fit=cover"
   >
 
-  <title>SANTE Member | เข้าสู่ระบบสมาชิก</title>
+  <title>SANTE SYSTEM | เข้าสู่ระบบสมาชิก</title>
 
+  <!-- ======================================================
+       FONT : PROMPT
+  ======================================================= -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
@@ -18,12 +21,50 @@
     rel="stylesheet"
   >
 
+  <!-- ======================================================
+       SUPABASE
+  ======================================================= -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+
   <style>
-    /* =========================================================
-       RESET / VARIABLES
-    ========================================================= */
+
+    /* ======================================================
+       ROOT
+    ======================================================= */
+
+    :root {
+      --navy: #06366f;
+      --navy-dark: #032a5a;
+      --navy-deep: #02244d;
+
+      --blue: #0878e5;
+      --blue-soft: #edf7ff;
+
+      --yellow: #ffc21c;
+      --yellow-dark: #e9a900;
+
+      --green: #16a36a;
+
+      --white: #ffffff;
+
+      --text: #082f67;
+      --muted: #7187a5;
+
+      --border: #d8e6f3;
+
+      --danger: #df3d4c;
+      --success: #14875d;
+
+      --shadow:
+        0 20px 55px
+        rgba(15, 58, 102, 0.10);
+    }
+
+
+    /* ======================================================
+       RESET
+    ======================================================= */
 
     * {
       box-sizing: border-box;
@@ -31,38 +72,15 @@
       padding: 0;
     }
 
-    :root {
-      --navy: #07366f;
-      --navy-dark: #032855;
-      --navy-deep: #021f43;
-
-      --yellow: #ffc52d;
-      --yellow-dark: #e9a900;
-
-      --blue-soft: #eaf7ff;
-      --yellow-soft: #fff8e8;
-
-      --white: #ffffff;
-
-      --text: #0a336d;
-      --muted: #6d82a1;
-      --line: #d8e5f1;
-
-      --green: #169865;
-      --red: #c83f3f;
-    }
-
     html {
       width: 100%;
       min-height: 100%;
-
       overflow-x: hidden;
     }
 
     body {
       width: 100%;
       min-height: 100vh;
-      min-height: 100dvh;
 
       overflow-x: hidden;
 
@@ -70,16 +88,20 @@
 
       color: var(--text);
 
-      background: #ffffff;
+      background: #f7fbff;
+
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
     }
 
     button,
     input {
-      font: inherit;
+      font-family: "Prompt", sans-serif;
     }
 
     button,
-    a {
+    a,
+    input {
       -webkit-tap-highlight-color: transparent;
     }
 
@@ -88,216 +110,277 @@
       text-decoration: none;
     }
 
+    button {
+      border: 0;
+    }
+
     img {
       display: block;
-
       max-width: 100%;
     }
 
 
-    /* =========================================================
+    /* ======================================================
        PAGE
-    ========================================================= */
+    ======================================================= */
 
     .page {
       width: 100%;
-
       min-height: 100vh;
-      min-height: 100dvh;
 
       display: grid;
 
       grid-template-columns:
-        minmax(0, 1.04fr)
-        minmax(470px, 0.96fr);
-
-      background: #ffffff;
+        minmax(0, 52%)
+        minmax(0, 48%);
     }
 
 
-    /* =========================================================
-       LEFT / MEMBER VISUAL
-    ========================================================= */
+    /* ======================================================
+       LEFT HERO
+    ======================================================= */
 
-    .visual-panel {
+    .hero {
       position: relative;
 
       min-width: 0;
       min-height: 100vh;
-      min-height: 100dvh;
 
       overflow: hidden;
+
+      background: #eaf7ff;
+    }
+
+
+    /* ======================================================
+       HERO BACKGROUND
+    ======================================================= */
+
+    .hero-picture {
+      position: absolute;
+      inset: 0;
+
+      z-index: 0;
+
+      display: block;
+
+      width: 100%;
+      height: 100%;
+    }
+
+    .hero-picture img {
+      width: 100%;
+      height: 100%;
+
+      object-fit: cover;
+
+      /*
+        ภาพ Desktop ถูกออกแบบให้แมวอยู่ด้านขวาล่าง
+        จึงรักษาบริเวณด้านขวาของภาพไว้
+      */
+
+      object-position: center center;
+    }
+
+
+    /* overlay บางมาก เพื่อให้อ่านตัวหนังสือได้ */
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+
+      z-index: 1;
+
+      pointer-events: none;
+
+      background:
+        linear-gradient(
+          90deg,
+          rgba(255,255,255,0.08) 0%,
+          rgba(255,255,255,0.03) 55%,
+          rgba(255,255,255,0.00) 100%
+        );
+    }
+
+
+    /* ======================================================
+       HERO CONTENT
+    ======================================================= */
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+
+      width: 100%;
+      min-height: 100vh;
 
       display: flex;
       flex-direction: column;
 
       padding:
-        28px
-        46px
-        22px;
-
-      background:
-        linear-gradient(
-          135deg,
-          #e8f7ff 0%,
-          #f6fbff 46%,
-          #fff8e9 100%
-        );
+        clamp(36px, 5vh, 64px)
+        clamp(42px, 5.4vw, 90px)
+        28px;
     }
 
 
-    /* =========================================================
-       COMPANY LOGO
-    ========================================================= */
+    /* ======================================================
+       LOGO
+    ======================================================= */
 
-    .brand {
-      position: relative;
-
-      z-index: 5;
-
-      height: 54px;
-
-      display: flex;
-      align-items: center;
-
-      flex: 0 0 auto;
-    }
-
-    .brand img {
-      width: 145px;
-      max-height: 54px;
+    .brand-logo {
+      width: clamp(82px, 7vw, 118px);
+      height: auto;
 
       object-fit: contain;
-      object-position: left center;
     }
 
 
-    /* =========================================================
-       MEMBER CONTENT
-    ========================================================= */
+    /* ======================================================
+       MEMBER BADGE
+    ======================================================= */
 
-    .visual-content {
-      position: relative;
+    .member-badge {
+      width: fit-content;
 
-      z-index: 5;
-
-      width: min(620px, 82%);
-
-      margin-top: 4vh;
-    }
-
-    .member-pill {
       display: inline-flex;
       align-items: center;
 
-      gap: 8px;
+      gap: 10px;
 
-      min-height: 35px;
+      margin-top:
+        clamp(18px, 2.5vh, 28px);
 
       padding:
-        6px
-        14px;
+        8px
+        16px;
 
       border:
         1px solid
-        rgba(7, 54, 111, 0.10);
+        rgba(5, 55, 105, 0.10);
 
       border-radius: 999px;
 
       background:
-        rgba(255, 255, 255, 0.9);
+        rgba(255,255,255,0.88);
 
       color: var(--navy);
 
-      font-size: 12px;
-      font-weight: 600;
-
       box-shadow:
-        0 6px 18px
-        rgba(7, 54, 111, 0.04);
+        0 5px 18px
+        rgba(10, 60, 105, 0.05);
+
+      font-size:
+        clamp(12px, .9vw, 15px);
+
+      font-weight: 600;
     }
 
-    .member-pill::before {
-      content: "";
+    .member-dot {
+      width: 11px;
+      height: 11px;
 
-      width: 9px;
-      height: 9px;
-
-      flex: 0 0 9px;
+      flex: 0 0 11px;
 
       border-radius: 50%;
 
       background: var(--yellow);
     }
 
-    .visual-title {
-      margin-top: 20px;
+
+    /* ======================================================
+       MOTTO
+    ======================================================= */
+
+    .hero-title {
+      margin-top:
+        clamp(18px, 2.7vh, 30px);
 
       color: var(--navy);
 
-      font-size: 47px;
+      font-size:
+        clamp(40px, 4.1vw, 66px);
+
       font-weight: 700;
 
-      line-height: 1.12;
+      line-height: 1.04;
 
-      letter-spacing: -1.1px;
+      letter-spacing: -1.6px;
     }
 
-    .visual-title span {
-      color: var(--yellow-dark);
+    .hero-title span {
+      color: #f3ad00;
     }
 
-    .visual-title-th {
-      margin-top: 12px;
+    .hero-thai-title {
+      margin-top: 10px;
 
       color: var(--navy);
 
-      font-size: 20px;
+      font-size:
+        clamp(19px, 1.55vw, 27px);
+
       font-weight: 700;
 
-      line-height: 1.5;
+      line-height: 1.4;
     }
 
-    .visual-description {
-      max-width: 570px;
+
+    /* ======================================================
+       DESCRIPTION
+    ======================================================= */
+
+    .hero-description {
+      width: min(500px, 68%);
 
       margin-top: 15px;
 
-      color: #577598;
+      color: var(--navy);
 
-      font-size: 13px;
+      font-size:
+        clamp(12px, .95vw, 15px);
+
       font-weight: 400;
 
-      line-height: 1.75;
+      line-height: 1.7;
     }
 
+
+    /* ======================================================
+       FEATURES
+    ======================================================= */
+
     .feature-list {
+      width: min(500px, 72%);
+
       display: grid;
 
-      gap: 9px;
+      gap: 10px;
 
-      margin-top: 18px;
+      margin-top: 19px;
     }
 
     .feature {
       display: flex;
       align-items: center;
 
-      gap: 10px;
+      gap: 11px;
 
       color: var(--navy);
 
-      font-size: 12px;
+      font-size:
+        clamp(11px, .9vw, 14px);
+
       font-weight: 500;
 
-      line-height: 1.5;
+      line-height: 1.45;
     }
 
     .feature-check {
-      width: 25px;
-      height: 25px;
+      width: 28px;
+      height: 28px;
 
-      flex: 0 0 25px;
+      flex: 0 0 28px;
 
       display: grid;
       place-items: center;
@@ -308,1036 +391,1176 @@
 
       color: var(--navy);
 
-      font-size: 12px;
+      font-size: 15px;
+
       font-weight: 700;
+
+      box-shadow:
+        0 5px 14px
+        rgba(238, 172, 0, .16);
     }
 
 
-    /* =========================================================
-       DESKTOP MEMBER HERO
+    /* ======================================================
+       COPYRIGHT
+    ======================================================= */
 
-       IMPORTANT:
-       We use the prepared hero image as a complete artwork.
-       No separate mascot scaling.
-    ========================================================= */
+    .copyright {
+      margin-top: auto;
 
-    .member-artwork {
-      position: absolute;
+      padding-top: 20px;
 
-      z-index: 2;
+      color: #607b9b;
 
-      right: 0;
-      bottom: 0;
+      font-size: 10px;
 
-      width: 420px;
-      height: 330px;
-
-      display: flex;
-      align-items: flex-end;
-      justify-content: flex-end;
-
-      overflow: hidden;
-
-      pointer-events: none;
-    }
-
-    .member-artwork picture {
-      width: 100%;
-      height: 100%;
-    }
-
-    .member-artwork img {
-      width: 100%;
-      height: 100%;
-
-      object-fit: contain;
-      object-position: right bottom;
-    }
-
-    .decor-circle {
-      position: absolute;
-
-      z-index: 1;
-
-      right: -95px;
-      bottom: -120px;
-
-      width: 390px;
-      height: 390px;
-
-      border-radius: 50%;
-
-      background:
-        rgba(255, 197, 45, 0.13);
-
-      pointer-events: none;
+      font-weight: 400;
     }
 
 
-    /* =========================================================
-       RIGHT LOGIN AREA
-    ========================================================= */
+    /* ======================================================
+       RIGHT SIDE
+    ======================================================= */
 
-    .login-panel {
+    .login-side {
       min-width: 0;
       min-height: 100vh;
-      min-height: 100dvh;
 
       display: flex;
       align-items: center;
       justify-content: center;
 
       padding:
-        22px
-        34px;
+        clamp(28px, 4vh, 55px)
+        clamp(30px, 4vw, 64px);
 
-      background: #ffffff;
+      background:
+        linear-gradient(
+          135deg,
+          #ffffff 0%,
+          #fbfdff 55%,
+          #f1f9ff 100%
+        );
     }
 
+
+    /* ======================================================
+       LOGIN CARD
+    ======================================================= */
+
     .login-card {
-      width: min(100%, 545px);
+      width: min(100%, 650px);
 
       padding:
-        34px
-        40px;
+        clamp(34px, 3.5vw, 50px)
+        clamp(38px, 4vw, 56px)
+        34px;
 
       border:
         1px solid
-        var(--line);
+        #dce7f2;
 
-      border-radius: 25px;
+      border-radius: 24px;
 
-      background: #ffffff;
+      background:
+        rgba(255,255,255,0.97);
 
-      box-shadow:
-        0 20px 55px
-        rgba(7, 54, 111, 0.07);
+      box-shadow: var(--shadow);
     }
 
 
-    /* =========================================================
-       LOGIN HEADING
-    ========================================================= */
+    /* ======================================================
+       LOGIN HEADER
+    ======================================================= */
 
     .login-eyebrow {
-      color: #bd8500;
+      color: #d79300;
 
       font-size: 13px;
-      font-weight: 700;
 
-      letter-spacing: 0.3px;
+      font-weight: 600;
+
+      letter-spacing: .1px;
     }
 
     .login-title {
-      margin-top: 7px;
+      margin-top: 8px;
 
-      color: var(--navy);
+      color: var(--navy-deep);
 
-      font-size: 34px;
+      font-size:
+        clamp(30px, 2.35vw, 42px);
+
       font-weight: 700;
 
-      line-height: 1.25;
+      line-height: 1.18;
 
-      letter-spacing: -0.6px;
+      letter-spacing: -.7px;
     }
 
     .login-description {
-      margin-top: 9px;
+      margin-top: 10px;
 
       color: var(--muted);
 
-      font-size: 12px;
+      font-size:
+        clamp(11px, .9vw, 14px);
+
       font-weight: 400;
 
-      line-height: 1.7;
+      line-height: 1.65;
     }
 
 
-    /* =========================================================
-       MESSAGE
-    ========================================================= */
-
-    .message {
-      display: none;
-
-      margin-top: 15px;
-
-      padding:
-        10px
-        12px;
-
-      border-radius: 10px;
-
-      font-size: 11px;
-      line-height: 1.6;
-    }
-
-    .message.error {
-      display: block;
-
-      background: #fff0f0;
-
-      color: var(--red);
-    }
-
-    .message.success {
-      display: block;
-
-      background: #eaf9f2;
-
-      color: #14784e;
-    }
-
-
-    /* =========================================================
+    /* ======================================================
        FORM
-    ========================================================= */
+    ======================================================= */
 
-    .form {
-      margin-top: 20px;
+    .login-form {
+      margin-top: 27px;
     }
 
-    .field {
-      margin-top: 14px;
+    .form-group {
+      margin-bottom: 18px;
     }
 
-    .field:first-child {
-      margin-top: 0;
-    }
+    .form-label {
+      display: flex;
+      align-items: center;
 
-    .field label {
-      display: block;
+      gap: 5px;
 
-      margin-bottom: 7px;
+      margin-bottom: 8px;
 
-      color: var(--navy);
+      color: var(--navy-deep);
 
       font-size: 13px;
+
       font-weight: 600;
     }
 
     .required {
-      color: #df3d3d;
+      color: #e74350;
     }
 
-    .input {
-      width: 100%;
-      height: 52px;
 
-      padding:
-        0
-        15px;
+    /* ======================================================
+       INPUT
+    ======================================================= */
+
+    .input-box {
+      position: relative;
+
+      width: 100%;
+      height: 58px;
+
+      display: flex;
+      align-items: center;
 
       border:
-        1px solid
-        #ccddeb;
+        1.5px solid
+        var(--border);
 
       border-radius: 12px;
 
-      outline: none;
-
       background: #ffffff;
 
-      color: var(--navy);
-
-      font-size: 14px;
-      font-weight: 400;
-
       transition:
-        border-color 0.15s ease,
-        box-shadow 0.15s ease;
+        border-color .15s ease,
+        box-shadow .15s ease;
     }
 
-    .input::placeholder {
-      color: #9aacc0;
-    }
-
-    .input:focus {
-      border-color: #78aee1;
+    .input-box:focus-within {
+      border-color: #69b2f3;
 
       box-shadow:
         0 0 0 4px
-        rgba(23, 135, 238, 0.07);
+        rgba(18, 132, 230, .08);
     }
 
+    .input-icon {
+      width: 54px;
 
-    /* =========================================================
-       PASSWORD
-    ========================================================= */
+      flex: 0 0 54px;
 
-    .password-wrap {
-      position: relative;
+      display: grid;
+      place-items: center;
+
+      color: #6982a3;
     }
 
-    .password-wrap .input {
-      padding-right: 72px;
+    .input-icon svg {
+      width: 21px;
+      height: 21px;
     }
 
-    .password-toggle {
-      position: absolute;
+    .input-box input {
+      width: 100%;
+      height: 100%;
 
-      top: 50%;
-      right: 8px;
+      min-width: 0;
 
-      transform: translateY(-50%);
-
-      min-width: 55px;
-      height: 36px;
+      padding:
+        0
+        12px
+        0
+        0;
 
       border: 0;
-      border-radius: 8px;
+      outline: 0;
 
       background: transparent;
 
       color: var(--navy);
 
+      font-size: 14px;
+
+      font-weight: 400;
+    }
+
+    .input-box input::placeholder {
+      color: #9aabc0;
+    }
+
+
+    /* ======================================================
+       PASSWORD
+    ======================================================= */
+
+    .password-toggle {
+      height: 100%;
+
+      flex: 0 0 auto;
+
+      display: flex;
+      align-items: center;
+
+      gap: 6px;
+
+      padding:
+        0
+        16px;
+
+      border: 0;
+
+      background: transparent;
+
+      color: #526e94;
+
       font-size: 12px;
-      font-weight: 600;
+
+      font-weight: 500;
 
       cursor: pointer;
     }
 
-    .password-toggle:hover {
-      background: #f1f6fb;
+    .password-toggle svg {
+      width: 20px;
+      height: 20px;
     }
 
 
-    /* =========================================================
-       LOGIN OPTIONS
-    ========================================================= */
+    /* ======================================================
+       OPTIONS
+    ======================================================= */
 
-    .login-options {
+    .form-options {
       display: flex;
       align-items: center;
       justify-content: space-between;
 
-      gap: 16px;
+      gap: 15px;
 
-      margin-top: 13px;
+      margin-top: 1px;
+      margin-bottom: 21px;
     }
 
     .remember {
       display: flex;
       align-items: center;
 
-      gap: 8px;
+      gap: 9px;
 
-      color: var(--navy);
+      color: #415b7c;
 
-      font-size: 11px;
-      font-weight: 400;
+      font-size: 12px;
 
       cursor: pointer;
-
-      user-select: none;
     }
 
     .remember input {
-      width: 17px;
-      height: 17px;
+      width: 18px;
+      height: 18px;
 
-      flex: 0 0 17px;
-
-      accent-color: var(--yellow-dark);
+      accent-color: var(--yellow);
 
       cursor: pointer;
     }
 
-    .forgot-button {
+    .forgot {
       border: 0;
 
       background: transparent;
 
-      color: #b37a00;
+      color: #0878e5;
 
-      font-size: 11px;
+      font-size: 12px;
+
       font-weight: 600;
 
       cursor: pointer;
     }
 
-    .forgot-button:hover {
+    .forgot:hover {
       text-decoration: underline;
     }
 
 
-    /* =========================================================
+    /* ======================================================
+       MESSAGE
+    ======================================================= */
+
+    .message {
+      display: none;
+
+      margin-bottom: 14px;
+
+      padding:
+        11px
+        13px;
+
+      border-radius: 10px;
+
+      background: #fff0f2;
+
+      color: var(--danger);
+
+      font-size: 11px;
+
+      line-height: 1.55;
+    }
+
+    .message.show {
+      display: block;
+    }
+
+    .message.success {
+      background: #eaf8f2;
+
+      color: var(--success);
+    }
+
+
+    /* ======================================================
        LOGIN BUTTON
-    ========================================================= */
+    ======================================================= */
 
     .login-button {
       width: 100%;
-      height: 52px;
+      height: 59px;
 
-      margin-top: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      gap: 12px;
 
       border: 0;
       border-radius: 12px;
 
       background:
         linear-gradient(
-          135deg,
-          #ffd13e,
-          #ffbd1c
+          90deg,
+          #ffc11a 0%,
+          #ffd13a 100%
         );
 
-      color: var(--navy);
+      color: var(--navy-deep);
 
-      font-size: 14px;
-      font-weight: 700;
+      box-shadow:
+        0 9px 24px
+        rgba(232, 170, 0, .20);
+
+      font-size: 15px;
+
+      font-weight: 600;
 
       cursor: pointer;
 
-      box-shadow:
-        0 10px 22px
-        rgba(255, 189, 28, 0.17);
-
       transition:
-        transform 0.15s ease,
-        opacity 0.15s ease;
+        transform .15s ease,
+        box-shadow .15s ease,
+        opacity .15s ease;
     }
 
     .login-button:hover:not(:disabled) {
       transform: translateY(-1px);
+
+      box-shadow:
+        0 12px 28px
+        rgba(232, 170, 0, .25);
     }
 
     .login-button:disabled {
-      opacity: 0.6;
+      opacity: .65;
 
       cursor: not-allowed;
     }
 
+    .login-button svg {
+      width: 22px;
+      height: 22px;
+    }
 
-    /* =========================================================
-       DIVIDER
-    ========================================================= */
 
-    .divider {
+    /* ======================================================
+       REGISTER DIVIDER
+    ======================================================= */
+
+    .register-divider {
       display: flex;
       align-items: center;
 
-      gap: 12px;
+      gap: 13px;
 
       margin:
-        18px
+        21px
         0
-        14px;
-
-      color: #9aacbf;
-
-      font-size: 10px;
+        18px;
     }
 
-    .divider::before,
-    .divider::after {
+    .register-divider::before,
+    .register-divider::after {
       content: "";
-
-      height: 1px;
 
       flex: 1;
 
-      background: #e1eaf2;
+      height: 1px;
+
+      background: #dce6f0;
+    }
+
+    .register-divider span {
+      color: #667e9e;
+
+      font-size: 12px;
+
+      white-space: nowrap;
     }
 
 
-    /* =========================================================
-       MEMBER ACTIONS
-    ========================================================= */
+    /* ======================================================
+       REGISTER BUTTON
+    ======================================================= */
 
-    .register-link {
+    .register-button {
       width: 100%;
-      min-height: 48px;
+      min-height: 60px;
 
       display: flex;
       align-items: center;
       justify-content: center;
 
-      padding:
-        8px
-        14px;
+      gap: 13px;
+
+      padding: 12px 18px;
 
       border:
-        1px solid
-        #ccddeb;
+        1.5px solid
+        #bcdcf5;
 
-      border-radius: 11px;
+      border-radius: 12px;
 
       background: #ffffff;
 
-      color: var(--navy);
+      color: #0877e5;
 
-      text-align: center;
+      font-size: 14px;
 
-      font-size: 12px;
       font-weight: 600;
 
       transition:
-        border-color 0.15s ease,
-        background 0.15s ease;
+        background .15s ease,
+        border-color .15s ease,
+        transform .15s ease;
     }
 
-    .register-link:hover {
-      border-color: #abc8e1;
+    .register-button:hover {
+      background: #f6fbff;
 
-      background: #f7fbff;
+      border-color: #80bff0;
+
+      transform: translateY(-1px);
     }
 
-    .home-link {
-      display: block;
+    .register-button svg {
+      width: 23px;
+      height: 23px;
+    }
 
-      margin-top: 12px;
 
-      color: #7a8da6;
+    /* ======================================================
+       HOME
+    ======================================================= */
 
-      text-align: center;
+    .back-home {
+      width: fit-content;
 
-      font-size: 10px;
+      display: flex;
+      align-items: center;
+
+      gap: 7px;
+
+      margin:
+        24px
+        auto
+        0;
+
+      color: #69809f;
+
+      font-size: 12px;
+
       font-weight: 400;
     }
 
-    .home-link:hover {
+    .back-home:hover {
       color: var(--navy);
     }
 
 
-    /* =========================================================
+    /* ======================================================
        SHORT DESKTOP
-       Optimized for notebook screens at browser zoom 100%
-    ========================================================= */
+       สำคัญสำหรับ Notebook ที่ Browser 100%
+    ======================================================= */
 
     @media
-      (min-width: 901px)
-      and (max-height: 800px) {
+    (min-width: 901px)
+    and
+    (max-height: 820px) {
 
-      .visual-panel {
+      .hero-content {
         padding:
-          20px
-          36px
-          16px;
-      }
-
-      .brand {
-        height: 44px;
-      }
-
-      .brand img {
-        width: 125px;
-        max-height: 44px;
-      }
-
-      .visual-content {
-        width: min(570px, 80%);
-
-        margin-top: 20px;
-      }
-
-      .member-pill {
-        min-height: 30px;
-
-        padding:
-          5px
-          11px;
-
-        font-size: 10px;
-      }
-
-      .visual-title {
-        margin-top: 13px;
-
-        font-size: 38px;
-      }
-
-      .visual-title-th {
-        margin-top: 7px;
-
-        font-size: 16px;
-      }
-
-      .visual-description {
-        margin-top: 8px;
-
-        font-size: 11px;
-
-        line-height: 1.6;
-      }
-
-      .feature-list {
-        gap: 6px;
-
-        margin-top: 10px;
-      }
-
-      .feature {
-        font-size: 10px;
-      }
-
-      .feature-check {
-        width: 21px;
-        height: 21px;
-
-        flex-basis: 21px;
-
-        font-size: 10px;
-      }
-
-      .member-artwork {
-        width: 310px;
-        height: 245px;
-      }
-
-      .login-panel {
-        padding:
-          16px
-          27px;
-      }
-
-      .login-card {
-        width: min(100%, 500px);
-
-        padding:
-          25px
-          33px;
-
-        border-radius: 21px;
-      }
-
-      .login-title {
-        font-size: 28px;
-      }
-
-      .login-description {
-        font-size: 10px;
-      }
-
-      .form {
-        margin-top: 15px;
-      }
-
-      .field {
-        margin-top: 10px;
-      }
-
-      .field label {
-        margin-bottom: 5px;
-
-        font-size: 11px;
-      }
-
-      .input {
-        height: 45px;
-
-        font-size: 12px;
-      }
-
-      .login-options {
-        margin-top: 10px;
-      }
-
-      .login-button {
-        height: 45px;
-
-        margin-top: 13px;
-      }
-
-      .divider {
-        margin:
-          13px
-          0
-          11px;
-      }
-
-      .register-link {
-        min-height: 42px;
-      }
-
-      .home-link {
-        margin-top: 8px;
-      }
-
-    }
-
-
-    /* =========================================================
-       MEDIUM DESKTOP
-    ========================================================= */
-
-    @media (max-width: 1100px) {
-
-      .page {
-        grid-template-columns:
-          minmax(0, 0.92fr)
-          minmax(430px, 1.08fr);
-      }
-
-      .visual-panel {
-        padding:
-          27px
-          30px;
-      }
-
-      .visual-content {
-        width: 92%;
-      }
-
-      .visual-title {
-        font-size: 39px;
-      }
-
-      .visual-title-th {
-        font-size: 17px;
-      }
-
-      .visual-description {
-        font-size: 11px;
-      }
-
-      .feature {
-        font-size: 10px;
-      }
-
-      .member-artwork {
-        width: 300px;
-        height: 260px;
-      }
-
-      .login-panel {
-        padding: 20px;
-      }
-
-      .login-card {
-        padding:
-          30px
-          31px;
-      }
-
-    }
-
-
-    /* =========================================================
-       TABLET / MOBILE
-    ========================================================= */
-
-    @media (max-width: 900px) {
-
-      body {
-        background: #f5faff;
-      }
-
-      .page {
-        display: block;
-
-        min-height: 100dvh;
-      }
-
-      .visual-panel {
-        min-height: 320px;
-
-        padding:
-          21px
-          22px
-          17px;
-      }
-
-      .brand {
-        height: 44px;
-      }
-
-      .brand img {
-        width: 120px;
-        max-height: 44px;
-      }
-
-      .visual-content {
-        width: 67%;
-
-        margin-top: 17px;
-      }
-
-      .member-pill {
-        min-height: 28px;
-
-        padding:
-          4px
-          10px;
-
-        font-size: 9px;
-      }
-
-      .visual-title {
-        margin-top: 11px;
-
-        font-size: 31px;
-
-        letter-spacing: -0.5px;
-      }
-
-      .visual-title-th {
-        margin-top: 6px;
-
-        font-size: 14px;
-      }
-
-      .visual-description {
-        margin-top: 7px;
-
-        font-size: 10px;
-
-        line-height: 1.6;
-      }
-
-      .feature-list {
-        display: none;
-      }
-
-      .member-artwork {
-        right: 0;
-        bottom: 0;
-
-        width: 235px;
-        height: 215px;
-      }
-
-      .decor-circle {
-        width: 250px;
-        height: 250px;
-
-        right: -90px;
-        bottom: -100px;
-      }
-
-      .login-panel {
-        min-height: auto;
-
-        padding:
-          15px
-          14px
-          30px;
-
-        background: #f5faff;
-      }
-
-      .login-card {
-        width: min(100%, 620px);
-
-        padding:
-          27px
-          24px;
-
-        border-radius: 20px;
-      }
-
-      .login-title {
-        font-size: 28px;
-      }
-
-    }
-
-
-    /* =========================================================
-       MOBILE
-    ========================================================= */
-
-    @media (max-width: 600px) {
-
-      .visual-panel {
-        min-height: 275px;
-
-        padding:
-          17px
-          17px
-          13px;
-      }
-
-      .brand {
-        height: 38px;
-      }
-
-      .brand img {
-        width: 105px;
-        max-height: 38px;
-      }
-
-      .visual-content {
-        width: 67%;
-
-        margin-top: 12px;
-      }
-
-      .member-pill {
-        min-height: 26px;
-
-        padding:
-          4px
-          8px;
-
-        font-size: 8px;
-      }
-
-      .member-pill::before {
-        width: 7px;
-        height: 7px;
-
-        flex-basis: 7px;
-      }
-
-      .visual-title {
-        margin-top: 9px;
-
-        font-size: 25px;
-
-        line-height: 1.12;
-      }
-
-      .visual-title-th {
-        margin-top: 5px;
-
-        font-size: 11px;
-      }
-
-      .visual-description {
-        max-width: 270px;
-
-        margin-top: 6px;
-
-        font-size: 9px;
-
-        line-height: 1.5;
-      }
-
-      .member-artwork {
-        right: -4px;
-
-        width: 175px;
-        height: 165px;
-      }
-
-      .login-panel {
-        padding:
-          11px
-          10px
-          25px;
-      }
-
-      .login-card {
-        padding:
-          23px
+          26px
+          52px
           18px;
-
-        border-radius: 18px;
       }
 
-      .login-eyebrow {
-        font-size: 11px;
+      .brand-logo {
+        width: 78px;
       }
 
-      .login-title {
-        margin-top: 4px;
+      .member-badge {
+        margin-top: 13px;
 
-        font-size: 25px;
+        padding:
+          6px
+          12px;
+
+        font-size: 10px;
       }
 
-      .login-description {
+      .member-dot {
+        width: 9px;
+        height: 9px;
+
+        flex-basis: 9px;
+      }
+
+      .hero-title {
+        margin-top: 13px;
+
+        font-size:
+          clamp(35px, 3.5vw, 50px);
+      }
+
+      .hero-thai-title {
         margin-top: 6px;
+
+        font-size:
+          clamp(16px, 1.3vw, 21px);
+      }
+
+      .hero-description {
+        margin-top: 8px;
 
         font-size: 11px;
 
         line-height: 1.55;
       }
 
-      .form {
-        margin-top: 17px;
+      .feature-list {
+        gap: 7px;
+
+        margin-top: 12px;
       }
 
-      .field {
-        margin-top: 13px;
-      }
-
-      .field label {
-        font-size: 12px;
-      }
-
-      /*
-        16px prevents iOS browser from zooming
-        automatically when an input receives focus.
-      */
-
-      .input {
-        height: 51px;
-
-        font-size: 16px;
-      }
-
-      .password-toggle {
-        font-size: 12px;
-      }
-
-      .login-options {
+      .feature {
         gap: 8px;
-      }
 
-      .remember,
-      .forgot-button {
         font-size: 10px;
       }
 
-      .login-button {
-        height: 51px;
+      .feature-check {
+        width: 23px;
+        height: 23px;
 
-        font-size: 14px;
+        flex-basis: 23px;
+
+        font-size: 12px;
       }
 
-      .register-link {
-        min-height: 47px;
+      .copyright {
+        padding-top: 10px;
+
+        font-size: 8px;
+      }
+
+
+      /* RIGHT */
+
+      .login-side {
+        padding:
+          20px
+          35px;
+      }
+
+      .login-card {
+        width: min(100%, 590px);
+
+        padding:
+          27px
+          38px
+          24px;
+
+        border-radius: 20px;
+      }
+
+      .login-eyebrow {
+        font-size: 10px;
+      }
+
+      .login-title {
+        margin-top: 5px;
+
+        font-size: 30px;
+      }
+
+      .login-description {
+        margin-top: 5px;
+
+        font-size: 10px;
+
+        line-height: 1.5;
+      }
+
+      .login-form {
+        margin-top: 18px;
+      }
+
+      .form-group {
+        margin-bottom: 12px;
+      }
+
+      .form-label {
+        margin-bottom: 5px;
+
+        font-size: 10px;
+      }
+
+      .input-box {
+        height: 48px;
+      }
+
+      .input-icon {
+        width: 46px;
+
+        flex-basis: 46px;
+      }
+
+      .input-icon svg {
+        width: 18px;
+        height: 18px;
+      }
+
+      .input-box input {
+        font-size: 11px;
+      }
+
+      .password-toggle {
+        padding:
+          0
+          13px;
+
+        font-size: 10px;
+      }
+
+      .form-options {
+        margin-bottom: 13px;
+      }
+
+      .remember,
+      .forgot {
+        font-size: 9px;
+      }
+
+      .remember input {
+        width: 16px;
+        height: 16px;
+      }
+
+      .login-button {
+        height: 49px;
+
+        font-size: 12px;
+      }
+
+      .register-divider {
+        margin:
+          13px
+          0;
+      }
+
+      .register-divider span {
+        font-size: 9px;
+      }
+
+      .register-button {
+        min-height: 49px;
 
         font-size: 11px;
       }
 
-      .home-link {
+      .back-home {
+        margin-top: 14px;
+
+        font-size: 9px;
+      }
+
+    }
+
+
+    /* ======================================================
+       TABLET
+    ======================================================= */
+
+    @media
+    (max-width: 1100px)
+    and
+    (min-width: 768px) {
+
+      .page {
+        grid-template-columns:
+          minmax(0, 46%)
+          minmax(0, 54%);
+      }
+
+      .hero-content {
+        padding:
+          38px
+          32px
+          24px;
+      }
+
+      .brand-logo {
+        width: 82px;
+      }
+
+      .hero-title {
+        font-size: 40px;
+      }
+
+      .hero-thai-title {
+        font-size: 18px;
+      }
+
+      .hero-description {
+        width: 90%;
+
+        font-size: 11px;
+      }
+
+      .feature-list {
+        width: 92%;
+      }
+
+      .feature {
+        font-size: 10px;
+      }
+
+      .login-side {
+        padding:
+          30px
+          24px;
+      }
+
+      .login-card {
+        padding:
+          34px
+          31px
+          28px;
+      }
+
+    }
+
+
+    /* ======================================================
+       MOBILE
+       ใช้ภาพ sante-dashboard-hero-mobile.png
+    ======================================================= */
+
+    @media (max-width: 767px) {
+
+      body {
+        background: #f4faff;
+      }
+
+      .page {
+        display: block;
+
+        min-height: 100vh;
+      }
+
+
+      /* ====================================================
+         MOBILE HERO
+      ===================================================== */
+
+      .hero {
+        min-height: 390px;
+        height: 390px;
+      }
+
+      .hero-picture img {
+        object-fit: cover;
+
+        /*
+          ภาพ Mobile มีแมวอยู่ช่วงล่าง
+          จึงเก็บด้านล่างไว้
+        */
+
+        object-position: center bottom;
+      }
+
+      .hero-overlay {
+        background:
+          linear-gradient(
+            180deg,
+            rgba(255,255,255,.03) 0%,
+            rgba(255,255,255,.02) 100%
+          );
+      }
+
+      .hero-content {
+        min-height: 390px;
+        height: 390px;
+
+        padding:
+          22px
+          20px
+          16px;
+      }
+
+      .brand-logo {
+        width: 66px;
+      }
+
+      .member-badge {
+        margin-top: 13px;
+
+        padding:
+          6px
+          11px;
+
+        font-size: 10px;
+      }
+
+      .member-dot {
+        width: 8px;
+        height: 8px;
+
+        flex-basis: 8px;
+      }
+
+      .hero-title {
+        width: 88%;
+
+        margin-top: 13px;
+
+        font-size: 28px;
+
+        line-height: 1.06;
+
+        letter-spacing: -.6px;
+      }
+
+      .hero-thai-title {
+        width: 85%;
+
+        margin-top: 6px;
+
+        font-size: 13px;
+
+        line-height: 1.4;
+      }
+
+
+      /*
+        มือถือซ่อนข้อความรองและ checklist
+        เพื่อไม่ให้ข้อความทับแมว
+        และรักษาความอ่านง่าย
+      */
+
+      .hero-description,
+      .feature-list,
+      .copyright {
+        display: none;
+      }
+
+
+      /* ====================================================
+         MOBILE LOGIN
+      ===================================================== */
+
+      .login-side {
+        min-height: auto;
+
+        display: block;
+
+        padding:
+          0
+          12px
+          30px;
+
+        background: #f4faff;
+      }
+
+      .login-card {
+        position: relative;
+        z-index: 10;
+
+        width: 100%;
+
+        margin-top: -22px;
+
+        padding:
+          26px
+          20px
+          22px;
+
+        border-radius: 21px;
+
+        box-shadow:
+          0 14px 35px
+          rgba(15, 60, 105, .10);
+      }
+
+      .login-eyebrow {
+        font-size: 10px;
+      }
+
+      .login-title {
+        margin-top: 5px;
+
+        font-size: 27px;
+      }
+
+      .login-description {
+        margin-top: 7px;
+
+        font-size: 10px;
+
+        line-height: 1.55;
+      }
+
+      .login-form {
+        margin-top: 20px;
+      }
+
+      .form-group {
+        margin-bottom: 14px;
+      }
+
+      .form-label {
+        margin-bottom: 6px;
+
+        font-size: 11px;
+      }
+
+      .input-box {
+        height: 52px;
+
+        border-radius: 11px;
+      }
+
+      .input-icon {
+        width: 46px;
+
+        flex-basis: 46px;
+      }
+
+      .input-icon svg {
+        width: 19px;
+        height: 19px;
+      }
+
+      .input-box input {
+        font-size: 12px;
+      }
+
+      .password-toggle {
+        padding:
+          0
+          12px;
+
+        font-size: 10px;
+      }
+
+      .form-options {
+        gap: 8px;
+
+        margin-bottom: 17px;
+      }
+
+      .remember,
+      .forgot {
+        font-size: 10px;
+      }
+
+      .remember {
+        gap: 6px;
+      }
+
+      .remember input {
+        width: 17px;
+        height: 17px;
+      }
+
+      .login-button {
+        height: 53px;
+
+        border-radius: 11px;
+
+        font-size: 13px;
+      }
+
+      .register-divider {
+        margin:
+          17px
+          0
+          14px;
+      }
+
+      .register-divider span {
+        font-size: 9px;
+      }
+
+      .register-button {
+        min-height: 52px;
+
+        border-radius: 11px;
+
+        font-size: 12px;
+      }
+
+      .back-home {
+        margin-top: 19px;
+
         font-size: 10px;
       }
 
     }
 
 
-    /* =========================================================
-       SMALL MOBILE
-    ========================================================= */
+    /* ======================================================
+       SMALL MOBILE 360 - 390
+    ======================================================= */
 
     @media (max-width: 390px) {
 
-      .visual-panel {
-        min-height: 260px;
+      .hero,
+      .hero-content {
+        min-height: 360px;
+        height: 360px;
       }
 
-      .visual-content {
-        width: 69%;
+      .hero-content {
+        padding:
+          19px
+          17px
+          14px;
       }
 
-      .visual-title {
-        font-size: 23px;
+      .brand-logo {
+        width: 58px;
       }
 
-      .visual-title-th {
-        font-size: 10px;
+      .member-badge {
+        margin-top: 10px;
       }
 
-      .visual-description {
-        font-size: 8.5px;
+      .hero-title {
+        font-size: 25px;
       }
 
-      .member-artwork {
-        width: 155px;
-        height: 150px;
+      .hero-thai-title {
+        font-size: 11px;
+      }
+
+      .login-side {
+        padding:
+          0
+          9px
+          25px;
       }
 
       .login-card {
         padding:
-          21px
-          15px;
+          24px
+          16px
+          20px;
       }
 
       .login-title {
+        font-size: 24px;
+      }
+
+      .login-description {
+        font-size: 9px;
+      }
+
+      .password-toggle span {
+        display: none;
+      }
+
+      .register-divider span {
+        font-size: 8px;
+      }
+
+    }
+
+
+    /* ======================================================
+       VERY SMALL MOBILE
+    ======================================================= */
+
+    @media (max-width: 350px) {
+
+      .hero,
+      .hero-content {
+        min-height: 335px;
+        height: 335px;
+      }
+
+      .hero-title {
         font-size: 23px;
+      }
+
+      .form-options {
+        align-items: flex-start;
+
+        flex-direction: column;
+
+        gap: 10px;
       }
 
     }
@@ -1351,66 +1574,102 @@
   <main class="page">
 
 
-    <!-- =======================================================
-         MEMBER VISUAL
-    ======================================================== -->
+    <!-- =====================================================
+         LEFT / HERO
+    ====================================================== -->
 
-    <section class="visual-panel">
+    <section class="hero">
 
 
-      <!-- CORRECT COMPANY LOGO -->
+      <!-- ===================================================
+           RESPONSIVE HERO IMAGE
+      ==================================================== -->
 
-      <div class="brand">
+      <picture class="hero-picture">
+
+        <!-- MOBILE IMAGE -->
+        <source
+          media="(max-width: 767px)"
+          srcset="sante-dashboard-hero-mobile.png"
+        >
+
+        <!-- DESKTOP / TABLET IMAGE -->
+        <img
+          src="sante-dashboard-hero-desktop.png"
+          alt=""
+          aria-hidden="true"
+        >
+
+      </picture>
+
+
+      <div class="hero-overlay"></div>
+
+
+      <!-- ===================================================
+           HERO CONTENT
+      ==================================================== -->
+
+      <div class="hero-content">
+
+
+        <!-- LOGO -->
 
         <img
+          class="brand-logo"
           src="sante (en)-logo.png"
           alt="SANTE Consulting"
         >
 
-      </div>
 
+        <!-- MEMBER BADGE -->
 
-      <!-- MEMBER COPY -->
+        <div class="member-badge">
 
-      <div class="visual-content">
+          <span class="member-dot"></span>
 
-        <div class="member-pill">
-          SANTE Member
+          <span>
+            SANTE Member
+          </span>
+
         </div>
 
 
-        <h1 class="visual-title">
+        <!-- MOTTO -->
 
+        <h1 class="hero-title">
           Trust in Safety.<br>
-
-          Trust in
-          <span>SANTE.</span>
-
+          Trust in <span>SANTE.</span>
         </h1>
 
 
-        <div class="visual-title-th">
+        <div class="hero-thai-title">
           เชื่อมั่นในความปลอดภัย เชื่อมั่นในซานเต้
         </div>
 
 
-        <p class="visual-description">
+        <!-- DESCRIPTION -->
+
+        <p class="hero-description">
           ระบบสมาชิกสำหรับงานอบรมและงานบริการของ SANTE
-          จัดการการสมัครอบรม การชำระเงิน เอกสาร
-          และติดตามสถานะของคุณได้ในที่เดียว
+          พร้อมให้คุณจัดการการสมัครอบรม ติดตามการชำระเงิน
+          เอกสาร และสถานะงานของคุณได้อย่างสะดวกในที่เดียว
         </p>
 
 
+        <!-- FEATURES -->
+
         <div class="feature-list">
+
 
           <div class="feature">
 
-            <div class="feature-check">
+            <span class="feature-check">
               ✓
-            </div>
+            </span>
 
             <span>
-              สมัครอบรม เรียนรู้ และติดตามหลักสูตร
+              สมัครอบรม เรียนรู้ และติดตามหลักสูตรของ SANTE
             </span>
 
           </div>
@@ -1418,9 +1677,9 @@
 
           <div class="feature">
 
-            <div class="feature-check">
+            <span class="feature-check">
               ✓
-            </div>
+            </span>
 
             <span>
               ดูประวัติการชำระเงินและเอกสาร
@@ -1431,63 +1690,58 @@
 
           <div class="feature">
 
-            <div class="feature-check">
+            <span class="feature-check">
               ✓
-            </div>
+            </span>
 
             <span>
-              ใช้บัญชีเดียวสำหรับบริการของ SANTE
+              ขอรับงานตรวจวัดสภาพแวดล้อมและงานบริการ
             </span>
 
           </div>
 
+
+          <div class="feature">
+
+            <span class="feature-check">
+              ✓
+            </span>
+
+            <span>
+              ขอคำปรึกษา และติดตามสถานะงานของคุณ
+            </span>
+
+          </div>
+
+
         </div>
 
-      </div>
 
+        <!-- COPYRIGHT -->
 
-      <div class="decor-circle"></div>
+        <div class="copyright">
+          © 2026 SANTE Consulting Co., Ltd. All rights reserved.
+        </div>
 
-
-      <!-- =====================================================
-           RESPONSIVE MEMBER ARTWORK
-
-           Desktop / Tablet:
-           sante-member-hero.png
-
-           Mobile:
-           sante-mobile-hero.png
-      ====================================================== -->
-
-      <div class="member-artwork">
-
-        <picture>
-
-          <source
-            media="(max-width: 600px)"
-            srcset="sante-mobile-hero.png"
-          >
-
-          <img
-            src="sante-member-hero.png"
-            alt="SANTE Member"
-          >
-
-        </picture>
 
       </div>
 
     </section>
 
 
-    <!-- =======================================================
-         LOGIN PANEL
-    ======================================================== -->
+    <!-- =====================================================
+         RIGHT / LOGIN
+    ====================================================== -->
 
-    <section class="login-panel">
+    <section class="login-side">
+
 
       <div class="login-card">
 
+
+        <!-- =================================================
+             HEADER
+        ================================================== -->
 
         <div class="login-eyebrow">
           SANTE MEMBER
@@ -1500,75 +1754,120 @@
 
 
         <p class="login-description">
-          เข้าสู่ระบบเพื่อใช้งานอบรม งานบริการ
-          การชำระเงิน เอกสาร และบริการต่าง ๆ ของ SANTE
+          เข้าสู่ระบบเพื่อใช้งานสมัครอบรม งานตรวจวัด งานบริการ
+          และงานที่ปรึกษาของ SANTE พร้อมติดตามการชำระเงิน
+          เอกสาร และสถานะงานของคุณในที่เดียว
         </p>
 
 
-        <!-- MESSAGE -->
-
-        <div
-          id="messageBox"
-          class="message"
-        ></div>
-
-
-        <!-- LOGIN FORM -->
+        <!-- =================================================
+             LOGIN FORM
+        ================================================== -->
 
         <form
           id="loginForm"
-          class="form"
+          class="login-form"
           novalidate
         >
 
 
           <!-- EMAIL -->
 
-          <div class="field">
+          <div class="form-group">
 
-            <label for="email">
-
+            <label
+              class="form-label"
+              for="email"
+            >
               อีเมล
-
-              <span class="required">
-                *
-              </span>
-
+              <span class="required">*</span>
             </label>
 
 
-            <input
-              id="email"
-              class="input"
-              type="email"
-              autocomplete="username"
-              placeholder="your@email.com"
-              required
-            >
+            <div class="input-box">
+
+              <span class="input-icon">
+
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <rect
+                    x="3"
+                    y="5"
+                    width="18"
+                    height="14"
+                    rx="2"
+                  ></rect>
+
+                  <path
+                    d="M3 7l9 6 9-6"
+                  ></path>
+                </svg>
+
+              </span>
+
+
+              <input
+                id="email"
+                type="email"
+                autocomplete="email"
+                placeholder="กรอกอีเมล"
+                required
+              >
+
+            </div>
 
           </div>
 
 
           <!-- PASSWORD -->
 
-          <div class="field">
+          <div class="form-group">
 
-            <label for="password">
-
+            <label
+              class="form-label"
+              for="password"
+            >
               รหัสผ่าน
-
-              <span class="required">
-                *
-              </span>
-
+              <span class="required">*</span>
             </label>
 
 
-            <div class="password-wrap">
+            <div class="input-box">
+
+              <span class="input-icon">
+
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <rect
+                    x="5"
+                    y="10"
+                    width="14"
+                    height="10"
+                    rx="2"
+                  ></rect>
+
+                  <path
+                    d="M8 10V7a4 4 0 018 0v3"
+                  ></path>
+
+                  <path
+                    d="M12 14v2"
+                  ></path>
+                </svg>
+
+              </span>
+
 
               <input
                 id="password"
-                class="input"
                 type="password"
                 autocomplete="current-password"
                 placeholder="กรอกรหัสผ่าน"
@@ -1580,8 +1879,30 @@
                 id="passwordToggle"
                 class="password-toggle"
                 type="button"
+                aria-label="แสดงหรือซ่อนรหัสผ่าน"
               >
-                แสดง
+
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12z"
+                  ></path>
+
+                  <circle
+                    cx="12"
+                    cy="12"
+                    r="2.5"
+                  ></circle>
+                </svg>
+
+                <span id="passwordToggleText">
+                  แสดง
+                </span>
+
               </button>
 
             </div>
@@ -1591,31 +1912,43 @@
 
           <!-- OPTIONS -->
 
-          <div class="login-options">
+          <div class="form-options">
+
 
             <label class="remember">
 
               <input
-                id="rememberEmail"
+                id="rememberMe"
                 type="checkbox"
+                checked
               >
 
               <span>
-                จดจำอีเมล
+                จดจำการเข้าสู่ระบบ
               </span>
 
             </label>
 
 
             <button
-              id="forgotPasswordButton"
-              class="forgot-button"
+              class="forgot"
               type="button"
+              id="forgotButton"
             >
               ลืมรหัสผ่าน?
             </button>
 
+
           </div>
+
+
+          <!-- MESSAGE -->
+
+          <div
+            id="message"
+            class="message"
+            role="alert"
+          ></div>
 
 
           <!-- LOGIN -->
@@ -1625,47 +1958,110 @@
             class="login-button"
             type="submit"
           >
-            เข้าสู่ระบบ
+
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                d="M10 17l5-5-5-5"
+              ></path>
+
+              <path
+                d="M15 12H3"
+              ></path>
+
+              <path
+                d="M14 3h5a2 2 0 012 2v14a2 2 0 01-2 2h-5"
+              ></path>
+            </svg>
+
+
+            <span id="loginButtonText">
+              เข้าสู่ระบบ
+            </span>
+
           </button>
+
 
         </form>
 
 
-        <!-- NEW MEMBER -->
+        <!-- =================================================
+             REGISTER
+        ================================================== -->
 
-        <div class="divider">
-          สมาชิกใหม่
+        <div class="register-divider">
+
+          <span>
+            ยังไม่มีบัญชีสมาชิก SANTE?
+          </span>
+
         </div>
 
 
         <a
-          id="registerLink"
-          class="register-link"
           href="register.html"
+          class="register-button"
         >
-          สร้างบัญชีสมาชิก SANTE
+
+          <svg
+            viewBox="0 0 24 24"
+            fill="currentColor"
+          >
+            <circle
+              cx="12"
+              cy="7"
+              r="4"
+            ></circle>
+
+            <path
+              d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"
+            ></path>
+          </svg>
+
+          <span>
+            สมัครสมาชิก
+          </span>
+
+          <span style="margin-left:auto;">
+            ›
+          </span>
+
         </a>
 
+
+        <!-- =================================================
+             HOME
+        ================================================== -->
 
         <a
-          class="home-link"
           href="index.html"
+          class="back-home"
         >
-          ← กลับหน้าหลัก SANTE
+          <span>←</span>
+
+          <span>
+            กลับหน้าหลัก SANTE
+          </span>
         </a>
+
 
       </div>
 
     </section>
+
 
   </main>
 
 
   <script>
 
-    /* =========================================================
-       SUPABASE
-    ========================================================= */
+    /* ======================================================
+       SUPABASE CONFIG
+    ======================================================= */
 
     const SUPABASE_URL =
       "https://cyegjwerxlxhczrfiurz.supabase.co";
@@ -1675,14 +2071,19 @@
       "sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF";
 
 
-    const db =
+    const AUTH_STORAGE_KEY =
+      "sante-member-auth";
+
+
+    const supabaseClient =
       window.supabase.createClient(
         SUPABASE_URL,
         SUPABASE_KEY,
         {
           auth: {
+
             storageKey:
-              "sante-member-auth",
+              AUTH_STORAGE_KEY,
 
             persistSession:
               true,
@@ -1692,14 +2093,15 @@
 
             detectSessionInUrl:
               true
+
           }
         }
       );
 
 
-    /* =========================================================
+    /* ======================================================
        ELEMENTS
-    ========================================================= */
+    ======================================================= */
 
     const loginForm =
       document.getElementById(
@@ -1725,15 +2127,15 @@
       );
 
 
-    const rememberEmail =
+    const passwordToggleText =
       document.getElementById(
-        "rememberEmail"
+        "passwordToggleText"
       );
 
 
-    const forgotPasswordButton =
+    const forgotButton =
       document.getElementById(
-        "forgotPasswordButton"
+        "forgotButton"
       );
 
 
@@ -1743,165 +2145,109 @@
       );
 
 
-    const messageBox =
+    const loginButtonText =
       document.getElementById(
-        "messageBox"
+        "loginButtonText"
       );
 
 
-    const registerLink =
+    const message =
       document.getElementById(
-        "registerLink"
+        "message"
       );
 
 
-    /* =========================================================
-       REDIRECT
-    ========================================================= */
+    /* ======================================================
+       HELPERS
+    ======================================================= */
 
-    function getSafeRedirect() {
+    function wait(ms) {
 
-      const params =
-        new URLSearchParams(
-          window.location.search
-        );
+      return new Promise(
+        function(resolve) {
 
-
-      const redirect =
-        params.get(
-          "redirect"
-        );
-
-
-      if (!redirect) {
-
-        return "member-home.html";
-
-      }
-
-
-      try {
-
-        const decoded =
-          decodeURIComponent(
-            redirect
+          setTimeout(
+            resolve,
+            ms
           );
 
-
-        /*
-          Only allow local application paths.
-          Prevent external redirect.
-        */
-
-        if (
-          decoded.startsWith("http://") ||
-          decoded.startsWith("https://") ||
-          decoded.startsWith("//")
-        ) {
-
-          return "member-home.html";
-
         }
-
-
-        if (
-          decoded.includes(
-            "admin"
-          )
-        ) {
-
-          return "member-home.html";
-
-        }
-
-
-        return decoded;
-
-      }
-      catch (_) {
-
-        return "member-home.html";
-
-      }
+      );
 
     }
 
-
-    const redirectTarget =
-      getSafeRedirect();
-
-
-    /* =========================================================
-       REGISTER LINK
-       Preserve redirect destination
-    ========================================================= */
-
-    if (
-      redirectTarget !==
-      "member-home.html"
-    ) {
-
-      registerLink.href =
-        "register.html?redirect=" +
-        encodeURIComponent(
-          redirectTarget
-        );
-
-    }
-
-
-    /* =========================================================
-       MESSAGE
-    ========================================================= */
 
     function clearMessage() {
 
-      messageBox.className =
+      message.className =
         "message";
 
 
-      messageBox.textContent =
+      message.textContent =
         "";
 
     }
 
 
-    function showMessage(
-      type,
-      text
-    ) {
+    function showError(text) {
 
-      messageBox.className =
-        "message " + type;
+      message.className =
+        "message show";
 
 
-      messageBox.textContent =
+      message.textContent =
         text;
 
     }
 
 
-    /* =========================================================
+    function showSuccess(text) {
+
+      message.className =
+        "message show success";
+
+
+      message.textContent =
+        text;
+
+    }
+
+
+    function setLoading(isLoading) {
+
+      loginButton.disabled =
+        isLoading;
+
+
+      loginButtonText.textContent =
+        isLoading
+          ? "กำลังเข้าสู่ระบบ..."
+          : "เข้าสู่ระบบ";
+
+    }
+
+
+    /* ======================================================
        PASSWORD SHOW / HIDE
-    ========================================================= */
+    ======================================================= */
 
     passwordToggle.addEventListener(
       "click",
-      function () {
+      function() {
 
-        const hidden =
+        const isHidden =
           passwordInput.type ===
           "password";
 
 
         passwordInput.type =
-          hidden
+          isHidden
             ? "text"
             : "password";
 
 
-        passwordToggle.textContent =
-          hidden
+        passwordToggleText.textContent =
+          isHidden
             ? "ซ่อน"
             : "แสดง";
 
@@ -1909,78 +2255,105 @@
     );
 
 
-    /* =========================================================
-       REMEMBER EMAIL
-    ========================================================= */
+    /* ======================================================
+       FORGOT PASSWORD
+    ======================================================= */
 
-    const REMEMBER_EMAIL_KEY =
-      "sante-member-remember-email";
+    forgotButton.addEventListener(
+      "click",
+      async function() {
+
+        clearMessage();
 
 
-    function loadRememberedEmail() {
+        const email =
+          emailInput
+            .value
+            .trim();
 
-      try {
 
-        const savedEmail =
-          localStorage.getItem(
-            REMEMBER_EMAIL_KEY
+        if (!email) {
+
+          showError(
+            "กรุณากรอกอีเมลของคุณก่อนเลือก “ลืมรหัสผ่าน?”"
           );
 
 
-        if (savedEmail) {
-
-          emailInput.value =
-            savedEmail;
+          emailInput.focus();
 
 
-          rememberEmail.checked =
-            true;
+          return;
+        }
+
+
+        forgotButton.disabled =
+          true;
+
+
+        try {
+
+          const redirectTo =
+            window.location.origin +
+            "/member-login.html";
+
+
+          const {
+            error
+          } =
+          await supabaseClient.auth
+            .resetPasswordForEmail(
+              email,
+              {
+                redirectTo:
+                  redirectTo
+              }
+            );
+
+
+          if (error) {
+
+            throw error;
+
+          }
+
+
+          showSuccess(
+            "ส่งลิงก์สำหรับตั้งรหัสผ่านใหม่แล้ว กรุณาตรวจสอบอีเมลของคุณ"
+          );
+
+
+        }
+        catch (error) {
+
+          console.error(
+            "Password reset error:",
+            error
+          );
+
+
+          showError(
+            "ไม่สามารถส่งลิงก์ตั้งรหัสผ่านใหม่ได้ กรุณาตรวจสอบอีเมลและลองอีกครั้ง"
+          );
+
+        }
+        finally {
+
+          forgotButton.disabled =
+            false;
 
         }
 
       }
-      catch (_) {}
-
-    }
+    );
 
 
-    function saveRememberedEmail(
-      email
-    ) {
-
-      try {
-
-        if (
-          rememberEmail.checked
-        ) {
-
-          localStorage.setItem(
-            REMEMBER_EMAIL_KEY,
-            email
-          );
-
-        }
-        else {
-
-          localStorage.removeItem(
-            REMEMBER_EMAIL_KEY
-          );
-
-        }
-
-      }
-      catch (_) {}
-
-    }
-
-
-    /* =========================================================
-       MEMBER LOGIN
-    ========================================================= */
+    /* ======================================================
+       LOGIN
+    ======================================================= */
 
     loginForm.addEventListener(
       "submit",
-      async function (event) {
+      async function(event) {
 
         event.preventDefault();
 
@@ -1995,233 +2368,16 @@
 
 
         const password =
-          passwordInput.value;
+          passwordInput
+            .value;
 
 
-        if (
-          !email ||
-          !password
-        ) {
-
-          showMessage(
-            "error",
-            "กรุณากรอกอีเมลและรหัสผ่านให้ครบถ้วน"
-          );
-
-
-          return;
-
-        }
-
-
-        loginButton.disabled =
-          true;
-
-
-        loginButton.textContent =
-          "กำลังเข้าสู่ระบบ...";
-
-
-        try {
-
-          /* -----------------------------------------
-             LOGIN
-          ----------------------------------------- */
-
-          const {
-            data,
-            error
-          } =
-          await db.auth
-            .signInWithPassword({
-              email,
-              password
-            });
-
-
-          if (error) {
-            throw error;
-          }
-
-
-          if (
-            !data?.user ||
-            !data?.session
-          ) {
-
-            throw new Error(
-              "ไม่พบข้อมูลการเข้าสู่ระบบ"
-            );
-
-          }
-
-
-          /* -----------------------------------------
-             ENSURE SESSION IS STORED
-          ----------------------------------------- */
-
-          let storedSession =
-            null;
-
-
-          for (
-            let attempt = 0;
-            attempt < 4;
-            attempt++
-          ) {
-
-            const {
-              data: sessionData
-            } =
-            await db.auth
-              .getSession();
-
-
-            storedSession =
-              sessionData?.session ||
-              null;
-
-
-            if (storedSession) {
-              break;
-            }
-
-
-            await new Promise(
-              resolve =>
-                setTimeout(
-                  resolve,
-                  150
-                )
-            );
-
-          }
-
-
-          if (!storedSession) {
-
-            throw new Error(
-              "ไม่สามารถบันทึก Session ได้ กรุณาลองใหม่อีกครั้ง"
-            );
-
-          }
-
-
-          /* -----------------------------------------
-             REMEMBER EMAIL
-          ----------------------------------------- */
-
-          saveRememberedEmail(
-            email
-          );
-
-
-          /* -----------------------------------------
-             SUCCESS
-          ----------------------------------------- */
-
-          showMessage(
-            "success",
-            "เข้าสู่ระบบสำเร็จ กำลังเปิดหน้าสมาชิก..."
-          );
-
-
-          loginButton.textContent =
-            "เข้าสู่ระบบสำเร็จ";
-
-
-          window.setTimeout(
-            function () {
-
-              window.location.href =
-                redirectTarget;
-
-            },
-            200
-          );
-
-        }
-        catch (error) {
-
-          console.error(
-            "Member login error:",
-            error
-          );
-
-
-          let message =
-            error?.message ||
-            "ไม่สามารถเข้าสู่ระบบได้";
-
-
-          const normalized =
-            String(message)
-              .toLowerCase();
-
-
-          if (
-            normalized.includes(
-              "invalid login credentials"
-            )
-          ) {
-
-            message =
-              "อีเมลหรือรหัสผ่านไม่ถูกต้อง";
-
-          }
-          else if (
-            normalized.includes(
-              "email not confirmed"
-            )
-          ) {
-
-            message =
-              "กรุณายืนยันอีเมลก่อนเข้าสู่ระบบ";
-
-          }
-
-
-          showMessage(
-            "error",
-            message
-          );
-
-
-          loginButton.disabled =
-            false;
-
-
-          loginButton.textContent =
-            "เข้าสู่ระบบ";
-
-        }
-
-      }
-    );
-
-
-    /* =========================================================
-       FORGOT PASSWORD
-    ========================================================= */
-
-    forgotPasswordButton.addEventListener(
-      "click",
-      async function () {
-
-        clearMessage();
-
-
-        const email =
-          emailInput
-            .value
-            .trim();
-
+        /* EMAIL */
 
         if (!email) {
 
-          showMessage(
-            "error",
-            "กรุณากรอกอีเมลก่อนขอรีเซ็ตรหัสผ่าน"
+          showError(
+            "กรุณากรอกอีเมล"
           );
 
 
@@ -2233,67 +2389,204 @@
         }
 
 
-        forgotPasswordButton.disabled =
-          true;
+        /* PASSWORD */
+
+        if (!password) {
+
+          showError(
+            "กรุณากรอกรหัสผ่าน"
+          );
 
 
-        forgotPasswordButton.textContent =
-          "กำลังส่ง...";
+          passwordInput.focus();
+
+
+          return;
+
+        }
+
+
+        setLoading(true);
+
+
+        let redirecting =
+          false;
 
 
         try {
 
-          const redirectTo =
-            window.location.origin +
-            "/member-login.html";
 
+          /* ==================================================
+             SIGN IN
+          ================================================== */
 
           const {
+            data,
             error
           } =
-          await db.auth
-            .resetPasswordForEmail(
-              email,
-              {
-                redirectTo
-              }
-            );
+          await supabaseClient.auth
+            .signInWithPassword({
+              email:
+                email,
+
+              password:
+                password
+            });
 
 
           if (error) {
-            throw error;
+
+            console.error(
+              "Member login error:",
+              error
+            );
+
+
+            showError(
+              "อีเมลหรือรหัสผ่านไม่ถูกต้อง กรุณาตรวจสอบและลองอีกครั้ง"
+            );
+
+
+            return;
+
           }
 
 
-          showMessage(
-            "success",
-            "ส่งคำขอรีเซ็ตรหัสผ่านแล้ว กรุณาตรวจสอบอีเมลของคุณ"
+          if (
+            !data ||
+            !data.user
+          ) {
+
+            showError(
+              "ไม่สามารถยืนยันบัญชีสมาชิกได้ กรุณาลองใหม่อีกครั้ง"
+            );
+
+
+            return;
+
+          }
+
+
+          /* ==================================================
+             WAIT FOR SESSION
+          ================================================== */
+
+          let activeSession =
+            null;
+
+
+          for (
+            let attempt = 1;
+            attempt <= 5;
+            attempt++
+          ) {
+
+            const {
+              data: sessionData,
+              error: sessionError
+            } =
+            await supabaseClient.auth
+              .getSession();
+
+
+            if (sessionError) {
+
+              console.error(
+                "Session error:",
+                sessionError
+              );
+
+
+              showError(
+                "ไม่สามารถตรวจสอบ Session ได้ กรุณาลองเข้าสู่ระบบอีกครั้ง"
+              );
+
+
+              return;
+
+            }
+
+
+            if (
+              sessionData &&
+              sessionData.session
+            ) {
+
+              activeSession =
+                sessionData.session;
+
+
+              break;
+
+            }
+
+
+            await wait(
+              150
+            );
+
+          }
+
+
+          if (!activeSession) {
+
+            showError(
+              "ระบบยังไม่สามารถบันทึก Session ได้ กรุณาลองเข้าสู่ระบบอีกครั้ง"
+            );
+
+
+            return;
+
+          }
+
+
+          /* ==================================================
+             SUCCESS
+          ================================================== */
+
+          showSuccess(
+            "เข้าสู่ระบบสำเร็จ กำลังเปิดหน้าสมาชิก..."
           );
+
+
+          loginButtonText.textContent =
+            "เข้าสู่ระบบสำเร็จ";
+
+
+          redirecting =
+            true;
+
+
+          await wait(
+            350
+          );
+
+
+          window.location.href =
+            "./member-home.html";
+
 
         }
         catch (error) {
 
           console.error(
-            "Reset password error:",
+            "Unexpected member login error:",
             error
           );
 
 
-          showMessage(
-            "error",
-            error?.message ||
-            "ไม่สามารถส่งคำขอรีเซ็ตรหัสผ่านได้"
+          showError(
+            "เกิดข้อผิดพลาดในการเข้าสู่ระบบ กรุณาลองใหม่อีกครั้ง"
           );
 
         }
         finally {
 
-          forgotPasswordButton.disabled =
-            false;
+          if (!redirecting) {
 
+            setLoading(false);
 
-          forgotPasswordButton.textContent =
-            "ลืมรหัสผ่าน?";
+          }
 
         }
 
@@ -2301,9 +2594,9 @@
     );
 
 
-    /* =========================================================
-       EXISTING MEMBER SESSION
-    ========================================================= */
+    /* ======================================================
+       CHECK EXISTING MEMBER SESSION
+    ======================================================= */
 
     async function checkExistingSession() {
 
@@ -2313,21 +2606,31 @@
           data,
           error
         } =
-        await db.auth
+        await supabaseClient.auth
           .getSession();
 
 
         if (error) {
+
+          console.warn(
+            "Session check error:",
+            error
+          );
+
+
           return;
+
         }
 
 
         if (
-          data?.session
+          data &&
+          data.session &&
+          data.session.user
         ) {
 
           window.location.replace(
-            redirectTarget
+            "./member-home.html"
           );
 
         }
@@ -2336,7 +2639,7 @@
       catch (error) {
 
         console.warn(
-          "Existing member session:",
+          "Existing session check:",
           error
         );
 
@@ -2345,12 +2648,9 @@
     }
 
 
-    /* =========================================================
+    /* ======================================================
        START
-    ========================================================= */
-
-    loadRememberedEmail();
-
+    ======================================================= */
 
     checkExistingSession();
 
