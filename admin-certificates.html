@@ -85,6 +85,17 @@ body{margin:0;background:var(--bg);font-family:"Prompt",sans-serif;color:var(--n
   .bulk-row>*:nth-child(n+4){display:none}
 }
 
+
+.template-manager{
+  display:grid;grid-template-columns:1fr auto auto auto;gap:8px;align-items:end;
+  padding:12px;border:1px solid var(--line);border-radius:14px;background:#f8fbff;margin-bottom:14px
+}
+.template-manager label{display:block;font-size:10px;color:var(--muted);margin-bottom:4px}
+.template-manager select{width:100%;min-height:40px;border:1px solid var(--line);border-radius:10px;padding:8px 10px;font:400 12px Prompt;background:#fff}
+.batch-template-info{margin-top:8px;font-size:10px;color:var(--muted)}
+.preview-toolbox .qrnote{grid-column:1/-1;font-size:9px;color:var(--muted)}
+@media(max-width:800px){.template-manager{grid-template-columns:1fr 1fr}.template-manager>div:first-child{grid-column:1/-1}}
+
 </style>
 </head>
 <body>
@@ -129,6 +140,17 @@ body{margin:0;background:var(--bg);font-family:"Prompt",sans-serif;color:var(--n
       <div class="designer">
         <aside class="form">
           <h3>ข้อมูลวุฒิบัตร</h3>
+          <div class="template-manager">
+            <div>
+              <label>แม่แบบที่บันทึกไว้</label>
+              <select id="savedTemplate" onchange="loadSavedTemplate(this.value)">
+                <option value="">-- ยังไม่เลือกแม่แบบ --</option>
+              </select>
+            </div>
+            <button class="btn light" onclick="saveAsTemplate()">บันทึกเป็นแม่แบบ</button>
+            <button class="btn primary" id="updateTemplateBtn" onclick="updateSavedTemplate()" disabled>อัปเดตแม่แบบ</button>
+            <button class="btn danger" id="deleteTemplateBtn" onclick="deleteSavedTemplate()" disabled>ลบแม่แบบ</button>
+          </div>
           <div class="template-note">กรอกข้อความแล้ว Preview จะเปลี่ยนทันที คุณสามารถเลือกข้อความบน Preview แล้วใช้ปุ่มลูกศรเพื่อขยับตำแหน่ง และ +/- เพื่อปรับขนาดได้</div>
 
           <div class="group"><label>ประเภท</label><select id="typeCode" onchange="applyType()"><option value="FREE_TRAINING">อบรมฟรี</option><option value="PAID_TRAINING">อบรมมีค่าใช้จ่าย</option><option value="SERVICE">งานบริการ</option></select></div>
@@ -160,7 +182,7 @@ body{margin:0;background:var(--bg);font-family:"Prompt",sans-serif;color:var(--n
           </div>
 
           <div style="display:grid;gap:8px;margin-top:15px">
-            <button class="btn primary" id="issueBtn" onclick="issueCertificate()">ออกวุฒิบัตร + สร้าง QR</button>
+            <button class="btn primary" id="issueBtn" onclick="issueCertificate()">ออกวุฒิบัตรรายบุคคล + สร้าง QR</button>
             <button class="btn yellow" onclick="downloadPDF()">ดาวน์โหลด PDF</button>
             <button class="btn light" onclick="downloadPNG()">ดาวน์โหลด PNG</button>
           </div>
@@ -206,6 +228,7 @@ body{margin:0;background:var(--bg);font-family:"Prompt",sans-serif;color:var(--n
         <div class="template-note"><strong>V2:</strong> ระบบกรองผู้ที่ยืนยันการลงทะเบียนและสถานะชำระเงินได้ แต่ยังไม่ผูกผลสอบอัตโนมัติในหน้านี้ ดังนั้นกรณีที่ต้องผ่าน Post-test ให้เลือกเฉพาะผู้ที่ผ่านเกณฑ์ก่อนกดออกวุฒิบัตร</div>
         <div class="bulk-grid">
           <div><label style="font-size:11px;font-weight:600">รอบการอบรม</label><select id="bulkSession" onchange="loadBulkParticipants()"><option value="">-- เลือกรอบการอบรม --</option></select></div>
+          <div><label style="font-size:11px;font-weight:600">แม่แบบวุฒิบัตร</label><select id="bulkTemplate"><option value="">-- เลือกแม่แบบ --</option></select><div class="batch-template-info">ใช้หน้าตา สี ตำแหน่ง และข้อความของแม่แบบนี้กับทุกคน</div></div>
           <div><label style="font-size:11px;font-weight:600">วันที่ออก</label><input id="bulkIssueDate" type="date"></div>
           <button class="btn light" onclick="toggleAllBulk(true)">เลือกทั้งหมด</button>
           <button class="btn primary" onclick="issueBulk()">ออกวุฒิบัตรที่เลือก</button>
@@ -231,7 +254,8 @@ body{margin:0;background:var(--bg);font-family:"Prompt",sans-serif;color:var(--n
 const SUPABASE_URL="https://cyegjwerxlxhczrfiurz.supabase.co";
 const SUPABASE_KEY="sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF";
 const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{storageKey:"sante-admin-auth",persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
-let currentUser=null, certificates=[], courses=[], profiles=[], trainingSessions=[], bulkParticipants=[];
+let currentUser=null, certificates=[], courses=[], profiles=[], trainingSessions=[], bulkParticipants=[], savedTemplates=[];
+let currentTemplateId=null;
 let lastVerificationUrl="";
 let previewZoom=1;
 
@@ -247,7 +271,7 @@ const layouts={
    duration:{x:50,y:70,size:16,color:"#172848"},
    delivery:{x:50,y:75,size:16,color:"#172848"},
    date:{x:50,y:79,size:16,color:"#172848"}
-  },qr:{x:91,y:88}
+  },qr:{x:91,y:16}
  },
  PAID_TRAINING:{
   bg:"cert-template-paid.png",
@@ -260,7 +284,7 @@ const layouts={
    duration:{x:50,y:70,size:16,color:"#203b73"},
    delivery:{x:50,y:75,size:16,color:"#203b73"},
    date:{x:50,y:79,size:16,color:"#203b73"}
-  },qr:{x:91,y:88}
+  },qr:{x:91,y:16}
  },
  SERVICE:{
   bg:"cert-template-service.png",
@@ -273,7 +297,7 @@ const layouts={
    duration:{x:50,y:64,size:14,color:"#172848"},
    delivery:{x:50,y:69,size:14,color:"#172848"},
    date:{x:50,y:75,size:15,color:"#172848"}
-  },qr:{x:91,y:88}
+  },qr:{x:91,y:16}
  }
 };
 let design=JSON.parse(JSON.stringify(layouts.FREE_TRAINING.fields));
@@ -386,6 +410,102 @@ async function loadBase(){
    });
  }
 }
+
+async function loadTemplates(){
+ const {data,error}=await db.from("certificate_design_templates")
+   .select("id,template_name,type_code,subtype,course_id,training_session_id,language_code,background_template,prefix,body_title,body_text,duration_text,delivery_text,design_json,is_active,created_at,updated_at")
+   .eq("is_active",true)
+   .order("updated_at",{ascending:false});
+ if(error){console.error("loadTemplates:",error);return}
+ savedTemplates=data||[];
+ const a=document.getElementById("savedTemplate");
+ const b=document.getElementById("bulkTemplate");
+ if(a)a.innerHTML='<option value="">-- ยังไม่เลือกแม่แบบ --</option>'+savedTemplates.map(x=>`<option value="${x.id}">${x.template_name}</option>`).join("");
+ if(b)b.innerHTML='<option value="">-- เลือกแม่แบบ --</option>'+savedTemplates.map(x=>`<option value="${x.id}">${x.template_name}</option>`).join("");
+}
+function currentDesignerPayload(){
+ const type=document.getElementById("typeCode").value;
+ return {
+   type_code:type,
+   subtype:type==="PAID_TRAINING"?document.getElementById("subtype").value:(type==="SERVICE"?"SERVICE":"FREE"),
+   course_id:document.getElementById("courseId").value||null,
+   training_session_id:null,
+   language_code:document.getElementById("language").value||"th",
+   background_template:layouts[type].bg,
+   prefix:document.getElementById("prefix").value.trim(),
+   body_title:document.getElementById("bodyTitle").value,
+   body_text:document.getElementById("bodyText").value,
+   duration_text:document.getElementById("durationText").value,
+   delivery_text:document.getElementById("deliveryText").value,
+   design_json:{fields:design,qr:qrPos,template:type}
+ };
+}
+async function saveAsTemplate(){
+ const name=prompt("ตั้งชื่อแม่แบบ เช่น SANTE Sharing - อบรมฟรีออนไลน์");
+ if(!name||!name.trim())return;
+ const payload=currentDesignerPayload();
+ payload.template_name=name.trim();
+ payload.created_by=currentUser?.id||null;
+ const {data,error}=await db.from("certificate_design_templates").insert(payload).select().single();
+ if(error){alert("บันทึกแม่แบบไม่สำเร็จ: "+error.message);return}
+ await loadTemplates();
+ currentTemplateId=data.id;
+ document.getElementById("savedTemplate").value=data.id;
+ syncTemplateButtons();
+ alert("บันทึกแม่แบบแล้ว");
+}
+function syncTemplateButtons(){
+ const has=!!currentTemplateId;
+ document.getElementById("updateTemplateBtn").disabled=!has;
+ document.getElementById("deleteTemplateBtn").disabled=!has;
+}
+async function loadSavedTemplate(id){
+ currentTemplateId=id||null;
+ syncTemplateButtons();
+ if(!id)return;
+ const t=savedTemplates.find(x=>x.id===id);
+ if(!t)return;
+ document.getElementById("typeCode").value=t.type_code||"FREE_TRAINING";
+ applyType();
+ if(t.subtype&&document.getElementById("subtype"))document.getElementById("subtype").value=t.subtype;
+ document.getElementById("language").value=t.language_code||"th";
+ document.getElementById("courseId").value=t.course_id||"";
+ document.getElementById("prefix").value=t.prefix||"";
+ document.getElementById("bodyTitle").value=t.body_title||"";
+ document.getElementById("bodyText").value=t.body_text||"";
+ document.getElementById("durationText").value=t.duration_text||"";
+ document.getElementById("deliveryText").value=t.delivery_text||"";
+ if(t.course_id){
+   const o=document.querySelector(`#courseId option[value="${t.course_id}"]`);
+   if(o)document.getElementById("courseName").value=o.dataset.name||o.textContent||"";
+ }
+ if(t.design_json?.fields)design=JSON.parse(JSON.stringify(t.design_json.fields));
+ if(t.design_json?.qr)qrPos={...t.design_json.qr};
+ applyDesign();syncPreview();selectField(selected);
+}
+async function updateSavedTemplate(){
+ if(!currentTemplateId)return;
+ const payload=currentDesignerPayload();
+ payload.updated_at=new Date().toISOString();
+ const {error}=await db.from("certificate_design_templates").update(payload).eq("id",currentTemplateId);
+ if(error){alert("อัปเดตแม่แบบไม่สำเร็จ: "+error.message);return}
+ await loadTemplates();
+ document.getElementById("savedTemplate").value=currentTemplateId;
+ alert("อัปเดตแม่แบบแล้ว");
+}
+async function deleteSavedTemplate(){
+ if(!currentTemplateId)return;
+ const t=savedTemplates.find(x=>x.id===currentTemplateId);
+ if(!t)return;
+ if(!confirm(`ลบแม่แบบ "${t.template_name}" ?\nวุฒิบัตรที่ออกไปแล้วจะไม่ถูกลบ`))return;
+ const {error}=await db.from("certificate_design_templates").delete().eq("id",currentTemplateId);
+ if(error){alert("ลบแม่แบบไม่สำเร็จ: "+error.message);return}
+ currentTemplateId=null;
+ await loadTemplates();
+ syncTemplateButtons();
+ alert("ลบแม่แบบแล้ว");
+}
+
 async function loadCertificates(){
  const {data,error}=await db.from("certificates").select("id,certificate_no,certificate_status,user_id,training_session_id,recipient_display_name,recipient_organization,course_name_snapshot,issue_date,template_code,certificate_subtype,verification_url,certificate_types(type_code,type_name_th)").order("created_at",{ascending:false}).limit(1000);
  if(error){alert("โหลดวุฒิบัตรไม่สำเร็จ: "+error.message);return}
@@ -428,7 +548,7 @@ async function issueCertificate(){
   const box=document.getElementById("issueResult");box.style.display="block";box.innerHTML=`ออกวุฒิบัตรสำเร็จ<br><strong>${data.certificate_no}</strong><br><a href="${data.verification_url}" target="_blank">ทดสอบหน้า Verify</a><br>${data.verification_url}`;
   await loadCertificates();
  }catch(e){alert("ออกวุฒิบัตรไม่สำเร็จ: "+(e.message||e))}
- finally{btn.disabled=false;btn.textContent="ออกวุฒิบัตร + สร้าง QR"}
+ finally{btn.disabled=false;btn.textContent="ออกวุฒิบัตรรายบุคคล + สร้าง QR"}
 }
 
 function formatDateOnly(v){
@@ -473,21 +593,23 @@ async function issueBulk(){
  const sessionId=document.getElementById("bulkSession").value;
  const session=trainingSessions.find(x=>x.id===sessionId);
  if(!session){alert("กรุณาเลือกรอบการอบรม");return}
+ const templateId=document.getElementById("bulkTemplate").value;
+ const saved=savedTemplates.find(x=>x.id===templateId);
+ if(!saved){alert("กรุณาเลือกแม่แบบวุฒิบัตรก่อน");return}
  const selected=[...document.querySelectorAll(".bulk-check:checked")].map(x=>bulkParticipants[Number(x.dataset.i)]);
  if(!selected.length){alert("กรุณาเลือกรายชื่ออย่างน้อย 1 คน");return}
- if(!confirm(`ยืนยันออกวุฒิบัตร ${selected.length} ใบ?\nกรณีหลักสูตรมี Post-test กรุณาตรวจว่ารายชื่อที่เลือกผ่านเกณฑ์แล้ว`))return;
+ if(!confirm(`ยืนยันใช้แม่แบบ "${saved.template_name}" ออกวุฒิบัตร ${selected.length} ใบ?\nกรณีหลักสูตรมี Post-test กรุณาตรวจว่ารายชื่อที่เลือกผ่านเกณฑ์แล้ว`))return;
 
  const progress=document.getElementById("bulkProgress");progress.style.display="block";
  const issueDate=document.getElementById("bulkIssueDate").value||new Date().toISOString().slice(0,10);
  const course=session.courses||{};
- const ct=course.course_type||"FREE_TRAINING";
- const type=ct==="FREE_TRAINING"?"FREE_TRAINING":"PAID_TRAINING";
- const subtype=ct==="INHOUSE_TRAINING"?"INHOUSE":"PUBLIC";
+ const type=saved.type_code||"FREE_TRAINING";
+ const subtype=saved.subtype||"FREE";
  const key=(course.certificate_prefix||course.course_code||"TR").replace(/^ST-/i,"").toUpperCase();
- const prefix=type==="FREE_TRAINING"?"ST-SS":(subtype==="INHOUSE"?`ST-IH-${key}`:`ST-${key}`);
+ const prefix=saved.prefix || (type==="FREE_TRAINING"?"ST-SS":(subtype==="INHOUSE"?`ST-IH-${key}`:`ST-${key}`));
  const seqKey=type==="FREE_TRAINING"?"FREE_TRAINING":`${subtype}-${key}`;
  const template=type;
- const layout=layouts[template];
+ const layout={fields:saved.design_json?.fields||layouts[template].fields,qr:saved.design_json?.qr||layouts[template].qr};
  let ok=0,fail=0;
  const failed=[];
 
@@ -500,8 +622,10 @@ async function issueBulk(){
      p_training_session_id:session.id,p_recipient_name:name,p_recipient_organization:r.organization_name||null,
      p_course_name:course.course_name_th||session.session_name||"",p_training_date:formatDateOnly(session.training_start_at),
      p_issue_date:issueDate,p_language_code:"th",p_template_code:template,p_prefix:prefix,p_sequence_key:seqKey,
-     p_body_title:"ผ่านการฝึกอบรมหลักสูตร",p_body_text:"",p_duration_text:calcDurationText(session),
-     p_delivery_text:session.delivery_method?`(${session.delivery_method})`:"",p_design_json:{fields:layout.fields,qr:layout.qr,template},
+     p_body_title:saved.body_title||"ผ่านการฝึกอบรมหลักสูตร",p_body_text:saved.body_text||"",
+     p_duration_text:saved.duration_text||calcDurationText(session),
+     p_delivery_text:saved.delivery_text||(session.delivery_method?`(${session.delivery_method})`:""),
+     p_design_json:{fields:layout.fields,qr:layout.qr,template},
      p_verification_base_url:location.origin
    });
    if(error){fail++;failed.push(name+": "+error.message)}else ok++;
@@ -557,7 +681,7 @@ async function init(){
   document.getElementById("bulkIssueDate").value=new Date().toISOString().slice(0,10);
   refreshFieldSelect();selectField("name");applyType();syncPreview();
   if(!(await auth()))return;
-  await Promise.all([loadBase(),loadCertificates()]);
+  await Promise.all([loadBase(),loadCertificates(),loadTemplates()]);
   document.getElementById("loading").style.display="none"
  }catch(e){document.querySelector(".loading-box").innerHTML=`<strong>ไม่สามารถเปิดโมดูลวุฒิบัตรได้</strong><p style="color:#c63a49">${e.message||e}</p><button class="btn yellow" onclick="location.reload()">ลองอีกครั้ง</button>`}
 }
