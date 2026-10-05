@@ -96,6 +96,58 @@ body{margin:0;background:var(--bg);font-family:"Prompt",sans-serif;color:var(--n
 .preview-toolbox .qrnote{grid-column:1/-1;font-size:9px;color:var(--muted)}
 @media(max-width:800px){.template-manager{grid-template-columns:1fr 1fr}.template-manager>div:first-child{grid-column:1/-1}}
 
+
+/* ===== Certificate Designer V4 ===== */
+.cert-item{
+  box-sizing:border-box;
+  overflow:hidden;
+  white-space:normal;
+  overflow-wrap:anywhere;
+  word-break:break-word;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:3px 6px;
+}
+.cert-item.selected{
+  outline:2px dashed #1677ff;
+  outline-offset:2px;
+  background:rgba(255,255,255,.42);
+}
+.toolbox-row2{
+  grid-column:1/-1;
+  display:grid;
+  grid-template-columns:auto repeat(2,42px) auto repeat(2,42px) auto repeat(2,42px) auto auto auto;
+  gap:7px;
+  align-items:center;
+  padding-top:6px;
+  border-top:1px dashed var(--line);
+}
+.toolbox-row2 .tool-label{font-size:10px;color:var(--muted);font-weight:600;white-space:nowrap}
+.toolbox-row2 button{
+  height:34px;min-width:38px;border:1px solid var(--line);border-radius:8px;
+  background:#f7faff;color:var(--navy);font:600 11px Prompt;cursor:pointer
+}
+.toolbox-row2 select{
+  min-height:34px!important;padding:4px 7px!important;font-size:11px!important
+}
+.dynamic-help{
+  padding:10px 12px;border-radius:11px;background:#eef7ff;color:#0b447f;
+  font-size:10px;line-height:1.6;margin:0 0 12px
+}
+.dynamic-token{
+  display:inline-flex;padding:3px 7px;border-radius:999px;background:#fff;border:1px solid #cfe0f2;
+  font:600 10px/1.2 monospace;color:#0b447f;margin:2px 3px 2px 0
+}
+.batch-session-preview{
+  margin-top:12px;padding:11px 13px;border:1px solid #dbe7f4;border-radius:12px;background:#f9fbfe;
+  font-size:11px;line-height:1.7;color:#243c60
+}
+.batch-session-preview strong{color:#0b447f}
+@media(max-width:900px){
+  .toolbox-row2{grid-template-columns:auto repeat(2,38px) auto repeat(2,38px);overflow:auto}
+}
+
 </style>
 </head>
 <body>
@@ -161,7 +213,19 @@ body{margin:0;background:var(--bg);font-family:"Prompt",sans-serif;color:var(--n
             <label>สมาชิก / ผู้เข้าอบรม (ไม่บังคับ)</label>
             <select id="userId" onchange="applySelectedUser()"><option value="">-- พิมพ์ชื่อเอง --</option></select>
           </div>
-          <div class="group"><label>ชื่อผู้รับ / ชื่อบริษัท</label><input id="recipientName" value="ชื่อผู้รับวุฒิบัตร" oninput="syncPreview()"></div>
+          <div class="dynamic-help">
+  <strong>Dynamic Fields ของแม่แบบ</strong><br>
+  ตอนบันทึกแม่แบบ ระบบจะจำตำแหน่ง ขนาด สี และกรอบข้อความ แต่จะไม่จำชื่อผู้รับจริง
+  <div style="margin-top:6px">
+    <span class="dynamic-token">{{recipient_name}}</span>
+    <span class="dynamic-token">{{organization_name}}</span>
+    <span class="dynamic-token">{{course_name}}</span>
+    <span class="dynamic-token">{{certificate_no}}</span>
+    <span class="dynamic-token">{{issue_date}}</span>
+    <span class="dynamic-token">{{verification_qr}}</span>
+  </div>
+</div>
+<div class="group"><label>ชื่อผู้รับ / ชื่อบริษัท <span style="color:#7b8da5">(ใช้ตอนออกรายบุคคล)</span></label><input id="recipientName" placeholder="เว้นว่างไว้ได้เมื่อกำลังออกแบบแม่แบบ" oninput="syncPreview()"></div>
           <div class="group" id="orgGroup"><label>หน่วยงาน / องค์กร</label><input id="recipientOrg" placeholder="เช่น บริษัท ตัวอย่าง จำกัด" oninput="syncPreview()"></div>
 
           <div class="group" id="courseGroup"><label>หลักสูตร</label><select id="courseId" onchange="applyCourse()"><option value="">-- เลือกหรือพิมพ์เอง --</option></select></div>
@@ -201,6 +265,25 @@ body{margin:0;background:var(--bg);font-family:"Prompt",sans-serif;color:var(--n
             <button onclick="changeSize(-1)" title="ลดขนาด">A−</button>
             <button onclick="changeSize(1)" title="เพิ่มขนาด">A+</button>
             <button class="reset" onclick="resetLayout()">รีเซ็ต</button>
+            <div class="toolbox-row2">
+              <span class="tool-label">กว้าง</span>
+              <button onclick="changeBox('width',-2)">W−</button>
+              <button onclick="changeBox('width',2)">W+</button>
+              <span class="tool-label">สูง</span>
+              <button onclick="changeBox('height',-2)">H−</button>
+              <button onclick="changeBox('height',2)">H+</button>
+              <span class="tool-label">ระยะบรรทัด</span>
+              <button onclick="changeLineHeight(-.08)">−</button>
+              <button onclick="changeLineHeight(.08)">+</button>
+              <span class="tool-label">จัดข้อความ</span>
+              <select id="fieldAlign" onchange="changeAlign(this.value)">
+                <option value="left">ซ้าย</option>
+                <option value="center" selected>กลาง</option>
+                <option value="right">ขวา</option>
+              </select>
+              <button onclick="toggleAutoFit()" id="autoFitBtn">Auto-fit ✓</button>
+              <button onclick="fitSelectedNow()">Fit now</button>
+            </div>
           </div>
           <div class="cert-stage-wrap">
             <div class="cert-stage" id="certStage">
@@ -233,6 +316,7 @@ body{margin:0;background:var(--bg);font-family:"Prompt",sans-serif;color:var(--n
           <button class="btn light" onclick="toggleAllBulk(true)">เลือกทั้งหมด</button>
           <button class="btn primary" onclick="issueBulk()">ออกวุฒิบัตรที่เลือก</button>
         </div>
+        <div class="batch-session-preview" id="bulkSessionPreview" style="display:none"></div>
         <div class="bulk-list" id="bulkList"><div class="empty">เลือกรอบการอบรมเพื่อดูรายชื่อ</div></div>
         <div class="bulk-progress" id="bulkProgress"></div>
       </div>
@@ -263,40 +347,40 @@ const layouts={
  FREE_TRAINING:{
   bg:"cert-template-free.png",
   fields:{
-   number:{x:95,y:2.8,size:13,color:"#172848"},
-   name:{x:50,y:40,size:34,color:"#172848"},
-   bodyTitle:{x:50,y:51,size:18,color:"#172848"},
-   course:{x:50,y:58,size:23,color:"#172848"},
-   body:{x:50,y:64,size:15,color:"#172848"},
-   duration:{x:50,y:70,size:16,color:"#172848"},
-   delivery:{x:50,y:75,size:16,color:"#172848"},
-   date:{x:50,y:79,size:16,color:"#172848"}
+   number:{x:95,y:2.8,size:13,color:"#172848",width:26,height:5,lineHeight:1.15,align:"right",autoFit:true},
+   name:{x:50,y:40,size:34,color:"#172848",width:72,height:9,lineHeight:1.15,align:"center",autoFit:true},
+   bodyTitle:{x:50,y:51,size:18,color:"#172848",width:70,height:6,lineHeight:1.2,align:"center",autoFit:true},
+   course:{x:50,y:58,size:23,color:"#172848",width:82,height:15,lineHeight:1.18,align:"center",autoFit:true},
+   body:{x:50,y:64,size:15,color:"#172848",width:84,height:14,lineHeight:1.28,align:"center",autoFit:true},
+   duration:{x:50,y:70,size:16,color:"#172848",width:72,height:6,lineHeight:1.2,align:"center",autoFit:true},
+   delivery:{x:50,y:75,size:16,color:"#172848",width:66,height:5,lineHeight:1.2,align:"center",autoFit:true},
+   date:{x:50,y:79,size:16,color:"#172848",width:68,height:6,lineHeight:1.2,align:"center",autoFit:true}
   },qr:{x:91,y:16}
  },
  PAID_TRAINING:{
   bg:"cert-template-paid.png",
   fields:{
-   number:{x:95,y:2.8,size:13,color:"#203b73"},
-   name:{x:50,y:42,size:37,color:"#203b73"},
-   bodyTitle:{x:50,y:53,size:18,color:"#203b73"},
-   course:{x:50,y:59,size:23,color:"#203b73"},
-   body:{x:50,y:65,size:15,color:"#203b73"},
-   duration:{x:50,y:70,size:16,color:"#203b73"},
-   delivery:{x:50,y:75,size:16,color:"#203b73"},
-   date:{x:50,y:79,size:16,color:"#203b73"}
+   number:{x:95,y:2.8,size:13,color:"#203b73",width:26,height:5,lineHeight:1.15,align:"right",autoFit:true},
+   name:{x:50,y:42,size:37,color:"#203b73",width:74,height:10,lineHeight:1.15,align:"center",autoFit:true},
+   bodyTitle:{x:50,y:53,size:18,color:"#203b73",width:72,height:6,lineHeight:1.2,align:"center",autoFit:true},
+   course:{x:50,y:59,size:23,color:"#203b73",width:84,height:15,lineHeight:1.18,align:"center",autoFit:true},
+   body:{x:50,y:65,size:15,color:"#203b73",width:84,height:14,lineHeight:1.26,align:"center",autoFit:true},
+   duration:{x:50,y:70,size:16,color:"#203b73",width:72,height:6,lineHeight:1.2,align:"center",autoFit:true},
+   delivery:{x:50,y:75,size:16,color:"#203b73",width:66,height:5,lineHeight:1.2,align:"center",autoFit:true},
+   date:{x:50,y:79,size:16,color:"#203b73",width:68,height:6,lineHeight:1.2,align:"center",autoFit:true}
   },qr:{x:91,y:16}
  },
  SERVICE:{
   bg:"cert-template-service.png",
   fields:{
-   number:{x:95,y:3,size:12,color:"#172848"},
-   name:{x:50,y:34,size:28,color:"#172848"},
-   bodyTitle:{x:50,y:43,size:16,color:"#172848"},
-   course:{x:50,y:50,size:20,color:"#172848"},
-   body:{x:50,y:57,size:15,color:"#172848"},
-   duration:{x:50,y:64,size:14,color:"#172848"},
-   delivery:{x:50,y:69,size:14,color:"#172848"},
-   date:{x:50,y:75,size:15,color:"#172848"}
+   number:{x:95,y:3,size:12,color:"#172848",width:26,height:5,lineHeight:1.15,align:"right",autoFit:true},
+   name:{x:50,y:34,size:28,color:"#172848",width:82,height:10,lineHeight:1.15,align:"center",autoFit:true},
+   bodyTitle:{x:50,y:43,size:16,color:"#172848",width:80,height:6,lineHeight:1.2,align:"center",autoFit:true},
+   course:{x:50,y:50,size:20,color:"#172848",width:86,height:16,lineHeight:1.2,align:"center",autoFit:true},
+   body:{x:50,y:57,size:15,color:"#172848",width:88,height:19,lineHeight:1.3,align:"center",autoFit:true},
+   duration:{x:50,y:64,size:14,color:"#172848",width:80,height:6,lineHeight:1.2,align:"center",autoFit:true},
+   delivery:{x:50,y:69,size:14,color:"#172848",width:74,height:6,lineHeight:1.2,align:"center",autoFit:true},
+   date:{x:50,y:75,size:15,color:"#172848",width:72,height:6,lineHeight:1.2,align:"center",autoFit:true}
   },qr:{x:91,y:16}
  }
 };
@@ -314,7 +398,28 @@ function switchTab(name){
  document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x.dataset.tab===name));
  document.querySelectorAll(".tab-panel").forEach(x=>x.classList.toggle("active",x.id==="tab-"+name));
 }
-function setPos(el,cfg){el.style.left=cfg.x+"%";el.style.top=cfg.y+"%";el.style.fontSize=cfg.size+"px";el.style.color=cfg.color||"#172848"}
+function normalizeFieldConfig(cfg,key){
+ const defaults={
+  width:key==="course"?82:(key==="body"?84:(key==="name"?72:70)),
+  height:key==="course"?15:(key==="body"?14:(key==="name"?9:6)),
+  lineHeight:1.2,
+  align:key==="number"?"right":"center",
+  autoFit:true
+ };
+ return Object.assign({},defaults,cfg||{});
+}
+function setPos(el,cfg,key){
+ cfg=normalizeFieldConfig(cfg,key);
+ el.style.left=cfg.x+"%";
+ el.style.top=cfg.y+"%";
+ el.style.width=cfg.width+"%";
+ el.style.height=cfg.height+"%";
+ el.style.fontSize=cfg.size+"px";
+ el.style.color=cfg.color||"#172848";
+ el.style.lineHeight=String(cfg.lineHeight||1.2);
+ el.style.textAlign=cfg.align||"center";
+ el.style.justifyContent=cfg.align==="left"?"flex-start":(cfg.align==="right"?"flex-end":"center");
+}
 function refreshFieldSelect(){
  const sel=document.getElementById("selectedField");sel.innerHTML="";
  Object.keys(fieldMap).forEach(k=>{const o=document.createElement("option");o.value=k;o.textContent=fieldMap[k];sel.appendChild(o)});
@@ -324,18 +429,79 @@ function selectField(k){
  selected=k;
  document.querySelectorAll(".cert-item").forEach(el=>el.classList.toggle("selected",el.dataset.field===k));
  document.getElementById("selectedField").value=k;
+ if(design[k])design[k]=normalizeFieldConfig(design[k],k);
  const picker=document.getElementById("fieldColor");
- if(picker&&design[k]) picker.value=design[k].color||"#172848";
+ if(picker&&design[k])picker.value=design[k].color||"#172848";
+ const align=document.getElementById("fieldAlign");
+ if(align&&design[k])align.value=design[k].align||"center";
+ refreshAutoFitButton();
 }
 function changeColor(color){
  if(!design[selected])return;
  design[selected].color=color;
  applyDesign();
 }
-function moveField(dx,dy){if(!design[selected])return;design[selected].x+=dx;design[selected].y+=dy;applyDesign()}
-function changeSize(d){if(!design[selected])return;design[selected].size=Math.max(8,design[selected].size+d);applyDesign()}
-function applyDesign(){
- Object.entries(design).forEach(([k,c])=>{const el=document.querySelector(`[data-field="${k}"]`);if(el)setPos(el,c)});
+function moveField(dx,dy){if(!design[selected])return;design[selected].x+=dx;design[selected].y+=dy;applyDesign(true)}
+function changeSize(d){if(!design[selected])return;design[selected]=normalizeFieldConfig(design[selected],selected);design[selected].size=Math.max(8,design[selected].size+d);applyDesign(false)}
+function changeBox(prop,delta){
+ if(!design[selected])return;
+ design[selected]=normalizeFieldConfig(design[selected],selected);
+ const min=prop==="width"?10:3, max=prop==="width"?94:35;
+ design[selected][prop]=Math.min(max,Math.max(min,(design[selected][prop]||min)+delta));
+ applyDesign(true);
+}
+function changeLineHeight(delta){
+ if(!design[selected])return;
+ design[selected]=normalizeFieldConfig(design[selected],selected);
+ design[selected].lineHeight=Math.min(2,Math.max(.8,Number(((design[selected].lineHeight||1.2)+delta).toFixed(2))));
+ applyDesign(true);
+}
+function changeAlign(v){
+ if(!design[selected])return;
+ design[selected]=normalizeFieldConfig(design[selected],selected);
+ design[selected].align=v;
+ applyDesign(true);
+}
+function toggleAutoFit(){
+ if(!design[selected])return;
+ design[selected]=normalizeFieldConfig(design[selected],selected);
+ design[selected].autoFit=!design[selected].autoFit;
+ refreshAutoFitButton();
+ applyDesign(true);
+}
+function refreshAutoFitButton(){
+ const b=document.getElementById("autoFitBtn");
+ if(!b||!design[selected])return;
+ const on=normalizeFieldConfig(design[selected],selected).autoFit!==false;
+ b.textContent=on?"Auto-fit ✓":"Auto-fit";
+ b.style.background=on?"#e9f8ef":"#f7faff";
+ b.style.color=on?"#168653":"#112443";
+}
+function autoFitElement(el,cfg){
+ if(!el||!cfg||cfg.autoFit===false)return;
+ let size=cfg.size||16;
+ el.style.fontSize=size+"px";
+ let guard=0;
+ while((el.scrollHeight>el.clientHeight+1 || el.scrollWidth>el.clientWidth+1) && size>8 && guard<80){
+   size-=.5;guard++;
+   el.style.fontSize=size+"px";
+ }
+}
+function fitSelectedNow(){
+ const el=document.querySelector(`[data-field="${selected}"]`);
+ if(!el||!design[selected])return;
+ design[selected]=normalizeFieldConfig(design[selected],selected);
+ autoFitElement(el,design[selected]);
+}
+function applyDesign(doFit=true){
+ Object.entries(design).forEach(([k,c])=>{
+   design[k]=normalizeFieldConfig(c,k);
+   const el=document.querySelector(`[data-field="${k}"]`);
+   if(el){
+     setPos(el,design[k],k);
+     if(doFit)requestAnimationFrame(()=>autoFitElement(el,design[k]));
+   }
+ });
  const qr=document.getElementById("qrBox");qr.style.left=qrPos.x+"%";qr.style.top=qrPos.y+"%";qr.style.transform="translate(-50%,-50%)";
  const ql=document.getElementById("qrLabel");if(ql){ql.style.left=qrPos.x+"%";ql.style.top=(qrPos.y+6.6)+"%";}
 }
@@ -372,19 +538,23 @@ function applySelectedUser(){
  if(o&&o.value)document.getElementById("recipientName").value=o.dataset.name||o.textContent;
  syncPreview()
 }
+function isTemplateDesignMode(){
+ return !document.getElementById("userId").value && !document.getElementById("recipientName").value.trim();
+}
 function syncPreview(){
  const type=document.getElementById("typeCode").value;
- document.getElementById("fNo").textContent=document.getElementById("previewNo").value;
- document.getElementById("fName").textContent=document.getElementById("recipientName").value;
+ const templateMode=isTemplateDesignMode();
+ document.getElementById("fNo").textContent=templateMode?"{{certificate_no}}":document.getElementById("previewNo").value;
+ document.getElementById("fName").textContent=templateMode?"{{recipient_name}}":(document.getElementById("recipientName").value||"{{recipient_name}}");
  document.getElementById("fBodyTitle").textContent=document.getElementById("bodyTitle").value;
- document.getElementById("fCourse").textContent=document.getElementById("courseName").value;
+ document.getElementById("fCourse").textContent=document.getElementById("courseName").value||"{{course_name}}";
  document.getElementById("fBody").textContent=document.getElementById("bodyText").value;
  document.getElementById("fDuration").textContent=document.getElementById("durationText").value;
  document.getElementById("fDelivery").textContent=document.getElementById("deliveryText").value;
  const date=document.getElementById("issueDate").value;
- document.getElementById("fDate").textContent=date?`ให้ไว้ ณ วันที่ ${formatThaiDate(date)}`:"";
- if(type==="SERVICE")document.getElementById("fName").textContent=document.getElementById("recipientName").value;
- applyDesign()
+ document.getElementById("fDate").textContent=templateMode?"ให้ไว้ ณ วันที่ {{issue_date}}":(date?`ให้ไว้ ณ วันที่ ${formatThaiDate(date)}`:"");
+ if(type==="SERVICE"&&templateMode)document.getElementById("fName").textContent="{{recipient_name}}";
+ applyDesign(true)
 }
 async function auth(){
  const {data:{session},error}=await db.auth.getSession();if(error)throw error;if(!session){location.href="admin-login.html";return false}
@@ -479,9 +649,14 @@ async function loadSavedTemplate(id){
    const o=document.querySelector(`#courseId option[value="${t.course_id}"]`);
    if(o)document.getElementById("courseName").value=o.dataset.name||o.textContent||"";
  }
- if(t.design_json?.fields)design=JSON.parse(JSON.stringify(t.design_json.fields));
+ if(t.design_json?.fields){
+   design=JSON.parse(JSON.stringify(t.design_json.fields));
+   Object.keys(design).forEach(k=>design[k]=normalizeFieldConfig(design[k],k));
+ }
  if(t.design_json?.qr)qrPos={...t.design_json.qr};
- applyDesign();syncPreview();selectField(selected);
+ document.getElementById("recipientName").value="";
+ document.getElementById("userId").value="";
+ applyDesign(true);syncPreview();selectField(selected);
 }
 async function updateSavedTemplate(){
  if(!currentTemplateId)return;
@@ -526,6 +701,8 @@ function renderList(){
 async function issueCertificate(){
  const btn=document.getElementById("issueBtn");btn.disabled=true;btn.textContent="กำลังออกวุฒิบัตร...";
  try{
+  const recipient=document.getElementById("recipientName").value.trim();
+  if(!recipient){alert("กรุณาระบุชื่อผู้รับก่อนออกวุฒิบัตรรายบุคคล\nหากกำลังออกแบบแม่แบบ ให้กด “บันทึกเป็นแม่แบบ” แทน");return}
   const type=document.getElementById("typeCode").value, issue=document.getElementById("issueDate").value||new Date().toISOString().slice(0,10);
   const prefix=document.getElementById("prefix").value.trim(), courseSel=document.getElementById("courseId");
   const courseId=courseSel.value||null, subtype=type==="PAID_TRAINING"?document.getElementById("subtype").value:(type==="SERVICE"?"SERVICE":"FREE");
@@ -558,7 +735,22 @@ function formatDateOnly(v){
 async function loadBulkParticipants(){
  const id=document.getElementById("bulkSession").value;
  const list=document.getElementById("bulkList");
- if(!id){list.innerHTML='<div class="empty">เลือกรอบการอบรมเพื่อดูรายชื่อ</div>';return}
+ const preview=document.getElementById("bulkSessionPreview");
+ if(!id){
+   list.innerHTML='<div class="empty">เลือกรอบการอบรมเพื่อดูรายชื่อ</div>';
+   if(preview)preview.style.display="none";
+   return
+ }
+ const session=trainingSessions.find(x=>x.id===id);
+ if(preview&&session){
+   const course=session.courses||{};
+   preview.style.display="block";
+   preview.innerHTML=`<strong>ข้อมูลที่จะใส่ลงวุฒิบัตร Batch</strong><br>
+   หลักสูตร: ${course.course_name_th||session.session_name||"-"}<br>
+   วันที่อบรม: ${formatDateOnly(session.training_start_at)||"-"}<br>
+   ระยะเวลา: ${calcDurationText(session)||"-"}<br>
+   รูปแบบ: ${formatDeliveryText(session.delivery_method)}`;
+ }
  list.innerHTML='<div class="empty">กำลังโหลดรายชื่อ...</div>';
  const {data,error}=await db.from("training_registrations")
    .select("id,training_session_id,user_id,registration_status,payment_required,payment_status,participant_title_th,participant_firstname_th,participant_lastname_th,participant_email,organization_name")
@@ -588,6 +780,13 @@ function calcDurationText(session){
  if(!hours)return "";
  const h=Number.isInteger(hours)?hours:hours.toFixed(1);
  return `ระยะเวลาการฝึกอบรม ${h} ชั่วโมง`;
+}
+function formatDeliveryText(v){
+ const x=(v||"").toUpperCase();
+ if(x==="ONLINE")return "(ผ่านระบบออนไลน์)";
+ if(x==="ONSITE")return "(อบรม ณ สถานที่จัดอบรม)";
+ if(x==="HYBRID")return "(รูปแบบ Hybrid)";
+ return v?`(${v})`:"";
 }
 async function issueBulk(){
  const sessionId=document.getElementById("bulkSession").value;
@@ -622,9 +821,10 @@ async function issueBulk(){
      p_training_session_id:session.id,p_recipient_name:name,p_recipient_organization:r.organization_name||null,
      p_course_name:course.course_name_th||session.session_name||"",p_training_date:formatDateOnly(session.training_start_at),
      p_issue_date:issueDate,p_language_code:"th",p_template_code:template,p_prefix:prefix,p_sequence_key:seqKey,
-     p_body_title:saved.body_title||"ผ่านการฝึกอบรมหลักสูตร",p_body_text:saved.body_text||"",
-     p_duration_text:saved.duration_text||calcDurationText(session),
-     p_delivery_text:saved.delivery_text||(session.delivery_method?`(${session.delivery_method})`:""),
+     p_body_title:saved.body_title||"ผ่านการฝึกอบรมหลักสูตร",
+     p_body_text:saved.body_text||"",
+     p_duration_text:calcDurationText(session),
+     p_delivery_text:formatDeliveryText(session.delivery_method),
      p_design_json:{fields:layout.fields,qr:layout.qr,template},
      p_verification_base_url:location.origin
    });
