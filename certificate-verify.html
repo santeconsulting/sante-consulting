@@ -55,8 +55,48 @@
   background:rgba(255,255,255,.83);padding:18px 42px;border-radius:14px;white-space:nowrap
 }
 
+
+/* ===== CERTIFICATE REVOKED VISUAL R4 ===== */
+.revoked-stage .cert-bg,
+.revoked-stage .item,
+.revoked-stage .sig,
+.revoked-stage .verify-qr,
+.revoked-stage .verify-qr-label{
+  filter:grayscale(1)!important;
+  opacity:.32!important;
+}
+.revoked-stage{
+  opacity:1!important;
+  filter:none!important;
+}
+.revoked-watermark{
+  display:none;
+  position:absolute;
+  inset:0;
+  z-index:9999;
+  align-items:center;
+  justify-content:center;
+  pointer-events:none;
+}
+.revoked-watermark.show{display:flex!important}
+.revoked-watermark span{
+  transform:rotate(-22deg);
+  padding:20px 46px;
+  border:8px solid rgba(158,42,52,.62);
+  border-radius:14px;
+  background:rgba(255,255,255,.90);
+  color:rgba(158,42,52,.78);
+  font-size:clamp(28px,4.4vw,58px);
+  line-height:1.2;
+  font-weight:800;
+  letter-spacing:.2px;
+  white-space:nowrap;
+  box-shadow:0 10px 30px rgba(0,0,0,.08);
+}
+
 </style>
 <meta name="sante-build" content="VERIFY-REVOKED-GRAY-R2">
+<meta name="sante-build" content="VERIFY-REVOKED-R4">
 </head>
 <body>
 <header class="head"><img src="SANTE-logo.png" alt="SANTE"><a href="/">SANTE Consulting</a></header>
@@ -67,7 +107,7 @@
   <div class="grid">
    <section class="card">
     <div class="cert-stage-wrap"><div class="cert-stage" id="stage">
-      <img class="cert-bg" id="bg">
+      <img class="cert-bg" id="bg"><div class="item issuer-item" id="issuer"></div>
       <div class="item no" id="no"></div><div class="item" id="name"></div><div class="item" id="bodyTitle"></div><div class="item" id="course"></div><div class="item" id="body"></div><div class="item" id="duration"></div><div class="item" id="delivery"></div><div class="item" id="date"></div><div class="verify-qr" id="verifyQr"></div><div class="verify-qr-label" id="verifyQrLabel">SCAN TO VERIFY</div><div class="revoked-watermark" id="revokedWatermark"><span>วุฒิบัตรนี้ถูกยกเลิกแล้ว</span></div>
     </div></div>
    </section>
@@ -123,6 +163,7 @@ function fitVerify(el,cfg){
 }
 function set(id,text,c){
  const e=document.getElementById(id),cfg=normalizeVerifyField(c,id);
+ if(!e)return;
  e.textContent=text||"";
  e.style.left=cfg.x+"%";e.style.top=cfg.y+"%";
  e.style.width=cfg.width+"%";e.style.height=cfg.height+"%";
@@ -174,16 +215,20 @@ async function init(){
  q.innerHTML="";
  new QRCode(q,{text:location.href,width:70,height:70,correctLevel:QRCode.CorrectLevel.M});
  document.getElementById("mNo").textContent=c.certificate_no;document.getElementById("mName").textContent=c.recipient_name||"-";document.getElementById("mOrg").textContent=c.recipient_organization||"-";document.getElementById("mCourse").textContent=c.course_name||"-";document.getElementById("mTrainingDate").textContent=c.training_date||"-";document.getElementById("mDate").textContent=thaiDate(c.issue_date);document.getElementById("mStatus").textContent=c.certificate_status;
- if(c.certificate_status!=="ISSUED"){
+ if(c.certificate_status==="REVOKED"){
   document.getElementById("stage")?.classList.add("revoked-stage");
   document.getElementById("revokedWatermark")?.classList.add("show");
-  document.getElementById("status").classList.add("bad");
-  document.getElementById("statusTitle").textContent=c.certificate_status==="REVOKED"?"วุฒิบัตรฉบับนี้ถูกยกเลิก":"เอกสารนี้ไม่อยู่ในสถานะใช้งาน";
+  document.getElementById("status")?.classList.add("bad");
+  document.getElementById("statusTitle").textContent="วุฒิบัตรฉบับนี้ถูกยกเลิกแล้ว";
   document.getElementById("statusSub").textContent=c.revoked_reason||"กรุณาติดต่อ SANTE Consulting เพื่อตรวจสอบ";
   if(c.revoked_reason){
     document.getElementById("revokedWrap").style.display="block";
     document.getElementById("mRevokedReason").textContent=c.revoked_reason;
   }
+}else if(c.certificate_status!=="ISSUED"){
+  document.getElementById("status")?.classList.add("bad");
+  document.getElementById("statusTitle").textContent="เอกสารนี้ไม่อยู่ในสถานะใช้งาน";
+  document.getElementById("statusSub").textContent="กรุณาติดต่อ SANTE Consulting เพื่อตรวจสอบ";
 }
  document.getElementById("loading").style.display="none";document.getElementById("app").style.display="block"
 }

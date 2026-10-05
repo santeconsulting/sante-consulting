@@ -232,6 +232,7 @@ body{margin:0;background:var(--bg);font-family:"Prompt",sans-serif;color:var(--n
 </style>
 <meta name="sante-build" content="CERT-BATCH-HOURS-FIX-2026-10-05">
 <meta name="sante-build" content="CERT-DATE-ISSUER-R2">
+<meta name="sante-build" content="CERT-ISSUER-UX-R4">
 </head>
 <body>
 <div class="loading" id="loading"><div class="loading-box"><strong>SANTE CERTIFICATE</strong><div>กำลังตรวจสอบสิทธิ์และโหลดข้อมูล...</div><div class="spinner"></div></div></div>
@@ -291,26 +292,7 @@ body{margin:0;background:var(--bg);font-family:"Prompt",sans-serif;color:var(--n
           <div class="group"><label>ประเภท</label><select id="typeCode" onchange="applyType()"><option value="FREE_TRAINING">อบรมฟรี</option><option value="PAID_TRAINING">อบรมมีค่าใช้จ่าย</option><option value="SERVICE">งานบริการ</option></select></div>
           <div class="group" id="subtypeGroup" style="display:none"><label>รูปแบบการอบรมมีค่าใช้จ่าย</label><select id="subtype" onchange="applyPrefix()"><option value="PUBLIC">Public Training</option><option value="INHOUSE">In-house Training</option></select></div>
           <div class="group"><label>ภาษา</label><select id="language"><option value="th">ภาษาไทย</option><option value="en">English (ใช้เมื่อต้องการ)</option></select></div>
-          <div class="group">
-            <label>ออกวุฒิบัตรในนาม</label>
-            <select id="issuerMode" onchange="applyIssuerMode();syncPreview()">
-              <option value="SANTE">บริษัท ซานเต้ คอนซัลติ้ง จำกัด</option>
-              <option value="CUSTOM">บริษัท / หน่วยงานอื่น</option>
-            </select>
-          </div>
-
-          <div class="group">
-            <label>ชื่อบริษัท / หน่วยงานผู้ออกวุฒิบัตร</label>
-            <input
-              id="issuerName"
-              value="บริษัท ซานเต้ คอนซัลติ้ง จำกัด"
-              oninput="syncPreview()"
-              readonly
-            >
-            <div class="hint">
-              ถ้าเลือก SANTE ระบบจะใส่ชื่อให้อัตโนมัติ หากเลือกบริษัทอื่นสามารถแก้ไขชื่อได้
-            </div>
-          </div>
+</div>
 
           <div class="bg-manager">
             <div class="bg-manager-head">
@@ -353,7 +335,19 @@ body{margin:0;background:var(--bg);font-family:"Prompt",sans-serif;color:var(--n
 <div class="group"><label>ชื่อผู้รับ / ชื่อบริษัท <span style="color:#7b8da5">(ใช้ตอนออกรายบุคคล)</span></label><input id="recipientName" placeholder="เว้นว่างไว้ได้เมื่อกำลังออกแบบแม่แบบ" oninput="syncPreview()"></div>
           <div class="group" id="orgGroup"><label>หน่วยงาน / องค์กร</label><input id="recipientOrg" placeholder="เช่น บริษัท ตัวอย่าง จำกัด" oninput="syncPreview()"></div>
 
-          <div class="group" id="courseGroup"><label>หลักสูตร</label><select id="courseId" onchange="applyCourse()"><option value="">-- เลือกหรือพิมพ์เอง --</option></select></div>
+          <div class="group">
+  <label>ออกวุฒิบัตรในนาม</label>
+  <select id="issuerMode" onchange="applyIssuerMode();syncPreview()">
+    <option value="SANTE">บริษัท ซานเต้ คอนซัลติ้ง จำกัด</option>
+    <option value="CUSTOM">บริษัท / หน่วยงานอื่น</option>
+  </select>
+</div>
+<div class="group">
+  <label>ชื่อบริษัท / หน่วยงานผู้ออกวุฒิบัตร</label>
+  <input id="issuerName" value="บริษัท ซานเต้ คอนซัลติ้ง จำกัด" oninput="syncPreview()" readonly>
+  <div class="hint">เลือก SANTE ระบบจะใส่ชื่อให้อัตโนมัติ หากเลือกบริษัทอื่นช่องนี้จะแก้ไขได้</div>
+</div>
+<div class="group" id="courseGroup"><label>หลักสูตร</label><select id="courseId" onchange="applyCourse()"><option value="">-- เลือกหรือพิมพ์เอง --</option></select></div>
           <div class="group">
   <label>ชื่อหลักสูตร / ชื่องานบริการ</label>
   <textarea id="courseName" rows="3" oninput="syncPreview()">ชื่อหลักสูตร</textarea>
@@ -695,16 +689,21 @@ function buildFieldSelect(){
 function applyIssuerMode(){
  const mode=document.getElementById("issuerMode")?.value||"SANTE";
  const input=document.getElementById("issuerName");
+ const hint=document.getElementById("issuerHint");
  if(!input)return;
  if(mode==="SANTE"){
    input.value="บริษัท ซานเต้ คอนซัลติ้ง จำกัด";
    input.readOnly=true;
+   input.style.background="#f4f7fb";
+   if(hint)hint.textContent="กำลังออกวุฒิบัตรในนาม บริษัท ซานเต้ คอนซัลติ้ง จำกัด";
  }else{
    input.readOnly=false;
+   input.style.background="#fff";
    if(input.value==="บริษัท ซานเต้ คอนซัลติ้ง จำกัด"){
      input.value="";
    }
-   input.focus();
+   if(hint)hint.textContent="กรอกชื่อบริษัท / หน่วยงานที่ต้องการให้ออกวุฒิบัตรในนามนั้น";
+   setTimeout(()=>input.focus(),0);
  }
 }
 
@@ -738,6 +737,7 @@ function applyType(){
  applyDesign(true);
  syncPreview();
  updateBackgroundStatus();
+  applyIssuerMode();
 }
 function applyPrefix(){
  const subtype=document.getElementById("subtype").value, course=document.getElementById("courseId").selectedOptions[0];
