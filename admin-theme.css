@@ -1,0 +1,438 @@
+
+/* =========================================================
+   SANTE ADMIN THEME V4
+   Master visual system based on the supplied reference images.
+   Uses repo assets already present:
+   - SANTE-logo.png
+   - sante-dashboard-hero-desktop.png
+   - sante-dashboard-hero-mobile.png
+   - sante-admin-artwork.png
+   ========================================================= */
+
+:root{
+  --sante-navy:#063d73;
+  --sante-navy-deep:#042d58;
+  --sante-navy-soft:#0b4f8e;
+  --sante-yellow:#ffc400;
+  --sante-blue:#1478ee;
+  --sante-bg:#f4f8fd;
+  --sante-card:#ffffff;
+  --sante-text:#0b2e5f;
+  --sante-muted:#6f82a0;
+  --sante-line:#dde8f4;
+  --sante-soft:#edf5ff;
+  --sante-success:#17b978;
+  --sante-danger:#d84b58;
+  --sante-shadow:0 8px 26px rgba(5,48,92,.075);
+  --sante-radius:18px;
+}
+
+html{
+  font-size:16px;
+  -webkit-text-size-adjust:100%;
+}
+body,button,input,select,textarea{
+  font-family:"Prompt",sans-serif!important;
+}
+body{
+  color:var(--sante-text)!important;
+  background:var(--sante-bg)!important;
+}
+
+/* ----- Unified sidebar ----- */
+.sidebar{
+  width:238px!important;
+  background:linear-gradient(180deg,#084b88 0%,#063c72 48%,#052f5d 100%)!important;
+  border-right:0!important;
+  box-shadow:none!important;
+}
+.main{
+  margin-left:238px!important;
+}
+.sidebar-brand,
+.brand{
+  min-height:108px!important;
+  padding:18px 14px 22px!important;
+  border-bottom:1px solid rgba(255,255,255,.11)!important;
+}
+.sidebar-brand{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+  gap:7px!important;
+}
+.brand{
+  justify-content:center!important;
+}
+.brand img,
+.sidebar-brand img{
+  width:78px!important;
+  height:58px!important;
+  object-fit:contain!important;
+}
+.brand-mark{
+  width:78px!important;
+  min-width:78px!important;
+  height:58px!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  background:url("./SANTE-logo.png") center/contain no-repeat!important;
+  color:transparent!important;
+  overflow:hidden!important;
+}
+.brand-text{
+  text-align:center!important;
+}
+.brand-text strong{
+  color:var(--sante-yellow)!important;
+  font-size:20px!important;
+  letter-spacing:.4px!important;
+}
+.brand-text span{
+  color:#fff!important;
+  opacity:.85!important;
+  font-size:9px!important;
+}
+.brand-name{
+  color:var(--sante-yellow)!important;
+}
+.brand-sub{
+  color:#fff!important;
+  opacity:.85!important;
+}
+.menu-title,
+.sidebar-section-title,
+.sidebar-title,
+.group{
+  padding-top:18px!important;
+  padding-bottom:7px!important;
+  color:rgba(255,255,255,.48)!important;
+  font-size:11px!important;
+  font-weight:500!important;
+  text-transform:uppercase;
+  letter-spacing:.35px;
+}
+.menu-item,
+.nav-item,
+.nav-link,
+.nav-btn{
+  min-height:48px!important;
+  border-radius:13px!important;
+  font-size:14px!important;
+  font-weight:500!important;
+  transition:.18s ease!important;
+}
+.menu-item:hover,
+.nav-item:hover,
+.nav-link:hover,
+.nav-btn:hover{
+  background:rgba(255,255,255,.08)!important;
+}
+.menu-item.active,
+.nav-item.active,
+.nav-link.active,
+.nav-btn.active{
+  color:#0a315f!important;
+  background:var(--sante-yellow)!important;
+  box-shadow:0 8px 18px rgba(0,0,0,.09)!important;
+  font-weight:600!important;
+}
+.menu-icon,
+.nav-icon{
+  color:inherit!important;
+}
+
+/* ----- Header ----- */
+.header,
+.topbar{
+  min-height:78px!important;
+  padding:0 24px!important;
+  background:#fff!important;
+  border-bottom:1px solid #edf2f7!important;
+  box-shadow:0 2px 10px rgba(5,48,92,.02)!important;
+}
+.header-title,
+.breadcrumb{
+  color:var(--sante-text)!important;
+}
+.header-title{
+  font-size:18px!important;
+  font-weight:600!important;
+}
+.role-badge,
+.avatar{
+  border-radius:50%!important;
+}
+.logout-button,
+.logout{
+  color:#c84b55!important;
+}
+
+/* ----- Main content ----- */
+.content{
+  max-width:1540px!important;
+  padding:22px 24px 42px!important;
+}
+
+/* ----- Dashboard hero: use the existing real artwork ----- */
+.welcome-card{
+  min-height:326px!important;
+  border:1px solid var(--sante-line)!important;
+  border-radius:22px!important;
+  background-image:url("./sante-dashboard-hero-desktop.png")!important;
+  background-size:cover!important;
+  background-position:center!important;
+  background-repeat:no-repeat!important;
+  box-shadow:var(--sante-shadow)!important;
+  overflow:hidden!important;
+}
+.welcome-card::before,
+.welcome-card::after{
+  display:none!important;
+}
+.welcome-content{
+  max-width:48%!important;
+  padding:34px 38px!important;
+}
+.welcome-content small,
+.welcome-content h1,
+.welcome-content p,
+.motto{
+  visibility:hidden!important;
+}
+
+/* ----- Subpage hero/header ----- */
+.page-header{
+  min-height:164px!important;
+  padding:28px 30px!important;
+  border:1px solid var(--sante-line)!important;
+  border-radius:22px!important;
+  color:var(--sante-text)!important;
+  background:
+    linear-gradient(90deg,rgba(255,255,255,.97) 0%,rgba(245,250,255,.93) 54%,rgba(255,247,221,.80) 100%),
+    url("./sante-admin-artwork.png") right 28px center/auto 145px no-repeat!important;
+  box-shadow:var(--sante-shadow)!important;
+}
+.page-header h1{
+  color:var(--sante-text)!important;
+  font-size:34px!important;
+  line-height:1.18!important;
+}
+.page-header h1 span{
+  color:#0d4a86!important;
+}
+.page-header p{
+  max-width:760px!important;
+  color:#58749b!important;
+  font-size:14px!important;
+}
+.page-badge{
+  margin-right:145px!important;
+  color:#096c49!important;
+  background:#e9fff5!important;
+  border:1px solid #83d8b1!important;
+}
+
+/* ----- Cards / panels ----- */
+.stat-card,
+.summary-card,
+.panel,
+.table-card,
+.course-card,
+.session-card,
+.payment-card,
+.set-card,
+.filter-card,
+.card{
+  border:1px solid var(--sante-line)!important;
+  border-radius:var(--sante-radius)!important;
+  background:var(--sante-card)!important;
+  box-shadow:var(--sante-shadow)!important;
+}
+.stat-card,
+.summary-card{
+  min-height:108px!important;
+}
+.stat-icon,
+.summary-icon{
+  border-radius:50%!important;
+  background:#eaf4ff!important;
+}
+.stat-value,
+.summary-value{
+  color:var(--sante-text)!important;
+  font-size:30px!important;
+  font-weight:700!important;
+}
+.stat-label,
+.summary-label{
+  color:#5f7597!important;
+  font-size:13px!important;
+  font-weight:600!important;
+}
+
+/* ----- Buttons ----- */
+.btn,
+.primary-btn,
+.secondary-btn,
+.refresh,
+.refresh-btn,
+.refresh-button,
+.action-btn,
+.view-btn,
+.save-btn,
+.cancel-btn,
+.mini-btn{
+  min-height:42px!important;
+  border-radius:11px!important;
+  font-weight:600!important;
+}
+.btn-primary,
+.primary-btn,
+.mini-btn.primary{
+  background:#0b447f!important;
+  border-color:#0b447f!important;
+  color:#fff!important;
+}
+.btn-yellow,
+.validate-btn{
+  background:var(--sante-yellow)!important;
+  border-color:var(--sante-yellow)!important;
+  color:#0a315f!important;
+}
+
+/* ----- Inputs ----- */
+input,
+select,
+textarea,
+.form-input,
+.form-select,
+.form-textarea{
+  border:1px solid #dbe6f1!important;
+  border-radius:11px!important;
+  background:#fff!important;
+  color:var(--sante-text)!important;
+}
+input:focus,
+select:focus,
+textarea:focus{
+  border-color:#8db8e7!important;
+  box-shadow:0 0 0 3px rgba(20,120,238,.08)!important;
+  outline:none!important;
+}
+
+/* ----- Tables ----- */
+.table-wrap,
+.table-scroll{
+  border:1px solid var(--sante-line)!important;
+  border-radius:14px!important;
+  overflow-x:auto!important;
+}
+table{
+  background:#fff!important;
+}
+th{
+  padding:13px 12px!important;
+  color:#fff!important;
+  background:#0a427c!important;
+  font-size:12px!important;
+  font-weight:500!important;
+}
+td{
+  padding:13px 12px!important;
+  border-bottom:1px solid #edf2f7!important;
+  color:#24496f!important;
+}
+tbody tr:hover{
+  background:#f9fbfe!important;
+}
+
+/* ----- Tabs ----- */
+.tabs{
+  padding:6px!important;
+  border:1px solid var(--sante-line)!important;
+  border-radius:17px!important;
+  background:#fff!important;
+  box-shadow:var(--sante-shadow)!important;
+}
+.tab-btn{
+  border-radius:12px!important;
+  color:#173a69!important;
+}
+.tab-btn.active{
+  color:#fff!important;
+  background:linear-gradient(180deg,#104d89,#0a3e76)!important;
+  box-shadow:0 5px 14px rgba(7,59,115,.14)!important;
+}
+
+/* ----- Status badges ----- */
+.badge,
+.status-badge{
+  border-radius:999px!important;
+}
+.badge.active,
+.badge.passed,
+.badge.open{
+  color:#0d885a!important;
+  background:#eafbf3!important;
+}
+.badge.inactive,
+.badge.failed,
+.badge.revoked{
+  color:#b63d49!important;
+  background:#fff0f2!important;
+}
+
+/* ----- Modals ----- */
+.modal-card,
+.modal-content{
+  border-radius:20px!important;
+  box-shadow:0 24px 70px rgba(4,45,88,.18)!important;
+}
+
+/* ----- Dashboard cards ----- */
+.stats{
+  gap:12px!important;
+}
+.section-heading{
+  color:var(--sante-text)!important;
+}
+.quick-card,
+.action-card{
+  border:1px solid var(--sante-line)!important;
+  border-radius:17px!important;
+  background:#fff!important;
+  box-shadow:var(--sante-shadow)!important;
+}
+
+/* ----- Responsive ----- */
+@media(max-width:1150px){
+  .sidebar{width:224px!important}
+  .main{margin-left:224px!important}
+  .page-header{
+    background:
+      linear-gradient(90deg,rgba(255,255,255,.98),rgba(246,250,255,.94))!important;
+  }
+  .page-badge{margin-right:0!important}
+}
+@media(max-width:900px){
+  .sidebar{width:286px!important}
+  .main{margin-left:0!important}
+  .content{padding:16px 14px 32px!important}
+  .header,.topbar{padding:0 16px!important}
+  .welcome-card{
+    min-height:340px!important;
+    background-image:url("./sante-dashboard-hero-mobile.png")!important;
+    background-position:center!important;
+  }
+  .welcome-content{max-width:100%!important;padding:20px!important}
+}
+@media(max-width:600px){
+  .content{padding:13px 11px 28px!important}
+  .page-header{min-height:auto!important;padding:20px!important}
+  .page-header h1{font-size:27px!important}
+  .page-badge{display:none!important}
+  .stat-value,.summary-value{font-size:27px!important}
+}
