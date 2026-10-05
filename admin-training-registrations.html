@@ -1083,6 +1083,7 @@
 </style>
 <link rel="stylesheet" href="admin-member-master.css">
 <meta name="sante-build" content="REG-DUP-HERO-FIX-R2">
+<meta name="sante-build" content="REGISTRATIONS-R3.1-NULL-FIX">
 </head>
 
 <body>
@@ -1526,10 +1527,10 @@
        * 3. แสดงบัญชี Admin
        */
 
-      document.getElementById(
-        "sidebarEmail"
-      ).textContent =
-        currentUser.email || "-";
+      const sidebarEmailEl = document.getElementById("sidebarEmail");
+      if (sidebarEmailEl) {
+        sidebarEmailEl.textContent = currentUser.email || "-";
+      }
 
 
       /*
@@ -1543,16 +1544,10 @@
        * 5. เปิดหน้า
        */
 
-      document.getElementById(
-        "loadingScreen"
-      ).style.display =
-        "none";
+      document.getElementById("loadingScreen")?.style && (document.getElementById("loadingScreen").style.display = "none");
 
 
-      document.getElementById(
-        "app"
-      ).style.display =
-        "block";
+      document.getElementById("app")?.style && (document.getElementById("app").style.display = "block");
 
 
     }catch(error){
@@ -1569,16 +1564,10 @@
       );
 
 
-      document.getElementById(
-        "loadingScreen"
-      ).style.display =
-        "none";
+      document.getElementById("loadingScreen")?.style && (document.getElementById("loadingScreen").style.display = "none");
 
 
-      document.getElementById(
-        "app"
-      ).style.display =
-        "block";
+      document.getElementById("app")?.style && (document.getElementById("app").style.display = "block");
 
     }
 
@@ -1952,27 +1941,19 @@
       ).length;
 
 
-    document.getElementById(
-      "totalCount"
-    ).textContent =
+    (document.getElementById("totalCount")||{}).textContent =
       formatNumber(total);
 
 
-    document.getElementById(
-      "confirmedCount"
-    ).textContent =
+    (document.getElementById("confirmedCount")||{}).textContent =
       formatNumber(confirmed);
 
 
-    document.getElementById(
-      "pendingCount"
-    ).textContent =
+    (document.getElementById("pendingCount")||{}).textContent =
       formatNumber(pending);
 
 
-    document.getElementById(
-      "paidCount"
-    ).textContent =
+    (document.getElementById("paidCount")||{}).textContent =
       formatNumber(paid);
 
   }
@@ -2029,16 +2010,12 @@
     );
 
 
-    document.getElementById(
-      "selectedSessionName"
-    ).textContent =
+    (document.getElementById("selectedSessionName")||{}).textContent =
       session.session_name ||
       "รอบการอบรม";
 
 
-    document.getElementById(
-      "selectedCourseName"
-    ).textContent =
+    (document.getElementById("selectedCourseName")||{}).textContent =
       getCourseName(session);
 
 
@@ -2082,9 +2059,7 @@
     }
 
 
-    document.getElementById(
-      "seatDisplay"
-    ).textContent =
+    (document.getElementById("seatDisplay")||{}).textContent =
       seatText;
 
 

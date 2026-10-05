@@ -337,7 +337,10 @@ body{margin:0;background:var(--bg);font-family:"Prompt",sans-serif;color:var(--n
 
           <div class="group">
   <label>ออกวุฒิบัตรในนาม</label>
-  <select id="issuerMode" onchange="applyIssuerMode();syncPreview()">
+  <select id="issuerMode" onchange="applyIssuerMode();
+ if(document.getElementById("trainingForText"))document.getElementById("trainingForText").value=t.design_json?.trainingForText||"";
+ if(document.getElementById("trainingHeldText"))document.getElementById("trainingHeldText").value=t.design_json?.trainingHeldText||"";
+ if(document.getElementById("trainingExtraText"))document.getElementById("trainingExtraText").value=t.design_json?.trainingExtraText||"";syncPreview()">
     <option value="SANTE">บริษัท ซานเต้ คอนซัลติ้ง จำกัด</option>
     <option value="CUSTOM">บริษัท / หน่วยงานอื่น</option>
   </select>
@@ -435,6 +438,9 @@ body{margin:0;background:var(--bg);font-family:"Prompt",sans-serif;color:var(--n
               <div class="cert-item" data-field="bodyTitle" id="fBodyTitle"></div>
               <div class="cert-item" data-field="course" id="fCourse"></div>
               <div class="cert-item" data-field="body" id="fBody"></div>
+<div class="cert-item" data-field="trainingFor" id="fTrainingFor"></div>
+<div class="cert-item" data-field="trainingHeld" id="fTrainingHeld"></div>
+<div class="cert-item" data-field="trainingExtra" id="fTrainingExtra"></div>
               <div class="cert-item" data-field="duration" id="fDuration"></div>
               <div class="cert-item" data-field="delivery" id="fDelivery"></div>
               <div class="cert-item" data-field="date" id="fDate"></div>
@@ -498,7 +504,10 @@ const layouts={
    name:{x:50,y:40,size:34,color:"#172848",width:72,height:9,lineHeight:1.15,align:"center",autoFit:true},
    bodyTitle:{x:50,y:51,size:18,color:"#172848",width:70,height:6,lineHeight:1.2,align:"center",autoFit:true},
    course:{x:50,y:58,size:23,color:"#172848",width:82,height:15,lineHeight:1.18,align:"center",autoFit:true},
-   body:{x:50,y:64,size:15,color:"#172848",width:84,height:14,lineHeight:1.28,align:"center",autoFit:true},
+   body:{x:50,y:62,size:14,color:"#172848",width:86,height:10,lineHeight:1.28,align:"center",autoFit:true},
+   trainingFor:{x:50,y:66,size:14,color:"#172848",width:86,height:5,lineHeight:1.2,align:"center",autoFit:true},
+   trainingHeld:{x:50,y:70,size:14,color:"#172848",width:86,height:5,lineHeight:1.2,align:"center",autoFit:true},
+   trainingExtra:{x:50,y:74,size:14,color:"#172848",width:80,height:5,lineHeight:1.2,align:"center",autoFit:true},
    duration:{x:50,y:70,size:16,color:"#172848",width:72,height:6,lineHeight:1.2,align:"center",autoFit:true},
    delivery:{x:50,y:75,size:16,color:"#172848",width:66,height:5,lineHeight:1.2,align:"center",autoFit:true},
    date:{x:50,y:79,size:16,color:"#172848",width:68,height:6,lineHeight:1.2,align:"center",autoFit:true}
@@ -512,7 +521,10 @@ const layouts={
    name:{x:50,y:42,size:37,color:"#203b73",width:74,height:10,lineHeight:1.15,align:"center",autoFit:true},
    bodyTitle:{x:50,y:53,size:18,color:"#203b73",width:72,height:6,lineHeight:1.2,align:"center",autoFit:true},
    course:{x:50,y:59,size:23,color:"#203b73",width:84,height:15,lineHeight:1.18,align:"center",autoFit:true},
-   body:{x:50,y:65,size:15,color:"#203b73",width:84,height:14,lineHeight:1.26,align:"center",autoFit:true},
+   body:{x:50,y:62,size:14,color:"#203b73",width:86,height:10,lineHeight:1.26,align:"center",autoFit:true},
+   trainingFor:{x:50,y:66,size:14,color:"#203b73",width:86,height:5,lineHeight:1.2,align:"center",autoFit:true},
+   trainingHeld:{x:50,y:70,size:14,color:"#203b73",width:86,height:5,lineHeight:1.2,align:"center",autoFit:true},
+   trainingExtra:{x:50,y:74,size:14,color:"#203b73",width:80,height:5,lineHeight:1.2,align:"center",autoFit:true},
    duration:{x:50,y:70,size:16,color:"#203b73",width:72,height:6,lineHeight:1.2,align:"center",autoFit:true},
    delivery:{x:50,y:75,size:16,color:"#203b73",width:66,height:5,lineHeight:1.2,align:"center",autoFit:true},
    date:{x:50,y:79,size:16,color:"#203b73",width:68,height:6,lineHeight:1.2,align:"center",autoFit:true}
@@ -526,7 +538,10 @@ const layouts={
    name:{x:50,y:34,size:28,color:"#172848",width:82,height:10,lineHeight:1.15,align:"center",autoFit:true},
    bodyTitle:{x:50,y:43,size:16,color:"#172848",width:80,height:6,lineHeight:1.2,align:"center",autoFit:true},
    course:{x:50,y:50,size:20,color:"#172848",width:86,height:16,lineHeight:1.2,align:"center",autoFit:true},
-   body:{x:50,y:57,size:15,color:"#172848",width:88,height:19,lineHeight:1.3,align:"center",autoFit:true},
+   body:{x:50,y:55,size:14,color:"#172848",width:88,height:10,lineHeight:1.3,align:"center",autoFit:true},
+   trainingFor:{x:50,y:61,size:14,color:"#172848",width:88,height:5,lineHeight:1.2,align:"center",autoFit:true},
+   trainingHeld:{x:50,y:65,size:14,color:"#172848",width:88,height:5,lineHeight:1.2,align:"center",autoFit:true},
+   trainingExtra:{x:50,y:69,size:14,color:"#172848",width:82,height:5,lineHeight:1.2,align:"center",autoFit:true},
    duration:{x:50,y:64,size:14,color:"#172848",width:80,height:6,lineHeight:1.2,align:"center",autoFit:true},
    delivery:{x:50,y:69,size:14,color:"#172848",width:74,height:6,lineHeight:1.2,align:"center",autoFit:true},
    date:{x:50,y:75,size:15,color:"#172848",width:72,height:6,lineHeight:1.2,align:"center",autoFit:true}
@@ -672,6 +687,9 @@ function buildFieldSelect(){
    bodyTitle:"ข้อความนำ",
    course:"ชื่อหลักสูตร / งานบริการ",
    body:"รายละเอียด",
+   trainingFor:"ฝึกอบรมให้กับ",
+   trainingHeld:"จัดฝึกอบรมวันที่",
+   trainingExtra:"ข้อความเพิ่มเติม",
    duration:"ระยะเวลา",
    delivery:"รูปแบบการอบรม",
    date:"วันที่ออก"
@@ -772,6 +790,9 @@ function syncPreview(){
  document.getElementById("fBodyTitle").textContent=document.getElementById("bodyTitle").value;
  document.getElementById("fCourse").textContent=document.getElementById("courseName").value||"{{course_name}}";
  document.getElementById("fBody").textContent=document.getElementById("bodyText").value;
+ document.getElementById("fTrainingFor").textContent=document.getElementById("trainingForText")?.value ? `ฝึกอบรมให้กับ ${document.getElementById("trainingForText").value}` : "";
+ document.getElementById("fTrainingHeld").textContent=document.getElementById("trainingHeldText")?.value ? `จัดฝึกอบรมวันที่ ${document.getElementById("trainingHeldText").value}` : "";
+ document.getElementById("fTrainingExtra").textContent=document.getElementById("trainingExtraText")?.value||"";
  const dh=document.getElementById("durationHours").value;
  document.getElementById("fDuration").textContent=dh!==""?`ระยะเวลาการฝึกอบรม ${formatHours(dh)} ชั่วโมง`:"";
  document.getElementById("fDelivery").textContent=document.getElementById("deliveryText").value;
@@ -940,7 +961,13 @@ function currentDesignerPayload(){
      durationHours:document.getElementById("durationHours").value!==""?Number(document.getElementById("durationHours").value):null,
      trainingDate:document.getElementById("trainingDate").value||null,
      issuerMode:document.getElementById("issuerMode")?.value||"SANTE",
-     issuerName:document.getElementById("issuerName")?.value||"บริษัท ซานเต้ คอนซัลติ้ง จำกัด"
+     issuerName:document.getElementById("issuerName")?.value||"บริษัท ซานเต้ คอนซัลติ้ง จำกัด",
+   trainingForText:document.getElementById("trainingForText")?.value||"",
+   trainingHeldText:document.getElementById("trainingHeldText")?.value||"",
+   trainingExtraText:document.getElementById("trainingExtraText")?.value||"",
+     trainingForText:document.getElementById("trainingForText")?.value||"",
+     trainingHeldText:document.getElementById("trainingHeldText")?.value||"",
+     trainingExtraText:document.getElementById("trainingExtraText")?.value||""
    }
  };
 }
@@ -1117,7 +1144,10 @@ async function issueCertificate(){
    backgroundTemplate:currentBackgroundUrl?null:getDefaultBackground(),
    trainingDate:document.getElementById("trainingDate").value||null,
    issuerMode:document.getElementById("issuerMode")?.value||"SANTE",
-   issuerName:document.getElementById("issuerName")?.value||"บริษัท ซานเต้ คอนซัลติ้ง จำกัด"
+   issuerName:document.getElementById("issuerName")?.value||"บริษัท ซานเต้ คอนซัลติ้ง จำกัด",
+     trainingForText:document.getElementById("trainingForText")?.value||"",
+     trainingHeldText:document.getElementById("trainingHeldText")?.value||"",
+     trainingExtraText:document.getElementById("trainingExtraText")?.value||""
  };
   const {data,error}=await db.rpc("admin_issue_certificate",{
    p_type_code:type,p_subtype:subtype,p_user_id:type==="SERVICE"?null:(document.getElementById("userId").value||null),
@@ -1300,7 +1330,10 @@ async function issueBulk(){
        backgroundTemplate:saved.background_template||layouts[template]?.bg||null,
        trainingDate:saved.design_json?.trainingDate||getBulkTrainingDate(session,saved)||null,
        issuerMode:saved.design_json?.issuerMode||"SANTE",
-       issuerName:getBulkIssuerName(saved)
+       issuerName:getBulkIssuerName(saved),
+       trainingForText:saved.design_json?.trainingForText||"",
+       trainingHeldText:saved.design_json?.trainingHeldText||"",
+       trainingExtraText:saved.design_json?.trainingExtraText||""
      },
      p_verification_base_url:location.origin
    });

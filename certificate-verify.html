@@ -108,7 +108,7 @@
    <section class="card">
     <div class="cert-stage-wrap"><div class="cert-stage" id="stage">
       <img class="cert-bg" id="bg"><div class="item issuer-item" id="issuer"></div>
-      <div class="item no" id="no"></div><div class="item" id="name"></div><div class="item" id="bodyTitle"></div><div class="item" id="course"></div><div class="item" id="body"></div><div class="item" id="duration"></div><div class="item" id="delivery"></div><div class="item" id="date"></div><div class="verify-qr" id="verifyQr"></div><div class="verify-qr-label" id="verifyQrLabel">SCAN TO VERIFY</div><div class="revoked-watermark" id="revokedWatermark"><span>วุฒิบัตรนี้ถูกยกเลิกแล้ว</span></div>
+      <div class="item no" id="no"></div><div class="item" id="name"></div><div class="item" id="bodyTitle"></div><div class="item" id="course"></div><div class="item" id="body"></div><div class="item" id="trainingFor"></div><div class="item" id="trainingHeld"></div><div class="item" id="trainingExtra"></div><div class="item" id="duration"></div><div class="item" id="delivery"></div><div class="item" id="date"></div><div class="verify-qr" id="verifyQr"></div><div class="verify-qr-label" id="verifyQrLabel">SCAN TO VERIFY</div><div class="revoked-watermark" id="revokedWatermark"><span>วุฒิบัตรนี้ถูกยกเลิกแล้ว</span></div>
     </div></div>
    </section>
    <aside class="card meta"><h2>ข้อมูลวุฒิบัตร</h2><dl>
@@ -126,7 +126,7 @@ const defaultLayouts={
   name:{x:50,y:40,size:34,color:"#172848",width:72,height:9,lineHeight:1.15,align:"center",autoFit:true},
   bodyTitle:{x:50,y:51,size:18,color:"#172848",width:70,height:6,lineHeight:1.2,align:"center",autoFit:true},
   course:{x:50,y:58,size:23,color:"#172848",width:82,height:15,lineHeight:1.18,align:"center",autoFit:true},
-  body:{x:50,y:64,size:15,color:"#172848",width:84,height:14,lineHeight:1.28,align:"center",autoFit:true},
+  body:{x:50,y:62,size:14,color:"#172848",width:86,height:10,lineHeight:1.28,align:"center",autoFit:true},trainingFor:{x:50,y:66,size:14,color:"#172848",width:86,height:5,lineHeight:1.2,align:"center",autoFit:true},trainingHeld:{x:50,y:70,size:14,color:"#172848",width:86,height:5,lineHeight:1.2,align:"center",autoFit:true},trainingExtra:{x:50,y:74,size:14,color:"#172848",width:80,height:5,lineHeight:1.2,align:"center",autoFit:true},
   duration:{x:50,y:70,size:16,color:"#172848",width:72,height:6,lineHeight:1.2,align:"center",autoFit:true},
   delivery:{x:50,y:75,size:16,color:"#172848",width:66,height:5,lineHeight:1.2,align:"center",autoFit:true},
   date:{x:50,y:79,size:16,color:"#172848",width:68,height:6,lineHeight:1.2,align:"center",autoFit:true}},qr:{x:91,y:16}},
@@ -135,7 +135,7 @@ const defaultLayouts={
   name:{x:50,y:42,size:37,color:"#203b73",width:74,height:10,lineHeight:1.15,align:"center",autoFit:true},
   bodyTitle:{x:50,y:53,size:18,color:"#203b73",width:72,height:6,lineHeight:1.2,align:"center",autoFit:true},
   course:{x:50,y:59,size:23,color:"#203b73",width:84,height:15,lineHeight:1.18,align:"center",autoFit:true},
-  body:{x:50,y:65,size:15,color:"#203b73",width:84,height:14,lineHeight:1.26,align:"center",autoFit:true},
+  body:{x:50,y:62,size:14,color:"#203b73",width:86,height:10,lineHeight:1.26,align:"center",autoFit:true},trainingFor:{x:50,y:66,size:14,color:"#203b73",width:86,height:5,lineHeight:1.2,align:"center",autoFit:true},trainingHeld:{x:50,y:70,size:14,color:"#203b73",width:86,height:5,lineHeight:1.2,align:"center",autoFit:true},trainingExtra:{x:50,y:74,size:14,color:"#203b73",width:80,height:5,lineHeight:1.2,align:"center",autoFit:true},
   duration:{x:50,y:70,size:16,color:"#203b73",width:72,height:6,lineHeight:1.2,align:"center",autoFit:true},
   delivery:{x:50,y:75,size:16,color:"#203b73",width:66,height:5,lineHeight:1.2,align:"center",autoFit:true},
   date:{x:50,y:79,size:16,color:"#203b73",width:68,height:6,lineHeight:1.2,align:"center",autoFit:true}},qr:{x:91,y:16}},
@@ -144,7 +144,7 @@ const defaultLayouts={
   name:{x:50,y:34,size:28,color:"#172848",width:82,height:10,lineHeight:1.15,align:"center",autoFit:true},
   bodyTitle:{x:50,y:43,size:16,color:"#172848",width:80,height:6,lineHeight:1.2,align:"center",autoFit:true},
   course:{x:50,y:50,size:20,color:"#172848",width:86,height:16,lineHeight:1.2,align:"center",autoFit:true},
-  body:{x:50,y:57,size:15,color:"#172848",width:88,height:19,lineHeight:1.3,align:"center",autoFit:true},
+  body:{x:50,y:55,size:14,color:"#172848",width:88,height:10,lineHeight:1.3,align:"center",autoFit:true},trainingFor:{x:50,y:61,size:14,color:"#172848",width:88,height:5,lineHeight:1.2,align:"center",autoFit:true},trainingHeld:{x:50,y:65,size:14,color:"#172848",width:88,height:5,lineHeight:1.2,align:"center",autoFit:true},trainingExtra:{x:50,y:69,size:14,color:"#172848",width:82,height:5,lineHeight:1.2,align:"center",autoFit:true},
   duration:{x:50,y:64,size:14,color:"#172848",width:80,height:6,lineHeight:1.2,align:"center",autoFit:true},
   delivery:{x:50,y:69,size:14,color:"#172848",width:74,height:6,lineHeight:1.2,align:"center",autoFit:true},
   date:{x:50,y:75,size:15,color:"#172848",width:72,height:6,lineHeight:1.2,align:"center",autoFit:true}},qr:{x:91,y:16}}
@@ -207,7 +207,7 @@ async function init(){
  }
  const c=data[0], type=c.template_code||"FREE_TRAINING", base=defaultLayouts[type]||defaultLayouts.FREE_TRAINING, d=c.design_json?.fields||base.fields;
  document.getElementById("bg").src=c.design_json?.backgroundUrl||c.design_json?.backgroundTemplate||base.bg;
- set("issuer",c.design_json?.issuerName||"บริษัท ซานเต้ คอนซัลติ้ง จำกัด",d.issuer||base.fields.issuer);set("no",c.certificate_no,d.number||base.fields.number);set("name",c.recipient_name,d.name||base.fields.name);set("bodyTitle",c.body_title,d.bodyTitle||base.fields.bodyTitle);set("course",c.course_name,d.course||base.fields.course);set("body",c.body_text,d.body||base.fields.body);set("duration",c.duration_text,d.duration||base.fields.duration);set("delivery",c.delivery_text,d.delivery||base.fields.delivery);set("date",c.training_date?"ให้ไว้ ณ วันที่ "+c.training_date:(c.issue_date?"ให้ไว้ ณ วันที่ "+thaiDate(c.issue_date):""),d.date||base.fields.date);
+ set("issuer",c.design_json?.issuerName||"บริษัท ซานเต้ คอนซัลติ้ง จำกัด",d.issuer||base.fields.issuer);set("no",c.certificate_no,d.number||base.fields.number);set("name",c.recipient_name,d.name||base.fields.name);set("bodyTitle",c.body_title,d.bodyTitle||base.fields.bodyTitle);set("course",c.course_name,d.course||base.fields.course);set("body",c.body_text,d.body||base.fields.body);set("trainingFor",c.design_json?.trainingForText?`ฝึกอบรมให้กับ ${c.design_json.trainingForText}`:"",d.trainingFor||base.fields.trainingFor);set("trainingHeld",c.design_json?.trainingHeldText?`จัดฝึกอบรมวันที่ ${c.design_json.trainingHeldText}`:"",d.trainingHeld||base.fields.trainingHeld);set("trainingExtra",c.design_json?.trainingExtraText||"",d.trainingExtra||base.fields.trainingExtra);set("duration",c.duration_text,d.duration||base.fields.duration);set("delivery",c.delivery_text,d.delivery||base.fields.delivery);set("date",c.training_date?"ให้ไว้ ณ วันที่ "+c.training_date:(c.issue_date?"ให้ไว้ ณ วันที่ "+thaiDate(c.issue_date):""),d.date||base.fields.date);
  const qpos=c.design_json?.qr||base.qr||{x:91,y:16};
  const q=document.getElementById("verifyQr"),ql=document.getElementById("verifyQrLabel");
  q.style.left=qpos.x+"%";q.style.top=qpos.y+"%";
