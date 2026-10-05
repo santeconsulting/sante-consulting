@@ -37,16 +37,22 @@
 <div class="app" id="app">
 <aside class="sidebar" id="sidebar">
 <div class="brand"><img src="./SANTE-logo.png" alt="SANTE"><div><div class="brand-name">ซานเต้</div><div class="brand-sub">SANTE CONSULTING</div></div></div>
-<div class="group">ภาพรวม</div><div class="nav"><button class="nav-btn" onclick="location.href='./admin.html'"><span class="nav-icon">⌂</span><span>แดชบอร์ด</span></button></div>
+<div class="group">ภาพรวม</div><div class="nav"><button class="nav-btn" onclick="location.href='./admin-dashboard.html'"><span class="nav-icon">⌂</span><span>แดชบอร์ด</span></button></div>
 <div class="group">การอบรมและการเรียนรู้</div><div class="nav">
-<button class="nav-btn" data-coming><span class="nav-icon">♟</span><span>สมาชิก</span></button>
+<button class="nav-btn" onclick="location.href='./admin-training-registrations.html'"><span class="nav-icon">♟</span><span>ผู้สมัครอบรม</span></button>
 <button class="nav-btn" onclick="location.href='./admin-courses.html'"><span class="nav-icon">▣</span><span>หลักสูตร</span></button>
 <button class="nav-btn" onclick="location.href='./admin-training-sessions.html'"><span class="nav-icon">◷</span><span>รอบการอบรม</span></button>
-<button class="nav-btn" onclick="location.href='./admin-question-import.html'"><span class="nav-icon">▤</span><span>คลังข้อสอบ / นำเข้าข้อสอบ</span></button>
+<button class="nav-btn" onclick="location.href='./admin-question-import.html'"><span class="nav-icon">▤</span><span>คลังข้อสอบ / นำเข้า</span></button>
 <button class="nav-btn active"><span class="nav-icon">☑</span><span>ข้อสอบและผลสอบ</span></button>
 <button class="nav-btn" data-coming><span class="nav-icon">▣</span><span>วุฒิบัตร</span></button>
 </div>
-<div class="group">งานบริการ</div><div class="nav"><button class="nav-btn" data-coming><span class="nav-icon">◆</span><span>บริการ</span></button><button class="nav-btn" data-coming><span class="nav-icon">▤</span><span>ใบเสนอราคา</span></button><button class="nav-btn" data-coming><span class="nav-icon">▧</span><span>งานบริการ</span></button></div>
+<div class="group">งานบริการและการเงิน</div><div class="nav">
+<button class="nav-btn" onclick="location.href='./admin-payments.html'"><span class="nav-icon">฿</span><span>การเงิน / การชำระเงิน</span></button>
+<button class="nav-btn" data-coming><span class="nav-icon">◆</span><span>งานบริการ</span></button>
+<button class="nav-btn" data-coming><span class="nav-icon">▤</span><span>ใบเสนอราคา</span></button>
+<button class="nav-btn" data-coming><span class="nav-icon">⚙</span><span>ตั้งค่าระบบ</span></button>
+<button class="nav-btn" data-coming><span class="nav-icon">◷</span><span>Audit Log</span></button>
+</div>
 </aside>
 <div class="main">
 <header class="topbar"><div class="top-left"><button class="mobile-menu" id="mobileMenu">☰</button><div class="breadcrumb">SANTE SYSTEM / <strong>ข้อสอบและผลสอบ</strong></div></div><div class="top-right"><div class="avatar" id="avatar">S</div><div class="user"><strong id="userEmail">-</strong><span>ผู้ดูแลระบบ</span></div><button class="logout" id="logoutBtn">ออกจากระบบ</button></div></header>
