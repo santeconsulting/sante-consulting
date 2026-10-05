@@ -1,0 +1,287 @@
+
+/* =========================================================
+   SANTE ADMIN — MEMBER MASTER FINAL
+   Goal: Admin uses the SAME visual language as Member.
+   ========================================================= */
+:root{
+  --sante-navy:#112443;
+  --sante-navy-2:#0b3f78;
+  --sante-yellow:#f8c73d;
+  --sante-blue:#1677ff;
+  --sante-bg:#f6f9fd;
+  --sante-card:#ffffff;
+  --sante-border:#d9e4f0;
+  --sante-muted:#78869a;
+  --sante-shadow:0 14px 40px rgba(18,46,84,.08);
+}
+*{box-sizing:border-box}
+html{font-size:16px;-webkit-text-size-adjust:100%}
+body,button,input,select,textarea{font-family:"Prompt",sans-serif!important}
+body{margin:0!important;background:var(--sante-bg)!important;color:var(--sante-navy)!important}
+body.au-ready{padding:0!important}
+a{text-decoration:none}
+img{max-width:100%}
+
+/* HIDE OLD SHELL ONLY — logic remains intact */
+body.au-ready > .sidebar,
+body.au-ready > .sante-sidebar,
+body.au-ready .main > .header,
+body.au-ready .main > .topbar,
+body.au-ready .main > .sante-topbar{
+  display:none!important;
+}
+
+/* ---------- Unified Admin Sidebar ---------- */
+.au-sidebar{
+  position:fixed;inset:0 auto 0 0;width:252px;z-index:1200;
+  overflow-y:auto;padding:0 14px 18px;
+  background:linear-gradient(180deg,#0b4c87 0%,#073c70 52%,#062f5b 100%);
+  color:#fff;
+}
+.au-brand{
+  height:118px;display:flex;align-items:center;justify-content:center;
+  border-bottom:1px solid rgba(255,255,255,.12)
+}
+.au-brand img{width:130px;height:76px;object-fit:contain}
+.au-nav{display:flex;flex-direction:column;gap:4px;padding-top:8px}
+.au-nav-title{
+  padding:17px 10px 6px;color:rgba(255,255,255,.48);
+  font-size:10px;letter-spacing:.6px;font-weight:500
+}
+.au-link{
+  display:flex;align-items:center;gap:11px;min-height:47px;padding:9px 12px;
+  border-radius:12px;color:#fff!important;font-size:13px;font-weight:500
+}
+.au-link:hover{background:rgba(255,255,255,.08)}
+.au-link.active{
+  background:var(--sante-yellow)!important;color:var(--sante-navy)!important;
+  font-weight:650;box-shadow:0 7px 17px rgba(0,0,0,.09)
+}
+.au-icon{width:22px;text-align:center;font-size:17px}
+.au-footer{
+  margin-top:24px;padding:16px 11px;border-top:1px solid rgba(255,255,255,.12);
+  color:rgba(255,255,255,.72);font-size:10px;line-height:1.65
+}
+.au-footer strong{display:block;color:#fff;font-size:11px}
+
+/* ---------- Unified Member-style Topbar ---------- */
+.au-topbar{
+  position:sticky;top:0;z-index:1100;height:76px;margin-left:252px;
+  display:flex;align-items:center;justify-content:space-between;gap:18px;
+  padding:0 28px;background:#fff;border-bottom:1px solid #e7edf5
+}
+.au-left{display:flex;align-items:center;gap:13px;min-width:0;flex:1}
+.au-menu{
+  display:none;width:42px;height:42px;border:1px solid var(--sante-border);
+  border-radius:13px;background:#fff;color:var(--sante-navy);font-size:22px
+}
+.au-search{
+  width:min(580px,48vw);height:44px;padding:0 18px;border-radius:24px;
+  display:flex;align-items:center;gap:10px;background:#eef4fa;color:#71839d;
+  font-size:13px
+}
+.au-right{display:flex;align-items:center;gap:14px}
+.au-user{text-align:right}
+.au-user strong{display:block;color:var(--sante-navy);font-size:13px}
+.au-user span{display:block;margin-top:1px;color:var(--sante-muted);font-size:11px}
+.au-avatar{
+  width:40px;height:40px;border-radius:50%;display:grid;place-items:center;
+  background:#0b447f;color:#fff;font-weight:700
+}
+.au-logout{
+  min-height:42px;padding:0 16px;border-radius:11px;border:1px solid #d6dde7;
+  background:#fff;color:var(--sante-navy);font-size:12px;font-weight:600
+}
+
+/* ---------- Main geometry ---------- */
+body.au-ready .main{
+  margin-left:252px!important;min-height:100vh!important;background:var(--sante-bg)!important
+}
+body.au-ready .content{
+  width:min(1480px,calc(100% - 56px))!important;max-width:none!important;
+  margin:0 auto!important;padding:30px 0 70px!important
+}
+
+/* ---------- MASTER COVER — same behavior as Member ---------- */
+.au-cover-wrap{margin:0 0 30px}
+.au-cover{
+  display:block;width:100%;overflow:hidden;border-radius:28px;
+  background:#fff;box-shadow:0 18px 45px rgba(18,46,84,.10)
+}
+.au-cover img{display:block;width:100%;height:auto;max-height:430px;object-fit:cover}
+
+/* Existing dashboard hero must not create a second hero */
+body.au-ready .welcome-card{display:none!important}
+
+/* Existing subpage header becomes a clean title/action card UNDER the cover */
+body.au-ready .page-header,
+body.au-ready .page-hero{
+  position:relative!important;min-height:0!important;margin:0 0 22px!important;
+  padding:24px 28px!important;border:1px solid var(--sante-border)!important;
+  border-radius:20px!important;background:#fff!important;color:var(--sante-navy)!important;
+  box-shadow:0 10px 28px rgba(23,48,82,.045)!important;
+  overflow:visible!important
+}
+body.au-ready .page-header::before,
+body.au-ready .page-header::after,
+body.au-ready .page-hero::before,
+body.au-ready .page-hero::after{display:none!important}
+body.au-ready .page-header h1,
+body.au-ready .page-title,
+body.au-ready .page-hero h1{
+  margin:0!important;color:var(--sante-navy)!important;font-size:29px!important;line-height:1.3!important;font-weight:700!important
+}
+body.au-ready .page-header p,
+body.au-ready .page-description,
+body.au-ready .page-subtitle,
+body.au-ready .page-hero p{
+  margin:6px 0 0!important;color:var(--sante-muted)!important;font-size:13px!important;line-height:1.65!important
+}
+
+/* Dashboard intro, inserted by JS */
+.au-page-intro{margin:0 0 22px}
+.au-page-intro h1{margin:0;color:var(--sante-navy);font-size:28px;line-height:1.3}
+.au-page-intro p{margin:6px 0 0;color:var(--sante-muted);font-size:13px}
+
+/* ---------- Member-style sections / cards ---------- */
+body.au-ready .section-heading{margin:28px 0 14px!important}
+body.au-ready .section-heading h2{margin:0!important;color:var(--sante-navy)!important;font-size:24px!important}
+body.au-ready .section-heading p{margin:4px 0 0!important;color:var(--sante-muted)!important;font-size:13px!important}
+
+body.au-ready .stat-card,
+body.au-ready .summary-card,
+body.au-ready .panel,
+body.au-ready .filter-panel,
+body.au-ready .toolbar,
+body.au-ready .table-card,
+body.au-ready .course-card,
+body.au-ready .session-card,
+body.au-ready .payment-card,
+body.au-ready .quick-card,
+body.au-ready .card{
+  border:1px solid var(--sante-border)!important;border-radius:20px!important;
+  background:#fff!important;box-shadow:0 10px 28px rgba(23,48,82,.045)!important
+}
+body.au-ready .stat-card,
+body.au-ready .summary-card{min-height:112px!important;padding:20px!important}
+body.au-ready .stat-icon,
+body.au-ready .summary-icon{
+  width:50px!important;height:50px!important;border-radius:50%!important;
+  background:#eef6ff!important;color:#0c4d8c!important
+}
+body.au-ready .stat-info span,
+body.au-ready .summary-label{color:#667d9d!important;font-size:12px!important;font-weight:600!important}
+body.au-ready .stat-info strong,
+body.au-ready .summary-value{color:var(--sante-navy)!important;font-size:29px!important;font-weight:700!important}
+
+/* Inputs / buttons */
+body.au-ready input,
+body.au-ready select,
+body.au-ready textarea{
+  min-height:46px!important;border:1px solid #d9e5f1!important;border-radius:12px!important;
+  background:#fff!important;color:var(--sante-navy)!important
+}
+body.au-ready input:focus,
+body.au-ready select:focus,
+body.au-ready textarea:focus{
+  border-color:#8db7e5!important;box-shadow:0 0 0 3px rgba(22,119,255,.08)!important;outline:none!important
+}
+body.au-ready .primary-btn,
+body.au-ready .btn-primary,
+body.au-ready .view-btn,
+body.au-ready .save-btn,
+body.au-ready .refresh-button,
+body.au-ready .refresh-btn{
+  border-radius:11px!important;background:#0b447f!important;color:#fff!important;border-color:#0b447f!important
+}
+body.au-ready .export-btn,
+body.au-ready .validate-btn{
+  border-radius:11px!important;background:var(--sante-yellow)!important;color:var(--sante-navy)!important;border-color:var(--sante-yellow)!important
+}
+
+/* Tables */
+body.au-ready .table-wrap,
+body.au-ready .table-container,
+body.au-ready .table-scroll{overflow-x:auto!important;-webkit-overflow-scrolling:touch!important}
+body.au-ready th{background:#0b447f!important;color:#fff!important}
+body.au-ready td{border-bottom:1px solid #edf2f7!important}
+
+/* ---------- MOBILE: show cat immediately ---------- */
+@media(max-width:1050px){
+  .au-sidebar{transform:translateX(-100%);transition:.22s ease}
+  .au-sidebar.open{transform:translateX(0)}
+  .au-topbar{margin-left:0;height:72px;padding:0 16px}
+  .au-menu{display:block}
+  .au-search{display:none}
+  body.au-ready .main{margin-left:0!important}
+  body.au-ready .content{width:calc(100% - 28px)!important;padding:20px 0 50px!important}
+}
+@media(max-width:700px){
+  .au-topbar{height:68px;padding:0 12px}
+  .au-user{display:none}
+  .au-avatar{width:36px;height:36px}
+  .au-logout{min-height:40px;padding:0 11px;font-size:11px}
+
+  body.au-ready .content{width:calc(100% - 20px)!important;padding:14px 0 36px!important}
+  .au-cover-wrap{margin-bottom:18px}
+  .au-cover{height:270px;border-radius:22px}
+  .au-cover picture,.au-cover img{width:100%;height:100%}
+  .au-cover img{
+    object-fit:cover!important;
+    object-position:center 76%!important; /* subject-aware: cat appears immediately */
+    max-height:none!important
+  }
+
+  body.au-ready .page-header,
+  body.au-ready .page-hero{padding:20px!important;border-radius:18px!important;margin-bottom:18px!important}
+  body.au-ready .page-header h1,
+  body.au-ready .page-title,
+  body.au-ready .page-hero h1{font-size:24px!important}
+  body.au-ready .page-header p,
+  body.au-ready .page-description,
+  body.au-ready .page-subtitle,
+  body.au-ready .page-hero p{font-size:13px!important}
+
+  .au-page-intro h1{font-size:24px}
+  .au-page-intro p{font-size:13px}
+
+  body.au-ready .stats,
+  body.au-ready .stats-grid,
+  body.au-ready .summary{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}
+  body.au-ready .course-grid,
+  body.au-ready .session-grid,
+  body.au-ready .quick-grid{grid-template-columns:1fr!important}
+  body.au-ready .toolbar,
+  body.au-ready .filter-panel,
+  body.au-ready .filters,
+  body.au-ready .form-grid,
+  body.au-ready .form-grid.three{grid-template-columns:1fr!important}
+  body.au-ready input,
+  body.au-ready select,
+  body.au-ready textarea{font-size:16px!important}
+  body.au-ready table{min-width:760px!important}
+}
+@media(max-width:430px){
+  .au-cover{height:245px}
+  .au-cover img{object-position:center 78%!important}
+  body.au-ready .stats,
+  body.au-ready .stats-grid,
+  body.au-ready .summary{grid-template-columns:1fr!important}
+}
+
+/* ---------- Login: same Member visual behavior ---------- */
+body.admin-login-page{background:#f7faff!important}
+@media(max-width:900px){
+  body.admin-login-page .login-shell{display:block!important;min-height:100dvh!important}
+  body.admin-login-page .login-visual{
+    min-height:0!important;height:330px!important;
+    background-image:url("./sante-dashboard-hero-mobile.png")!important;
+    background-size:cover!important;background-position:center 76%!important
+  }
+  body.admin-login-page .login-copy{display:none!important}
+  body.admin-login-page .login-card-wrap{padding:0 14px 28px!important}
+  body.admin-login-page .login-card{
+    width:100%!important;margin:-18px auto 0!important;padding:26px 20px!important;
+    border-radius:22px!important;box-shadow:0 14px 40px rgba(18,46,84,.10)!important
+  }
+}
