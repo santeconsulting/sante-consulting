@@ -54,6 +54,37 @@ body{margin:0;background:var(--bg);font-family:"Prompt",sans-serif;color:var(--n
 .empty{text-align:center;padding:35px;color:var(--muted)}
 @media(max-width:1100px){.designer{grid-template-columns:1fr}.form{position:static}.stats{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:700px){.content{width:calc(100% - 20px);padding:14px 0 35px}.page-header{padding:19px}.page-header h1{font-size:24px}.tabs{overflow:auto}.tab{min-width:145px}.stats{grid-template-columns:1fr 1fr}.toolbar{grid-template-columns:1fr}.row2{grid-template-columns:1fr}.preview-head{align-items:flex-start;flex-direction:column}.cert-stage-wrap{padding:8px}.cert-stage{transform:scale(.38);margin-bottom:-410px}.form input,.form select,.form textarea{font-size:16px}}
+
+/* ===== Certificate Designer V2 ===== */
+.preview-toolbox{
+  position:sticky;top:82px;z-index:30;
+  display:grid;grid-template-columns:1.25fr auto auto auto auto auto auto auto;
+  gap:7px;align-items:end;
+  padding:10px;margin-bottom:12px;
+  border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.97);
+  box-shadow:0 8px 24px rgba(18,46,84,.08);backdrop-filter:blur(7px)
+}
+.preview-toolbox label{display:block;font-size:10px;color:var(--muted);margin-bottom:4px}
+.preview-toolbox select{min-height:38px!important}
+.preview-toolbox input[type="color"]{width:46px;height:38px;padding:3px;border:1px solid var(--line);border-radius:9px;background:#fff}
+.preview-toolbox button{height:38px;min-width:42px;border:1px solid var(--line);border-radius:9px;background:#f7faff;color:var(--navy);font:600 12px Prompt;cursor:pointer}
+.preview-toolbox .reset{padding:0 10px}
+.qrbox{border:1px solid rgba(17,36,67,.15);border-radius:5px}
+.qr-label{position:absolute;font-size:8px;color:#667d9d;transform:translate(-50%,0);white-space:nowrap}
+.bulk-grid{display:grid;grid-template-columns:1.4fr .7fr auto auto;gap:10px;align-items:end}
+.bulk-list{margin-top:14px;border:1px solid var(--line);border-radius:14px;overflow:auto;max-height:480px}
+.bulk-row{display:grid;grid-template-columns:42px 1.35fr 1fr .65fr .65fr;gap:10px;align-items:center;padding:11px 13px;border-bottom:1px solid #edf2f7;font-size:11px}
+.bulk-row.head{position:sticky;top:0;background:#0b447f;color:white;font-weight:600;z-index:2}
+.bulk-row:last-child{border-bottom:0}
+.bulk-progress{display:none;margin-top:12px;padding:11px 13px;border-radius:11px;background:#eef6ff;color:#0b447f;font-size:12px}
+@media(max-width:900px){
+  .preview-toolbox{top:72px;grid-template-columns:1fr repeat(4,42px);overflow:auto}
+  .preview-toolbox .color-wrap,.preview-toolbox .reset{grid-row:2}
+  .bulk-grid{grid-template-columns:1fr}
+  .bulk-row{grid-template-columns:34px 1.5fr 1fr}
+  .bulk-row>*:nth-child(n+4){display:none}
+}
+
 </style>
 </head>
 <body>
@@ -69,6 +100,7 @@ body{margin:0;background:var(--bg);font-family:"Prompt",sans-serif;color:var(--n
     <div class="tabs">
       <button class="tab active" data-tab="list" onclick="switchTab('list')">รายการวุฒิบัตร</button>
       <button class="tab" data-tab="designer" onclick="switchTab('designer')">ออกวุฒิบัตร / Designer</button>
+      <button class="tab" data-tab="bulk" onclick="switchTab('bulk')">ออกหลายใบ</button>
       <button class="tab" data-tab="signers" onclick="switchTab('signers')">ผู้ลงนาม</button>
     </div>
 
@@ -127,13 +159,6 @@ body{margin:0;background:var(--bg);font-family:"Prompt",sans-serif;color:var(--n
             <div class="group"><label>เลข Preview</label><input id="previewNo" value="ST-SS-69-0001" oninput="syncPreview()"></div>
           </div>
 
-          <div class="group"><label>เลือกข้อความบน Preview</label><select id="selectedField" onchange="selectField(this.value)"></select></div>
-          <div class="adjust">
-            <button onclick="moveField(0,-1)">↑</button><button onclick="changeSize(1)">A+</button><button onclick="moveField(0,1)">↓</button>
-            <button onclick="moveField(-1,0)">←</button><button onclick="changeSize(-1)">A-</button><button onclick="moveField(1,0)">→</button>
-            <button class="wide" onclick="resetLayout()">รีเซ็ตตำแหน่งตาม Template</button>
-          </div>
-
           <div style="display:grid;gap:8px;margin-top:15px">
             <button class="btn primary" id="issueBtn" onclick="issueCertificate()">ออกวุฒิบัตร + สร้าง QR</button>
             <button class="btn yellow" onclick="downloadPDF()">ดาวน์โหลด PDF</button>
@@ -143,7 +168,18 @@ body{margin:0;background:var(--bg);font-family:"Prompt",sans-serif;color:var(--n
         </aside>
 
         <section class="preview-panel">
-          <div class="preview-head"><div><h3>Preview</h3><div class="hint">Template 4:3 จากไฟล์ที่คุณส่งมา</div></div><div class="preview-actions"><button class="btn light" onclick="zoomPreview(.9)">- Zoom</button><button class="btn light" onclick="zoomPreview(1.1)">+ Zoom</button></div></div>
+          <div class="preview-head"><div><h3>Preview</h3><div class="hint">เลือกข้อความบนวุฒิบัตรแล้วปรับได้ทันที โดยไม่ต้องเลื่อนกลับไปด้านล่าง</div></div><div class="preview-actions"><button class="btn light" onclick="zoomPreview(.9)">- Zoom</button><button class="btn light" onclick="zoomPreview(1.1)">+ Zoom</button></div></div>
+          <div class="preview-toolbox">
+            <div><label>ข้อความที่กำลังปรับ</label><select id="selectedField" onchange="selectField(this.value)"></select></div>
+            <div class="color-wrap"><label>สี</label><input type="color" id="fieldColor" value="#172848" onchange="changeColor(this.value)"></div>
+            <button onclick="moveField(-1,0)" title="ซ้าย">←</button>
+            <button onclick="moveField(1,0)" title="ขวา">→</button>
+            <button onclick="moveField(0,-1)" title="ขึ้น">↑</button>
+            <button onclick="moveField(0,1)" title="ลง">↓</button>
+            <button onclick="changeSize(-1)" title="ลดขนาด">A−</button>
+            <button onclick="changeSize(1)" title="เพิ่มขนาด">A+</button>
+            <button class="reset" onclick="resetLayout()">รีเซ็ต</button>
+          </div>
           <div class="cert-stage-wrap">
             <div class="cert-stage" id="certStage">
               <img class="cert-bg" id="certBg" src="cert-template-free.png">
@@ -155,10 +191,27 @@ body{margin:0;background:var(--bg);font-family:"Prompt",sans-serif;color:var(--n
               <div class="cert-item" data-field="duration" id="fDuration"></div>
               <div class="cert-item" data-field="delivery" id="fDelivery"></div>
               <div class="cert-item" data-field="date" id="fDate"></div>
-              <div class="qrbox" id="qrBox"></div>
+              <div class="qrbox" id="qrBox"></div><div class="qr-label" id="qrLabel">SCAN TO VERIFY</div>
             </div>
           </div>
         </section>
+      </div>
+    </section>
+
+
+    <section id="tab-bulk" class="tab-panel">
+      <div class="panel">
+        <h3 style="margin-top:0">ออกวุฒิบัตรหลายใบ</h3>
+        <p class="hint">เหมาะสำหรับอบรมฟรีหรือรอบอบรมที่มีผู้เข้าอบรมจำนวนมาก เลือกรอบ → ตรวจรายชื่อ → เลือกผู้ที่มีสิทธิ์ → ออกเลขและ QR ให้ทั้งหมด</p>
+        <div class="template-note"><strong>V2:</strong> ระบบกรองผู้ที่ยืนยันการลงทะเบียนและสถานะชำระเงินได้ แต่ยังไม่ผูกผลสอบอัตโนมัติในหน้านี้ ดังนั้นกรณีที่ต้องผ่าน Post-test ให้เลือกเฉพาะผู้ที่ผ่านเกณฑ์ก่อนกดออกวุฒิบัตร</div>
+        <div class="bulk-grid">
+          <div><label style="font-size:11px;font-weight:600">รอบการอบรม</label><select id="bulkSession" onchange="loadBulkParticipants()"><option value="">-- เลือกรอบการอบรม --</option></select></div>
+          <div><label style="font-size:11px;font-weight:600">วันที่ออก</label><input id="bulkIssueDate" type="date"></div>
+          <button class="btn light" onclick="toggleAllBulk(true)">เลือกทั้งหมด</button>
+          <button class="btn primary" onclick="issueBulk()">ออกวุฒิบัตรที่เลือก</button>
+        </div>
+        <div class="bulk-list" id="bulkList"><div class="empty">เลือกรอบการอบรมเพื่อดูรายชื่อ</div></div>
+        <div class="bulk-progress" id="bulkProgress"></div>
       </div>
     </section>
 
@@ -178,33 +231,49 @@ body{margin:0;background:var(--bg);font-family:"Prompt",sans-serif;color:var(--n
 const SUPABASE_URL="https://cyegjwerxlxhczrfiurz.supabase.co";
 const SUPABASE_KEY="sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF";
 const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{storageKey:"sante-admin-auth",persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
-let currentUser=null, certificates=[], courses=[], profiles=[];
+let currentUser=null, certificates=[], courses=[], profiles=[], trainingSessions=[], bulkParticipants=[];
+let lastVerificationUrl="";
 let previewZoom=1;
 
 const layouts={
  FREE_TRAINING:{
   bg:"cert-template-free.png",
   fields:{
-   number:{x:95,y:2.8,size:14},name:{x:50,y:40,size:37},bodyTitle:{x:50,y:49,size:21},
-   course:{x:50,y:56,size:25},body:{x:50,y:63,size:16},duration:{x:50,y:69,size:19},
-   delivery:{x:50,y:74,size:18},date:{x:50,y:82,size:18}
-  },qr:{x:90,y:86}
+   number:{x:95,y:2.8,size:13,color:"#172848"},
+   name:{x:50,y:40,size:34,color:"#172848"},
+   bodyTitle:{x:50,y:51,size:18,color:"#172848"},
+   course:{x:50,y:58,size:23,color:"#172848"},
+   body:{x:50,y:64,size:15,color:"#172848"},
+   duration:{x:50,y:70,size:16,color:"#172848"},
+   delivery:{x:50,y:75,size:16,color:"#172848"},
+   date:{x:50,y:79,size:16,color:"#172848"}
+  },qr:{x:91,y:88}
  },
  PAID_TRAINING:{
   bg:"cert-template-paid.png",
   fields:{
-   number:{x:95,y:2.8,size:14},name:{x:50,y:42,size:42},bodyTitle:{x:50,y:53,size:22},
-   course:{x:50,y:59,size:27},body:{x:50,y:65,size:16},duration:{x:50,y:70,size:19},
-   delivery:{x:50,y:75,size:18},date:{x:50,y:82,size:18}
-  },qr:{x:90,y:86}
+   number:{x:95,y:2.8,size:13,color:"#203b73"},
+   name:{x:50,y:42,size:37,color:"#203b73"},
+   bodyTitle:{x:50,y:53,size:18,color:"#203b73"},
+   course:{x:50,y:59,size:23,color:"#203b73"},
+   body:{x:50,y:65,size:15,color:"#203b73"},
+   duration:{x:50,y:70,size:16,color:"#203b73"},
+   delivery:{x:50,y:75,size:16,color:"#203b73"},
+   date:{x:50,y:79,size:16,color:"#203b73"}
+  },qr:{x:91,y:88}
  },
  SERVICE:{
   bg:"cert-template-service.png",
   fields:{
-   number:{x:95,y:3,size:13},name:{x:50,y:34,size:29},bodyTitle:{x:50,y:43,size:18},
-   course:{x:50,y:49,size:22},body:{x:50,y:56,size:17},duration:{x:50,y:64,size:16},
-   delivery:{x:50,y:69,size:16},date:{x:50,y:75,size:17}
-  },qr:{x:90,y:84}
+   number:{x:95,y:3,size:12,color:"#172848"},
+   name:{x:50,y:34,size:28,color:"#172848"},
+   bodyTitle:{x:50,y:43,size:16,color:"#172848"},
+   course:{x:50,y:50,size:20,color:"#172848"},
+   body:{x:50,y:57,size:15,color:"#172848"},
+   duration:{x:50,y:64,size:14,color:"#172848"},
+   delivery:{x:50,y:69,size:14,color:"#172848"},
+   date:{x:50,y:75,size:15,color:"#172848"}
+  },qr:{x:91,y:88}
  }
 };
 let design=JSON.parse(JSON.stringify(layouts.FREE_TRAINING.fields));
@@ -221,7 +290,7 @@ function switchTab(name){
  document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x.dataset.tab===name));
  document.querySelectorAll(".tab-panel").forEach(x=>x.classList.toggle("active",x.id==="tab-"+name));
 }
-function setPos(el,cfg){el.style.left=cfg.x+"%";el.style.top=cfg.y+"%";el.style.fontSize=cfg.size+"px"}
+function setPos(el,cfg){el.style.left=cfg.x+"%";el.style.top=cfg.y+"%";el.style.fontSize=cfg.size+"px";el.style.color=cfg.color||"#172848"}
 function refreshFieldSelect(){
  const sel=document.getElementById("selectedField");sel.innerHTML="";
  Object.keys(fieldMap).forEach(k=>{const o=document.createElement("option");o.value=k;o.textContent=fieldMap[k];sel.appendChild(o)});
@@ -231,12 +300,20 @@ function selectField(k){
  selected=k;
  document.querySelectorAll(".cert-item").forEach(el=>el.classList.toggle("selected",el.dataset.field===k));
  document.getElementById("selectedField").value=k;
+ const picker=document.getElementById("fieldColor");
+ if(picker&&design[k]) picker.value=design[k].color||"#172848";
+}
+function changeColor(color){
+ if(!design[selected])return;
+ design[selected].color=color;
+ applyDesign();
 }
 function moveField(dx,dy){if(!design[selected])return;design[selected].x+=dx;design[selected].y+=dy;applyDesign()}
 function changeSize(d){if(!design[selected])return;design[selected].size=Math.max(8,design[selected].size+d);applyDesign()}
 function applyDesign(){
  Object.entries(design).forEach(([k,c])=>{const el=document.querySelector(`[data-field="${k}"]`);if(el)setPos(el,c)});
  const qr=document.getElementById("qrBox");qr.style.left=qrPos.x+"%";qr.style.top=qrPos.y+"%";qr.style.transform="translate(-50%,-50%)";
+ const ql=document.getElementById("qrLabel");if(ql){ql.style.left=qrPos.x+"%";ql.style.top=(qrPos.y+6.6)+"%";}
 }
 function resetLayout(){
  const type=document.getElementById("typeCode").value;
@@ -292,15 +369,25 @@ async function auth(){
  return true
 }
 async function loadBase(){
- const [c,p]=await Promise.all([
+ const [c,p,s]=await Promise.all([
   db.from("courses").select("id,course_code,course_name_th,certificate_prefix,course_type").order("sort_order"),
-  db.from("profiles").select("id,firstname_th,lastname_th,email").order("firstname_th").limit(500)
+  db.from("profiles").select("id,firstname_th,lastname_th,email").order("firstname_th").limit(500),
+  db.from("training_sessions").select("id,course_id,session_name,session_code,training_start_at,training_end_at,delivery_method,session_status,courses(id,course_name_th,course_type,course_code,certificate_prefix)").order("training_start_at",{ascending:false}).limit(300)
  ]);
- if(!c.error){courses=c.data||[];const s=document.getElementById("courseId");courses.forEach(x=>{const o=document.createElement("option");o.value=x.id;o.textContent=x.course_name_th;o.dataset.name=x.course_name_th;o.dataset.code=x.course_code||"";o.dataset.prefix=x.certificate_prefix||"";s.appendChild(o)})}
- if(!p.error){profiles=p.data||[];const s=document.getElementById("userId");profiles.forEach(x=>{const name=[x.firstname_th,x.lastname_th].filter(Boolean).join(" ")||x.email;const o=document.createElement("option");o.value=x.id;o.textContent=name;o.dataset.name=name;s.appendChild(o)})}
+ if(!c.error){courses=c.data||[];const sel=document.getElementById("courseId");courses.forEach(x=>{const o=document.createElement("option");o.value=x.id;o.textContent=x.course_name_th;o.dataset.name=x.course_name_th;o.dataset.code=x.course_code||"";o.dataset.prefix=x.certificate_prefix||"";sel.appendChild(o)})}
+ if(!p.error){profiles=p.data||[];const sel=document.getElementById("userId");profiles.forEach(x=>{const name=[x.firstname_th,x.lastname_th].filter(Boolean).join(" ")||x.email;const o=document.createElement("option");o.value=x.id;o.textContent=name;o.dataset.name=name;sel.appendChild(o)})}
+ if(!s.error){
+   trainingSessions=s.data||[];
+   const sel=document.getElementById("bulkSession");
+   trainingSessions.forEach(x=>{
+     const o=document.createElement("option");o.value=x.id;
+     o.textContent=(x.session_name||x.session_code||"รอบอบรม")+" — "+(x.courses?.course_name_th||"");
+     sel.appendChild(o);
+   });
+ }
 }
 async function loadCertificates(){
- const {data,error}=await db.from("certificates").select("id,certificate_no,certificate_status,recipient_display_name,recipient_organization,course_name_snapshot,issue_date,template_code,certificate_subtype,verification_url,certificate_types(type_code,type_name_th)").order("created_at",{ascending:false}).limit(1000);
+ const {data,error}=await db.from("certificates").select("id,certificate_no,certificate_status,user_id,training_session_id,recipient_display_name,recipient_organization,course_name_snapshot,issue_date,template_code,certificate_subtype,verification_url,certificate_types(type_code,type_name_th)").order("created_at",{ascending:false}).limit(1000);
  if(error){alert("โหลดวุฒิบัตรไม่สำเร็จ: "+error.message);return}
  certificates=data||[];renderList();updateStats()
 }
@@ -332,33 +419,142 @@ async function issueCertificate(){
    p_language_code:document.getElementById("language").value,p_template_code:type,p_prefix:prefix,p_sequence_key:sequenceKey,
    p_body_title:document.getElementById("bodyTitle").value,p_body_text:document.getElementById("bodyText").value,
    p_duration_text:document.getElementById("durationText").value,p_delivery_text:document.getElementById("deliveryText").value,
-   p_design_json:designJson,p_verification_base_url:"https://santeconsulting.co.th"
+   p_design_json:designJson,p_verification_base_url:location.origin
   });
   if(error)throw error;
   document.getElementById("previewNo").value=data.certificate_no;syncPreview();
-  makeQR(data.verification_url);
-  const box=document.getElementById("issueResult");box.style.display="block";box.innerHTML=`ออกวุฒิบัตรสำเร็จ<br><strong>${data.certificate_no}</strong><br>${data.verification_url}`;
+  lastVerificationUrl=data.verification_url;
+  await makeQR(data.verification_url);
+  const box=document.getElementById("issueResult");box.style.display="block";box.innerHTML=`ออกวุฒิบัตรสำเร็จ<br><strong>${data.certificate_no}</strong><br><a href="${data.verification_url}" target="_blank">ทดสอบหน้า Verify</a><br>${data.verification_url}`;
   await loadCertificates();
  }catch(e){alert("ออกวุฒิบัตรไม่สำเร็จ: "+(e.message||e))}
  finally{btn.disabled=false;btn.textContent="ออกวุฒิบัตร + สร้าง QR"}
 }
-function makeQR(url){
- const box=document.getElementById("qrBox");box.innerHTML="";new QRCode(box,{text:url,width:82,height:82,correctLevel:QRCode.CorrectLevel.M})
+
+function formatDateOnly(v){
+ if(!v)return "";
+ return new Intl.DateTimeFormat("th-TH",{day:"numeric",month:"long",year:"numeric"}).format(new Date(v));
+}
+async function loadBulkParticipants(){
+ const id=document.getElementById("bulkSession").value;
+ const list=document.getElementById("bulkList");
+ if(!id){list.innerHTML='<div class="empty">เลือกรอบการอบรมเพื่อดูรายชื่อ</div>';return}
+ list.innerHTML='<div class="empty">กำลังโหลดรายชื่อ...</div>';
+ const {data,error}=await db.from("training_registrations")
+   .select("id,training_session_id,user_id,registration_status,payment_required,payment_status,participant_title_th,participant_firstname_th,participant_lastname_th,participant_email,organization_name")
+   .eq("training_session_id",id)
+   .order("registered_at",{ascending:true});
+ if(error){list.innerHTML='<div class="empty">โหลดรายชื่อไม่สำเร็จ: '+error.message+'</div>';return}
+ bulkParticipants=(data||[]).filter(x=>x.registration_status==="CONFIRMED" && (!x.payment_required || x.payment_status==="PAID"));
+ const existing=certificates.filter(x=>x.training_session_id===id);
+ const existingUsers=new Set(existing.map(x=>x.user_id).filter(Boolean));
+ bulkParticipants=bulkParticipants.map(x=>({...x,already:existingUsers.has(x.user_id)}));
+ renderBulk();
+}
+function renderBulk(){
+ const list=document.getElementById("bulkList");
+ if(!bulkParticipants.length){list.innerHTML='<div class="empty">ไม่พบผู้สมัครที่ยืนยันแล้วและผ่านเงื่อนไขการชำระเงิน</div>';return}
+ list.innerHTML=`<div class="bulk-row head"><div></div><div>ผู้รับ</div><div>อีเมล</div><div>สมัคร</div><div>ชำระเงิน</div></div>`+
+ bulkParticipants.map((x,i)=>{
+   const name=[x.participant_title_th,x.participant_firstname_th,x.participant_lastname_th].filter(Boolean).join(" ");
+   return `<div class="bulk-row"><div><input type="checkbox" class="bulk-check" data-i="${i}" ${x.already?"disabled":""}></div><div><strong>${name||"-"}</strong>${x.already?'<br><span class="badge gray">มีวุฒิบัตรแล้ว</span>':""}</div><div>${x.participant_email||"-"}</div><div>${x.registration_status||"-"}</div><div>${x.payment_required?(x.payment_status||"-"):"ไม่เสียค่าใช้จ่าย"}</div></div>`;
+ }).join("");
+}
+function toggleAllBulk(v){document.querySelectorAll(".bulk-check:not(:disabled)").forEach(x=>x.checked=v)}
+function calcDurationText(session){
+ if(!session?.training_start_at||!session?.training_end_at)return "";
+ const a=new Date(session.training_start_at),b=new Date(session.training_end_at);
+ const hours=Math.max(0,(b-a)/3600000);
+ if(!hours)return "";
+ const h=Number.isInteger(hours)?hours:hours.toFixed(1);
+ return `ระยะเวลาการฝึกอบรม ${h} ชั่วโมง`;
+}
+async function issueBulk(){
+ const sessionId=document.getElementById("bulkSession").value;
+ const session=trainingSessions.find(x=>x.id===sessionId);
+ if(!session){alert("กรุณาเลือกรอบการอบรม");return}
+ const selected=[...document.querySelectorAll(".bulk-check:checked")].map(x=>bulkParticipants[Number(x.dataset.i)]);
+ if(!selected.length){alert("กรุณาเลือกรายชื่ออย่างน้อย 1 คน");return}
+ if(!confirm(`ยืนยันออกวุฒิบัตร ${selected.length} ใบ?\nกรณีหลักสูตรมี Post-test กรุณาตรวจว่ารายชื่อที่เลือกผ่านเกณฑ์แล้ว`))return;
+
+ const progress=document.getElementById("bulkProgress");progress.style.display="block";
+ const issueDate=document.getElementById("bulkIssueDate").value||new Date().toISOString().slice(0,10);
+ const course=session.courses||{};
+ const ct=course.course_type||"FREE_TRAINING";
+ const type=ct==="FREE_TRAINING"?"FREE_TRAINING":"PAID_TRAINING";
+ const subtype=ct==="INHOUSE_TRAINING"?"INHOUSE":"PUBLIC";
+ const key=(course.certificate_prefix||course.course_code||"TR").replace(/^ST-/i,"").toUpperCase();
+ const prefix=type==="FREE_TRAINING"?"ST-SS":(subtype==="INHOUSE"?`ST-IH-${key}`:`ST-${key}`);
+ const seqKey=type==="FREE_TRAINING"?"FREE_TRAINING":`${subtype}-${key}`;
+ const template=type;
+ const layout=layouts[template];
+ let ok=0,fail=0;
+ const failed=[];
+
+ for(let i=0;i<selected.length;i++){
+   const r=selected[i];
+   const name=[r.participant_title_th,r.participant_firstname_th,r.participant_lastname_th].filter(Boolean).join(" ");
+   progress.textContent=`กำลังออกใบที่ ${i+1}/${selected.length}: ${name}`;
+   const {error}=await db.rpc("admin_issue_certificate",{
+     p_type_code:type,p_subtype:subtype,p_user_id:r.user_id||null,p_course_id:session.course_id,
+     p_training_session_id:session.id,p_recipient_name:name,p_recipient_organization:r.organization_name||null,
+     p_course_name:course.course_name_th||session.session_name||"",p_training_date:formatDateOnly(session.training_start_at),
+     p_issue_date:issueDate,p_language_code:"th",p_template_code:template,p_prefix:prefix,p_sequence_key:seqKey,
+     p_body_title:"ผ่านการฝึกอบรมหลักสูตร",p_body_text:"",p_duration_text:calcDurationText(session),
+     p_delivery_text:session.delivery_method?`(${session.delivery_method})`:"",p_design_json:{fields:layout.fields,qr:layout.qr,template},
+     p_verification_base_url:location.origin
+   });
+   if(error){fail++;failed.push(name+": "+error.message)}else ok++;
+ }
+ progress.innerHTML=`เสร็จแล้ว: สำเร็จ <strong>${ok}</strong> ใบ${fail?` · ไม่สำเร็จ <strong>${fail}</strong> ใบ<br>${failed.join("<br>")}`:""}`;
+ await loadCertificates();
+ await loadBulkParticipants();
+}
+
+async function makeQR(url){
+ lastVerificationUrl=url||lastVerificationUrl;
+ const box=document.getElementById("qrBox");
+ box.innerHTML="";
+ if(!lastVerificationUrl)return;
+ new QRCode(box,{text:lastVerificationUrl,width:82,height:82,correctLevel:QRCode.CorrectLevel.M});
+ await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
+ // Convert QR canvas to a normal IMG so html2canvas/PDF always captures it.
+ const canvas=box.querySelector("canvas");
+ if(canvas){
+   const img=document.createElement("img");
+   img.src=canvas.toDataURL("image/png");
+   img.alt="QR verification";
+   img.style.width="100%";img.style.height="100%";
+   box.innerHTML="";box.appendChild(img);
+ }
 }
 async function captureStage(){
- const el=document.getElementById("certStage");document.querySelectorAll(".cert-item").forEach(x=>x.classList.remove("selected"));
- return await html2canvas(el,{scale:2,useCORS:true,backgroundColor:"#ffffff"})
+ if(document.fonts&&document.fonts.ready)await document.fonts.ready;
+ if(lastVerificationUrl)await makeQR(lastVerificationUrl);
+ await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
+ const el=document.getElementById("certStage");
+ document.querySelectorAll(".cert-item").forEach(x=>x.classList.remove("selected"));
+ const c=await html2canvas(el,{scale:3,useCORS:true,backgroundColor:"#ffffff",logging:false});
+ selectField(selected);
+ return c;
 }
 async function downloadPNG(){
- const c=await captureStage(),a=document.createElement("a");a.download=(document.getElementById("previewNo").value||"SANTE-Certificate")+".png";a.href=c.toDataURL("image/png");a.click();selectField(selected)
+ const c=await captureStage(),a=document.createElement("a");
+ a.download=(document.getElementById("previewNo").value||"SANTE-Certificate")+".png";
+ a.href=c.toDataURL("image/png");a.click();
 }
 async function downloadPDF(){
- const c=await captureStage(),img=c.toDataURL("image/jpeg",.96);const {jsPDF}=window.jspdf;const pdf=new jsPDF({orientation:"landscape",unit:"mm",format:"a4"});pdf.addImage(img,"JPEG",0,0,297,210);pdf.save((document.getElementById("previewNo").value||"SANTE-Certificate")+".pdf");selectField(selected)
+ const c=await captureStage(),img=c.toDataURL("image/jpeg",.98);
+ const {jsPDF}=window.jspdf;
+ const pdf=new jsPDF({orientation:"landscape",unit:"mm",format:"a4"});
+ pdf.addImage(img,"JPEG",0,0,297,210);
+ pdf.save((document.getElementById("previewNo").value||"SANTE-Certificate")+".pdf");
 }
 document.querySelectorAll(".cert-item").forEach(el=>el.addEventListener("click",()=>selectField(el.dataset.field)));
 async function init(){
  try{
   document.getElementById("issueDate").value=new Date().toISOString().slice(0,10);
+  document.getElementById("bulkIssueDate").value=new Date().toISOString().slice(0,10);
   refreshFieldSelect();selectField("name");applyType();syncPreview();
   if(!(await auth()))return;
   await Promise.all([loadBase(),loadCertificates()]);
