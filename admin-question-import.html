@@ -1437,107 +1437,102 @@ function showAuthError(message){
 
 async function verifyAdmin(){
 
-  // Safety UI timer: if something truly stalls, never leave the user
-  // staring at the spinner forever.
-  const safetyTimer = setTimeout(()=>{
-    const gate = document.getElementById("authGate");
-    const spinner = document.getElementById("spinner");
-    const box = document.getElementById("authError");
-    const actions = document.getElementById("authActions");
-
-    if(gate && gate.style.display !== "none"){
-      if(spinner) spinner.style.display = "none";
-      if(box){
-        box.textContent =
-          "การตรวจสอบสิทธิ์ใช้เวลานานผิดปกติ กรุณากด “ลองอีกครั้ง”";
-        box.style.display = "block";
-      }
-      if(actions) actions.style.display = "flex";
-    }
-  }, 9000);
-
   try{
 
     if(!window.supabase){
-      throw new Error(
-        "ไม่สามารถเชื่อมต่อ Supabase ได้ กรุณารีเฟรชหน้าอีกครั้ง"
-      );
+      throw new Error("ไม่สามารถโหลด Supabase ได้");
     }
 
+    // Bypass Supabase Auth lock on this page by reading the already-saved
+    // admin session directly from localStorage. Other Admin pages already
+    // prove this session is valid.
+    const rawSession =
+      localStorage.getItem(AUTH_STORAGE_KEY);
+
+    if(!rawSession){
+      location.replace("./admin-login.html");
+      return;
+    }
+
+    let savedSession;
+
+    try{
+      savedSession = JSON.parse(rawSession);
+    }catch(parseError){
+      throw new Error("ข้อมูลการเข้าสู่ระบบเสียหาย กรุณาเข้าสู่ระบบใหม่");
+    }
+
+    const accessToken =
+      savedSession?.access_token ||
+      savedSession?.currentSession?.access_token ||
+      savedSession?.session?.access_token;
+
+    currentUser =
+      savedSession?.user ||
+      savedSession?.currentSession?.user ||
+      savedSession?.session?.user ||
+      null;
+
+    if(!accessToken){
+      location.replace("./admin-login.html");
+      return;
+    }
+
+    // Create a data client that does NOT initialize Supabase Auth.
+    // This avoids the auth-lock hang seen only on admin-question-import.
     sb =
       window.supabase.createClient(
         SUPABASE_URL,
         SUPABASE_KEY,
         {
           auth:{
-            storageKey:AUTH_STORAGE_KEY,
-            persistSession:true,
-            autoRefreshToken:true,
-            detectSessionInUrl:true
+            persistSession:false,
+            autoRefreshToken:false,
+            detectSessionInUrl:false
+          },
+          global:{
+            headers:{
+              Authorization:`Bearer ${accessToken}`
+            }
           }
         }
       );
 
-    // Use the same auth flow as admin-exams.html, which is already working.
-    const sessionResult =
-      await sb.auth.getSession();
-
-    if(sessionResult.error){
-      throw sessionResult.error;
-    }
-
-    if(!sessionResult.data.session){
-      clearTimeout(safetyTimer);
-      location.replace("./admin-login.html");
-      return;
-    }
-
-    const userResult =
-      await sb.auth.getUser();
-
-    if(userResult.error){
-      throw userResult.error;
-    }
-
-    if(!userResult.data.user){
-      clearTimeout(safetyTimer);
-      location.replace("./admin-login.html");
-      return;
-    }
-
-    currentUser =
-      userResult.data.user;
-
     const permissionResult =
-      await sb.rpc("is_staff");
+      await withTimeout(
+        sb.rpc("is_staff"),
+        6000,
+        "ตรวจสอบสิทธิ์กับฐานข้อมูลไม่สำเร็จภายในเวลาที่กำหนด"
+      );
 
     if(permissionResult.error){
       throw permissionResult.error;
     }
 
     if(permissionResult.data !== true){
-      throw new Error(
-        "บัญชีนี้ไม่มีสิทธิ์เข้าใช้งานระบบผู้ดูแล"
-      );
+      throw new Error("บัญชีนี้ไม่มีสิทธิ์เข้าใช้งานระบบผู้ดูแล");
     }
 
-    clearTimeout(safetyTimer);
-
     const email =
-      currentUser.email ||
+      currentUser?.email ||
       "ผู้ดูแลระบบ";
 
-    document
-      .getElementById("userEmail")
-      .textContent = email;
+    const emailEl =
+      document.getElementById("userEmail");
 
-    document
-      .getElementById("avatar")
-      .textContent =
-      email.charAt(0).toUpperCase();
+    const avatarEl =
+      document.getElementById("avatar");
 
-    // IMPORTANT: reveal the page immediately after auth succeeds.
-    // Loading question batches must NOT block the entire admin page.
+    if(emailEl){
+      emailEl.textContent = email;
+    }
+
+    if(avatarEl){
+      avatarEl.textContent =
+        email.charAt(0).toUpperCase();
+    }
+
+    // Show page immediately after permission is confirmed.
     document
       .getElementById("authGate")
       .style.display = "none";
@@ -1546,10 +1541,9 @@ async function verifyAdmin(){
       .getElementById("app")
       .style.display = "block";
 
-    // Load data separately so a data-query issue shows inside the page
-    // instead of looking like an authentication hang.
+    // Data loading is separate; it must never block the entire page.
     loadBatches().catch(error=>{
-      console.error("loadBatches error:", error);
+      console.error("loadBatches error:",error);
       showMessage(
         "error",
         error.message ||
@@ -1557,21 +1551,33 @@ async function verifyAdmin(){
       );
     });
 
-  }
+  }catch(error){
 
-  catch(error){
+    console.error("verifyAdmin error:",error);
 
-    clearTimeout(safetyTimer);
+    const spinner =
+      document.getElementById("spinner");
 
-    console.error(
-      "verifyAdmin error:",
-      error
-    );
+    const box =
+      document.getElementById("authError");
 
-    showAuthError(
-      error.message ||
-      "เกิดข้อผิดพลาดในการตรวจสอบสิทธิ์"
-    );
+    const actions =
+      document.getElementById("authActions");
+
+    if(spinner){
+      spinner.style.display = "none";
+    }
+
+    if(box){
+      box.textContent =
+        error.message ||
+        "เกิดข้อผิดพลาดในการตรวจสอบสิทธิ์";
+      box.style.display = "block";
+    }
+
+    if(actions){
+      actions.style.display = "flex";
+    }
 
   }
 
@@ -2586,30 +2592,10 @@ document.addEventListener("DOMContentLoaded", function(){
 <div id="buildMarker" style="position:fixed;right:10px;bottom:10px;z-index:99999;
 font:600 10px/1.2 Prompt,sans-serif;color:#60789c;background:rgba(255,255,255,.88);
 border:1px solid #dbe6f1;border-radius:8px;padding:6px 8px;">
-QI FIX 2026-10-05 V3
+QI DIRECT AUTH 2026-10-05 V4
 </div>
 
 
-<script id="qi-hard-fallback-v3">
-window.addEventListener("DOMContentLoaded", function(){
-  setTimeout(function(){
-    var gate=document.getElementById("authGate");
-    var app=document.getElementById("app");
-    var err=document.getElementById("authError");
-    var actions=document.getElementById("authActions");
-    var spinner=document.getElementById("spinner");
-
-    if(gate && gate.style.display !== "none" && (!app || app.style.display !== "block")){
-      if(spinner) spinner.style.display="none";
-      if(err){
-        err.textContent="หน้าเว็บยังไม่ผ่านขั้นตรวจสอบสิทธิ์ กรุณากด “ลองอีกครั้ง” หรือออกจากระบบแล้วเข้าสู่ระบบใหม่";
-        err.style.display="block";
-      }
-      if(actions) actions.style.display="flex";
-    }
-  },10000);
-});
-</script>
 
 </body>
 </html>
