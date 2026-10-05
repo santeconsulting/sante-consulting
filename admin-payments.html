@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<title>ตรวจสอบการชำระเงิน | SANTE Admin</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+ --navy:#082d69;
+ --navy2:#061f4b;
+ --yellow:#ffbf19;
+ --blue:#087df0;
+ --green:#188d49;
+ --red:#b42318;
+ --orange:#b26b00;
+ --bg:#f2f8fc;
+ --white:#fff;
+ --text:#082d69;
+ --muted:#7084a4;
+ --line:#dbe7f1;
+ --sidebar:270px;
+}
+html,body{width:100%;min-height:100%}
+body{
+ font-family:"Prompt",sans-serif;
+ background:var(--bg);
+ color:var(--text);
+}
+button,input{font-family:"Prompt",sans-serif}
+button{cursor:pointer}
+a{text-decoration:none;color:inherit}
+
+/* SIDEBAR */
+.sidebar{
+ position:fixed;
+ inset:0 auto 0 0;
+ width:var(--sidebar);
+ background:linear-gradient(180deg,#082d69,#061f4b);
+ color:#fff;
+ z-index:300;
+ overflow-y:auto;
+}
+.sidebar-brand{
+ height:98px;
+ display:flex;
+ align-items:center;
+ padding:15px 24px;
+ border-bottom:1px solid rgba(255,255,255,.09);
+}
+.sidebar-brand img{
+ width:170px;
+ max-height:67px;
+ object-fit:contain;
+ object-position:left center;
+ filter:brightness(0) invert(1);
+}
+.sidebar-title{
+ padding:22px 23px 8px;
+ font-size:10px;
+ letter-spacing:1.2px;
+ color:#94acd1;
+}
+.nav{padding:0 13px 28px}
+.nav-link{
+ min-height:50px;
+ margin:4px 0;
+ padding:0 15px;
+ border-radius:14px;
+ display:flex;
+ align-items:center;
+ gap:12px;
+ color:#dbe8fa;
+ font-size:13px;
+}
+.nav-link:hover{background:rgba(255,255,255,.08)}
+.nav-link.active{
+ background:var(--yellow);
+ color:var(--navy);
+ font-weight:600;
+}
+.nav-icon{width:27px;text-align:center;font-size:18px}
+.sidebar-bottom{
+ margin:15px 14px 25px;
+ padding:15px;
+ border-radius:15px;
+ background:rgba(255,255,255,.07);
+}
+.sidebar-bottom strong{font-size:12px}
+.sidebar-bottom p{
+ margin-top:4px;
+ color:#aac0df;
+ font-size:10px;
+ line-height:1.6;
+}
+
+/* MAIN */
+.main{margin-left:var(--sidebar);min-height:100vh}
+.topbar{
+ height:78px;
+ position:sticky;
+ top:0;
+ z-index:200;
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ gap:20px;
+ padding:0 30px;
+ background:rgba(255,255,255,.97);
+ border-bottom:1px solid #e4edf5;
+}
+.topbar-left{display:flex;align-items:center;gap:13px}
+.mobile-menu{
+ display:none;
+ width:42px;height:42px;
+ border:1px solid var(--line);
+ border-radius:11px;
+ background:#fff;
+ color:var(--navy);
+ font-size:20px;
+}
+.page-name{font-size:19px;font-weight:600}
+.page-sub{font-size:11px;color:var(--muted);margin-top:2px}
+.admin-area{display:flex;align-items:center;gap:12px}
+.admin-copy{text-align:right}
+.admin-name{font-size:13px;font-weight:600}
+.admin-email{font-size:10px;color:var(--muted)}
+.logout{
+ min-height:40px;
+ padding:0 14px;
+ border:1px solid var(--line);
+ border-radius:10px;
+ background:#fff;
+ color:var(--navy);
+ font-size:11px;
+ font-weight:600;
+}
+.content{
+ width:min(1480px,calc(100% - 52px));
+ margin:0 auto;
+ padding:28px 0 60px;
+}
+
+/* PAGE HEADER */
+.page-header{
+ display:flex;
+ align-items:flex-end;
+ justify-content:space-between;
+ gap:20px;
+ margin-bottom:20px;
+}
+.page-header h1{font-size:28px}
+.page-header p{margin-top:5px;color:var(--muted);font-size:12px}
+.refresh-btn{
+ min-height:42px;
+ padding:0 15px;
+ border:1px solid var(--line);
+ border-radius:11px;
+ background:#fff;
+ color:var(--navy);
+ font-size:12px;
+ font-weight:600;
+}
+
+/* SUMMARY */
+.summary{
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ gap:13px;
+ margin-bottom:20px;
+}
+.summary-card{
+ background:#fff;
+ border:1px solid var(--line);
+ border-radius:17px;
+ padding:18px 20px;
+}
+.summary-label{font-size:10px;color:var(--muted)}
+.summary-value{font-size:25px;font-weight:700;margin-top:4px}
+.summary-note{font-size:9px;color:#8b9cb1;margin-top:2px}
+
+/* FILTERS */
+.toolbar{
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ gap:15px;
+ margin-bottom:15px;
+ padding:13px;
+ background:#fff;
+ border:1px solid var(--line);
+ border-radius:15px;
+}
+.tabs{display:flex;gap:7px;flex-wrap:wrap}
+.tab{
+ min-height:36px;
+ padding:0 13px;
+ border:1px solid #dce6ef;
+ border-radius:9px;
+ background:#fff;
+ color:var(--navy);
+ font-size:10px;
+ font-weight:500;
+}
+.tab.active{
+ background:var(--navy);
+ border-color:var(--navy);
+ color:#fff;
+}
+.search{
+ width:300px;
+ max-width:100%;
+ height:38px;
+ padding:0 12px;
+ border:1px solid var(--line);
+ border-radius:9px;
+ outline:none;
+ color:var(--navy);
+}
+
+/* PAYMENT CARDS */
+.payment-list{display:grid;gap:12px}
+.payment-card{
+ background:#fff;
+ border:1px solid var(--line);
+ border-radius:18px;
+ overflow:hidden;
+}
+.payment-main{
+ display:grid;
+ grid-template-columns:minmax(240px,1.5fr) minmax(170px,.8fr) 150px 145px auto;
+ gap:18px;
+ align-items:center;
+ padding:20px 22px;
+}
+.payment-no{font-size:10px;color:var(--muted)}
+.payment-title{font-size:15px;font-weight:600;margin-top:3px}
+.payment-session{font-size:10px;color:var(--muted);margin-top:3px}
+.person-name{font-size:12px;font-weight:500}
+.person-email{font-size:9px;color:var(--muted);margin-top:2px}
+.amount{font-size:19px;font-weight:700;white-space:nowrap}
+.status{
+ display:inline-flex;
+ width:max-content;
+ padding:6px 10px;
+ border-radius:999px;
+ font-size:9px;
+ font-weight:600;
+}
+.status-review{background:#e8f2ff;color:#1763ad}
+.status-verified{background:#e7f7ed;color:#147440}
+.status-pending{background:#fff3cd;color:#896100}
+.actions{
+ display:flex;
+ justify-content:flex-end;
+ gap:7px;
+ flex-wrap:wrap;
+}
+.btn{
+ min-height:37px;
+ padding:0 12px;
+ border-radius:9px;
+ border:1px solid var(--line);
+ background:#fff;
+ color:var(--navy);
+ font-size:10px;
+ font-weight:600;
+}
+.btn-primary{
+ background:var(--navy);
+ border-color:var(--navy);
+ color:#fff;
+}
+.btn-primary:hover{background:var(--navy2)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+
+.empty{
+ padding:60px 20px;
+ text-align:center;
+ background:#fff;
+ border:1px solid var(--line);
+ border-radius:18px;
+ color:var(--muted);
+ font-size:12px;
+}
+.loading{
+ padding:60px 20px;
+ text-align:center;
+ color:var(--muted);
+ font-size:12px;
+}
+
+/* MODAL */
+.modal-backdrop{
+ position:fixed;
+ inset:0;
+ z-index:800;
+ display:none;
+ align-items:center;
+ justify-content:center;
+ padding:25px;
+ background:rgba(4,24,55,.62);
+}
+.modal-backdrop.show{display:flex}
+.modal{
+ width:min(920px,100%);
+ max-height:90dvh;
+ overflow:auto;
+ background:#fff;
+ border-radius:20px;
+ box-shadow:0 25px 70px rgba(0,0,0,.22);
+}
+.modal-header{
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ gap:15px;
+ padding:19px 22px;
+ border-bottom:1px solid var(--line);
+}
+.modal-header h2{font-size:18px}
+.close{
+ width:38px;height:38px;
+ border:1px solid var(--line);
+ border-radius:10px;
+ background:#fff;
+ color:var(--navy);
+ font-size:20px;
+}
+.modal-body{padding:22px}
+.detail-grid{
+ display:grid;
+ grid-template-columns:repeat(2,1fr);
+ gap:13px;
+ margin-bottom:18px;
+}
+.detail{
+ padding:13px;
+ border-radius:11px;
+ background:#f5f9fc;
+}
+.detail-label{font-size:9px;color:var(--muted)}
+.detail-value{font-size:12px;font-weight:500;margin-top:3px;word-break:break-word}
+
+.slip-area{
+ min-height:320px;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ overflow:hidden;
+ background:#f3f7fa;
+ border:1px solid var(--line);
+ border-radius:14px;
+}
+.slip-area img{
+ display:block;
+ max-width:100%;
+ max-height:65vh;
+ object-fit:contain;
+}
+.slip-pdf{
+ text-align:center;
+ padding:30px;
+}
+.slip-pdf p{font-size:12px;color:var(--muted);margin-bottom:13px}
+.open-file{
+ display:inline-flex;
+ align-items:center;
+ min-height:40px;
+ padding:0 15px;
+ border-radius:9px;
+ background:var(--navy);
+ color:#fff;
+ font-size:11px;
+ font-weight:600;
+}
+.modal-actions{
+ display:flex;
+ justify-content:flex-end;
+ gap:10px;
+ padding:18px 22px;
+ border-top:1px solid var(--line);
+}
+.verify-btn{
+ min-height:44px;
+ padding:0 18px;
+ border:0;
+ border-radius:10px;
+ background:var(--green);
+ color:#fff;
+ font-size:12px;
+ font-weight:600;
+}
+.verify-btn:disabled{opacity:.45;cursor:not-allowed}
+
+.message{
+ display:none;
+ margin:0 22px 18px;
+ padding:12px 14px;
+ border-radius:10px;
+ font-size:11px;
+ line-height:1.6;
+}
+.message.error{display:block;background:#fff0f0;color:#a52d2d}
+.message.success{display:block;background:#e9f8ef;color:#147440}
+
+.loading-screen{
+ position:fixed;
+ inset:0;
+ z-index:1000;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ background:#f4f9fd;
+ color:var(--navy);
+ font-size:13px;
+}
+.overlay{display:none}
+
+@media(max-width:1150px){
+ .payment-main{grid-template-columns:1.5fr 1fr 130px}
+ .payment-main .status-wrap{grid-column:2}
+ .actions{grid-column:3;grid-row:1 / span 2}
+}
+@media(max-width:900px){
+ .sidebar{transform:translateX(-100%);transition:.2s}
+ .sidebar.open{transform:translateX(0)}
+ .main{margin-left:0}
+ .mobile-menu{display:block}
+ .overlay{
+  position:fixed;inset:0;z-index:250;
+  background:rgba(3,20,48,.45)
+ }
+ .overlay.show{display:block}
+}
+@media(max-width:767px){
+ .topbar{height:64px;padding:0 12px}
+ .page-name{font-size:15px}
+ .page-sub,.admin-copy{display:none}
+ .logout{min-height:38px;padding:0 10px}
+ .content{width:100%;padding:20px 12px 40px}
+ .page-header{align-items:flex-start}
+ .page-header h1{font-size:22px}
+ .summary{grid-template-columns:1fr 1fr}
+ .toolbar{align-items:stretch;flex-direction:column}
+ .search{width:100%}
+ .payment-main{display:block;padding:17px}
+ .payment-main>div{margin-bottom:11px}
+ .actions{justify-content:stretch;margin-bottom:0!important}
+ .btn{flex:1}
+ .detail-grid{grid-template-columns:1fr}
+ .modal-backdrop{padding:10px}
+ .modal{max-height:96dvh;border-radius:16px}
+ .modal-body{padding:16px}
+ .modal-actions{padding:15px;flex-direction:column}
+ .verify-btn{width:100%}
+}
+</style>
+</head>
+
+<body>
+
+<div id="loadingScreen" class="loading-screen">
+ กำลังตรวจสอบสิทธิ์ผู้ดูแลระบบ...
+</div>
+
+<div id="overlay" class="overlay"></div>
+
+<aside id="sidebar" class="sidebar">
+ <div class="sidebar-brand">
+  <img src="sante%20(en)-logo.png" alt="SANTE">
+ </div>
+
+ <div class="sidebar-title">SANTE ADMIN</div>
+
+ <nav class="nav">
+  <a href="admin.html" class="nav-link"><span class="nav-icon">⌂</span>แดชบอร์ด</a>
+  <a href="admin-courses.html" class="nav-link"><span class="nav-icon">▤</span>หลักสูตร</a>
+  <a href="admin-training-sessions.html" class="nav-link"><span class="nav-icon">◫</span>รอบอบรม</a>
+  <a href="admin-exams.html" class="nav-link"><span class="nav-icon">✓</span>ข้อสอบ</a>
+  <a href="admin-question-import.html" class="nav-link"><span class="nav-icon">⇧</span>นำเข้าข้อสอบ</a>
+  <a href="admin-payments.html" class="nav-link active"><span class="nav-icon">฿</span>การชำระเงิน</a>
+  <a href="#" class="nav-link"><span class="nav-icon">♙</span>สมาชิก</a>
+  <a href="#" class="nav-link"><span class="nav-icon">▣</span>งานบริการ</a>
+  <a href="#" class="nav-link"><span class="nav-icon">▧</span>เอกสาร</a>
+ </nav>
+
+ <div class="sidebar-bottom">
+  <strong>SANTE SYSTEM</strong>
+  <p>ระบบบริหารจัดการภายใน<br>SANTE Consulting</p>
+ </div>
+</aside>
+
+<div class="main">
+
+<header class="topbar">
+ <div class="topbar-left">
+  <button id="menuButton" class="mobile-menu">☰</button>
+  <div>
+   <div class="page-name">การชำระเงิน</div>
+   <div class="page-sub">ตรวจสอบหลักฐานและยืนยันการชำระเงิน</div>
+  </div>
+ </div>
+
+ <div class="admin-area">
+  <div class="admin-copy">
+   <div id="adminName" class="admin-name">ผู้ดูแลระบบ</div>
+   <div id="adminEmail" class="admin-email"></div>
+  </div>
+  <button id="logoutButton" class="logout">ออกจากระบบ</button>
+ </div>
+</header>
+
+<main class="content">
+
+ <div class="page-header">
+  <div>
+   <h1>ตรวจสอบการชำระเงิน</h1>
+   <p>ตรวจสอบหลักฐานที่สมาชิกส่งเข้ามา ก่อนยืนยันการชำระเงินและสิทธิ์การอบรม</p>
+  </div>
+
+  <button id="refreshButton" class="refresh-btn">↻ รีเฟรช</button>
+ </div>
+
+ <section class="summary">
+  <div class="summary-card">
+   <div class="summary-label">รอตรวจสอบ</div>
+   <div id="reviewCount" class="summary-value">0</div>
+   <div class="summary-note">มีหลักฐานแล้วและรอ Admin</div>
+  </div>
+
+  <div class="summary-card">
+   <div class="summary-label">ชำระเงินแล้ว</div>
+   <div id="verifiedCount" class="summary-value">0</div>
+   <div class="summary-note">ได้รับการยืนยันแล้ว</div>
+  </div>
+
+  <div class="summary-card">
+   <div class="summary-label">รายการทั้งหมด</div>
+   <div id="allCount" class="summary-value">0</div>
+   <div class="summary-note">Payment ที่โหลดได้</div>
+  </div>
+ </section>
+
+ <section class="toolbar">
+  <div class="tabs">
+   <button class="tab active" data-filter="REVIEW">รอตรวจสอบ</button>
+   <button class="tab" data-filter="VERIFIED">ชำระเงินแล้ว</button>
+   <button class="tab" data-filter="ALL">ทั้งหมด</button>
+  </div>
+
+  <input id="searchInput" class="search" type="search" placeholder="ค้นหาเลขที่ Payment / ชื่อสมาชิก / อีเมล">
+ </section>
+
+ <section id="paymentList" class="payment-list">
+  <div class="loading">กำลังโหลดรายการชำระเงิน...</div>
+ </section>
+
+</main>
+</div>
+
+<!-- MODAL -->
+<div id="paymentModal" class="modal-backdrop">
+ <div class="modal">
+
+  <div class="modal-header">
+   <h2>ตรวจสอบหลักฐานการชำระเงิน</h2>
+   <button id="closeModal" class="close">×</button>
+  </div>
+
+  <div class="modal-body">
+
+   <div class="detail-grid">
+    <div class="detail">
+     <div class="detail-label">เลขที่รายการ</div>
+     <div id="modalPaymentNo" class="detail-value">-</div>
+    </div>
+
+    <div class="detail">
+     <div class="detail-label">ยอดเงิน</div>
+     <div id="modalAmount" class="detail-value">-</div>
+    </div>
+
+    <div class="detail">
+     <div class="detail-label">สมาชิก</div>
+     <div id="modalMember" class="detail-value">-</div>
+    </div>
+
+    <div class="detail">
+     <div class="detail-label">อีเมล</div>
+     <div id="modalEmail" class="detail-value">-</div>
+    </div>
+
+    <div class="detail">
+     <div class="detail-label">หลักสูตร</div>
+     <div id="modalCourse" class="detail-value">-</div>
+    </div>
+
+    <div class="detail">
+     <div class="detail-label">รอบอบรม</div>
+     <div id="modalSession" class="detail-value">-</div>
+    </div>
+
+    <div class="detail">
+     <div class="detail-label">ชื่อไฟล์</div>
+     <div id="modalFilename" class="detail-value">-</div>
+    </div>
+
+    <div class="detail">
+     <div class="detail-label">วันที่ส่งหลักฐาน</div>
+     <div id="modalSubmitted" class="detail-value">-</div>
+    </div>
+   </div>
+
+   <div id="slipArea" class="slip-area">
+    กำลังโหลดหลักฐาน...
+   </div>
+
+  </div>
+
+  <div id="modalMessage" class="message"></div>
+
+  <div class="modal-actions">
+   <button id="cancelModalButton" class="btn">ปิด</button>
+   <button id="verifyButton" class="verify-btn">✓ ยืนยันการชำระเงิน</button>
+  </div>
+
+ </div>
+</div>
+
+<script>
+const SUPABASE_URL="https://cyegjwerxlxhczrfiurz.supabase.co";
+const SUPABASE_KEY="sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF";
+
+const db=supabase.createClient(
+ SUPABASE_URL,
+ SUPABASE_KEY,
+ {
+  auth:{
+   storageKey:"sante-admin-auth",
+   persistSession:true,
+   autoRefreshToken:true,
+   detectSessionInUrl:true
+  }
+ }
+);
+
+let payments=[];
+let currentFilter="REVIEW";
+let selectedPayment=null;
+let verifying=false;
+
+const list=document.getElementById("paymentList");
+const modal=document.getElementById("paymentModal");
+const verifyButton=document.getElementById("verifyButton");
+const modalMessage=document.getElementById("modalMessage");
+const sidebar=document.getElementById("sidebar");
+const overlay=document.getElementById("overlay");
+
+const esc=v=>String(v??"").replace(/[&<>"']/g,m=>({
+ "&":"&amp;",
+ "<":"&lt;",
+ ">":"&gt;",
+ '"':"&quot;",
+ "'":"&#039;"
+}[m]));
+
+const money=v=>new Intl.NumberFormat("th-TH",{
+ style:"currency",
+ currency:"THB",
+ minimumFractionDigits:2
+}).format(Number(v||0));
+
+function formatDate(v){
+ if(!v)return"-";
+ const d=new Date(v);
+ if(Number.isNaN(d.getTime()))return"-";
+ return new Intl.DateTimeFormat("th-TH",{
+  dateStyle:"medium",
+  timeStyle:"short"
+ }).format(d);
+}
+
+function fullName(profile){
+ if(!profile)return"-";
+ return [
+  profile.title_th,
+  profile.firstname_th,
+  profile.lastname_th
+ ].filter(Boolean).join(" ")||"-";
+}
+
+function setModalMessage(type,text){
+ modalMessage.className="message "+type;
+ modalMessage.textContent=text;
+}
+
+function clearModalMessage(){
+ modalMessage.className="message";
+ modalMessage.textContent="";
+}
+
+function closeModal(){
+ modal.classList.remove("show");
+ selectedPayment=null;
+ clearModalMessage();
+ document.getElementById("slipArea").innerHTML="";
+}
+
+document.getElementById("menuButton").onclick=()=>{
+ sidebar.classList.add("open");
+ overlay.classList.add("show");
+};
+
+overlay.onclick=()=>{
+ sidebar.classList.remove("open");
+ overlay.classList.remove("show");
+};
+
+document.getElementById("closeModal").onclick=closeModal;
+document.getElementById("cancelModalButton").onclick=closeModal;
+
+modal.addEventListener("click",e=>{
+ if(e.target===modal)closeModal();
+});
+
+async function requireAdmin(){
+ const {data:{session}}=await db.auth.getSession();
+
+ if(!session?.user){
+  location.replace("admin-login.html");
+  return null;
+ }
+
+ const {data:staff,error}=await db.rpc("is_staff");
+
+ if(error || staff!==true){
+  await db.auth.signOut();
+  location.replace("admin-login.html");
+  return null;
+ }
+
+ document.getElementById("adminEmail").textContent=session.user.email||"";
+ document.getElementById("adminName").textContent="ผู้ดูแลระบบ SANTE";
+
+ return session.user;
+}
+
+/*
+  โหลด Payment ก่อน
+
+  Finance/Admin policy สามารถอ่าน payments ได้
+*/
+async function loadPayments(){
+
+ list.innerHTML='<div class="loading">กำลังโหลดรายการชำระเงิน...</div>';
+
+ const {data:paymentRows,error}=await db
+  .from("payments")
+  .select(`
+   id,
+   payment_no,
+   order_id,
+   user_id,
+   amount,
+   currency,
+   payment_status,
+   created_at,
+   verified_at
+  `)
+  .order("created_at",{ascending:false})
+  .limit(300);
+
+ if(error){
+  console.error(error);
+  list.innerHTML='<div class="empty">ไม่สามารถโหลดรายการชำระเงินได้<br>'+esc(error.message)+'</div>';
+  return;
+ }
+
+ payments=paymentRows||[];
+
+ /*
+   โหลดข้อมูลประกอบทีละ Payment
+   เพื่อไม่ผูกกับ FK relationship naming ของ PostgREST
+*/
+ await Promise.all(
+  payments.map(async p=>{
+
+   p.profile=null;
+   p.item=null;
+   p.session=null;
+   p.course=null;
+   p.slip=null;
+
+   const tasks=[];
+
+   if(p.user_id){
+    tasks.push(
+     db.from("profiles")
+      .select("id,title_th,firstname_th,lastname_th,email")
+      .eq("id",p.user_id)
+      .maybeSingle()
+      .then(({data})=>{p.profile=data||null})
+    );
+   }
+
+   if(p.order_id){
+    tasks.push(
+     db.from("order_items")
+      .select("training_session_id,course_id,description")
+      .eq("order_id",p.order_id)
+      .limit(1)
+      .maybeSingle()
+      .then(({data})=>{p.item=data||null})
+    );
+   }
+
+   tasks.push(
+    db.from("payment_slips")
+     .select("id,payment_id,user_id,storage_bucket,storage_path,original_filename,mime_type,file_size,slip_status,submitted_at")
+     .eq("payment_id",p.id)
+     .maybeSingle()
+     .then(({data})=>{p.slip=data||null})
+   );
+
+   await Promise.all(tasks);
+
+   if(p.item?.training_session_id){
+    const {data:s}=await db
+     .from("training_sessions")
+     .select("id,session_name,course_id")
+     .eq("id",p.item.training_session_id)
+     .maybeSingle();
+
+    p.session=s||null;
+
+    if(s?.course_id){
+     const {data:c}=await db
+      .from("courses")
+      .select("id,course_name_th")
+      .eq("id",s.course_id)
+      .maybeSingle();
+
+     p.course=c||null;
+    }
+   }else if(p.item?.course_id){
+    const {data:c}=await db
+     .from("courses")
+     .select("id,course_name_th")
+     .eq("id",p.item.course_id)
+     .maybeSingle();
+
+    p.course=c||null;
+   }
+  })
+ );
+
+ updateSummary();
+ render();
+}
+
+function isReview(p){
+ return String(p.payment_status||"").toUpperCase()!=="VERIFIED" && !!p.slip;
+}
+
+function updateSummary(){
+ const review=payments.filter(isReview).length;
+ const verified=payments.filter(p=>String(p.payment_status||"").toUpperCase()==="VERIFIED").length;
+
+ document.getElementById("reviewCount").textContent=review;
+ document.getElementById("verifiedCount").textContent=verified;
+ document.getElementById("allCount").textContent=payments.length;
+}
+
+function render(){
+
+ const search=document.getElementById("searchInput").value.trim().toLowerCase();
+
+ let rows=payments.filter(p=>{
+  const status=String(p.payment_status||"").toUpperCase();
+
+  if(currentFilter==="REVIEW" && !isReview(p))return false;
+  if(currentFilter==="VERIFIED" && status!=="VERIFIED")return false;
+
+  if(search){
+   const hay=[
+    p.payment_no,
+    fullName(p.profile),
+    p.profile?.email,
+    p.course?.course_name_th,
+    p.session?.session_name
+   ].join(" ").toLowerCase();
+
+   if(!hay.includes(search))return false;
+  }
+
+  return true;
+ });
+
+ if(!rows.length){
+  list.innerHTML='<div class="empty">ไม่พบรายการชำระเงินในหมวดนี้</div>';
+  return;
+ }
+
+ list.innerHTML=rows.map(p=>{
+  const status=String(p.payment_status||"PENDING").toUpperCase();
+  let cls="status-pending";
+  let label="รอชำระเงิน";
+
+  if(status==="VERIFIED"){
+   cls="status-verified";
+   label="ชำระเงินแล้ว";
+  }else if(p.slip){
+   cls="status-review";
+   label="รอตรวจสอบ";
+  }
+
+  const title=
+   p.course?.course_name_th ||
+   p.item?.description ||
+   "รายการชำระเงิน";
+
+  return `
+   <article class="payment-card">
+    <div class="payment-main">
+
+     <div>
+      <div class="payment-no">${esc(p.payment_no||"-")}</div>
+      <div class="payment-title">${esc(title)}</div>
+      <div class="payment-session">${esc(p.session?.session_name||"")}</div>
+     </div>
+
+     <div>
+      <div class="person-name">${esc(fullName(p.profile))}</div>
+      <div class="person-email">${esc(p.profile?.email||"")}</div>
+     </div>
+
+     <div class="amount">${money(p.amount)}</div>
+
+     <div class="status-wrap">
+      <span class="status ${cls}">${label}</span>
+     </div>
+
+     <div class="actions">
+      ${
+       p.slip
+       ? `<button class="btn ${status!=="VERIFIED"?"btn-primary":""}" onclick="openPayment('${esc(p.id)}')">
+           ${status==="VERIFIED"?"ดูรายละเอียด":"ตรวจสอบ"}
+          </button>`
+       : `<button class="btn" disabled>ยังไม่มีสลิป</button>`
+      }
+     </div>
+
+    </div>
+   </article>
+  `;
+ }).join("");
+}
+
+async function openPayment(id){
+
+ selectedPayment=payments.find(x=>x.id===id);
+
+ if(!selectedPayment)return;
+
+ clearModalMessage();
+
+ const p=selectedPayment;
+
+ document.getElementById("modalPaymentNo").textContent=p.payment_no||"-";
+ document.getElementById("modalAmount").textContent=money(p.amount);
+ document.getElementById("modalMember").textContent=fullName(p.profile);
+ document.getElementById("modalEmail").textContent=p.profile?.email||"-";
+ document.getElementById("modalCourse").textContent=
+  p.course?.course_name_th||p.item?.description||"-";
+ document.getElementById("modalSession").textContent=p.session?.session_name||"-";
+ document.getElementById("modalFilename").textContent=p.slip?.original_filename||"-";
+ document.getElementById("modalSubmitted").textContent=formatDate(p.slip?.submitted_at);
+
+ const verified=String(p.payment_status||"").toUpperCase()==="VERIFIED";
+
+ verifyButton.disabled=verified;
+ verifyButton.textContent=verified
+  ?"✓ ชำระเงินแล้ว"
+  :"✓ ยืนยันการชำระเงิน";
+
+ modal.classList.add("show");
+
+ await loadSlipPreview(p);
+}
+
+async function loadSlipPreview(p){
+
+ const area=document.getElementById("slipArea");
+
+ if(!p.slip?.storage_path){
+  area.innerHTML='<div>ไม่พบไฟล์หลักฐาน</div>';
+  return;
+ }
+
+ area.innerHTML="กำลังโหลดหลักฐาน...";
+
+ const bucket=p.slip.storage_bucket||"payment-slips";
+
+ const {data,error}=await db
+  .storage
+  .from(bucket)
+  .createSignedUrl(
+   p.slip.storage_path,
+   600
+  );
+
+ if(error || !data?.signedUrl){
+  console.error(error);
+  area.innerHTML='<div>ไม่สามารถเปิดหลักฐานการชำระเงินได้</div>';
+  return;
+ }
+
+ const url=data.signedUrl;
+ const mime=String(p.slip.mime_type||"").toLowerCase();
+
+ if(mime==="application/pdf" || String(p.slip.original_filename||"").toLowerCase().endsWith(".pdf")){
+  area.innerHTML=`
+   <div class="slip-pdf">
+    <p>หลักฐานเป็นไฟล์ PDF</p>
+    <a class="open-file" href="${esc(url)}" target="_blank" rel="noopener">
+     เปิดไฟล์ PDF
+    </a>
+   </div>
+  `;
+ }else{
+  area.innerHTML=`
+   <a href="${esc(url)}" target="_blank" rel="noopener">
+    <img src="${esc(url)}" alt="หลักฐานการชำระเงิน">
+   </a>
+  `;
+ }
+}
+
+async function verifyPayment(){
+
+ if(verifying || !selectedPayment)return;
+
+ if(String(selectedPayment.payment_status||"").toUpperCase()==="VERIFIED"){
+  return;
+ }
+
+ if(!selectedPayment.slip){
+  setModalMessage("error","ไม่พบหลักฐานการชำระเงิน");
+  return;
+ }
+
+ const ok=confirm(
+  "ยืนยันการชำระเงินรายการนี้หรือไม่?\n\n"+
+  "เมื่อยืนยันแล้ว ระบบจะดำเนินการสิทธิ์และยืนยันที่นั่งอบรมตาม Payment นี้"
+ );
+
+ if(!ok)return;
+
+ verifying=true;
+ verifyButton.disabled=true;
+ verifyButton.textContent="กำลังยืนยัน...";
+ clearModalMessage();
+
+ try{
+
+  const {data,error}=await db.rpc(
+   "admin_verify_payment",
+   {
+    p_payment_id:selectedPayment.id
+   }
+  );
+
+  if(error)throw error;
+
+  setModalMessage(
+   "success",
+   "ยืนยันการชำระเงินเรียบร้อยแล้ว ระบบได้ดำเนินการสิทธิ์ของรายการนี้แล้ว"
+  );
+
+  verifyButton.textContent="✓ ชำระเงินแล้ว";
+  verifyButton.disabled=true;
+
+  selectedPayment.payment_status="VERIFIED";
+  selectedPayment.verified_at=new Date().toISOString();
+
+  updateSummary();
+  render();
+
+ }catch(error){
+
+  console.error(error);
+
+  setModalMessage(
+   "error",
+   error?.message||
+   "ไม่สามารถยืนยันการชำระเงินได้"
+  );
+
+  verifyButton.disabled=false;
+  verifyButton.textContent="✓ ยืนยันการชำระเงิน";
+
+ }finally{
+  verifying=false;
+ }
+}
+
+verifyButton.onclick=verifyPayment;
+
+document.querySelectorAll(".tab").forEach(btn=>{
+ btn.onclick=()=>{
+  document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+  btn.classList.add("active");
+  currentFilter=btn.dataset.filter;
+  render();
+ };
+});
+
+document.getElementById("searchInput").addEventListener("input",render);
+document.getElementById("refreshButton").onclick=loadPayments;
+
+document.getElementById("logoutButton").onclick=async()=>{
+ await db.auth.signOut();
+ location.replace("admin-login.html");
+};
+
+async function init(){
+
+ const admin=await requireAdmin();
+
+ if(!admin)return;
+
+ document.getElementById("loadingScreen").style.display="none";
+
+ await loadPayments();
+}
+
+init();
+</script>
+
+</body>
+</html>
