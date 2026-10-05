@@ -285,3 +285,64 @@ body.admin-login-page{background:#f7faff!important}
     border-radius:22px!important;box-shadow:0 14px 40px rgba(18,46,84,.10)!important
   }
 }
+
+
+/* =========================================================
+   FINAL V2 FIX — Desktop hero + balanced logo
+   ========================================================= */
+
+/* Logo: use the trimmed transparent file without artificial stretching */
+.au-brand{
+  height:126px!important;
+  padding:14px 10px!important;
+}
+.au-brand img{
+  display:block!important;
+  width:auto!important;
+  height:92px!important;
+  max-width:155px!important;
+  object-fit:contain!important;
+  object-position:center!important;
+}
+
+/* Desktop cover must behave exactly like Member: full image, no crop */
+@media(min-width:701px){
+  .au-cover-wrap{
+    width:100%!important;
+    margin:0 0 30px!important;
+  }
+  .au-cover{
+    display:block!important;
+    width:100%!important;
+    height:auto!important;
+    aspect-ratio:auto!important;
+    overflow:hidden!important;
+    border-radius:28px!important;
+    background:#fff!important;
+  }
+  .au-cover picture{
+    display:block!important;
+    width:100%!important;
+    height:auto!important;
+  }
+  .au-cover img{
+    display:block!important;
+    width:100%!important;
+    height:auto!important;
+    max-height:none!important;
+    object-fit:contain!important;
+    object-position:center center!important;
+  }
+}
+
+/* Mobile logo stays centered and proportional */
+@media(max-width:700px){
+  .au-brand{
+    height:108px!important;
+    padding:12px!important;
+  }
+  .au-brand img{
+    height:78px!important;
+    max-width:138px!important;
+  }
+}
