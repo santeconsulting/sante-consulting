@@ -974,51 +974,83 @@
       }
     }
   
-/* ===== CLEAN HERO FIX 2026-10-05 =====
-   Remove the legacy navy hero completely.
-   Only the Member-style image hero is rendered.
-================================================ */
-.page-hero.clean-image-hero{
-  width:100%!important;
-  min-height:0!important;
-  height:auto!important;
-  padding:0!important;
-  margin:0!important;
-  display:block!important;
-  position:relative!important;
-  overflow:hidden!important;
-  border-radius:24px!important;
-  background:#fff!important;
-  background-image:none!important;
-  box-shadow:0 10px 35px rgba(3,45,94,.10)!important;
-  color:inherit!important;
+/* ===== SANTE UNIFIED ADMIN SHELL 2026-10-05 ===== */
+:root{
+  --sante-shell-navy:#0b4f88;
+  --sante-shell-navy-dark:#073a68;
+  --sante-shell-yellow:#ffc83d;
+  --sante-shell-bg:#f3f7fb;
+  --sante-shell-line:#dbe5ef;
 }
-.page-hero.clean-image-hero::before,
-.page-hero.clean-image-hero::after{
-  content:none!important;
-  display:none!important;
+@media(min-width:901px){
+  body{background:var(--sante-shell-bg)!important}
+  .sidebar{
+    width:236px!important;
+    background:linear-gradient(180deg,var(--sante-shell-navy),var(--sante-shell-navy-dark))!important;
+    color:#fff!important;
+    box-shadow:none!important;
+  }
+  .main{margin-left:236px!important}
 }
-.clean-image-hero-picture{
-  display:block!important;
-  width:100%!important;
-  height:auto!important;
-  line-height:0!important;
+.sidebar-brand,.brand{
+  min-height:116px!important;
+  padding:18px 16px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  border-bottom:1px solid rgba(255,255,255,.12)!important;
 }
-.clean-image-hero-img{
-  display:block!important;
-  width:100%!important;
-  height:auto!important;
-  max-width:100%!important;
+.sidebar-brand img,.brand img,.brand-logo{
+  width:92px!important;
+  height:76px!important;
   object-fit:contain!important;
-  object-position:center center!important;
+  background:transparent!important;
+  border-radius:0!important;
+  padding:0!important;
 }
+.brand-row{justify-content:center!important}
+.brand-row>div:not(:first-child),.brand-name,.brand-subtitle,.brand-text{display:none!important}
+.menu,.nav{padding:10px 10px 26px!important}
+.menu-title,.sidebar-section-title,.group{
+  padding:13px 12px 7px!important;
+  font-size:10px!important;
+  letter-spacing:.5px!important;
+  color:rgba(255,255,255,.5)!important;
+}
+.menu-item,.nav-item,.nav-btn{
+  min-height:44px!important;
+  border-radius:10px!important;
+  font-size:13px!important;
+  color:#fff!important;
+  gap:10px!important;
+}
+.menu-item.active,.nav-item.active,.nav-btn.active{
+  background:var(--sante-shell-yellow)!important;
+  color:#082b50!important;
+  font-weight:700!important;
+}
+.topbar,.header{
+  min-height:78px!important;
+  height:78px!important;
+  background:#fff!important;
+  border-bottom:1px solid var(--sante-shell-line)!important;
+  position:sticky!important;top:0!important;z-index:80!important;
+}
+.sante-unified-search{
+  width:min(620px,52vw);height:44px;border:0;border-radius:999px;
+  background:#eef4fa;padding:0 20px;color:#6c8199;
+  display:flex;align-items:center;font-size:12px
+}
+.sante-unified-search::before{content:"⌕";margin-right:10px}
 @media(max-width:900px){
-  .page-hero.clean-image-hero{border-radius:18px!important}
-  .clean-image-hero-img{width:100%!important;height:auto!important;object-fit:contain!important}
+  .sidebar{width:260px!important}
+  .main{margin-left:0!important}
+  .sante-unified-search{display:none}
 }
 
+.clean-image-hero{padding:0!important;background:#fff!important;overflow:hidden!important;border-radius:24px!important}.clean-image-hero:before,.clean-image-hero:after{display:none!important;content:none!important}
 </style>
-<meta name="sante-build" content="REGISTRATIONS-CLEAN-HERO-2026-10-05">
+<link rel="stylesheet" href="admin-member-master.css">
 </head>
 
 <body>
@@ -1050,189 +1082,75 @@
 
 
     <!-- SIDEBAR -->
-    <aside class="sidebar" id="sidebar">
+    <aside class="sidebar sante-sidebar" id="sidebar">
+  <div class="sante-brand">
+    <img src="SANTE-logo.png" alt="SANTE Consulting">
+  </div>
 
-      <div class="sidebar-brand">
+  <nav class="sante-nav">
+    <div class="sante-nav-title">MAIN</div>
+    <a href="admin-dashboard.html" class="sante-nav-link"><span class="sante-nav-icon">⌂</span><span>หน้าหลัก</span></a>
 
-        <div class="brand-mark">
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
+    <div class="sante-nav-title">TRAINING &amp; LEARNING</div>
+    <a href="admin-courses.html" class="sante-nav-link"><span class="sante-nav-icon">▤</span><span>จัดการหลักสูตร</span></a>
+    <a href="admin-training-registrations.html" class="sante-nav-link active"><span class="sante-nav-icon">♙</span><span>ผู้สมัครอบรม</span></a>
+    <a href="admin-training-sessions.html" class="sante-nav-link"><span class="sante-nav-icon">▦</span><span>รอบการอบรม</span></a>
+    <a href="admin-question-import.html" class="sante-nav-link"><span class="sante-nav-icon">✎</span><span>คลังข้อสอบ / นำเข้า</span></a>
+    <a href="admin-exams.html" class="sante-nav-link"><span class="sante-nav-icon">✓</span><span>ข้อสอบและผลสอบ</span></a>
+    <a href="#" class="sante-nav-link" data-coming><span class="sante-nav-icon">▣</span><span>ใบประกาศนียบัตร</span></a>
 
-        <div class="brand-text">
-          <h1>SANTE SYSTEM</h1>
-          <p>ADMINISTRATION</p>
-        </div>
+    <div class="sante-nav-title">SERVICE &amp; FINANCE</div>
+    <a href="#" class="sante-nav-link" data-coming><span class="sante-nav-icon">◆</span><span>งานบริการ</span></a>
+    <a href="#" class="sante-nav-link" data-coming><span class="sante-nav-icon">▧</span><span>ใบเสนอราคา</span></a>
+    <a href="admin-payments.html" class="sante-nav-link"><span class="sante-nav-icon">฿</span><span>การเงิน / การชำระเงิน</span></a>
 
-      </div>
+    <div class="sante-nav-title">SYSTEM</div>
+    <a href="#" class="sante-nav-link" data-coming><span class="sante-nav-icon">⚙</span><span>ตั้งค่าระบบ</span></a>
+    <a href="#" class="sante-nav-link" data-coming><span class="sante-nav-icon">◷</span><span>Audit Log</span></a>
+  </nav>
 
-
-      <nav class="menu">
-
-        <div class="menu-title">MAIN</div>
-
-        <a class="menu-item" href="admin-dashboard.html">
-          <span class="menu-icon">▦</span>
-          Dashboard
-        </a>
-
-
-        <div class="menu-title">TRAINING & LEARNING</div>
-
-        <button class="menu-item" type="button">
-          <span class="menu-icon">👥</span>
-          สมาชิก
-        </button>
-
-        <a class="menu-item" href="admin-courses.html">
-          <span class="menu-icon">📚</span>
-          หลักสูตร
-        </a>
-
-        <a class="menu-item" href="admin-training-sessions.html">
-          <span class="menu-icon">📅</span>
-          รอบการอบรม
-        </a>
-
-        <a class="menu-item active" href="admin-training-registrations.html">
-          <span class="menu-icon">👤</span>
-          ผู้สมัครอบรม
-        </a>
-
-        <a class="menu-item" href="admin-question-import.html">
-          <span class="menu-icon">📝</span>
-          คลังข้อสอบ
-        </a>
-
-        <a class="menu-item" href="admin-question-import.html">
-          <span class="menu-icon">⬆</span>
-          นำเข้าข้อสอบ
-        </a>
-
-        <button class="menu-item" type="button">
-          <span class="menu-icon">📊</span>
-          ผลการสอบ
-        </button>
-
-        <button class="menu-item" type="button">
-          <span class="menu-icon">🏅</span>
-          วุฒิบัตร
-        </button>
-
-
-        <div class="menu-title">SERVICE</div>
-
-        <button class="menu-item" type="button">
-          <span class="menu-icon">🛠</span>
-          งานบริการ
-        </button>
-
-        <button class="menu-item" type="button">
-          <span class="menu-icon">📄</span>
-          ใบเสนอราคา
-        </button>
-
-        <button class="menu-item" type="button">
-          <span class="menu-icon">💳</span>
-          การเงิน / การชำระเงิน
-        </button>
-
-
-        <div class="menu-title">SYSTEM</div>
-
-        <button class="menu-item" type="button">
-          <span class="menu-icon">⚙</span>
-          ตั้งค่าระบบ
-        </button>
-
-        <button class="menu-item" type="button">
-          <span class="menu-icon">🕘</span>
-          Audit Log
-        </button>
-
-      </nav>
-
-
-      <div class="sidebar-bottom">
-
-        <div class="sidebar-user">
-
-          <div class="sidebar-avatar">
-            A
-          </div>
-
-          <div class="sidebar-user-info">
-            <strong>Administrator</strong>
-            <span id="sidebarEmail">-</span>
-          </div>
-
-        </div>
-
-      </div>
-
-    </aside>
+  <div class="sante-sidebar-user">
+    <div class="sante-sidebar-avatar">A</div>
+    <div>
+      <strong>Administrator</strong>
+      <span id="sidebarEmail">-</span>
+    </div>
+  </div>
+</aside>
 
 
     <!-- MAIN -->
     <main class="main">
 
       <!-- HEADER -->
-      <header class="header">
-
-        <div class="header-left">
-
-          <button
-            class="mobile-menu"
-            type="button"
-            onclick="openSidebar()"
-          >
-            ☰
-          </button>
-
-          <div class="header-title">
-            <h2>ผู้สมัครอบรม</h2>
-            <p>จัดการและตรวจสอบรายชื่อผู้สมัครในแต่ละรอบการอบรม</p>
-          </div>
-
-        </div>
-
-
-        <div class="header-right">
-
-          <div class="role-badge">
-            ● SUPER ADMIN
-          </div>
-
-          <button
-            class="logout-button"
-            type="button"
-            onclick="logout()"
-          >
-            ออกจากระบบ
-          </button>
-
-        </div>
-
-      </header>
+      <header class="sante-topbar">
+  <div class="sante-topbar-left">
+    <button class="sante-mobile-menu mobile-menu" type="button" onclick="openSidebar()">☰</button>
+    <div class="sante-search">⌕ <span>ค้นหาหลักสูตร, สมาชิก, การสอบ, เอกสาร...</span></div>
+    <div class="sante-page-mobile-title">
+      <strong>ผู้สมัครอบรม</strong><span>จัดการและตรวจสอบรายชื่อผู้สมัครในแต่ละรอบการอบรม</span>
+    </div>
+  </div>
+  <div class="sante-topbar-right">
+    <div class="sante-lang">◉ TH⌄</div>
+    <div class="sante-bell">♢<span></span></div>
+    <div class="sante-user-avatar">A</div>
+          <div class="sante-user-copy"><strong>Admin</strong><span>ผู้ดูแลระบบ</span></div>
+          <button class="sante-logout" type="button" onclick="logout()">ออกจากระบบ</button>
+  </div>
+</header>
 
 
       <!-- CONTENT -->
       <div class="content">
 
         <!-- HERO -->
-        <section class="page-hero clean-image-hero" aria-label="SANTE Training">
-          <picture class="clean-image-hero-picture">
-            <source media="(max-width: 767px)" srcset="sante-dashboard-hero-mobile.png">
-            <img
-              src="sante-dashboard-hero-desktop.png"
-              alt="Trust in Safety. Trust in SANTE."
-              class="clean-image-hero-img"
-            >
-          </picture>
-        </section>
+<section class="page-hero clean-image-hero">
+  <picture>
+    <source media="(max-width:767px)" srcset="sante-dashboard-hero-mobile.png">
+    <img src="sante-dashboard-hero-desktop.png" alt="Trust in Safety. Trust in SANTE." style="display:block;width:100%;height:auto;object-fit:contain">
+  </picture>
+</section>
 
 
         <!-- OVERVIEW -->
@@ -3281,5 +3199,18 @@
 
 </script>
 
+
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+  document.querySelectorAll("[data-coming]").forEach(function(node){
+    node.addEventListener("click", function(event){
+      event.preventDefault();
+      alert("โมดูลนี้กำลังอยู่ระหว่างการพัฒนา");
+    });
+  });
+});
+</script>
+
+<script src="admin-member-master.js"></script>
 </body>
 </html>

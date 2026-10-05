@@ -601,6 +601,29 @@ function resetLayout(){
 }
 function zoomPreview(f){previewZoom=Math.min(1.4,Math.max(.5,previewZoom*f));document.getElementById("certStage").style.zoom=previewZoom}
 
+
+function buildFieldSelect(){
+ const sel=document.getElementById("selectedField");
+ if(!sel)return;
+ const labels={
+   number:"เลขวุฒิบัตร",
+   name:"ชื่อผู้รับวุฒิบัตร",
+   bodyTitle:"ข้อความนำ",
+   course:"ชื่อหลักสูตร / งานบริการ",
+   body:"รายละเอียด",
+   duration:"ระยะเวลา",
+   delivery:"รูปแบบการอบรม",
+   date:"วันที่ออก"
+ };
+ sel.innerHTML=Object.keys(design||{}).map(k=>`<option value="${k}">${labels[k]||k}</option>`).join("");
+ if(selected && design[selected])sel.value=selected;
+ else{
+   selected=Object.keys(design||{})[0]||"course";
+   sel.value=selected;
+ }
+ selectField(selected);
+}
+
 function applyType(){
  const type=document.getElementById("typeCode").value;
  if(!currentBackgroundUrl){

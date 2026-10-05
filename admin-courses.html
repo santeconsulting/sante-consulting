@@ -944,7 +944,82 @@
         font-size: 25px;
       }
     }
-  </style>
+  
+/* ===== SANTE UNIFIED ADMIN SHELL 2026-10-05 ===== */
+:root{
+  --sante-shell-navy:#0b4f88;
+  --sante-shell-navy-dark:#073a68;
+  --sante-shell-yellow:#ffc83d;
+  --sante-shell-bg:#f3f7fb;
+  --sante-shell-line:#dbe5ef;
+}
+@media(min-width:901px){
+  body{background:var(--sante-shell-bg)!important}
+  .sidebar{
+    width:236px!important;
+    background:linear-gradient(180deg,var(--sante-shell-navy),var(--sante-shell-navy-dark))!important;
+    color:#fff!important;
+    box-shadow:none!important;
+  }
+  .main{margin-left:236px!important}
+}
+.sidebar-brand,.brand{
+  min-height:116px!important;
+  padding:18px 16px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  border-bottom:1px solid rgba(255,255,255,.12)!important;
+}
+.sidebar-brand img,.brand img,.brand-logo{
+  width:92px!important;
+  height:76px!important;
+  object-fit:contain!important;
+  background:transparent!important;
+  border-radius:0!important;
+  padding:0!important;
+}
+.brand-row{justify-content:center!important}
+.brand-row>div:not(:first-child),.brand-name,.brand-subtitle,.brand-text{display:none!important}
+.menu,.nav{padding:10px 10px 26px!important}
+.menu-title,.sidebar-section-title,.group{
+  padding:13px 12px 7px!important;
+  font-size:10px!important;
+  letter-spacing:.5px!important;
+  color:rgba(255,255,255,.5)!important;
+}
+.menu-item,.nav-item,.nav-btn{
+  min-height:44px!important;
+  border-radius:10px!important;
+  font-size:13px!important;
+  color:#fff!important;
+  gap:10px!important;
+}
+.menu-item.active,.nav-item.active,.nav-btn.active{
+  background:var(--sante-shell-yellow)!important;
+  color:#082b50!important;
+  font-weight:700!important;
+}
+.topbar,.header{
+  min-height:78px!important;
+  height:78px!important;
+  background:#fff!important;
+  border-bottom:1px solid var(--sante-shell-line)!important;
+  position:sticky!important;top:0!important;z-index:80!important;
+}
+.sante-unified-search{
+  width:min(620px,52vw);height:44px;border:0;border-radius:999px;
+  background:#eef4fa;padding:0 20px;color:#6c8199;
+  display:flex;align-items:center;font-size:12px
+}
+.sante-unified-search::before{content:"⌕";margin-right:10px}
+@media(max-width:900px){
+  .sidebar{width:260px!important}
+  .main{margin-left:0!important}
+  .sante-unified-search{display:none}
+}
+
+</style>
 </head>
 
 <body>
@@ -959,13 +1034,7 @@
   <!-- Sidebar -->
   <aside class="sidebar" id="sidebar">
 
-    <div class="brand">
-      <div class="brand-row">
-        <img src="SANTE-logo.png" alt="SANTE" class="brand-logo">
-        <div>
-          <div class="brand-name">SANTE</div>
-          <div class="brand-subtitle">ระบบบริหารจัดการ</div>
-        </div>
+    <div class="brand"><img src="SANTE-logo.png" alt="SANTE"></div>
       </div>
     </div>
 
