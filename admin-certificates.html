@@ -396,7 +396,7 @@ body{margin:0;background:var(--bg);font-family:"Prompt",sans-serif;color:var(--n
         <div class="template-note"><strong>V2:</strong> ระบบกรองผู้ที่ยืนยันการลงทะเบียนและสถานะชำระเงินได้ แต่ยังไม่ผูกผลสอบอัตโนมัติในหน้านี้ ดังนั้นกรณีที่ต้องผ่าน Post-test ให้เลือกเฉพาะผู้ที่ผ่านเกณฑ์ก่อนกดออกวุฒิบัตร</div>
         <div class="bulk-grid">
           <div><label style="font-size:11px;font-weight:600">รอบการอบรม</label><select id="bulkSession" onchange="loadBulkParticipants()"><option value="">-- เลือกรอบการอบรม --</option></select></div>
-          <div><label style="font-size:11px;font-weight:600">แม่แบบวุฒิบัตร</label><select id="bulkTemplate"><option value="">-- เลือกแม่แบบ --</option></select><div class="batch-template-info">ใช้หน้าตา สี ตำแหน่ง และข้อความของแม่แบบนี้กับทุกคน</div></div>
+          <div><label style="font-size:11px;font-weight:600">แม่แบบวุฒิบัตร</label><select id="bulkTemplate" onchange="refreshBulkSummary()"><option value="">-- เลือกแม่แบบ --</option></select><div class="batch-template-info">ใช้หน้าตา สี ตำแหน่ง และข้อความของแม่แบบนี้กับทุกคน</div></div>
           <div><label style="font-size:11px;font-weight:600">วันที่ออก</label><input id="bulkIssueDate" type="date"></div>
           <button class="btn light" onclick="toggleAllBulk(true)">เลือกทั้งหมด</button>
           <button class="btn primary" onclick="issueBulk()">ออกวุฒิบัตรที่เลือก</button>
@@ -1010,6 +1010,43 @@ function formatDateOnly(v){
  if(!v)return "";
  return new Intl.DateTimeFormat("th-TH",{day:"numeric",month:"long",year:"numeric"}).format(new Date(v));
 }
+function getBulkDurationText(session,saved){
+ const course=session?.courses||{};
+ if(!saved)return "";
+ const source=saved.design_json?.durationSource||"TEMPLATE";
+ if(source==="COURSE"){
+   return course.duration_hours!==null&&course.duration_hours!==undefined
+     ? `${formatHours(course.duration_hours)} ชั่วโมง`
+     : "ยังไม่ได้กำหนดชั่วโมงในหลักสูตร";
+ }
+ if(saved.design_json?.durationHours!==null&&saved.design_json?.durationHours!==undefined){
+   return `${formatHours(saved.design_json.durationHours)} ชั่วโมง`;
+ }
+ const parsed=parseHoursFromText(saved.duration_text);
+ return parsed!==""?`${formatHours(parsed)} ชั่วโมง`:"ยังไม่ได้กำหนดในแม่แบบ";
+}
+function getBulkCourseText(session,saved){
+ const course=session?.courses||{};
+ if(!saved)return course.course_name_th||session?.session_name||"-";
+ return (saved.design_json?.courseSource||"TEMPLATE")==="SESSION"
+   ? (course.course_name_th||session?.session_name||"-")
+   : (saved.design_json?.courseText||course.course_name_th||session?.session_name||"-");
+}
+function refreshBulkSummary(){
+ const id=document.getElementById("bulkSession").value;
+ const templateId=document.getElementById("bulkTemplate").value;
+ const preview=document.getElementById("bulkSessionPreview");
+ const session=trainingSessions.find(x=>x.id===id);
+ if(!preview||!session){if(preview)preview.style.display="none";return}
+ const saved=savedTemplates.find(x=>x.id===templateId);
+ preview.style.display="block";
+ preview.innerHTML=`<strong>ข้อมูลที่จะพิมพ์ลงวุฒิบัตร Batch</strong><br>
+   ชื่อหลักสูตรบนวุฒิบัตร: ${getBulkCourseText(session,saved)}<br>
+   วันที่อบรม: ${formatDateOnly(session.training_start_at)||"-"}<br>
+   ระยะเวลาบนวุฒิบัตร: ${saved?getBulkDurationText(session,saved):"กรุณาเลือกแม่แบบ"}<br>
+   รูปแบบ: ${formatDeliveryText(session.delivery_method)}<br>
+   <span style="color:#6b7f99">หมายเหตุ: ระบบจะไม่คำนวณชั่วโมงจากช่วงเวลา Session มาแทนค่าของแม่แบบอีก</span>`;
+}
 async function loadBulkParticipants(){
  const id=document.getElementById("bulkSession").value;
  const list=document.getElementById("bulkList");
@@ -1019,17 +1056,7 @@ async function loadBulkParticipants(){
    if(preview)preview.style.display="none";
    return
  }
- const session=trainingSessions.find(x=>x.id===id);
- if(preview&&session){
-   const course=session.courses||{};
-   preview.style.display="block";
-   preview.innerHTML=`<strong>ข้อมูลที่จะใส่ลงวุฒิบัตร Batch</strong><br>
-   หลักสูตร: ${course.course_name_th||session.session_name||"-"}<br>
-   วันที่อบรม: ${formatDateOnly(session.training_start_at)||"-"}<br>
-   ระยะเวลาในหลักสูตร: ${session.courses?.duration_hours!==null&&session.courses?.duration_hours!==undefined?formatHours(session.courses.duration_hours)+" ชั่วโมง":"ยังไม่ได้กำหนด"}<br>
-   ระยะเวลาจากช่วงเวลา Session: ${calcDurationText(session)||"-"}<br>
-   รูปแบบ: ${formatDeliveryText(session.delivery_method)}`;
- }
+ refreshBulkSummary();
  list.innerHTML='<div class="empty">กำลังโหลดรายชื่อ...</div>';
  const {data,error}=await db.from("training_registrations")
    .select("id,training_session_id,user_id,registration_status,payment_required,payment_status,participant_title_th,participant_firstname_th,participant_lastname_th,participant_email,organization_name")
@@ -1076,7 +1103,7 @@ async function issueBulk(){
  if(!saved){alert("กรุณาเลือกแม่แบบวุฒิบัตรก่อน");return}
  const selected=[...document.querySelectorAll(".bulk-check:checked")].map(x=>bulkParticipants[Number(x.dataset.i)]);
  if(!selected.length){alert("กรุณาเลือกรายชื่ออย่างน้อย 1 คน");return}
- if(!confirm(`ยืนยันใช้แม่แบบ "${saved.template_name}" ออกวุฒิบัตร ${selected.length} ใบ?\nกรณีหลักสูตรมี Post-test กรุณาตรวจว่ารายชื่อที่เลือกผ่านเกณฑ์แล้ว`))return;
+ if(!confirm(`ยืนยันใช้แม่แบบ "${saved.template_name}" ออกวุฒิบัตร ${selected.length} ใบ?\nระยะเวลาที่จะพิมพ์: ${getBulkDurationText(session,saved)}\nกรณีหลักสูตรมี Post-test กรุณาตรวจว่ารายชื่อที่เลือกผ่านเกณฑ์แล้ว`))return;
 
  const progress=document.getElementById("bulkProgress");progress.style.display="block";
  const issueDate=document.getElementById("bulkIssueDate").value||new Date().toISOString().slice(0,10);
