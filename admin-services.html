@@ -1,0 +1,1087 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SANTE Admin | งานบริการ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --navy:#082d69;
+  --navy-dark:#061f4b;
+  --navy-soft:#0d4386;
+  --yellow:#ffbf19;
+  --yellow-soft:#fff4cf;
+  --blue:#087df0;
+  --green:#159447;
+  --red:#b42318;
+  --bg:#f1f7fb;
+  --white:#fff;
+  --text:#082d69;
+  --muted:#6f83a2;
+  --line:#d9e5ef;
+  --sidebar:285px;
+}
+
+html,body{
+  width:100%;
+  min-height:100%;
+}
+
+body{
+  font-family:"Prompt",sans-serif;
+  color:var(--text);
+  background:var(--bg);
+  font-size:16px;
+  -webkit-font-smoothing:antialiased;
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+button,input{
+  font-family:"Prompt",sans-serif;
+}
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
+.sidebar{
+  position:fixed;
+  left:0;
+  top:0;
+  bottom:0;
+  z-index:300;
+  width:var(--sidebar);
+  display:flex;
+  flex-direction:column;
+  background:
+    linear-gradient(
+      180deg,
+      #082d69 0%,
+      #06265c 55%,
+      #061f4b 100%
+    );
+  color:#fff;
+  overflow-y:auto;
+}
+
+.sidebar-brand{
+  min-height:128px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:22px 25px;
+  border-bottom:1px solid rgba(255,255,255,.10);
+}
+
+.sidebar-brand img{
+  display:block;
+  width:190px;
+  max-width:100%;
+  height:82px;
+  object-fit:contain;
+}
+
+.sidebar-label{
+  padding:26px 25px 10px;
+  color:#9bb1d0;
+  font-size:12px;
+  font-weight:500;
+  letter-spacing:1.7px;
+}
+
+.nav{
+  padding:0 15px 25px;
+}
+
+.nav-link{
+  min-height:58px;
+  display:flex;
+  align-items:center;
+  gap:14px;
+  margin:5px 0;
+  padding:0 17px;
+  border-radius:16px;
+  color:#e4edfa;
+  font-size:15px;
+  font-weight:500;
+  transition:.18s ease;
+}
+
+.nav-link:hover{
+  background:rgba(255,255,255,.08);
+  color:#fff;
+}
+
+.nav-link.active{
+  background:var(--yellow);
+  color:var(--navy);
+  font-weight:600;
+  box-shadow:0 7px 18px rgba(0,0,0,.10);
+}
+
+.nav-icon{
+  width:29px;
+  flex:0 0 29px;
+  display:grid;
+  place-items:center;
+  font-size:21px;
+  line-height:1;
+}
+
+.sidebar-footer{
+  margin:auto 15px 22px;
+  padding:18px;
+  border-radius:17px;
+  background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.05);
+}
+
+.sidebar-footer strong{
+  display:block;
+  font-size:13px;
+  font-weight:600;
+}
+
+.sidebar-footer p{
+  margin-top:6px;
+  color:#b6c8e2;
+  font-size:11px;
+  line-height:1.65;
+}
+
+/* =========================================================
+   MAIN / TOPBAR
+========================================================= */
+
+.main{
+  min-height:100vh;
+  margin-left:var(--sidebar);
+}
+
+.topbar{
+  position:sticky;
+  top:0;
+  z-index:200;
+  height:88px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:24px;
+  padding:0 34px;
+  background:rgba(255,255,255,.97);
+  border-bottom:1px solid #e2ebf3;
+  box-shadow:0 3px 14px rgba(8,45,105,.025);
+}
+
+.topbar-left{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+
+.page-name{
+  font-size:21px;
+  line-height:1.3;
+  font-weight:600;
+}
+
+.page-sub{
+  margin-top:4px;
+  color:var(--muted);
+  font-size:12px;
+}
+
+.mobile-menu{
+  display:none;
+  width:44px;
+  height:44px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:#fff;
+  color:var(--navy);
+  font-size:21px;
+  cursor:pointer;
+}
+
+.admin-area{
+  display:flex;
+  align-items:center;
+  gap:17px;
+}
+
+.admin-copy{
+  text-align:right;
+}
+
+.admin-name{
+  font-size:15px;
+  font-weight:600;
+}
+
+.admin-email{
+  margin-top:2px;
+  color:var(--muted);
+  font-size:11px;
+}
+
+.logout{
+  min-height:46px;
+  padding:0 18px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:#fff;
+  color:var(--navy);
+  font-size:13px;
+  font-weight:600;
+  cursor:pointer;
+}
+
+.logout:hover{
+  background:#f6faff;
+}
+
+.content{
+  width:min(1540px,calc(100% - 58px));
+  margin:0 auto;
+  padding:30px 0 65px;
+}
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.dashboard-hero{
+  position:relative;
+  width:100%;
+  min-height:320px;
+  overflow:hidden;
+  border-radius:25px;
+  background:#fff;
+  box-shadow:0 10px 28px rgba(8,45,105,.08);
+}
+
+.dashboard-hero-picture{
+  position:absolute;
+  inset:0;
+  display:block;
+}
+
+.dashboard-hero-image{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center;
+}
+
+.dashboard-hero-content{
+  position:relative;
+  z-index:2;
+  width:48%;
+  min-height:320px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding:38px 20px 38px 48px;
+}
+
+.system-badge{
+  width:max-content;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:7px 13px;
+  border-radius:999px;
+  background:rgba(255,255,255,.94);
+  color:var(--blue);
+  font-size:11px;
+  font-weight:700;
+  box-shadow:0 3px 12px rgba(8,45,105,.08);
+}
+
+.system-dot{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:#1cad5a;
+}
+
+.dashboard-hero h1{
+  margin-top:15px;
+  font-size:31px;
+  line-height:1.25;
+  font-weight:500;
+}
+
+.dashboard-hero h1 strong{
+  display:block;
+  margin-top:2px;
+  font-size:42px;
+  line-height:1.18;
+  font-weight:700;
+}
+
+.dashboard-hero p{
+  max-width:650px;
+  margin-top:12px;
+  color:#506987;
+  font-size:13px;
+  line-height:1.75;
+}
+
+.dashboard-date{
+  margin-top:17px;
+  color:#58708f;
+  font-size:12px;
+  font-weight:500;
+}
+
+/* =========================================================
+   SECTION
+========================================================= */
+
+.section-head{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:20px;
+  margin:34px 4px 17px;
+}
+
+.section-head h2{
+  font-size:24px;
+  line-height:1.35;
+  font-weight:600;
+}
+
+.section-head p{
+  margin-top:5px;
+  color:var(--muted);
+  font-size:12px;
+}
+
+/* =========================================================
+   STATS
+========================================================= */
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:17px;
+}
+
+.stat{
+  min-height:145px;
+  padding:22px;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:20px;
+  box-shadow:0 6px 18px rgba(8,45,105,.035);
+}
+
+.stat-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+
+.stat-icon{
+  width:50px;
+  height:50px;
+  display:grid;
+  place-items:center;
+  border-radius:15px;
+  background:#eaf4ff;
+  color:var(--navy);
+  font-size:23px;
+}
+
+.stat-label{
+  color:var(--muted);
+  font-size:13px;
+  font-weight:500;
+}
+
+.stat-value{
+  margin-top:10px;
+  font-size:34px;
+  line-height:1;
+  font-weight:700;
+}
+
+.stat-note{
+  margin-top:8px;
+  color:#8496ad;
+  font-size:11px;
+}
+
+/* =========================================================
+   MANAGEMENT
+========================================================= */
+
+.management{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:17px;
+}
+
+.manage-card{
+  min-height:165px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  padding:23px;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:20px;
+  box-shadow:0 5px 15px rgba(8,45,105,.025);
+  transition:.18s ease;
+}
+
+.manage-card:hover{
+  transform:translateY(-2px);
+  box-shadow:0 12px 28px rgba(8,45,105,.08);
+}
+
+.manage-icon{
+  width:49px;
+  height:49px;
+  display:grid;
+  place-items:center;
+  border-radius:15px;
+  background:#edf6ff;
+  font-size:23px;
+}
+
+.manage-card h3{
+  margin-top:14px;
+  font-size:16px;
+  font-weight:600;
+}
+
+.manage-card p{
+  margin-top:5px;
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.6;
+}
+
+.manage-action{
+  margin-top:16px;
+  color:var(--blue);
+  font-size:11px;
+  font-weight:600;
+}
+
+/* =========================================================
+   LOWER PANELS
+========================================================= */
+
+.panel-grid{
+  display:grid;
+  grid-template-columns:1.45fr 1fr;
+  gap:17px;
+}
+
+.panel{
+  padding:24px;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:20px;
+}
+
+.panel h3{
+  font-size:17px;
+  font-weight:600;
+}
+
+.panel>p{
+  margin-top:4px;
+  color:var(--muted);
+  font-size:11px;
+}
+
+.quick-list{
+  display:grid;
+  gap:10px;
+  margin-top:18px;
+}
+
+.quick-item{
+  min-height:49px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  padding:0 15px;
+  border-radius:12px;
+  background:#f5f9fc;
+  font-size:12px;
+}
+
+.quick-item span:last-child{
+  color:var(--blue);
+  font-weight:600;
+}
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+.loading-screen{
+  position:fixed;
+  inset:0;
+  z-index:1000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#f4f9fd;
+  color:var(--navy);
+  font-size:15px;
+}
+
+.overlay{
+  display:none;
+}
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media(max-width:1200px){
+
+  :root{
+    --sidebar:255px;
+  }
+
+  .stats,
+  .management{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+
+  .dashboard-hero-content{
+    width:56%;
+  }
+}
+
+/* =========================================================
+   MOBILE SIDEBAR
+========================================================= */
+
+@media(max-width:900px){
+
+  .sidebar{
+    width:285px;
+    transform:translateX(-100%);
+    transition:.2s ease;
+  }
+
+  .sidebar.open{
+    transform:translateX(0);
+  }
+
+  .main{
+    margin-left:0;
+  }
+
+  .mobile-menu{
+    display:block;
+  }
+
+  .overlay{
+    position:fixed;
+    inset:0;
+    z-index:250;
+    background:rgba(3,20,48,.48);
+  }
+
+  .overlay.show{
+    display:block;
+  }
+
+  .panel-grid{
+    grid-template-columns:1fr;
+  }
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width:767px){
+
+  body{
+    font-size:15px;
+  }
+
+  .topbar{
+    height:68px;
+    padding:0 12px;
+  }
+
+  .page-name{
+    font-size:16px;
+  }
+
+  .page-sub,
+  .admin-copy{
+    display:none;
+  }
+
+  .logout{
+    min-height:40px;
+    padding:0 11px;
+    font-size:11px;
+  }
+
+  .content{
+    width:100%;
+    padding:12px 12px 42px;
+  }
+
+  .dashboard-hero{
+    min-height:410px;
+    border-radius:20px;
+  }
+
+  .dashboard-hero-content{
+    width:100%;
+    min-height:410px;
+    justify-content:flex-end;
+    padding:25px 21px;
+    background:
+      linear-gradient(
+        180deg,
+        rgba(255,255,255,0) 32%,
+        rgba(255,255,255,.72) 59%,
+        rgba(255,255,255,.97) 78%,
+        #fff 100%
+      );
+  }
+
+  .dashboard-hero h1{
+    font-size:22px;
+  }
+
+  .dashboard-hero h1 strong{
+    font-size:30px;
+  }
+
+  .dashboard-hero p{
+    max-width:100%;
+    font-size:11px;
+    line-height:1.6;
+  }
+
+  .dashboard-date{
+    font-size:10px;
+  }
+
+  .section-head{
+    margin:27px 3px 14px;
+  }
+
+  .section-head h2{
+    font-size:20px;
+  }
+
+  .section-head p{
+    font-size:10px;
+  }
+
+  .stats{
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+  }
+
+  .stat{
+    min-height:135px;
+    padding:16px;
+    border-radius:17px;
+  }
+
+  .stat-icon{
+    width:43px;
+    height:43px;
+    font-size:19px;
+  }
+
+  .stat-label{
+    font-size:10px;
+  }
+
+  .stat-value{
+    font-size:27px;
+  }
+
+  .stat-note{
+    font-size:9px;
+  }
+
+  .management{
+    grid-template-columns:1fr;
+    gap:10px;
+  }
+
+  .manage-card{
+    min-height:140px;
+    padding:18px;
+    border-radius:17px;
+  }
+
+  .panel{
+    padding:18px;
+    border-radius:17px;
+  }
+}
+
+@media(max-width:420px){
+
+  .stats{
+    grid-template-columns:1fr;
+  }
+}
+
+
+/* ===== SERVICES MODULE V1 ===== */
+:root{--navy:#0a4d82;--yellow:#ffc83d;--ink:#102442;--muted:#72869b;--bg:#f3f7fb;--line:#dce6f0;--white:#fff;}
+*{box-sizing:border-box}
+body{margin:0;font-family:Prompt,sans-serif;background:var(--bg);color:var(--ink)}
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:240px;background:linear-gradient(180deg,#0b568e 0%,#0a477a 60%,#083d6b 100%);z-index:50;overflow-y:auto}
+.sidebar .brand{min-height:145px;display:flex;align-items:center;justify-content:center;border-bottom:1px solid rgba(255,255,255,.15)}
+.sidebar .brand img{width:112px;max-height:88px;object-fit:contain}
+.sidebar-title{padding:18px 22px 8px;font-size:10px;font-weight:600;color:rgba(255,255,255,.5);letter-spacing:.6px}
+.nav{padding:0 12px 22px}
+.nav a{display:flex;align-items:center;gap:11px;min-height:48px;padding:10px 13px;margin:4px 0;border-radius:10px;text-decoration:none;color:#fff;font-size:12px;font-weight:500}
+.nav a.active{background:var(--yellow);color:#082b50}
+.nav-icon{width:24px;text-align:center}
+.main{margin-left:240px;min-height:100vh}
+.topbar{height:82px;background:#fff;border-bottom:1px solid #e1eaf3;display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:30}
+.search-shell{width:min(590px,52vw);height:46px;border-radius:999px;background:#edf3f9;display:flex;align-items:center;padding:0 18px;gap:10px}
+.search-shell input{border:0;outline:0;background:transparent;width:100%;font:400 13px Prompt}
+.admin-area{display:flex;align-items:center;gap:14px}
+.avatar{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:#0b4f88;color:#fff;font-weight:700}
+.logout{height:42px;padding:0 18px;border-radius:11px;border:1px solid #d6e1ec;background:#fff;font:600 12px Prompt;cursor:pointer}
+.content{padding:30px 28px 50px}
+.page-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:22px}
+.page-head h1{margin:0;font-size:30px}
+.page-head p{margin:5px 0 0;color:var(--muted);font-size:12px}
+.btn{border:0;border-radius:11px;padding:11px 16px;font:600 12px Prompt;cursor:pointer}
+.btn.primary{background:#0b4f88;color:#fff}
+.btn.yellow{background:var(--yellow);color:#102442}
+.btn.light{background:#f2f6fa;color:#16324e;border:1px solid #dce6f0}
+.btn.danger{background:#fff0f1;color:#a52a35;border:1px solid #f4c8cc}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}
+.stat{background:#fff;border:1px solid var(--line);border-radius:17px;padding:18px}
+.stat span{font-size:11px;color:var(--muted)} .stat strong{display:block;font-size:27px;margin-top:6px}
+.tabs{display:flex;gap:8px;margin:0 0 16px;flex-wrap:wrap}
+.tab{padding:10px 14px;border-radius:999px;border:1px solid #dce6f0;background:#fff;font:600 11px Prompt;cursor:pointer}
+.tab.active{background:#0b4f88;color:#fff;border-color:#0b4f88}
+.panel{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px;margin-bottom:18px}
+.toolbar{display:grid;grid-template-columns:1fr 220px 220px auto;gap:10px;align-items:center}
+.input,.select,textarea{width:100%;border:1px solid #d5e1ec;border-radius:11px;padding:11px 12px;font:400 12px Prompt;background:#fff}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.card{border:1px solid var(--line);border-radius:16px;padding:16px;background:#fff;display:flex;flex-direction:column;gap:10px}
+.badge{display:inline-flex;align-items:center;width:max-content;padding:5px 9px;border-radius:999px;font-size:9px;font-weight:600;background:#eaf4ff;color:#0b568e}
+.badge.green{background:#eaf9f0;color:#20794c} .badge.orange{background:#fff4e5;color:#b86e00} .badge.gray{background:#eef2f6;color:#6c7f92}
+.card h3{margin:0;font-size:16px} .muted{color:var(--muted);font-size:11px}
+.meta-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.meta{background:#f7f9fc;border-radius:10px;padding:9px} .meta span{display:block;font-size:9px;color:#7f91a5} .meta strong{font-size:12px}
+.card-actions{display:flex;gap:8px;margin-top:auto}
+.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:14px}
+table{width:100%;border-collapse:collapse;min-width:980px} th{background:#0b4f88;color:#fff;text-align:left;padding:11px;font-size:10px} td{padding:11px;border-bottom:1px solid #e6edf4;font-size:11px;vertical-align:top}
+.empty{padding:40px;text-align:center;color:#7c8fa3}
+.modal-backdrop{position:fixed;inset:0;background:rgba(8,30,55,.55);display:none;align-items:center;justify-content:center;z-index:100}
+.modal-backdrop.show{display:flex}
+.modal{width:min(920px,94vw);max-height:90vh;overflow:auto;background:#fff;border-radius:20px;padding:20px}
+.modal h2{margin-top:0}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-grid .full{grid-column:1/-1}
+.form-grid label{font-size:10px;font-weight:600;display:block;margin-bottom:5px}
+.switch{display:flex;gap:8px;align-items:center;margin-top:7px;font-size:11px}
+.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
+.hidden{display:none!important}
+.toast{position:fixed;right:18px;bottom:18px;background:#102442;color:#fff;padding:12px 16px;border-radius:12px;font-size:11px;opacity:0;transform:translateY(12px);transition:.2s;z-index:200}
+.toast.show{opacity:1;transform:none}
+@media(max-width:1100px){.cards{grid-template-columns:repeat(2,1fr)}.stats{grid-template-columns:repeat(2,1fr)}.toolbar{grid-template-columns:1fr 1fr}}
+@media(max-width:800px){.sidebar{transform:translateX(-100%)}.main{margin-left:0}.cards,.stats,.form-grid{grid-template-columns:1fr}.toolbar{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<aside class="sidebar">
+  <div class="brand"><img src="SANTE-logo.png" alt="SANTE"></div>
+  <div class="sidebar-title">MAIN</div>
+  <nav class="nav">
+    <a href="admin-dashboard.html"><span class="nav-icon">⌂</span>หน้าหลัก</a>
+  </nav>
+  <div class="sidebar-title">TRAINING & LEARNING</div>
+  <nav class="nav">
+    <a href="admin-courses.html"><span class="nav-icon">▤</span>จัดการหลักสูตร</a>
+    <a href="admin-training-registrations.html"><span class="nav-icon">♟</span>ผู้สมัครอบรม</a>
+    <a href="admin-training-sessions.html"><span class="nav-icon">▦</span>รอบการอบรม</a>
+    <a href="admin-question-import.html"><span class="nav-icon">✎</span>คลังข้อสอบ / นำเข้า</a>
+    <a href="admin-exams.html"><span class="nav-icon">✓</span>ข้อสอบและผลสอบ</a>
+    <a href="admin-certificates.html"><span class="nav-icon">▣</span>ใบประกาศนียบัตร</a>
+  </nav>
+  <div class="sidebar-title">SERVICE & FINANCE</div>
+  <nav class="nav">
+    <a href="admin-services.html" class="active"><span class="nav-icon">◆</span>งานบริการ</a>
+    <a href="admin-quotations.html"><span class="nav-icon">▧</span>ใบเสนอราคา</a>
+    <a href="admin-payments.html"><span class="nav-icon">฿</span>การเงิน / การชำระเงิน</a>
+  </nav>
+</aside>
+
+<div class="main">
+<header class="topbar">
+  <div class="search-shell"><span>⌕</span><input id="globalSearch" placeholder="ค้นหาบริการ, ลูกค้า, คำขอ..."></div>
+  <div class="admin-area">
+    <div class="avatar">A</div>
+    <div><div style="font-size:13px;font-weight:600">Admin</div><div id="adminEmail" style="font-size:10px;color:#7b8da2">ผู้ดูแลระบบ</div></div>
+    <button class="logout" id="logoutBtn">ออกจากระบบ</button>
+  </div>
+</header>
+
+<main class="content">
+  <div class="page-head">
+    <div><h1>งานบริการ</h1><p>จัดการรายการบริการ ราคา คำขอบริการ และสถานะงานของ SANTE</p></div>
+    <button class="btn yellow" onclick="openServiceModal()">+ เพิ่มบริการ</button>
+  </div>
+
+  <section class="stats">
+    <div class="stat"><span>บริการทั้งหมด</span><strong id="statServices">0</strong></div>
+    <div class="stat"><span>เปิดใช้งาน</span><strong id="statActive">0</strong></div>
+    <div class="stat"><span>คำขอบริการ</span><strong id="statRequests">0</strong></div>
+    <div class="stat"><span>งานที่กำลังดำเนินการ</span><strong id="statInProgress">0</strong></div>
+  </section>
+
+  <div class="tabs">
+    <button class="tab active" data-tab="catalog" onclick="switchTab('catalog',this)">รายการบริการ</button>
+    <button class="tab" data-tab="requests" onclick="switchTab('requests',this)">คำขอบริการ</button>
+    <button class="tab" data-tab="schedule" onclick="switchTab('schedule',this)">งานและนัดหมาย</button>
+  </div>
+
+  <section id="catalogTab">
+    <div class="panel">
+      <div class="toolbar">
+        <input class="input" id="serviceSearch" placeholder="ค้นหาชื่อบริการ...">
+        <select class="select" id="categoryFilter"><option value="">ทุกหมวดบริการ</option></select>
+        <select class="select" id="statusFilter"><option value="">ทุกสถานะ</option><option value="true">เปิดใช้งาน</option><option value="false">ปิดใช้งาน</option></select>
+        <button class="btn primary" onclick="loadAll()">รีเฟรชข้อมูล</button>
+      </div>
+    </div>
+    <div class="cards" id="serviceCards"></div>
+    <div class="empty hidden" id="serviceEmpty">ยังไม่มีรายการบริการ</div>
+  </section>
+
+  <section id="requestsTab" class="hidden">
+    <div class="panel">
+      <div class="toolbar">
+        <input class="input" id="requestSearch" placeholder="ค้นหาลูกค้า / บริษัท / บริการ...">
+        <select class="select" id="requestStatusFilter">
+          <option value="">ทุกสถานะ</option>
+          <option value="NEW">คำขอใหม่</option>
+          <option value="QUOTING">กำลังทำใบเสนอราคา</option>
+          <option value="QUOTED">ส่งใบเสนอราคาแล้ว</option>
+          <option value="APPROVED">ลูกค้าอนุมัติ</option>
+          <option value="SCHEDULED">นัดหมายแล้ว</option>
+          <option value="IN_PROGRESS">กำลังดำเนินงาน</option>
+          <option value="COMPLETED">เสร็จสิ้น</option>
+          <option value="CANCELLED">ยกเลิก</option>
+        </select>
+        <div></div>
+        <button class="btn primary" onclick="loadAll()">รีเฟรชข้อมูล</button>
+      </div>
+    </div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>เลขคำขอ</th><th>ลูกค้า</th><th>บริการ</th><th>สถานที่</th><th>ผู้ติดต่อ</th><th>วันที่ส่ง</th><th>สถานะ</th><th>จัดการ</th></tr></thead>
+      <tbody id="requestBody"></tbody>
+    </table></div>
+    <div class="empty hidden" id="requestEmpty">ยังไม่มีคำขอบริการ</div>
+  </section>
+
+  <section id="scheduleTab" class="hidden">
+    <div class="panel">
+      <h3 style="margin-top:0">งานและนัดหมาย</h3>
+      <p class="muted">แสดงงานที่อนุมัติแล้วและวันนัดหมายที่ยืนยันกับลูกค้า</p>
+    </div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>เลขงาน</th><th>ลูกค้า</th><th>บริการ</th><th>วันที่ยืนยัน</th><th>สถานที่</th><th>ผู้ติดต่อ</th><th>สถานะ</th></tr></thead>
+      <tbody id="scheduleBody"></tbody>
+    </table></div>
+    <div class="empty hidden" id="scheduleEmpty">ยังไม่มีงานที่นัดหมาย</div>
+  </section>
+</main>
+</div>
+
+<div class="modal-backdrop" id="serviceModal">
+  <div class="modal">
+    <h2 id="serviceModalTitle">เพิ่มบริการ</h2>
+    <div class="form-grid">
+      <div><label>รหัสบริการ</label><input class="input" id="serviceCode" placeholder="เช่น IH-SAFETY-01"></div>
+      <div><label>หมวดบริการ</label><input class="input" id="serviceCategory" placeholder="เช่น อบรม / ตรวจวัด / ที่ปรึกษา"></div>
+      <div class="full"><label>ชื่อบริการ</label><input class="input" id="serviceName" placeholder="ชื่อบริการ"></div>
+      <div class="full"><label>รายละเอียดบริการ</label><textarea id="serviceDescription" rows="4" placeholder="รายละเอียด"></textarea></div>
+      <div><label>รูปแบบราคา</label><select class="select" id="pricingMode"><option value="FIXED">ราคาคงที่</option><option value="PER_PERSON">ต่อคน</option><option value="PER_DAY">ต่อวัน</option><option value="CUSTOM">ประเมินหน้างาน / ใบเสนอราคา</option></select></div>
+      <div><label>ราคาเริ่มต้น (บาท)</label><input class="input" id="basePrice" type="number" min="0" step="0.01"></div>
+      <div><label>หน่วยราคา</label><input class="input" id="priceUnit" placeholder="ครั้ง / คน / วัน"></div>
+      <div><label>VAT</label><select class="select" id="vatRate"><option value="7">7%</option><option value="0">0%</option></select></div>
+      <div><label>WHT เริ่มต้น</label><select class="select" id="whtRate"><option value="3">3%</option><option value="0">0%</option></select></div>
+      <div><label>ลำดับการแสดง</label><input class="input" id="sortOrder" type="number" value="0"></div>
+      <div class="full"><label class="switch"><input type="checkbox" id="isActive" checked> เปิดใช้งานบริการนี้</label></div>
+    </div>
+    <div class="modal-actions"><button class="btn light" onclick="closeServiceModal()">ยกเลิก</button><button class="btn primary" onclick="saveService()">บันทึกบริการ</button></div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="requestModal">
+  <div class="modal">
+    <h2>จัดการคำขอบริการ</h2>
+    <div id="requestDetail"></div>
+    <div class="form-grid" style="margin-top:14px">
+      <div><label>สถานะ</label>
+        <select class="select" id="editRequestStatus">
+          <option value="NEW">คำขอใหม่</option><option value="QUOTING">กำลังทำใบเสนอราคา</option><option value="QUOTED">ส่งใบเสนอราคาแล้ว</option>
+          <option value="APPROVED">ลูกค้าอนุมัติ</option><option value="SCHEDULED">นัดหมายแล้ว</option><option value="IN_PROGRESS">กำลังดำเนินงาน</option>
+          <option value="COMPLETED">เสร็จสิ้น</option><option value="CANCELLED">ยกเลิก</option>
+        </select>
+      </div>
+      <div><label>วันที่ยืนยันเข้าบริการ</label><input class="input" type="date" id="confirmedDate"></div>
+      <div class="full"><label>หมายเหตุ Admin</label><textarea id="adminNote" rows="3"></textarea></div>
+    </div>
+    <div class="modal-actions"><button class="btn light" onclick="closeRequestModal()">ปิด</button><button class="btn primary" onclick="saveRequest()">บันทึก</button></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const SUPABASE_URL="https://cyegjwerxlxhczrfiurz.supabase.co";
+const SUPABASE_KEY="sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF";
+const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{storageKey:"sante-admin-auth",persistSession:true,autoRefreshToken:true}});
+let currentUser=null, services=[], requests=[], editingServiceId=null, editingRequestId=null;
+
+function toast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2200)}
+function money(v){return Number(v||0).toLocaleString("th-TH",{minimumFractionDigits:0,maximumFractionDigits:2})}
+function dt(v){if(!v)return"-";try{return new Intl.DateTimeFormat("th-TH",{dateStyle:"medium",timeStyle:"short"}).format(new Date(v))}catch{return v}}
+function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+
+async function init(){
+  const {data:{session}}=await db.auth.getSession();
+  if(!session){location.href="admin-login.html";return}
+  const {data:isStaff,error}=await db.rpc("is_staff");
+  if(error||!isStaff){await db.auth.signOut();location.href="admin-login.html";return}
+  currentUser=session.user;
+  document.getElementById("adminEmail").textContent=currentUser.email||"ผู้ดูแลระบบ";
+  await loadAll();
+}
+async function loadAll(){
+  const [s,r]=await Promise.all([
+    db.from("services").select("*").order("sort_order",{ascending:true}).order("created_at",{ascending:false}),
+    db.from("service_requests").select("*,services(service_name,service_code)").order("created_at",{ascending:false})
+  ]);
+  if(s.error){console.error(s.error);toast("โหลดรายการบริการไม่สำเร็จ")} else services=s.data||[];
+  if(r.error){console.error(r.error);toast("โหลดคำขอบริการไม่สำเร็จ")} else requests=r.data||[];
+  renderAll();
+}
+function renderAll(){
+  document.getElementById("statServices").textContent=services.length;
+  document.getElementById("statActive").textContent=services.filter(x=>x.is_active).length;
+  document.getElementById("statRequests").textContent=requests.length;
+  document.getElementById("statInProgress").textContent=requests.filter(x=>["APPROVED","SCHEDULED","IN_PROGRESS"].includes(x.status)).length;
+  renderCategories();renderServices();renderRequests();renderSchedule();
+}
+function renderCategories(){
+  const cats=[...new Set(services.map(x=>x.category).filter(Boolean))].sort();
+  const sel=document.getElementById("categoryFilter"),cur=sel.value;
+  sel.innerHTML='<option value="">ทุกหมวดบริการ</option>'+cats.map(c=>`<option>${esc(c)}</option>`).join("");
+  sel.value=cur;
+}
+function renderServices(){
+  const q=document.getElementById("serviceSearch").value.toLowerCase().trim(),cat=document.getElementById("categoryFilter").value,st=document.getElementById("statusFilter").value;
+  const rows=services.filter(x=>(!q||[x.service_name,x.service_code,x.category,x.description].join(" ").toLowerCase().includes(q))&&(!cat||x.category===cat)&&(st===""||String(x.is_active)===st));
+  const box=document.getElementById("serviceCards"),empty=document.getElementById("serviceEmpty");
+  empty.classList.toggle("hidden",!!rows.length);
+  box.innerHTML=rows.map(x=>`<div class="card">
+    <span class="badge ${x.is_active?"green":"gray"}">${x.is_active?"เปิดใช้งาน":"ปิดใช้งาน"}</span>
+    <h3>${esc(x.service_name)}</h3><div class="muted">${esc(x.service_code||"-")} · ${esc(x.category||"-")}</div>
+    <div class="muted">${esc(x.description||"")}</div>
+    <div class="meta-grid">
+      <div class="meta"><span>ราคา</span><strong>${x.pricing_mode==="CUSTOM"?"ตามใบเสนอราคา":money(x.base_price)+" บาท"}</strong></div>
+      <div class="meta"><span>รูปแบบราคา</span><strong>${esc(x.pricing_mode)}</strong></div>
+      <div class="meta"><span>VAT</span><strong>${money(x.vat_rate)}%</strong></div>
+      <div class="meta"><span>WHT</span><strong>${money(x.wht_rate)}%</strong></div>
+    </div>
+    <div class="card-actions"><button class="btn light" onclick="openServiceModal('${x.id}')">แก้ไข</button><button class="btn ${x.is_active?"danger":"primary"}" onclick="toggleService('${x.id}',${!x.is_active})">${x.is_active?"ปิดใช้งาน":"เปิดใช้งาน"}</button></div>
+  </div>`).join("");
+}
+function renderRequests(){
+  const q=document.getElementById("requestSearch")?.value.toLowerCase().trim()||"",st=document.getElementById("requestStatusFilter")?.value||"";
+  const rows=requests.filter(x=>(!q||[x.request_no,x.customer_name,x.organization_name,x.services?.service_name,x.contact_name,x.contact_phone].join(" ").toLowerCase().includes(q))&&(!st||x.status===st));
+  document.getElementById("requestEmpty").classList.toggle("hidden",!!rows.length);
+  document.getElementById("requestBody").innerHTML=rows.map(x=>`<tr>
+    <td><strong>${esc(x.request_no||"-")}</strong></td><td>${esc(x.customer_name||"-")}<div class="muted">${esc(x.organization_name||"")}</div></td>
+    <td>${esc(x.services?.service_name||"-")}</td><td>${esc(x.location_text||"-")}</td>
+    <td>${esc(x.contact_name||"-")}<div class="muted">${esc(x.contact_phone||"")}</div></td><td>${dt(x.created_at)}</td>
+    <td><span class="badge">${esc(x.status||"-")}</span></td><td><button class="btn light" onclick="openRequestModal('${x.id}')">จัดการ</button></td>
+  </tr>`).join("");
+}
+function renderSchedule(){
+  const rows=requests.filter(x=>x.confirmed_service_date||["SCHEDULED","IN_PROGRESS","COMPLETED"].includes(x.status));
+  document.getElementById("scheduleEmpty").classList.toggle("hidden",!!rows.length);
+  document.getElementById("scheduleBody").innerHTML=rows.map(x=>`<tr>
+    <td><strong>${esc(x.request_no||"-")}</strong></td><td>${esc(x.organization_name||x.customer_name||"-")}</td><td>${esc(x.services?.service_name||"-")}</td>
+    <td>${x.confirmed_service_date?new Intl.DateTimeFormat("th-TH",{dateStyle:"long"}).format(new Date(x.confirmed_service_date+"T00:00:00")):"-"}</td>
+    <td>${esc(x.location_text||"-")}</td><td>${esc(x.contact_name||"-")}<div class="muted">${esc(x.contact_phone||"")}</div></td><td><span class="badge">${esc(x.status||"-")}</span></td>
+  </tr>`).join("");
+}
+function switchTab(name,btn){
+  ["catalog","requests","schedule"].forEach(x=>document.getElementById(x+"Tab").classList.toggle("hidden",x!==name));
+  document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));btn.classList.add("active");
+}
+function openServiceModal(id=null){
+  editingServiceId=id;const x=services.find(s=>s.id===id)||{};
+  document.getElementById("serviceModalTitle").textContent=id?"แก้ไขบริการ":"เพิ่มบริการ";
+  serviceCode.value=x.service_code||"";serviceCategory.value=x.category||"";serviceName.value=x.service_name||"";serviceDescription.value=x.description||"";
+  pricingMode.value=x.pricing_mode||"FIXED";basePrice.value=x.base_price??"";priceUnit.value=x.price_unit||"";vatRate.value=String(x.vat_rate??7);whtRate.value=String(x.wht_rate??3);sortOrder.value=x.sort_order??0;isActive.checked=x.is_active!==false;
+  document.getElementById("serviceModal").classList.add("show");
+}
+function closeServiceModal(){document.getElementById("serviceModal").classList.remove("show")}
+async function saveService(){
+  const payload={service_code:serviceCode.value.trim()||null,category:serviceCategory.value.trim()||null,service_name:serviceName.value.trim(),description:serviceDescription.value.trim()||null,pricing_mode:pricingMode.value,base_price:basePrice.value?Number(basePrice.value):null,price_unit:priceUnit.value.trim()||null,vat_rate:Number(vatRate.value),wht_rate:Number(whtRate.value),sort_order:Number(sortOrder.value||0),is_active:isActive.checked,updated_at:new Date().toISOString()};
+  if(!payload.service_name){toast("กรุณากรอกชื่อบริการ");return}
+  let res;
+  if(editingServiceId)res=await db.from("services").update(payload).eq("id",editingServiceId);
+  else res=await db.from("services").insert({...payload,created_by:currentUser.id});
+  if(res.error){alert(res.error.message);return} closeServiceModal();toast("บันทึกบริการแล้ว");await loadAll();
+}
+async function toggleService(id,val){const {error}=await db.from("services").update({is_active:val,updated_at:new Date().toISOString()}).eq("id",id);if(error)alert(error.message);else await loadAll()}
+function openRequestModal(id){
+  editingRequestId=id;const x=requests.find(r=>r.id===id);if(!x)return;
+  document.getElementById("requestDetail").innerHTML=`<div class="panel" style="padding:12px"><strong>${esc(x.request_no||"-")}</strong><div class="muted">${esc(x.organization_name||x.customer_name||"-")} · ${esc(x.services?.service_name||"-")}</div><div style="margin-top:8px;font-size:11px">${esc(x.request_note||"")}</div></div>`;
+  editRequestStatus.value=x.status||"NEW";confirmedDate.value=x.confirmed_service_date||"";adminNote.value=x.admin_note||"";
+  document.getElementById("requestModal").classList.add("show");
+}
+function closeRequestModal(){document.getElementById("requestModal").classList.remove("show")}
+async function saveRequest(){
+  const {error}=await db.from("service_requests").update({status:editRequestStatus.value,confirmed_service_date:confirmedDate.value||null,admin_note:adminNote.value.trim()||null,updated_at:new Date().toISOString(),updated_by:currentUser.id}).eq("id",editingRequestId);
+  if(error){alert(error.message);return}closeRequestModal();toast("บันทึกคำขอแล้ว");await loadAll();
+}
+document.getElementById("logoutBtn").onclick=async()=>{await db.auth.signOut();location.href="admin-login.html"};
+["serviceSearch","categoryFilter","statusFilter"].forEach(id=>document.getElementById(id).addEventListener(id==="serviceSearch"?"input":"change",renderServices));
+["requestSearch","requestStatusFilter"].forEach(id=>document.getElementById(id).addEventListener(id==="requestSearch"?"input":"change",renderRequests));
+document.getElementById("globalSearch").addEventListener("input",e=>{serviceSearch.value=e.target.value;requestSearch.value=e.target.value;renderServices();renderRequests()});
+init();
+</script>
+</body>
+</html>

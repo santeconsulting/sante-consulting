@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SANTE | ขอรับบริการ</title>
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Prompt;background:#f3f7fb;color:#102442}header{height:78px;background:#fff;border-bottom:1px solid #dfe8f0;display:flex;align-items:center;justify-content:space-between;padding:0 7vw}header img{width:72px}.wrap{max-width:1120px;margin:28px auto;padding:0 20px}.hero{background:#0b568e;color:#fff;border-radius:22px;padding:28px;margin-bottom:18px}.hero h1{margin:0 0 8px}.panel{background:#fff;border:1px solid #dce6f0;border-radius:18px;padding:20px;margin-bottom:18px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}label{display:block;font-size:11px;font-weight:600;margin-bottom:5px}input,select,textarea{width:100%;border:1px solid #d5e1ec;border-radius:11px;padding:11px 12px;font:400 12px Prompt}.full{grid-column:1/-1}button{border:0;border-radius:11px;background:#0b4f88;color:#fff;padding:12px 18px;font:600 12px Prompt;cursor:pointer}.service-list{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.service-card{border:1px solid #dce6f0;border-radius:14px;padding:14px;cursor:pointer}.service-card.active{border-color:#ffc83d;background:#fff9e8}.muted{font-size:10px;color:#73879c}@media(max-width:760px){.grid,.service-list{grid-template-columns:1fr}}
+</style></head><body>
+<header><img src="SANTE-logo.png"><strong>SANTE Consulting</strong></header>
+<div class="wrap">
+<div class="hero"><h1>ขอรับบริการจาก SANTE</h1><div>เลือกบริการ กรอกข้อมูลสถานที่ ผู้ติดต่อ และวันที่สะดวก เพื่อให้ทีม SANTE จัดทำใบเสนอราคาและติดต่อกลับ</div></div>
+<div class="panel"><h2>เลือกบริการ</h2><div id="serviceList" class="service-list"></div></div>
+<div class="panel"><h2>ข้อมูลคำขอบริการ</h2><div class="grid">
+<div><label>ชื่อผู้ติดต่อ</label><input id="customerName"></div><div><label>บริษัท / หน่วยงาน</label><input id="organizationName"></div>
+<div><label>อีเมล</label><input id="email" type="email"></div><div><label>โทรศัพท์</label><input id="phone"></div>
+<div class="full"><label>สถานที่ให้บริการ</label><textarea id="locationText" rows="2"></textarea></div>
+<div class="full"><label>ลิงก์ Google Maps / แผนที่</label><input id="mapUrl" placeholder="https://..."></div>
+<div><label>วันที่สะดวก 1</label><input id="date1" type="date"></div><div><label>วันที่สะดวก 2</label><input id="date2" type="date"></div>
+<div><label>วันที่สะดวก 3</label><input id="date3" type="date"></div><div></div>
+<div class="full"><label>รายละเอียด / หมายเหตุ</label><textarea id="note" rows="4"></textarea></div>
+</div><div style="margin-top:14px"><button onclick="submitRequest()">ส่งคำขอบริการ</button></div></div>
+</div>
+<script>
+const db=window.supabase.createClient("https://cyegjwerxlxhczrfiurz.supabase.co","sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF",{auth:{storageKey:"sante-admin-auth",persistSession:true,autoRefreshToken:true}});
+let services=[],selectedServiceId=null,user=null;
+async function init(){const s=await db.auth.getSession();user=s.data.session?.user||null;if(!user){location.href="member-login.html";return}const r=await db.from("services").select("*").eq("is_active",true).order("sort_order");if(r.error){alert(r.error.message);return}services=r.data||[];render();const p=await db.from("profiles").select("*").eq("id",user.id).maybeSingle();const x=p.data||{};customerName.value=[x.title_th,x.firstname_th,x.lastname_th].filter(Boolean).join(" ");email.value=x.email||user.email||"";phone.value=x.phone||"";}
+function render(){serviceList.innerHTML=services.map(x=>`<div class="service-card ${selectedServiceId===x.id?"active":""}" onclick="pick('${x.id}')"><strong>${x.service_name}</strong><div class="muted">${x.category||""}</div><div style="margin-top:8px">${x.pricing_mode==="CUSTOM"?"ขอใบเสนอราคา":Number(x.base_price||0).toLocaleString("th-TH")+" บาท"}</div></div>`).join("")}
+function pick(id){selectedServiceId=id;render()}
+async function submitRequest(){if(!selectedServiceId){alert("กรุณาเลือกบริการ");return}if(!customerName.value.trim()||!organizationName.value.trim()||!phone.value.trim()){alert("กรุณากรอกชื่อ บริษัท/หน่วยงาน และโทรศัพท์");return}
+const payload={user_id:user.id,service_id:selectedServiceId,customer_name:customerName.value.trim(),organization_name:organizationName.value.trim(),email:email.value.trim()||user.email,phone:phone.value.trim(),contact_name:customerName.value.trim(),contact_phone:phone.value.trim(),location_text:locationText.value.trim()||null,map_url:mapUrl.value.trim()||null,preferred_dates:[date1.value,date2.value,date3.value].filter(Boolean),request_note:note.value.trim()||null,status:"NEW"};
+const r=await db.from("service_requests").insert(payload).select("request_no").single();if(r.error){alert(r.error.message);return}alert("ส่งคำขอบริการเรียบร้อย\nเลขคำขอ: "+(r.data.request_no||"-"));location.href="member-home.html";}
+init();
+</script></body></html>
