@@ -2,8 +2,8 @@
 <html lang="th">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
-<title>SANTE Admin | Dashboard</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>SANTE Admin | แดชบอร์ด</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,320 +13,534 @@
 
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
+
 :root{
   --navy:#082d69;
-  --navy2:#061f4b;
+  --navy-dark:#061f4b;
+  --navy-soft:#0d4386;
   --yellow:#ffbf19;
+  --yellow-soft:#fff4cf;
   --blue:#087df0;
-  --green:#188d49;
+  --green:#159447;
   --red:#b42318;
-  --bg:#f2f8fc;
+  --bg:#f1f7fb;
   --white:#fff;
   --text:#082d69;
-  --muted:#7084a4;
-  --line:#dbe7f1;
-  --sidebar:270px;
+  --muted:#6f83a2;
+  --line:#d9e5ef;
+  --sidebar:285px;
 }
-html,body{width:100%;min-height:100%}
+
+html,body{
+  width:100%;
+  min-height:100%;
+}
+
 body{
   font-family:"Prompt",sans-serif;
-  background:var(--bg);
   color:var(--text);
+  background:var(--bg);
+  font-size:16px;
+  -webkit-font-smoothing:antialiased;
 }
-button,input{font-family:"Prompt",sans-serif}
-a{text-decoration:none;color:inherit}
 
-/* SIDEBAR */
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+button,input{
+  font-family:"Prompt",sans-serif;
+}
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
 .sidebar{
   position:fixed;
-  inset:0 auto 0 0;
-  width:var(--sidebar);
-  background:linear-gradient(180deg,#082d69 0%,#061f4b 100%);
-  color:#fff;
+  left:0;
+  top:0;
+  bottom:0;
   z-index:300;
+  width:var(--sidebar);
+  display:flex;
+  flex-direction:column;
+  background:
+    linear-gradient(
+      180deg,
+      #082d69 0%,
+      #06265c 55%,
+      #061f4b 100%
+    );
+  color:#fff;
   overflow-y:auto;
 }
+
 .sidebar-brand{
-  height:98px;
+  min-height:128px;
   display:flex;
   align-items:center;
-  padding:15px 24px;
-  border-bottom:1px solid rgba(255,255,255,.09);
+  justify-content:center;
+  padding:22px 25px;
+  border-bottom:1px solid rgba(255,255,255,.10);
 }
+
 .sidebar-brand img{
-  width:170px;
-  max-height:67px;
+  display:block;
+  width:190px;
+  max-width:100%;
+  height:82px;
   object-fit:contain;
-  object-position:left center;
-  filter:brightness(0) invert(1);
 }
-.sidebar-title{
-  padding:22px 23px 8px;
-  font-size:10px;
-  letter-spacing:1.2px;
-  color:#94acd1;
+
+.sidebar-label{
+  padding:26px 25px 10px;
+  color:#9bb1d0;
+  font-size:12px;
+  font-weight:500;
+  letter-spacing:1.7px;
 }
-.nav{padding:0 13px 28px}
+
+.nav{
+  padding:0 15px 25px;
+}
+
 .nav-link{
-  min-height:50px;
-  margin:4px 0;
-  padding:0 15px;
-  border-radius:14px;
+  min-height:58px;
   display:flex;
   align-items:center;
-  gap:12px;
-  color:#dbe8fa;
-  font-size:13px;
-  font-weight:400;
-  transition:.15s;
+  gap:14px;
+  margin:5px 0;
+  padding:0 17px;
+  border-radius:16px;
+  color:#e4edfa;
+  font-size:15px;
+  font-weight:500;
+  transition:.18s ease;
 }
-.nav-link:hover{background:rgba(255,255,255,.08);color:#fff}
+
+.nav-link:hover{
+  background:rgba(255,255,255,.08);
+  color:#fff;
+}
+
 .nav-link.active{
   background:var(--yellow);
   color:var(--navy);
   font-weight:600;
-}
-.nav-icon{
-  width:27px;
-  text-align:center;
-  font-size:18px;
-}
-.sidebar-bottom{
-  margin:15px 14px 25px;
-  padding:15px;
-  border-radius:15px;
-  background:rgba(255,255,255,.07);
-}
-.sidebar-bottom strong{font-size:12px}
-.sidebar-bottom p{
-  margin-top:4px;
-  color:#aac0df;
-  font-size:10px;
-  line-height:1.6;
+  box-shadow:0 7px 18px rgba(0,0,0,.10);
 }
 
-/* MAIN */
-.main{
-  margin-left:var(--sidebar);
-  min-height:100vh;
+.nav-icon{
+  width:29px;
+  flex:0 0 29px;
+  display:grid;
+  place-items:center;
+  font-size:21px;
+  line-height:1;
 }
+
+.sidebar-footer{
+  margin:auto 15px 22px;
+  padding:18px;
+  border-radius:17px;
+  background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.05);
+}
+
+.sidebar-footer strong{
+  display:block;
+  font-size:13px;
+  font-weight:600;
+}
+
+.sidebar-footer p{
+  margin-top:6px;
+  color:#b6c8e2;
+  font-size:11px;
+  line-height:1.65;
+}
+
+/* =========================================================
+   MAIN / TOPBAR
+========================================================= */
+
+.main{
+  min-height:100vh;
+  margin-left:var(--sidebar);
+}
+
 .topbar{
-  height:78px;
   position:sticky;
   top:0;
   z-index:200;
+  height:88px;
   display:flex;
   align-items:center;
   justify-content:space-between;
-  gap:20px;
-  padding:0 30px;
-  background:rgba(255,255,255,.96);
-  border-bottom:1px solid #e4edf5;
+  gap:24px;
+  padding:0 34px;
+  background:rgba(255,255,255,.97);
+  border-bottom:1px solid #e2ebf3;
+  box-shadow:0 3px 14px rgba(8,45,105,.025);
 }
+
 .topbar-left{
   display:flex;
   align-items:center;
-  gap:13px;
+  gap:14px;
 }
+
+.page-name{
+  font-size:21px;
+  line-height:1.3;
+  font-weight:600;
+}
+
+.page-sub{
+  margin-top:4px;
+  color:var(--muted);
+  font-size:12px;
+}
+
 .mobile-menu{
   display:none;
-  width:42px;
-  height:42px;
+  width:44px;
+  height:44px;
   border:1px solid var(--line);
-  border-radius:11px;
+  border-radius:12px;
   background:#fff;
   color:var(--navy);
-  font-size:20px;
+  font-size:21px;
   cursor:pointer;
 }
-.page-name{font-size:19px;font-weight:600}
-.page-sub{font-size:11px;color:var(--muted);margin-top:2px}
+
 .admin-area{
   display:flex;
   align-items:center;
-  gap:12px;
+  gap:17px;
 }
-.admin-copy{text-align:right}
-.admin-name{font-size:13px;font-weight:600}
-.admin-email{font-size:10px;color:var(--muted)}
+
+.admin-copy{
+  text-align:right;
+}
+
+.admin-name{
+  font-size:15px;
+  font-weight:600;
+}
+
+.admin-email{
+  margin-top:2px;
+  color:var(--muted);
+  font-size:11px;
+}
+
 .logout{
-  min-height:40px;
-  padding:0 14px;
+  min-height:46px;
+  padding:0 18px;
   border:1px solid var(--line);
-  border-radius:10px;
+  border-radius:12px;
   background:#fff;
   color:var(--navy);
-  font-size:11px;
+  font-size:13px;
   font-weight:600;
   cursor:pointer;
 }
-.content{
-  width:min(1480px,calc(100% - 52px));
-  margin:0 auto;
-  padding:26px 0 60px;
+
+.logout:hover{
+  background:#f6faff;
 }
 
-/* HERO */
+.content{
+  width:min(1540px,calc(100% - 58px));
+  margin:0 auto;
+  padding:30px 0 65px;
+}
+
+/* =========================================================
+   HERO
+========================================================= */
+
 .dashboard-hero{
   position:relative;
   width:100%;
-  min-height:300px;
+  min-height:320px;
   overflow:hidden;
   border-radius:25px;
   background:#fff;
-  box-shadow:0 10px 30px rgba(8,45,105,.08);
+  box-shadow:0 10px 28px rgba(8,45,105,.08);
 }
-.dashboard-hero-picture,
+
+.dashboard-hero-picture{
+  position:absolute;
+  inset:0;
+  display:block;
+}
+
 .dashboard-hero-image{
   display:block;
   width:100%;
   height:100%;
-}
-.dashboard-hero-picture{
-  position:absolute;
-  inset:0;
-}
-.dashboard-hero-image{
   object-fit:cover;
   object-position:center;
 }
+
 .dashboard-hero-content{
   position:relative;
   z-index:2;
-  width:47%;
-  min-height:300px;
-  padding:42px 20px 35px 45px;
+  width:48%;
+  min-height:320px;
   display:flex;
   flex-direction:column;
   justify-content:center;
+  padding:38px 20px 38px 48px;
 }
+
 .system-badge{
   width:max-content;
-  display:flex;
+  display:inline-flex;
   align-items:center;
-  gap:7px;
-  padding:6px 11px;
+  gap:8px;
+  padding:7px 13px;
   border-radius:999px;
-  background:rgba(255,255,255,.92);
+  background:rgba(255,255,255,.94);
   color:var(--blue);
-  font-size:10px;
+  font-size:11px;
   font-weight:700;
   box-shadow:0 3px 12px rgba(8,45,105,.08);
 }
+
 .system-dot{
-  width:7px;height:7px;border-radius:50%;
-  background:var(--green);
-}
-.dashboard-hero h1{
-  margin-top:14px;
-  font-size:29px;
-  line-height:1.35;
-  font-weight:500;
-}
-.dashboard-hero h1 strong{display:block;font-size:36px}
-.dashboard-hero p{
-  max-width:600px;
-  margin-top:9px;
-  color:#506987;
-  font-size:12px;
-  line-height:1.75;
-}
-.dashboard-date{
-  margin-top:15px;
-  font-size:11px;
-  color:#5f7592;
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:#1cad5a;
 }
 
-/* SECTIONS */
+.dashboard-hero h1{
+  margin-top:15px;
+  font-size:31px;
+  line-height:1.25;
+  font-weight:500;
+}
+
+.dashboard-hero h1 strong{
+  display:block;
+  margin-top:2px;
+  font-size:42px;
+  line-height:1.18;
+  font-weight:700;
+}
+
+.dashboard-hero p{
+  max-width:650px;
+  margin-top:12px;
+  color:#506987;
+  font-size:13px;
+  line-height:1.75;
+}
+
+.dashboard-date{
+  margin-top:17px;
+  color:#58708f;
+  font-size:12px;
+  font-weight:500;
+}
+
+/* =========================================================
+   SECTION
+========================================================= */
+
 .section-head{
   display:flex;
-  justify-content:space-between;
   align-items:flex-end;
+  justify-content:space-between;
   gap:20px;
-  margin:29px 4px 14px;
+  margin:34px 4px 17px;
 }
-.section-head h2{font-size:20px}
-.section-head p{font-size:11px;color:var(--muted);margin-top:3px}
+
+.section-head h2{
+  font-size:24px;
+  line-height:1.35;
+  font-weight:600;
+}
+
+.section-head p{
+  margin-top:5px;
+  color:var(--muted);
+  font-size:12px;
+}
+
+/* =========================================================
+   STATS
+========================================================= */
 
 .stats{
   display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:14px;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:17px;
 }
+
 .stat{
+  min-height:145px;
+  padding:22px;
   background:#fff;
   border:1px solid var(--line);
-  border-radius:18px;
-  padding:19px;
+  border-radius:20px;
   box-shadow:0 6px 18px rgba(8,45,105,.035);
 }
+
 .stat-top{
-  display:flex;
-  justify-content:space-between;
-  gap:10px;
-  align-items:center;
-}
-.stat-icon{
-  width:43px;height:43px;
-  border-radius:13px;
-  display:grid;place-items:center;
-  background:#eaf4ff;
-  font-size:20px;
-}
-.stat-label{font-size:11px;color:var(--muted)}
-.stat-value{font-size:26px;font-weight:700;margin-top:6px}
-.stat-note{font-size:10px;color:#8799af;margin-top:3px}
-
-.management{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:14px;
-}
-.manage-card{
-  min-height:135px;
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between;
-  padding:20px;
-  border-radius:18px;
-  background:#fff;
-  border:1px solid var(--line);
-  transition:.15s;
-}
-.manage-card:hover{
-  transform:translateY(-2px);
-  box-shadow:0 10px 25px rgba(8,45,105,.08);
-}
-.manage-icon{font-size:25px}
-.manage-card h3{margin-top:11px;font-size:14px}
-.manage-card p{margin-top:4px;font-size:10px;color:var(--muted)}
-.manage-action{margin-top:12px;font-size:10px;color:var(--blue);font-weight:600}
-
-.panel-grid{
-  display:grid;
-  grid-template-columns:1.5fr 1fr;
-  gap:14px;
-}
-.panel{
-  background:#fff;
-  border:1px solid var(--line);
-  border-radius:18px;
-  padding:21px;
-}
-.panel h3{font-size:15px}
-.panel p{font-size:10px;color:var(--muted);margin-top:3px}
-.quick-list{margin-top:16px;display:grid;gap:9px}
-.quick-item{
   display:flex;
   align-items:center;
   justify-content:space-between;
   gap:12px;
-  padding:12px 13px;
-  border-radius:12px;
-  background:#f5f9fc;
+}
+
+.stat-icon{
+  width:50px;
+  height:50px;
+  display:grid;
+  place-items:center;
+  border-radius:15px;
+  background:#eaf4ff;
+  color:var(--navy);
+  font-size:23px;
+}
+
+.stat-label{
+  color:var(--muted);
+  font-size:13px;
+  font-weight:500;
+}
+
+.stat-value{
+  margin-top:10px;
+  font-size:34px;
+  line-height:1;
+  font-weight:700;
+}
+
+.stat-note{
+  margin-top:8px;
+  color:#8496ad;
   font-size:11px;
 }
-.quick-item span:last-child{font-weight:600;color:var(--blue)}
+
+/* =========================================================
+   MANAGEMENT
+========================================================= */
+
+.management{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:17px;
+}
+
+.manage-card{
+  min-height:165px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  padding:23px;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:20px;
+  box-shadow:0 5px 15px rgba(8,45,105,.025);
+  transition:.18s ease;
+}
+
+.manage-card:hover{
+  transform:translateY(-2px);
+  box-shadow:0 12px 28px rgba(8,45,105,.08);
+}
+
+.manage-icon{
+  width:49px;
+  height:49px;
+  display:grid;
+  place-items:center;
+  border-radius:15px;
+  background:#edf6ff;
+  font-size:23px;
+}
+
+.manage-card h3{
+  margin-top:14px;
+  font-size:16px;
+  font-weight:600;
+}
+
+.manage-card p{
+  margin-top:5px;
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.6;
+}
+
+.manage-action{
+  margin-top:16px;
+  color:var(--blue);
+  font-size:11px;
+  font-weight:600;
+}
+
+/* =========================================================
+   LOWER PANELS
+========================================================= */
+
+.panel-grid{
+  display:grid;
+  grid-template-columns:1.45fr 1fr;
+  gap:17px;
+}
+
+.panel{
+  padding:24px;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:20px;
+}
+
+.panel h3{
+  font-size:17px;
+  font-weight:600;
+}
+
+.panel>p{
+  margin-top:4px;
+  color:var(--muted);
+  font-size:11px;
+}
+
+.quick-list{
+  display:grid;
+  gap:10px;
+  margin-top:18px;
+}
+
+.quick-item{
+  min-height:49px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  padding:0 15px;
+  border-radius:12px;
+  background:#f5f9fc;
+  font-size:12px;
+}
+
+.quick-item span:last-child{
+  color:var(--blue);
+  font-weight:600;
+}
+
+/* =========================================================
+   LOADING
+========================================================= */
 
 .loading-screen{
   position:fixed;
@@ -337,122 +551,343 @@ a{text-decoration:none;color:inherit}
   justify-content:center;
   background:#f4f9fd;
   color:var(--navy);
-  font-size:14px;
+  font-size:15px;
 }
-.overlay{display:none}
 
-/* RESPONSIVE */
-@media(max-width:1180px){
-  .stats,.management{grid-template-columns:repeat(2,1fr)}
-  .dashboard-hero-content{width:55%}
+.overlay{
+  display:none;
 }
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media(max-width:1200px){
+
+  :root{
+    --sidebar:255px;
+  }
+
+  .stats,
+  .management{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+
+  .dashboard-hero-content{
+    width:56%;
+  }
+}
+
+/* =========================================================
+   MOBILE SIDEBAR
+========================================================= */
+
 @media(max-width:900px){
+
   .sidebar{
+    width:285px;
     transform:translateX(-100%);
-    transition:.2s;
+    transition:.2s ease;
   }
-  .sidebar.open{transform:translateX(0)}
-  .main{margin-left:0}
-  .mobile-menu{display:block}
+
+  .sidebar.open{
+    transform:translateX(0);
+  }
+
+  .main{
+    margin-left:0;
+  }
+
+  .mobile-menu{
+    display:block;
+  }
+
   .overlay{
-    position:fixed;inset:0;
-    background:rgba(3,20,48,.45);
+    position:fixed;
+    inset:0;
     z-index:250;
+    background:rgba(3,20,48,.48);
   }
-  .overlay.show{display:block}
-  .dashboard-hero-content{width:58%}
-  .panel-grid{grid-template-columns:1fr}
+
+  .overlay.show{
+    display:block;
+  }
+
+  .panel-grid{
+    grid-template-columns:1fr;
+  }
 }
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
 @media(max-width:767px){
-  .topbar{height:64px;padding:0 12px}
-  .page-name{font-size:15px}
-  .page-sub,.admin-copy{display:none}
-  .logout{padding:0 10px;min-height:38px}
-  .content{width:100%;padding:12px 12px 40px}
-  .dashboard-hero{
-    min-height:350px;
-    border-radius:19px;
+
+  body{
+    font-size:15px;
   }
+
+  .topbar{
+    height:68px;
+    padding:0 12px;
+  }
+
+  .page-name{
+    font-size:16px;
+  }
+
+  .page-sub,
+  .admin-copy{
+    display:none;
+  }
+
+  .logout{
+    min-height:40px;
+    padding:0 11px;
+    font-size:11px;
+  }
+
+  .content{
+    width:100%;
+    padding:12px 12px 42px;
+  }
+
+  .dashboard-hero{
+    min-height:410px;
+    border-radius:20px;
+  }
+
   .dashboard-hero-content{
     width:100%;
-    min-height:350px;
-    padding:24px 20px;
+    min-height:410px;
     justify-content:flex-end;
-    background:linear-gradient(180deg,transparent 30%,rgba(255,255,255,.94) 72%,#fff 100%);
+    padding:25px 21px;
+    background:
+      linear-gradient(
+        180deg,
+        rgba(255,255,255,0) 32%,
+        rgba(255,255,255,.72) 59%,
+        rgba(255,255,255,.97) 78%,
+        #fff 100%
+      );
   }
-  .dashboard-hero h1{font-size:21px}
-  .dashboard-hero h1 strong{font-size:27px}
-  .dashboard-hero p{font-size:10px;max-width:95%}
-  .stats,.management{grid-template-columns:1fr 1fr;gap:9px}
-  .stat,.manage-card{padding:15px;border-radius:15px}
-  .stat-value{font-size:22px}
-  .manage-card{min-height:125px}
+
+  .dashboard-hero h1{
+    font-size:22px;
+  }
+
+  .dashboard-hero h1 strong{
+    font-size:30px;
+  }
+
+  .dashboard-hero p{
+    max-width:100%;
+    font-size:11px;
+    line-height:1.6;
+  }
+
+  .dashboard-date{
+    font-size:10px;
+  }
+
+  .section-head{
+    margin:27px 3px 14px;
+  }
+
+  .section-head h2{
+    font-size:20px;
+  }
+
+  .section-head p{
+    font-size:10px;
+  }
+
+  .stats{
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+  }
+
+  .stat{
+    min-height:135px;
+    padding:16px;
+    border-radius:17px;
+  }
+
+  .stat-icon{
+    width:43px;
+    height:43px;
+    font-size:19px;
+  }
+
+  .stat-label{
+    font-size:10px;
+  }
+
+  .stat-value{
+    font-size:27px;
+  }
+
+  .stat-note{
+    font-size:9px;
+  }
+
+  .management{
+    grid-template-columns:1fr;
+    gap:10px;
+  }
+
+  .manage-card{
+    min-height:140px;
+    padding:18px;
+    border-radius:17px;
+  }
+
+  .panel{
+    padding:18px;
+    border-radius:17px;
+  }
 }
-@media(max-width:460px){
-  .stats,.management{grid-template-columns:1fr}
+
+@media(max-width:420px){
+
+  .stats{
+    grid-template-columns:1fr;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<div id="loadingScreen" class="loading-screen">กำลังตรวจสอบสิทธิ์ผู้ดูแลระบบ...</div>
+<div id="loadingScreen" class="loading-screen">
+  กำลังตรวจสอบสิทธิ์ผู้ดูแลระบบ...
+</div>
+
 <div id="overlay" class="overlay"></div>
 
 <aside id="sidebar" class="sidebar">
+
   <div class="sidebar-brand">
-    <img src="sante%20(en)-logo.png" alt="SANTE">
+    <img src="sante%20(en)-logo.png" alt="SANTE Consulting">
   </div>
 
-  <div class="sidebar-title">SANTE ADMIN</div>
+  <div class="sidebar-label">SANTE ADMIN</div>
 
   <nav class="nav">
-    <a href="admin.html" class="nav-link active"><span class="nav-icon">⌂</span>แดชบอร์ด</a>
-    <a href="admin-courses.html" class="nav-link"><span class="nav-icon">▤</span>หลักสูตร</a>
-    <a href="admin-training-sessions.html" class="nav-link"><span class="nav-icon">◫</span>รอบอบรม</a>
-    <a href="admin-exams.html" class="nav-link"><span class="nav-icon">✓</span>ข้อสอบ</a>
-    <a href="admin-question-import.html" class="nav-link"><span class="nav-icon">⇧</span>นำเข้าข้อสอบ</a>
-    <a href="admin-payments.html" class="nav-link"><span class="nav-icon">฿</span>การชำระเงิน</a>
-    <a href="#" class="nav-link"><span class="nav-icon">♙</span>สมาชิก</a>
-    <a href="#" class="nav-link"><span class="nav-icon">▣</span>งานบริการ</a>
-    <a href="#" class="nav-link"><span class="nav-icon">▧</span>เอกสาร</a>
+
+    <a href="admin.html" class="nav-link active">
+      <span class="nav-icon">⌂</span>
+      <span>แดชบอร์ด</span>
+    </a>
+
+    <a href="admin-courses.html" class="nav-link">
+      <span class="nav-icon">▤</span>
+      <span>หลักสูตร</span>
+    </a>
+
+    <a href="admin-training-sessions.html" class="nav-link">
+      <span class="nav-icon">◫</span>
+      <span>รอบอบรม</span>
+    </a>
+
+    <a href="admin-exams.html" class="nav-link">
+      <span class="nav-icon">✓</span>
+      <span>ข้อสอบ</span>
+    </a>
+
+    <a href="admin-question-import.html" class="nav-link">
+      <span class="nav-icon">⇧</span>
+      <span>นำเข้าข้อสอบ</span>
+    </a>
+
+    <a href="admin-payments.html" class="nav-link">
+      <span class="nav-icon">฿</span>
+      <span>การชำระเงิน</span>
+    </a>
+
+    <a href="#" class="nav-link">
+      <span class="nav-icon">♙</span>
+      <span>สมาชิก</span>
+    </a>
+
+    <a href="#" class="nav-link">
+      <span class="nav-icon">▣</span>
+      <span>งานบริการ</span>
+    </a>
+
+    <a href="#" class="nav-link">
+      <span class="nav-icon">▧</span>
+      <span>เอกสาร</span>
+    </a>
+
   </nav>
 
-  <div class="sidebar-bottom">
+  <div class="sidebar-footer">
     <strong>SANTE SYSTEM</strong>
-    <p>ระบบบริหารจัดการภายใน<br>SANTE Consulting</p>
+    <p>
+      ระบบบริหารจัดการภายใน<br>
+      SANTE Consulting
+    </p>
   </div>
+
 </aside>
 
 <div class="main">
 
 <header class="topbar">
+
   <div class="topbar-left">
-    <button id="menuButton" class="mobile-menu">☰</button>
+
+    <button id="menuButton" class="mobile-menu">
+      ☰
+    </button>
+
     <div>
       <div class="page-name">แดชบอร์ด</div>
       <div class="page-sub">ภาพรวมระบบ SANTE</div>
     </div>
+
   </div>
 
   <div class="admin-area">
+
     <div class="admin-copy">
-      <div id="adminName" class="admin-name">ผู้ดูแลระบบ</div>
+      <div id="adminName" class="admin-name">
+        ผู้ดูแลระบบ SANTE
+      </div>
       <div id="adminEmail" class="admin-email"></div>
     </div>
-    <button id="logoutButton" class="logout">ออกจากระบบ</button>
+
+    <button id="logoutButton" class="logout">
+      ออกจากระบบ
+    </button>
+
   </div>
+
 </header>
 
 <main class="content">
 
 <section class="dashboard-hero">
+
   <picture class="dashboard-hero-picture">
-    <source media="(max-width:767px)" srcset="sante-dashboard-hero-mobile.png">
-    <img src="sante-dashboard-hero-desktop.png" alt="SANTE Admin" class="dashboard-hero-image">
+
+    <source
+      media="(max-width:767px)"
+      srcset="sante-dashboard-hero-mobile.png"
+    >
+
+    <img
+      src="sante-dashboard-hero-desktop.png"
+      alt="SANTE Admin"
+      class="dashboard-hero-image"
+    >
+
   </picture>
 
   <div class="dashboard-hero-content">
+
     <div class="system-badge">
       <span class="system-dot"></span>
       SANTE SYSTEM
@@ -468,8 +903,13 @@ a{text-decoration:none;color:inherit}
       งานบริการ และเอกสารของ SANTE ในพื้นที่เดียว
     </p>
 
-    <div class="dashboard-date" id="dashboardDate"></div>
+    <div
+      class="dashboard-date"
+      id="dashboardDate"
+    ></div>
+
   </div>
+
 </section>
 
 <div class="section-head">
@@ -480,103 +920,206 @@ a{text-decoration:none;color:inherit}
 </div>
 
 <section class="stats">
+
   <div class="stat">
-    <div class="stat-top"><div class="stat-icon">▤</div><div class="stat-label">หลักสูตร</div></div>
+
+    <div class="stat-top">
+      <div class="stat-icon">▤</div>
+      <div class="stat-label">หลักสูตร</div>
+    </div>
+
     <div id="courseCount" class="stat-value">–</div>
     <div class="stat-note">หลักสูตรในระบบ</div>
+
   </div>
 
   <div class="stat">
-    <div class="stat-top"><div class="stat-icon">◫</div><div class="stat-label">รอบอบรม</div></div>
+
+    <div class="stat-top">
+      <div class="stat-icon">◫</div>
+      <div class="stat-label">รอบอบรม</div>
+    </div>
+
     <div id="sessionCount" class="stat-value">–</div>
     <div class="stat-note">รอบอบรมทั้งหมด</div>
+
   </div>
 
   <div class="stat">
-    <div class="stat-top"><div class="stat-icon">♙</div><div class="stat-label">สมาชิก</div></div>
+
+    <div class="stat-top">
+      <div class="stat-icon">♙</div>
+      <div class="stat-label">สมาชิก</div>
+    </div>
+
     <div id="memberCount" class="stat-value">–</div>
     <div class="stat-note">บัญชีสมาชิก</div>
+
   </div>
 
   <div class="stat">
-    <div class="stat-top"><div class="stat-icon">฿</div><div class="stat-label">รอตรวจสอบ</div></div>
+
+    <div class="stat-top">
+      <div class="stat-icon">฿</div>
+      <div class="stat-label">รอตรวจสอบ</div>
+    </div>
+
     <div id="paymentCount" class="stat-value">–</div>
     <div class="stat-note">หลักฐานการชำระเงิน</div>
+
   </div>
+
 </section>
 
 <div class="section-head">
   <div>
-    <h2>จัดการระบบ</h2>
+    <h2>เมนูจัดการด่วน</h2>
     <p>เข้าสู่ส่วนงานที่ใช้งานบ่อย</p>
   </div>
 </div>
 
 <section class="management">
-  <a href="admin-courses.html" class="manage-card">
-    <div><div class="manage-icon">📚</div><h3>หลักสูตร</h3><p>สร้างและจัดการหลักสูตร</p></div>
-    <div class="manage-action">จัดการหลักสูตร →</div>
+
+  <a
+    href="admin-courses.html"
+    class="manage-card"
+  >
+    <div>
+      <div class="manage-icon">📚</div>
+      <h3>จัดการหลักสูตร</h3>
+      <p>สร้าง แก้ไข และจัดการหลักสูตร</p>
+    </div>
+
+    <div class="manage-action">
+      จัดการหลักสูตร →
+    </div>
   </a>
 
-  <a href="admin-training-sessions.html" class="manage-card">
-    <div><div class="manage-icon">📅</div><h3>รอบอบรม</h3><p>วันอบรม ราคา และจำนวนที่นั่ง</p></div>
-    <div class="manage-action">จัดการรอบอบรม →</div>
+  <a
+    href="admin-training-sessions.html"
+    class="manage-card"
+  >
+    <div>
+      <div class="manage-icon">📅</div>
+      <h3>จัดการรอบอบรม</h3>
+      <p>วันอบรม ราคา และจำนวนที่นั่ง</p>
+    </div>
+
+    <div class="manage-action">
+      จัดการรอบอบรม →
+    </div>
   </a>
 
-  <a href="admin-exams.html" class="manage-card">
-    <div><div class="manage-icon">📝</div><h3>ข้อสอบ</h3><p>ชุดข้อสอบและเกณฑ์การสอบ</p></div>
-    <div class="manage-action">จัดการข้อสอบ →</div>
+  <a
+    href="admin-exams.html"
+    class="manage-card"
+  >
+    <div>
+      <div class="manage-icon">📝</div>
+      <h3>จัดการข้อสอบ</h3>
+      <p>ชุดข้อสอบ เกณฑ์ และการทดสอบ</p>
+    </div>
+
+    <div class="manage-action">
+      จัดการข้อสอบ →
+    </div>
   </a>
 
-  <a href="admin-payments.html" class="manage-card">
-    <div><div class="manage-icon">💳</div><h3>การชำระเงิน</h3><p>ตรวจสอบหลักฐานและยืนยันการชำระเงิน</p></div>
-    <div class="manage-action">ตรวจสอบการชำระเงิน →</div>
+  <a
+    href="admin-payments.html"
+    class="manage-card"
+  >
+    <div>
+      <div class="manage-icon">💳</div>
+      <h3>การชำระเงิน</h3>
+      <p>ตรวจสอบหลักฐานและยืนยันการชำระเงิน</p>
+    </div>
+
+    <div class="manage-action">
+      ตรวจสอบการชำระเงิน →
+    </div>
   </a>
+
 </section>
 
 <div class="section-head">
   <div>
     <h2>สถานะระบบ</h2>
-    <p>ทางลัดสำหรับงานสำคัญ</p>
+    <p>งานสำคัญที่สามารถดำเนินการได้ทันที</p>
   </div>
 </div>
 
 <section class="panel-grid">
+
   <div class="panel">
+
     <h3>งานที่ต้องดำเนินการ</h3>
-    <p>รายการที่ควรตรวจสอบจาก Dashboard</p>
+    <p>รายการสำคัญจาก Dashboard</p>
+
     <div class="quick-list">
-      <a href="admin-payments.html" class="quick-item">
+
+      <a
+        href="admin-payments.html"
+        class="quick-item"
+      >
         <span>หลักฐานการชำระเงินที่รอตรวจสอบ</span>
-        <span id="paymentQuick">ดูรายการ →</span>
+        <span>ดูรายการ →</span>
       </a>
-      <a href="admin-training-sessions.html" class="quick-item">
-        <span>จัดการรอบอบรม</span><span>เปิด →</span>
+
+      <a
+        href="admin-training-sessions.html"
+        class="quick-item"
+      >
+        <span>จัดการรอบอบรม</span>
+        <span>เปิด →</span>
       </a>
-      <a href="admin-question-import.html" class="quick-item">
-        <span>นำเข้าข้อสอบ</span><span>เปิด →</span>
+
+      <a
+        href="admin-question-import.html"
+        class="quick-item"
+      >
+        <span>นำเข้าข้อสอบ</span>
+        <span>เปิด →</span>
       </a>
+
     </div>
+
   </div>
 
   <div class="panel">
+
     <h3>SANTE Admin</h3>
-    <p>ระบบผู้ดูแลสำหรับการบริหารงาน SANTE</p>
+    <p>ระบบบริหารจัดการภายใน SANTE</p>
+
     <div class="quick-list">
-      <div class="quick-item"><span>สถานะระบบ</span><span>พร้อมใช้งาน</span></div>
-      <div class="quick-item"><span>สิทธิ์ปัจจุบัน</span><span>ผู้ดูแลระบบ</span></div>
+
+      <div class="quick-item">
+        <span>สถานะระบบ</span>
+        <span>พร้อมใช้งาน</span>
+      </div>
+
+      <div class="quick-item">
+        <span>สิทธิ์ปัจจุบัน</span>
+        <span>ผู้ดูแลระบบ</span>
+      </div>
+
     </div>
+
   </div>
+
 </section>
 
 </main>
 </div>
 
 <script>
-const SUPABASE_URL="https://cyegjwerxlxhczrfiurz.supabase.co";
-const SUPABASE_KEY="sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF";
+const SUPABASE_URL =
+  "https://cyegjwerxlxhczrfiurz.supabase.co";
 
-const db=supabase.createClient(
+const SUPABASE_KEY =
+  "sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF";
+
+const db = supabase.createClient(
   SUPABASE_URL,
   SUPABASE_KEY,
   {
@@ -589,77 +1132,251 @@ const db=supabase.createClient(
   }
 );
 
-const loadingScreen=document.getElementById("loadingScreen");
-const sidebar=document.getElementById("sidebar");
-const overlay=document.getElementById("overlay");
+const loadingScreen =
+  document.getElementById("loadingScreen");
 
-document.getElementById("menuButton").onclick=()=>{
-  sidebar.classList.add("open");
-  overlay.classList.add("show");
-};
+const sidebar =
+  document.getElementById("sidebar");
 
-overlay.onclick=()=>{
+const overlay =
+  document.getElementById("overlay");
+
+document.getElementById("menuButton")
+  .addEventListener("click",()=>{
+    sidebar.classList.add("open");
+    overlay.classList.add("show");
+  });
+
+overlay.addEventListener("click",()=>{
   sidebar.classList.remove("open");
   overlay.classList.remove("show");
-};
+});
 
-document.getElementById("dashboardDate").textContent=
-  new Intl.DateTimeFormat("th-TH",{
-    dateStyle:"full"
-  }).format(new Date());
+document.getElementById("dashboardDate").textContent =
+  new Intl.DateTimeFormat(
+    "th-TH",
+    {
+      dateStyle:"full"
+    }
+  ).format(new Date());
 
-async function countTable(table,filters=[]){
+async function countTable(
+  table,
+  filters=[]
+){
+
   try{
-    let q=db.from(table).select("*",{count:"exact",head:true});
-    filters.forEach(f=>{
-      q=q.eq(f.column,f.value);
+
+    let query =
+      db
+      .from(table)
+      .select(
+        "*",
+        {
+          count:"exact",
+          head:true
+        }
+      );
+
+    filters.forEach(filter=>{
+      query =
+        query.eq(
+          filter.column,
+          filter.value
+        );
     });
-    const {count,error}=await q;
-    if(error) return "–";
+
+    const {
+      count,
+      error
+    } = await query;
+
+    if(error){
+      console.warn(
+        "countTable",
+        table,
+        error
+      );
+
+      return "–";
+    }
+
     return count ?? 0;
+
+  }catch(error){
+
+    console.warn(
+      "countTable",
+      table,
+      error
+    );
+
+    return "–";
+  }
+}
+
+async function countPaymentsWaitingReview(){
+
+  try{
+
+    const {
+      data,
+      error
+    } =
+      await db
+      .from("payment_slips")
+      .select("payment_id");
+
+    if(error){
+      return "–";
+    }
+
+    if(!data?.length){
+      return 0;
+    }
+
+    const paymentIds =
+      [...new Set(
+        data
+          .map(x=>x.payment_id)
+          .filter(Boolean)
+      )];
+
+    if(!paymentIds.length){
+      return 0;
+    }
+
+    const {
+      count,
+      error:paymentError
+    } =
+      await db
+      .from("payments")
+      .select(
+        "*",
+        {
+          count:"exact",
+          head:true
+        }
+      )
+      .in(
+        "id",
+        paymentIds
+      )
+      .neq(
+        "payment_status",
+        "VERIFIED"
+      );
+
+    if(paymentError){
+      return "–";
+    }
+
+    return count ?? 0;
+
   }catch{
     return "–";
   }
 }
 
 async function init(){
-  const {data:{session}}=await db.auth.getSession();
+
+  const {
+    data:{
+      session
+    }
+  } =
+    await db.auth.getSession();
 
   if(!session?.user){
-    location.replace("admin-login.html");
+
+    location.replace(
+      "admin-login.html"
+    );
+
     return;
   }
 
-  const {data:staff,error:staffError}=await db.rpc("is_staff");
+  const {
+    data:staff,
+    error:staffError
+  } =
+    await db.rpc("is_staff");
 
-  if(staffError || staff !== true){
+  if(
+    staffError ||
+    staff !== true
+  ){
+
     await db.auth.signOut();
-    location.replace("admin-login.html");
+
+    location.replace(
+      "admin-login.html"
+    );
+
     return;
   }
 
-  document.getElementById("adminEmail").textContent=session.user.email||"";
-  document.getElementById("adminName").textContent="ผู้ดูแลระบบ SANTE";
+  document.getElementById(
+    "adminEmail"
+  ).textContent =
+    session.user.email || "";
 
-  loadingScreen.style.display="none";
+  document.getElementById(
+    "adminName"
+  ).textContent =
+    "ผู้ดูแลระบบ SANTE";
 
-  const [courses,sessions,members,payments]=await Promise.all([
-    countTable("courses"),
-    countTable("training_sessions"),
-    countTable("profiles"),
-    countTable("payment_slips")
-  ]);
+  loadingScreen.style.display =
+    "none";
 
-  document.getElementById("courseCount").textContent=courses;
-  document.getElementById("sessionCount").textContent=sessions;
-  document.getElementById("memberCount").textContent=members;
-  document.getElementById("paymentCount").textContent=payments;
+  const [
+    courses,
+    sessions,
+    members,
+    payments
+  ] =
+    await Promise.all([
+      countTable("courses"),
+      countTable("training_sessions"),
+      countTable("profiles"),
+      countPaymentsWaitingReview()
+    ]);
+
+  document.getElementById(
+    "courseCount"
+  ).textContent =
+    courses;
+
+  document.getElementById(
+    "sessionCount"
+  ).textContent =
+    sessions;
+
+  document.getElementById(
+    "memberCount"
+  ).textContent =
+    members;
+
+  document.getElementById(
+    "paymentCount"
+  ).textContent =
+    payments;
 }
 
-document.getElementById("logoutButton").onclick=async()=>{
-  await db.auth.signOut();
-  location.replace("admin-login.html");
-};
+document.getElementById(
+  "logoutButton"
+).addEventListener(
+  "click",
+  async()=>{
+
+    await db.auth.signOut();
+
+    location.replace(
+      "admin-login.html"
+    );
+  }
+);
 
 init();
 </script>
