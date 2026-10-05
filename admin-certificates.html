@@ -190,8 +190,17 @@ body{margin:0;background:var(--bg);font-family:"Prompt",sans-serif;color:var(--n
   .bg-manager-grid{grid-template-columns:1fr}
 }
 
+
+.issuer-item{
+  z-index:6;
+  background:rgba(255,255,255,.96);
+  border-radius:4px;
+  font-weight:700;
+}
+
 </style>
 <meta name="sante-build" content="CERT-BATCH-HOURS-FIX-2026-10-05">
+<meta name="sante-build" content="CERT-DATE-ISSUER-R2">
 </head>
 <body>
 <div class="loading" id="loading"><div class="loading-box"><strong>SANTE CERTIFICATE</strong><div>กำลังตรวจสอบสิทธิ์และโหลดข้อมูล...</div><div class="spinner"></div></div></div>
@@ -251,6 +260,27 @@ body{margin:0;background:var(--bg);font-family:"Prompt",sans-serif;color:var(--n
           <div class="group"><label>ประเภท</label><select id="typeCode" onchange="applyType()"><option value="FREE_TRAINING">อบรมฟรี</option><option value="PAID_TRAINING">อบรมมีค่าใช้จ่าย</option><option value="SERVICE">งานบริการ</option></select></div>
           <div class="group" id="subtypeGroup" style="display:none"><label>รูปแบบการอบรมมีค่าใช้จ่าย</label><select id="subtype" onchange="applyPrefix()"><option value="PUBLIC">Public Training</option><option value="INHOUSE">In-house Training</option></select></div>
           <div class="group"><label>ภาษา</label><select id="language"><option value="th">ภาษาไทย</option><option value="en">English (ใช้เมื่อต้องการ)</option></select></div>
+          <div class="group">
+            <label>ออกวุฒิบัตรในนาม</label>
+            <select id="issuerMode" onchange="applyIssuerMode();syncPreview()">
+              <option value="SANTE">บริษัท ซานเต้ คอนซัลติ้ง จำกัด</option>
+              <option value="CUSTOM">บริษัท / หน่วยงานอื่น</option>
+            </select>
+          </div>
+
+          <div class="group">
+            <label>ชื่อบริษัท / หน่วยงานผู้ออกวุฒิบัตร</label>
+            <input
+              id="issuerName"
+              value="บริษัท ซานเต้ คอนซัลติ้ง จำกัด"
+              oninput="syncPreview()"
+              readonly
+            >
+            <div class="hint">
+              ถ้าเลือก SANTE ระบบจะใส่ชื่อให้อัตโนมัติ หากเลือกบริษัทอื่นสามารถแก้ไขชื่อได้
+            </div>
+          </div>
+
           <div class="bg-manager">
             <div class="bg-manager-head">
               <div>
@@ -374,6 +404,7 @@ body{margin:0;background:var(--bg);font-family:"Prompt",sans-serif;color:var(--n
           <div class="cert-stage-wrap">
             <div class="cert-stage" id="certStage">
               <img class="cert-bg" id="certBg" src="cert-template-free.png">
+              <div class="cert-item issuer-item" data-field="issuer" id="fIssuer"></div>
               <div class="cert-item" data-field="number" id="fNo"></div>
               <div class="cert-item" data-field="name" id="fName"></div>
               <div class="cert-item" data-field="bodyTitle" id="fBodyTitle"></div>
@@ -437,6 +468,7 @@ const layouts={
  FREE_TRAINING:{
   bg:"cert-template-free.png",
   fields:{
+   issuer:{x:50,y:25,size:29,color:"#203b73",width:68,height:9,lineHeight:1.12,align:"center",autoFit:true},
    number:{x:95,y:2.8,size:13,color:"#172848",width:26,height:5,lineHeight:1.15,align:"right",autoFit:true},
    name:{x:50,y:40,size:34,color:"#172848",width:72,height:9,lineHeight:1.15,align:"center",autoFit:true},
    bodyTitle:{x:50,y:51,size:18,color:"#172848",width:70,height:6,lineHeight:1.2,align:"center",autoFit:true},
@@ -450,6 +482,7 @@ const layouts={
  PAID_TRAINING:{
   bg:"cert-template-paid.png",
   fields:{
+   issuer:{x:50,y:25,size:29,color:"#203b73",width:68,height:9,lineHeight:1.12,align:"center",autoFit:true},
    number:{x:95,y:2.8,size:13,color:"#203b73",width:26,height:5,lineHeight:1.15,align:"right",autoFit:true},
    name:{x:50,y:42,size:37,color:"#203b73",width:74,height:10,lineHeight:1.15,align:"center",autoFit:true},
    bodyTitle:{x:50,y:53,size:18,color:"#203b73",width:72,height:6,lineHeight:1.2,align:"center",autoFit:true},
@@ -463,6 +496,7 @@ const layouts={
  SERVICE:{
   bg:"cert-template-service.png",
   fields:{
+   issuer:{x:50,y:25,size:27,color:"#172848",width:72,height:9,lineHeight:1.12,align:"center",autoFit:true},
    number:{x:95,y:3,size:12,color:"#172848",width:26,height:5,lineHeight:1.15,align:"right",autoFit:true},
    name:{x:50,y:34,size:28,color:"#172848",width:82,height:10,lineHeight:1.15,align:"center",autoFit:true},
    bodyTitle:{x:50,y:43,size:16,color:"#172848",width:80,height:6,lineHeight:1.2,align:"center",autoFit:true},
@@ -477,7 +511,8 @@ const layouts={
 let design=JSON.parse(JSON.stringify(layouts.FREE_TRAINING.fields));
 let qrPos={...layouts.FREE_TRAINING.qr};
 let selected="name";
-const fieldMap={number:"เลขวุฒิบัตร",name:"ชื่อผู้รับ / บริษัท",bodyTitle:"ข้อความนำ",course:"ชื่อหลักสูตร / งานบริการ",body:"รายละเอียดเพิ่มเติม",duration:"ระยะเวลา",delivery:"รูปแบบ",date:"วันที่ออก"};
+const fieldMap={issuer:"ชื่อบริษัท / หน่วยงานผู้ออก",
+   number:"เลขวุฒิบัตร",name:"ชื่อผู้รับ / บริษัท",bodyTitle:"ข้อความนำ",course:"ชื่อหลักสูตร / งานบริการ",body:"รายละเอียดเพิ่มเติม",duration:"ระยะเวลา",delivery:"รูปแบบ",date:"วันที่ออก"};
 
 function formatThaiDate(v){
  if(!v)return "";
@@ -606,6 +641,7 @@ function buildFieldSelect(){
  const sel=document.getElementById("selectedField");
  if(!sel)return;
  const labels={
+   issuer:"ชื่อบริษัท / หน่วยงานผู้ออก",
    number:"เลขวุฒิบัตร",
    name:"ชื่อผู้รับวุฒิบัตร",
    bodyTitle:"ข้อความนำ",
@@ -622,6 +658,23 @@ function buildFieldSelect(){
    sel.value=selected;
  }
  selectField(selected);
+}
+
+
+function applyIssuerMode(){
+ const mode=document.getElementById("issuerMode")?.value||"SANTE";
+ const input=document.getElementById("issuerName");
+ if(!input)return;
+ if(mode==="SANTE"){
+   input.value="บริษัท ซานเต้ คอนซัลติ้ง จำกัด";
+   input.readOnly=true;
+ }else{
+   input.readOnly=false;
+   if(input.value==="บริษัท ซานเต้ คอนซัลติ้ง จำกัด"){
+     input.value="";
+   }
+   input.focus();
+ }
 }
 
 function applyType(){
@@ -682,6 +735,7 @@ function isTemplateDesignMode(){
 function syncPreview(){
  const type=document.getElementById("typeCode").value;
  const templateMode=isTemplateDesignMode();
+ document.getElementById("fIssuer").textContent=document.getElementById("issuerName")?.value||"บริษัท ซานเต้ คอนซัลติ้ง จำกัด";
  document.getElementById("fNo").textContent=templateMode?"{{certificate_no}}":document.getElementById("previewNo").value;
  document.getElementById("fName").textContent=templateMode?"{{recipient_name}}":(document.getElementById("recipientName").value||"{{recipient_name}}");
  document.getElementById("fBodyTitle").textContent=document.getElementById("bodyTitle").value;
@@ -690,8 +744,12 @@ function syncPreview(){
  const dh=document.getElementById("durationHours").value;
  document.getElementById("fDuration").textContent=dh!==""?`ระยะเวลาการฝึกอบรม ${formatHours(dh)} ชั่วโมง`:"";
  document.getElementById("fDelivery").textContent=document.getElementById("deliveryText").value;
- const date=document.getElementById("issueDate").value;
- document.getElementById("fDate").textContent=templateMode?"ให้ไว้ ณ วันที่ {{issue_date}}":(date?`ให้ไว้ ณ วันที่ ${formatThaiDate(date)}`:"");
+ const trainingDate=document.getElementById("trainingDate").value;
+ const issueDate=document.getElementById("issueDate").value;
+ const dateToShow=trainingDate||issueDate;
+ document.getElementById("fDate").textContent=templateMode
+   ?"ให้ไว้ ณ วันที่ {{training_date}}"
+   :(dateToShow?`ให้ไว้ ณ วันที่ ${formatThaiDate(dateToShow)}`:"");
  if(type==="SERVICE"&&templateMode)document.getElementById("fName").textContent="{{recipient_name}}";
  applyDesign(true)
 }
@@ -848,7 +906,10 @@ function currentDesignerPayload(){
      courseSource:document.getElementById("courseSource")?.value||"TEMPLATE",
      courseText:document.getElementById("courseName").value,
      durationSource:document.getElementById("durationSource")?.value||"TEMPLATE",
-     durationHours:document.getElementById("durationHours").value!==""?Number(document.getElementById("durationHours").value):null
+     durationHours:document.getElementById("durationHours").value!==""?Number(document.getElementById("durationHours").value):null,
+     trainingDate:document.getElementById("trainingDate").value||null,
+     issuerMode:document.getElementById("issuerMode")?.value||"SANTE",
+     issuerName:document.getElementById("issuerName")?.value||"บริษัท ซานเต้ คอนซัลติ้ง จำกัด"
    }
  };
 }
@@ -910,6 +971,16 @@ async function loadSavedTemplate(id){
  if(document.getElementById("courseSource")){
    document.getElementById("courseSource").value=t.design_json?.courseSource||"TEMPLATE";
  }
+ if(document.getElementById("trainingDate")){
+   document.getElementById("trainingDate").value=t.design_json?.trainingDate||"";
+ }
+ if(document.getElementById("issuerMode")){
+   document.getElementById("issuerMode").value=t.design_json?.issuerMode||"SANTE";
+ }
+ if(document.getElementById("issuerName")){
+   document.getElementById("issuerName").value=t.design_json?.issuerName||"บริษัท ซานเต้ คอนซัลติ้ง จำกัด";
+ }
+ applyIssuerMode();
  if(t.design_json?.fields){
    design=JSON.parse(JSON.stringify(t.design_json.fields));
    Object.keys(design).forEach(k=>design[k]=normalizeFieldConfig(design[k],k));
@@ -1009,7 +1080,14 @@ async function issueCertificate(){
   const prefix=document.getElementById("prefix").value.trim(), courseSel=document.getElementById("courseId");
   const courseId=courseSel.value||null, subtype=type==="PAID_TRAINING"?document.getElementById("subtype").value:(type==="SERVICE"?"SERVICE":"FREE");
   const sequenceKey=type==="PAID_TRAINING"?(subtype+"-"+(courseSel.selectedOptions[0]?.dataset.code||prefix)):type;
-  const designJson={fields:design,qr:qrPos,template:type,backgroundUrl:currentBackgroundUrl||null,backgroundTemplate:currentBackgroundUrl?null:getDefaultBackground()};
+  const designJson={
+   fields:design,qr:qrPos,template:type,
+   backgroundUrl:currentBackgroundUrl||null,
+   backgroundTemplate:currentBackgroundUrl?null:getDefaultBackground(),
+   trainingDate:document.getElementById("trainingDate").value||null,
+   issuerMode:document.getElementById("issuerMode")?.value||"SANTE",
+   issuerName:document.getElementById("issuerName")?.value||"บริษัท ซานเต้ คอนซัลติ้ง จำกัด"
+ };
   const {data,error}=await db.rpc("admin_issue_certificate",{
    p_type_code:type,p_subtype:subtype,p_user_id:type==="SERVICE"?null:(document.getElementById("userId").value||null),
    p_course_id:courseId,p_training_session_id:null,p_recipient_name:document.getElementById("recipientName").value.trim(),
@@ -1033,6 +1111,19 @@ async function issueCertificate(){
 function formatDateOnly(v){
  if(!v)return "";
  return new Intl.DateTimeFormat("th-TH",{day:"numeric",month:"long",year:"numeric"}).format(new Date(v));
+}
+function getBulkTrainingDate(session,saved){
+ const templateDate=saved?.design_json?.trainingDate||"";
+ if(templateDate)return templateDate;
+ if(!session?.training_start_at)return "";
+ return new Date(session.training_start_at).toISOString().slice(0,10);
+}
+function getBulkTrainingDateText(session,saved){
+ const d=getBulkTrainingDate(session,saved);
+ return d?formatDateOnly(d):"-";
+}
+function getBulkIssuerName(saved){
+ return saved?.design_json?.issuerName||"บริษัท ซานเต้ คอนซัลติ้ง จำกัด";
 }
 function getBulkDurationText(session,saved){
  const course=session?.courses||{};
@@ -1066,7 +1157,8 @@ function refreshBulkSummary(){
  preview.style.display="block";
  preview.innerHTML=`<strong>ข้อมูลที่จะพิมพ์ลงวุฒิบัตร Batch · HOTFIX ชั่วโมง</strong><br>
    ชื่อหลักสูตรบนวุฒิบัตร: ${getBulkCourseText(session,saved)}<br>
-   วันที่อบรม: ${formatDateOnly(session.training_start_at)||"-"}<br>
+   วันที่อบรมบนวุฒิบัตร: ${getBulkTrainingDateText(session,saved)}<br>
+   ผู้ออกวุฒิบัตร: ${saved?getBulkIssuerName(saved):"กรุณาเลือกแม่แบบ"}<br>
    ระยะเวลาบนวุฒิบัตร: ${saved?getBulkDurationText(session,saved):"กรุณาเลือกแม่แบบ"}<br>
    รูปแบบ: ${formatDeliveryText(session.delivery_method)}<br>
    <span style="color:#6b7f99">หมายเหตุ: ระบบจะไม่คำนวณชั่วโมงจากช่วงเวลา Session มาแทนค่าของแม่แบบอีก</span>`;
@@ -1127,7 +1219,7 @@ async function issueBulk(){
  if(!saved){alert("กรุณาเลือกแม่แบบวุฒิบัตรก่อน");return}
  const selected=[...document.querySelectorAll(".bulk-check:checked")].map(x=>bulkParticipants[Number(x.dataset.i)]);
  if(!selected.length){alert("กรุณาเลือกรายชื่ออย่างน้อย 1 คน");return}
- if(!confirm(`ยืนยันใช้แม่แบบ "${saved.template_name}" ออกวุฒิบัตร ${selected.length} ใบ?\nระยะเวลาที่จะพิมพ์: ${getBulkDurationText(session,saved)}\nกรณีหลักสูตรมี Post-test กรุณาตรวจว่ารายชื่อที่เลือกผ่านเกณฑ์แล้ว`))return;
+ if(!confirm(`ยืนยันใช้แม่แบบ "${saved.template_name}" ออกวุฒิบัตร ${selected.length} ใบ?\nวันที่อบรมที่จะพิมพ์: ${getBulkTrainingDateText(session,saved)}\nระยะเวลาที่จะพิมพ์: ${getBulkDurationText(session,saved)}\nผู้ออกวุฒิบัตร: ${getBulkIssuerName(saved)}\nกรณีหลักสูตรมี Post-test กรุณาตรวจว่ารายชื่อที่เลือกผ่านเกณฑ์แล้ว`))return;
 
  const progress=document.getElementById("bulkProgress");progress.style.display="block";
  const issueDate=document.getElementById("bulkIssueDate").value||new Date().toISOString().slice(0,10);
@@ -1152,7 +1244,7 @@ async function issueBulk(){
      p_course_name:(saved.design_json?.courseSource||"TEMPLATE")==="SESSION"
        ? (course.course_name_th||session.session_name||"")
        : (saved.design_json?.courseText||course.course_name_th||session.session_name||""),
-     p_training_date:formatDateOnly(session.training_start_at),
+     p_training_date:getBulkTrainingDateText(session,saved)!=="-"?getBulkTrainingDateText(session,saved):null,
      p_issue_date:issueDate,p_language_code:"th",p_template_code:template,p_prefix:prefix,p_sequence_key:seqKey,
      p_body_title:saved.body_title||"ผ่านการฝึกอบรมหลักสูตร",
      p_body_text:saved.body_text||"",
@@ -1167,7 +1259,10 @@ async function issueBulk(){
        qr:layout.qr,
        template,
        backgroundUrl:saved.background_url||null,
-       backgroundTemplate:saved.background_template||layouts[template]?.bg||null
+       backgroundTemplate:saved.background_template||layouts[template]?.bg||null,
+       trainingDate:saved.design_json?.trainingDate||getBulkTrainingDate(session,saved)||null,
+       issuerMode:saved.design_json?.issuerMode||"SANTE",
+       issuerName:getBulkIssuerName(saved)
      },
      p_verification_base_url:location.origin
    });

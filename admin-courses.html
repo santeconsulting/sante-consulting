@@ -1020,6 +1020,7 @@
 }
 
 </style>
+<meta name="sante-build" content="COURSE-HOURS-R2">
 </head>
 
 <body>
@@ -2027,6 +2028,13 @@
                 <div class="course-actions">
 
                   <button
+                    class="secondary-btn"
+                    onclick="quickSetCourseHours('${course.id}', ${course.duration_hours !== null && course.duration_hours !== undefined ? course.duration_hours : 'null'})"
+                  >
+                    กำหนดชั่วโมง
+                  </button>
+
+                  <button
                     class="secondary-btn edit-btn"
                     onclick="editCourse('${course.id}')"
                   >
@@ -2043,6 +2051,60 @@
         }).join("");
 
     }
+
+
+
+    async function quickSetCourseHours(courseId,currentHours){
+
+      const input =
+        prompt(
+          "กรอกจำนวนชั่วโมงของหลักสูตร เช่น 2, 6, 12 หรือ 3.5",
+          currentHours ?? ""
+        );
+
+      if(input===null){
+        return;
+      }
+
+      const raw=input.trim();
+      const value=raw===""?null:Number(raw);
+
+      if(value!==null && (!Number.isFinite(value) || value<0)){
+        showToast(
+          "กรุณากรอกจำนวนชั่วโมงเป็นตัวเลข เช่น 2, 6, 12 หรือ 3.5",
+          "error"
+        );
+        return;
+      }
+
+      const {error} =
+        await supabaseClient
+          .from("courses")
+          .update({
+            duration_hours:value,
+            updated_at:new Date().toISOString()
+          })
+          .eq("id",courseId);
+
+      if(error){
+        showToast(
+          "บันทึกชั่วโมงไม่สำเร็จ: " + error.message,
+          "error"
+        );
+        return;
+      }
+
+      showToast(
+        value===null
+          ? "ล้างจำนวนชั่วโมงแล้ว"
+          : `บันทึก ${value} ชั่วโมงแล้ว`,
+        "success"
+      );
+
+      await loadCourses();
+    }
+
+    window.quickSetCourseHours=quickSetCourseHours;
 
 
     /* =========================================================
@@ -2062,6 +2124,7 @@
 
       document.getElementById("normalPrice").value = "0";
       document.getElementById("salePrice").value = "0";
+      if(document.getElementById("durationHours")) document.getElementById("durationHours").value = "";
       document.getElementById("courseStatus").value = "DRAFT";
 
       courseModal.classList.add("show");

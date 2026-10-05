@@ -11,7 +11,41 @@
 *{box-sizing:border-box}body{margin:0;background:#f6f9fd;color:#112443;font-family:Prompt,sans-serif}.head{height:72px;background:#fff;border-bottom:1px solid #e5edf5;display:flex;align-items:center;justify-content:space-between;padding:0 max(18px,calc((100% - 1440px)/2))}.head img{width:105px;height:48px;object-fit:contain}.head a{color:#0b447f;text-decoration:none;font-size:12px;font-weight:600}.wrap{width:min(1320px,calc(100% - 28px));margin:28px auto 60px}.status{display:flex;align-items:center;gap:12px;padding:18px 20px;border:1px solid #cfe9dc;background:#effaf4;border-radius:17px;margin-bottom:18px}.status.bad{background:#fff1f2;border-color:#f2c9ce}.dot{width:14px;height:14px;border-radius:50%;background:#19a86b}.bad .dot{background:#d94b59}.status strong{display:block;font-size:18px}.status span{font-size:12px;color:#6f8199}.grid{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:18px}.card{background:#fff;border:1px solid #dbe5ef;border-radius:20px;padding:18px;box-shadow:0 12px 34px rgba(20,48,83,.06)}.cert-stage-wrap{overflow:auto;background:#eef4fa;border-radius:16px;padding:12px}.cert-stage{position:relative;width:960px;height:664px;margin:auto;background:#fff;overflow:hidden}.cert-bg{position:absolute;inset:0;width:100%;height:100%}.verify-qr{position:absolute;width:76px;height:76px;padding:4px;background:#fff;border-radius:5px;transform:translate(-50%,-50%);box-shadow:0 2px 8px rgba(17,36,67,.12)}.verify-qr img,.verify-qr canvas{width:100%!important;height:100%!important}.verify-qr-label{position:absolute;transform:translate(-50%,0);background:#123b70;color:#fff;padding:3px 7px;border-radius:999px;font-size:7px;font-weight:600;white-space:nowrap;letter-spacing:.3px}.item{position:absolute;transform:translate(-50%,-50%);white-space:normal;overflow-wrap:anywhere;word-break:break-word;overflow:hidden;display:flex;align-items:center;justify-content:center;box-sizing:border-box;padding:3px 6px;color:#172848}.no{text-align:right;transform:translate(-100%,-50%)}.meta h2{margin:0 0 14px}.meta dl{margin:0}.meta dt{font-size:10px;color:#8090a5;margin-top:13px}.meta dd{margin:3px 0 0;font-size:13px;font-weight:600}.loading{text-align:center;padding:90px 20px;color:#71839b}.error{padding:30px;text-align:center;color:#c33}.footer{text-align:center;color:#8795a8;font-size:10px;margin-top:22px}
 @media(max-width:900px){.grid{grid-template-columns:1fr}.cert-stage{transform:scale(.66);transform-origin:top left;margin-bottom:-225px}.meta{order:-1}}
 @media(max-width:520px){.head{padding:0 14px}.wrap{width:calc(100% - 18px);margin-top:14px}.cert-stage{transform:scale(.39);margin-bottom:-405px}.status{padding:14px}.status strong{font-size:16px}}
+
+.issuer-item{
+  z-index:6;
+  background:rgba(255,255,255,.96);
+  border-radius:4px;
+  font-weight:700;
+}
+.revoked-stage{
+  filter:grayscale(1);
+  opacity:.46;
+}
+.revoked-watermark{
+  display:none;
+  position:absolute;
+  inset:0;
+  z-index:60;
+  align-items:center;
+  justify-content:center;
+  pointer-events:none;
+}
+.revoked-watermark.show{display:flex}
+.revoked-watermark span{
+  transform:rotate(-23deg);
+  padding:18px 42px;
+  border:7px solid rgba(167,47,58,.40);
+  border-radius:13px;
+  background:rgba(255,255,255,.78);
+  color:rgba(167,47,58,.56);
+  font-size:44px;
+  line-height:1.2;
+  font-weight:700;
+  white-space:nowrap;
+}
 </style>
+<meta name="sante-build" content="VERIFY-REVOKED-GRAY-R2">
 </head>
 <body>
 <header class="head"><img src="SANTE-logo.png" alt="SANTE"><a href="/">SANTE Consulting</a></header>
@@ -23,11 +57,11 @@
    <section class="card">
     <div class="cert-stage-wrap"><div class="cert-stage" id="stage">
       <img class="cert-bg" id="bg">
-      <div class="item no" id="no"></div><div class="item" id="name"></div><div class="item" id="bodyTitle"></div><div class="item" id="course"></div><div class="item" id="body"></div><div class="item" id="duration"></div><div class="item" id="delivery"></div><div class="item" id="date"></div><div class="verify-qr" id="verifyQr"></div><div class="verify-qr-label" id="verifyQrLabel">SCAN TO VERIFY</div>
+      <div class="item no" id="no"></div><div class="item" id="name"></div><div class="item" id="bodyTitle"></div><div class="item" id="course"></div><div class="item" id="body"></div><div class="item" id="duration"></div><div class="item" id="delivery"></div><div class="item" id="date"></div><div class="verify-qr" id="verifyQr"></div><div class="verify-qr-label" id="verifyQrLabel">SCAN TO VERIFY</div><div class="revoked-watermark" id="revokedWatermark"><span>วุฒิบัตรนี้ถูกยกเลิกแล้ว</span></div>
     </div></div>
    </section>
    <aside class="card meta"><h2>ข้อมูลวุฒิบัตร</h2><dl>
-    <dt>เลขวุฒิบัตร</dt><dd id="mNo">-</dd><dt>ผู้รับ</dt><dd id="mName">-</dd><dt>องค์กร</dt><dd id="mOrg">-</dd><dt>หลักสูตร / งานบริการ</dt><dd id="mCourse">-</dd><dt>วันที่ออก</dt><dd id="mDate">-</dd><dt>สถานะ</dt><dd id="mStatus">-</dd><div id="revokedWrap" style="display:none"><dt>เหตุผลการยกเลิก</dt><dd id="mRevokedReason">-</dd></div>
+    <dt>เลขวุฒิบัตร</dt><dd id="mNo">-</dd><dt>ผู้รับ</dt><dd id="mName">-</dd><dt>องค์กร</dt><dd id="mOrg">-</dd><dt>หลักสูตร / งานบริการ</dt><dd id="mCourse">-</dd><dt>วันที่อบรม / ให้บริการ</dt><dd id="mTrainingDate">-</dd><dt>วันที่ออกวุฒิบัตร</dt><dd id="mDate">-</dd><dt>สถานะ</dt><dd id="mStatus">-</dd><div id="revokedWrap" style="display:none"><dt>เหตุผลการยกเลิก</dt><dd id="mRevokedReason">-</dd></div>
    </dl></aside>
   </div>
   <div class="footer">© 2026 SANTE Consulting Co., Ltd. · Trust in Safety. Trust in SANTE.</div>
@@ -36,7 +70,7 @@
 <script>
 const db=window.supabase.createClient("https://cyegjwerxlxhczrfiurz.supabase.co","sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF");
 const defaultLayouts={
- FREE_TRAINING:{bg:"cert-template-free.png",fields:{
+ FREE_TRAINING:{bg:"cert-template-free.png",fields:{issuer:{x:50,y:25,size:29,color:"#172848",width:68,height:9,lineHeight:1.12,align:"center",autoFit:true},
   number:{x:95,y:2.8,size:13,color:"#172848",width:26,height:5,lineHeight:1.15,align:"right",autoFit:true},
   name:{x:50,y:40,size:34,color:"#172848",width:72,height:9,lineHeight:1.15,align:"center",autoFit:true},
   bodyTitle:{x:50,y:51,size:18,color:"#172848",width:70,height:6,lineHeight:1.2,align:"center",autoFit:true},
@@ -45,7 +79,7 @@ const defaultLayouts={
   duration:{x:50,y:70,size:16,color:"#172848",width:72,height:6,lineHeight:1.2,align:"center",autoFit:true},
   delivery:{x:50,y:75,size:16,color:"#172848",width:66,height:5,lineHeight:1.2,align:"center",autoFit:true},
   date:{x:50,y:79,size:16,color:"#172848",width:68,height:6,lineHeight:1.2,align:"center",autoFit:true}},qr:{x:91,y:16}},
- PAID_TRAINING:{bg:"cert-template-paid.png",fields:{
+ PAID_TRAINING:{bg:"cert-template-paid.png",fields:{issuer:{x:50,y:25,size:29,color:"#203b73",width:68,height:9,lineHeight:1.12,align:"center",autoFit:true},
   number:{x:95,y:2.8,size:13,color:"#203b73",width:26,height:5,lineHeight:1.15,align:"right",autoFit:true},
   name:{x:50,y:42,size:37,color:"#203b73",width:74,height:10,lineHeight:1.15,align:"center",autoFit:true},
   bodyTitle:{x:50,y:53,size:18,color:"#203b73",width:72,height:6,lineHeight:1.2,align:"center",autoFit:true},
@@ -54,7 +88,7 @@ const defaultLayouts={
   duration:{x:50,y:70,size:16,color:"#203b73",width:72,height:6,lineHeight:1.2,align:"center",autoFit:true},
   delivery:{x:50,y:75,size:16,color:"#203b73",width:66,height:5,lineHeight:1.2,align:"center",autoFit:true},
   date:{x:50,y:79,size:16,color:"#203b73",width:68,height:6,lineHeight:1.2,align:"center",autoFit:true}},qr:{x:91,y:16}},
- SERVICE:{bg:"cert-template-service.png",fields:{
+ SERVICE:{bg:"cert-template-service.png",fields:{issuer:{x:50,y:25,size:27,color:"#172848",width:72,height:9,lineHeight:1.12,align:"center",autoFit:true},
   number:{x:95,y:3,size:12,color:"#172848",width:26,height:5,lineHeight:1.15,align:"right",autoFit:true},
   name:{x:50,y:34,size:28,color:"#172848",width:82,height:10,lineHeight:1.15,align:"center",autoFit:true},
   bodyTitle:{x:50,y:43,size:16,color:"#172848",width:80,height:6,lineHeight:1.2,align:"center",autoFit:true},
@@ -94,15 +128,17 @@ async function init(){
  if(error||!data||!data.length){document.getElementById("loading").innerHTML='<div class="error"><strong>ไม่สามารถตรวจสอบวุฒิบัตรได้</strong><br>'+(error?error.message:"ไม่พบข้อมูลวุฒิบัตรจาก QR นี้")+'<br><br><a href="/" style="color:#0b447f">กลับเว็บไซต์ SANTE</a></div>';return}
  const c=data[0], type=c.template_code||"FREE_TRAINING", base=defaultLayouts[type]||defaultLayouts.FREE_TRAINING, d=c.design_json?.fields||base.fields;
  document.getElementById("bg").src=c.design_json?.backgroundUrl||c.design_json?.backgroundTemplate||base.bg;
- set("no",c.certificate_no,d.number||base.fields.number);set("name",c.recipient_name,d.name||base.fields.name);set("bodyTitle",c.body_title,d.bodyTitle||base.fields.bodyTitle);set("course",c.course_name,d.course||base.fields.course);set("body",c.body_text,d.body||base.fields.body);set("duration",c.duration_text,d.duration||base.fields.duration);set("delivery",c.delivery_text,d.delivery||base.fields.delivery);set("date",c.issue_date?"ให้ไว้ ณ วันที่ "+thaiDate(c.issue_date):"",d.date||base.fields.date);
+ set("issuer",c.design_json?.issuerName||"บริษัท ซานเต้ คอนซัลติ้ง จำกัด",d.issuer||base.fields.issuer);set("no",c.certificate_no,d.number||base.fields.number);set("name",c.recipient_name,d.name||base.fields.name);set("bodyTitle",c.body_title,d.bodyTitle||base.fields.bodyTitle);set("course",c.course_name,d.course||base.fields.course);set("body",c.body_text,d.body||base.fields.body);set("duration",c.duration_text,d.duration||base.fields.duration);set("delivery",c.delivery_text,d.delivery||base.fields.delivery);set("date",c.training_date?"ให้ไว้ ณ วันที่ "+c.training_date:(c.issue_date?"ให้ไว้ ณ วันที่ "+thaiDate(c.issue_date):""),d.date||base.fields.date);
  const qpos=c.design_json?.qr||base.qr||{x:91,y:16};
  const q=document.getElementById("verifyQr"),ql=document.getElementById("verifyQrLabel");
  q.style.left=qpos.x+"%";q.style.top=qpos.y+"%";
  ql.style.left=qpos.x+"%";ql.style.top=(qpos.y+6.3)+"%";
  q.innerHTML="";
  new QRCode(q,{text:location.href,width:70,height:70,correctLevel:QRCode.CorrectLevel.M});
- document.getElementById("mNo").textContent=c.certificate_no;document.getElementById("mName").textContent=c.recipient_name||"-";document.getElementById("mOrg").textContent=c.recipient_organization||"-";document.getElementById("mCourse").textContent=c.course_name||"-";document.getElementById("mDate").textContent=thaiDate(c.issue_date);document.getElementById("mStatus").textContent=c.certificate_status;
+ document.getElementById("mNo").textContent=c.certificate_no;document.getElementById("mName").textContent=c.recipient_name||"-";document.getElementById("mOrg").textContent=c.recipient_organization||"-";document.getElementById("mCourse").textContent=c.course_name||"-";document.getElementById("mTrainingDate").textContent=c.training_date||"-";document.getElementById("mDate").textContent=thaiDate(c.issue_date);document.getElementById("mStatus").textContent=c.certificate_status;
  if(c.certificate_status!=="ISSUED"){
+  document.getElementById("stage").classList.add("revoked-stage");
+  document.getElementById("revokedWatermark").classList.add("show");
   document.getElementById("status").classList.add("bad");
   document.getElementById("statusTitle").textContent=c.certificate_status==="REVOKED"?"วุฒิบัตรฉบับนี้ถูกยกเลิก":"เอกสารนี้ไม่อยู่ในสถานะใช้งาน";
   document.getElementById("statusSub").textContent=c.revoked_reason||"กรุณาติดต่อ SANTE Consulting เพื่อตรวจสอบ";
