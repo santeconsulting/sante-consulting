@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SANTE Admin - ใบประกาศนียบัตร</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
+<link rel="stylesheet" href="admin-member-master.css">
+<style>
+:root{--navy:#112443;--blue:#0b447f;--yellow:#f8c73d;--line:#dbe5ef;--muted:#71839c;--bg:#f6f9fd}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);font-family:"Prompt",sans-serif;color:var(--navy)}
+.loading{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;background:#f6f9fd}
+.loading-box{background:#fff;border:1px solid var(--line);border-radius:22px;padding:30px 44px;text-align:center;box-shadow:0 18px 50px rgba(12,45,84,.12)}
+.spinner{width:38px;height:38px;border:4px solid #e8eef5;border-top-color:var(--yellow);border-radius:50%;margin:16px auto 0;animation:spin .8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+.main{min-height:100vh}.content{width:min(1480px,calc(100% - 56px));margin:auto;padding:30px 0 60px}
+.page-header{display:flex;justify-content:space-between;align-items:center;gap:18px;padding:24px 28px;background:#fff;border:1px solid var(--line);border-radius:20px;margin-bottom:18px}
+.page-header h1{margin:0;font-size:30px}.page-header p{margin:5px 0 0;color:var(--muted);font-size:13px}
+.tabs{display:flex;gap:8px;padding:7px;background:#fff;border:1px solid var(--line);border-radius:16px;margin-bottom:18px}
+.tab{flex:1;min-height:44px;border:0;border-radius:11px;background:transparent;color:var(--navy);font:600 13px Prompt;cursor:pointer}
+.tab.active{background:var(--blue);color:#fff}
+.tab-panel{display:none}.tab-panel.active{display:block}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
+.stat{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px}.stat span{font-size:12px;color:var(--muted)}.stat strong{display:block;font-size:30px;margin-top:7px}
+.panel{background:#fff;border:1px solid var(--line);border-radius:20px;padding:20px;margin-bottom:18px;box-shadow:0 10px 28px rgba(23,48,82,.04)}
+.toolbar{display:grid;grid-template-columns:1.4fr .7fr .7fr auto;gap:10px}.toolbar input,.toolbar select,.form input,.form select,.form textarea{width:100%;min-height:44px;padding:10px 12px;border:1px solid var(--line);border-radius:11px;font:400 13px Prompt;background:#fff;color:var(--navy)}
+.btn{min-height:43px;padding:0 15px;border:0;border-radius:11px;font:600 12px Prompt;cursor:pointer}.btn.primary{background:var(--blue);color:#fff}.btn.yellow{background:var(--yellow);color:var(--navy)}.btn.light{background:#eef4fa;color:var(--navy)}.btn.danger{background:#fff0f1;color:#c63a49}
+.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:14px}.table{width:100%;border-collapse:collapse;min-width:1000px}.table th{background:var(--blue);color:#fff;text-align:left;padding:12px;font-size:11px}.table td{padding:12px;border-bottom:1px solid #edf2f7;font-size:11px}.badge{display:inline-flex;padding:5px 9px;border-radius:999px;font-size:10px;font-weight:600;background:#e9f8ef;color:#15955a}.badge.gray{background:#eef2f6;color:#6c7e94}.badge.red{background:#fff0f1;color:#c63a49}
+.designer{display:grid;grid-template-columns:390px minmax(0,1fr);gap:18px;align-items:start}
+.form{background:#fff;border:1px solid var(--line);border-radius:20px;padding:18px;position:sticky;top:90px}
+.form h3{margin:0 0 14px}.group{margin-bottom:13px}.group label{display:block;font-size:11px;font-weight:600;margin-bottom:6px}.row2{display:grid;grid-template-columns:1fr 1fr;gap:9px}.hint{font-size:10px;color:var(--muted);line-height:1.5;margin-top:5px}
+.preview-panel{background:#fff;border:1px solid var(--line);border-radius:20px;padding:18px}
+.preview-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}.preview-head h3{margin:0}.preview-actions{display:flex;gap:8px;flex-wrap:wrap}
+.cert-stage-wrap{overflow:auto;background:#eef4fa;border-radius:16px;padding:14px}
+.cert-stage{position:relative;width:960px;height:664px;margin:auto;background:#fff;overflow:hidden;box-shadow:0 10px 30px rgba(15,47,85,.14);transform-origin:top left}
+.cert-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;pointer-events:none}
+.cert-item{position:absolute;transform:translate(-50%,-50%);text-align:center;white-space:pre-wrap;line-height:1.28;color:#172848;font-weight:500;cursor:pointer;outline:0;padding:2px 4px;max-width:86%}
+.cert-item.selected{outline:2px dashed #1677ff;background:rgba(255,255,255,.4)}
+#fNo{text-align:right;transform:translate(-100%,-50%);white-space:nowrap}
+#fName{font-weight:700}
+#fCourse{font-weight:700}
+#fBody{font-weight:500}
+.qrbox{position:absolute;width:86px;height:86px;display:flex;align-items:center;justify-content:center;background:#fff;padding:4px}
+.qrbox img,.qrbox canvas{width:100%!important;height:100%!important}
+.adjust{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px}.adjust button{min-height:36px;border:1px solid var(--line);border-radius:9px;background:#f7faff;cursor:pointer}.adjust .wide{grid-column:span 3}
+.issue-result{display:none;margin-top:12px;padding:12px;border-radius:12px;background:#edf9f2;color:#13784c;font-size:12px;line-height:1.6;word-break:break-all}
+.template-note{padding:11px 12px;border-radius:12px;background:#fff8df;color:#6b5600;font-size:11px;line-height:1.6;margin-bottom:12px}
+.empty{text-align:center;padding:35px;color:var(--muted)}
+@media(max-width:1100px){.designer{grid-template-columns:1fr}.form{position:static}.stats{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:700px){.content{width:calc(100% - 20px);padding:14px 0 35px}.page-header{padding:19px}.page-header h1{font-size:24px}.tabs{overflow:auto}.tab{min-width:145px}.stats{grid-template-columns:1fr 1fr}.toolbar{grid-template-columns:1fr}.row2{grid-template-columns:1fr}.preview-head{align-items:flex-start;flex-direction:column}.cert-stage-wrap{padding:8px}.cert-stage{transform:scale(.38);margin-bottom:-410px}.form input,.form select,.form textarea{font-size:16px}}
+</style>
+</head>
+<body>
+<div class="loading" id="loading"><div class="loading-box"><strong>SANTE CERTIFICATE</strong><div>กำลังตรวจสอบสิทธิ์และโหลดข้อมูล...</div><div class="spinner"></div></div></div>
+
+<main class="main">
+  <div class="content">
+    <section class="page-header">
+      <div><h1>ใบประกาศนียบัตร</h1><p>ออกวุฒิบัตร ออกแบบข้อความ ตรวจสอบ QR และจัดการเอกสารจากหน้าเดียว</p></div>
+      <button class="btn yellow" onclick="switchTab('designer')">+ ออกวุฒิบัตร</button>
+    </section>
+
+    <div class="tabs">
+      <button class="tab active" data-tab="list" onclick="switchTab('list')">รายการวุฒิบัตร</button>
+      <button class="tab" data-tab="designer" onclick="switchTab('designer')">ออกวุฒิบัตร / Designer</button>
+      <button class="tab" data-tab="signers" onclick="switchTab('signers')">ผู้ลงนาม</button>
+    </div>
+
+    <section id="tab-list" class="tab-panel active">
+      <div class="stats">
+        <div class="stat"><span>ทั้งหมด</span><strong id="statAll">0</strong></div>
+        <div class="stat"><span>ออกแล้ว</span><strong id="statIssued">0</strong></div>
+        <div class="stat"><span>งานอบรม</span><strong id="statTraining">0</strong></div>
+        <div class="stat"><span>งานบริการ</span><strong id="statService">0</strong></div>
+      </div>
+      <div class="panel">
+        <div class="toolbar">
+          <input id="search" placeholder="ค้นหาเลขวุฒิบัตร / ชื่อผู้รับ / หลักสูตร..." oninput="renderList()">
+          <select id="filterType" onchange="renderList()"><option value="">ทุกประเภท</option><option value="FREE_TRAINING">อบรมฟรี</option><option value="PAID_TRAINING">อบรมมีค่าใช้จ่าย</option><option value="SERVICE">งานบริการ</option></select>
+          <select id="filterStatus" onchange="renderList()"><option value="">ทุกสถานะ</option><option value="ISSUED">ออกแล้ว</option><option value="REVOKED">ยกเลิก</option><option value="PENDING">รอดำเนินการ</option></select>
+          <button class="btn light" onclick="loadCertificates()">↻ รีเฟรช</button>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="table-wrap"><table class="table"><thead><tr><th>เลขวุฒิบัตร</th><th>ผู้รับ / องค์กร</th><th>หลักสูตร / งานบริการ</th><th>วันที่ออก</th><th>ประเภท</th><th>สถานะ</th><th>ตรวจสอบ</th></tr></thead><tbody id="certBody"></tbody></table></div>
+        <div id="emptyList" class="empty" style="display:none">ยังไม่มีวุฒิบัตรในระบบ</div>
+      </div>
+    </section>
+
+    <section id="tab-designer" class="tab-panel">
+      <div class="designer">
+        <aside class="form">
+          <h3>ข้อมูลวุฒิบัตร</h3>
+          <div class="template-note">กรอกข้อความแล้ว Preview จะเปลี่ยนทันที คุณสามารถเลือกข้อความบน Preview แล้วใช้ปุ่มลูกศรเพื่อขยับตำแหน่ง และ +/- เพื่อปรับขนาดได้</div>
+
+          <div class="group"><label>ประเภท</label><select id="typeCode" onchange="applyType()"><option value="FREE_TRAINING">อบรมฟรี</option><option value="PAID_TRAINING">อบรมมีค่าใช้จ่าย</option><option value="SERVICE">งานบริการ</option></select></div>
+          <div class="group" id="subtypeGroup" style="display:none"><label>รูปแบบการอบรมมีค่าใช้จ่าย</label><select id="subtype" onchange="applyPrefix()"><option value="PUBLIC">Public Training</option><option value="INHOUSE">In-house Training</option></select></div>
+          <div class="group"><label>ภาษา</label><select id="language"><option value="th">ภาษาไทย</option><option value="en">English (ใช้เมื่อต้องการ)</option></select></div>
+
+          <div class="group" id="memberGroup">
+            <label>สมาชิก / ผู้เข้าอบรม (ไม่บังคับ)</label>
+            <select id="userId" onchange="applySelectedUser()"><option value="">-- พิมพ์ชื่อเอง --</option></select>
+          </div>
+          <div class="group"><label>ชื่อผู้รับ / ชื่อบริษัท</label><input id="recipientName" value="ชื่อผู้รับวุฒิบัตร" oninput="syncPreview()"></div>
+          <div class="group" id="orgGroup"><label>หน่วยงาน / องค์กร</label><input id="recipientOrg" placeholder="เช่น บริษัท ตัวอย่าง จำกัด" oninput="syncPreview()"></div>
+
+          <div class="group" id="courseGroup"><label>หลักสูตร</label><select id="courseId" onchange="applyCourse()"><option value="">-- เลือกหรือพิมพ์เอง --</option></select></div>
+          <div class="group"><label>ชื่อหลักสูตร / ชื่องานบริการ</label><textarea id="courseName" rows="3" oninput="syncPreview()">ชื่อหลักสูตร</textarea></div>
+          <div class="group"><label>ข้อความนำ</label><input id="bodyTitle" value="ผ่านการฝึกอบรมหลักสูตร" oninput="syncPreview()"></div>
+          <div class="group"><label>รายละเอียดเพิ่มเติม</label><textarea id="bodyText" rows="4" placeholder="ข้อความเพิ่มเติม..." oninput="syncPreview()"></textarea></div>
+          <div class="row2">
+            <div class="group"><label>ระยะเวลา</label><input id="durationText" value="ระยะเวลาการฝึกอบรม ๒ ชั่วโมง" oninput="syncPreview()"></div>
+            <div class="group"><label>รูปแบบ</label><input id="deliveryText" value="(ผ่านระบบออนไลน์)" oninput="syncPreview()"></div>
+          </div>
+          <div class="row2">
+            <div class="group"><label>วันที่อบรม/ให้บริการ</label><input id="trainingDate" placeholder="เช่น 11 กันยายน 2569" oninput="syncPreview()"></div>
+            <div class="group"><label>วันที่ออก</label><input id="issueDate" type="date" onchange="syncPreview()"></div>
+          </div>
+          <div class="row2">
+            <div class="group"><label>Prefix เลขวุฒิบัตร</label><input id="prefix" value="ST-SS" oninput="syncPreview()"><div class="hint">Paid/In-house สามารถเปลี่ยนตามรหัสหลักสูตรได้</div></div>
+            <div class="group"><label>เลข Preview</label><input id="previewNo" value="ST-SS-69-0001" oninput="syncPreview()"></div>
+          </div>
+
+          <div class="group"><label>เลือกข้อความบน Preview</label><select id="selectedField" onchange="selectField(this.value)"></select></div>
+          <div class="adjust">
+            <button onclick="moveField(0,-1)">↑</button><button onclick="changeSize(1)">A+</button><button onclick="moveField(0,1)">↓</button>
+            <button onclick="moveField(-1,0)">←</button><button onclick="changeSize(-1)">A-</button><button onclick="moveField(1,0)">→</button>
+            <button class="wide" onclick="resetLayout()">รีเซ็ตตำแหน่งตาม Template</button>
+          </div>
+
+          <div style="display:grid;gap:8px;margin-top:15px">
+            <button class="btn primary" id="issueBtn" onclick="issueCertificate()">ออกวุฒิบัตร + สร้าง QR</button>
+            <button class="btn yellow" onclick="downloadPDF()">ดาวน์โหลด PDF</button>
+            <button class="btn light" onclick="downloadPNG()">ดาวน์โหลด PNG</button>
+          </div>
+          <div class="issue-result" id="issueResult"></div>
+        </aside>
+
+        <section class="preview-panel">
+          <div class="preview-head"><div><h3>Preview</h3><div class="hint">Template 4:3 จากไฟล์ที่คุณส่งมา</div></div><div class="preview-actions"><button class="btn light" onclick="zoomPreview(.9)">- Zoom</button><button class="btn light" onclick="zoomPreview(1.1)">+ Zoom</button></div></div>
+          <div class="cert-stage-wrap">
+            <div class="cert-stage" id="certStage">
+              <img class="cert-bg" id="certBg" src="cert-template-free.png">
+              <div class="cert-item" data-field="number" id="fNo"></div>
+              <div class="cert-item" data-field="name" id="fName"></div>
+              <div class="cert-item" data-field="bodyTitle" id="fBodyTitle"></div>
+              <div class="cert-item" data-field="course" id="fCourse"></div>
+              <div class="cert-item" data-field="body" id="fBody"></div>
+              <div class="cert-item" data-field="duration" id="fDuration"></div>
+              <div class="cert-item" data-field="delivery" id="fDelivery"></div>
+              <div class="cert-item" data-field="date" id="fDate"></div>
+              <div class="qrbox" id="qrBox"></div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <section id="tab-signers" class="tab-panel">
+      <div class="panel">
+        <h3 style="margin-top:0">ผู้ลงนามที่ใช้งาน</h3>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px">
+          <div class="panel" style="margin:0"><img src="signature-director.png" style="height:95px;object-fit:contain"><h4>นางสาววลีภรณ์ หาญนภาชีวิน</h4><p style="font-size:12px;color:var(--muted)">กรรมการผู้จัดการบริษัท<br>บริษัท ซานเต้ คอนซัลติ้ง จำกัด</p></div>
+          <div class="panel" style="margin:0"><img src="signature-officer.png" style="height:95px;object-fit:contain"><h4>นายณัฐพงค์ ม้าเทศ</h4><p style="font-size:12px;color:var(--muted)">บุคคลผู้ดำเนินการตรวจวัดและวิเคราะห์สภาวะการทำงาน<br>ตามกฎหมายกรมสวัสดิการและคุ้มครองแรงงาน</p></div>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<script>
+const SUPABASE_URL="https://cyegjwerxlxhczrfiurz.supabase.co";
+const SUPABASE_KEY="sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF";
+const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{storageKey:"sante-admin-auth",persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+let currentUser=null, certificates=[], courses=[], profiles=[];
+let previewZoom=1;
+
+const layouts={
+ FREE_TRAINING:{
+  bg:"cert-template-free.png",
+  fields:{
+   number:{x:95,y:2.8,size:14},name:{x:50,y:40,size:37},bodyTitle:{x:50,y:49,size:21},
+   course:{x:50,y:56,size:25},body:{x:50,y:63,size:16},duration:{x:50,y:69,size:19},
+   delivery:{x:50,y:74,size:18},date:{x:50,y:82,size:18}
+  },qr:{x:90,y:86}
+ },
+ PAID_TRAINING:{
+  bg:"cert-template-paid.png",
+  fields:{
+   number:{x:95,y:2.8,size:14},name:{x:50,y:42,size:42},bodyTitle:{x:50,y:53,size:22},
+   course:{x:50,y:59,size:27},body:{x:50,y:65,size:16},duration:{x:50,y:70,size:19},
+   delivery:{x:50,y:75,size:18},date:{x:50,y:82,size:18}
+  },qr:{x:90,y:86}
+ },
+ SERVICE:{
+  bg:"cert-template-service.png",
+  fields:{
+   number:{x:95,y:3,size:13},name:{x:50,y:34,size:29},bodyTitle:{x:50,y:43,size:18},
+   course:{x:50,y:49,size:22},body:{x:50,y:56,size:17},duration:{x:50,y:64,size:16},
+   delivery:{x:50,y:69,size:16},date:{x:50,y:75,size:17}
+  },qr:{x:90,y:84}
+ }
+};
+let design=JSON.parse(JSON.stringify(layouts.FREE_TRAINING.fields));
+let qrPos={...layouts.FREE_TRAINING.qr};
+let selected="name";
+const fieldMap={number:"เลขวุฒิบัตร",name:"ชื่อผู้รับ / บริษัท",bodyTitle:"ข้อความนำ",course:"ชื่อหลักสูตร / งานบริการ",body:"รายละเอียดเพิ่มเติม",duration:"ระยะเวลา",delivery:"รูปแบบ",date:"วันที่ออก"};
+
+function formatThaiDate(v){
+ if(!v)return "";
+ const d=new Date(v+"T00:00:00");
+ return new Intl.DateTimeFormat("th-TH",{day:"numeric",month:"long",year:"numeric"}).format(d);
+}
+function switchTab(name){
+ document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x.dataset.tab===name));
+ document.querySelectorAll(".tab-panel").forEach(x=>x.classList.toggle("active",x.id==="tab-"+name));
+}
+function setPos(el,cfg){el.style.left=cfg.x+"%";el.style.top=cfg.y+"%";el.style.fontSize=cfg.size+"px"}
+function refreshFieldSelect(){
+ const sel=document.getElementById("selectedField");sel.innerHTML="";
+ Object.keys(fieldMap).forEach(k=>{const o=document.createElement("option");o.value=k;o.textContent=fieldMap[k];sel.appendChild(o)});
+ sel.value=selected;
+}
+function selectField(k){
+ selected=k;
+ document.querySelectorAll(".cert-item").forEach(el=>el.classList.toggle("selected",el.dataset.field===k));
+ document.getElementById("selectedField").value=k;
+}
+function moveField(dx,dy){if(!design[selected])return;design[selected].x+=dx;design[selected].y+=dy;applyDesign()}
+function changeSize(d){if(!design[selected])return;design[selected].size=Math.max(8,design[selected].size+d);applyDesign()}
+function applyDesign(){
+ Object.entries(design).forEach(([k,c])=>{const el=document.querySelector(`[data-field="${k}"]`);if(el)setPos(el,c)});
+ const qr=document.getElementById("qrBox");qr.style.left=qrPos.x+"%";qr.style.top=qrPos.y+"%";qr.style.transform="translate(-50%,-50%)";
+}
+function resetLayout(){
+ const type=document.getElementById("typeCode").value;
+ design=JSON.parse(JSON.stringify(layouts[type].fields));qrPos={...layouts[type].qr};applyDesign()
+}
+function zoomPreview(f){previewZoom=Math.min(1.4,Math.max(.5,previewZoom*f));document.getElementById("certStage").style.zoom=previewZoom}
+
+function applyType(){
+ const type=document.getElementById("typeCode").value;
+ document.getElementById("certBg").src=layouts[type].bg;
+ document.getElementById("subtypeGroup").style.display=type==="PAID_TRAINING"?"block":"none";
+ document.getElementById("orgGroup").style.display=type==="SERVICE"?"block":"block";
+ document.getElementById("memberGroup").style.display=type==="SERVICE"?"none":"block";
+ if(type==="FREE_TRAINING"){document.getElementById("bodyTitle").value="ผ่านการฝึกอบรมหลักสูตร";document.getElementById("prefix").value="ST-SS"}
+ if(type==="PAID_TRAINING"){document.getElementById("bodyTitle").value="ผ่านการฝึกอบรมหลักสูตร";applyPrefix()}
+ if(type==="SERVICE"){document.getElementById("bodyTitle").value="ขอรับรองว่า";document.getElementById("prefix").value="ST-SR";document.getElementById("durationText").value="";document.getElementById("deliveryText").value=""}
+ resetLayout();syncPreview()
+}
+function applyPrefix(){
+ const subtype=document.getElementById("subtype").value, course=document.getElementById("courseId").selectedOptions[0];
+ const coursePrefix=(course?.dataset.prefix||course?.dataset.code||"TR").replace(/^ST-/i,"").toUpperCase();
+ document.getElementById("prefix").value=subtype==="INHOUSE"?`ST-IH-${coursePrefix}`:`ST-${coursePrefix}`;
+ syncPreview()
+}
+function applyCourse(){
+ const o=document.getElementById("courseId").selectedOptions[0];
+ if(o&&o.value){document.getElementById("courseName").value=o.dataset.name||o.textContent;if(document.getElementById("typeCode").value==="PAID_TRAINING")applyPrefix()}
+ syncPreview()
+}
+function applySelectedUser(){
+ const o=document.getElementById("userId").selectedOptions[0];
+ if(o&&o.value)document.getElementById("recipientName").value=o.dataset.name||o.textContent;
+ syncPreview()
+}
+function syncPreview(){
+ const type=document.getElementById("typeCode").value;
+ document.getElementById("fNo").textContent=document.getElementById("previewNo").value;
+ document.getElementById("fName").textContent=document.getElementById("recipientName").value;
+ document.getElementById("fBodyTitle").textContent=document.getElementById("bodyTitle").value;
+ document.getElementById("fCourse").textContent=document.getElementById("courseName").value;
+ document.getElementById("fBody").textContent=document.getElementById("bodyText").value;
+ document.getElementById("fDuration").textContent=document.getElementById("durationText").value;
+ document.getElementById("fDelivery").textContent=document.getElementById("deliveryText").value;
+ const date=document.getElementById("issueDate").value;
+ document.getElementById("fDate").textContent=date?`ให้ไว้ ณ วันที่ ${formatThaiDate(date)}`:"";
+ if(type==="SERVICE")document.getElementById("fName").textContent=document.getElementById("recipientName").value;
+ applyDesign()
+}
+async function auth(){
+ const {data:{session},error}=await db.auth.getSession();if(error)throw error;if(!session){location.href="admin-login.html";return false}
+ currentUser=session.user;
+ const {data:ok,error:e}=await db.rpc("is_staff");if(e)throw e;if(!ok){location.href="admin-login.html";return false}
+ return true
+}
+async function loadBase(){
+ const [c,p]=await Promise.all([
+  db.from("courses").select("id,course_code,course_name_th,certificate_prefix,course_type").order("sort_order"),
+  db.from("profiles").select("id,firstname_th,lastname_th,email").order("firstname_th").limit(500)
+ ]);
+ if(!c.error){courses=c.data||[];const s=document.getElementById("courseId");courses.forEach(x=>{const o=document.createElement("option");o.value=x.id;o.textContent=x.course_name_th;o.dataset.name=x.course_name_th;o.dataset.code=x.course_code||"";o.dataset.prefix=x.certificate_prefix||"";s.appendChild(o)})}
+ if(!p.error){profiles=p.data||[];const s=document.getElementById("userId");profiles.forEach(x=>{const name=[x.firstname_th,x.lastname_th].filter(Boolean).join(" ")||x.email;const o=document.createElement("option");o.value=x.id;o.textContent=name;o.dataset.name=name;s.appendChild(o)})}
+}
+async function loadCertificates(){
+ const {data,error}=await db.from("certificates").select("id,certificate_no,certificate_status,recipient_display_name,recipient_organization,course_name_snapshot,issue_date,template_code,certificate_subtype,verification_url,certificate_types(type_code,type_name_th)").order("created_at",{ascending:false}).limit(1000);
+ if(error){alert("โหลดวุฒิบัตรไม่สำเร็จ: "+error.message);return}
+ certificates=data||[];renderList();updateStats()
+}
+function updateStats(){
+ document.getElementById("statAll").textContent=certificates.length;
+ document.getElementById("statIssued").textContent=certificates.filter(x=>x.certificate_status==="ISSUED").length;
+ document.getElementById("statService").textContent=certificates.filter(x=>x.certificate_types?.type_code==="SERVICE").length;
+ document.getElementById("statTraining").textContent=certificates.filter(x=>x.certificate_types?.type_code!=="SERVICE").length;
+}
+function renderList(){
+ const q=document.getElementById("search").value.toLowerCase().trim(),t=document.getElementById("filterType").value,s=document.getElementById("filterStatus").value;
+ const rows=certificates.filter(x=>(!t||x.certificate_types?.type_code===t)&&(!s||x.certificate_status===s)&&(!q||[x.certificate_no,x.recipient_display_name,x.recipient_organization,x.course_name_snapshot].join(" ").toLowerCase().includes(q)));
+ document.getElementById("emptyList").style.display=rows.length?"none":"block";
+ document.getElementById("certBody").innerHTML=rows.map(x=>`<tr><td><strong>${x.certificate_no||"-"}</strong></td><td>${x.recipient_display_name||x.recipient_organization||"-"}</td><td>${x.course_name_snapshot||"-"}</td><td>${x.issue_date?formatThaiDate(x.issue_date):"-"}</td><td>${x.certificate_types?.type_name_th||"-"}</td><td><span class="badge ${x.certificate_status==="REVOKED"?"red":""}">${x.certificate_status||"-"}</span></td><td>${x.verification_url?`<a class="btn light" style="display:inline-flex;align-items:center" href="${x.verification_url}" target="_blank">เปิด</a>`:"-"}</td></tr>`).join("")
+}
+async function issueCertificate(){
+ const btn=document.getElementById("issueBtn");btn.disabled=true;btn.textContent="กำลังออกวุฒิบัตร...";
+ try{
+  const type=document.getElementById("typeCode").value, issue=document.getElementById("issueDate").value||new Date().toISOString().slice(0,10);
+  const prefix=document.getElementById("prefix").value.trim(), courseSel=document.getElementById("courseId");
+  const courseId=courseSel.value||null, subtype=type==="PAID_TRAINING"?document.getElementById("subtype").value:(type==="SERVICE"?"SERVICE":"FREE");
+  const sequenceKey=type==="PAID_TRAINING"?(subtype+"-"+(courseSel.selectedOptions[0]?.dataset.code||prefix)):type;
+  const designJson={fields:design,qr:qrPos,template:type};
+  const {data,error}=await db.rpc("admin_issue_certificate",{
+   p_type_code:type,p_subtype:subtype,p_user_id:type==="SERVICE"?null:(document.getElementById("userId").value||null),
+   p_course_id:courseId,p_training_session_id:null,p_recipient_name:document.getElementById("recipientName").value.trim(),
+   p_recipient_organization:document.getElementById("recipientOrg").value.trim()||null,p_course_name:document.getElementById("courseName").value.trim(),
+   p_training_date:document.getElementById("trainingDate").value.trim()||null,p_issue_date:issue,
+   p_language_code:document.getElementById("language").value,p_template_code:type,p_prefix:prefix,p_sequence_key:sequenceKey,
+   p_body_title:document.getElementById("bodyTitle").value,p_body_text:document.getElementById("bodyText").value,
+   p_duration_text:document.getElementById("durationText").value,p_delivery_text:document.getElementById("deliveryText").value,
+   p_design_json:designJson,p_verification_base_url:"https://santeconsulting.co.th"
+  });
+  if(error)throw error;
+  document.getElementById("previewNo").value=data.certificate_no;syncPreview();
+  makeQR(data.verification_url);
+  const box=document.getElementById("issueResult");box.style.display="block";box.innerHTML=`ออกวุฒิบัตรสำเร็จ<br><strong>${data.certificate_no}</strong><br>${data.verification_url}`;
+  await loadCertificates();
+ }catch(e){alert("ออกวุฒิบัตรไม่สำเร็จ: "+(e.message||e))}
+ finally{btn.disabled=false;btn.textContent="ออกวุฒิบัตร + สร้าง QR"}
+}
+function makeQR(url){
+ const box=document.getElementById("qrBox");box.innerHTML="";new QRCode(box,{text:url,width:82,height:82,correctLevel:QRCode.CorrectLevel.M})
+}
+async function captureStage(){
+ const el=document.getElementById("certStage");document.querySelectorAll(".cert-item").forEach(x=>x.classList.remove("selected"));
+ return await html2canvas(el,{scale:2,useCORS:true,backgroundColor:"#ffffff"})
+}
+async function downloadPNG(){
+ const c=await captureStage(),a=document.createElement("a");a.download=(document.getElementById("previewNo").value||"SANTE-Certificate")+".png";a.href=c.toDataURL("image/png");a.click();selectField(selected)
+}
+async function downloadPDF(){
+ const c=await captureStage(),img=c.toDataURL("image/jpeg",.96);const {jsPDF}=window.jspdf;const pdf=new jsPDF({orientation:"landscape",unit:"mm",format:"a4"});pdf.addImage(img,"JPEG",0,0,297,210);pdf.save((document.getElementById("previewNo").value||"SANTE-Certificate")+".pdf");selectField(selected)
+}
+document.querySelectorAll(".cert-item").forEach(el=>el.addEventListener("click",()=>selectField(el.dataset.field)));
+async function init(){
+ try{
+  document.getElementById("issueDate").value=new Date().toISOString().slice(0,10);
+  refreshFieldSelect();selectField("name");applyType();syncPreview();
+  if(!(await auth()))return;
+  await Promise.all([loadBase(),loadCertificates()]);
+  document.getElementById("loading").style.display="none"
+ }catch(e){document.querySelector(".loading-box").innerHTML=`<strong>ไม่สามารถเปิดโมดูลวุฒิบัตรได้</strong><p style="color:#c63a49">${e.message||e}</p><button class="btn yellow" onclick="location.reload()">ลองอีกครั้ง</button>`}
+}
+async function logout(){try{await db.auth.signOut()}finally{location.href="admin-login.html"}}
+init();
+</script>
+<script src="admin-member-master.js"></script>
+</body></html>
