@@ -1,255 +1,144 @@
 <!doctype html>
 <html lang="th">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ตรวจสอบวุฒิบัตร - SANTE Consulting</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ตรวจสอบวุฒิบัตร | SANTE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 <style>
-*{box-sizing:border-box}body{margin:0;background:#f6f9fd;color:#112443;font-family:Prompt,sans-serif}.head{height:72px;background:#fff;border-bottom:1px solid #e5edf5;display:flex;align-items:center;justify-content:space-between;padding:0 max(18px,calc((100% - 1440px)/2))}.head img{width:105px;height:48px;object-fit:contain}.head a{color:#0b447f;text-decoration:none;font-size:12px;font-weight:600}.wrap{width:min(1320px,calc(100% - 28px));margin:28px auto 60px}.status{display:flex;align-items:center;gap:12px;padding:18px 20px;border:1px solid #cfe9dc;background:#effaf4;border-radius:17px;margin-bottom:18px}.status.bad{background:#fff1f2;border-color:#f2c9ce}.dot{width:14px;height:14px;border-radius:50%;background:#19a86b}.bad .dot{background:#d94b59}.status strong{display:block;font-size:18px}.status span{font-size:12px;color:#6f8199}.grid{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:18px}.card{background:#fff;border:1px solid #dbe5ef;border-radius:20px;padding:18px;box-shadow:0 12px 34px rgba(20,48,83,.06)}.cert-stage-wrap{overflow:auto;background:#eef4fa;border-radius:16px;padding:12px}.cert-stage{position:relative;width:960px;height:664px;margin:auto;background:#fff;overflow:hidden}.cert-bg{position:absolute;inset:0;width:100%;height:100%}.verify-qr{position:absolute;width:76px;height:76px;padding:4px;background:#fff;border-radius:5px;transform:translate(-50%,-50%);box-shadow:0 2px 8px rgba(17,36,67,.12)}.verify-qr img,.verify-qr canvas{width:100%!important;height:100%!important}.verify-qr-label{position:absolute;transform:translate(-50%,0);background:#123b70;color:#fff;padding:3px 7px;border-radius:999px;font-size:7px;font-weight:600;white-space:nowrap;letter-spacing:.3px}.item{position:absolute;transform:translate(-50%,-50%);white-space:normal;overflow-wrap:anywhere;word-break:break-word;overflow:hidden;display:flex;align-items:center;justify-content:center;box-sizing:border-box;padding:3px 6px;color:#172848}.no{text-align:right;transform:translate(-100%,-50%)}.meta h2{margin:0 0 14px}.meta dl{margin:0}.meta dt{font-size:10px;color:#8090a5;margin-top:13px}.meta dd{margin:3px 0 0;font-size:13px;font-weight:600}.loading{text-align:center;padding:90px 20px;color:#71839b}.error{padding:30px;text-align:center;color:#c33}.footer{text-align:center;color:#8795a8;font-size:10px;margin-top:22px}
-@media(max-width:900px){.grid{grid-template-columns:1fr}.cert-stage{transform:scale(.66);transform-origin:top left;margin-bottom:-225px}.meta{order:-1}}
-@media(max-width:520px){.head{padding:0 14px}.wrap{width:calc(100% - 18px);margin-top:14px}.cert-stage{transform:scale(.39);margin-bottom:-405px}.status{padding:14px}.status strong{font-size:16px}}
-
-.issuer-item{
-  z-index:6;
-  background:rgba(255,255,255,.96);
-  border-radius:4px;
-  font-weight:700;
-}
-.revoked-stage{
-  filter:grayscale(1);
-  opacity:.46;
-}
-.revoked-watermark{
-  display:none;
-  position:absolute;
-  inset:0;
-  z-index:60;
-  align-items:center;
-  justify-content:center;
-  pointer-events:none;
-}
-.revoked-watermark.show{display:flex}
-.revoked-watermark span{
-  transform:rotate(-23deg);
-  padding:18px 42px;
-  border:7px solid rgba(167,47,58,.40);
-  border-radius:13px;
-  background:rgba(255,255,255,.78);
-  color:rgba(167,47,58,.56);
-  font-size:44px;
-  line-height:1.2;
-  font-weight:700;
-  white-space:nowrap;
-}
-
-/* ===== R3 REVOKED VISUAL ===== */
-.revoked-stage{filter:grayscale(1)!important;opacity:.38!important}
-.revoked-watermark{display:none;position:absolute;inset:0;z-index:999;align-items:center;justify-content:center;pointer-events:none}
-.revoked-watermark.show{display:flex!important}
-.revoked-watermark span{
-  transform:rotate(-24deg);font-size:clamp(26px,4vw,56px);font-weight:800;
-  color:rgba(154,45,55,.65);border:7px solid rgba(154,45,55,.42);
-  background:rgba(255,255,255,.83);padding:18px 42px;border-radius:14px;white-space:nowrap
-}
-
-
-/* ===== CERTIFICATE REVOKED VISUAL R4 ===== */
-.revoked-stage .cert-bg,
-.revoked-stage .item,
-.revoked-stage .sig,
-.revoked-stage .verify-qr,
-.revoked-stage .verify-qr-label{
-  filter:grayscale(1)!important;
-  opacity:.32!important;
-}
-.revoked-stage{
-  opacity:1!important;
-  filter:none!important;
-}
-.revoked-watermark{
-  display:none;
-  position:absolute;
-  inset:0;
-  z-index:9999;
-  align-items:center;
-  justify-content:center;
-  pointer-events:none;
-}
-.revoked-watermark.show{display:flex!important}
-.revoked-watermark span{
-  transform:rotate(-22deg);
-  padding:20px 46px;
-  border:8px solid rgba(158,42,52,.62);
-  border-radius:14px;
-  background:rgba(255,255,255,.90);
-  color:rgba(158,42,52,.78);
-  font-size:clamp(28px,4.4vw,58px);
-  line-height:1.2;
-  font-weight:800;
-  letter-spacing:.2px;
-  white-space:nowrap;
-  box-shadow:0 10px 30px rgba(0,0,0,.08);
-}
-
-
-/* ===== R6: preserve certificate line breaks ===== */
-.item{
-  white-space:pre-line!important;
-}
-#body,#trainingFor,#trainingHeld,#trainingExtra{
-  white-space:pre-wrap!important;
-  overflow-wrap:anywhere!important;
-}
-
-
-/* ===== R7 verification multiline ===== */
-#trainingFor,#trainingHeld,#trainingExtra{
-  white-space:pre-wrap!important;
-  overflow-wrap:anywhere!important;
-}
-
+*{box-sizing:border-box}body{margin:0;font-family:Prompt,sans-serif;background:#f3f7fb;color:#102442}
+header{height:82px;background:#fff;border-bottom:1px solid #dfe7ef;display:flex;align-items:center;justify-content:space-between;padding:0 6vw}
+header img{width:76px;height:56px;object-fit:contain}.wrap{max-width:1420px;margin:28px auto;padding:0 22px}
+.card{background:#fff;border:1px solid #dae5ef;border-radius:22px;padding:20px;box-shadow:0 14px 40px rgba(17,51,85,.06)}
+.status{padding:14px 18px;border-radius:14px;margin-bottom:18px;background:#ecfaf2;color:#146c43}.status.bad{background:#fff0f1;color:#9e2a34}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:20px}.stage-wrap{overflow:auto;background:#eef4fa;border-radius:16px;padding:14px}
+.stage{position:relative;width:1200px;aspect-ratio:1200/848;margin:auto;background:#fff;overflow:hidden}.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:fill}
+.item{position:absolute;transform:translate(-50%,-50%);display:flex;align-items:center;justify-content:center;white-space:pre-wrap;overflow:hidden;z-index:5}
+.issuer-logo{position:absolute;transform:translate(-50%,-50%);z-index:7;object-fit:contain}
+.sig{position:absolute;transform:translate(-50%,-50%);z-index:8;text-align:center;color:#172848;width:34%}.sig img{height:60px;max-width:55%;object-fit:contain}.sig .n{font-weight:600;font-size:18px}.sig .p,.sig .o{font-size:14px;white-space:pre-line}
+.qr{position:absolute;transform:translate(-50%,-50%);z-index:9;background:white;padding:4px}.qr-label{position:absolute;transform:translate(-50%,-50%);z-index:9;background:#0b447f;color:#fff;border-radius:999px;font-size:8px;padding:3px 7px}
+.info h2{margin-top:0}.info dl{display:grid;grid-template-columns:1fr;gap:4px}.info dt{font-size:11px;color:#7d8fa5;margin-top:10px}.info dd{margin:0;font-weight:600}
+.revoked-stage .bg,.revoked-stage .item,.revoked-stage .issuer-logo,.revoked-stage .sig,.revoked-stage .qr,.revoked-stage .qr-label{filter:grayscale(1);opacity:.36}
+.watermark{display:none;position:absolute;inset:0;z-index:99;align-items:center;justify-content:center;pointer-events:none}.watermark.show{display:flex}.watermark span{transform:rotate(-22deg);padding:20px 42px;border:8px solid rgba(158,42,52,.62);background:rgba(255,255,255,.9);border-radius:14px;color:rgba(158,42,52,.78);font-size:46px;font-weight:800}
+.deleted{padding:70px 25px;text-align:center}.deleted h2{color:#9e2a34}
+@media(max-width:950px){.grid{grid-template-columns:1fr}.stage{width:100%;min-width:760px}}
 </style>
-<meta name="sante-build" content="VERIFY-REVOKED-GRAY-R2">
-<meta name="sante-build" content="VERIFY-REVOKED-R4">
-<meta name="sante-build" content="VERIFY-SUPABASE-MULTILINE-R6">
-<meta name="sante-build" content="VERIFY-DIRECT-ENDPOINT-R7">
 </head>
 <body>
-<header class="head"><img src="SANTE-logo.png" alt="SANTE"><a href="/">SANTE Consulting</a></header>
-<main class="wrap">
- <div id="loading" class="card loading">กำลังตรวจสอบวุฒิบัตร...</div>
- <div id="app" style="display:none">
-  <div id="status" class="status"><div class="dot"></div><div><strong id="statusTitle">เอกสารนี้ออกโดย SANTE Consulting</strong><span id="statusSub">ตรวจสอบจากระบบ SANTE</span></div></div>
-  <div class="grid">
-   <section class="card">
-    <div class="cert-stage-wrap"><div class="cert-stage" id="stage">
-      <img class="cert-bg" id="bg"><div class="item issuer-item" id="issuer"></div>
-      <div class="item no" id="no"></div><div class="item" id="name"></div><div class="item" id="bodyTitle"></div><div class="item" id="course"></div><div class="item" id="body"></div><div class="item" id="trainingFor"></div><div class="item" id="trainingHeld"></div><div class="item" id="trainingExtra"></div><div class="item" id="duration"></div><div class="item" id="delivery"></div><div class="item" id="date"></div><div class="verify-qr" id="verifyQr"></div><div class="verify-qr-label" id="verifyQrLabel">SCAN TO VERIFY</div><div class="revoked-watermark" id="revokedWatermark"><span>วุฒิบัตรนี้ถูกยกเลิกแล้ว</span></div>
-    </div></div>
-   </section>
-   <aside class="card meta"><h2>ข้อมูลวุฒิบัตร</h2><dl>
-    <dt>เลขวุฒิบัตร</dt><dd id="mNo">-</dd><dt>ผู้รับ</dt><dd id="mName">-</dd><dt>องค์กร</dt><dd id="mOrg">-</dd><dt>หลักสูตร / งานบริการ</dt><dd id="mCourse">-</dd><dt>วันที่อบรม / ให้บริการ</dt><dd id="mTrainingDate">-</dd><dt>วันที่ออกวุฒิบัตร</dt><dd id="mDate">-</dd><dt>สถานะ</dt><dd id="mStatus">-</dd><div id="revokedWrap" style="display:none"><dt>เหตุผลการยกเลิก</dt><dd id="mRevokedReason">-</dd></div>
-   </dl></aside>
+<header><img src="SANTE-logo.png" alt="SANTE"><strong>SANTE Consulting</strong></header>
+<div class="wrap">
+  <div class="card" id="loading">กำลังตรวจสอบวุฒิบัตร...</div>
+  <div id="app" style="display:none">
+    <div class="status" id="status"><strong id="statusTitle"></strong><div id="statusSub"></div></div>
+    <div class="grid">
+      <div class="stage-wrap"><div class="stage" id="stage">
+        <img class="bg" id="bg">
+        <img class="issuer-logo" id="issuerLogo">
+        <div class="item" id="issuer"></div><div class="item" id="no"></div><div class="item" id="name"></div>
+        <div class="item" id="bodyTitle"></div><div class="item" id="course"></div><div class="item" id="body"></div>
+        <div class="item" id="trainingFor"></div><div class="item" id="trainingHeld"></div><div class="item" id="trainingExtra"></div>
+        <div class="item" id="duration"></div><div class="item" id="delivery"></div><div class="item" id="date"></div>
+        <div class="sig" id="sig1"><img id="sigImg1"><div class="n" id="sigName1"></div><div class="p" id="sigPos1"></div><div class="o" id="sigOrg1"></div></div>
+        <div class="sig" id="sig2"><img id="sigImg2"><div class="n" id="sigName2"></div><div class="p" id="sigPos2"></div><div class="o" id="sigOrg2"></div></div>
+        <div class="qr" id="verifyQr"></div><div class="qr-label" id="verifyQrLabel">SCAN TO VERIFY</div>
+        <div class="watermark" id="watermark"><span>วุฒิบัตรนี้ถูกยกเลิกแล้ว</span></div>
+      </div></div>
+      <aside class="info"><h2>ข้อมูลวุฒิบัตร</h2><dl>
+        <dt>เลขวุฒิบัตร</dt><dd id="mNo">-</dd><dt>ผู้รับ</dt><dd id="mName">-</dd>
+        <dt>องค์กร</dt><dd id="mOrg">-</dd><dt>หลักสูตร / งานบริการ</dt><dd id="mCourse">-</dd>
+        <dt>วันที่อบรม / ให้บริการ</dt><dd id="mTrainingDate">-</dd><dt>วันที่ออก</dt><dd id="mIssueDate">-</dd>
+        <dt>ผู้ออกวุฒิบัตร</dt><dd id="mIssuer">-</dd><dt>สถานะ</dt><dd id="mStatus">-</dd>
+        <dt id="reasonLabel" style="display:none">เหตุผลการยกเลิก</dt><dd id="mReason" style="display:none">-</dd>
+      </dl></aside>
+    </div>
   </div>
-  <div class="footer">© 2026 SANTE Consulting Co., Ltd. · Trust in Safety. Trust in SANTE.</div>
- </div>
-</main>
+</div>
 <script>
-const db=window.supabase?.createClient?.("https://cyegjwerxlxhczrfiurz.supabase.co","sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF");
-const defaultLayouts={
- FREE_TRAINING:{bg:"cert-template-free.png",fields:{issuer:{x:50,y:25,size:29,color:"#172848",width:68,height:9,lineHeight:1.12,align:"center",autoFit:true},
-  number:{x:95,y:2.8,size:13,color:"#172848",width:26,height:5,lineHeight:1.15,align:"right",autoFit:true},
-  name:{x:50,y:40,size:34,color:"#172848",width:72,height:9,lineHeight:1.15,align:"center",autoFit:true},
-  bodyTitle:{x:50,y:51,size:18,color:"#172848",width:70,height:6,lineHeight:1.2,align:"center",autoFit:true},
-  course:{x:50,y:58,size:23,color:"#172848",width:82,height:15,lineHeight:1.18,align:"center",autoFit:true},
-  body:{x:50,y:62,size:14,color:"#172848",width:86,height:10,lineHeight:1.28,align:"center",autoFit:true},trainingFor:{x:50,y:66,size:14,color:"#172848",width:86,height:5,lineHeight:1.2,align:"center",autoFit:true},trainingHeld:{x:50,y:70,size:14,color:"#172848",width:86,height:5,lineHeight:1.2,align:"center",autoFit:true},trainingExtra:{x:50,y:74,size:14,color:"#172848",width:80,height:5,lineHeight:1.2,align:"center",autoFit:true},
-  duration:{x:50,y:70,size:16,color:"#172848",width:72,height:6,lineHeight:1.2,align:"center",autoFit:true},
-  delivery:{x:50,y:75,size:16,color:"#172848",width:66,height:5,lineHeight:1.2,align:"center",autoFit:true},
-  date:{x:50,y:79,size:16,color:"#172848",width:68,height:6,lineHeight:1.2,align:"center",autoFit:true}},qr:{x:91,y:16}},
- PAID_TRAINING:{bg:"cert-template-paid.png",fields:{issuer:{x:50,y:25,size:29,color:"#203b73",width:68,height:9,lineHeight:1.12,align:"center",autoFit:true},
-  number:{x:95,y:2.8,size:13,color:"#203b73",width:26,height:5,lineHeight:1.15,align:"right",autoFit:true},
-  name:{x:50,y:42,size:37,color:"#203b73",width:74,height:10,lineHeight:1.15,align:"center",autoFit:true},
-  bodyTitle:{x:50,y:53,size:18,color:"#203b73",width:72,height:6,lineHeight:1.2,align:"center",autoFit:true},
-  course:{x:50,y:59,size:23,color:"#203b73",width:84,height:15,lineHeight:1.18,align:"center",autoFit:true},
-  body:{x:50,y:62,size:14,color:"#203b73",width:86,height:10,lineHeight:1.26,align:"center",autoFit:true},trainingFor:{x:50,y:66,size:14,color:"#203b73",width:86,height:5,lineHeight:1.2,align:"center",autoFit:true},trainingHeld:{x:50,y:70,size:14,color:"#203b73",width:86,height:5,lineHeight:1.2,align:"center",autoFit:true},trainingExtra:{x:50,y:74,size:14,color:"#203b73",width:80,height:5,lineHeight:1.2,align:"center",autoFit:true},
-  duration:{x:50,y:70,size:16,color:"#203b73",width:72,height:6,lineHeight:1.2,align:"center",autoFit:true},
-  delivery:{x:50,y:75,size:16,color:"#203b73",width:66,height:5,lineHeight:1.2,align:"center",autoFit:true},
-  date:{x:50,y:79,size:16,color:"#203b73",width:68,height:6,lineHeight:1.2,align:"center",autoFit:true}},qr:{x:91,y:16}},
- SERVICE:{bg:"cert-template-service.png",fields:{issuer:{x:50,y:25,size:27,color:"#172848",width:72,height:9,lineHeight:1.12,align:"center",autoFit:true},
-  number:{x:95,y:3,size:12,color:"#172848",width:26,height:5,lineHeight:1.15,align:"right",autoFit:true},
-  name:{x:50,y:34,size:28,color:"#172848",width:82,height:10,lineHeight:1.15,align:"center",autoFit:true},
-  bodyTitle:{x:50,y:43,size:16,color:"#172848",width:80,height:6,lineHeight:1.2,align:"center",autoFit:true},
-  course:{x:50,y:50,size:20,color:"#172848",width:86,height:16,lineHeight:1.2,align:"center",autoFit:true},
-  body:{x:50,y:55,size:14,color:"#172848",width:88,height:10,lineHeight:1.3,align:"center",autoFit:true},trainingFor:{x:50,y:61,size:14,color:"#172848",width:88,height:5,lineHeight:1.2,align:"center",autoFit:true},trainingHeld:{x:50,y:65,size:14,color:"#172848",width:88,height:5,lineHeight:1.2,align:"center",autoFit:true},trainingExtra:{x:50,y:69,size:14,color:"#172848",width:82,height:5,lineHeight:1.2,align:"center",autoFit:true},
-  duration:{x:50,y:64,size:14,color:"#172848",width:80,height:6,lineHeight:1.2,align:"center",autoFit:true},
-  delivery:{x:50,y:69,size:14,color:"#172848",width:74,height:6,lineHeight:1.2,align:"center",autoFit:true},
-  date:{x:50,y:75,size:15,color:"#172848",width:72,height:6,lineHeight:1.2,align:"center",autoFit:true}},qr:{x:91,y:16}}
+const SUPABASE_URL="https://cyegjwerxlxhczrfiurz.supabase.co";
+const SUPABASE_KEY="sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF";
+const defaults={
+ FREE_TRAINING:{bg:"certificate-free.png",fields:{
+ issuer:{x:50,y:21,size:26,color:"#172848",width:70,height:8,align:"center"},
+ number:{x:94,y:3,size:13,color:"#172848",width:24,height:5,align:"right"},
+ name:{x:50,y:40,size:34,color:"#172848",width:72,height:9,align:"center"},
+ bodyTitle:{x:50,y:51,size:18,color:"#172848",width:70,height:6,align:"center"},
+ course:{x:50,y:58,size:23,color:"#172848",width:82,height:15,align:"center"},
+ body:{x:50,y:62,size:14,color:"#172848",width:86,height:10,align:"center"},
+ trainingFor:{x:50,y:66,size:14,color:"#172848",width:86,height:5,align:"center"},
+ trainingHeld:{x:50,y:70,size:14,color:"#172848",width:86,height:5,align:"center"},
+ trainingExtra:{x:50,y:74,size:14,color:"#172848",width:80,height:5,align:"center"},
+ duration:{x:50,y:70,size:16,color:"#172848",width:72,height:6,align:"center"},
+ delivery:{x:50,y:75,size:16,color:"#172848",width:66,height:5,align:"center"},
+ date:{x:50,y:79,size:16,color:"#172848",width:68,height:6,align:"center"}},qr:{x:91,y:16}},
+ PAID_TRAINING:{bg:"certificate-pay.png",fields:{}},
+ SERVICE:{bg:"certificate-service.png",fields:{}}
 };
-function thaiDate(v){if(!v)return"-";return new Intl.DateTimeFormat("th-TH",{day:"numeric",month:"long",year:"numeric"}).format(new Date(v+"T00:00:00"))}
-function normalizeVerifyField(c,key){
- const defaults={width:key==="course"?82:(key==="body"?84:(key==="name"?72:70)),height:key==="course"?15:(key==="body"?14:(key==="name"?9:6)),lineHeight:1.2,align:key==="number"?"right":"center",autoFit:true,color:"#172848"};
- return Object.assign({},defaults,c||{});
+defaults.PAID_TRAINING.fields=JSON.parse(JSON.stringify(defaults.FREE_TRAINING.fields));
+defaults.SERVICE.fields=JSON.parse(JSON.stringify(defaults.FREE_TRAINING.fields));
+function thaiDate(v){if(!v)return"-";try{return new Intl.DateTimeFormat("th-TH",{day:"numeric",month:"long",year:"numeric"}).format(new Date(v+"T00:00:00"))}catch{return v}}
+function setField(id,text,cfg){
+ const e=document.getElementById(id);if(!e)return;
+ cfg=cfg||{};e.textContent=text||"";e.style.left=(cfg.x??50)+"%";e.style.top=(cfg.y??50)+"%";
+ e.style.width=(cfg.width??70)+"%";e.style.height=(cfg.height??6)+"%";e.style.fontSize=(cfg.size??16)+"px";
+ e.style.color=cfg.color||"#172848";e.style.textAlign=cfg.align||"center";
+ e.style.justifyContent=(cfg.align==="left"?"flex-start":cfg.align==="right"?"flex-end":"center");
+ e.style.lineHeight=String(cfg.lineHeight||1.2)
 }
-function fitVerify(el,cfg){
- if(cfg.autoFit===false)return;
- let size=cfg.size||16;el.style.fontSize=size+"px";let guard=0;
- while((el.scrollHeight>el.clientHeight+1||el.scrollWidth>el.clientWidth+1)&&size>8&&guard<80){
-   size-=.5;guard++;el.style.fontSize=size+"px";
- }
-}
-function set(id,text,c){
- const e=document.getElementById(id),cfg=normalizeVerifyField(c,id);
- if(!e)return;
- e.textContent=text||"";
- e.style.left=cfg.x+"%";e.style.top=cfg.y+"%";
- e.style.width=cfg.width+"%";e.style.height=cfg.height+"%";
- e.style.fontSize=cfg.size+"px";e.style.color=cfg.color||"#172848";
- e.style.lineHeight=String(cfg.lineHeight||1.2);e.style.textAlign=cfg.align||"center";
- e.style.justifyContent=cfg.align==="left"?"flex-start":(cfg.align==="right"?"flex-end":"center");
- if(id==="name"||id==="course")e.style.fontWeight="700";
- requestAnimationFrame(()=>fitVerify(e,cfg));
+function renderSignatory(i,state,count,type){
+ const w=document.getElementById("sig"+i);if(!w)return;
+ if(i>count){w.style.display="none";return} w.style.display="block";
+ w.style.left=(count===1?50:(i===1?34:66))+"%";w.style.top=(type==="SERVICE"?82:86)+"%";
+ const img=document.getElementById("sigImg"+i);img.style.display=state?.image?"inline-block":"none";if(state?.image)img.src=state.image;
+ document.getElementById("sigName"+i).textContent=state?.name||"";
+ document.getElementById("sigPos"+i).textContent=state?.position||"";
+ const org=document.getElementById("sigOrg"+i);org.textContent=state?.organization||"";org.style.display=state?.showOrganization===false?"none":"block";
 }
 async function init(){
  const token=new URLSearchParams(location.search).get("token");
- if(!token){document.getElementById("loading").innerHTML='<div class="error"><strong>ไม่พบรหัสตรวจสอบวุฒิบัตร</strong><br>กรุณาสแกน QR จากวุฒิบัตรอีกครั้ง</div>';return}
- let data=null,error=null;
+ if(!token){document.getElementById("loading").innerHTML='<div class="deleted"><h2>ไม่พบรหัสตรวจสอบวุฒิบัตร</h2></div>';return}
+ let c=null;
  try{
-   const controller=new AbortController();
-   const timer=setTimeout(()=>controller.abort(),10000);
-   const res=await fetch(
-     "https://cyegjwerxlxhczrfiurz.supabase.co/rest/v1/rpc/get_certificate_public",
-     {
-       method:"POST",
-       headers:{
-         "Content-Type":"application/json",
-         "apikey":"sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF",
-         "Authorization":"Bearer sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF"
-       },
-       body:JSON.stringify({p_token:token}),
-       signal:controller.signal
-     }
-   );
-   clearTimeout(timer);
-   if(!res.ok){
-     throw new Error("HTTP "+res.status+" "+await res.text());
-   }
-   data=await res.json();
- }catch(e){
-   error=e;
+  const ctl=new AbortController();const timer=setTimeout(()=>ctl.abort(),10000);
+  const r=await fetch(SUPABASE_URL+"/rest/v1/rpc/get_certificate_public_v2",{method:"POST",headers:{"Content-Type":"application/json","apikey":SUPABASE_KEY,"Authorization":"Bearer "+SUPABASE_KEY},body:JSON.stringify({p_token:token}),signal:ctl.signal});
+  clearTimeout(timer);if(!r.ok)throw new Error(await r.text());c=await r.json();
+ }catch(e){document.getElementById("loading").innerHTML='<div class="deleted"><h2>ไม่สามารถตรวจสอบวุฒิบัตรได้</h2><p>'+e.message+'</p></div>';return}
+ if(!c){document.getElementById("loading").innerHTML='<div class="deleted"><h2>ไม่พบข้อมูลวุฒิบัตร</h2></div>';return}
+ if(c.certificate_status==="DELETED"){
+   document.getElementById("loading").innerHTML='<div class="deleted"><h2>วุฒิบัตรนี้ถูกลบออกจากระบบแล้ว</h2><p>เลขวุฒิบัตร '+(c.certificate_no||"-")+'</p></div>';return;
  }
- if(error||!data||!data.length){
-   document.getElementById("loading").innerHTML='<div class="error"><strong>ไม่สามารถตรวจสอบวุฒิบัตรได้</strong><br>'+(error?(error.name==="AbortError"?"เชื่อมต่อฐานข้อมูลเกิน 10 วินาที":error.message):"ไม่พบข้อมูลวุฒิบัตรจาก QR นี้")+'<br><br><a href="/" style="color:#0b447f">กลับเว็บไซต์ SANTE</a></div>';
-   return
- }
- const c=data[0], type=c.template_code||"FREE_TRAINING", base=defaultLayouts[type]||defaultLayouts.FREE_TRAINING, d=c.design_json?.fields||base.fields;
- document.getElementById("bg").src=c.design_json?.backgroundUrl||c.design_json?.backgroundTemplate||base.bg;
- set("issuer",c.design_json?.issuerName||"บริษัท ซานเต้ คอนซัลติ้ง จำกัด",d.issuer||base.fields.issuer);set("no",c.certificate_no,d.number||base.fields.number);set("name",c.recipient_name,d.name||base.fields.name);set("bodyTitle",c.body_title,d.bodyTitle||base.fields.bodyTitle);set("course",c.course_name,d.course||base.fields.course);set("body",c.body_text,d.body||base.fields.body);set("trainingFor",c.design_json?.trainingForText?`ฝึกอบรมให้กับ ${c.design_json.trainingForText}`:"",d.trainingFor||base.fields.trainingFor);set("trainingHeld",c.design_json?.trainingHeldText?`จัดฝึกอบรมวันที่ ${c.design_json.trainingHeldText}`:"",d.trainingHeld||base.fields.trainingHeld);set("trainingExtra",c.design_json?.trainingExtraText||"",d.trainingExtra||base.fields.trainingExtra);set("duration",c.duration_text,d.duration||base.fields.duration);set("delivery",c.delivery_text,d.delivery||base.fields.delivery);set("date",c.training_date?"ให้ไว้ ณ วันที่ "+c.training_date:(c.issue_date?"ให้ไว้ ณ วันที่ "+thaiDate(c.issue_date):""),d.date||base.fields.date);
- const qpos=c.design_json?.qr||base.qr||{x:91,y:16};
- const q=document.getElementById("verifyQr"),ql=document.getElementById("verifyQrLabel");
- q.style.left=qpos.x+"%";q.style.top=qpos.y+"%";
- ql.style.left=qpos.x+"%";ql.style.top=(qpos.y+6.3)+"%";
- q.innerHTML="";
- new QRCode(q,{text:location.href,width:70,height:70,correctLevel:QRCode.CorrectLevel.M});
- document.getElementById("mNo").textContent=c.certificate_no;document.getElementById("mName").textContent=c.recipient_name||"-";document.getElementById("mOrg").textContent=c.recipient_organization||"-";document.getElementById("mCourse").textContent=c.course_name||"-";document.getElementById("mTrainingDate").textContent=c.training_date||"-";document.getElementById("mDate").textContent=thaiDate(c.issue_date);document.getElementById("mStatus").textContent=c.certificate_status;
+ const type=c.template_code||"FREE_TRAINING",base=defaults[type]||defaults.FREE_TRAINING,j=c.design_json||{},fields=j.fields||base.fields;
+ document.getElementById("bg").src=j.backgroundUrl||j.backgroundTemplate||base.bg;
+ const logo=document.getElementById("issuerLogo"),lp=j.issuerLogo||{x:50,y:7.5,w:11};
+ logo.style.display=j.showIssuerLogo===false||!j.issuerLogoData?"none":"block";if(j.issuerLogoData)logo.src=j.issuerLogoData;
+ logo.style.left=(lp.x??50)+"%";logo.style.top=(lp.y??7.5)+"%";logo.style.width=(lp.w??11)+"%";
+ setField("issuer",j.showIssuerName===false?"":(j.issuerName||""),fields.issuer);
+ setField("no",c.certificate_no,fields.number);setField("name",c.recipient_name,fields.name);
+ setField("bodyTitle",c.body_title,fields.bodyTitle);setField("course",c.course_name,fields.course);setField("body",c.body_text,fields.body);
+ setField("trainingFor",j.trainingForText?("ฝึกอบรมให้กับ "+j.trainingForText):"",fields.trainingFor);
+ setField("trainingHeld",j.trainingHeldText?("จัดฝึกอบรมวันที่ "+j.trainingHeldText):"",fields.trainingHeld);
+ setField("trainingExtra",j.trainingExtraText||"",fields.trainingExtra);
+ setField("duration",c.duration_text,fields.duration);setField("delivery",c.delivery_text,fields.delivery);
+ setField("date",c.training_date?("ให้ไว้ ณ วันที่ "+c.training_date):(c.issue_date?("ให้ไว้ ณ วันที่ "+thaiDate(c.issue_date)):""),fields.date);
+ const count=Number(j.signatureCount||0);renderSignatory(1,j.signatory1,count,type);renderSignatory(2,j.signatory2,count,type);
+ const qp=j.qr||base.qr||{x:91,y:16},q=document.getElementById("verifyQr"),ql=document.getElementById("verifyQrLabel");
+ q.style.left=qp.x+"%";q.style.top=qp.y+"%";ql.style.left=qp.x+"%";ql.style.top=(qp.y+6.3)+"%";
+ new QRCode(q,{text:location.href,width:72,height:72,correctLevel:QRCode.CorrectLevel.M});
+ document.getElementById("mNo").textContent=c.certificate_no||"-";document.getElementById("mName").textContent=c.recipient_name||"-";
+ document.getElementById("mOrg").textContent=c.recipient_organization||"-";document.getElementById("mCourse").textContent=c.course_name||"-";
+ document.getElementById("mTrainingDate").textContent=c.training_date||"-";document.getElementById("mIssueDate").textContent=thaiDate(c.issue_date);
+ document.getElementById("mIssuer").textContent=j.issuerName||"-";document.getElementById("mStatus").textContent=c.certificate_status||"-";
  if(c.certificate_status==="REVOKED"){
-  document.getElementById("stage")?.classList.add("revoked-stage");
-  document.getElementById("revokedWatermark")?.classList.add("show");
-  document.getElementById("status")?.classList.add("bad");
-  document.getElementById("statusTitle").textContent="วุฒิบัตรฉบับนี้ถูกยกเลิกแล้ว";
-  document.getElementById("statusSub").textContent=c.revoked_reason||"กรุณาติดต่อ SANTE Consulting เพื่อตรวจสอบ";
-  if(c.revoked_reason){
-    document.getElementById("revokedWrap").style.display="block";
-    document.getElementById("mRevokedReason").textContent=c.revoked_reason;
-  }
-}else if(c.certificate_status!=="ISSUED"){
-  document.getElementById("status")?.classList.add("bad");
-  document.getElementById("statusTitle").textContent="เอกสารนี้ไม่อยู่ในสถานะใช้งาน";
-  document.getElementById("statusSub").textContent="กรุณาติดต่อ SANTE Consulting เพื่อตรวจสอบ";
-}
- document.getElementById("loading").style.display="none";document.getElementById("app").style.display="block"
+   document.getElementById("stage").classList.add("revoked-stage");document.getElementById("watermark").classList.add("show");
+   document.getElementById("status").classList.add("bad");document.getElementById("statusTitle").textContent="วุฒิบัตรฉบับนี้ถูกยกเลิกแล้ว";
+   document.getElementById("statusSub").textContent=c.revoked_reason||"กรุณาติดต่อ SANTE Consulting เพื่อตรวจสอบ";
+   document.getElementById("reasonLabel").style.display="block";document.getElementById("mReason").style.display="block";document.getElementById("mReason").textContent=c.revoked_reason||"-";
+ }else{
+   document.getElementById("statusTitle").textContent="วุฒิบัตรนี้ใช้งานได้";
+   document.getElementById("statusSub").textContent="ข้อมูลตรงกับระบบ SANTE";
+ }
+ document.getElementById("loading").style.display="none";document.getElementById("app").style.display="block";
 }
 init();
 </script>

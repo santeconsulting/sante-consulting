@@ -251,12 +251,138 @@ body{margin:0;background:var(--bg);font-family:"Prompt",sans-serif;color:var(--n
   overflow-wrap:anywhere!important;
 }
 
+
+/* ===== SANTE CERTIFICATE DESIGNER R8 ===== */
+.designer{
+  display:grid!important;
+  grid-template-columns:minmax(420px,470px) minmax(680px,1fr)!important;
+  gap:16px!important;
+  align-items:start!important;
+}
+.form{
+  position:relative!important;
+  top:auto!important;
+  min-width:0!important;
+}
+.preview-panel{
+  position:sticky!important;
+  top:88px!important;
+  align-self:start!important;
+  max-height:calc(100vh - 106px)!important;
+  overflow:auto!important;
+  min-width:0!important;
+}
+.preview-head{
+  position:sticky!important;
+  top:0!important;
+  z-index:45!important;
+  padding:4px 0 10px!important;
+  background:#fff!important;
+}
+.preview-toolbox{
+  top:54px!important;
+}
+.detail-section{
+  margin:14px 0;
+  padding:14px;
+  border:1px solid #d8e4ef;
+  border-radius:14px;
+  background:#f8fbff;
+}
+.detail-section-title{
+  font-size:12px;
+  font-weight:700;
+  color:#112443;
+  margin-bottom:10px;
+}
+.detail-line{
+  margin-bottom:10px;
+}
+.detail-line:last-of-type{
+  margin-bottom:4px;
+}
+.detail-line label{
+  display:flex!important;
+  align-items:center;
+  gap:7px;
+  margin-bottom:5px!important;
+  font-size:11px!important;
+}
+.detail-line label span{
+  display:inline-flex;
+  min-width:68px;
+  justify-content:center;
+  padding:4px 7px;
+  border-radius:999px;
+  background:#e8f1fb;
+  color:#0b447f;
+  font-size:9px;
+  font-weight:700;
+}
+.detail-line textarea{
+  min-height:58px!important;
+  resize:vertical;
+}
+.form .row2{
+  align-items:start;
+}
+@media(max-width:1280px){
+  .designer{
+    grid-template-columns:minmax(360px,420px) minmax(600px,1fr)!important;
+  }
+}
+@media(max-width:1050px){
+  .designer{
+    grid-template-columns:1fr!important;
+  }
+  .preview-panel{
+    position:relative!important;
+    top:auto!important;
+    max-height:none!important;
+    overflow:visible!important;
+  }
+  .preview-head,.preview-toolbox{
+    position:relative!important;
+    top:auto!important;
+  }
+}
+
+
+/* ===== FINAL CERTIFICATE DESIGNER R10 ===== */
+.issuer-options-card,.signature-editor-card{
+  margin:14px 0;padding:14px;border:1px solid #d9e4ef;border-radius:14px;background:#f8fbff
+}
+.issuer-options-title,.signatory-title{font-weight:700;color:#112443;margin-bottom:8px}
+.switch-line{display:flex!important;align-items:center;gap:8px;margin:7px 0!important}
+.brand-position-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.asset-actions{display:flex;gap:8px;margin-top:7px}
+.signature-editor-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.signature-editor-head select{max-width:160px}
+.signatory-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.signatory-card{border:1px solid #dce6f0;border-radius:12px;padding:12px;background:#fff}
+.signatory-card label{display:block;margin:8px 0 5px;font-size:11px;font-weight:600}
+.signatory-card textarea{resize:vertical}
+.issuer-logo-preview{
+  position:absolute;z-index:9;transform:translate(-50%,-50%);object-fit:contain;pointer-events:none
+}
+.signature-preview{
+  position:absolute;z-index:10;transform:translate(-50%,-50%);text-align:center;width:34%;pointer-events:none;color:#172848
+}
+.signature-img{display:block;margin:0 auto 2px;max-width:52%;height:54px;object-fit:contain}
+.signature-name{font-weight:600;font-size:13px;line-height:1.15;white-space:pre-line}
+.signature-position,.signature-org{font-size:11px;line-height:1.2;white-space:pre-line}
+@media(max-width:1100px){
+ .brand-position-grid,.signatory-grid{grid-template-columns:1fr}
+}
+
 </style>
 <meta name="sante-build" content="CERT-BATCH-HOURS-FIX-2026-10-05">
 <meta name="sante-build" content="CERT-DATE-ISSUER-R2">
 <meta name="sante-build" content="CERT-ISSUER-UX-R4">
 <meta name="sante-build" content="CERT-MULTILINE-R6">
 <meta name="sante-build" content="CERT-THREE-DETAILS-R7">
+<meta name="sante-build" content="CERT-DESIGNER-R8-STICKY-PREVIEW">
+<meta name="sante-build" content="CERTIFICATE-FINAL-R10">
 </head>
 <body>
 <div class="loading" id="loading"><div class="loading-box"><strong>SANTE CERTIFICATE</strong><div>กำลังตรวจสอบสิทธิ์และโหลดข้อมูล...</div><div class="spinner"></div></div></div>
@@ -286,7 +412,7 @@ body{margin:0;background:var(--bg);font-family:"Prompt",sans-serif;color:var(--n
         <div class="toolbar">
           <input id="search" placeholder="ค้นหาเลขวุฒิบัตร / ชื่อผู้รับ / หลักสูตร..." oninput="renderList()">
           <select id="filterType" onchange="renderList()"><option value="">ทุกประเภท</option><option value="FREE_TRAINING">อบรมฟรี</option><option value="PAID_TRAINING">อบรมมีค่าใช้จ่าย</option><option value="SERVICE">งานบริการ</option></select>
-          <select id="filterStatus" onchange="renderList()"><option value="">ทุกสถานะ</option><option value="ISSUED">ออกแล้ว</option><option value="REVOKED">ยกเลิก</option><option value="PENDING">รอดำเนินการ</option></select>
+          <select id="filterStatus" onchange="renderList()"><option value="">ทุกสถานะ</option><option value="ISSUED">ออกแล้ว</option><option value="REVOKED">ยกเลิก</option><option value="PENDING">รอดำเนินการ</option><option value="DELETED">ลบแล้ว</option></select>
           <button class="btn light" onclick="loadCertificates()">↻ รีเฟรช</button>
         </div>
       </div>
@@ -316,7 +442,6 @@ body{margin:0;background:var(--bg);font-family:"Prompt",sans-serif;color:var(--n
           <div class="group"><label>ประเภท</label><select id="typeCode" onchange="applyType()"><option value="FREE_TRAINING">อบรมฟรี</option><option value="PAID_TRAINING">อบรมมีค่าใช้จ่าย</option><option value="SERVICE">งานบริการ</option></select></div>
           <div class="group" id="subtypeGroup" style="display:none"><label>รูปแบบการอบรมมีค่าใช้จ่าย</label><select id="subtype" onchange="applyPrefix()"><option value="PUBLIC">Public Training</option><option value="INHOUSE">In-house Training</option></select></div>
           <div class="group"><label>ภาษา</label><select id="language"><option value="th">ภาษาไทย</option><option value="en">English (ใช้เมื่อต้องการ)</option></select></div>
-</div>
 
           <div class="bg-manager">
             <div class="bg-manager-head">
@@ -363,13 +488,33 @@ body{margin:0;background:var(--bg);font-family:"Prompt",sans-serif;color:var(--n
   <label>ออกวุฒิบัตรในนาม</label>
   <select id="issuerMode" onchange="applyIssuerMode();syncPreview()">
     <option value="SANTE">บริษัท ซานเต้ คอนซัลติ้ง จำกัด</option>
-    <option value="CUSTOM">บริษัท / หน่วยงานอื่น</option>
+    <option value="CLIENT">บริษัท / หน่วยงานลูกค้า</option>
   </select>
 </div>
 <div class="group">
   <label>ชื่อบริษัท / หน่วยงานผู้ออกวุฒิบัตร</label>
   <input id="issuerName" value="บริษัท ซานเต้ คอนซัลติ้ง จำกัด" oninput="syncPreview()" readonly>
   <div class="hint">เลือก SANTE ระบบจะใส่ชื่อให้อัตโนมัติ หากเลือกบริษัทอื่นช่องนี้จะแก้ไขได้</div>
+</div>
+<div class="issuer-options-card">
+  <div class="issuer-options-title">การแสดงผลผู้ออกวุฒิบัตร</div>
+  <label class="switch-line"><input type="checkbox" id="showIssuerLogo" checked onchange="syncPreview()"> แสดงโลโก้ผู้ออกวุฒิบัตร</label>
+  <label class="switch-line"><input type="checkbox" id="showIssuerName" checked onchange="syncPreview()"> แสดงชื่อบริษัท / หน่วยงาน</label>
+
+  <div class="client-logo-box" id="clientLogoBox" style="display:none">
+    <label>โลโก้บริษัท / หน่วยงานลูกค้า</label>
+    <input type="file" id="clientLogoFile" accept="image/png,image/jpeg,image/webp" onchange="handleClientLogoUpload(this)">
+    <div class="asset-actions">
+      <button class="btn light" type="button" onclick="clearClientLogo()">ลบโลโก้ลูกค้า</button>
+    </div>
+    <div class="hint">PNG / JPG / WebP · ระบบจะย่อภาพก่อนบันทึกลงแม่แบบ</div>
+  </div>
+
+  <div class="brand-position-grid">
+    <div><label>ตำแหน่งโลโก้ X (%)</label><input id="issuerLogoX" type="number" value="50" step="0.5" oninput="syncPreview()"></div>
+    <div><label>ตำแหน่งโลโก้ Y (%)</label><input id="issuerLogoY" type="number" value="7.5" step="0.5" oninput="syncPreview()"></div>
+    <div><label>ความกว้างโลโก้ (%)</label><input id="issuerLogoW" type="number" value="11" min="3" max="30" step="0.5" oninput="syncPreview()"></div>
+  </div>
 </div>
 <div class="group" id="courseGroup"><label>หลักสูตร</label><select id="courseId" onchange="applyCourse()"><option value="">-- เลือกหรือพิมพ์เอง --</option></select></div>
           <div class="group">
@@ -385,46 +530,55 @@ body{margin:0;background:var(--bg);font-family:"Prompt",sans-serif;color:var(--n
   </select>
 </div>
           <div class="group"><label>ข้อความนำ</label><input id="bodyTitle" value="ผ่านการฝึกอบรมหลักสูตร" oninput="syncPreview()"></div>
-          <div class="group">
-  <label>รายละเอียดบรรทัดที่ 1</label>
-  <textarea id="trainingForText" rows="2"
-    placeholder="เช่น บริษัท โนโว ออโต้โมทีฟ ซิสเต็ม (ไทยแลนด์) จำกัด"
-    oninput="syncPreview()"></textarea>
-  <div class="hint">บนวุฒิบัตรจะแสดงนำหน้าว่า “ฝึกอบรมให้กับ”</div>
-</div>
+          <div class="detail-section">
+  <div class="detail-section-title">รายละเอียดเพิ่มเติมบนวุฒิบัตร (3 บรรทัด)</div>
 
-<div class="group">
-  <label>รายละเอียดบรรทัดที่ 2</label>
-  <textarea id="trainingHeldText" rows="2"
-    placeholder="เช่น 23 กรกฎาคม พ.ศ. 2567"
-    oninput="syncPreview()"></textarea>
-  <div class="hint">บนวุฒิบัตรจะแสดงนำหน้าว่า “จัดฝึกอบรมวันที่”</div>
-</div>
+  <div class="detail-line">
+    <label><span>บรรทัดที่ 1</span> ฝึกอบรมให้กับ</label>
+    <textarea id="trainingForText" rows="2"
+      placeholder="เช่น บริษัท โนโว ออโต้โมทีฟ ซิสเต็ม (ไทยแลนด์) จำกัด"
+      oninput="syncPreview()"></textarea>
+  </div>
 
-<div class="group">
-  <label>รายละเอียดบรรทัดที่ 3</label>
-  <textarea id="trainingExtraText" rows="2"
-    placeholder="เช่น จำนวน 3 ชั่วโมง"
-    oninput="syncPreview()"></textarea>
-  <div class="hint">ข้อความบรรทัดนี้พิมพ์เองได้อิสระ</div>
+  <div class="detail-line">
+    <label><span>บรรทัดที่ 2</span> จัดฝึกอบรมวันที่</label>
+    <textarea id="trainingHeldText" rows="2"
+      placeholder="เช่น 23 กรกฎาคม พ.ศ. 2567"
+      oninput="syncPreview()"></textarea>
+  </div>
+
+  <div class="detail-line">
+    <label><span>บรรทัดที่ 3</span> ข้อความเพิ่มเติม</label>
+    <textarea id="trainingExtraText" rows="2"
+      placeholder="เช่น จำนวน 3 ชั่วโมง"
+      oninput="syncPreview()"></textarea>
+  </div>
+
+  <div class="hint">ทั้ง 3 ช่องจะแสดงบนวุฒิบัตรทันที และสามารถเลือกเพื่อขยับตำแหน่ง/ปรับขนาดได้จาก Preview</div>
 </div>
 
 <input type="hidden" id="bodyText" value="">
           <div class="row2">
-            <div class="group">
-      <label>ระยะเวลาการอบรม (ชั่วโมง)</label>
-      <input id="durationHours" type="number" min="0" step="0.5" value="2" oninput="syncPreview()">
-      <div class="hint">กรอกเฉพาะตัวเลข เช่น 2, 3.5, 6</div>
-    </div>
-    <div class="group" id="durationSourceGroup">
-      <label>เวลาออกแบบ Batch ให้ใช้ระยะเวลาจาก</label>
-      <select id="durationSource">
-        <option value="TEMPLATE">ตัวเลขที่กำหนดในแม่แบบ</option>
-        <option value="COURSE">ชั่วโมงที่กำหนดในหลักสูตร</option><option value="SESSION">ชั่วโมงที่กำหนดในรอบอบรม</option>
-      </select>
-    </div>
-            <div class="group"><label>รูปแบบ</label><input id="deliveryText" value="(ผ่านระบบออนไลน์)" oninput="syncPreview()"></div>
-          </div>
+  <div class="group">
+    <label>ระยะเวลาการอบรม (ชั่วโมง)</label>
+    <input id="durationHours" type="number" min="0" step="0.5" value="2" oninput="syncPreview()">
+    <div class="hint">กรอกเฉพาะตัวเลข เช่น 2, 3.5, 6</div>
+  </div>
+
+  <div class="group" id="durationSourceGroup">
+    <label>เวลาออกแบบ Batch ให้ใช้ระยะเวลาจาก</label>
+    <select id="durationSource">
+      <option value="TEMPLATE">ตัวเลขที่กำหนดในแม่แบบ</option>
+      <option value="COURSE">ชั่วโมงที่กำหนดในหลักสูตร</option>
+      <option value="SESSION">ชั่วโมงที่กำหนดในรอบอบรม</option>
+    </select>
+  </div>
+</div>
+
+<div class="group">
+  <label>รูปแบบ</label>
+  <input id="deliveryText" value="(ผ่านระบบออนไลน์)" oninput="syncPreview()">
+</div>
           <div class="row2">
             <div class="group"><label>วันที่อบรม/ให้บริการ</label><input id="trainingDate" type="date" onchange="syncPreview()"><div class="hint">เลือกจากปฏิทินได้เหมือนวันที่ออกวุฒิบัตร</div></div>
             <div class="group"><label>วันที่ออก</label><input id="issueDate" type="date" onchange="syncPreview()"></div>
@@ -433,6 +587,61 @@ body{margin:0;background:var(--bg);font-family:"Prompt",sans-serif;color:var(--n
             <div class="group"><label>Prefix เลขวุฒิบัตร</label><input id="prefix" value="ST-SS" oninput="syncPreview()"><div class="hint">Paid/In-house สามารถเปลี่ยนตามรหัสหลักสูตรได้</div></div>
             <div class="group"><label>เลข Preview</label><input id="previewNo" value="ST-SS-69-0001" oninput="syncPreview()"></div>
           </div>
+
+
+<div class="signature-editor-card">
+  <div class="signature-editor-head">
+    <div>
+      <strong>ผู้ลงนาม</strong>
+      <div class="hint">0 คน = ไม่แสดงลายเซ็น · 1 คน = จัดกึ่งกลาง · 2 คน = ซ้าย–ขวา</div>
+    </div>
+    <select id="signatureCount" onchange="applySignatureCount();syncPreview()">
+      <option value="0">ไม่มีลายเซ็น</option>
+      <option value="1" selected>1 ลายเซ็น</option>
+      <option value="2">2 ลายเซ็น</option>
+    </select>
+  </div>
+
+  <div class="signatory-grid" id="signatoryGrid">
+    <div class="signatory-card" id="signatoryCard1">
+      <div class="signatory-title">ผู้ลงนามคนที่ 1</div>
+      <label>ประเภทผู้ลงนาม</label>
+      <select id="sig1Type" onchange="applySignatoryPreset(1);syncPreview()">
+        <option value="SANTE_DIRECTOR">SANTE — กรรมการผู้จัดการ</option>
+        <option value="SANTE_OFFICER">SANTE — ผู้ดำเนินการตรวจวัดฯ</option>
+        <option value="CLIENT">บริษัทลูกค้า</option>
+        <option value="TRAINER">วิทยากร</option>
+        <option value="CUSTOM">กำหนดเอง</option>
+      </select>
+      <label>ชื่อผู้ลงนาม</label><input id="sig1Name" oninput="syncPreview()">
+      <label>ตำแหน่ง</label><textarea id="sig1Position" rows="2" oninput="syncPreview()"></textarea>
+      <label>บริษัท / หน่วยงาน</label><input id="sig1Org" oninput="syncPreview()">
+      <label class="switch-line"><input id="sig1ShowOrg" type="checkbox" checked onchange="syncPreview()"> แสดงชื่อบริษัท / หน่วยงาน</label>
+      <label>ภาพลายเซ็น</label>
+      <input type="file" id="sig1File" accept="image/png,image/jpeg,image/webp" onchange="handleSignatureUpload(1,this)">
+      <button class="btn light" type="button" onclick="clearSignatureImage(1)">ลบภาพลายเซ็น</button>
+    </div>
+
+    <div class="signatory-card" id="signatoryCard2" style="display:none">
+      <div class="signatory-title">ผู้ลงนามคนที่ 2</div>
+      <label>ประเภทผู้ลงนาม</label>
+      <select id="sig2Type" onchange="applySignatoryPreset(2);syncPreview()">
+        <option value="CLIENT">บริษัทลูกค้า</option>
+        <option value="TRAINER">วิทยากร</option>
+        <option value="SANTE_DIRECTOR">SANTE — กรรมการผู้จัดการ</option>
+        <option value="SANTE_OFFICER">SANTE — ผู้ดำเนินการตรวจวัดฯ</option>
+        <option value="CUSTOM">กำหนดเอง</option>
+      </select>
+      <label>ชื่อผู้ลงนาม</label><input id="sig2Name" oninput="syncPreview()">
+      <label>ตำแหน่ง</label><textarea id="sig2Position" rows="2" oninput="syncPreview()"></textarea>
+      <label>บริษัท / หน่วยงาน</label><input id="sig2Org" oninput="syncPreview()">
+      <label class="switch-line"><input id="sig2ShowOrg" type="checkbox" checked onchange="syncPreview()"> แสดงชื่อบริษัท / หน่วยงาน</label>
+      <label>ภาพลายเซ็น</label>
+      <input type="file" id="sig2File" accept="image/png,image/jpeg,image/webp" onchange="handleSignatureUpload(2,this)">
+      <button class="btn light" type="button" onclick="clearSignatureImage(2)">ลบภาพลายเซ็น</button>
+    </div>
+  </div>
+</div>
 
           <div style="display:grid;gap:8px;margin-top:15px">
             <button class="btn primary" id="issueBtn" onclick="issueCertificate()">ออกวุฒิบัตรรายบุคคล + สร้าง QR</button>
@@ -476,7 +685,20 @@ body{margin:0;background:var(--bg);font-family:"Prompt",sans-serif;color:var(--n
           </div>
           <div class="cert-stage-wrap">
             <div class="cert-stage" id="certStage">
-              <img class="cert-bg" id="certBg" src="cert-template-free.png">
+              <img class="cert-bg" id="certBg" src="certificate-free.png">
+              <img class="issuer-logo-preview" id="issuerLogoPreview" src="SANTE-logo.png" alt="Issuer logo">
+              <div class="signature-preview" id="signaturePreview1">
+                <img id="sigPreviewImg1" class="signature-img" alt="ลายเซ็น 1">
+                <div id="sigPreviewName1" class="signature-name"></div>
+                <div id="sigPreviewPosition1" class="signature-position"></div>
+                <div id="sigPreviewOrg1" class="signature-org"></div>
+              </div>
+              <div class="signature-preview" id="signaturePreview2">
+                <img id="sigPreviewImg2" class="signature-img" alt="ลายเซ็น 2">
+                <div id="sigPreviewName2" class="signature-name"></div>
+                <div id="sigPreviewPosition2" class="signature-position"></div>
+                <div id="sigPreviewOrg2" class="signature-org"></div>
+              </div>
               <div class="cert-item issuer-item" data-field="issuer" id="fIssuer"></div>
               <div class="cert-item" data-field="number" id="fNo"></div>
               <div class="cert-item" data-field="name" id="fName"></div>
@@ -542,7 +764,7 @@ let previewZoom=1;
 
 const layouts={
  FREE_TRAINING:{
-  bg:"cert-template-free.png",
+  bg:"certificate-free.png",
   fields:{
    issuer:{x:50,y:25,size:29,color:"#203b73",width:68,height:9,lineHeight:1.12,align:"center",autoFit:true},
    number:{x:95,y:2.8,size:13,color:"#172848",width:26,height:5,lineHeight:1.15,align:"right",autoFit:true},
@@ -559,7 +781,7 @@ const layouts={
   },qr:{x:91,y:16}
  },
  PAID_TRAINING:{
-  bg:"cert-template-paid.png",
+  bg:"certificate-pay.png",
   fields:{
    issuer:{x:50,y:25,size:29,color:"#203b73",width:68,height:9,lineHeight:1.12,align:"center",autoFit:true},
    number:{x:95,y:2.8,size:13,color:"#203b73",width:26,height:5,lineHeight:1.15,align:"right",autoFit:true},
@@ -576,7 +798,7 @@ const layouts={
   },qr:{x:91,y:16}
  },
  SERVICE:{
-  bg:"cert-template-service.png",
+  bg:"certificate-service.png",
   fields:{
    issuer:{x:50,y:25,size:27,color:"#172848",width:72,height:9,lineHeight:1.12,align:"center",autoFit:true},
    number:{x:95,y:3,size:12,color:"#172848",width:26,height:5,lineHeight:1.15,align:"right",autoFit:true},
@@ -1132,7 +1354,7 @@ async function deleteSavedTemplate(){
 }
 
 async function loadCertificates(){
- const {data,error}=await db.from("certificates").select("id,certificate_no,certificate_status,revoked_reason,user_id,training_session_id,recipient_display_name,recipient_organization,course_name_snapshot,issue_date,template_code,certificate_subtype,verification_url,certificate_types(type_code,type_name_th)").order("created_at",{ascending:false}).limit(1000);
+ const {data,error}=await db.from("certificates").select("id,certificate_no,certificate_status,revoked_reason,user_id,training_session_id,recipient_display_name,recipient_organization,course_name_snapshot,issue_date,template_code,certificate_subtype,verification_url,deleted_at,deleted_by,certificate_types(type_code,type_name_th)").order("created_at",{ascending:false}).limit(1000);
  if(error){alert("โหลดวุฒิบัตรไม่สำเร็จ: "+error.message);return}
  certificates=data||[];renderList();updateStats()
 }
@@ -1187,15 +1409,12 @@ async function issueCertificate(){
   const courseId=courseSel.value||null, subtype=type==="PAID_TRAINING"?document.getElementById("subtype").value:(type==="SERVICE"?"SERVICE":"FREE");
   const sequenceKey=type==="PAID_TRAINING"?(subtype+"-"+(courseSel.selectedOptions[0]?.dataset.code||prefix)):type;
   const designJson={
-   fields:design,qr:qrPos,template:type,
+   ...currentDesignerPayload().design_json,
+   fields:design,
+   qr:qrPos,
+   template:type,
    backgroundUrl:currentBackgroundUrl||null,
-   backgroundTemplate:currentBackgroundUrl?null:getDefaultBackground(),
-   trainingDate:document.getElementById("trainingDate").value||null,
-   issuerMode:document.getElementById("issuerMode")?.value||"SANTE",
-   issuerName:document.getElementById("issuerName")?.value||"บริษัท ซานเต้ คอนซัลติ้ง จำกัด",
-     trainingForText:document.getElementById("trainingForText")?.value||"",
-     trainingHeldText:document.getElementById("trainingHeldText")?.value||"",
-     trainingExtraText:document.getElementById("trainingExtraText")?.value||""
+   backgroundTemplate:currentBackgroundUrl?null:getDefaultBackground()
  };
   const {data,error}=await db.rpc("admin_issue_certificate",{
    p_type_code:type,p_subtype:subtype,p_user_id:type==="SERVICE"?null:(document.getElementById("userId").value||null),
@@ -1371,6 +1590,7 @@ async function issueBulk(){
            : (saved.duration_text||"")),
      p_delivery_text:formatDeliveryText(session.delivery_method),
      p_design_json:{
+       ...(saved.design_json||{}),
        fields:layout.fields,
        qr:layout.qr,
        template,
@@ -1444,6 +1664,275 @@ async function init(){
  }catch(e){document.querySelector(".loading-box").innerHTML=`<strong>ไม่สามารถเปิดโมดูลวุฒิบัตรได้</strong><p style="color:#c63a49">${e.message||e}</p><button class="btn yellow" onclick="location.reload()">ลองอีกครั้ง</button>`}
 }
 async function logout(){try{await db.auth.signOut()}finally{location.href="admin-login.html"}}
+
+/* ===== FINAL CERTIFICATE DESIGNER R10 ===== */
+let clientLogoData="";
+let signatureImageData={1:"signature-director.png",2:""};
+const SANTE_NAME="บริษัท ซานเต้ คอนซัลติ้ง จำกัด";
+
+function safeBool(id, fallback=true){
+  const el=document.getElementById(id); return el ? !!el.checked : fallback;
+}
+function normalizeIssuerModeValue(v){
+  return v==="CUSTOM" ? "CLIENT" : (v||"SANTE");
+}
+async function fileToCompressedDataURL(file,maxW=900,maxH=500,quality=.88){
+  if(!file)return "";
+  const src=await new Promise((resolve,reject)=>{
+    const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=reject;r.readAsDataURL(file);
+  });
+  const img=await new Promise((resolve,reject)=>{
+    const i=new Image();i.onload=()=>resolve(i);i.onerror=reject;i.src=src;
+  });
+  let w=img.naturalWidth,h=img.naturalHeight;
+  const scale=Math.min(1,maxW/w,maxH/h);w=Math.round(w*scale);h=Math.round(h*scale);
+  const c=document.createElement("canvas");c.width=w;c.height=h;
+  c.getContext("2d").drawImage(img,0,0,w,h);
+  return c.toDataURL("image/png",quality);
+}
+async function handleClientLogoUpload(input){
+  const f=input?.files?.[0]; if(!f)return;
+  try{clientLogoData=await fileToCompressedDataURL(f,900,500,.9);syncPreview()}catch(e){alert("อ่านไฟล์โลโก้ไม่สำเร็จ")}
+}
+function clearClientLogo(){
+  clientLogoData=""; const x=document.getElementById("clientLogoFile");if(x)x.value="";syncPreview();
+}
+async function handleSignatureUpload(index,input){
+  const f=input?.files?.[0];if(!f)return;
+  try{signatureImageData[index]=await fileToCompressedDataURL(f,900,400,.92);syncPreview()}catch(e){alert("อ่านไฟล์ลายเซ็นไม่สำเร็จ")}
+}
+function clearSignatureImage(index){
+  signatureImageData[index]="";
+  const x=document.getElementById("sig"+index+"File");if(x)x.value="";
+  syncPreview();
+}
+function applyIssuerMode(){
+  const mode=normalizeIssuerModeValue(document.getElementById("issuerMode")?.value);
+  const input=document.getElementById("issuerName");
+  const logoBox=document.getElementById("clientLogoBox");
+  if(mode==="SANTE"){
+    if(input){input.value=SANTE_NAME;input.readOnly=true;input.style.background="#f4f7fb"}
+    if(logoBox)logoBox.style.display="none";
+    if(!signatureImageData[1])signatureImageData[1]="signature-director.png";
+    const c=document.getElementById("signatureCount");if(c&&c.value==="0")c.value="1";
+    const s=document.getElementById("sig1Type");if(s)s.value="SANTE_DIRECTOR";
+    applySignatoryPreset(1,false);
+  }else{
+    if(input){input.readOnly=false;input.style.background="#fff";if(input.value===SANTE_NAME)input.value=""}
+    if(logoBox)logoBox.style.display="block";
+    const s=document.getElementById("sig1Type");
+    if(s&&s.value==="SANTE_DIRECTOR")s.value="CLIENT";
+    applySignatoryPreset(1,false);
+  }
+  syncBrandingPreview();
+}
+function getSignatoryPreset(type){
+  if(type==="SANTE_DIRECTOR")return {
+    name:"นางสาววลีภรณ์ หาญนภาชีวิน",
+    position:"กรรมการผู้จัดการ",
+    organization:SANTE_NAME,
+    image:"signature-director.png"
+  };
+  if(type==="SANTE_OFFICER")return {
+    name:"นายณัฐพงค์ ม้าเทศ",
+    position:"บุคคลผู้ดำเนินการตรวจวัดและวิเคราะห์สภาวะการทำงาน\nตามกฎหมายกรมสวัสดิการและคุ้มครองแรงงาน",
+    organization:SANTE_NAME,
+    image:"signature-officer.png"
+  };
+  return null;
+}
+function applySignatoryPreset(index,doSync=true){
+  const type=document.getElementById("sig"+index+"Type")?.value||"CUSTOM";
+  const p=getSignatoryPreset(type);
+  if(p){
+    document.getElementById("sig"+index+"Name").value=p.name;
+    document.getElementById("sig"+index+"Position").value=p.position;
+    document.getElementById("sig"+index+"Org").value=p.organization;
+    document.getElementById("sig"+index+"ShowOrg").checked=true;
+    signatureImageData[index]=p.image;
+  }else if(type==="CLIENT"){
+    const issuer=document.getElementById("issuerName")?.value||"";
+    if(!document.getElementById("sig"+index+"Org").value)document.getElementById("sig"+index+"Org").value=issuer;
+  }
+  if(doSync)syncPreview();
+}
+function applySignatureCount(){
+  const count=Number(document.getElementById("signatureCount")?.value||0);
+  document.getElementById("signatoryCard1").style.display=count>=1?"block":"none";
+  document.getElementById("signatoryCard2").style.display=count>=2?"block":"none";
+  syncBrandingPreview();
+}
+function getBrandState(){
+  const mode=normalizeIssuerModeValue(document.getElementById("issuerMode")?.value);
+  return {
+    mode,
+    showLogo:safeBool("showIssuerLogo",true),
+    showName:safeBool("showIssuerName",true),
+    issuerName:document.getElementById("issuerName")?.value||"",
+    logoData:mode==="SANTE"?"SANTE-logo.png":clientLogoData,
+    logoX:Number(document.getElementById("issuerLogoX")?.value||50),
+    logoY:Number(document.getElementById("issuerLogoY")?.value||7.5),
+    logoW:Number(document.getElementById("issuerLogoW")?.value||11)
+  };
+}
+function getSignatoryState(index){
+  return {
+    type:document.getElementById("sig"+index+"Type")?.value||"CUSTOM",
+    name:document.getElementById("sig"+index+"Name")?.value||"",
+    position:document.getElementById("sig"+index+"Position")?.value||"",
+    organization:document.getElementById("sig"+index+"Org")?.value||"",
+    showOrganization:safeBool("sig"+index+"ShowOrg",true),
+    image:signatureImageData[index]||""
+  };
+}
+function syncBrandingPreview(){
+  const b=getBrandState();
+  const logo=document.getElementById("issuerLogoPreview");
+  if(logo){
+    logo.style.display=b.showLogo&&b.logoData?"block":"none";
+    logo.src=b.logoData||"";
+    logo.style.left=b.logoX+"%";
+    logo.style.top=b.logoY+"%";
+    logo.style.width=b.logoW+"%";
+    logo.style.height="auto";
+  }
+  const issuer=document.getElementById("fIssuer");
+  if(issuer)issuer.style.display=b.showName&&b.issuerName?"flex":"none";
+
+  const count=Number(document.getElementById("signatureCount")?.value||0);
+  for(let i=1;i<=2;i++){
+    const wrap=document.getElementById("signaturePreview"+i);
+    if(!wrap)continue;
+    if(i>count){wrap.style.display="none";continue}
+    wrap.style.display="block";
+    const state=getSignatoryState(i);
+    const x=count===1?50:(i===1?34:66);
+    const y=document.getElementById("typeCode")?.value==="SERVICE"?82:86;
+    wrap.style.left=x+"%";wrap.style.top=y+"%";
+    const img=document.getElementById("sigPreviewImg"+i);
+    img.style.display=state.image?"block":"none"; if(state.image)img.src=state.image;
+    document.getElementById("sigPreviewName"+i).textContent=state.name;
+    document.getElementById("sigPreviewPosition"+i).textContent=state.position;
+    const org=document.getElementById("sigPreviewOrg"+i);
+    org.textContent=state.organization;org.style.display=state.showOrganization&&state.organization?"block":"none";
+  }
+}
+function collectFinalDesignExtras(){
+  return {
+    issuerMode:normalizeIssuerModeValue(document.getElementById("issuerMode")?.value),
+    showIssuerLogo:safeBool("showIssuerLogo",true),
+    showIssuerName:safeBool("showIssuerName",true),
+    issuerName:document.getElementById("issuerName")?.value||"",
+    issuerLogoData:normalizeIssuerModeValue(document.getElementById("issuerMode")?.value)==="SANTE"?"SANTE-logo.png":clientLogoData,
+    issuerLogo:{x:Number(document.getElementById("issuerLogoX")?.value||50),y:Number(document.getElementById("issuerLogoY")?.value||7.5),w:Number(document.getElementById("issuerLogoW")?.value||11)},
+    signatureCount:Number(document.getElementById("signatureCount")?.value||0),
+    signatory1:getSignatoryState(1),
+    signatory2:getSignatoryState(2)
+  };
+}
+function restoreFinalDesignExtras(j={}){
+  const mode=normalizeIssuerModeValue(j.issuerMode||"SANTE");
+  if(document.getElementById("issuerMode"))document.getElementById("issuerMode").value=mode;
+  if(document.getElementById("showIssuerLogo"))document.getElementById("showIssuerLogo").checked=j.showIssuerLogo!==false;
+  if(document.getElementById("showIssuerName"))document.getElementById("showIssuerName").checked=j.showIssuerName!==false;
+  if(document.getElementById("issuerName"))document.getElementById("issuerName").value=j.issuerName||(mode==="SANTE"?SANTE_NAME:"");
+  clientLogoData=mode==="SANTE"?"":(j.issuerLogoData||"");
+  const lp=j.issuerLogo||{};
+  if(document.getElementById("issuerLogoX"))document.getElementById("issuerLogoX").value=lp.x??50;
+  if(document.getElementById("issuerLogoY"))document.getElementById("issuerLogoY").value=lp.y??7.5;
+  if(document.getElementById("issuerLogoW"))document.getElementById("issuerLogoW").value=lp.w??11;
+  const count=Number(j.signatureCount ?? (mode==="SANTE"?1:1));
+  document.getElementById("signatureCount").value=String(count);
+  [1,2].forEach(i=>{
+    const s=j["signatory"+i]||{};
+    if(s.type)document.getElementById("sig"+i+"Type").value=s.type;
+    document.getElementById("sig"+i+"Name").value=s.name||"";
+    document.getElementById("sig"+i+"Position").value=s.position||"";
+    document.getElementById("sig"+i+"Org").value=s.organization||"";
+    document.getElementById("sig"+i+"ShowOrg").checked=s.showOrganization!==false;
+    signatureImageData[i]=s.image||"";
+  });
+  applyIssuerMode();
+  applySignatureCount();
+  syncBrandingPreview();
+}
+
+const __r10SyncPreview=syncPreview;
+syncPreview=function(){
+  __r10SyncPreview();
+  syncBrandingPreview();
+};
+
+const __r10CurrentDesignerPayload=currentDesignerPayload;
+currentDesignerPayload=function(){
+  const p=__r10CurrentDesignerPayload();
+  p.design_json={...(p.design_json||{}),...collectFinalDesignExtras()};
+  return p;
+};
+
+const __r10LoadSavedTemplate=loadSavedTemplate;
+loadSavedTemplate=async function(id){
+  await __r10LoadSavedTemplate(id);
+  const t=savedTemplates.find(x=>x.id===id);
+  if(t)restoreFinalDesignExtras(t.design_json||{});
+};
+
+const __r10ApplyType=applyType;
+applyType=function(){
+  __r10ApplyType();
+  // Keep blank master backgrounds; all branding/signatures are dynamic.
+  const type=document.getElementById("typeCode").value;
+  if(!currentBackgroundUrl && document.getElementById("certBg"))document.getElementById("certBg").src=layouts[type].bg;
+  syncBrandingPreview();
+};
+
+function r10Status(x){
+  return x.deleted_at?"DELETED":(x.certificate_status||"-");
+}
+renderList=function(){
+ const q=document.getElementById("search").value.toLowerCase().trim(),t=document.getElementById("filterType").value,s=document.getElementById("filterStatus").value;
+ const rows=certificates.filter(x=>{
+   const status=r10Status(x);
+   return (!t||x.certificate_types?.type_code===t)&&(!s||status===s)&&(!q||[x.certificate_no,x.recipient_display_name,x.recipient_organization,x.course_name_snapshot].join(" ").toLowerCase().includes(q));
+ });
+ document.getElementById("emptyList").style.display=rows.length?"none":"block";
+ document.getElementById("certBody").innerHTML=rows.map(x=>{
+  const status=r10Status(x);
+  return `<tr>
+ <td><strong>${x.certificate_no||"-"}</strong></td>
+ <td>${x.recipient_display_name||x.recipient_organization||"-"}</td>
+ <td>${x.course_name_snapshot||"-"}</td>
+ <td>${x.issue_date?formatThaiDate(x.issue_date):"-"}</td>
+ <td>${x.certificate_types?.type_name_th||"-"}</td>
+ <td><span class="badge ${status==="REVOKED"||status==="DELETED"?"red":""}">${status}</span>${x.revoked_reason?`<div class="hint">${x.revoked_reason}</div>`:""}</td>
+ <td>${x.verification_url?`<a class="btn light" style="display:inline-flex;align-items:center" href="${x.verification_url}" target="_blank">เปิด</a>`:"-"}</td>
+ <td style="white-space:nowrap">
+   ${!x.deleted_at&&x.certificate_status!=="REVOKED"?`<button class="btn light" onclick="revokeCertificate('${x.id}','${String(x.certificate_no||"").replace(/'/g,"")}')">ยกเลิก</button>`:""}
+   ${!x.deleted_at?`<button class="btn danger" onclick="deleteCertificate('${x.id}','${String(x.certificate_no||"").replace(/'/g,"")}')">ลบ</button>`:`<button class="btn light" onclick="restoreCertificate('${x.id}','${String(x.certificate_no||"").replace(/'/g,"")}')">กู้คืน</button>`}
+ </td>
+ </tr>`;
+ }).join("");
+};
+deleteCertificate=async function(id,no){
+ if(!confirm(`ลบวุฒิบัตร ${no} ออกจากรายการใช้งาน?\n\nระบบจะใช้ Soft Delete และยังเก็บประวัติไว้`))return;
+ const {error}=await db.rpc("admin_soft_delete_certificate",{p_certificate_id:id});
+ if(error){alert("ลบวุฒิบัตรไม่สำเร็จ: "+error.message);return}
+ await loadCertificates();alert("ลบวุฒิบัตรแล้ว");
+};
+async function restoreCertificate(id,no){
+ if(!confirm(`กู้คืนวุฒิบัตร ${no} ?`))return;
+ const {error}=await db.rpc("admin_restore_certificate",{p_certificate_id:id});
+ if(error){alert("กู้คืนไม่สำเร็จ: "+error.message);return}
+ await loadCertificates();alert("กู้คืนวุฒิบัตรแล้ว");
+}
+
+setTimeout(()=>{
+  applySignatoryPreset(1,false);
+  applySignatureCount();
+  applyIssuerMode();
+  syncPreview();
+},0);
+
 init();
 </script>
 <script src="admin-member-master.js"></script>
