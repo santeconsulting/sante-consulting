@@ -104,10 +104,18 @@
   overflow-wrap:anywhere!important;
 }
 
+
+/* ===== R7 verification multiline ===== */
+#trainingFor,#trainingHeld,#trainingExtra{
+  white-space:pre-wrap!important;
+  overflow-wrap:anywhere!important;
+}
+
 </style>
 <meta name="sante-build" content="VERIFY-REVOKED-GRAY-R2">
 <meta name="sante-build" content="VERIFY-REVOKED-R4">
 <meta name="sante-build" content="VERIFY-SUPABASE-MULTILINE-R6">
+<meta name="sante-build" content="VERIFY-DIRECT-ENDPOINT-R7">
 </head>
 <body>
 <header class="head"><img src="SANTE-logo.png" alt="SANTE"><a href="/">SANTE Consulting</a></header>
@@ -130,9 +138,7 @@
  </div>
 </main>
 <script>
-const SUPABASE_URL="https://cyegjwerxlxhczrfiurz.supabase.co";
-const SUPABASE_KEY="sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF";
-const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+const db=window.supabase?.createClient?.("https://cyegjwerxlxhczrfiurz.supabase.co","sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF");
 const defaultLayouts={
  FREE_TRAINING:{bg:"cert-template-free.png",fields:{issuer:{x:50,y:25,size:29,color:"#172848",width:68,height:9,lineHeight:1.12,align:"center",autoFit:true},
   number:{x:95,y:2.8,size:13,color:"#172848",width:26,height:5,lineHeight:1.15,align:"right",autoFit:true},
@@ -187,10 +193,6 @@ function set(id,text,c){
  requestAnimationFrame(()=>fitVerify(e,cfg));
 }
 async function init(){
- if(typeof SUPABASE_URL==="undefined" || typeof SUPABASE_KEY==="undefined"){
-   document.getElementById("loading").innerHTML='<div class="error"><strong>ไม่สามารถตรวจสอบวุฒิบัตรได้</strong><br>การตั้งค่าการเชื่อมต่อฐานข้อมูลไม่สมบูรณ์</div>';
-   return;
- }
  const token=new URLSearchParams(location.search).get("token");
  if(!token){document.getElementById("loading").innerHTML='<div class="error"><strong>ไม่พบรหัสตรวจสอบวุฒิบัตร</strong><br>กรุณาสแกน QR จากวุฒิบัตรอีกครั้ง</div>';return}
  let data=null,error=null;
@@ -198,13 +200,13 @@ async function init(){
    const controller=new AbortController();
    const timer=setTimeout(()=>controller.abort(),10000);
    const res=await fetch(
-     SUPABASE_URL+"/rest/v1/rpc/get_certificate_public",
+     "https://cyegjwerxlxhczrfiurz.supabase.co/rest/v1/rpc/get_certificate_public",
      {
        method:"POST",
        headers:{
          "Content-Type":"application/json",
-         "apikey":SUPABASE_KEY,
-         "Authorization":"Bearer "+SUPABASE_KEY
+         "apikey":"sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF",
+         "Authorization":"Bearer sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF"
        },
        body:JSON.stringify({p_token:token}),
        signal:controller.signal

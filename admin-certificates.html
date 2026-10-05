@@ -242,11 +242,21 @@ body{margin:0;background:var(--bg);font-family:"Prompt",sans-serif;color:var(--n
   overflow-wrap:anywhere!important;
 }
 
+
+/* ===== R7 certificate three-line details ===== */
+.cert-item[data-field="trainingFor"],
+.cert-item[data-field="trainingHeld"],
+.cert-item[data-field="trainingExtra"]{
+  white-space:pre-wrap!important;
+  overflow-wrap:anywhere!important;
+}
+
 </style>
 <meta name="sante-build" content="CERT-BATCH-HOURS-FIX-2026-10-05">
 <meta name="sante-build" content="CERT-DATE-ISSUER-R2">
 <meta name="sante-build" content="CERT-ISSUER-UX-R4">
 <meta name="sante-build" content="CERT-MULTILINE-R6">
+<meta name="sante-build" content="CERT-THREE-DETAILS-R7">
 </head>
 <body>
 <div class="loading" id="loading"><div class="loading-box"><strong>SANTE CERTIFICATE</strong><div>กำลังตรวจสอบสิทธิ์และโหลดข้อมูล...</div><div class="spinner"></div></div></div>
@@ -351,10 +361,7 @@ body{margin:0;background:var(--bg);font-family:"Prompt",sans-serif;color:var(--n
 
           <div class="group">
   <label>ออกวุฒิบัตรในนาม</label>
-  <select id="issuerMode" onchange="applyIssuerMode();
- if(document.getElementById("trainingForText"))document.getElementById("trainingForText").value=t.design_json?.trainingForText||"";
- if(document.getElementById("trainingHeldText"))document.getElementById("trainingHeldText").value=t.design_json?.trainingHeldText||"";
- if(document.getElementById("trainingExtraText"))document.getElementById("trainingExtraText").value=t.design_json?.trainingExtraText||"";syncPreview()">
+  <select id="issuerMode" onchange="applyIssuerMode();syncPreview()">
     <option value="SANTE">บริษัท ซานเต้ คอนซัลติ้ง จำกัด</option>
     <option value="CUSTOM">บริษัท / หน่วยงานอื่น</option>
   </select>
@@ -378,7 +385,31 @@ body{margin:0;background:var(--bg);font-family:"Prompt",sans-serif;color:var(--n
   </select>
 </div>
           <div class="group"><label>ข้อความนำ</label><input id="bodyTitle" value="ผ่านการฝึกอบรมหลักสูตร" oninput="syncPreview()"></div>
-          <div class="group"><label>รายละเอียดเพิ่มเติม</label><textarea id="bodyText" rows="4" placeholder="ข้อความเพิ่มเติม..." oninput="syncPreview()"></textarea></div>
+          <div class="group">
+  <label>รายละเอียดบรรทัดที่ 1</label>
+  <textarea id="trainingForText" rows="2"
+    placeholder="เช่น บริษัท โนโว ออโต้โมทีฟ ซิสเต็ม (ไทยแลนด์) จำกัด"
+    oninput="syncPreview()"></textarea>
+  <div class="hint">บนวุฒิบัตรจะแสดงนำหน้าว่า “ฝึกอบรมให้กับ”</div>
+</div>
+
+<div class="group">
+  <label>รายละเอียดบรรทัดที่ 2</label>
+  <textarea id="trainingHeldText" rows="2"
+    placeholder="เช่น 23 กรกฎาคม พ.ศ. 2567"
+    oninput="syncPreview()"></textarea>
+  <div class="hint">บนวุฒิบัตรจะแสดงนำหน้าว่า “จัดฝึกอบรมวันที่”</div>
+</div>
+
+<div class="group">
+  <label>รายละเอียดบรรทัดที่ 3</label>
+  <textarea id="trainingExtraText" rows="2"
+    placeholder="เช่น จำนวน 3 ชั่วโมง"
+    oninput="syncPreview()"></textarea>
+  <div class="hint">ข้อความบรรทัดนี้พิมพ์เองได้อิสระ</div>
+</div>
+
+<input type="hidden" id="bodyText" value="">
           <div class="row2">
             <div class="group">
       <label>ระยะเวลาการอบรม (ชั่วโมง)</label>
@@ -803,7 +834,7 @@ function syncPreview(){
  document.getElementById("fName").textContent=templateMode?"{{recipient_name}}":(document.getElementById("recipientName").value||"{{recipient_name}}");
  document.getElementById("fBodyTitle").textContent=document.getElementById("bodyTitle").value;
  document.getElementById("fCourse").textContent=document.getElementById("courseName").value||"{{course_name}}";
- document.getElementById("fBody").textContent=document.getElementById("bodyText").value;
+ document.getElementById("fBody").textContent=document.getElementById("bodyText")?.value||"";
  document.getElementById("fTrainingFor").textContent=document.getElementById("trainingForText")?.value ? `ฝึกอบรมให้กับ ${document.getElementById("trainingForText").value}` : "";
  document.getElementById("fTrainingHeld").textContent=document.getElementById("trainingHeldText")?.value ? `จัดฝึกอบรมวันที่ ${document.getElementById("trainingHeldText").value}` : "";
  document.getElementById("fTrainingExtra").textContent=document.getElementById("trainingExtraText")?.value||"";
@@ -1060,7 +1091,10 @@ async function loadSavedTemplate(id){
  if(t.design_json?.qr)qrPos={...t.design_json.qr};
  document.getElementById("recipientName").value="";
  document.getElementById("userId").value="";
- applyDesign(true);syncPreview();selectField(selected);
+ applyDesign(true);if(document.getElementById("trainingForText")) document.getElementById("trainingForText").value=t.design_json?.trainingForText||"";
+ if(document.getElementById("trainingHeldText")) document.getElementById("trainingHeldText").value=t.design_json?.trainingHeldText||"";
+ if(document.getElementById("trainingExtraText")) document.getElementById("trainingExtraText").value=t.design_json?.trainingExtraText||"";
+ syncPreview();selectField(selected);
 }
 async function updateSavedTemplate(){
  if(!currentTemplateId)return;
