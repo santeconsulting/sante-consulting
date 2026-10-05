@@ -1964,6 +1964,12 @@ html,body,button,input,select,textarea{font-family:"Prompt",sans-serif!important
     }
   }
 
+  function formatCourseHours(value) {
+    const n = Number(value);
+    if (!Number.isFinite(n)) return "-";
+    return Number.isInteger(n) ? String(n) : String(n).replace(/\.0+$/, "");
+  }
+
   function formatMoney(value) {
     const amount = Number(value || 0);
 
@@ -2346,7 +2352,8 @@ html,body,button,input,select,textarea{font-family:"Prompt",sans-serif!important
         courses (
           id,
           course_name_th,
-          course_type
+          course_type,
+          duration_hours
         )
       `)
       .eq("session_status", "OPEN")
@@ -2498,6 +2505,15 @@ html,body,button,input,select,textarea{font-family:"Prompt",sans-serif!important
                   <div class="detail-label">หลักสูตร</div>
                   <div class="detail-value">
                     ${escapeHtml(courseName)}
+                  </div>
+                </div>
+
+                <div class="detail">
+                  <div class="detail-label">ระยะเวลาอบรม</div>
+                  <div class="detail-value">
+                    ${session.courses?.duration_hours !== null && session.courses?.duration_hours !== undefined
+                      ? `${escapeHtml(formatCourseHours(session.courses.duration_hours))} ชั่วโมง`
+                      : "-"}
                   </div>
                 </div>
 

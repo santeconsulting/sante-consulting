@@ -148,6 +148,48 @@ body{margin:0;background:var(--bg);font-family:"Prompt",sans-serif;color:var(--n
   .toolbox-row2{grid-template-columns:auto repeat(2,38px) auto repeat(2,38px);overflow:auto}
 }
 
+
+/* ===== Certificate Template Image Manager V7 ===== */
+.bg-manager{
+  margin:12px 0 14px;
+  padding:13px;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:#f8fbff;
+}
+.bg-manager-head{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px
+}
+.bg-manager-title{font-size:12px;font-weight:700;color:var(--navy)}
+.bg-manager-note{font-size:9px;color:var(--muted);line-height:1.5}
+.bg-manager-grid{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto auto;
+  gap:8px;
+  align-items:end;
+}
+.bg-file-label{
+  display:flex;align-items:center;justify-content:center;
+  min-height:40px;padding:0 12px;border:1px dashed #9eb8d5;border-radius:10px;
+  background:#fff;color:#0b447f;font-size:11px;font-weight:600;cursor:pointer;text-align:center
+}
+.bg-file-label:hover{background:#f2f8ff}
+.bg-file-label input{display:none}
+.bg-status{
+  margin-top:8px;padding:8px 10px;border-radius:9px;background:#fff;border:1px solid #e1e9f2;
+  font-size:10px;line-height:1.6;color:#49617e
+}
+.bg-status strong{color:#112443}
+.bg-actions{display:flex;gap:6px;flex-wrap:wrap}
+.bg-thumb{
+  width:100%;aspect-ratio:960/664;border-radius:10px;overflow:hidden;border:1px solid #d7e2ee;
+  background:#eef4fa;margin-top:10px;display:none
+}
+.bg-thumb img{display:block;width:100%;height:100%;object-fit:cover}
+@media(max-width:800px){
+  .bg-manager-grid{grid-template-columns:1fr}
+}
+
 </style>
 </head>
 <body>
@@ -208,6 +250,27 @@ body{margin:0;background:var(--bg);font-family:"Prompt",sans-serif;color:var(--n
           <div class="group"><label>ประเภท</label><select id="typeCode" onchange="applyType()"><option value="FREE_TRAINING">อบรมฟรี</option><option value="PAID_TRAINING">อบรมมีค่าใช้จ่าย</option><option value="SERVICE">งานบริการ</option></select></div>
           <div class="group" id="subtypeGroup" style="display:none"><label>รูปแบบการอบรมมีค่าใช้จ่าย</label><select id="subtype" onchange="applyPrefix()"><option value="PUBLIC">Public Training</option><option value="INHOUSE">In-house Training</option></select></div>
           <div class="group"><label>ภาษา</label><select id="language"><option value="th">ภาษาไทย</option><option value="en">English (ใช้เมื่อต้องการ)</option></select></div>
+          <div class="bg-manager">
+            <div class="bg-manager-head">
+              <div>
+                <div class="bg-manager-title">รูปพื้นหลังแม่แบบวุฒิบัตร</div>
+                <div class="bg-manager-note">รองรับ PNG / JPG / WEBP · แนะนำสัดส่วนประมาณ 960 × 664 px หรือสัดส่วนเดียวกัน</div>
+              </div>
+              <span class="template-chip" id="bgTypeChip">ใช้รูปมาตรฐาน</span>
+            </div>
+            <div class="bg-manager-grid">
+              <label class="bg-file-label">
+                <input id="backgroundFile" type="file" accept="image/png,image/jpeg,image/webp" onchange="chooseBackgroundFile(event)">
+                เลือกรูปพื้นหลังใหม่
+              </label>
+              <button class="btn light" type="button" onclick="replaceBackgroundImage()">อัปโหลด / เปลี่ยนรูป</button>
+              <button class="btn danger" type="button" onclick="resetBackgroundImage()">กลับไปใช้รูปมาตรฐาน</button>
+            </div>
+            <div class="bg-status" id="bgStatus">
+              <strong>ปัจจุบัน:</strong> ใช้รูปมาตรฐานของประเภทวุฒิบัตร
+            </div>
+            <div class="bg-thumb" id="bgThumb"><img id="bgThumbImg" alt="ตัวอย่างพื้นหลังวุฒิบัตร"></div>
+          </div>
 
           <div class="group" id="memberGroup">
             <label>สมาชิก / ผู้เข้าอบรม (ไม่บังคับ)</label>
@@ -244,7 +307,18 @@ body{margin:0;background:var(--bg);font-family:"Prompt",sans-serif;color:var(--n
           <div class="group"><label>ข้อความนำ</label><input id="bodyTitle" value="ผ่านการฝึกอบรมหลักสูตร" oninput="syncPreview()"></div>
           <div class="group"><label>รายละเอียดเพิ่มเติม</label><textarea id="bodyText" rows="4" placeholder="ข้อความเพิ่มเติม..." oninput="syncPreview()"></textarea></div>
           <div class="row2">
-            <div class="group"><label>ระยะเวลา</label><input id="durationText" value="ระยะเวลาการฝึกอบรม 2 ชั่วโมง" oninput="syncPreview()"></div>
+            <div class="group">
+      <label>ระยะเวลาการอบรม (ชั่วโมง)</label>
+      <input id="durationHours" type="number" min="0" step="0.5" value="2" oninput="syncPreview()">
+      <div class="hint">กรอกเฉพาะตัวเลข เช่น 2, 3.5, 6</div>
+    </div>
+    <div class="group" id="durationSourceGroup">
+      <label>เวลาออกแบบ Batch ให้ใช้ระยะเวลาจาก</label>
+      <select id="durationSource">
+        <option value="TEMPLATE">ตัวเลขที่กำหนดในแม่แบบ</option>
+        <option value="COURSE">ชั่วโมงที่กำหนดในหลักสูตร</option>
+      </select>
+    </div>
             <div class="group"><label>รูปแบบ</label><input id="deliveryText" value="(ผ่านระบบออนไลน์)" oninput="syncPreview()"></div>
           </div>
           <div class="row2">
@@ -351,6 +425,10 @@ const SUPABASE_KEY="sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF";
 const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{storageKey:"sante-admin-auth",persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
 let currentUser=null, certificates=[], courses=[], profiles=[], trainingSessions=[], bulkParticipants=[], savedTemplates=[];
 let currentTemplateId=null;
+let selectedBackgroundFile=null;
+let currentBackgroundUrl="";
+let currentBackgroundPath="";
+let previousBackgroundPath="";
 let lastVerificationUrl="";
 let previewZoom=1;
 
@@ -524,14 +602,34 @@ function zoomPreview(f){previewZoom=Math.min(1.4,Math.max(.5,previewZoom*f));doc
 
 function applyType(){
  const type=document.getElementById("typeCode").value;
- document.getElementById("certBg").src=layouts[type].bg;
+ if(!currentBackgroundUrl){
+   document.getElementById("certBg").src=layouts[type].bg;
+ }
  document.getElementById("subtypeGroup").style.display=type==="PAID_TRAINING"?"block":"none";
- document.getElementById("orgGroup").style.display=type==="SERVICE"?"block":"block";
  document.getElementById("memberGroup").style.display=type==="SERVICE"?"none":"block";
- if(type==="FREE_TRAINING"){document.getElementById("bodyTitle").value="ผ่านการฝึกอบรมหลักสูตร";document.getElementById("prefix").value="ST-SS"}
- if(type==="PAID_TRAINING"){document.getElementById("bodyTitle").value="ผ่านการฝึกอบรมหลักสูตร";applyPrefix()}
- if(type==="SERVICE"){document.getElementById("bodyTitle").value="ขอรับรองว่า";document.getElementById("prefix").value="ST-SR";document.getElementById("durationText").value="";document.getElementById("deliveryText").value=""}
- resetLayout();syncPreview()
+ document.getElementById("courseGroup").style.display=type==="SERVICE"?"none":"block";
+ document.getElementById("courseSourceGroup").style.display=type==="SERVICE"?"none":"block";
+ document.getElementById("durationSourceGroup").style.display=type==="SERVICE"?"none":"block";
+ document.getElementById("orgGroup").style.display="block";
+ if(type==="SERVICE"){
+   document.getElementById("bodyTitle").value="ขอมอบวุฒิบัตรฉบับนี้เพื่อแสดงว่า";
+   document.getElementById("durationHours").value="";
+   document.getElementById("deliveryText").value="";
+   document.getElementById("prefix").value="ST-SR";
+ }else if(type==="FREE_TRAINING"){
+   document.getElementById("bodyTitle").value="ผ่านการฝึกอบรมหลักสูตร";
+   document.getElementById("prefix").value="ST-SS";
+   if(document.getElementById("durationHours").value==="")document.getElementById("durationHours").value="2";
+ }else{
+   document.getElementById("bodyTitle").value="ผ่านการฝึกอบรมหลักสูตร";
+   applyPrefix();
+ }
+ design=JSON.parse(JSON.stringify(layouts[type].fields));
+ qrPos={...layouts[type].qr};
+ buildFieldSelect();
+ applyDesign(true);
+ syncPreview();
+ updateBackgroundStatus();
 }
 function applyPrefix(){
  const subtype=document.getElementById("subtype").value, course=document.getElementById("courseId").selectedOptions[0];
@@ -549,6 +647,11 @@ function applySelectedUser(){
  if(o&&o.value)document.getElementById("recipientName").value=o.dataset.name||o.textContent;
  syncPreview()
 }
+function formatHours(v){
+ const n=Number(v);
+ if(!Number.isFinite(n))return "";
+ return Number.isInteger(n)?String(n):String(n).replace(/\.0+$/,"");
+}
 function isTemplateDesignMode(){
  return !document.getElementById("userId").value && !document.getElementById("recipientName").value.trim();
 }
@@ -560,13 +663,107 @@ function syncPreview(){
  document.getElementById("fBodyTitle").textContent=document.getElementById("bodyTitle").value;
  document.getElementById("fCourse").textContent=document.getElementById("courseName").value||"{{course_name}}";
  document.getElementById("fBody").textContent=document.getElementById("bodyText").value;
- document.getElementById("fDuration").textContent=document.getElementById("durationText").value;
+ const dh=document.getElementById("durationHours").value;
+ document.getElementById("fDuration").textContent=dh!==""?`ระยะเวลาการฝึกอบรม ${formatHours(dh)} ชั่วโมง`:"";
  document.getElementById("fDelivery").textContent=document.getElementById("deliveryText").value;
  const date=document.getElementById("issueDate").value;
  document.getElementById("fDate").textContent=templateMode?"ให้ไว้ ณ วันที่ {{issue_date}}":(date?`ให้ไว้ ณ วันที่ ${formatThaiDate(date)}`:"");
  if(type==="SERVICE"&&templateMode)document.getElementById("fName").textContent="{{recipient_name}}";
  applyDesign(true)
 }
+
+function getDefaultBackground(){
+ const type=document.getElementById("typeCode").value;
+ return layouts[type]?.bg||"cert-template-free.png";
+}
+function updateBackgroundStatus(){
+ const status=document.getElementById("bgStatus");
+ const chip=document.getElementById("bgTypeChip");
+ const thumb=document.getElementById("bgThumb");
+ const thumbImg=document.getElementById("bgThumbImg");
+ if(!status)return;
+ if(currentBackgroundUrl){
+   status.innerHTML=`<strong>ปัจจุบัน:</strong> ใช้รูปพื้นหลังที่อัปโหลดเอง${currentBackgroundPath?`<br><span>${currentBackgroundPath}</span>`:""}`;
+   chip.textContent="รูปที่อัปโหลดเอง";
+   if(thumb&&thumbImg){thumb.style.display="block";thumbImg.src=currentBackgroundUrl}
+ }else{
+   status.innerHTML=`<strong>ปัจจุบัน:</strong> ใช้รูปมาตรฐานของประเภทวุฒิบัตร`;
+   chip.textContent="ใช้รูปมาตรฐาน";
+   if(thumb)thumb.style.display="none";
+ }
+}
+function chooseBackgroundFile(event){
+ const file=event.target.files?.[0]||null;
+ selectedBackgroundFile=file;
+ if(!file)return;
+ const allowed=["image/png","image/jpeg","image/webp"];
+ if(!allowed.includes(file.type)){
+   alert("รองรับเฉพาะไฟล์ PNG, JPG หรือ WEBP");
+   event.target.value="";
+   selectedBackgroundFile=null;
+   return;
+ }
+ if(file.size>8*1024*1024){
+   alert("ไฟล์มีขนาดใหญ่เกินไป กรุณาใช้ไฟล์ไม่เกิน 8 MB");
+   event.target.value="";
+   selectedBackgroundFile=null;
+   return;
+ }
+ const preview=URL.createObjectURL(file);
+ document.getElementById("certBg").src=preview;
+ const thumb=document.getElementById("bgThumb"),img=document.getElementById("bgThumbImg");
+ if(thumb&&img){thumb.style.display="block";img.src=preview}
+ document.getElementById("bgStatus").innerHTML=`<strong>พร้อมอัปโหลด:</strong> ${file.name} · ${(file.size/1024/1024).toFixed(2)} MB`;
+ document.getElementById("bgTypeChip").textContent="รออัปโหลด";
+}
+function safeFileName(name){
+ const ext=(name.split(".").pop()||"png").toLowerCase().replace(/[^a-z0-9]/g,"")||"png";
+ return `${Date.now()}-${crypto.randomUUID()}.${ext}`;
+}
+async function replaceBackgroundImage(){
+ if(!selectedBackgroundFile){
+   alert("กรุณาเลือกรูปพื้นหลังก่อน");
+   return;
+ }
+ const type=document.getElementById("typeCode").value.toLowerCase();
+ const objectPath=`${type}/${safeFileName(selectedBackgroundFile.name)}`;
+ const status=document.getElementById("bgStatus");
+ status.innerHTML="<strong>กำลังอัปโหลดรูป...</strong>";
+ const {error}=await db.storage.from("certificate-templates").upload(objectPath,selectedBackgroundFile,{
+   cacheControl:"3600",
+   upsert:false,
+   contentType:selectedBackgroundFile.type
+ });
+ if(error){
+   status.innerHTML=`<strong>อัปโหลดไม่สำเร็จ:</strong> ${error.message}`;
+   return;
+ }
+ const {data}=db.storage.from("certificate-templates").getPublicUrl(objectPath);
+ previousBackgroundPath=currentBackgroundPath||previousBackgroundPath||"";
+ currentBackgroundPath=objectPath;
+ currentBackgroundUrl=data.publicUrl;
+ document.getElementById("certBg").src=currentBackgroundUrl;
+ selectedBackgroundFile=null;
+ document.getElementById("backgroundFile").value="";
+ updateBackgroundStatus();
+ alert("อัปโหลดรูปพื้นหลังแล้ว\nอย่าลืมกด “บันทึกเป็นแม่แบบ” หรือ “อัปเดตแม่แบบ”");
+}
+async function removeStorageObject(path){
+ if(!path)return;
+ try{
+   await db.storage.from("certificate-templates").remove([path]);
+ }catch(e){console.warn("remove background:",e)}
+}
+function resetBackgroundImage(){
+ if(currentBackgroundPath&&!previousBackgroundPath)previousBackgroundPath=currentBackgroundPath;
+ currentBackgroundUrl="";
+ currentBackgroundPath="";
+ selectedBackgroundFile=null;
+ document.getElementById("backgroundFile").value="";
+ document.getElementById("certBg").src=getDefaultBackground();
+ updateBackgroundStatus();
+}
+
 async function auth(){
  const {data:{session},error}=await db.auth.getSession();if(error)throw error;if(!session){location.href="admin-login.html";return false}
  currentUser=session.user;
@@ -575,9 +772,9 @@ async function auth(){
 }
 async function loadBase(){
  const [c,p,s]=await Promise.all([
-  db.from("courses").select("id,course_code,course_name_th,certificate_prefix,course_type").order("sort_order"),
+  db.from("courses").select("id,course_code,course_name_th,certificate_prefix,course_type,duration_hours").order("sort_order"),
   db.from("profiles").select("id,firstname_th,lastname_th,email").order("firstname_th").limit(500),
-  db.from("training_sessions").select("id,course_id,session_name,session_code,training_start_at,training_end_at,delivery_method,session_status,courses(id,course_name_th,course_type,course_code,certificate_prefix)").order("training_start_at",{ascending:false}).limit(300)
+  db.from("training_sessions").select("id,course_id,session_name,session_code,training_start_at,training_end_at,delivery_method,session_status,courses(id,course_name_th,course_type,course_code,certificate_prefix,duration_hours)").order("training_start_at",{ascending:false}).limit(300)
  ]);
  if(!c.error){courses=c.data||[];const sel=document.getElementById("courseId");courses.forEach(x=>{const o=document.createElement("option");o.value=x.id;o.textContent=x.course_name_th;o.dataset.name=x.course_name_th;o.dataset.code=x.course_code||"";o.dataset.prefix=x.certificate_prefix||"";sel.appendChild(o)})}
  if(!p.error){profiles=p.data||[];const sel=document.getElementById("userId");profiles.forEach(x=>{const name=[x.firstname_th,x.lastname_th].filter(Boolean).join(" ")||x.email;const o=document.createElement("option");o.value=x.id;o.textContent=name;o.dataset.name=name;sel.appendChild(o)})}
@@ -594,7 +791,7 @@ async function loadBase(){
 
 async function loadTemplates(){
  const {data,error}=await db.from("certificate_design_templates")
-   .select("id,template_name,type_code,subtype,course_id,training_session_id,language_code,background_template,prefix,body_title,body_text,duration_text,delivery_text,design_json,is_active,created_at,updated_at")
+   .select("id,template_name,type_code,subtype,course_id,training_session_id,language_code,background_template,background_url,background_storage_path,prefix,body_title,body_text,duration_text,delivery_text,design_json,is_active,created_at,updated_at")
    .eq("is_active",true)
    .order("updated_at",{ascending:false});
  if(error){console.error("loadTemplates:",error);return}
@@ -612,18 +809,22 @@ function currentDesignerPayload(){
    course_id:document.getElementById("courseId").value||null,
    training_session_id:null,
    language_code:document.getElementById("language").value||"th",
-   background_template:layouts[type].bg,
+   background_template:currentBackgroundUrl?null:layouts[type].bg,
+   background_url:currentBackgroundUrl||null,
+   background_storage_path:currentBackgroundPath||null,
    prefix:document.getElementById("prefix").value.trim(),
    body_title:document.getElementById("bodyTitle").value,
    body_text:document.getElementById("bodyText").value,
-   duration_text:document.getElementById("durationText").value,
+   duration_text:document.getElementById("durationHours").value!==""?`ระยะเวลาการฝึกอบรม ${formatHours(document.getElementById("durationHours").value)} ชั่วโมง`:"",
    delivery_text:document.getElementById("deliveryText").value,
    design_json:{
      fields:design,
      qr:qrPos,
      template:type,
      courseSource:document.getElementById("courseSource")?.value||"TEMPLATE",
-     courseText:document.getElementById("courseName").value
+     courseText:document.getElementById("courseName").value,
+     durationSource:document.getElementById("durationSource")?.value||"TEMPLATE",
+     durationHours:document.getElementById("durationHours").value!==""?Number(document.getElementById("durationHours").value):null
    }
  };
 }
@@ -638,6 +839,7 @@ async function saveAsTemplate(){
  await loadTemplates();
  currentTemplateId=data.id;
  document.getElementById("savedTemplate").value=data.id;
+ previousBackgroundPath="";
  syncTemplateButtons();
  alert("บันทึกแม่แบบแล้ว");
 }
@@ -645,6 +847,10 @@ function syncTemplateButtons(){
  const has=!!currentTemplateId;
  document.getElementById("updateTemplateBtn").disabled=!has;
  document.getElementById("deleteTemplateBtn").disabled=!has;
+}
+function parseHoursFromText(s){
+ const m=String(s||"").match(/([0-9]+(?:\.[0-9]+)?)/);
+ return m?m[1]:"";
 }
 async function loadSavedTemplate(id){
  currentTemplateId=id||null;
@@ -656,11 +862,20 @@ async function loadSavedTemplate(id){
  applyType();
  if(t.subtype&&document.getElementById("subtype"))document.getElementById("subtype").value=t.subtype;
  document.getElementById("language").value=t.language_code||"th";
+ currentBackgroundUrl=t.background_url||"";
+ currentBackgroundPath=t.background_storage_path||"";
+ previousBackgroundPath="";
+ document.getElementById("certBg").src=currentBackgroundUrl||t.background_template||layouts[t.type_code||"FREE_TRAINING"].bg;
+ updateBackgroundStatus();
  document.getElementById("courseId").value=t.course_id||"";
  document.getElementById("prefix").value=t.prefix||"";
  document.getElementById("bodyTitle").value=t.body_title||"";
  document.getElementById("bodyText").value=t.body_text||"";
- document.getElementById("durationText").value=t.duration_text||"";
+ const savedHours=t.design_json?.durationHours;
+ document.getElementById("durationHours").value=savedHours!==undefined&&savedHours!==null?savedHours:parseHoursFromText(t.duration_text);
+ if(document.getElementById("durationSource")){
+   document.getElementById("durationSource").value=t.design_json?.durationSource||"TEMPLATE";
+ }
  document.getElementById("deliveryText").value=t.delivery_text||"";
  if(t.design_json?.courseText){
    document.getElementById("courseName").value=t.design_json.courseText;
@@ -682,10 +897,16 @@ async function loadSavedTemplate(id){
 }
 async function updateSavedTemplate(){
  if(!currentTemplateId)return;
+ const oldTemplate=savedTemplates.find(x=>x.id===currentTemplateId);
+ const oldPath=oldTemplate?.background_storage_path||"";
  const payload=currentDesignerPayload();
  payload.updated_at=new Date().toISOString();
  const {error}=await db.from("certificate_design_templates").update(payload).eq("id",currentTemplateId);
  if(error){alert("อัปเดตแม่แบบไม่สำเร็จ: "+error.message);return}
+ if(oldPath && oldPath!==currentBackgroundPath){
+   await removeStorageObject(oldPath);
+ }
+ previousBackgroundPath="";
  await loadTemplates();
  document.getElementById("savedTemplate").value=currentTemplateId;
  alert("อัปเดตแม่แบบแล้ว");
@@ -697,9 +918,15 @@ async function deleteSavedTemplate(){
  if(!confirm(`ลบแม่แบบ "${t.template_name}" ?\nวุฒิบัตรที่ออกไปแล้วจะไม่ถูกลบ`))return;
  const {error}=await db.from("certificate_design_templates").delete().eq("id",currentTemplateId);
  if(error){alert("ลบแม่แบบไม่สำเร็จ: "+error.message);return}
+ if(t.background_storage_path)await removeStorageObject(t.background_storage_path);
  currentTemplateId=null;
+ currentBackgroundUrl="";
+ currentBackgroundPath="";
+ previousBackgroundPath="";
+ document.getElementById("certBg").src=getDefaultBackground();
  await loadTemplates();
  syncTemplateButtons();
+ updateBackgroundStatus();
  alert("ลบแม่แบบแล้ว");
 }
 
@@ -758,7 +985,7 @@ async function issueCertificate(){
   const prefix=document.getElementById("prefix").value.trim(), courseSel=document.getElementById("courseId");
   const courseId=courseSel.value||null, subtype=type==="PAID_TRAINING"?document.getElementById("subtype").value:(type==="SERVICE"?"SERVICE":"FREE");
   const sequenceKey=type==="PAID_TRAINING"?(subtype+"-"+(courseSel.selectedOptions[0]?.dataset.code||prefix)):type;
-  const designJson={fields:design,qr:qrPos,template:type};
+  const designJson={fields:design,qr:qrPos,template:type,backgroundUrl:currentBackgroundUrl||null,backgroundTemplate:currentBackgroundUrl?null:getDefaultBackground()};
   const {data,error}=await db.rpc("admin_issue_certificate",{
    p_type_code:type,p_subtype:subtype,p_user_id:type==="SERVICE"?null:(document.getElementById("userId").value||null),
    p_course_id:courseId,p_training_session_id:null,p_recipient_name:document.getElementById("recipientName").value.trim(),
@@ -766,7 +993,7 @@ async function issueCertificate(){
    p_training_date:document.getElementById("trainingDate").value?formatThaiDate(document.getElementById("trainingDate").value):null,p_issue_date:issue,
    p_language_code:document.getElementById("language").value,p_template_code:type,p_prefix:prefix,p_sequence_key:sequenceKey,
    p_body_title:document.getElementById("bodyTitle").value,p_body_text:document.getElementById("bodyText").value,
-   p_duration_text:document.getElementById("durationText").value,p_delivery_text:document.getElementById("deliveryText").value,
+   p_duration_text:document.getElementById("durationHours").value!==""?`ระยะเวลาการฝึกอบรม ${formatHours(document.getElementById("durationHours").value)} ชั่วโมง`:"",p_delivery_text:document.getElementById("deliveryText").value,
    p_design_json:designJson,p_verification_base_url:location.origin
   });
   if(error)throw error;
@@ -799,7 +1026,8 @@ async function loadBulkParticipants(){
    preview.innerHTML=`<strong>ข้อมูลที่จะใส่ลงวุฒิบัตร Batch</strong><br>
    หลักสูตร: ${course.course_name_th||session.session_name||"-"}<br>
    วันที่อบรม: ${formatDateOnly(session.training_start_at)||"-"}<br>
-   ระยะเวลา: ${calcDurationText(session)||"-"}<br>
+   ระยะเวลาในหลักสูตร: ${session.courses?.duration_hours!==null&&session.courses?.duration_hours!==undefined?formatHours(session.courses.duration_hours)+" ชั่วโมง":"ยังไม่ได้กำหนด"}<br>
+   ระยะเวลาจากช่วงเวลา Session: ${calcDurationText(session)||"-"}<br>
    รูปแบบ: ${formatDeliveryText(session.delivery_method)}`;
  }
  list.innerHTML='<div class="empty">กำลังโหลดรายชื่อ...</div>';
@@ -877,9 +1105,19 @@ async function issueBulk(){
      p_issue_date:issueDate,p_language_code:"th",p_template_code:template,p_prefix:prefix,p_sequence_key:seqKey,
      p_body_title:saved.body_title||"ผ่านการฝึกอบรมหลักสูตร",
      p_body_text:saved.body_text||"",
-     p_duration_text:calcDurationText(session),
+     p_duration_text:(saved.design_json?.durationSource||"TEMPLATE")==="COURSE"
+       ? (course.duration_hours!==null&&course.duration_hours!==undefined?`ระยะเวลาการฝึกอบรม ${formatHours(course.duration_hours)} ชั่วโมง`:"")
+       : (saved.design_json?.durationHours!==null&&saved.design_json?.durationHours!==undefined
+           ? `ระยะเวลาการฝึกอบรม ${formatHours(saved.design_json.durationHours)} ชั่วโมง`
+           : (saved.duration_text||"")),
      p_delivery_text:formatDeliveryText(session.delivery_method),
-     p_design_json:{fields:layout.fields,qr:layout.qr,template},
+     p_design_json:{
+       fields:layout.fields,
+       qr:layout.qr,
+       template,
+       backgroundUrl:saved.background_url||null,
+       backgroundTemplate:saved.background_template||layouts[template]?.bg||null
+     },
      p_verification_base_url:location.origin
    });
    if(error){fail++;failed.push(name+": "+error.message)}else ok++;
@@ -933,6 +1171,7 @@ async function init(){
  try{
   document.getElementById("issueDate").value=new Date().toISOString().slice(0,10);
   document.getElementById("bulkIssueDate").value=new Date().toISOString().slice(0,10);
+  updateBackgroundStatus();
   refreshFieldSelect();selectField("name");applyType();syncPreview();
   if(!(await auth()))return;
   await Promise.all([loadBase(),loadCertificates(),loadTemplates()]);

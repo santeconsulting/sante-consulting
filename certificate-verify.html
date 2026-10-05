@@ -93,7 +93,7 @@ async function init(){
  const {data,error}=await db.rpc("get_certificate_public",{p_token:token});
  if(error||!data||!data.length){document.getElementById("loading").innerHTML='<div class="error"><strong>ไม่สามารถตรวจสอบวุฒิบัตรได้</strong><br>'+(error?error.message:"ไม่พบข้อมูลวุฒิบัตรจาก QR นี้")+'<br><br><a href="/" style="color:#0b447f">กลับเว็บไซต์ SANTE</a></div>';return}
  const c=data[0], type=c.template_code||"FREE_TRAINING", base=defaultLayouts[type]||defaultLayouts.FREE_TRAINING, d=c.design_json?.fields||base.fields;
- document.getElementById("bg").src=base.bg;
+ document.getElementById("bg").src=c.design_json?.backgroundUrl||c.design_json?.backgroundTemplate||base.bg;
  set("no",c.certificate_no,d.number||base.fields.number);set("name",c.recipient_name,d.name||base.fields.name);set("bodyTitle",c.body_title,d.bodyTitle||base.fields.bodyTitle);set("course",c.course_name,d.course||base.fields.course);set("body",c.body_text,d.body||base.fields.body);set("duration",c.duration_text,d.duration||base.fields.duration);set("delivery",c.delivery_text,d.delivery||base.fields.delivery);set("date",c.issue_date?"ให้ไว้ ณ วันที่ "+thaiDate(c.issue_date):"",d.date||base.fields.date);
  const qpos=c.design_json?.qr||base.qr||{x:91,y:16};
  const q=document.getElementById("verifyQr"),ql=document.getElementById("verifyQrLabel");
