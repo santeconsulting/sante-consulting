@@ -191,6 +191,7 @@ body{margin:0;background:var(--bg);font-family:"Prompt",sans-serif;color:var(--n
 }
 
 </style>
+<meta name="sante-build" content="CERT-BATCH-HOURS-FIX-2026-10-05">
 </head>
 <body>
 <div class="loading" id="loading"><div class="loading-box"><strong>SANTE CERTIFICATE</strong><div>กำลังตรวจสอบสิทธิ์และโหลดข้อมูล...</div><div class="spinner"></div></div></div>
@@ -1040,7 +1041,7 @@ function refreshBulkSummary(){
  if(!preview||!session){if(preview)preview.style.display="none";return}
  const saved=savedTemplates.find(x=>x.id===templateId);
  preview.style.display="block";
- preview.innerHTML=`<strong>ข้อมูลที่จะพิมพ์ลงวุฒิบัตร Batch</strong><br>
+ preview.innerHTML=`<strong>ข้อมูลที่จะพิมพ์ลงวุฒิบัตร Batch · HOTFIX ชั่วโมง</strong><br>
    ชื่อหลักสูตรบนวุฒิบัตร: ${getBulkCourseText(session,saved)}<br>
    วันที่อบรม: ${formatDateOnly(session.training_start_at)||"-"}<br>
    ระยะเวลาบนวุฒิบัตร: ${saved?getBulkDurationText(session,saved):"กรุณาเลือกแม่แบบ"}<br>

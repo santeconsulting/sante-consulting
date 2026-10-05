@@ -974,47 +974,51 @@
       }
     }
   
-/* ===== FIX 2026-10-05: remove left ghost/overlap on desktop ===== */
-@media (min-width:901px){
-  html,body{overflow-x:hidden!important}
-  .app{position:relative!important;background:#f4f8fc!important;isolation:isolate!important}
-  .sidebar{
-    position:fixed!important;
-    left:0!important;
-    top:0!important;
-    bottom:0!important;
-    width:220px!important;
-    transform:none!important;
-    z-index:300!important;
-    overflow-y:auto!important;
-    overflow-x:hidden!important;
-    background:#0b4f88!important;
-  }
-  .main{
-    position:relative!important;
-    z-index:1!important;
-    margin-left:220px!important;
-    width:calc(100% - 220px)!important;
-    min-width:0!important;
-    background:#f4f8fc!important;
-    overflow:hidden!important;
-  }
-  .sidebar-overlay{display:none!important}
-  .page-hero,
-  .content,
-  .header{
-    position:relative!important;
-    z-index:2!important;
-    background-color:transparent;
-  }
-  body::before,body::after,.app::before,.app::after,.main::before,.main::after{
-    content:none!important;
-    display:none!important;
-    background:none!important;
-  }
+/* ===== CLEAN HERO FIX 2026-10-05 =====
+   Remove the legacy navy hero completely.
+   Only the Member-style image hero is rendered.
+================================================ */
+.page-hero.clean-image-hero{
+  width:100%!important;
+  min-height:0!important;
+  height:auto!important;
+  padding:0!important;
+  margin:0!important;
+  display:block!important;
+  position:relative!important;
+  overflow:hidden!important;
+  border-radius:24px!important;
+  background:#fff!important;
+  background-image:none!important;
+  box-shadow:0 10px 35px rgba(3,45,94,.10)!important;
+  color:inherit!important;
+}
+.page-hero.clean-image-hero::before,
+.page-hero.clean-image-hero::after{
+  content:none!important;
+  display:none!important;
+}
+.clean-image-hero-picture{
+  display:block!important;
+  width:100%!important;
+  height:auto!important;
+  line-height:0!important;
+}
+.clean-image-hero-img{
+  display:block!important;
+  width:100%!important;
+  height:auto!important;
+  max-width:100%!important;
+  object-fit:contain!important;
+  object-position:center center!important;
+}
+@media(max-width:900px){
+  .page-hero.clean-image-hero{border-radius:18px!important}
+  .clean-image-hero-img{width:100%!important;height:auto!important;object-fit:contain!important}
 }
 
 </style>
+<meta name="sante-build" content="REGISTRATIONS-CLEAN-HERO-2026-10-05">
 </head>
 
 <body>
@@ -1219,21 +1223,15 @@
       <div class="content">
 
         <!-- HERO -->
-        <section class="page-hero">
-
-          <div class="hero-content">
-
-            <small>SANTE TRAINING</small>
-
-            <h1>จัดการผู้สมัครอบรม</h1>
-
-            <p>
-              ตรวจสอบรายชื่อผู้สมัคร สถานะการลงทะเบียน
-              สถานะการชำระเงิน และจำนวนที่นั่งของแต่ละรอบการอบรม
-            </p>
-
-          </div>
-
+        <section class="page-hero clean-image-hero" aria-label="SANTE Training">
+          <picture class="clean-image-hero-picture">
+            <source media="(max-width: 767px)" srcset="sante-dashboard-hero-mobile.png">
+            <img
+              src="sante-dashboard-hero-desktop.png"
+              alt="Trust in Safety. Trust in SANTE."
+              class="clean-image-hero-img"
+            >
+          </picture>
         </section>
 
 
