@@ -183,7 +183,7 @@ tbody tr:last-child td{border-bottom:0}tbody tr:hover{background:#fafcfe}
   .panel{padding:16px}.detail-grid{grid-template-columns:1fr}
 }
 </style>
-<link rel="stylesheet" href="./admin-theme.css">
+<link rel="stylesheet" href="./admin-master.css">
 </head>
 
 <body>
@@ -199,47 +199,57 @@ tbody tr:last-child td{border-bottom:0}tbody tr:hover{background:#fafcfe}
 <div class="overlay" id="overlay"></div>
 
 <div class="app" id="app">
-<aside class="sidebar" id="sidebar">
-  <div class="brand">
-    <img src="./SANTE-logo.png" alt="SANTE">
-    <div><div class="brand-name">ซานเต้</div><div class="brand-sub">SANTE CONSULTING</div></div>
+<aside class="sidebar sante-sidebar" id="sidebar">
+  <div class="sante-brand">
+    <img src="SANTE-logo.png" alt="SANTE Consulting">
   </div>
 
-  <div class="group">ภาพรวม</div>
-  <div class="nav">
-    <button class="nav-btn" onclick="location.href='./admin-dashboard.html'"><span class="nav-icon">⌂</span><span>แดชบอร์ด</span></button>
-  </div>
+  <nav class="sante-nav">
+    <div class="sante-nav-title">MAIN</div>
+    <a href="admin-dashboard.html" class="sante-nav-link"><span class="sante-nav-icon">⌂</span><span>หน้าหลัก</span></a>
 
-  <div class="group">การอบรมและการเรียนรู้</div>
-  <div class="nav">
-    <button class="nav-btn" onclick="location.href='./admin-training-registrations.html'"><span class="nav-icon">♟</span><span>ผู้สมัครอบรม</span></button>
-    <button class="nav-btn" onclick="location.href='./admin-courses.html'"><span class="nav-icon">▣</span><span>หลักสูตร</span></button>
-    <button class="nav-btn" onclick="location.href='./admin-training-sessions.html'"><span class="nav-icon">◷</span><span>รอบการอบรม</span></button>
-    <button class="nav-btn" onclick="location.href='./admin-question-import.html'"><span class="nav-icon">▤</span><span>คลังข้อสอบ / นำเข้า</span></button>
-    <button class="nav-btn active"><span class="nav-icon">☑</span><span>ข้อสอบและผลสอบ</span></button>
-    <button class="nav-btn" data-coming><span class="nav-icon">▣</span><span>วุฒิบัตร</span></button>
-  </div>
+    <div class="sante-nav-title">TRAINING &amp; LEARNING</div>
+    <a href="admin-courses.html" class="sante-nav-link"><span class="sante-nav-icon">▤</span><span>จัดการหลักสูตร</span></a>
+    <a href="admin-training-registrations.html" class="sante-nav-link"><span class="sante-nav-icon">♙</span><span>ผู้สมัครอบรม</span></a>
+    <a href="admin-training-sessions.html" class="sante-nav-link"><span class="sante-nav-icon">▦</span><span>รอบการอบรม</span></a>
+    <a href="admin-question-import.html" class="sante-nav-link"><span class="sante-nav-icon">✎</span><span>คลังข้อสอบ / นำเข้า</span></a>
+    <a href="admin-exams.html" class="sante-nav-link active"><span class="sante-nav-icon">✓</span><span>ข้อสอบและผลสอบ</span></a>
+    <a href="#" class="sante-nav-link" data-coming><span class="sante-nav-icon">▣</span><span>ใบประกาศนียบัตร</span></a>
 
-  <div class="group">งานบริการและการเงิน</div>
-  <div class="nav">
-    <button class="nav-btn" onclick="location.href='./admin-payments.html'"><span class="nav-icon">฿</span><span>การเงิน / การชำระเงิน</span></button>
-    <button class="nav-btn" data-coming><span class="nav-icon">◆</span><span>งานบริการ</span></button>
-    <button class="nav-btn" data-coming><span class="nav-icon">▤</span><span>ใบเสนอราคา</span></button>
-    <button class="nav-btn" data-coming><span class="nav-icon">⚙</span><span>ตั้งค่าระบบ</span></button>
-    <button class="nav-btn" data-coming><span class="nav-icon">◷</span><span>Audit Log</span></button>
+    <div class="sante-nav-title">SERVICE &amp; FINANCE</div>
+    <a href="#" class="sante-nav-link" data-coming><span class="sante-nav-icon">◆</span><span>งานบริการ</span></a>
+    <a href="#" class="sante-nav-link" data-coming><span class="sante-nav-icon">▧</span><span>ใบเสนอราคา</span></a>
+    <a href="admin-payments.html" class="sante-nav-link"><span class="sante-nav-icon">฿</span><span>การเงิน / การชำระเงิน</span></a>
+
+    <div class="sante-nav-title">SYSTEM</div>
+    <a href="#" class="sante-nav-link" data-coming><span class="sante-nav-icon">⚙</span><span>ตั้งค่าระบบ</span></a>
+    <a href="#" class="sante-nav-link" data-coming><span class="sante-nav-icon">◷</span><span>Audit Log</span></a>
+  </nav>
+
+  <div class="sante-sidebar-user">
+    <div class="sante-sidebar-avatar">A</div>
+    <div>
+      <strong>Administrator</strong>
+      <span class="sante-sidebar-sub">SANTE Consulting</span>
+    </div>
   </div>
 </aside>
 
 <div class="main">
-<header class="topbar">
-  <div class="top-left">
-    <button class="mobile-menu" id="mobileMenu">☰</button>
-    <div class="breadcrumb">SANTE SYSTEM / <strong>ข้อสอบและผลสอบ</strong></div>
+<header class="sante-topbar">
+  <div class="sante-topbar-left">
+    <button id="mobileMenu" class="sante-mobile-menu mobile-menu" type="button">☰</button>
+    <div class="sante-search">⌕ <span>ค้นหาหลักสูตร, สมาชิก, การสอบ, เอกสาร...</span></div>
+    <div class="sante-page-mobile-title">
+      <strong>ข้อสอบและผลสอบ</strong><span>เปิดสิทธิ์สอบ ติดตาม Attempts และผลสอบรายบุคคล</span>
+    </div>
   </div>
-  <div class="top-right">
-    <div class="avatar" id="avatar">S</div>
-    <div class="user"><strong id="userEmail">-</strong><span>ผู้ดูแลระบบ</span></div>
-    <button class="logout" id="logoutBtn">ออกจากระบบ</button>
+  <div class="sante-topbar-right">
+    <div class="sante-lang">◉ TH⌄</div>
+    <div class="sante-bell">♢<span></span></div>
+    <div class="sante-user-avatar" id="avatar">A</div>
+          <div class="sante-user-copy"><strong id="userEmail">ผู้ดูแลระบบ</strong><span>ผู้ดูแลระบบ</span></div>
+          <button class="sante-logout" id="logoutBtn" type="button">ออกจากระบบ</button>
   </div>
 </header>
 
@@ -1076,5 +1086,17 @@ overlay.addEventListener("click",()=>{
 
 verifyAdmin();
 </script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+  document.querySelectorAll("[data-coming]").forEach(function(node){
+    node.addEventListener("click", function(event){
+      event.preventDefault();
+      alert("โมดูลนี้กำลังอยู่ระหว่างการพัฒนา");
+    });
+  });
+});
+</script>
+
 </body>
 </html>

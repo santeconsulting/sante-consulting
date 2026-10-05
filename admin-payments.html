@@ -909,7 +909,7 @@ button{
 @media(max-width:650px){.page-actions{width:100%}.page-actions .export-btn,.page-actions .refresh-btn{flex:1;min-width:140px}}
 
 </style>
-<link rel="stylesheet" href="./admin-theme.css">
+<link rel="stylesheet" href="./admin-master.css">
 </head>
 
 <body>
@@ -920,96 +920,59 @@ button{
 
 <div id="overlay" class="overlay"></div>
 
-<aside id="sidebar" class="sidebar">
-
-  <div class="sidebar-brand">
-    <img
-      src="sante%20(en)-logo.png"
-      alt="SANTE Consulting"
-    >
+<aside class="sidebar sante-sidebar" id="sidebar">
+  <div class="sante-brand">
+    <img src="SANTE-logo.png" alt="SANTE Consulting">
   </div>
 
-  <div class="sidebar-label">
-    SANTE ADMIN
-  </div>
+  <nav class="sante-nav">
+    <div class="sante-nav-title">MAIN</div>
+    <a href="admin-dashboard.html" class="sante-nav-link"><span class="sante-nav-icon">⌂</span><span>หน้าหลัก</span></a>
 
-  <nav class="nav">
-    <a href="admin-dashboard.html" class="nav-link"><span class="nav-icon">⌂</span><span>แดชบอร์ด</span></a>
-    <a href="admin-training-registrations.html" class="nav-link"><span class="nav-icon">♙</span><span>ผู้สมัครอบรม</span></a>
-    <a href="admin-courses.html" class="nav-link"><span class="nav-icon">▤</span><span>หลักสูตร</span></a>
-    <a href="admin-training-sessions.html" class="nav-link"><span class="nav-icon">◫</span><span>รอบการอบรม</span></a>
-    <a href="admin-question-import.html" class="nav-link"><span class="nav-icon">⇧</span><span>คลังข้อสอบ / นำเข้า</span></a>
-    <a href="admin-exams.html" class="nav-link"><span class="nav-icon">✓</span><span>ข้อสอบและผลสอบ</span></a>
-    <a href="#" class="nav-link" data-coming><span class="nav-icon">▱</span><span>วุฒิบัตร</span></a>
-    <a href="admin-payments.html" class="nav-link active"><span class="nav-icon">฿</span><span>การเงิน / การชำระเงิน</span></a>
-    <a href="#" class="nav-link" data-coming><span class="nav-icon">▣</span><span>งานบริการ</span></a>
-    <a href="#" class="nav-link" data-coming><span class="nav-icon">▧</span><span>ใบเสนอราคา</span></a>
-    <a href="#" class="nav-link" data-coming><span class="nav-icon">⚙</span><span>ตั้งค่าระบบ</span></a>
-    <a href="#" class="nav-link" data-coming><span class="nav-icon">◷</span><span>Audit Log</span></a>
+    <div class="sante-nav-title">TRAINING &amp; LEARNING</div>
+    <a href="admin-courses.html" class="sante-nav-link"><span class="sante-nav-icon">▤</span><span>จัดการหลักสูตร</span></a>
+    <a href="admin-training-registrations.html" class="sante-nav-link"><span class="sante-nav-icon">♙</span><span>ผู้สมัครอบรม</span></a>
+    <a href="admin-training-sessions.html" class="sante-nav-link"><span class="sante-nav-icon">▦</span><span>รอบการอบรม</span></a>
+    <a href="admin-question-import.html" class="sante-nav-link"><span class="sante-nav-icon">✎</span><span>คลังข้อสอบ / นำเข้า</span></a>
+    <a href="admin-exams.html" class="sante-nav-link"><span class="sante-nav-icon">✓</span><span>ข้อสอบและผลสอบ</span></a>
+    <a href="#" class="sante-nav-link" data-coming><span class="sante-nav-icon">▣</span><span>ใบประกาศนียบัตร</span></a>
+
+    <div class="sante-nav-title">SERVICE &amp; FINANCE</div>
+    <a href="#" class="sante-nav-link" data-coming><span class="sante-nav-icon">◆</span><span>งานบริการ</span></a>
+    <a href="#" class="sante-nav-link" data-coming><span class="sante-nav-icon">▧</span><span>ใบเสนอราคา</span></a>
+    <a href="admin-payments.html" class="sante-nav-link active"><span class="sante-nav-icon">฿</span><span>การเงิน / การชำระเงิน</span></a>
+
+    <div class="sante-nav-title">SYSTEM</div>
+    <a href="#" class="sante-nav-link" data-coming><span class="sante-nav-icon">⚙</span><span>ตั้งค่าระบบ</span></a>
+    <a href="#" class="sante-nav-link" data-coming><span class="sante-nav-icon">◷</span><span>Audit Log</span></a>
   </nav>
 
-  <div class="sidebar-footer">
-    <strong>SANTE SYSTEM</strong>
-    <p>
-      ระบบบริหารจัดการภายใน<br>
-      SANTE Consulting
-    </p>
+  <div class="sante-sidebar-user">
+    <div class="sante-sidebar-avatar">A</div>
+    <div>
+      <strong>Administrator</strong>
+      <span class="sante-sidebar-sub">SANTE Consulting</span>
+    </div>
   </div>
-
 </aside>
 
 <div class="main">
 
-<header class="topbar">
-
-  <div class="topbar-left">
-
-    <button
-      id="menuButton"
-      class="mobile-menu"
-    >
-      ☰
-    </button>
-
-    <div>
-      <div class="page-name">
-        การชำระเงิน
-      </div>
-
-      <div class="page-sub">
-        ตรวจสอบหลักฐานและยืนยันการชำระเงิน
-      </div>
+<header class="sante-topbar">
+  <div class="sante-topbar-left">
+    <button id="menuButton" class="sante-mobile-menu mobile-menu" type="button">☰</button>
+    <div class="sante-search">⌕ <span>ค้นหาหลักสูตร, สมาชิก, การสอบ, เอกสาร...</span></div>
+    <div class="sante-page-mobile-title">
+      <strong>การเงิน / การชำระเงิน</strong><span>ตรวจสอบหลักฐานและยืนยันการชำระเงิน</span>
     </div>
-
   </div>
-
-  <div class="admin-area">
-
-    <div class="admin-copy">
-
-      <div
-        id="adminName"
-        class="admin-name"
-      >
-        ผู้ดูแลระบบ SANTE
-      </div>
-
-      <div
-        id="adminEmail"
-        class="admin-email"
-      ></div>
-
-    </div>
-
-    <button
-      id="logoutButton"
-      class="logout"
-    >
-      ออกจากระบบ
-    </button>
-
+  <div class="sante-topbar-right">
+    <div class="sante-lang">◉ TH⌄</div>
+    <div class="sante-bell">♢<span></span></div>
+    <div class="sante-user-avatar">A</div>
+          <div class="sante-user-copy"><strong id="adminName">ผู้ดูแลระบบ SANTE</strong><span id="adminEmail"></span></div>
+          <button class="sante-logout" id="logoutButton" type="button">ออกจากระบบ</button>
   </div>
-
 </header>
 
 <main class="content">
@@ -2652,6 +2615,18 @@ async function init(){
 }
 
 init();
+</script>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+  document.querySelectorAll("[data-coming]").forEach(function(node){
+    node.addEventListener("click", function(event){
+      event.preventDefault();
+      alert("โมดูลนี้กำลังอยู่ระหว่างการพัฒนา");
+    });
+  });
+});
 </script>
 
 </body>

@@ -1084,7 +1084,7 @@
     }
 
   </style>
-<link rel="stylesheet" href="./admin-theme.css">
+<link rel="stylesheet" href="./admin-master.css">
 </head>
 
 <body>
@@ -1108,115 +1108,63 @@
 
 
   <!-- SIDEBAR -->
-  <aside class="sidebar" id="sidebar">
+  <aside class="sidebar sante-sidebar" id="sidebar">
+  <div class="sante-brand">
+    <img src="SANTE-logo.png" alt="SANTE Consulting">
+  </div>
 
-    <div class="brand">
+  <nav class="sante-nav">
+    <div class="sante-nav-title">MAIN</div>
+    <a href="admin-dashboard.html" class="sante-nav-link"><span class="sante-nav-icon">⌂</span><span>หน้าหลัก</span></a>
 
-      <div class="brand-row">
+    <div class="sante-nav-title">TRAINING &amp; LEARNING</div>
+    <a href="admin-courses.html" class="sante-nav-link"><span class="sante-nav-icon">▤</span><span>จัดการหลักสูตร</span></a>
+    <a href="admin-training-registrations.html" class="sante-nav-link"><span class="sante-nav-icon">♙</span><span>ผู้สมัครอบรม</span></a>
+    <a href="admin-training-sessions.html" class="sante-nav-link active"><span class="sante-nav-icon">▦</span><span>รอบการอบรม</span></a>
+    <a href="admin-question-import.html" class="sante-nav-link"><span class="sante-nav-icon">✎</span><span>คลังข้อสอบ / นำเข้า</span></a>
+    <a href="admin-exams.html" class="sante-nav-link"><span class="sante-nav-icon">✓</span><span>ข้อสอบและผลสอบ</span></a>
+    <a href="#" class="sante-nav-link" data-coming><span class="sante-nav-icon">▣</span><span>ใบประกาศนียบัตร</span></a>
 
-        <img
-          src="SANTE-logo.png"
-          class="brand-logo"
-          alt="SANTE"
-        >
+    <div class="sante-nav-title">SERVICE &amp; FINANCE</div>
+    <a href="#" class="sante-nav-link" data-coming><span class="sante-nav-icon">◆</span><span>งานบริการ</span></a>
+    <a href="#" class="sante-nav-link" data-coming><span class="sante-nav-icon">▧</span><span>ใบเสนอราคา</span></a>
+    <a href="admin-payments.html" class="sante-nav-link"><span class="sante-nav-icon">฿</span><span>การเงิน / การชำระเงิน</span></a>
 
-        <div>
-          <div class="brand-name">SANTE</div>
-          <div class="brand-subtitle">
-            ระบบบริหารจัดการ
-          </div>
-        </div>
+    <div class="sante-nav-title">SYSTEM</div>
+    <a href="#" class="sante-nav-link" data-coming><span class="sante-nav-icon">⚙</span><span>ตั้งค่าระบบ</span></a>
+    <a href="#" class="sante-nav-link" data-coming><span class="sante-nav-icon">◷</span><span>Audit Log</span></a>
+  </nav>
 
-      </div>
-
+  <div class="sante-sidebar-user">
+    <div class="sante-sidebar-avatar">A</div>
+    <div>
+      <strong>Administrator</strong>
+      <span class="sante-sidebar-sub">SANTE Consulting</span>
     </div>
-
-
-    <div class="sidebar-title">เมนูหลัก</div>
-
-    <nav class="nav">
-      <a href="admin-dashboard.html" class="nav-item"><span class="nav-icon">⌂</span><span>แดชบอร์ด</span></a>
-      <a href="admin-training-registrations.html" class="nav-item"><span class="nav-icon">♙</span><span>ผู้สมัครอบรม</span></a>
-      <a href="admin-courses.html" class="nav-item"><span class="nav-icon">▣</span><span>หลักสูตร</span></a>
-      <a href="admin-training-sessions.html" class="nav-item active"><span class="nav-icon">▦</span><span>รอบการอบรม</span></a>
-      <a href="admin-question-import.html" class="nav-item"><span class="nav-icon">✎</span><span>คลังข้อสอบ / นำเข้า</span></a>
-      <a href="admin-exams.html" class="nav-item"><span class="nav-icon">✓</span><span>ข้อสอบและผลสอบ</span></a>
-      <a href="#" class="nav-item" data-coming><span class="nav-icon">▱</span><span>วุฒิบัตร</span></a>
-
-      <div class="sidebar-title" style="padding-left:10px;">งานบริการ</div>
-      <a href="#" class="nav-item" data-coming><span class="nav-icon">⚙</span><span>งานบริการ</span></a>
-      <a href="#" class="nav-item" data-coming><span class="nav-icon">▧</span><span>ใบเสนอราคา</span></a>
-
-      <div class="sidebar-title" style="padding-left:10px;">การเงินและระบบ</div>
-      <a href="admin-payments.html" class="nav-item"><span class="nav-icon">฿</span><span>การเงิน / การชำระเงิน</span></a>
-      <a href="#" class="nav-item" data-coming><span class="nav-icon">☰</span><span>ตั้งค่าระบบ</span></a>
-      <a href="#" class="nav-item" data-coming><span class="nav-icon">◷</span><span>Audit Log</span></a>
-    </nav>
-
-  </aside>
+  </div>
+</aside>
 
 
   <!-- MAIN -->
   <main class="main">
 
     <!-- TOPBAR -->
-    <header class="topbar">
-
-      <div class="topbar-left">
-
-        <button
-          class="mobile-menu"
-          id="mobileMenuBtn"
-        >
-          ☰
-        </button>
-
-        <div class="topbar-title">
-          ระบบจัดการรอบการอบรม
-        </div>
-
-      </div>
-
-
-      <div class="topbar-right">
-
-        <div class="admin-user">
-
-          <div
-            class="avatar"
-            id="adminAvatar"
-          >
-            A
-          </div>
-
-          <div class="admin-info">
-
-            <div
-              class="admin-name"
-              id="adminName"
-            >
-              ผู้ดูแลระบบ
-            </div>
-
-            <div class="admin-role">
-              ผู้ดูแลระบบ
-            </div>
-
-          </div>
-
-        </div>
-
-
-        <button
-          class="logout-btn"
-          id="logoutBtn"
-        >
-          ออกจากระบบ
-        </button>
-
-      </div>
-
-    </header>
+    <header class="sante-topbar">
+  <div class="sante-topbar-left">
+    <button id="mobileMenuBtn" class="sante-mobile-menu mobile-menu" type="button">☰</button>
+    <div class="sante-search">⌕ <span>ค้นหาหลักสูตร, สมาชิก, การสอบ, เอกสาร...</span></div>
+    <div class="sante-page-mobile-title">
+      <strong>รอบการอบรม</strong><span>สร้างและจัดการรอบอบรม วันรับสมัคร ที่นั่ง และการเปิดข้อสอบ</span>
+    </div>
+  </div>
+  <div class="sante-topbar-right">
+    <div class="sante-lang">◉ TH⌄</div>
+    <div class="sante-bell">♢<span></span></div>
+    <div class="sante-user-avatar" id="adminAvatar">A</div>
+          <div class="sante-user-copy"><strong id="adminName">ผู้ดูแลระบบ</strong><span>ผู้ดูแลระบบ</span></div>
+          <button class="sante-logout" id="logoutBtn" type="button">ออกจากระบบ</button>
+  </div>
+</header>
 
 
     <div class="content">
@@ -2255,13 +2203,6 @@
 
     }
 
-
-    document.querySelectorAll("[data-coming]").forEach(el => {
-      el.addEventListener("click", event => {
-        event.preventDefault();
-        alert("โมดูลนี้กำลังอยู่ระหว่างการพัฒนา");
-      });
-    });
 
     /* =========================================================
        AUTH
@@ -4526,6 +4467,18 @@
     }
 
   </script>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+  document.querySelectorAll("[data-coming]").forEach(function(node){
+    node.addEventListener("click", function(event){
+      event.preventDefault();
+      alert("โมดูลนี้กำลังอยู่ระหว่างการพัฒนา");
+    });
+  });
+});
+</script>
 
 </body>
 </html>

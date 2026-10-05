@@ -1,0 +1,230 @@
+
+:root{
+  --navy:#083f77;
+  --navy2:#063462;
+  --yellow:#ffc400;
+  --bg:#f3f8ff;
+  --card:#fff;
+  --text:#0b2f60;
+  --muted:#6e83a2;
+  --line:#dce8f4;
+  --shadow:0 8px 26px rgba(5,47,94,.07);
+}
+*{box-sizing:border-box}
+html{font-size:16px;-webkit-text-size-adjust:100%}
+body,button,input,select,textarea{font-family:"Prompt",sans-serif!important}
+body{margin:0!important;background:var(--bg)!important;color:var(--text)!important}
+a{text-decoration:none}
+
+/* ---------- MASTER SIDEBAR ---------- */
+.sante-sidebar.sidebar{
+  position:fixed!important;left:0!important;top:0!important;bottom:0!important;
+  width:250px!important;z-index:100!important;padding:0 14px 18px!important;
+  overflow-y:auto!important;color:#fff!important;
+  background:linear-gradient(180deg,#0a4b88 0%,#063b70 53%,#052f5c 100%)!important;
+}
+.sante-brand{
+  height:118px;display:flex;align-items:center;justify-content:center;
+  border-bottom:1px solid rgba(255,255,255,.12)
+}
+.sante-brand img{
+  width:132px;height:82px;object-fit:contain!important;
+  background:transparent!important;border:0!important;border-radius:0!important
+}
+.sante-nav{padding-top:7px;display:flex;flex-direction:column;gap:4px}
+.sante-nav-title{
+  padding:17px 11px 6px;color:rgba(255,255,255,.48);
+  font-size:10px;font-weight:500;letter-spacing:.55px
+}
+.sante-nav-link{
+  min-height:47px;padding:9px 12px;border-radius:12px;
+  display:flex;align-items:center;gap:10px;color:#fff!important;
+  font-size:13px;font-weight:500
+}
+.sante-nav-link:hover{background:rgba(255,255,255,.08)}
+.sante-nav-link.active{
+  color:#0b315e!important;background:var(--yellow)!important;
+  font-weight:650;box-shadow:0 6px 14px rgba(0,0,0,.08)
+}
+.sante-nav-icon{width:24px;text-align:center;font-size:17px}
+.sante-sidebar-user{
+  margin-top:22px;padding:15px 9px 4px;border-top:1px solid rgba(255,255,255,.12);
+  display:flex;align-items:center;gap:9px
+}
+.sante-sidebar-avatar{
+  width:36px;height:36px;border-radius:50%;display:grid;place-items:center;
+  color:#083563;background:var(--yellow);font-weight:700;font-size:12px
+}
+.sante-sidebar-user strong{display:block;color:#fff;font-size:11px}
+.sante-sidebar-user span{display:block;color:rgba(255,255,255,.64);font-size:9px;max-width:160px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* ---------- MASTER TOPBAR ---------- */
+.main{margin-left:250px!important;min-height:100vh!important;background:var(--bg)!important}
+.sante-topbar{
+  position:sticky;top:0;z-index:80;height:76px;padding:0 24px;
+  display:flex;align-items:center;justify-content:space-between;gap:20px;
+  background:#fff;border-bottom:1px solid #e9f0f7
+}
+.sante-topbar-left{min-width:0;flex:1;display:flex;align-items:center;gap:14px}
+.sante-search{
+  width:min(560px,48vw);height:44px;padding:0 18px;
+  display:flex;align-items:center;gap:10px;border-radius:23px;
+  color:#657a99;background:#edf4fb;font-size:13px
+}
+.sante-page-mobile-title{display:none}
+.sante-topbar-right{display:flex;align-items:center;gap:10px}
+.sante-lang{font-size:12px;font-weight:600}
+.sante-bell{position:relative;width:34px;height:34px;display:grid;place-items:center}
+.sante-bell span{position:absolute;right:4px;top:4px;width:7px;height:7px;border-radius:50%;background:#ef3340}
+.sante-user-avatar{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;color:#fff;background:#0a3f77;font-weight:700}
+.sante-user-copy strong{display:block;max-width:210px;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sante-user-copy span{display:block;color:#7b8ca4;font-size:10px}
+.sante-logout{min-height:38px;padding:0 12px;border:1px solid #dce6f0;border-radius:10px;color:#c44b56;background:#fff;font-size:11px}
+.sante-mobile-menu{display:none;border:0;background:transparent;color:#0a3e75;font-size:26px}
+
+/* hide old page-specific headers only after new shell exists */
+.header,.topbar{display:none!important}
+
+/* ---------- MAIN CONTENT ---------- */
+.content{
+  width:min(1420px,calc(100% - 44px))!important;
+  max-width:1420px!important;margin:0 auto!important;padding:20px 0 40px!important
+}
+
+/* ---------- DASHBOARD HERO ----------
+   IMPORTANT: keep original HTML text visible; show full mascot image on right.
+*/
+.welcome-card{
+  position:relative!important;min-height:285px!important;margin:0 0 22px!important;
+  padding:0!important;overflow:hidden!important;
+  border:1px solid var(--line)!important;border-radius:22px!important;
+  background:
+    linear-gradient(90deg,rgba(255,255,255,.97) 0%,rgba(255,255,255,.88) 46%,rgba(255,255,255,.05) 72%),
+    url("./sante-dashboard-hero-desktop.png") right center/auto 100% no-repeat!important;
+  box-shadow:var(--shadow)!important
+}
+.welcome-card::before,.welcome-card::after{display:none!important}
+.welcome-content{
+  visibility:visible!important;display:block!important;position:relative!important;z-index:2!important;
+  max-width:620px!important;padding:37px 40px!important
+}
+.welcome-content small{
+  display:inline-flex!important;padding:7px 13px!important;border-radius:999px!important;
+  color:#1478ee!important;background:#fff!important;box-shadow:0 5px 16px rgba(7,59,115,.08)!important;
+  font-size:11px!important;font-weight:700!important
+}
+.welcome-content h1{
+  margin:13px 0 10px!important;color:var(--text)!important;
+  font-size:36px!important;line-height:1.2!important;font-weight:700!important
+}
+.welcome-content p{margin:0!important;color:#536f96!important;font-size:14px!important;line-height:1.65!important}
+.welcome-content .motto{
+  margin-top:18px!important;color:#0a3c71!important;font-size:15px!important;font-weight:700!important
+}
+.welcome-content .motto span{color:#e7aa00!important}
+
+/* ---------- SUBPAGE HERO ---------- */
+.page-header,.page-hero{
+  position:relative!important;overflow:hidden!important;
+  min-height:150px!important;margin-bottom:18px!important;padding:26px 29px!important;
+  display:flex!important;align-items:center!important;justify-content:space-between!important;gap:20px!important;
+  border:1px solid var(--line)!important;border-radius:20px!important;
+  color:var(--text)!important;
+  background:linear-gradient(90deg,#fff 0%,#f8fbff 62%,#fff8df 100%)!important;
+  box-shadow:var(--shadow)!important
+}
+.page-header::after,.page-hero::after{
+  content:"";position:absolute;right:24px;bottom:-26px;width:190px;height:190px;
+  background:url("./sante-admin-artwork.png") center/contain no-repeat;
+  opacity:.34;pointer-events:none
+}
+.page-header>*,.page-hero>*{position:relative;z-index:2}
+.page-header h1,.page-title,.hero-content h1{
+  margin:0!important;color:var(--text)!important;font-size:29px!important;line-height:1.25!important;font-weight:700!important
+}
+.page-header p,.page-description,.page-subtitle,.hero-content p{
+  margin:7px 0 0!important;max-width:760px!important;color:#607a9e!important;font-size:13px!important;line-height:1.65!important
+}
+.page-actions{margin-right:150px!important}
+.page-badge{margin-right:150px!important}
+
+/* ---------- CARDS ---------- */
+.stats,.stats-grid,.summary{gap:12px!important;margin-bottom:18px!important}
+.stat-card,.summary-card,.panel,.filter-panel,.toolbar,.table-card,.course-card,.session-card,.payment-card,.quick-card,.card{
+  border:1px solid var(--line)!important;border-radius:17px!important;
+  background:#fff!important;box-shadow:var(--shadow)!important
+}
+.stat-card,.summary-card{min-height:108px!important;padding:17px!important}
+.stat-icon,.summary-icon,.quick-icon{border-radius:50%!important;background:#eaf4ff!important;color:#0c4d8c!important}
+.stat-info span,.summary-label{color:#607797!important;font-size:12px!important;font-weight:600!important}
+.stat-info strong,.summary-value{color:var(--text)!important;font-size:29px!important;font-weight:700!important}
+.section-heading{margin:24px 0 13px!important}
+.section-heading h2{font-size:21px!important}
+.section-heading p{font-size:12px!important;color:var(--muted)!important}
+
+/* ---------- FORMS / BUTTONS ---------- */
+input,select,textarea,.search,.search-input{
+  min-height:45px!important;border:1px solid #d9e5f1!important;border-radius:11px!important;
+  background:#fff!important;color:var(--text)!important;outline:none!important
+}
+input:focus,select:focus,textarea:focus{border-color:#8eb7e4!important;box-shadow:0 0 0 3px rgba(20,120,238,.08)!important}
+.btn,.primary-btn,.secondary-btn,.refresh,.refresh-btn,.refresh-button,.action-btn,.view-btn,.save-btn,.cancel-btn,.mini-btn,.export-btn{
+  min-height:42px!important;border-radius:10px!important;font-weight:600!important
+}
+.primary-btn,.btn-primary,.mini-btn.primary,.save-btn{color:#fff!important;background:#0b447f!important;border-color:#0b447f!important}
+.btn-yellow,.validate-btn,.export-btn{color:#0b315e!important;background:var(--yellow)!important;border-color:var(--yellow)!important}
+
+/* ---------- TABLES ---------- */
+.table-wrap,.table-container,.table-scroll{border-radius:13px!important;overflow-x:auto!important;background:#fff!important}
+th{padding:12px!important;background:#0a447f!important;color:#fff!important;font-size:11px!important}
+td{padding:12px!important;border-bottom:1px solid #edf2f7!important;color:#294d73!important;font-size:11px!important}
+
+/* ---------- MOBILE ---------- */
+@media(max-width:1050px){
+  .sante-sidebar.sidebar{width:250px!important;transform:translateX(-100%)!important;transition:.2s}
+  .sante-sidebar.sidebar.open,.sante-sidebar.sidebar.show{transform:translateX(0)!important}
+  .main{margin-left:0!important}
+  .sante-mobile-menu{display:block!important}
+  .sante-search{display:none!important}
+  .sante-page-mobile-title{display:flex!important;flex-direction:column}
+  .sante-lang,.sante-bell{display:none!important}
+  .content{width:calc(100% - 28px)!important;padding:15px 0 30px!important}
+}
+@media(max-width:700px){
+  .sante-topbar{height:66px;padding:0 13px}
+  .sante-page-mobile-title strong{font-size:17px}
+  .sante-page-mobile-title span{display:none}
+  .sante-user-copy{display:none}
+  .sante-user-avatar{width:36px;height:36px}
+  .sante-logout{min-height:38px;padding:0 10px}
+  .content{width:calc(100% - 20px)!important}
+
+  .welcome-card{
+    min-height:390px!important;
+    background:
+      linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.88) 66%,#fff 100%),
+      url("./sante-dashboard-hero-mobile.png") center top/cover no-repeat!important;
+  }
+  .welcome-content{padding:210px 24px 24px!important;max-width:none!important}
+  .welcome-content h1{font-size:29px!important}
+  .welcome-content p{font-size:13px!important}
+  .welcome-content .motto{display:none!important}
+
+  .page-header,.page-hero{
+    min-height:124px!important;padding:19px!important;background:linear-gradient(145deg,#fff,#f5faff)!important
+  }
+  .page-header::after,.page-hero::after{width:115px;height:115px;right:4px;bottom:-22px;opacity:.16}
+  .page-header h1,.page-title,.hero-content h1{font-size:24px!important}
+  .page-actions,.page-badge{margin-right:0!important}
+  .stats,.stats-grid,.summary{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important}
+  .stat-card,.summary-card{min-height:98px!important;padding:14px!important}
+  .stat-info strong,.summary-value{font-size:25px!important}
+  .course-grid,.session-grid,.quick-grid{grid-template-columns:1fr!important}
+  .toolbar,.filter-panel,.filters,.form-grid,.form-grid.three{grid-template-columns:1fr!important}
+  input,select,textarea{font-size:16px!important}
+  table{min-width:760px!important}
+  .modal-card,.modal-content{width:calc(100vw - 18px)!important;max-width:none!important;max-height:calc(100dvh - 18px)!important;margin:9px!important}
+}
+@media(max-width:430px){
+  .stats,.stats-grid,.summary{grid-template-columns:1fr!important}
+}
