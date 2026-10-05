@@ -229,10 +229,24 @@ body{margin:0;background:var(--bg);font-family:"Prompt",sans-serif;color:var(--n
   .main,.admin-main,.page-main{margin-left:0!important}
 }
 
+
+/* ===== R6: preserve manual line breaks on certificate ===== */
+.cert-item{
+  white-space:pre-line!important;
+}
+.cert-item[data-field="body"],
+.cert-item[data-field="trainingFor"],
+.cert-item[data-field="trainingHeld"],
+.cert-item[data-field="trainingExtra"]{
+  white-space:pre-wrap!important;
+  overflow-wrap:anywhere!important;
+}
+
 </style>
 <meta name="sante-build" content="CERT-BATCH-HOURS-FIX-2026-10-05">
 <meta name="sante-build" content="CERT-DATE-ISSUER-R2">
 <meta name="sante-build" content="CERT-ISSUER-UX-R4">
+<meta name="sante-build" content="CERT-MULTILINE-R6">
 </head>
 <body>
 <div class="loading" id="loading"><div class="loading-box"><strong>SANTE CERTIFICATE</strong><div>กำลังตรวจสอบสิทธิ์และโหลดข้อมูล...</div><div class="spinner"></div></div></div>
