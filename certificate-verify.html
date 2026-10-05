@@ -44,6 +44,17 @@
   font-weight:700;
   white-space:nowrap;
 }
+
+/* ===== R3 REVOKED VISUAL ===== */
+.revoked-stage{filter:grayscale(1)!important;opacity:.38!important}
+.revoked-watermark{display:none;position:absolute;inset:0;z-index:999;align-items:center;justify-content:center;pointer-events:none}
+.revoked-watermark.show{display:flex!important}
+.revoked-watermark span{
+  transform:rotate(-24deg);font-size:clamp(26px,4vw,56px);font-weight:800;
+  color:rgba(154,45,55,.65);border:7px solid rgba(154,45,55,.42);
+  background:rgba(255,255,255,.83);padding:18px 42px;border-radius:14px;white-space:nowrap
+}
+
 </style>
 <meta name="sante-build" content="VERIFY-REVOKED-GRAY-R2">
 </head>
@@ -124,8 +135,35 @@ function set(id,text,c){
 async function init(){
  const token=new URLSearchParams(location.search).get("token");
  if(!token){document.getElementById("loading").innerHTML='<div class="error"><strong>ไม่พบรหัสตรวจสอบวุฒิบัตร</strong><br>กรุณาสแกน QR จากวุฒิบัตรอีกครั้ง</div>';return}
- const {data,error}=await db.rpc("get_certificate_public",{p_token:token});
- if(error||!data||!data.length){document.getElementById("loading").innerHTML='<div class="error"><strong>ไม่สามารถตรวจสอบวุฒิบัตรได้</strong><br>'+(error?error.message:"ไม่พบข้อมูลวุฒิบัตรจาก QR นี้")+'<br><br><a href="/" style="color:#0b447f">กลับเว็บไซต์ SANTE</a></div>';return}
+ let data=null,error=null;
+ try{
+   const controller=new AbortController();
+   const timer=setTimeout(()=>controller.abort(),10000);
+   const res=await fetch(
+     SUPABASE_URL+"/rest/v1/rpc/get_certificate_public",
+     {
+       method:"POST",
+       headers:{
+         "Content-Type":"application/json",
+         "apikey":SUPABASE_KEY,
+         "Authorization":"Bearer "+SUPABASE_KEY
+       },
+       body:JSON.stringify({p_token:token}),
+       signal:controller.signal
+     }
+   );
+   clearTimeout(timer);
+   if(!res.ok){
+     throw new Error("HTTP "+res.status+" "+await res.text());
+   }
+   data=await res.json();
+ }catch(e){
+   error=e;
+ }
+ if(error||!data||!data.length){
+   document.getElementById("loading").innerHTML='<div class="error"><strong>ไม่สามารถตรวจสอบวุฒิบัตรได้</strong><br>'+(error?(error.name==="AbortError"?"เชื่อมต่อฐานข้อมูลเกิน 10 วินาที":error.message):"ไม่พบข้อมูลวุฒิบัตรจาก QR นี้")+'<br><br><a href="/" style="color:#0b447f">กลับเว็บไซต์ SANTE</a></div>';
+   return
+ }
  const c=data[0], type=c.template_code||"FREE_TRAINING", base=defaultLayouts[type]||defaultLayouts.FREE_TRAINING, d=c.design_json?.fields||base.fields;
  document.getElementById("bg").src=c.design_json?.backgroundUrl||c.design_json?.backgroundTemplate||base.bg;
  set("issuer",c.design_json?.issuerName||"บริษัท ซานเต้ คอนซัลติ้ง จำกัด",d.issuer||base.fields.issuer);set("no",c.certificate_no,d.number||base.fields.number);set("name",c.recipient_name,d.name||base.fields.name);set("bodyTitle",c.body_title,d.bodyTitle||base.fields.bodyTitle);set("course",c.course_name,d.course||base.fields.course);set("body",c.body_text,d.body||base.fields.body);set("duration",c.duration_text,d.duration||base.fields.duration);set("delivery",c.delivery_text,d.delivery||base.fields.delivery);set("date",c.training_date?"ให้ไว้ ณ วันที่ "+c.training_date:(c.issue_date?"ให้ไว้ ณ วันที่ "+thaiDate(c.issue_date):""),d.date||base.fields.date);
@@ -137,8 +175,8 @@ async function init(){
  new QRCode(q,{text:location.href,width:70,height:70,correctLevel:QRCode.CorrectLevel.M});
  document.getElementById("mNo").textContent=c.certificate_no;document.getElementById("mName").textContent=c.recipient_name||"-";document.getElementById("mOrg").textContent=c.recipient_organization||"-";document.getElementById("mCourse").textContent=c.course_name||"-";document.getElementById("mTrainingDate").textContent=c.training_date||"-";document.getElementById("mDate").textContent=thaiDate(c.issue_date);document.getElementById("mStatus").textContent=c.certificate_status;
  if(c.certificate_status!=="ISSUED"){
-  document.getElementById("stage").classList.add("revoked-stage");
-  document.getElementById("revokedWatermark").classList.add("show");
+  document.getElementById("stage")?.classList.add("revoked-stage");
+  document.getElementById("revokedWatermark")?.classList.add("show");
   document.getElementById("status").classList.add("bad");
   document.getElementById("statusTitle").textContent=c.certificate_status==="REVOKED"?"วุฒิบัตรฉบับนี้ถูกยกเลิก":"เอกสารนี้ไม่อยู่ในสถานะใช้งาน";
   document.getElementById("statusSub").textContent=c.revoked_reason||"กรุณาติดต่อ SANTE Consulting เพื่อตรวจสอบ";

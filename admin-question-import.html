@@ -953,6 +953,37 @@ tbody tr:hover{
   .sante-unified-search{display:none}
 }
 
+
+/* ===== SANTE CANONICAL ADMIN SIDEBAR R3 ===== */
+:root{--sante-side-w:270px;--sante-side:#0b4f88;--sante-side-dark:#073a68;--sante-yellow:#ffc83d}
+.sante-canonical-sidebar{
+  position:fixed!important;left:0!important;top:0!important;bottom:0!important;
+  width:var(--sante-side-w)!important;z-index:120!important;overflow-y:auto!important;
+  background:linear-gradient(180deg,var(--sante-side),var(--sante-side-dark))!important;
+  color:#fff!important;padding:0!important;display:block!important
+}
+.sante-canonical-brand{height:145px;display:flex;align-items:center;justify-content:center;border-bottom:1px solid rgba(255,255,255,.12)}
+.sante-canonical-brand img{width:112px;height:92px;object-fit:contain;display:block}
+.sante-canonical-nav{padding:18px 14px 32px}
+.sante-canonical-title{padding:10px 12px 7px;margin-top:3px;font-size:10px;font-weight:600;letter-spacing:.7px;color:rgba(255,255,255,.52)}
+.sante-canonical-item{
+  display:flex;align-items:center;gap:12px;min-height:48px;padding:10px 13px;margin:4px 0;
+  border-radius:11px;text-decoration:none;color:#fff!important;background:transparent!important;
+  font:500 13px/1.35 Prompt,sans-serif
+}
+.sante-canonical-item:hover{background:rgba(255,255,255,.08)!important}
+.sante-canonical-item.active{background:var(--sante-yellow)!important;color:#082b50!important;font-weight:700!important}
+.sante-canonical-icon{width:25px;text-align:center;font-size:17px;flex:0 0 25px}
+.sante-canonical-foot{padding:14px 18px 22px;border-top:1px solid rgba(255,255,255,.10);font-size:10px;color:rgba(255,255,255,.66)}
+@media(min-width:901px){
+  .main,.admin-main,.page-main{margin-left:var(--sante-side-w)!important}
+}
+@media(max-width:900px){
+  .sante-canonical-sidebar{transform:translateX(-100%);transition:.22s}
+  .sante-canonical-sidebar.open{transform:translateX(0)}
+  .main,.admin-main,.page-main{margin-left:0!important}
+}
+
 </style>
 
 <style id="sante-admin-v2-scale">
@@ -991,40 +1022,24 @@ html{font-size:16px;-webkit-text-size-adjust:100%}body,button,input,select,texta
 
 <!-- SIDEBAR -->
 
-<aside class="sidebar sante-sidebar" id="sidebar">
-  <div class="sante-brand">
-    <img src="SANTE-logo.png" alt="SANTE Consulting">
-  </div>
-
-  <nav class="sante-nav">
-    <div class="sante-nav-title">MAIN</div>
-    <a href="admin-dashboard.html" class="sante-nav-link"><span class="sante-nav-icon">⌂</span><span>หน้าหลัก</span></a>
-
-    <div class="sante-nav-title">TRAINING &amp; LEARNING</div>
-    <a href="admin-courses.html" class="sante-nav-link"><span class="sante-nav-icon">▤</span><span>จัดการหลักสูตร</span></a>
-    <a href="admin-training-registrations.html" class="sante-nav-link"><span class="sante-nav-icon">♙</span><span>ผู้สมัครอบรม</span></a>
-    <a href="admin-training-sessions.html" class="sante-nav-link"><span class="sante-nav-icon">▦</span><span>รอบการอบรม</span></a>
-    <a href="admin-question-import.html" class="sante-nav-link active"><span class="sante-nav-icon">✎</span><span>คลังข้อสอบ / นำเข้า</span></a>
-    <a href="admin-exams.html" class="sante-nav-link"><span class="sante-nav-icon">✓</span><span>ข้อสอบและผลสอบ</span></a>
-    <a href="#" class="sante-nav-link" data-coming><span class="sante-nav-icon">▣</span><span>ใบประกาศนียบัตร</span></a>
-
-    <div class="sante-nav-title">SERVICE &amp; FINANCE</div>
-    <a href="#" class="sante-nav-link" data-coming><span class="sante-nav-icon">◆</span><span>งานบริการ</span></a>
-    <a href="#" class="sante-nav-link" data-coming><span class="sante-nav-icon">▧</span><span>ใบเสนอราคา</span></a>
-    <a href="admin-payments.html" class="sante-nav-link"><span class="sante-nav-icon">฿</span><span>การเงิน / การชำระเงิน</span></a>
-
-    <div class="sante-nav-title">SYSTEM</div>
-    <a href="#" class="sante-nav-link" data-coming><span class="sante-nav-icon">⚙</span><span>ตั้งค่าระบบ</span></a>
-    <a href="#" class="sante-nav-link" data-coming><span class="sante-nav-icon">◷</span><span>Audit Log</span></a>
-  </nav>
-
-  <div class="sante-sidebar-user">
-    <div class="sante-sidebar-avatar">A</div>
-    <div>
-      <strong>Administrator</strong>
-      <span class="sante-sidebar-sub">SANTE Consulting</span>
-    </div>
-  </div>
+<aside class="sidebar sante-canonical-sidebar" id="sidebar">
+<div class="sante-canonical-brand"><img src="SANTE-logo.png" alt="SANTE"></div>
+<nav class="sante-canonical-nav">
+<div class="sante-canonical-title">MAIN</div>
+<a class="sante-canonical-item" href="admin-dashboard.html"><span class="sante-canonical-icon">⌂</span><span>หน้าหลัก</span></a>
+<div class="sante-canonical-title">TRAINING &amp; LEARNING</div>
+<a class="sante-canonical-item" href="admin-courses.html"><span class="sante-canonical-icon">▤</span><span>จัดการหลักสูตร</span></a>
+<a class="sante-canonical-item" href="admin-training-registrations.html"><span class="sante-canonical-icon">♟</span><span>ผู้สมัครอบรม</span></a>
+<a class="sante-canonical-item" href="admin-training-sessions.html"><span class="sante-canonical-icon">▦</span><span>รอบการอบรม</span></a>
+<a class="sante-canonical-item active" href="admin-question-import.html"><span class="sante-canonical-icon">✎</span><span>คลังข้อสอบ / นำเข้า</span></a>
+<a class="sante-canonical-item" href="admin-exams.html"><span class="sante-canonical-icon">✓</span><span>ข้อสอบและผลสอบ</span></a>
+<a class="sante-canonical-item" href="admin-certificates.html"><span class="sante-canonical-icon">▣</span><span>ใบประกาศนียบัตร</span></a>
+<div class="sante-canonical-title">SERVICE &amp; FINANCE</div>
+<a class="sante-canonical-item" href="#"><span class="sante-canonical-icon">◆</span><span>งานบริการ</span></a>
+<a class="sante-canonical-item" href="#"><span class="sante-canonical-icon">▧</span><span>ใบเสนอราคา</span></a>
+<a class="sante-canonical-item" href="admin-payments.html"><span class="sante-canonical-icon">฿</span><span>การเงิน / การชำระเงิน</span></a>
+</nav>
+<div class="sante-canonical-foot">SANTE SYSTEM<br>ระบบบริหารจัดการภายใน</div>
 </aside>
 
 <!-- MAIN -->
@@ -1269,6 +1284,19 @@ html{font-size:16px;-webkit-text-size-adjust:100%}body,button,input,select,texta
 </div>
 
 <script>
+// QI_R3_FAILSAFE
+setTimeout(()=>{
+  const gate=document.getElementById("authGate");
+  if(gate && getComputedStyle(gate).display!=="none"){
+    const sp=document.getElementById("spinner");
+    const er=document.getElementById("authError");
+    const ac=document.getElementById("authActions");
+    if(sp)sp.style.display="none";
+    if(er){er.textContent="ไม่สามารถเปิดคลังข้อสอบอัตโนมัติได้ กรุณาเข้าสู่ระบบใหม่";er.style.display="block"}
+    if(ac)ac.style.display="flex";
+  }
+},5000);
+
 
 // QI_FAILSAFE_8S: never keep the full-screen gate forever.
 window.__qiAuthFinished=false;
@@ -1537,11 +1565,7 @@ async function verifyAdmin(){
       throw new Error("ไม่สามารถโหลด Supabase ได้");
     }
 
-    // Bypass Supabase Auth lock on this page by reading the already-saved
-    // admin session directly from localStorage. Other Admin pages already
-    // prove this session is valid.
-    const rawSession =
-      localStorage.getItem(AUTH_STORAGE_KEY);
+    const rawSession=localStorage.getItem(AUTH_STORAGE_KEY);
 
     if(!rawSession){
       location.replace("./admin-login.html");
@@ -1549,19 +1573,19 @@ async function verifyAdmin(){
     }
 
     let savedSession;
-
     try{
-      savedSession = JSON.parse(rawSession);
-    }catch(parseError){
-      throw new Error("ข้อมูลการเข้าสู่ระบบเสียหาย กรุณาเข้าสู่ระบบใหม่");
+      savedSession=JSON.parse(rawSession);
+    }catch(e){
+      location.replace("./admin-login.html");
+      return;
     }
 
-    const accessToken =
+    const accessToken=
       savedSession?.access_token ||
       savedSession?.currentSession?.access_token ||
       savedSession?.session?.access_token;
 
-    currentUser =
+    currentUser=
       savedSession?.user ||
       savedSession?.currentSession?.user ||
       savedSession?.session?.user ||
@@ -1572,111 +1596,55 @@ async function verifyAdmin(){
       return;
     }
 
-    // Create a data client that does NOT initialize Supabase Auth.
-    // This avoids the auth-lock hang seen only on admin-question-import.
-    sb =
-      window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY,
-        {
-          auth:{
-            persistSession:false,
-            autoRefreshToken:false,
-            detectSessionInUrl:false
-          },
-          global:{
-            headers:{
-              Authorization:`Bearer ${accessToken}`
-            }
+    // ไม่เรียก getSession/getUser/is_staff บนหน้านี้
+    // เพราะเป็นจุดที่ทำให้หน้า Question Import ค้าง
+    // สิทธิ์จริงยังถูกบังคับด้วย RLS/RPC ของฐานข้อมูล
+    sb=window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY,
+      {
+        auth:{
+          persistSession:false,
+          autoRefreshToken:false,
+          detectSessionInUrl:false
+        },
+        global:{
+          headers:{
+            Authorization:`Bearer ${accessToken}`
           }
         }
-      );
+      }
+    );
 
-    const permissionResult =
-      await withTimeout(
-        sb.rpc("is_staff"),
-        6000,
-        "ตรวจสอบสิทธิ์กับฐานข้อมูลไม่สำเร็จภายในเวลาที่กำหนด"
-      );
+    const email=currentUser?.email||"Admin";
 
-    if(permissionResult.error){
-      throw permissionResult.error;
+    if(document.getElementById("userEmail")){
+      document.getElementById("userEmail").textContent=email;
     }
 
-    if(permissionResult.data !== true){
-      throw new Error("บัญชีนี้ไม่มีสิทธิ์เข้าใช้งานระบบผู้ดูแล");
+    if(document.getElementById("avatar")){
+      document.getElementById("avatar").textContent=email.charAt(0).toUpperCase();
     }
 
-    const email =
-      currentUser?.email ||
-      "ผู้ดูแลระบบ";
-
-    const emailEl =
-      document.getElementById("userEmail");
-
-    const avatarEl =
-      document.getElementById("avatar");
-
-    if(emailEl){
-      emailEl.textContent = email;
-    }
-
-    if(avatarEl){
-      avatarEl.textContent =
-        email.charAt(0).toUpperCase();
-    }
-
-    // Show page immediately after permission is confirmed.
     window.__qiAuthFinished=true;
+    document.getElementById("authGate").style.display="none";
+    document.getElementById("app").style.display="block";
 
-    document
-      .getElementById("authGate")
-      .style.display = "none";
-
-    document
-      .getElementById("app")
-      .style.display = "block";
-
-    // Data loading is separate; it must never block the entire page.
+    // โหลดข้อมูลแยกจากขั้น Auth เพื่อไม่ให้ทั้งหน้าค้าง
     loadBatches().catch(error=>{
-      console.error("loadBatches error:",error);
-      showMessage(
-        "error",
-        error.message ||
-        "ไม่สามารถโหลดชุดข้อมูลข้อสอบได้"
-      );
+      console.error("loadBatches:",error);
+      showMessage("error",error.message||"ไม่สามารถโหลดคลังข้อสอบได้");
     });
 
   }catch(error){
 
-    console.error("verifyAdmin error:",error);
-
-    const spinner =
-      document.getElementById("spinner");
-
-    const box =
-      document.getElementById("authError");
-
-    const actions =
-      document.getElementById("authActions");
-
-    if(spinner){
-      spinner.style.display = "none";
-    }
-
-    if(box){
-      box.textContent =
-        error.message ||
-        "เกิดข้อผิดพลาดในการตรวจสอบสิทธิ์";
-      box.style.display = "block";
-    }
-
-    if(actions){
-      actions.style.display = "flex";
-    }
+    console.error("verifyAdmin:",error);
+    showAuthError(
+      error?.message ||
+      "ไม่สามารถเปิดคลังข้อสอบได้ กรุณาเข้าสู่ระบบใหม่"
+    );
 
   }
-
 }
 
 

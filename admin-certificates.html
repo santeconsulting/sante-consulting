@@ -198,6 +198,37 @@ body{margin:0;background:var(--bg);font-family:"Prompt",sans-serif;color:var(--n
   font-weight:700;
 }
 
+
+/* ===== SANTE CANONICAL ADMIN SIDEBAR R3 ===== */
+:root{--sante-side-w:270px;--sante-side:#0b4f88;--sante-side-dark:#073a68;--sante-yellow:#ffc83d}
+.sante-canonical-sidebar{
+  position:fixed!important;left:0!important;top:0!important;bottom:0!important;
+  width:var(--sante-side-w)!important;z-index:120!important;overflow-y:auto!important;
+  background:linear-gradient(180deg,var(--sante-side),var(--sante-side-dark))!important;
+  color:#fff!important;padding:0!important;display:block!important
+}
+.sante-canonical-brand{height:145px;display:flex;align-items:center;justify-content:center;border-bottom:1px solid rgba(255,255,255,.12)}
+.sante-canonical-brand img{width:112px;height:92px;object-fit:contain;display:block}
+.sante-canonical-nav{padding:18px 14px 32px}
+.sante-canonical-title{padding:10px 12px 7px;margin-top:3px;font-size:10px;font-weight:600;letter-spacing:.7px;color:rgba(255,255,255,.52)}
+.sante-canonical-item{
+  display:flex;align-items:center;gap:12px;min-height:48px;padding:10px 13px;margin:4px 0;
+  border-radius:11px;text-decoration:none;color:#fff!important;background:transparent!important;
+  font:500 13px/1.35 Prompt,sans-serif
+}
+.sante-canonical-item:hover{background:rgba(255,255,255,.08)!important}
+.sante-canonical-item.active{background:var(--sante-yellow)!important;color:#082b50!important;font-weight:700!important}
+.sante-canonical-icon{width:25px;text-align:center;font-size:17px;flex:0 0 25px}
+.sante-canonical-foot{padding:14px 18px 22px;border-top:1px solid rgba(255,255,255,.10);font-size:10px;color:rgba(255,255,255,.66)}
+@media(min-width:901px){
+  .main,.admin-main,.page-main{margin-left:var(--sante-side-w)!important}
+}
+@media(max-width:900px){
+  .sante-canonical-sidebar{transform:translateX(-100%);transition:.22s}
+  .sante-canonical-sidebar.open{transform:translateX(0)}
+  .main,.admin-main,.page-main{margin-left:0!important}
+}
+
 </style>
 <meta name="sante-build" content="CERT-BATCH-HOURS-FIX-2026-10-05">
 <meta name="sante-build" content="CERT-DATE-ISSUER-R2">
@@ -347,7 +378,7 @@ body{margin:0;background:var(--bg);font-family:"Prompt",sans-serif;color:var(--n
       <label>เวลาออกแบบ Batch ให้ใช้ระยะเวลาจาก</label>
       <select id="durationSource">
         <option value="TEMPLATE">ตัวเลขที่กำหนดในแม่แบบ</option>
-        <option value="COURSE">ชั่วโมงที่กำหนดในหลักสูตร</option>
+        <option value="COURSE">ชั่วโมงที่กำหนดในหลักสูตร</option><option value="SESSION">ชั่วโมงที่กำหนดในรอบอบรม</option>
       </select>
     </div>
             <div class="group"><label>รูปแบบ</label><input id="deliveryText" value="(ผ่านระบบออนไลน์)" oninput="syncPreview()"></div>
@@ -856,7 +887,7 @@ async function loadBase(){
  const [c,p,s]=await Promise.all([
   db.from("courses").select("id,course_code,course_name_th,certificate_prefix,course_type,duration_hours").order("sort_order"),
   db.from("profiles").select("id,firstname_th,lastname_th,email").order("firstname_th").limit(500),
-  db.from("training_sessions").select("id,course_id,session_name,session_code,training_start_at,training_end_at,delivery_method,session_status,courses(id,course_name_th,course_type,course_code,certificate_prefix,duration_hours)").order("training_start_at",{ascending:false}).limit(300)
+  db.from("training_sessions").select("id,course_id,session_name,session_code,training_start_at,training_end_at,delivery_method,session_status,courses(id,course_name_th,course_type,course_code,certificate_prefix,duration_hours),training_hours").order("training_start_at",{ascending:false}).limit(300)
  ]);
  if(!c.error){courses=c.data||[];const sel=document.getElementById("courseId");courses.forEach(x=>{const o=document.createElement("option");o.value=x.id;o.textContent=x.course_name_th;o.dataset.name=x.course_name_th;o.dataset.code=x.course_code||"";o.dataset.prefix=x.certificate_prefix||"";sel.appendChild(o)})}
  if(!p.error){profiles=p.data||[];const sel=document.getElementById("userId");profiles.forEach(x=>{const name=[x.firstname_th,x.lastname_th].filter(Boolean).join(" ")||x.email;const o=document.createElement("option");o.value=x.id;o.textContent=name;o.dataset.name=name;sel.appendChild(o)})}
@@ -1134,6 +1165,11 @@ function getBulkDurationText(session,saved){
      ? `${formatHours(course.duration_hours)} ชั่วโมง`
      : "ยังไม่ได้กำหนดชั่วโมงในหลักสูตร";
  }
+ if(source==="SESSION"){
+   return session?.training_hours!==null&&session?.training_hours!==undefined
+     ? `${formatHours(session.training_hours)} ชั่วโมง`
+     : "ยังไม่ได้กำหนดชั่วโมงในรอบอบรม";
+ }
  if(saved.design_json?.durationHours!==null&&saved.design_json?.durationHours!==undefined){
    return `${formatHours(saved.design_json.durationHours)} ชั่วโมง`;
  }
@@ -1250,7 +1286,9 @@ async function issueBulk(){
      p_body_text:saved.body_text||"",
      p_duration_text:(saved.design_json?.durationSource||"TEMPLATE")==="COURSE"
        ? (course.duration_hours!==null&&course.duration_hours!==undefined?`ระยะเวลาการฝึกอบรม ${formatHours(course.duration_hours)} ชั่วโมง`:"")
-       : (saved.design_json?.durationHours!==null&&saved.design_json?.durationHours!==undefined
+       : (saved.design_json?.durationSource||"TEMPLATE")==="SESSION"
+         ? (session.training_hours!==null&&session.training_hours!==undefined?`ระยะเวลาการฝึกอบรม ${formatHours(session.training_hours)} ชั่วโมง`:"")
+         : (saved.design_json?.durationHours!==null&&saved.design_json?.durationHours!==undefined
            ? `ระยะเวลาการฝึกอบรม ${formatHours(saved.design_json.durationHours)} ชั่วโมง`
            : (saved.duration_text||"")),
      p_delivery_text:formatDeliveryText(session.delivery_method),

@@ -2512,9 +2512,11 @@ html,body,button,input,select,textarea{font-family:"Prompt",sans-serif!important
                 <div class="detail">
                   <div class="detail-label">ระยะเวลาอบรม</div>
                   <div class="detail-value">
-                    ${session.courses?.duration_hours !== null && session.courses?.duration_hours !== undefined
-                      ? `${escapeHtml(formatCourseHours(session.courses.duration_hours))} ชั่วโมง`
-                      : "-"}
+                    ${session.training_hours !== null && session.training_hours !== undefined
+                      ? `${escapeHtml(formatCourseHours(session.training_hours))} ชั่วโมง`
+                      : (session.courses?.duration_hours !== null && session.courses?.duration_hours !== undefined
+                          ? `${escapeHtml(formatCourseHours(session.courses.duration_hours))} ชั่วโมง`
+                          : "-")}
                   </div>
                 </div>
 
