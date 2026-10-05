@@ -2582,5 +2582,34 @@ document.addEventListener("DOMContentLoaded", function(){
 </script>
 
 <script src="admin-member-master.js"></script>
+
+<div id="buildMarker" style="position:fixed;right:10px;bottom:10px;z-index:99999;
+font:600 10px/1.2 Prompt,sans-serif;color:#60789c;background:rgba(255,255,255,.88);
+border:1px solid #dbe6f1;border-radius:8px;padding:6px 8px;">
+QI FIX 2026-10-05 V3
+</div>
+
+
+<script id="qi-hard-fallback-v3">
+window.addEventListener("DOMContentLoaded", function(){
+  setTimeout(function(){
+    var gate=document.getElementById("authGate");
+    var app=document.getElementById("app");
+    var err=document.getElementById("authError");
+    var actions=document.getElementById("authActions");
+    var spinner=document.getElementById("spinner");
+
+    if(gate && gate.style.display !== "none" && (!app || app.style.display !== "block")){
+      if(spinner) spinner.style.display="none";
+      if(err){
+        err.textContent="หน้าเว็บยังไม่ผ่านขั้นตรวจสอบสิทธิ์ กรุณากด “ลองอีกครั้ง” หรือออกจากระบบแล้วเข้าสู่ระบบใหม่";
+        err.style.display="block";
+      }
+      if(actions) actions.style.display="flex";
+    }
+  },10000);
+});
+</script>
+
 </body>
 </html>
