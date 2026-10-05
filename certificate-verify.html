@@ -27,7 +27,7 @@
     </div></div>
    </section>
    <aside class="card meta"><h2>ข้อมูลวุฒิบัตร</h2><dl>
-    <dt>เลขวุฒิบัตร</dt><dd id="mNo">-</dd><dt>ผู้รับ</dt><dd id="mName">-</dd><dt>องค์กร</dt><dd id="mOrg">-</dd><dt>หลักสูตร / งานบริการ</dt><dd id="mCourse">-</dd><dt>วันที่ออก</dt><dd id="mDate">-</dd><dt>สถานะ</dt><dd id="mStatus">-</dd>
+    <dt>เลขวุฒิบัตร</dt><dd id="mNo">-</dd><dt>ผู้รับ</dt><dd id="mName">-</dd><dt>องค์กร</dt><dd id="mOrg">-</dd><dt>หลักสูตร / งานบริการ</dt><dd id="mCourse">-</dd><dt>วันที่ออก</dt><dd id="mDate">-</dd><dt>สถานะ</dt><dd id="mStatus">-</dd><div id="revokedWrap" style="display:none"><dt>เหตุผลการยกเลิก</dt><dd id="mRevokedReason">-</dd></div>
    </dl></aside>
   </div>
   <div class="footer">© 2026 SANTE Consulting Co., Ltd. · Trust in Safety. Trust in SANTE.</div>
@@ -102,7 +102,15 @@ async function init(){
  q.innerHTML="";
  new QRCode(q,{text:location.href,width:70,height:70,correctLevel:QRCode.CorrectLevel.M});
  document.getElementById("mNo").textContent=c.certificate_no;document.getElementById("mName").textContent=c.recipient_name||"-";document.getElementById("mOrg").textContent=c.recipient_organization||"-";document.getElementById("mCourse").textContent=c.course_name||"-";document.getElementById("mDate").textContent=thaiDate(c.issue_date);document.getElementById("mStatus").textContent=c.certificate_status;
- if(c.certificate_status!=="ISSUED"){document.getElementById("status").classList.add("bad");document.getElementById("statusTitle").textContent="เอกสารนี้ไม่อยู่ในสถานะใช้งาน";document.getElementById("statusSub").textContent="กรุณาติดต่อ SANTE Consulting เพื่อตรวจสอบ"}
+ if(c.certificate_status!=="ISSUED"){
+  document.getElementById("status").classList.add("bad");
+  document.getElementById("statusTitle").textContent=c.certificate_status==="REVOKED"?"วุฒิบัตรฉบับนี้ถูกยกเลิก":"เอกสารนี้ไม่อยู่ในสถานะใช้งาน";
+  document.getElementById("statusSub").textContent=c.revoked_reason||"กรุณาติดต่อ SANTE Consulting เพื่อตรวจสอบ";
+  if(c.revoked_reason){
+    document.getElementById("revokedWrap").style.display="block";
+    document.getElementById("mRevokedReason").textContent=c.revoked_reason;
+  }
+}
  document.getElementById("loading").style.display="none";document.getElementById("app").style.display="block"
 }
 init();

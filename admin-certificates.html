@@ -183,7 +183,7 @@ body{margin:0;background:var(--bg);font-family:"Prompt",sans-serif;color:var(--n
         </div>
       </div>
       <div class="panel">
-        <div class="table-wrap"><table class="table"><thead><tr><th>เลขวุฒิบัตร</th><th>ผู้รับ / องค์กร</th><th>หลักสูตร / งานบริการ</th><th>วันที่ออก</th><th>ประเภท</th><th>สถานะ</th><th>ตรวจสอบ</th></tr></thead><tbody id="certBody"></tbody></table></div>
+        <div class="table-wrap"><table class="table"><thead><tr><th>เลขวุฒิบัตร</th><th>ผู้รับ / องค์กร</th><th>หลักสูตร / งานบริการ</th><th>วันที่ออก</th><th>ประเภท</th><th>สถานะ</th><th>ตรวจสอบ</th><th>จัดการ</th></tr></thead><tbody id="certBody"></tbody></table></div>
         <div id="emptyList" class="empty" style="display:none">ยังไม่มีวุฒิบัตรในระบบ</div>
       </div>
     </section>
@@ -229,15 +229,26 @@ body{margin:0;background:var(--bg);font-family:"Prompt",sans-serif;color:var(--n
           <div class="group" id="orgGroup"><label>หน่วยงาน / องค์กร</label><input id="recipientOrg" placeholder="เช่น บริษัท ตัวอย่าง จำกัด" oninput="syncPreview()"></div>
 
           <div class="group" id="courseGroup"><label>หลักสูตร</label><select id="courseId" onchange="applyCourse()"><option value="">-- เลือกหรือพิมพ์เอง --</option></select></div>
-          <div class="group"><label>ชื่อหลักสูตร / ชื่องานบริการ</label><textarea id="courseName" rows="3" oninput="syncPreview()">ชื่อหลักสูตร</textarea></div>
+          <div class="group">
+  <label>ชื่อหลักสูตร / ชื่องานบริการ</label>
+  <textarea id="courseName" rows="3" oninput="syncPreview()">ชื่อหลักสูตร</textarea>
+  <div class="hint">ข้อความนี้สามารถบันทึกไปกับแม่แบบได้</div>
+</div>
+<div class="group" id="courseSourceGroup">
+  <label>เวลาออกแบบ Batch ให้ใช้ชื่อหลักสูตรจาก</label>
+  <select id="courseSource">
+    <option value="TEMPLATE">ข้อความที่กำหนดในแม่แบบ</option>
+    <option value="SESSION">ชื่อหลักสูตรจากรอบอบรม</option>
+  </select>
+</div>
           <div class="group"><label>ข้อความนำ</label><input id="bodyTitle" value="ผ่านการฝึกอบรมหลักสูตร" oninput="syncPreview()"></div>
           <div class="group"><label>รายละเอียดเพิ่มเติม</label><textarea id="bodyText" rows="4" placeholder="ข้อความเพิ่มเติม..." oninput="syncPreview()"></textarea></div>
           <div class="row2">
-            <div class="group"><label>ระยะเวลา</label><input id="durationText" value="ระยะเวลาการฝึกอบรม ๒ ชั่วโมง" oninput="syncPreview()"></div>
+            <div class="group"><label>ระยะเวลา</label><input id="durationText" value="ระยะเวลาการฝึกอบรม 2 ชั่วโมง" oninput="syncPreview()"></div>
             <div class="group"><label>รูปแบบ</label><input id="deliveryText" value="(ผ่านระบบออนไลน์)" oninput="syncPreview()"></div>
           </div>
           <div class="row2">
-            <div class="group"><label>วันที่อบรม/ให้บริการ</label><input id="trainingDate" placeholder="เช่น 11 กันยายน 2569" oninput="syncPreview()"></div>
+            <div class="group"><label>วันที่อบรม/ให้บริการ</label><input id="trainingDate" type="date" onchange="syncPreview()"><div class="hint">เลือกจากปฏิทินได้เหมือนวันที่ออกวุฒิบัตร</div></div>
             <div class="group"><label>วันที่ออก</label><input id="issueDate" type="date" onchange="syncPreview()"></div>
           </div>
           <div class="row2">
@@ -607,7 +618,13 @@ function currentDesignerPayload(){
    body_text:document.getElementById("bodyText").value,
    duration_text:document.getElementById("durationText").value,
    delivery_text:document.getElementById("deliveryText").value,
-   design_json:{fields:design,qr:qrPos,template:type}
+   design_json:{
+     fields:design,
+     qr:qrPos,
+     template:type,
+     courseSource:document.getElementById("courseSource")?.value||"TEMPLATE",
+     courseText:document.getElementById("courseName").value
+   }
  };
 }
 async function saveAsTemplate(){
@@ -645,9 +662,14 @@ async function loadSavedTemplate(id){
  document.getElementById("bodyText").value=t.body_text||"";
  document.getElementById("durationText").value=t.duration_text||"";
  document.getElementById("deliveryText").value=t.delivery_text||"";
- if(t.course_id){
+ if(t.design_json?.courseText){
+   document.getElementById("courseName").value=t.design_json.courseText;
+ }else if(t.course_id){
    const o=document.querySelector(`#courseId option[value="${t.course_id}"]`);
    if(o)document.getElementById("courseName").value=o.dataset.name||o.textContent||"";
+ }
+ if(document.getElementById("courseSource")){
+   document.getElementById("courseSource").value=t.design_json?.courseSource||"TEMPLATE";
  }
  if(t.design_json?.fields){
    design=JSON.parse(JSON.stringify(t.design_json.fields));
@@ -682,7 +704,7 @@ async function deleteSavedTemplate(){
 }
 
 async function loadCertificates(){
- const {data,error}=await db.from("certificates").select("id,certificate_no,certificate_status,user_id,training_session_id,recipient_display_name,recipient_organization,course_name_snapshot,issue_date,template_code,certificate_subtype,verification_url,certificate_types(type_code,type_name_th)").order("created_at",{ascending:false}).limit(1000);
+ const {data,error}=await db.from("certificates").select("id,certificate_no,certificate_status,revoked_reason,user_id,training_session_id,recipient_display_name,recipient_organization,course_name_snapshot,issue_date,template_code,certificate_subtype,verification_url,certificate_types(type_code,type_name_th)").order("created_at",{ascending:false}).limit(1000);
  if(error){alert("โหลดวุฒิบัตรไม่สำเร็จ: "+error.message);return}
  certificates=data||[];renderList();updateStats()
 }
@@ -696,8 +718,37 @@ function renderList(){
  const q=document.getElementById("search").value.toLowerCase().trim(),t=document.getElementById("filterType").value,s=document.getElementById("filterStatus").value;
  const rows=certificates.filter(x=>(!t||x.certificate_types?.type_code===t)&&(!s||x.certificate_status===s)&&(!q||[x.certificate_no,x.recipient_display_name,x.recipient_organization,x.course_name_snapshot].join(" ").toLowerCase().includes(q)));
  document.getElementById("emptyList").style.display=rows.length?"none":"block";
- document.getElementById("certBody").innerHTML=rows.map(x=>`<tr><td><strong>${x.certificate_no||"-"}</strong></td><td>${x.recipient_display_name||x.recipient_organization||"-"}</td><td>${x.course_name_snapshot||"-"}</td><td>${x.issue_date?formatThaiDate(x.issue_date):"-"}</td><td>${x.certificate_types?.type_name_th||"-"}</td><td><span class="badge ${x.certificate_status==="REVOKED"?"red":""}">${x.certificate_status||"-"}</span></td><td>${x.verification_url?`<a class="btn light" style="display:inline-flex;align-items:center" href="${x.verification_url}" target="_blank">เปิด</a>`:"-"}</td></tr>`).join("")
+ document.getElementById("certBody").innerHTML=rows.map(x=>`<tr>
+ <td><strong>${x.certificate_no||"-"}</strong></td>
+ <td>${x.recipient_display_name||x.recipient_organization||"-"}</td>
+ <td>${x.course_name_snapshot||"-"}</td>
+ <td>${x.issue_date?formatThaiDate(x.issue_date):"-"}</td>
+ <td>${x.certificate_types?.type_name_th||"-"}</td>
+ <td><span class="badge ${x.certificate_status==="REVOKED"?"red":""}">${x.certificate_status||"-"}</span>${x.revoked_reason?`<div class="hint">${x.revoked_reason}</div>`:""}</td>
+ <td>${x.verification_url?`<a class="btn light" style="display:inline-flex;align-items:center" href="${x.verification_url}" target="_blank">เปิด</a>`:"-"}</td>
+ <td style="white-space:nowrap">
+   ${x.certificate_status!=="REVOKED"?`<button class="btn light" onclick="revokeCertificate('${x.id}','${(x.certificate_no||"").replace(/'/g,"")}')">ยกเลิก</button>`:""}
+   <button class="btn danger" onclick="deleteCertificate('${x.id}','${(x.certificate_no||"").replace(/'/g,"")}')">ลบ</button>
+ </td>
+</tr>`).join("")
 }
+
+async function revokeCertificate(id,no){
+ const reason=prompt(`ระบุเหตุผลการยกเลิก ${no}`,"ออกข้อมูลผิด");
+ if(reason===null)return;
+ const {error}=await db.rpc("admin_revoke_certificate",{p_certificate_id:id,p_reason:reason.trim()||"ยกเลิกโดยผู้ดูแลระบบ"});
+ if(error){alert("ยกเลิกวุฒิบัตรไม่สำเร็จ: "+error.message);return}
+ await loadCertificates();
+ alert("ยกเลิกวุฒิบัตรแล้ว");
+}
+async function deleteCertificate(id,no){
+ if(!confirm(`ลบวุฒิบัตร ${no} ออกจากระบบถาวร?\n\nแนะนำให้ใช้ “ยกเลิก” สำหรับวุฒิบัตรที่เคยส่งให้ผู้รับแล้ว\nการลบเหมาะกับข้อมูลทดสอบหรือข้อมูลที่สร้างผิดเท่านั้น`))return;
+ const {error}=await db.rpc("admin_delete_certificate",{p_certificate_id:id});
+ if(error){alert("ลบวุฒิบัตรไม่สำเร็จ: "+error.message);return}
+ await loadCertificates();
+ alert("ลบวุฒิบัตรแล้ว");
+}
+
 async function issueCertificate(){
  const btn=document.getElementById("issueBtn");btn.disabled=true;btn.textContent="กำลังออกวุฒิบัตร...";
  try{
@@ -712,7 +763,7 @@ async function issueCertificate(){
    p_type_code:type,p_subtype:subtype,p_user_id:type==="SERVICE"?null:(document.getElementById("userId").value||null),
    p_course_id:courseId,p_training_session_id:null,p_recipient_name:document.getElementById("recipientName").value.trim(),
    p_recipient_organization:document.getElementById("recipientOrg").value.trim()||null,p_course_name:document.getElementById("courseName").value.trim(),
-   p_training_date:document.getElementById("trainingDate").value.trim()||null,p_issue_date:issue,
+   p_training_date:document.getElementById("trainingDate").value?formatThaiDate(document.getElementById("trainingDate").value):null,p_issue_date:issue,
    p_language_code:document.getElementById("language").value,p_template_code:type,p_prefix:prefix,p_sequence_key:sequenceKey,
    p_body_title:document.getElementById("bodyTitle").value,p_body_text:document.getElementById("bodyText").value,
    p_duration_text:document.getElementById("durationText").value,p_delivery_text:document.getElementById("deliveryText").value,
@@ -819,7 +870,10 @@ async function issueBulk(){
    const {error}=await db.rpc("admin_issue_certificate",{
      p_type_code:type,p_subtype:subtype,p_user_id:r.user_id||null,p_course_id:session.course_id,
      p_training_session_id:session.id,p_recipient_name:name,p_recipient_organization:r.organization_name||null,
-     p_course_name:course.course_name_th||session.session_name||"",p_training_date:formatDateOnly(session.training_start_at),
+     p_course_name:(saved.design_json?.courseSource||"TEMPLATE")==="SESSION"
+       ? (course.course_name_th||session.session_name||"")
+       : (saved.design_json?.courseText||course.course_name_th||session.session_name||""),
+     p_training_date:formatDateOnly(session.training_start_at),
      p_issue_date:issueDate,p_language_code:"th",p_template_code:template,p_prefix:prefix,p_sequence_key:seqKey,
      p_body_title:saved.body_title||"ผ่านการฝึกอบรมหลักสูตร",
      p_body_text:saved.body_text||"",
