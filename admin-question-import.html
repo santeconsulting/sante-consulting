@@ -1437,14 +1437,31 @@ function showAuthError(message){
 
 async function verifyAdmin(){
 
+  // Safety UI timer: if something truly stalls, never leave the user
+  // staring at the spinner forever.
+  const safetyTimer = setTimeout(()=>{
+    const gate = document.getElementById("authGate");
+    const spinner = document.getElementById("spinner");
+    const box = document.getElementById("authError");
+    const actions = document.getElementById("authActions");
+
+    if(gate && gate.style.display !== "none"){
+      if(spinner) spinner.style.display = "none";
+      if(box){
+        box.textContent =
+          "การตรวจสอบสิทธิ์ใช้เวลานานผิดปกติ กรุณากด “ลองอีกครั้ง”";
+        box.style.display = "block";
+      }
+      if(actions) actions.style.display = "flex";
+    }
+  }, 9000);
+
   try{
 
     if(!window.supabase){
-
       throw new Error(
-        "ไม่สามารถเชื่อมต่อระบบเข้าสู่ระบบได้"
+        "ไม่สามารถเชื่อมต่อ Supabase ได้ กรุณารีเฟรชหน้าอีกครั้ง"
       );
-
     }
 
     sb =
@@ -1461,66 +1478,30 @@ async function verifyAdmin(){
         }
       );
 
-    let session=null;
-
-    // Fast auth check: one normal check + one short retry only.
-    // Prevents the page from appearing to hang for 20–30 seconds.
-    let sessionResult =
-      await withTimeout(
-        sb.auth.getSession(),
-        4500,
-        "การตรวจสอบสถานะเข้าสู่ระบบใช้เวลานานเกินไป"
-      );
+    // Use the same auth flow as admin-exams.html, which is already working.
+    const sessionResult =
+      await sb.auth.getSession();
 
     if(sessionResult.error){
       throw sessionResult.error;
     }
 
-    session=sessionResult.data.session;
-
-    if(!session){
-      await sleep(350);
-
-      sessionResult =
-        await withTimeout(
-          sb.auth.getSession(),
-          3500,
-          "ไม่พบสถานะเข้าสู่ระบบ"
-        );
-
-      if(sessionResult.error){
-        throw sessionResult.error;
-      }
-
-      session=sessionResult.data.session;
-    }
-
-    if(!session){
-
-      location.replace(
-        "./admin-login.html"
-      );
-
+    if(!sessionResult.data.session){
+      clearTimeout(safetyTimer);
+      location.replace("./admin-login.html");
       return;
     }
 
     const userResult =
-      await withTimeout(
-        sb.auth.getUser(),
-        6000,
-        "การตรวจสอบบัญชีใช้เวลานานเกินไป"
-      );
+      await sb.auth.getUser();
 
     if(userResult.error){
       throw userResult.error;
     }
 
     if(!userResult.data.user){
-
-      location.replace(
-        "./admin-login.html"
-      );
-
+      clearTimeout(safetyTimer);
+      location.replace("./admin-login.html");
       return;
     }
 
@@ -1528,30 +1509,19 @@ async function verifyAdmin(){
       userResult.data.user;
 
     const permissionResult =
-      await withTimeout(
-        sb.rpc("is_staff"),
-        6000,
-        "การตรวจสอบสิทธิ์ผู้ดูแลระบบใช้เวลานานเกินไป"
-      );
+      await sb.rpc("is_staff");
 
     if(permissionResult.error){
-
-      throw new Error(
-        "ไม่สามารถตรวจสอบสิทธิ์ผู้ดูแลระบบได้: "
-        +
-        permissionResult.error.message
-      );
-
+      throw permissionResult.error;
     }
 
     if(permissionResult.data !== true){
-
-      showAuthError(
+      throw new Error(
         "บัญชีนี้ไม่มีสิทธิ์เข้าใช้งานระบบผู้ดูแล"
       );
-
-      return;
     }
+
+    clearTimeout(safetyTimer);
 
     const email =
       currentUser.email ||
@@ -1559,28 +1529,44 @@ async function verifyAdmin(){
 
     document
       .getElementById("userEmail")
-      .textContent=email;
+      .textContent = email;
 
     document
       .getElementById("avatar")
-      .textContent=
+      .textContent =
       email.charAt(0).toUpperCase();
 
+    // IMPORTANT: reveal the page immediately after auth succeeds.
+    // Loading question batches must NOT block the entire admin page.
     document
       .getElementById("authGate")
-      .style.display="none";
+      .style.display = "none";
 
     document
       .getElementById("app")
-      .style.display="block";
+      .style.display = "block";
 
-    await loadBatches();
+    // Load data separately so a data-query issue shows inside the page
+    // instead of looking like an authentication hang.
+    loadBatches().catch(error=>{
+      console.error("loadBatches error:", error);
+      showMessage(
+        "error",
+        error.message ||
+        "ไม่สามารถโหลดชุดข้อมูลข้อสอบได้"
+      );
+    });
 
   }
 
   catch(error){
 
-    console.error(error);
+    clearTimeout(safetyTimer);
+
+    console.error(
+      "verifyAdmin error:",
+      error
+    );
 
     showAuthError(
       error.message ||
