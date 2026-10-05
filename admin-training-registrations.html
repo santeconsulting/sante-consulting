@@ -1026,88 +1026,25 @@
 
 
       <nav class="menu">
-
         <div class="menu-title">MAIN</div>
+        <a class="menu-item" href="admin-dashboard.html"><span class="menu-icon">▦</span>แดชบอร์ด</a>
 
-        <a class="menu-item" href="admin-dashboard.html">
-          <span class="menu-icon">▦</span>
-          Dashboard
-        </a>
-
-
-        <div class="menu-title">TRAINING & LEARNING</div>
-
-        <button class="menu-item" type="button">
-          <span class="menu-icon">👥</span>
-          สมาชิก
-        </button>
-
-        <a class="menu-item" href="admin-courses.html">
-          <span class="menu-icon">📚</span>
-          หลักสูตร
-        </a>
-
-        <a class="menu-item" href="admin-training-sessions.html">
-          <span class="menu-icon">📅</span>
-          รอบการอบรม
-        </a>
-
-        <a class="menu-item active" href="admin-training-registrations.html">
-          <span class="menu-icon">👤</span>
-          ผู้สมัครอบรม
-        </a>
-
-        <a class="menu-item" href="admin-question-import.html">
-          <span class="menu-icon">📝</span>
-          คลังข้อสอบ
-        </a>
-
-        <a class="menu-item" href="admin-question-import.html">
-          <span class="menu-icon">⬆</span>
-          นำเข้าข้อสอบ
-        </a>
-
-        <button class="menu-item" type="button">
-          <span class="menu-icon">📊</span>
-          ผลการสอบ
-        </button>
-
-        <button class="menu-item" type="button">
-          <span class="menu-icon">🏅</span>
-          วุฒิบัตร
-        </button>
-
+        <div class="menu-title">TRAINING &amp; LEARNING</div>
+        <a class="menu-item active" href="admin-training-registrations.html"><span class="menu-icon">👥</span>ผู้สมัครอบรม</a>
+        <a class="menu-item" href="admin-courses.html"><span class="menu-icon">📚</span>หลักสูตร</a>
+        <a class="menu-item" href="admin-training-sessions.html"><span class="menu-icon">📅</span>รอบการอบรม</a>
+        <a class="menu-item" href="admin-question-import.html"><span class="menu-icon">⬆</span>คลังข้อสอบ / นำเข้า</a>
+        <a class="menu-item" href="admin-exams.html"><span class="menu-icon">📊</span>ข้อสอบและผลสอบ</a>
+        <button class="menu-item" type="button" data-coming><span class="menu-icon">🏅</span>วุฒิบัตร</button>
 
         <div class="menu-title">SERVICE</div>
-
-        <button class="menu-item" type="button">
-          <span class="menu-icon">🛠</span>
-          งานบริการ
-        </button>
-
-        <button class="menu-item" type="button">
-          <span class="menu-icon">📄</span>
-          ใบเสนอราคา
-        </button>
-
-        <button class="menu-item" type="button">
-          <span class="menu-icon">💳</span>
-          การเงิน / การชำระเงิน
-        </button>
-
+        <button class="menu-item" type="button" data-coming><span class="menu-icon">🛠</span>งานบริการ</button>
+        <button class="menu-item" type="button" data-coming><span class="menu-icon">📄</span>ใบเสนอราคา</button>
+        <a class="menu-item" href="admin-payments.html"><span class="menu-icon">💳</span>การเงิน / การชำระเงิน</a>
 
         <div class="menu-title">SYSTEM</div>
-
-        <button class="menu-item" type="button">
-          <span class="menu-icon">⚙</span>
-          ตั้งค่าระบบ
-        </button>
-
-        <button class="menu-item" type="button">
-          <span class="menu-icon">🕘</span>
-          Audit Log
-        </button>
-
+        <button class="menu-item" type="button" data-coming><span class="menu-icon">⚙</span>ตั้งค่าระบบ</button>
+        <button class="menu-item" type="button" data-coming><span class="menu-icon">🕘</span>Audit Log</button>
       </nav>
 
 
@@ -1469,6 +1406,10 @@
       }
     );
 
+
+  document.querySelectorAll("[data-coming]").forEach(el => {
+    el.addEventListener("click", () => alert("โมดูลนี้กำลังอยู่ระหว่างการพัฒนา"));
+  });
 
   /* =========================================
      STATE
