@@ -945,113 +945,156 @@
       }
     }
   
-/* ===== SANTE UNIFIED ADMIN SHELL 2026-10-05 ===== */
-:root{
-  --sante-shell-navy:#0b4f88;
-  --sante-shell-navy-dark:#073a68;
-  --sante-shell-yellow:#ffc83d;
-  --sante-shell-bg:#f3f7fb;
-  --sante-shell-line:#dbe5ef;
+/* ===== SANTE ADMIN VISUAL FIX R11 : COURSES ===== */
+
+/* Header identical visual language to dashboard */
+.topbar{
+  height:82px!important;
+  padding:0 28px!important;
+  background:rgba(255,255,255,.98)!important;
+  border-bottom:1px solid #e1eaf3!important;
+  box-shadow:0 2px 10px rgba(8,45,105,.02)!important;
 }
-@media(min-width:901px){
-  body{background:var(--sante-shell-bg)!important}
-  .sidebar{
-    width:236px!important;
-    background:linear-gradient(180deg,var(--sante-shell-navy),var(--sante-shell-navy-dark))!important;
-    color:#fff!important;
-    box-shadow:none!important;
-  }
-  .main{margin-left:236px!important}
+.dashboard-style-topbar-left{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  min-width:0;
+  flex:1;
 }
-.sidebar-brand,.brand{
-  min-height:116px!important;
-  padding:18px 16px!important;
-  display:flex!important;
-  align-items:center!important;
-  justify-content:center!important;
-  border-bottom:1px solid rgba(255,255,255,.12)!important;
+.global-search-shell{
+  width:min(590px,52vw);
+  height:46px;
+  border-radius:999px;
+  background:#edf3f9;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:0 18px;
+  border:1px solid transparent;
 }
-.sidebar-brand img,.brand img,.brand-logo{
-  width:92px!important;
-  height:76px!important;
-  object-fit:contain!important;
+.global-search-shell:focus-within{
+  border-color:#d0deec;
+  background:#f6f9fc;
+}
+.global-search-icon{
+  color:#6f849d;
+  font-size:16px;
+  line-height:1;
+}
+.global-search-shell input{
+  width:100%;
+  border:0!important;
+  outline:0!important;
   background:transparent!important;
-  border-radius:0!important;
+  color:#18324f;
+  font:400 13px/1.2 "Prompt",sans-serif;
   padding:0!important;
 }
-.brand-row{justify-content:center!important}
-.brand-row>div:not(:first-child),.brand-name,.brand-subtitle,.brand-text{display:none!important}
-.menu,.nav{padding:10px 10px 26px!important}
-.menu-title,.sidebar-section-title,.group{
-  padding:13px 12px 7px!important;
+.global-search-shell input::placeholder{color:#7d90a5}
+
+/* User block like dashboard */
+.topbar-right{gap:14px!important}
+.admin-user{gap:10px!important}
+.avatar{
+  width:42px!important;height:42px!important;
+  background:#0b4f88!important;
+  font-size:15px!important;
+}
+.admin-name{
+  font-size:14px!important;
+  font-weight:600!important;
+  color:#102442!important;
+}
+.admin-role{
   font-size:10px!important;
-  letter-spacing:.5px!important;
-  color:rgba(255,255,255,.5)!important;
+  color:#7b8da2!important;
 }
-.menu-item,.nav-item,.nav-btn{
-  min-height:44px!important;
-  border-radius:10px!important;
-  font-size:13px!important;
-  color:#fff!important;
-  gap:10px!important;
-}
-.menu-item.active,.nav-item.active,.nav-btn.active{
-  background:var(--sante-shell-yellow)!important;
-  color:#082b50!important;
-  font-weight:700!important;
-}
-.topbar,.header{
-  min-height:78px!important;
-  height:78px!important;
+.logout-btn{
+  min-height:42px!important;
+  padding:0 18px!important;
+  border-radius:11px!important;
   background:#fff!important;
-  border-bottom:1px solid var(--sante-shell-line)!important;
-  position:sticky!important;top:0!important;z-index:80!important;
+  border:1px solid #d6e1ec!important;
+  color:#102442!important;
+  font-weight:600!important;
 }
-.sante-unified-search{
-  width:min(620px,52vw);height:44px;border:0;border-radius:999px;
-  background:#eef4fa;padding:0 20px;color:#6c8199;
-  display:flex;align-items:center;font-size:12px
+
+/* Sidebar: remove edge artifact and match dashboard proportions */
+.sidebar{
+  width:240px!important;
+  border-right:0!important;
+  box-shadow:none!important;
+  background:linear-gradient(180deg,#0b568e 0%,#0a477a 55%,#083d6b 100%)!important;
 }
-.sante-unified-search::before{content:"⌕";margin-right:10px}
+.main{
+  margin-left:240px!important;
+  border-left:0!important;
+  box-shadow:none!important;
+}
+.sidebar::before,.sidebar::after,.main::before,.main::after{
+  content:none!important;display:none!important;
+}
+
+/* Brand simplified to look like dashboard sidebar */
+.brand{
+  min-height:142px!important;
+  padding:22px 18px!important;
+  display:flex!important;
+  justify-content:center!important;
+  align-items:center!important;
+  border-bottom:1px solid rgba(255,255,255,.13)!important;
+}
+.brand-row{display:block!important;text-align:center!important}
+.brand-logo{
+  width:108px!important;
+  height:82px!important;
+  border-radius:0!important;
+  background:transparent!important;
+  padding:0!important;
+  object-fit:contain!important;
+}
+.brand-name,.brand-subtitle{display:none!important}
+.sidebar-section-title{
+  padding:19px 22px 8px!important;
+  font-size:10px!important;
+  letter-spacing:.45px!important;
+  color:rgba(255,255,255,.50)!important;
+  text-transform:uppercase;
+}
+.nav{padding:0 12px 26px!important}
+.nav-item{
+  min-height:48px!important;
+  margin:4px 0!important;
+  padding:10px 13px!important;
+  border-radius:10px!important;
+  gap:11px!important;
+  font-size:12px!important;
+  color:#fff!important;
+}
+.nav-item.active{
+  background:#ffc83d!important;
+  color:#082b50!important;
+  box-shadow:none!important;
+}
+.nav-icon{font-size:16px!important;width:25px!important}
+
+/* Page spacing aligned with dashboard */
+.content{
+  padding:30px 28px 46px!important;
+}
+.page-header{
+  margin-bottom:22px!important;
+}
+
 @media(max-width:900px){
-  .sidebar{width:260px!important}
+  .sidebar{width:240px!important}
   .main{margin-left:0!important}
-  .sante-unified-search{display:none}
-}
-
-
-/* ===== SANTE CANONICAL ADMIN SIDEBAR R3 ===== */
-:root{--sante-side-w:270px;--sante-side:#0b4f88;--sante-side-dark:#073a68;--sante-yellow:#ffc83d}
-.sante-canonical-sidebar{
-  position:fixed!important;left:0!important;top:0!important;bottom:0!important;
-  width:var(--sante-side-w)!important;z-index:120!important;overflow-y:auto!important;
-  background:linear-gradient(180deg,var(--sante-side),var(--sante-side-dark))!important;
-  color:#fff!important;padding:0!important;display:block!important
-}
-.sante-canonical-brand{height:145px;display:flex;align-items:center;justify-content:center;border-bottom:1px solid rgba(255,255,255,.12)}
-.sante-canonical-brand img{width:112px;height:92px;object-fit:contain;display:block}
-.sante-canonical-nav{padding:18px 14px 32px}
-.sante-canonical-title{padding:10px 12px 7px;margin-top:3px;font-size:10px;font-weight:600;letter-spacing:.7px;color:rgba(255,255,255,.52)}
-.sante-canonical-item{
-  display:flex;align-items:center;gap:12px;min-height:48px;padding:10px 13px;margin:4px 0;
-  border-radius:11px;text-decoration:none;color:#fff!important;background:transparent!important;
-  font:500 13px/1.35 Prompt,sans-serif
-}
-.sante-canonical-item:hover{background:rgba(255,255,255,.08)!important}
-.sante-canonical-item.active{background:var(--sante-yellow)!important;color:#082b50!important;font-weight:700!important}
-.sante-canonical-icon{width:25px;text-align:center;font-size:17px;flex:0 0 25px}
-.sante-canonical-foot{padding:14px 18px 22px;border-top:1px solid rgba(255,255,255,.10);font-size:10px;color:rgba(255,255,255,.66)}
-@media(min-width:901px){
-  .main,.admin-main,.page-main{margin-left:var(--sante-side-w)!important}
-}
-@media(max-width:900px){
-  .sante-canonical-sidebar{transform:translateX(-100%);transition:.22s}
-  .sante-canonical-sidebar.open{transform:translateX(0)}
-  .main,.admin-main,.page-main{margin-left:0!important}
+  .global-search-shell{width:min(520px,68vw)}
 }
 
 </style>
-<meta name="sante-build" content="COURSE-HOURS-R2">
+<meta name="sante-build" content="ADMIN-VISUAL-R11-COURSES">
 </head>
 
 <body>
@@ -1064,34 +1107,103 @@
   </div>
 
   <!-- Sidebar -->
-  <aside class="sidebar sante-canonical-sidebar" id="sidebar">
-<div class="sante-canonical-brand"><img src="SANTE-logo.png" alt="SANTE"></div>
-<nav class="sante-canonical-nav">
-<div class="sante-canonical-title">MAIN</div>
-<a class="sante-canonical-item" href="admin-dashboard.html"><span class="sante-canonical-icon">⌂</span><span>หน้าหลัก</span></a>
-<div class="sante-canonical-title">TRAINING &amp; LEARNING</div>
-<a class="sante-canonical-item active" href="admin-courses.html"><span class="sante-canonical-icon">▤</span><span>จัดการหลักสูตร</span></a>
-<a class="sante-canonical-item" href="admin-training-registrations.html"><span class="sante-canonical-icon">♟</span><span>ผู้สมัครอบรม</span></a>
-<a class="sante-canonical-item" href="admin-training-sessions.html"><span class="sante-canonical-icon">▦</span><span>รอบการอบรม</span></a>
-<a class="sante-canonical-item" href="admin-question-import.html"><span class="sante-canonical-icon">✎</span><span>คลังข้อสอบ / นำเข้า</span></a>
-<a class="sante-canonical-item" href="admin-exams.html"><span class="sante-canonical-icon">✓</span><span>ข้อสอบและผลสอบ</span></a>
-<a class="sante-canonical-item" href="admin-certificates.html"><span class="sante-canonical-icon">▣</span><span>ใบประกาศนียบัตร</span></a>
-<div class="sante-canonical-title">SERVICE &amp; FINANCE</div>
-<a class="sante-canonical-item" href="#"><span class="sante-canonical-icon">◆</span><span>งานบริการ</span></a>
-<a class="sante-canonical-item" href="#"><span class="sante-canonical-icon">▧</span><span>ใบเสนอราคา</span></a>
-<a class="sante-canonical-item" href="admin-payments.html"><span class="sante-canonical-icon">฿</span><span>การเงิน / การชำระเงิน</span></a>
-</nav>
-<div class="sante-canonical-foot">SANTE SYSTEM<br>ระบบบริหารจัดการภายใน</div>
-</aside>
+  <aside class="sidebar" id="sidebar">
+
+    <div class="brand">
+      <div class="brand-row">
+        <img src="SANTE-logo.png" alt="SANTE" class="brand-logo">
+        <div>
+          <div class="brand-name">SANTE</div>
+          <div class="brand-subtitle">ระบบบริหารจัดการ</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar-section-title">เมนูหลัก</div>
+
+    <nav class="nav">
+      <a href="admin-dashboard.html" class="nav-item">
+        <span class="nav-icon">⌂</span>
+        <span>ภาพรวมระบบ</span>
+      </a>
+
+      <a href="admin-courses.html" class="nav-item active">
+        <span class="nav-icon">▣</span>
+        <span>หลักสูตร</span>
+      </a>
+
+      <a href="#" class="nav-item">
+        <span class="nav-icon">▤</span>
+        <span>รอบการอบรม</span>
+      </a>
+
+      <a href="admin-question-import.html" class="nav-item">
+        <span class="nav-icon">✎</span>
+        <span>คลังข้อสอบ</span>
+      </a>
+
+      <a href="#" class="nav-item">
+        <span class="nav-icon">♙</span>
+        <span>สมาชิก</span>
+      </a>
+
+      <div class="sidebar-section-title" style="padding-left:10px;">
+        งานบริการ
+      </div>
+
+      <a href="#" class="nav-item">
+        <span class="nav-icon">▦</span>
+        <span>งานบริการ</span>
+      </a>
+
+      <a href="#" class="nav-item">
+        <span class="nav-icon">▧</span>
+        <span>ใบเสนอราคา</span>
+      </a>
+
+      <a href="#" class="nav-item">
+        <span class="nav-icon">⚙</span>
+        <span>งานและนัดหมาย</span>
+      </a>
+
+      <div class="sidebar-section-title" style="padding-left:10px;">
+        การเงินและเอกสาร
+      </div>
+
+      <a href="#" class="nav-item">
+        <span class="nav-icon">฿</span>
+        <span>การเงิน</span>
+      </a>
+
+      <a href="#" class="nav-item">
+        <span class="nav-icon">▱</span>
+        <span>วุฒิบัตร</span>
+      </a>
+
+      <a href="#" class="nav-item">
+        <span class="nav-icon">☰</span>
+        <span>ตั้งค่าระบบ</span>
+      </a>
+    </nav>
+
+  </aside>
 
   <!-- Main -->
   <main class="main">
 
     <header class="topbar">
 
-      <div style="display:flex; align-items:center; gap:14px;">
+      <div class="dashboard-style-topbar-left">
         <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
-        <div class="topbar-title">ระบบจัดการหลักสูตร</div>
+        <div class="global-search-shell">
+          <span class="global-search-icon">⌕</span>
+          <input
+            id="globalAdminSearch"
+            type="text"
+            placeholder="ค้นหาหลักสูตร, สมาชิก, การสอบ, เอกสาร..."
+            autocomplete="off"
+          >
+        </div>
       </div>
 
       <div class="topbar-right">
@@ -1100,8 +1212,8 @@
           <div class="avatar" id="adminAvatar">A</div>
 
           <div class="admin-info">
-            <div class="admin-name" id="adminName">ผู้ดูแลระบบ</div>
-            <div class="admin-role">ผู้ดูแลระบบ</div>
+            <div class="admin-name" id="adminName">Admin</div>
+            <div class="admin-role" id="adminEmail">ผู้ดูแลระบบ</div>
           </div>
         </div>
 
@@ -1310,23 +1422,6 @@
                   step="0.01"
                   value="0"
                 >
-              </div>
-
-              <div class="form-group">
-                <label class="form-label">
-                  ชั่วโมงการอบรม
-                </label>
-                <input
-                  type="number"
-                  id="durationHours"
-                  class="form-input"
-                  min="0"
-                  step="0.5"
-                  placeholder="เช่น 2, 6, 12"
-                >
-                <div class="helper">
-                  จำนวนชั่วโมงของหลักสูตร ใช้แสดงในหน้า Member และสามารถนำไปใช้ในวุฒิบัตรได้
-                </div>
               </div>
 
               <div class="form-group">
@@ -1572,6 +1667,14 @@
         });
 
       searchInput.addEventListener("input", renderCourses);
+
+      const globalAdminSearch = document.getElementById("globalAdminSearch");
+      if (globalAdminSearch) {
+        globalAdminSearch.addEventListener("input", () => {
+          searchInput.value = globalAdminSearch.value;
+          renderCourses();
+        });
+      }
       typeFilter.addEventListener("change", renderCourses);
       statusFilter.addEventListener("change", renderCourses);
 
@@ -1716,7 +1819,6 @@
           thumbnail_url,
           normal_price,
           sale_price,
-          duration_hours,
           access_days,
           pass_percentage,
           has_exam,
@@ -1934,17 +2036,6 @@
 
                   <div class="course-info">
                     <div class="course-info-label">
-                      ชั่วโมงการอบรม
-                    </div>
-                    <div class="course-info-value">
-                      ${course.duration_hours !== null && course.duration_hours !== undefined
-                        ? `${escapeHtml(formatNumber(course.duration_hours))} ชั่วโมง`
-                        : "ยังไม่ได้กำหนด"}
-                    </div>
-                  </div>
-
-                  <div class="course-info">
-                    <div class="course-info-label">
                       ระยะเวลาสิทธิ์
                     </div>
 
@@ -2004,13 +2095,6 @@
                 <div class="course-actions">
 
                   <button
-                    class="secondary-btn"
-                    onclick="quickSetCourseHours('${course.id}', ${course.duration_hours !== null && course.duration_hours !== undefined ? course.duration_hours : 'null'})"
-                  >
-                    กำหนดชั่วโมง
-                  </button>
-
-                  <button
                     class="secondary-btn edit-btn"
                     onclick="editCourse('${course.id}')"
                   >
@@ -2027,60 +2111,6 @@
         }).join("");
 
     }
-
-
-
-    async function quickSetCourseHours(courseId,currentHours){
-
-      const input =
-        prompt(
-          "กรอกจำนวนชั่วโมงของหลักสูตร เช่น 2, 6, 12 หรือ 3.5",
-          currentHours ?? ""
-        );
-
-      if(input===null){
-        return;
-      }
-
-      const raw=input.trim();
-      const value=raw===""?null:Number(raw);
-
-      if(value!==null && (!Number.isFinite(value) || value<0)){
-        showToast(
-          "กรุณากรอกจำนวนชั่วโมงเป็นตัวเลข เช่น 2, 6, 12 หรือ 3.5",
-          "error"
-        );
-        return;
-      }
-
-      const {error} =
-        await supabaseClient
-          .from("courses")
-          .update({
-            duration_hours:value,
-            updated_at:new Date().toISOString()
-          })
-          .eq("id",courseId);
-
-      if(error){
-        showToast(
-          "บันทึกชั่วโมงไม่สำเร็จ: " + error.message,
-          "error"
-        );
-        return;
-      }
-
-      showToast(
-        value===null
-          ? "ล้างจำนวนชั่วโมงแล้ว"
-          : `บันทึก ${value} ชั่วโมงแล้ว`,
-        "success"
-      );
-
-      await loadCourses();
-    }
-
-    window.quickSetCourseHours=quickSetCourseHours;
 
 
     /* =========================================================
@@ -2100,7 +2130,6 @@
 
       document.getElementById("normalPrice").value = "0";
       document.getElementById("salePrice").value = "0";
-      if(document.getElementById("durationHours")) document.getElementById("durationHours").value = "";
       document.getElementById("courseStatus").value = "DRAFT";
 
       courseModal.classList.add("show");
@@ -2152,9 +2181,6 @@
 
       document.getElementById("salePrice").value =
         course.sale_price ?? 0;
-
-      document.getElementById("durationHours").value =
-        course.duration_hours ?? "";
 
       document.getElementById("accessDays").value =
         course.access_days ?? "";
@@ -2221,11 +2247,6 @@
       const salePrice =
         parseNullableNumber(
           document.getElementById("salePrice").value
-        );
-
-      const durationHours =
-        parseNullableNumber(
-          document.getElementById("durationHours").value
         );
 
       const accessDays =
@@ -2304,7 +2325,6 @@
             description: description || null,
             normal_price: normalPrice ?? 0,
             sale_price: salePrice ?? 0,
-            duration_hours: durationHours,
             access_days: accessDays,
             pass_percentage: passPercentage,
             has_exam: hasExam,
@@ -2350,7 +2370,6 @@
             thumbnail_url: null,
             normal_price: normalPrice ?? 0,
             sale_price: salePrice ?? 0,
-            duration_hours: durationHours,
             access_days: accessDays,
             pass_percentage: passPercentage,
             has_exam: hasExam,
