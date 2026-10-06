@@ -17,29 +17,28 @@
   --text:#173654;
   --muted:#71849b;
   --bg:#f7fbff;
-  --white:#fff;
 }
 *{box-sizing:border-box}
 html{font-size:16px;-webkit-text-size-adjust:100%;text-size-adjust:100%}
 html,body{margin:0;min-height:100%;font-family:"Prompt",sans-serif;color:var(--text);background:var(--bg)}
-body{min-height:100vh;min-height:100svh;overflow-x:hidden}
+body{min-height:100vh;min-height:100dvh;overflow-x:hidden}
 a{color:inherit}
 button,input{font-family:inherit}
 
-/* Desktop master layout: artwork and form scale as two real columns.
-   The left artwork already contains logo/copy, so nothing is overlaid on top of it. */
+/* Desktop: both halves share the same viewport and therefore scale together. */
 .page{
+  width:100%;
   min-height:100vh;
-  min-height:100svh;
+  min-height:100dvh;
   display:grid;
-  grid-template-columns:minmax(0,52%) minmax(0,48%);
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
   background:#fff;
 }
 .hero{
   position:relative;
   min-width:0;
   min-height:100vh;
-  min-height:100svh;
+  min-height:100dvh;
   overflow:hidden;
   background:#eef7ff;
 }
@@ -55,71 +54,84 @@ button,input{font-family:inherit}
 .login-side{
   min-width:0;
   min-height:100vh;
-  min-height:100svh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:clamp(28px,4vw,64px);
-  background:linear-gradient(135deg,#f9fcff 0%,#ffffff 58%,#f8fbff 100%);
+  min-height:100dvh;
+  display:grid;
+  place-items:center;
+  padding:clamp(14px,2.2vh,30px) clamp(18px,2.8vw,48px);
+  background:linear-gradient(135deg,#f9fcff 0%,#fff 58%,#f8fbff 100%);
 }
 .login-card{
-  width:min(100%,690px);
+  width:min(100%,660px);
   background:rgba(255,255,255,.98);
   border:1px solid #dbe6f0;
-  border-radius:26px;
-  padding:clamp(30px,3vw,50px);
+  border-radius:clamp(18px,2.4vh,26px);
+  padding:clamp(18px,2.7vh,34px) clamp(22px,2.7vw,40px);
   box-shadow:0 20px 55px rgba(8,47,97,.08);
 }
-.login-eyebrow{margin:0 0 10px;color:#c98e00;font-size:14px;font-weight:700;letter-spacing:.02em}
-.login-title{margin:0;color:var(--navy);font-size:clamp(34px,2.6vw,54px);line-height:1.1;letter-spacing:-.025em;font-weight:700}
-.login-description{margin:14px 0 0;color:var(--muted);font-size:clamp(14px,1vw,16px);line-height:1.7}
-.login-form{margin-top:28px}
-.form-group{margin-bottom:18px}
-.form-label{display:block;margin-bottom:8px;font-size:14px;font-weight:600;color:#0c2f5d}
+.login-eyebrow{margin:0 0 clamp(5px,.8vh,9px);color:#c98e00;font-size:clamp(11px,1.45vh,14px);font-weight:700;letter-spacing:.02em}
+.login-title{margin:0;color:var(--navy);font-size:clamp(28px,4.2vh,46px);line-height:1.08;letter-spacing:-.025em;font-weight:700}
+.login-description{margin:clamp(7px,1.2vh,12px) 0 0;color:var(--muted);font-size:clamp(11px,1.55vh,15px);line-height:1.55}
+.login-form{margin-top:clamp(13px,2.1vh,22px)}
+.form-group{margin-bottom:clamp(9px,1.45vh,15px)}
+.form-label{display:block;margin-bottom:clamp(4px,.7vh,7px);font-size:clamp(11px,1.45vh,13px);font-weight:600;color:#0c2f5d}
 .required{color:#d64045}
-.input-box{height:60px;border:1.5px solid #d8e4ef;border-radius:14px;display:flex;align-items:center;background:#fff;overflow:hidden;transition:border-color .2s ease,box-shadow .2s ease}
+.input-box{height:clamp(46px,6.1vh,56px);border:1.5px solid #d8e4ef;border-radius:clamp(10px,1.4vh,13px);display:flex;align-items:center;background:#fff;overflow:hidden;transition:border-color .2s ease,box-shadow .2s ease}
 .input-box:focus-within{border-color:#85b7df;box-shadow:0 0 0 3px rgba(50,133,199,.08)}
-.input-icon{width:54px;display:grid;place-items:center;color:#6f89a8;flex:0 0 54px}
-.input-icon svg{width:22px;height:22px}
-.input-box input{min-width:0;border:0!important;outline:0!important;box-shadow:none!important;flex:1;height:100%;font-size:15px;background:transparent;color:#163451;padding:0 8px}
+.input-icon{width:clamp(44px,5.5vh,50px);display:grid;place-items:center;color:#6f89a8;flex:0 0 clamp(44px,5.5vh,50px)}
+.input-icon svg{width:clamp(18px,2.3vh,20px);height:clamp(18px,2.3vh,20px)}
+.input-box input{min-width:0;border:0!important;outline:0!important;box-shadow:none!important;flex:1;height:100%;font-size:clamp(12px,1.55vh,14px);background:transparent;color:#163451;padding:0 8px}
 .input-box input::placeholder{color:#9aaabc}
-.password-toggle{height:100%;border:0;background:transparent;padding:0 18px;color:#44617f;font-size:13px;font-weight:500;display:flex;gap:7px;align-items:center;cursor:pointer;white-space:nowrap}
-.password-toggle svg{width:20px;height:20px}
-.form-options{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:4px 0 20px}
-.remember{display:flex;align-items:center;gap:8px;color:#6e8198;font-size:13px}
-.remember input{width:18px;height:18px;accent-color:#f1b400}
-.forgot{border:0;background:transparent;color:#1670d1;font-size:13px;font-weight:600;cursor:pointer;padding:0}
-.message{display:none;border-radius:10px;padding:10px 12px;margin:0 0 14px;font-size:12px;background:#fff0f1;color:#a52a35}
+.password-toggle{height:100%;border:0;background:transparent;padding:0 clamp(10px,1.5vw,14px);color:#44617f;font-size:clamp(10px,1.35vh,12px);font-weight:500;display:flex;gap:6px;align-items:center;cursor:pointer;white-space:nowrap}
+.password-toggle svg{width:clamp(16px,2vh,18px);height:clamp(16px,2vh,18px)}
+.form-options{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:2px 0 clamp(10px,1.55vh,16px)}
+.remember{display:flex;align-items:center;gap:7px;color:#6e8198;font-size:clamp(10px,1.35vh,12px)}
+.remember input{width:clamp(14px,1.8vh,16px);height:clamp(14px,1.8vh,16px);accent-color:#f1b400}
+.forgot{border:0;background:transparent;color:#1670d1;font-size:clamp(10px,1.35vh,12px);font-weight:600;cursor:pointer;padding:0}
+.message{display:none;border-radius:10px;padding:9px 11px;margin:0 0 10px;font-size:11px;background:#fff0f1;color:#a52a35}
 .message.show{display:block}.message.success{background:#edf9f1;color:#28794b}.message.info{background:#edf5ff;color:#245c9c}
-.login-button{min-height:62px;width:100%;border:0;border-radius:14px;background:linear-gradient(90deg,#ffbd13,#ffc935);color:#082f61;font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:10px;cursor:pointer;box-shadow:0 10px 25px rgba(255,190,20,.22)}
-.login-button svg{width:22px;height:22px}.login-button:disabled{opacity:.65;cursor:wait}
-.other-divider{display:flex;align-items:center;gap:14px;margin:24px 0 19px;color:#8496aa;font-size:13px;text-align:center}
+.login-button{height:clamp(46px,6.2vh,56px);width:100%;border:0;border-radius:clamp(10px,1.4vh,13px);background:linear-gradient(90deg,#ffbd13,#ffc935);color:#082f61;font-size:clamp(13px,1.7vh,15px);font-weight:700;display:flex;align-items:center;justify-content:center;gap:9px;cursor:pointer;box-shadow:0 10px 25px rgba(255,190,20,.22)}
+.login-button svg{width:clamp(18px,2.3vh,20px);height:clamp(18px,2.3vh,20px)}.login-button:disabled{opacity:.65;cursor:wait}
+.other-divider{display:flex;align-items:center;gap:12px;margin:clamp(10px,1.65vh,17px) 0 clamp(8px,1.3vh,14px);color:#8496aa;font-size:clamp(10px,1.35vh,12px);text-align:center}
 .other-divider:before,.other-divider:after{content:"";height:1px;background:#dce6ef;flex:1}
-.secondary-button{min-height:74px;border:1.5px solid #d6e4f0;border-radius:16px;text-decoration:none;color:#0d3f75;display:flex;align-items:center;gap:12px;padding:12px 16px;font-size:14px;font-weight:600;background:#fff;transition:.2s ease box-shadow,.2s ease transform}
+.secondary-grid{display:grid;gap:9px}
+.secondary-button{min-height:clamp(52px,7vh,62px);border:1.5px solid #d6e4f0;border-radius:clamp(11px,1.5vh,14px);text-decoration:none;color:#0d3f75;display:flex;align-items:center;gap:10px;padding:8px 12px;font-size:clamp(11px,1.45vh,13px);font-weight:600;background:#fff;transition:.2s ease box-shadow,.2s ease transform}
 .secondary-button:hover{transform:translateY(-1px);box-shadow:0 10px 22px rgba(11,79,136,.08)}
-.secondary-button .sec-icon{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:#eef6ff;font-size:18px;flex:0 0 42px}
-.secondary-button small{display:block;color:#8193a6;font-weight:400;font-size:11px;margin-top:3px;line-height:1.45}
-.back-home{text-align:center;margin-top:22px}.back-home a{text-decoration:none;color:#778da5;font-size:12px}
-.security-note{margin-top:22px;padding:14px 16px;background:#eef7ff;border-radius:14px;color:#6f839b;font-size:11px;line-height:1.55;display:flex;gap:10px;align-items:flex-start}
-.security-note span:first-child{font-size:16px;line-height:1}
+.secondary-button .sec-icon{width:clamp(32px,4.4vh,38px);height:clamp(32px,4.4vh,38px);border-radius:50%;display:grid;place-items:center;background:#eef6ff;font-size:clamp(14px,1.9vh,16px);flex:0 0 clamp(32px,4.4vh,38px)}
+.secondary-button small{display:block;color:#8193a6;font-weight:400;font-size:clamp(9px,1.1vh,10px);margin-top:2px;line-height:1.35}
+.back-home{text-align:center;margin-top:clamp(10px,1.55vh,16px)}.back-home a{text-decoration:none;color:#778da5;font-size:clamp(9px,1.2vh,11px)}
+.security-note{margin-top:clamp(9px,1.45vh,15px);padding:clamp(8px,1.1vh,11px) 12px;background:#eef7ff;border-radius:11px;color:#6f839b;font-size:clamp(9px,1.05vh,10px);line-height:1.4;display:flex;gap:9px;align-items:flex-start}
+.security-note span:first-child{font-size:14px;line-height:1}
 
-/* Keep a two-column desktop experience even when browser zoom increases.
-   Only stack when the CSS viewport is genuinely tablet-sized. */
-@media (max-width:1200px){
-  .page{grid-template-columns:minmax(0,48%) minmax(0,52%)}
-  .login-side{padding:28px}
-  .login-card{padding:32px}
-  .login-title{font-size:clamp(32px,3.4vw,46px)}
+/* Admin has two shortcut cards; member has one. */
+.admin-page .secondary-grid{grid-template-columns:1fr 1fr}
+.member-page .secondary-grid{grid-template-columns:1fr}
+
+/* True desktop fit: viewport itself is the frame, so no vertical page scrollbar at 100%. */
+@media (min-width:901px){
+  html,body{width:100%;height:100%;overflow:hidden}
+  .page{height:100vh;height:100dvh;min-height:0;overflow:hidden}
+  .hero,.login-side{height:100vh;height:100dvh;min-height:0}
+  .login-card{max-height:calc(100dvh - 24px)}
 }
 
+/* Slight width rebalance on smaller desktop while both sides still move together. */
+@media (min-width:901px) and (max-width:1250px){
+  .page{grid-template-columns:minmax(0,48%) minmax(0,52%)}
+  .login-side{padding-left:20px;padding-right:20px}
+}
+
+/* Tablet / mobile becomes stacked and scrollable by design. */
 @media (max-width:900px){
-  .page{display:block;min-height:100svh;background:#f7fbff}
+  html,body{height:auto;overflow-x:hidden;overflow-y:auto}
+  .page{display:block;min-height:100dvh;background:#f7fbff}
   .hero{min-height:0;height:auto;overflow:visible;background:#eef7ff}
   .hero-media{position:relative;inset:auto;width:100%;height:auto;object-fit:contain;object-position:center top}
-  .login-side{min-height:auto;padding:18px 16px 28px;background:#f7fbff}
-  .login-card{width:100%;max-width:680px;border-radius:24px;padding:28px 24px;box-shadow:0 16px 38px rgba(8,47,97,.07)}
+  .login-side{min-height:auto;height:auto;padding:18px 16px 28px;background:#f7fbff}
+  .login-card{width:100%;max-width:680px;max-height:none;border-radius:24px;padding:28px 24px;box-shadow:0 16px 38px rgba(8,47,97,.07)}
+  .login-title{font-size:clamp(28px,6vw,40px)}
+  .login-description{font-size:13px}
+  .input-box input{font-size:16px}
 }
-
 @media (max-width:600px){
   .login-side{padding:14px 12px calc(22px + env(safe-area-inset-bottom))}
   .login-card{border-radius:20px;padding:24px 18px 20px}
@@ -130,129 +142,21 @@ button,input{font-family:inherit}
   .form-group{margin-bottom:15px}
   .input-box{height:54px;border-radius:12px}
   .input-icon{width:46px;flex-basis:46px}.input-icon svg{width:20px;height:20px}
-  .input-box input{font-size:16px} /* prevents iOS focus zoom */
   .password-toggle{padding:0 12px;font-size:12px}
   .form-options{align-items:flex-start;gap:10px;flex-wrap:wrap;margin-bottom:18px}
   .remember,.forgot{font-size:12px}
-  .login-button{min-height:56px;border-radius:12px}
+  .login-button{height:56px;border-radius:12px}
   .other-divider{margin:21px 0 16px;font-size:12px;gap:10px}
-  .secondary-button{min-height:66px;border-radius:14px;padding:10px 13px}
+  .secondary-button{min-height:66px;border-radius:14px;padding:10px 13px;font-size:13px}
   .secondary-button .sec-icon{width:38px;height:38px;flex-basis:38px}
+  .admin-page .secondary-grid{grid-template-columns:1fr}
   .security-note{margin-top:18px;font-size:10px}
-}
-
-@media (max-height:760px) and (min-width:901px){
-  .login-side{padding-top:20px;padding-bottom:20px}
-  .login-card{padding-top:26px;padding-bottom:26px}
-  .login-form{margin-top:20px}
-  .form-group{margin-bottom:14px}
-  .input-box{height:54px}
-  .login-button{min-height:56px}
-  .other-divider{margin:18px 0 14px}
-  .secondary-button{min-height:64px}
-  .security-note{margin-top:16px}
-}
-.secondary-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-@media (max-width:600px){.secondary-grid{grid-template-columns:1fr}}
-
-
-/* R3 DESKTOP VIEWPORT FIT
-   Goal: at browser zoom 100% the full two-column login experience stays inside
-   the visible desktop viewport without vertical scrolling. Mobile/tablet keeps
-   the stacked responsive layout below 900px. */
-@media (min-width:901px){
-  html,body{width:100%;height:100%;overflow:hidden}
-  body{min-height:100vh;min-height:100svh}
-  .page{
-    width:100vw;
-    height:100vh;
-    height:100svh;
-    min-height:0;
-    overflow:hidden;
-    grid-template-columns:minmax(0,52%) minmax(0,48%);
-  }
-  .hero,
-  .login-side{
-    height:100vh;
-    height:100svh;
-    min-height:0;
-  }
-  .hero-media{
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    object-position:center center;
-  }
-  .login-side{
-    padding:clamp(14px,2.2vh,28px) clamp(24px,3vw,48px);
-  }
-  .login-card{
-    width:min(100%,660px);
-    max-height:calc(100svh - 28px);
-    padding:clamp(20px,2.6vh,34px) clamp(26px,2.7vw,42px);
-    border-radius:24px;
-  }
-  .login-eyebrow{margin-bottom:7px;font-size:13px}
-  .login-title{font-size:clamp(30px,2.35vw,46px);line-height:1.08}
-  .login-description{margin-top:10px;font-size:clamp(12px,.9vw,15px);line-height:1.55}
-  .login-form{margin-top:clamp(16px,2vh,22px)}
-  .form-group{margin-bottom:clamp(11px,1.6vh,15px)}
-  .form-label{margin-bottom:6px;font-size:13px}
-  .input-box{height:clamp(50px,6.4vh,56px);border-radius:12px}
-  .input-icon{width:50px;flex-basis:50px}.input-icon svg{width:20px;height:20px}
-  .input-box input{font-size:14px}
-  .password-toggle{padding:0 14px;font-size:12px}.password-toggle svg{width:18px;height:18px}
-  .form-options{margin:2px 0 clamp(12px,1.7vh,17px);font-size:12px}
-  .remember,.forgot{font-size:12px}.remember input{width:16px;height:16px}
-  .login-button{min-height:clamp(50px,6.5vh,56px);border-radius:12px;font-size:15px}
-  .login-button svg{width:20px;height:20px}
-  .other-divider{margin:clamp(14px,1.8vh,18px) 0 clamp(11px,1.5vh,15px);font-size:12px}
-  .secondary-grid{gap:10px}
-  .secondary-button{min-height:clamp(56px,7.5vh,64px);border-radius:14px;padding:9px 13px;font-size:13px}
-  .secondary-button .sec-icon{width:36px;height:36px;flex-basis:36px;font-size:16px}
-  .secondary-button small{font-size:10px;margin-top:2px}
-  .back-home{margin-top:clamp(13px,1.7vh,18px)}.back-home a{font-size:11px}
-  .security-note{margin-top:clamp(12px,1.7vh,17px);padding:10px 13px;border-radius:12px;font-size:10px;line-height:1.45}
-}
-
-/* Compact desktop/laptop heights (e.g. 1366×768, browser chrome visible). */
-@media (min-width:901px) and (max-height:820px){
-  .login-side{padding-top:12px;padding-bottom:12px}
-  .login-card{max-height:calc(100svh - 20px);padding-top:18px;padding-bottom:18px}
-  .login-title{font-size:clamp(29px,2.15vw,40px)}
-  .login-description{margin-top:7px;line-height:1.45}
-  .login-form{margin-top:14px}
-  .form-group{margin-bottom:10px}
-  .input-box{height:48px}
-  .form-options{margin-bottom:11px}
-  .login-button{min-height:49px}
-  .other-divider{margin:12px 0 10px}
-  .secondary-button{min-height:54px;padding-top:7px;padding-bottom:7px}
-  .security-note{margin-top:10px;padding-top:8px;padding-bottom:8px}
-  .back-home{margin-top:11px}
-}
-
-@media (min-width:901px) and (max-height:700px){
-  .login-card{padding-top:14px;padding-bottom:14px}
-  .login-eyebrow{font-size:11px;margin-bottom:5px}
-  .login-title{font-size:30px}
-  .login-description{font-size:11px;line-height:1.4}
-  .login-form{margin-top:10px}
-  .form-label{font-size:12px;margin-bottom:4px}
-  .form-group{margin-bottom:8px}
-  .input-box{height:44px}
-  .login-button{min-height:45px}
-  .other-divider{margin:9px 0 8px;font-size:11px}
-  .secondary-button{min-height:48px}
-  .secondary-button .sec-icon{width:32px;height:32px;flex-basis:32px}
-  .security-note{margin-top:8px;padding:7px 10px;font-size:9px}
-  .back-home{margin-top:8px}
 }
 
 </style>
 </head>
 <body>
-<main class="page">
+<main class="page admin-page">
   <section class="hero" aria-label="SANTE Admin Hero">
     <img class="hero-media" src="sante-admin-login-hero.png" alt="SANTE Admin">
   </section>
