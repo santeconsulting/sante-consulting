@@ -21,11 +21,20 @@ label{display:block;font-size:11px;font-weight:600;margin:0 0 5px}.req{color:#c3
 .notice{padding:12px 14px;border-radius:11px;background:#eef8f1;color:#237447;font-size:12px;display:none}.error{background:#fff0f0;color:#a52d2d}
 .loading{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#fff;z-index:999;color:#082d69}
 @media(max-width:800px){.topbar{height:64px;padding:6px 12px}.brand-logo{width:120px;height:48px}.member-copy{display:none}.page{width:100%;padding:12px 12px 40px}.grid,.grid3,.type-grid{grid-template-columns:1fr}.page-title h1{font-size:23px}.panel{padding:16px;border-radius:16px}.checkrow{grid-template-columns:1fr}.area-row{grid-template-columns:1fr}.actions{flex-direction:column}.btn{width:100%}}
+
+/* R4 canonical member shell */
+.member-shell-hero{width:min(1480px,calc(100% - 48px));margin:22px auto 0;overflow:hidden;border-radius:28px;background:#fff;box-shadow:0 10px 30px rgba(11,45,103,.07)}
+.member-shell-hero img{display:block;width:100%;height:auto}
+@media(max-width:767px){.member-shell-hero{width:calc(100% - 24px);margin-top:10px;border-radius:18px}}
+/* R4 readable typography */
+.page{font-size:16px}.page-title h1{font-size:34px}.page-title p{font-size:15px}
+label{font-size:14px}.input,.select,textarea{font-size:15px;padding:13px 14px}.hint{font-size:12px}.type-card strong{font-size:19px}.type-card span{font-size:13px}.section-title{font-size:21px}.btn{font-size:14px}
+@media(max-width:767px){.page{font-size:15px}.page-title h1{font-size:26px}.page-title p{font-size:13px}label{font-size:13px}.input,.select,textarea{font-size:14px}.section-title{font-size:18px}.btn{font-size:13px}}
 </style></head>
 <body>
 <div id="loading" class="loading">กำลังเตรียมแบบคำขอ...</div>
 <header class="topbar"><a href="member-home.html"><img class="brand-logo" src="sante%20(en)-logo.png" alt="SANTE"></a>
-<div class="member-area"><div class="member-copy"><div id="memberName" class="member-name">สมาชิก SANTE</div><div id="memberEmail" class="member-email"></div></div><button id="logout" class="logout">ออกจากระบบ</button></div></header>
+<div class="member-area"><div class="member-copy"><div id="memberName" class="member-name">สมาชิก SANTE</div><div id="memberEmail" class="member-email"></div></div><button id="logout" class="logout">ออกจากระบบ</button></div></header><section class="member-shell-hero"><img src="sante-member-hero.png" alt="Trust in Safety. Trust in SANTE."></section>
 <main class="page">
 <div class="crumbs"><a href="member-home.html">หน้าหลักสมาชิก</a> › ขอรับบริการ</div>
 <div class="page-title"><h1>ขอรับบริการจาก SANTE</h1><p>เลือกประเภทคำขอได้ครั้งละ 1 ประเภท ระบบจะแสดงเฉพาะข้อมูลที่จำเป็นสำหรับการประเมินราคา</p></div>
@@ -190,7 +199,10 @@ async function init(){
  const p=await db.from("profiles").select("*").eq("id",user.id).maybeSingle();const x=p.data||{};
  memberName.textContent=[x.title_th,x.firstname_th,x.lastname_th].filter(Boolean).join(" ")||"สมาชิก SANTE";
  customerName.value=memberName.textContent;email.value=x.email||user.email||"";phone.value=x.phone||"";
- renderMeasurements();await Promise.all([loadCourses(),loadThaiAddress()]);loading.style.display="none";
+ renderMeasurements();await Promise.all([loadCourses(),loadThaiAddress()]);
+ const requestedType=new URLSearchParams(location.search).get("type");
+ if(["TRAINING","SERVICE","CONSULTING"].includes(requestedType))pickType(requestedType);
+ loading.style.display="none";
 }
 async function submitRequest(){
  if(!requestType)return showMsg("กรุณาเลือกประเภทคำขอ",true);
