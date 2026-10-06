@@ -1,33 +1,250 @@
 <!doctype html>
-<html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>SANTE | ขอรับบริการ</title>
+<html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>SANTE Member | ขอรับบริการ</title>
 <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:Prompt;background:#f3f7fb;color:#102442}header{height:78px;background:#fff;border-bottom:1px solid #dfe8f0;display:flex;align-items:center;justify-content:space-between;padding:0 7vw}header img{width:72px}.wrap{max-width:1120px;margin:28px auto;padding:0 20px}.hero{background:#0b568e;color:#fff;border-radius:22px;padding:28px;margin-bottom:18px}.hero h1{margin:0 0 8px}.panel{background:#fff;border:1px solid #dce6f0;border-radius:18px;padding:20px;margin-bottom:18px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}label{display:block;font-size:11px;font-weight:600;margin-bottom:5px}input,select,textarea{width:100%;border:1px solid #d5e1ec;border-radius:11px;padding:11px 12px;font:400 12px Prompt}.full{grid-column:1/-1}button{border:0;border-radius:11px;background:#0b4f88;color:#fff;padding:12px 18px;font:600 12px Prompt;cursor:pointer}.service-list{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.service-card{border:1px solid #dce6f0;border-radius:14px;padding:14px;cursor:pointer}.service-card.active{border-color:#ffc83d;background:#fff9e8}.muted{font-size:10px;color:#73879c}@media(max-width:760px){.grid,.service-list{grid-template-columns:1fr}}
-</style></head><body>
-<header><img src="SANTE-logo.png"><strong>SANTE Consulting</strong></header>
-<div class="wrap">
-<div class="hero"><h1>ขอรับบริการจาก SANTE</h1><div>เลือกบริการ กรอกข้อมูลสถานที่ ผู้ติดต่อ และวันที่สะดวก เพื่อให้ทีม SANTE จัดทำใบเสนอราคาและติดต่อกลับ</div></div>
-<div class="panel"><h2>เลือกบริการ</h2><div id="serviceList" class="service-list"></div></div>
-<div class="panel"><h2>ข้อมูลคำขอบริการ</h2><div class="grid">
-<div><label>ชื่อผู้ติดต่อ</label><input id="customerName"></div><div><label>บริษัท / หน่วยงาน</label><input id="organizationName"></div>
-<div><label>อีเมล</label><input id="email" type="email"></div><div><label>โทรศัพท์</label><input id="phone"></div>
-<div class="full"><label>สถานที่ให้บริการ</label><textarea id="locationText" rows="2"></textarea></div>
-<div class="full"><label>ลิงก์ Google Maps / แผนที่</label><input id="mapUrl" placeholder="https://..."></div>
-<div><label>วันที่สะดวก 1</label><input id="date1" type="date"></div><div><label>วันที่สะดวก 2</label><input id="date2" type="date"></div>
-<div><label>วันที่สะดวก 3</label><input id="date3" type="date"></div><div></div>
-<div class="full"><label>รายละเอียด / หมายเหตุ</label><textarea id="note" rows="4"></textarea></div>
-</div><div style="margin-top:14px"><button onclick="submitRequest()">ส่งคำขอบริการ</button></div></div>
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:Prompt,sans-serif;color:#082d69;background:linear-gradient(180deg,#fff,#f2f8fc)}
+a{text-decoration:none;color:inherit}button,input,select,textarea{font-family:Prompt,sans-serif}
+.topbar{height:82px;position:sticky;top:0;z-index:90;display:flex;align-items:center;justify-content:space-between;padding:0 max(28px,calc((100vw - 1480px)/2));background:rgba(255,255,255,.97);border-bottom:1px solid #e7eef6}
+.brand-logo{width:220px;height:68px;object-fit:contain;object-position:left center}.member-area{display:flex;align-items:center;gap:16px}.member-copy{text-align:right}.member-name{font-weight:600}.member-email{font-size:12px;color:#7184a3}.logout{height:42px;padding:0 16px;border:1px solid #d5e1ef;border-radius:11px;background:#fff;color:#082d69;font-weight:600;cursor:pointer}
+.page{width:min(1320px,calc(100% - 40px));margin:0 auto;padding:24px 0 60px}.crumbs{font-size:12px;color:#6f82a0;margin-bottom:12px}.page-title{margin-bottom:18px}.page-title h1{margin:0;font-size:30px}.page-title p{margin:5px 0 0;color:#6f82a0;font-size:13px}
+.panel{background:#fff;border:1px solid #dce7f2;border-radius:20px;padding:22px;margin-bottom:16px;box-shadow:0 7px 20px rgba(25,75,130,.035)}
+.section-title{display:flex;align-items:center;gap:10px;margin-bottom:16px;font-size:18px;font-weight:700}.step{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:#ffbf19;color:#082d69;font-size:12px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.full{grid-column:1/-1}
+label{display:block;font-size:11px;font-weight:600;margin:0 0 5px}.req{color:#c33232}
+.input,.select,textarea{width:100%;border:1px solid #d5e1ec;border-radius:11px;padding:11px 12px;background:#fff;color:#082d69;font-size:13px;outline:none}.input:focus,.select:focus,textarea:focus{border-color:#77b7eb;box-shadow:0 0 0 3px rgba(8,125,240,.07)}
+.type-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.type-card{border:2px solid #e0e9f2;border-radius:16px;padding:17px;background:#fff;cursor:pointer}.type-card.active{border-color:#ffbf19;background:#fff9e8}.type-card strong{display:block;font-size:16px}.type-card span{display:block;margin-top:4px;color:#7184a3;font-size:11px}
+.dynamic{display:none}.dynamic.show{display:block}.hint{font-size:10px;color:#72869b;line-height:1.55}.checkrow{display:grid;grid-template-columns:minmax(220px,1fr) 150px;gap:12px;align-items:center;padding:10px 0;border-bottom:1px dashed #e3ebf2}.checkrow:last-child{border-bottom:0}.checkname{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600}
+.area-list{grid-column:1/-1;padding-left:26px}.area-row{display:grid;grid-template-columns:150px 1fr;gap:10px;margin-top:8px;align-items:center}.filebox{border:1px dashed #abc7de;border-radius:14px;padding:16px;background:#f8fbfe}
+.actions{display:flex;justify-content:flex-end;gap:10px}.btn{min-height:44px;border:0;border-radius:11px;padding:0 18px;font-size:13px;font-weight:600;cursor:pointer}.primary{background:#0b4f88;color:#fff}.yellow{background:#ffbf19;color:#082d69}.light{background:#fff;border:1px solid #d5e1ec;color:#082d69}
+.notice{padding:12px 14px;border-radius:11px;background:#eef8f1;color:#237447;font-size:12px;display:none}.error{background:#fff0f0;color:#a52d2d}
+.loading{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#fff;z-index:999;color:#082d69}
+@media(max-width:800px){.topbar{height:64px;padding:6px 12px}.brand-logo{width:120px;height:48px}.member-copy{display:none}.page{width:100%;padding:12px 12px 40px}.grid,.grid3,.type-grid{grid-template-columns:1fr}.page-title h1{font-size:23px}.panel{padding:16px;border-radius:16px}.checkrow{grid-template-columns:1fr}.area-row{grid-template-columns:1fr}.actions{flex-direction:column}.btn{width:100%}}
+</style></head>
+<body>
+<div id="loading" class="loading">กำลังเตรียมแบบคำขอ...</div>
+<header class="topbar"><a href="member-home.html"><img class="brand-logo" src="sante%20(en)-logo.png" alt="SANTE"></a>
+<div class="member-area"><div class="member-copy"><div id="memberName" class="member-name">สมาชิก SANTE</div><div id="memberEmail" class="member-email"></div></div><button id="logout" class="logout">ออกจากระบบ</button></div></header>
+<main class="page">
+<div class="crumbs"><a href="member-home.html">หน้าหลักสมาชิก</a> › ขอรับบริการ</div>
+<div class="page-title"><h1>ขอรับบริการจาก SANTE</h1><p>เลือกประเภทคำขอได้ครั้งละ 1 ประเภท ระบบจะแสดงเฉพาะข้อมูลที่จำเป็นสำหรับการประเมินราคา</p></div>
+
+<section class="panel">
+<div class="section-title"><span class="step">1</span>เลือกประเภทคำขอ</div>
+<div class="type-grid">
+<div class="type-card" data-type="TRAINING" onclick="pickType('TRAINING')"><strong>อบรม In-house</strong><span>เลือกหลักสูตร จำนวนผู้เข้าอบรม และรายละเอียดที่ต้องการ</span></div>
+<div class="type-card" data-type="SERVICE" onclick="pickType('SERVICE')"><strong>งานบริการ</strong><span>ตรวจวัดสภาพแวดล้อม / ตรวจสอบระบบไฟฟ้า</span></div>
+<div class="type-card" data-type="CONSULTING" onclick="pickType('CONSULTING')"><strong>งานที่ปรึกษา</strong><span>ระบุหัวข้อและรายละเอียดที่ต้องการปรึกษา</span></div>
 </div>
+</section>
+
+<section class="panel">
+<div class="section-title"><span class="step">2</span>รายละเอียดงาน</div>
+
+<div id="trainingBox" class="dynamic">
+<div class="grid">
+<div class="full"><label>ค้นหาและเลือกหลักสูตร <span class="req">*</span></label>
+<input id="courseSearch" class="input" list="courseOptions" placeholder="พิมพ์คำ เช่น รถยก, จป., ไฟฟ้า, CPR"><datalist id="courseOptions"></datalist>
+<div class="hint">หากไม่พบหลักสูตร ให้เลือก “อื่น ๆ / ระบุหลักสูตรเอง”</div></div>
+<div id="otherCourseWrap" class="full" style="display:none"><label>รายละเอียดหลักสูตรอื่น ๆ <span class="req">*</span></label><textarea id="otherCourse" rows="3"></textarea></div>
+<div><label>จำนวนผู้เข้าอบรม (คน) <span class="req">*</span></label><input id="participantCount" class="input" type="number" min="1" inputmode="numeric"></div>
+<div><label>รูปแบบการอบรม</label><select id="trainingMode" class="select"><option value="IN_HOUSE">In-house ณ สถานประกอบการ</option><option value="ONLINE">Online</option><option value="OTHER">อื่น ๆ</option></select></div>
+</div>
+</div>
+
+<div id="serviceBox" class="dynamic">
+<div class="grid">
+<div class="full"><label>ประเภทงานบริการ <span class="req">*</span></label>
+<select id="serviceGroup" class="select" onchange="switchServiceGroup()">
+<option value="">-- เลือก --</option>
+<option value="IH">บริการตรวจวัดด้านสุขศาสตร์อุตสาหกรรม อาชีวอนามัย และสภาพแวดล้อมในการทำงาน</option>
+<option value="ELECTRICAL">ตรวจสอบและรับรองระบบไฟฟ้าและบริภัณฑ์ไฟฟ้า</option>
+</select></div>
+</div>
+<div id="ihBox" style="display:none;margin-top:14px">
+<div class="hint" style="margin-bottom:8px">เลือกได้หลายรายการภายใต้คำขอบริการตรวจวัด 1 คำขอ</div>
+<div id="measurements"></div>
+</div>
+<div id="electricalBox" style="display:none;margin-top:14px">
+<div class="grid3">
+<div><label>จำนวนตู้ MDB</label><input id="mdbCount" class="input" type="number" min="0"></div>
+<div><label>จำนวนเครื่องจักร</label><input id="machineCount" class="input" type="number" min="0"></div>
+<div><label>จำนวนอาคาร</label><input id="buildingCount" class="input" type="number" min="0"></div>
+<div class="full"><label>รายละเอียดเพิ่มเติมของระบบไฟฟ้า <span class="req">*</span></label><textarea id="electricalDetail" rows="4"></textarea></div>
+</div>
+</div>
+</div>
+
+<div id="consultingBox" class="dynamic">
+<div class="grid"><div class="full"><label>หัวข้อที่ต้องการปรึกษา <span class="req">*</span></label><input id="consultingSubject" class="input"></div>
+<div class="full"><label>รายละเอียดที่ต้องการปรึกษา <span class="req">*</span></label><textarea id="consultingDetail" rows="5"></textarea></div></div>
+</div>
+</section>
+
+<section class="panel">
+<div class="section-title"><span class="step">3</span>ข้อมูลบริษัท / หน่วยงาน</div>
+<div class="grid3">
+<div class="full"><label>ชื่อบริษัท / หน่วยงาน <span class="req">*</span></label><input id="organizationName" class="input"></div>
+<div><label>เลขประจำตัวผู้เสียภาษี <span class="req">*</span></label><input id="taxId" class="input" maxlength="13" inputmode="numeric"></div>
+<div><label>ประเภทสาขา <span class="req">*</span></label><select id="branchType" class="select" onchange="branchNoWrap.style.display=this.value==='BRANCH'?'block':'none'"><option value="HEAD_OFFICE">สำนักงานใหญ่</option><option value="BRANCH">สาขา</option></select></div>
+<div id="branchNoWrap" style="display:none"><label>เลขที่สาขา <span class="req">*</span></label><input id="branchNo" class="input"></div>
+<div><label>เลขที่ <span class="req">*</span></label><input id="addressNo" class="input"></div>
+<div><label>หมู่</label><input id="moo" class="input"></div>
+<div><label>อาคาร / ชั้น</label><input id="building" class="input"></div>
+<div><label>ซอย</label><input id="soi" class="input"></div>
+<div><label>ถนน</label><input id="road" class="input"></div>
+<div><label>จังหวัด <span class="req">*</span></label><input id="province" class="input" list="provinceList" placeholder="ค้นหาจังหวัด"><datalist id="provinceList"></datalist></div>
+<div><label>อำเภอ / เขต <span class="req">*</span></label><input id="district" class="input" list="districtList"><datalist id="districtList"></datalist></div>
+<div><label>ตำบล / แขวง <span class="req">*</span></label><input id="subdistrict" class="input" list="subdistrictList"><datalist id="subdistrictList"></datalist></div>
+<div><label>รหัสไปรษณีย์ <span class="req">*</span></label><input id="postcode" class="input" maxlength="5" inputmode="numeric"></div>
+</div>
+</section>
+
+<section class="panel">
+<div class="section-title"><span class="step">4</span>ผู้ติดต่อและสถานที่ให้บริการ</div>
+<div class="grid">
+<div><label>ชื่อผู้ติดต่อ <span class="req">*</span></label><input id="customerName" class="input"></div>
+<div><label>โทรศัพท์ <span class="req">*</span></label><input id="phone" class="input"></div>
+<div><label>อีเมล <span class="req">*</span></label><input id="email" class="input" type="email"></div>
+<div><label>Google Maps / แผนที่</label><input id="mapUrl" class="input" placeholder="https://..."></div>
+<div class="full"><label>สถานที่ให้บริการ <span class="req">*</span></label><textarea id="locationText" rows="2"></textarea></div>
+<div><label>วันที่สะดวก 1</label><input id="date1" type="date" class="input"></div><div><label>วันที่สะดวก 2</label><input id="date2" type="date" class="input"></div>
+</div>
+</section>
+
+<section class="panel">
+<div class="section-title"><span class="step">5</span>ข้อมูลประกอบคำขอ</div>
+<div class="grid">
+<div class="full"><label>รายละเอียดเพิ่มเติม / วัตถุประสงค์ของการขอรับบริการ <span class="req">*</span></label><textarea id="additionalDetail" rows="5" placeholder="กรุณาระบุข้อมูลที่ช่วยให้ SANTE ประเมินขอบเขตงานและจัดทำใบเสนอราคาได้ถูกต้อง"></textarea></div>
+<div class="full filebox"><label>แนบไฟล์ประกอบ (ถ้ามี)</label><input id="attachment" type="file" accept=".pdf,.jpg,.jpeg,.png,.xls,.xlsx,.zip,application/pdf,image/jpeg,image/png,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/zip">
+<div class="hint">แนบได้ 1 ไฟล์ ขนาดไม่เกิน 20 MB: PDF / JPG / PNG / Excel / ZIP หากมีหลายเอกสารให้รวมเป็น PDF หรือ ZIP</div></div>
+</div>
+</section>
+<div id="message" class="notice"></div>
+<div class="actions"><a class="btn light" href="member-service-requests.html">ดูคำขอของฉัน</a><button id="submitBtn" class="btn yellow" onclick="submitRequest()">ยืนยันส่งคำขอ</button></div>
+</main>
+
 <script>
 const db=window.supabase.createClient("https://cyegjwerxlxhczrfiurz.supabase.co","sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF",{auth:{storageKey:"sante-member-auth",persistSession:true,autoRefreshToken:true}});
-let services=[],selectedServiceId=null,user=null;
-async function init(){const s=await db.auth.getSession();user=s.data.session?.user||null;if(!user){location.href="member-login.html";return}const r=await db.from("services").select("*").eq("is_active",true).order("sort_order");if(r.error){alert(r.error.message);return}services=r.data||[];render();const p=await db.from("profiles").select("*").eq("id",user.id).maybeSingle();const x=p.data||{};customerName.value=[x.title_th,x.firstname_th,x.lastname_th].filter(Boolean).join(" ");email.value=x.email||user.email||"";phone.value=x.phone||"";}
-function render(){serviceList.innerHTML=services.map(x=>`<div class="service-card ${selectedServiceId===x.id?"active":""}" onclick="pick('${x.id}')"><strong>${x.service_name}</strong><div class="muted">${x.category||""}</div><div style="margin-top:8px">${x.pricing_mode==="CUSTOM"?"ขอใบเสนอราคา":Number(x.base_price||0).toLocaleString("th-TH")+" บาท"}</div></div>`).join("")}
-function pick(id){selectedServiceId=id;render()}
-async function submitRequest(){if(!selectedServiceId){alert("กรุณาเลือกบริการ");return}if(!customerName.value.trim()||!organizationName.value.trim()||!phone.value.trim()){alert("กรุณากรอกชื่อ บริษัท/หน่วยงาน และโทรศัพท์");return}
-const payload={user_id:user.id,service_id:selectedServiceId,customer_name:customerName.value.trim(),organization_name:organizationName.value.trim(),email:email.value.trim()||user.email,phone:phone.value.trim(),contact_name:customerName.value.trim(),contact_phone:phone.value.trim(),location_text:locationText.value.trim()||null,map_url:mapUrl.value.trim()||null,preferred_dates:[date1.value,date2.value,date3.value].filter(Boolean),request_note:note.value.trim()||null,status:"NEW"};
-const r=await db.from("service_requests").insert(payload).select("request_no").single();if(r.error){alert(r.error.message);return}alert("ส่งคำขอบริการเรียบร้อย\nเลขคำขอ: "+(r.data.request_no||"-"));location.href="member-home.html";}
+let user=null,requestType="",courses=[],thaiAddress=[];
+const $=id=>document.getElementById(id);
+const measureDefs=[
+ ["heat","ความร้อน","รายการ"],
+ ["light_area","ความเข้มแสงสว่างแบบพื้นที่","พื้นที่"],
+ ["light_point","ความเข้มแสงสว่างแบบเฉพาะจุด","จุด"],
+ ["noise_area","ระดับเสียงแบบพื้นที่","จุด"],
+ ["noise_personal","ระดับเสียงแบบติดตัวบุคคล","จุด"],
+ ["noise_contour","Noise contour map แผนผังแสดงระดับเสียง","พื้นที่"],
+ ["other","อื่น ๆ","รายการ"]
+];
+
+function pickType(t){
+ requestType=t;
+ document.querySelectorAll(".type-card").forEach(x=>x.classList.toggle("active",x.dataset.type===t));
+ ["trainingBox","serviceBox","consultingBox"].forEach(id=>$(id).classList.remove("show"));
+ $(t==="TRAINING"?"trainingBox":t==="SERVICE"?"serviceBox":"consultingBox").classList.add("show");
+}
+function renderMeasurements(){
+ $("measurements").innerHTML=measureDefs.map(([key,name,unit])=>`<div class="checkrow"><label class="checkname"><input type="checkbox" id="m_${key}" onchange="measureToggle('${key}')">${name}</label><div><input id="m_${key}_count" class="input" type="number" min="0" placeholder="จำนวน${unit}" disabled oninput="measureCountChanged('${key}')"></div><div id="m_${key}_areas" class="area-list"></div></div>`).join("");
+}
+function measureToggle(k){const c=$("m_"+k),n=$("m_"+k+"_count");n.disabled=!c.checked;if(!c.checked){n.value="";$("m_"+k+"_areas").innerHTML=""}if(k==="other"&&c.checked){$("m_"+k+"_areas").innerHTML='<textarea id="m_other_detail" class="input" rows="3" placeholder="ระบุรายละเอียดงานอื่น ๆ *"></textarea>'}}
+function measureCountChanged(k){
+ if(!["light_area","noise_contour"].includes(k))return;
+ const n=Math.max(0,Number($("m_"+k+"_count").value||0));
+ $("m_"+k+"_areas").innerHTML=Array.from({length:n},(_,i)=>`<div class="area-row"><span>พื้นที่ที่ ${i+1}</span><div style="display:flex;align-items:center;gap:8px"><input class="input area-size" type="number" min="0" step="0.01" placeholder="จำนวน"><span class="hint">ตารางเมตร</span></div></div>`).join("");
+}
+function switchServiceGroup(){ihBox.style.display=serviceGroup.value==="IH"?"block":"none";electricalBox.style.display=serviceGroup.value==="ELECTRICAL"?"block":"none"}
+function collectMeasurements(){
+ const out={};
+ measureDefs.forEach(([k,name,unit])=>{if(!$("m_"+k).checked)return;const count=Number($("m_"+k+"_count").value||0);out[k]={name,count,unit};if(["light_area","noise_contour"].includes(k))out[k].areas=[...$("m_"+k+"_areas").querySelectorAll(".area-size")].map(x=>Number(x.value||0));if(k==="other")out[k].detail=$("m_other_detail")?.value.trim()||""});
+ return out;
+}
+function showMsg(t,err=false){message.textContent=t;message.className="notice"+(err?" error":"");message.style.display="block";message.scrollIntoView({behavior:"smooth",block:"center"})}
+function fullAddress(){return [addressNo.value,moo.value&&"หมู่ "+moo.value,building.value,soi.value&&"ซอย "+soi.value,road.value&&"ถนน"+road.value,subdistrict.value,district.value,province.value,postcode.value].filter(Boolean).join(" ");}
+
+async function loadCourses(){
+ const r=await db.from("courses").select("id,course_code,title_th,title_en").order("title_th");
+ courses=r.data||[];
+ const fixed=["คณะกรรมการความปลอดภัย อาชีวอนามัย และสภาพแวดล้อมในการทำงานของสถานประกอบกิจการ", "เจ้าหน้าที่ความปลอดภัยในการทำงานระดับบริหาร", "เจ้าหน้าที่ความปลอดภัยในการทำงานระดับหัวหน้างาน", "ความปลอดภัย อาชีวอนามัย และสภาพแวดล้อมในการทำงาน สำหรับลูกจ้างทั่วไปและลูกจ้างเข้าทำงานใหม่", "มาตรการอนุรักษ์การได้ยิน ในสถานประกอบกิจการ", "ความปลอดภัยในการทำงานเกี่ยวกับไฟฟ้า สำหรับลูกจ้างซึ่งปฏิบัติงานเกี่ยวกับไฟฟ้า", "การทำงานให้ถูกหลักการยศาสตร์ และออฟฟิศซินโดรม", "การประเมินคาร์บอนฟุตพริ้นท์ขององค์กร", "การขับและการตรวจสอบบำรุงรักษารถยกอย่างปลอดภัยและถูกวิธี", "สรุปกฎหมายความปลอดภัย อาชีวอนามัย และสภาพแวดล้อมในการทำงาน", "การฝึกอบรมผู้บังคับปั้นจั่น ผู้ให้สัญญาณแก่ผู้บังคับปั้นจั่น ผู้ยึดเกาะวัสดุ และผู้ควบคุมการใช้ปั้นจั่น สำหรับปั้นจั่นชนิดเคลื่อนที่", "ความปลอดภัยในการทำงานกับสารเคมีอันตรายและการตอบโต้เหตุฉุกเฉิน", "การขับรถอย่างปลอดภัย (Safety Driving Training)", "การปฐมพยาบาลเบื้องต้น และการช่วยชีวิตขั้นพื้นฐาน โดยวิธีการ CPR & AED", "การสร้างพฤติกรรมความปลอดภัย BBS สำหรับพนักงานในองค์กร", "ติวสอบเจ้าหน้าความปลอดภัยทางรังสี RSO ระดับต้น ของสำนักงานปรมาณูเพื่อสันติ", "ติวสอบบุคลากรเฉพาะ (บฉ.) การเก็บรักษาสารเคมีและวัตถุอันตราย ตามกฎหมายกรมโรงงานอุตสาหกรรม", "ติวสอบผู้ควบคุมระบบบำบัดมลพิษน้ำ ตามกฎหมายกรมโรงงานอุตสาหกรรม", "ติวสอบผู้ควบคุมระบบการจัดการมลพิษกากอุตสาหกรรม ตามกฎหมายกรมโรงงานอุตสาหกรรม", "ติวสอบผู้ควบคุมระบบการจัดการมลพิษอากาศ ตามกฎหมายกรมโรงงานอุตสาหกรรม", "อื่น ๆ / ระบุหลักสูตรเอง"];
+ const names=[...new Set([...courses.map(x=>x.title_th||x.title_en).filter(Boolean),...fixed])];
+ courseOptions.innerHTML=names.map(x=>`<option value="${x.replaceAll('"','&quot;')}"></option>`).join("");
+ courseSearch.addEventListener("input",()=>{otherCourseWrap.style.display=courseSearch.value==="อื่น ๆ / ระบุหลักสูตรเอง"?"block":"none"});
+}
+
+async function loadThaiAddress(){
+ const provinces=["กระบี่","กรุงเทพมหานคร","กาญจนบุรี","กาฬสินธุ์","กำแพงเพชร","ขอนแก่น","จันทบุรี","ฉะเชิงเทรา","ชลบุรี","ชัยนาท","ชัยภูมิ","ชุมพร","ตรัง","ตราด","ตาก","นครนายก","นครปฐม","นครพนม","นครราชสีมา","นครศรีธรรมราช","นครสวรรค์","นนทบุรี","นราธิวาส","น่าน","บึงกาฬ","บุรีรัมย์","ปทุมธานี","ประจวบคีรีขันธ์","ปราจีนบุรี","ปัตตานี","พระนครศรีอยุธยา","พะเยา","พังงา","พัทลุง","พิจิตร","พิษณุโลก","ภูเก็ต","มหาสารคาม","มุกดาหาร","ยะลา","ยโสธร","ร้อยเอ็ด","ระนอง","ระยอง","ราชบุรี","ลพบุรี","ลำปาง","ลำพูน","ศรีสะเกษ","สกลนคร","สงขลา","สตูล","สมุทรปราการ","สมุทรสงคราม","สมุทรสาคร","สระแก้ว","สระบุรี","สิงห์บุรี","สุโขทัย","สุพรรณบุรี","สุราษฎร์ธานี","สุรินทร์","หนองคาย","หนองบัวลำภู","อ่างทอง","อำนาจเจริญ","อุดรธานี","อุตรดิตถ์","อุทัยธานี","อุบลราชธานี","เชียงราย","เชียงใหม่","เพชรบุรี","เพชรบูรณ์","เลย","แพร่","แม่ฮ่องสอน"];
+ provinceList.innerHTML=provinces.map(x=>`<option value="${x}"></option>`).join("");
+ try{
+  const r=await fetch("https://cdn.jsdelivr.net/gh/earthchie/jquery.Thailand.js@master/database/raw_database/raw_database.json");
+  if(r.ok)thaiAddress=await r.json();
+ }catch(e){console.warn("Thai address dataset unavailable",e)}
+ province.addEventListener("change",()=>{if(!thaiAddress.length)return;const rows=thaiAddress.filter(x=>x.province===province.value);districtList.innerHTML=[...new Set(rows.map(x=>x.amphoe))].map(x=>`<option value="${x}"></option>`).join("")});
+ district.addEventListener("change",()=>{if(!thaiAddress.length)return;const rows=thaiAddress.filter(x=>x.province===province.value&&x.amphoe===district.value);subdistrictList.innerHTML=[...new Set(rows.map(x=>x.district))].map(x=>`<option value="${x}"></option>`).join("")});
+ subdistrict.addEventListener("change",()=>{if(!thaiAddress.length)return;const x=thaiAddress.find(x=>x.province===province.value&&x.amphoe===district.value&&x.district===subdistrict.value);if(x?.zipcode)postcode.value=x.zipcode});
+}
+
+async function init(){
+ const s=await db.auth.getSession();user=s.data.session?.user;if(!user){location="member-login.html";return}
+ memberEmail.textContent=user.email||"";
+ const p=await db.from("profiles").select("*").eq("id",user.id).maybeSingle();const x=p.data||{};
+ memberName.textContent=[x.title_th,x.firstname_th,x.lastname_th].filter(Boolean).join(" ")||"สมาชิก SANTE";
+ customerName.value=memberName.textContent;email.value=x.email||user.email||"";phone.value=x.phone||"";
+ renderMeasurements();await Promise.all([loadCourses(),loadThaiAddress()]);loading.style.display="none";
+}
+async function submitRequest(){
+ if(!requestType)return showMsg("กรุณาเลือกประเภทคำขอ",true);
+ if(!organizationName.value.trim()||!taxId.value.trim()||!addressNo.value.trim()||!province.value.trim()||!district.value.trim()||!subdistrict.value.trim()||!postcode.value.trim())return showMsg("กรุณากรอกข้อมูลบริษัทและที่อยู่ที่มีเครื่องหมาย * ให้ครบ",true);
+ if(branchType.value==="BRANCH"&&!branchNo.value.trim())return showMsg("กรุณาระบุเลขที่สาขา",true);
+ if(!customerName.value.trim()||!phone.value.trim()||!email.value.trim()||!locationText.value.trim())return showMsg("กรุณากรอกข้อมูลผู้ติดต่อและสถานที่ให้บริการให้ครบ",true);
+ if(!additionalDetail.value.trim())return showMsg("กรุณากรอกรายละเอียดเพิ่มเติม / วัตถุประสงค์ของงาน",true);
+ let detail={};
+ let courseId=null,courseName=null,serviceGroupVal=null;
+ if(requestType==="TRAINING"){
+   if(!courseSearch.value.trim()||Number(participantCount.value||0)<1)return showMsg("กรุณาเลือกหลักสูตรและระบุจำนวนผู้เข้าอบรม",true);
+   if(courseSearch.value==="อื่น ๆ / ระบุหลักสูตรเอง"&&!otherCourse.value.trim())return showMsg("กรุณาระบุรายละเอียดหลักสูตรอื่น ๆ",true);
+   courseName=courseSearch.value==="อื่น ๆ / ระบุหลักสูตรเอง"?otherCourse.value.trim():courseSearch.value.trim();
+   courseId=courses.find(x=>(x.title_th||x.title_en)===courseSearch.value)?.id||null;
+   detail={training_mode:trainingMode.value};
+ } else if(requestType==="SERVICE"){
+   serviceGroupVal=serviceGroup.value;if(!serviceGroupVal)return showMsg("กรุณาเลือกประเภทงานบริการ",true);
+   if(serviceGroupVal==="IH"){
+     const m=collectMeasurements();if(!Object.keys(m).length)return showMsg("กรุณาเลือกอย่างน้อย 1 รายการตรวจวัด",true);
+     for(const [k,v] of Object.entries(m)){if(v.count<1)return showMsg("กรุณาระบุจำนวนของ "+v.name,true);if((k==="light_area"||k==="noise_contour")&&v.areas.some(x=>x<=0))return showMsg("กรุณาระบุขนาดพื้นที่ให้ครบ",true);if(k==="other"&&!v.detail)return showMsg("กรุณาระบุรายละเอียดงานอื่น ๆ",true)}
+     detail={measurements:m};
+   } else {
+     if(!electricalDetail.value.trim())return showMsg("กรุณาระบุรายละเอียดระบบไฟฟ้า",true);
+     detail={mdb_count:Number(mdbCount.value||0),machine_count:Number(machineCount.value||0),building_count:Number(buildingCount.value||0),detail:electricalDetail.value.trim()};
+   }
+ } else {
+   if(!consultingSubject.value.trim()||!consultingDetail.value.trim())return showMsg("กรุณาระบุหัวข้อและรายละเอียดงานที่ปรึกษา",true);
+   detail={subject:consultingSubject.value.trim(),detail:consultingDetail.value.trim()};
+ }
+ const file=attachment.files[0];if(file&&file.size>20*1024*1024)return showMsg("ไฟล์แนบต้องมีขนาดไม่เกิน 20 MB",true);
+ submitBtn.disabled=true;submitBtn.textContent="กำลังส่ง...";
+ try{
+   const payload={
+     user_id:user.id,request_type:requestType,service_group:serviceGroupVal,course_id:courseId,course_name:courseName,
+     participant_count:requestType==="TRAINING"?Number(participantCount.value):null,
+     customer_name:customerName.value.trim(),contact_name:customerName.value.trim(),email:email.value.trim(),phone:phone.value.trim(),contact_phone:phone.value.trim(),
+     organization_name:organizationName.value.trim(),company_tax_id:taxId.value.trim(),company_branch_type:branchType.value,company_branch_no:branchNo.value.trim()||null,
+     address_no:addressNo.value.trim(),moo:moo.value.trim()||null,building:building.value.trim()||null,soi:soi.value.trim()||null,road:road.value.trim()||null,
+     province:province.value.trim(),district:district.value.trim(),subdistrict:subdistrict.value.trim(),postcode:postcode.value.trim(),
+     location_text:locationText.value.trim(),map_url:mapUrl.value.trim()||null,preferred_dates:[date1.value,date2.value].filter(Boolean),
+     service_detail:detail,additional_detail:additionalDetail.value.trim(),request_note:additionalDetail.value.trim(),status:"NEW"
+   };
+   const ins=await db.from("service_requests").insert(payload).select("id,request_no").single();
+   if(ins.error)throw ins.error;
+   if(file){
+      const safe=file.name.replace(/[^A-Za-z0-9._-]+/g,"_");
+      const path=`${user.id}/${ins.data.id}/${Date.now()}_${safe}`;
+      const up=await db.storage.from("service-request-files").upload(path,file,{upsert:false,contentType:file.type||undefined});
+      if(up.error)throw up.error;
+      await db.from("service_requests").update({attachment_name:file.name,attachment_path:path,attachment_mime:file.type||null,attachment_size:file.size}).eq("id",ins.data.id);
+   }
+   location.href="member-service-requests.html?created="+encodeURIComponent(ins.data.request_no||"");
+ }catch(e){console.error(e);showMsg(e.message||"ส่งคำขอไม่สำเร็จ",true);submitBtn.disabled=false;submitBtn.textContent="ยืนยันส่งคำขอ"}
+}
+logout.onclick=async()=>{await db.auth.signOut();location="member-login.html"};
 init();
 </script></body></html>

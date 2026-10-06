@@ -820,7 +820,7 @@ table{width:100%;border-collapse:collapse;min-width:980px} th{background:#0b4f88
 </head>
 <body>
 <aside class="sidebar">
-  <div class="brand"><img src="SANTE-logo.png" alt="SANTE"></div>
+  <div class="brand"><img src="SANTE-logo-primary.png" alt="SANTE"></div>
   <div class="sidebar-title">MAIN</div>
   <nav class="nav">
     <a href="admin-dashboard.html"><span class="nav-icon">⌂</span>หน้าหลัก</a>
@@ -854,7 +854,7 @@ table{width:100%;border-collapse:collapse;min-width:980px} th{background:#0b4f88
 
 <main class="content">
   <div class="page-head">
-    <div><h1>งานบริการ</h1><p>จัดการรายการบริการ ราคา คำขอบริการ และสถานะงานของ SANTE</p></div>
+    <div><h1>งานบริการ</h1><p>จัดการคำขอบริการประจำวัน และตั้งค่ารายการบริการของ SANTE</p></div>
     <button class="btn yellow" onclick="openServiceModal()">+ เพิ่มบริการ</button>
   </div>
 
@@ -866,7 +866,7 @@ table{width:100%;border-collapse:collapse;min-width:980px} th{background:#0b4f88
   </section>
 
   <div class="tabs">
-    <button class="tab active" data-tab="catalog" onclick="switchTab('catalog',this)">รายการบริการ</button>
+    <button class="tab active" data-tab="catalog" onclick="switchTab('catalog',this)">ตั้งค่ารายการบริการ</button>
     <button class="tab" data-tab="requests" onclick="switchTab('requests',this)">คำขอบริการ</button>
     <button class="tab" data-tab="schedule" onclick="switchTab('schedule',this)">งานและนัดหมาย</button>
   </div>
@@ -1022,7 +1022,7 @@ function renderServices(){
       <div class="meta"><span>VAT</span><strong>${money(x.vat_rate)}%</strong></div>
       <div class="meta"><span>WHT</span><strong>${money(x.wht_rate)}%</strong></div>
     </div>
-    <div class="card-actions"><button class="btn light" onclick="openServiceModal('${x.id}')">แก้ไข</button><button class="btn ${x.is_active?"danger":"primary"}" onclick="toggleService('${x.id}',${!x.is_active})">${x.is_active?"ปิดใช้งาน":"เปิดใช้งาน"}</button></div>
+    <div class="card-actions"><button class="btn light" onclick="openServiceModal('${x.id}')">ตั้งค่าบริการ</button><button class="btn ${x.is_active?"danger":"primary"}" onclick="toggleService('${x.id}',${!x.is_active})">${x.is_active?"ปิดใช้งาน":"เปิดใช้งาน"}</button></div>
   </div>`).join("");
 }
 function renderRequests(){

@@ -1,0 +1,43 @@
+<!doctype html><html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>SANTE Member | คำขอของฉัน</title>
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet"><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:Prompt,sans-serif;color:#082d69;background:linear-gradient(180deg,#fff,#f2f8fc)}
+a{text-decoration:none;color:inherit}button,input,select,textarea{font-family:Prompt,sans-serif}
+.topbar{height:82px;position:sticky;top:0;z-index:90;display:flex;align-items:center;justify-content:space-between;padding:0 max(28px,calc((100vw - 1480px)/2));background:rgba(255,255,255,.97);border-bottom:1px solid #e7eef6}
+.brand-logo{width:220px;height:68px;object-fit:contain;object-position:left center}.member-area{display:flex;align-items:center;gap:16px}.member-copy{text-align:right}.member-name{font-weight:600}.member-email{font-size:12px;color:#7184a3}.logout{height:42px;padding:0 16px;border:1px solid #d5e1ef;border-radius:11px;background:#fff;color:#082d69;font-weight:600;cursor:pointer}
+.page{width:min(1320px,calc(100% - 40px));margin:0 auto;padding:24px 0 60px}.crumbs{font-size:12px;color:#6f82a0;margin-bottom:12px}.page-title{margin-bottom:18px}.page-title h1{margin:0;font-size:30px}.page-title p{margin:5px 0 0;color:#6f82a0;font-size:13px}
+.panel{background:#fff;border:1px solid #dce7f2;border-radius:20px;padding:22px;margin-bottom:16px;box-shadow:0 7px 20px rgba(25,75,130,.035)}
+.section-title{display:flex;align-items:center;gap:10px;margin-bottom:16px;font-size:18px;font-weight:700}.step{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:#ffbf19;color:#082d69;font-size:12px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.full{grid-column:1/-1}
+label{display:block;font-size:11px;font-weight:600;margin:0 0 5px}.req{color:#c33232}
+.input,.select,textarea{width:100%;border:1px solid #d5e1ec;border-radius:11px;padding:11px 12px;background:#fff;color:#082d69;font-size:13px;outline:none}.input:focus,.select:focus,textarea:focus{border-color:#77b7eb;box-shadow:0 0 0 3px rgba(8,125,240,.07)}
+.type-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.type-card{border:2px solid #e0e9f2;border-radius:16px;padding:17px;background:#fff;cursor:pointer}.type-card.active{border-color:#ffbf19;background:#fff9e8}.type-card strong{display:block;font-size:16px}.type-card span{display:block;margin-top:4px;color:#7184a3;font-size:11px}
+.dynamic{display:none}.dynamic.show{display:block}.hint{font-size:10px;color:#72869b;line-height:1.55}.checkrow{display:grid;grid-template-columns:minmax(220px,1fr) 150px;gap:12px;align-items:center;padding:10px 0;border-bottom:1px dashed #e3ebf2}.checkrow:last-child{border-bottom:0}.checkname{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600}
+.area-list{grid-column:1/-1;padding-left:26px}.area-row{display:grid;grid-template-columns:150px 1fr;gap:10px;margin-top:8px;align-items:center}.filebox{border:1px dashed #abc7de;border-radius:14px;padding:16px;background:#f8fbfe}
+.actions{display:flex;justify-content:flex-end;gap:10px}.btn{min-height:44px;border:0;border-radius:11px;padding:0 18px;font-size:13px;font-weight:600;cursor:pointer}.primary{background:#0b4f88;color:#fff}.yellow{background:#ffbf19;color:#082d69}.light{background:#fff;border:1px solid #d5e1ec;color:#082d69}
+.notice{padding:12px 14px;border-radius:11px;background:#eef8f1;color:#237447;font-size:12px;display:none}.error{background:#fff0f0;color:#a52d2d}
+.loading{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#fff;z-index:999;color:#082d69}
+@media(max-width:800px){.topbar{height:64px;padding:6px 12px}.brand-logo{width:120px;height:48px}.member-copy{display:none}.page{width:100%;padding:12px 12px 40px}.grid,.grid3,.type-grid{grid-template-columns:1fr}.page-title h1{font-size:23px}.panel{padding:16px;border-radius:16px}.checkrow{grid-template-columns:1fr}.area-row{grid-template-columns:1fr}.actions{flex-direction:column}.btn{width:100%}}
+
+.cards{display:grid;gap:12px}.request{background:#fff;border:1px solid #dce7f2;border-radius:18px;padding:18px;display:grid;grid-template-columns:1.4fr 1fr auto;gap:18px;align-items:center}.reqno{font-size:12px;color:#7184a3}.rtitle{font-size:17px;font-weight:700;margin-top:4px}.meta{font-size:11px;color:#7184a3;margin-top:5px;line-height:1.6}.badge{display:inline-flex;padding:7px 10px;border-radius:999px;font-size:10px;font-weight:600;background:#eef5fb;color:#0b568e}.badge.green{background:#e9f8ef;color:#237447}.empty{padding:55px;text-align:center;color:#7184a3}@media(max-width:800px){.request{grid-template-columns:1fr}}
+</style></head><body><div id="loading" class="loading">กำลังโหลดคำขอของคุณ...</div>
+<header class="topbar"><a href="member-home.html"><img class="brand-logo" src="sante%20(en)-logo.png"></a><div class="member-area"><div class="member-copy"><div id="memberName" class="member-name">สมาชิก SANTE</div><div id="memberEmail" class="member-email"></div></div><button id="logout" class="logout">ออกจากระบบ</button></div></header>
+<main class="page"><div class="crumbs"><a href="member-home.html">หน้าหลักสมาชิก</a> › คำขอของฉัน</div><div class="page-title"><h1>คำขอของฉัน</h1><p>ติดตามสถานะคำขอบริการและเปิดใบเสนอราคาได้จากหน้านี้</p></div>
+<div id="createdMsg" class="notice"></div><div id="cards" class="cards"></div></main>
+<script>
+const db=window.supabase.createClient("https://cyegjwerxlxhczrfiurz.supabase.co","sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF",{auth:{storageKey:"sante-member-auth",persistSession:true,autoRefreshToken:true}});
+const statusMap={NEW:["ได้รับเรื่องแล้ว",""],REVIEWING:["อยู่ระหว่างการตรวจสอบรายละเอียด",""],QUOTING:["อยู่ระหว่างจัดทำใบเสนอราคา",""],QUOTED:["เสนอราคาแล้ว",""],APPROVED:["ได้รับการอนุมัติราคาแล้ว","green"],SCHEDULED:["นัดหมายแล้ว","green"],IN_PROGRESS:["กำลังดำเนินงาน",""],COMPLETED:["เสร็จสิ้น","green"],CANCELLED:["ยกเลิก",""]};
+const typeMap={TRAINING:"อบรม In-house",SERVICE:"งานบริการ",CONSULTING:"งานที่ปรึกษา"};
+function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+async function init(){
+ const s=await db.auth.getSession(),u=s.data.session?.user;if(!u){location="member-login.html";return}memberEmail.textContent=u.email||"";
+ const p=await db.from("profiles").select("*").eq("id",u.id).maybeSingle();const x=p.data||{};memberName.textContent=[x.title_th,x.firstname_th,x.lastname_th].filter(Boolean).join(" ")||"สมาชิก SANTE";
+ const cr=new URLSearchParams(location.search).get("created");if(cr){createdMsg.style.display="block";createdMsg.textContent="ส่งคำขอเรียบร้อย เลขคำขอ "+cr}
+ const [rr,qq]=await Promise.all([db.from("service_requests").select("*").eq("user_id",u.id).order("created_at",{ascending:false}),db.from("quotations").select("id,service_request_id,quotation_no,status,grand_total,net_receivable").eq("member_id",u.id).order("created_at",{ascending:false})]);
+ if(rr.error){cards.innerHTML='<div class="empty">โหลดคำขอไม่สำเร็จ</div>';loading.style.display="none";return}
+ const qs=qq.data||[];
+ cards.innerHTML=(rr.data||[]).map(r=>{const st=statusMap[r.status]||[r.status||"-",""];const q=qs.find(x=>x.service_request_id===r.id&&["SENT","APPROVED"].includes(x.status));const detail=r.course_name||r.service_group==="IH"?"บริการตรวจวัดด้านสุขศาสตร์อุตสาหกรรม":r.service_group==="ELECTRICAL"?"ตรวจสอบและรับรองระบบไฟฟ้า":r.service_detail?.subject||r.additional_detail||"-";return `<div class="request"><div><div class="reqno">${esc(r.request_no||"-")}</div><div class="rtitle">${esc(typeMap[r.request_type]||"คำขอบริการ")}</div><div class="meta">${esc(detail)}<br>${esc(r.organization_name||"")}</div></div><div><span class="badge ${st[1]}">${esc(st[0])}</span><div class="meta">ส่งเมื่อ ${new Date(r.created_at).toLocaleDateString("th-TH")}</div></div><div>${q?`<a class="btn yellow" href="member-quotation.html?id=${q.id}">เปิดใบเสนอราคา</a>`:""}</div></div>`}).join("")||'<div class="panel empty">ยังไม่มีคำขอบริการ <div style="margin-top:15px"><a class="btn yellow" href="service-request.html">สร้างคำขอใหม่</a></div></div>';
+ loading.style.display="none";
+}
+logout.onclick=async()=>{await db.auth.signOut();location="member-login.html"};init();
+</script></body></html>

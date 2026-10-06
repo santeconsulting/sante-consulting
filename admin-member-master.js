@@ -18,8 +18,8 @@
     ["admin-question-import.html","✎","คลังข้อสอบ / นำเข้า","training"],
     ["admin-exams.html","✓","ข้อสอบและผลสอบ","training"],
     ["admin-certificates.html","▣","ใบประกาศนียบัตร","training"],
-    ["#","◆","งานบริการ","service"],
-    ["#","▧","ใบเสนอราคา","service"],
+    ["admin-services.html","◆","งานบริการ","service"],
+    ["admin-quotations.html","▧","ใบเสนอราคา","service"],
     ["admin-payments.html","฿","การเงิน / การชำระเงิน","service"],
     ["#","⚙","ตั้งค่าระบบ","system"],
     ["#","◷","Audit Log","system"],
@@ -33,6 +33,8 @@
     "admin-question-import": ["คลังข้อสอบ / นำเข้าข้อสอบ","ตรวจสอบข้อมูล ดูตัวอย่าง และนำข้อสอบเข้าสู่ระบบ"],
     "admin-exams": ["ข้อสอบและผลสอบ","จัดการชุดข้อสอบ เปิดสิทธิ์สอบ และติดตามผลสอบ"],
     "admin-payments": ["การชำระเงิน","ตรวจสอบหลักฐานและยืนยันการชำระเงิน"],
+    "admin-services": ["งานบริการ","จัดการคำขอบริการ ตั้งค่ารายการบริการ และสถานะงาน"],
+    "admin-quotations": ["ใบเสนอราคา","สร้าง แก้ไข ส่ง และติดตามใบเสนอราคา"],
     "admin-certificates": ["ใบประกาศนียบัตร","ออกวุฒิบัตร ออกแบบ ตรวจสอบ และจัดการเอกสาร"]
   };
 
@@ -49,7 +51,7 @@
     aside.className = "au-sidebar";
     aside.id = "auSidebar";
     let lastGroup = "";
-    let html = `<div class="au-brand"><img src="SANTE-logo.png" alt="SANTE"></div><nav class="au-nav">`;
+    let html = `<div class="au-brand"><img src="SANTE-logo-primary.png" alt="SANTE"></div><nav class="au-nav">`;
     for (const [href,icon,label,group] of nav){
       if (group !== lastGroup){
         const groupTitle = group==="main"?"MAIN":group==="training"?"TRAINING & LEARNING":group==="service"?"SERVICE & FINANCE":"SYSTEM";
