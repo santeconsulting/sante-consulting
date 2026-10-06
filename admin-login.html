@@ -154,6 +154,101 @@ button,input{font-family:inherit}
 }
 .secondary-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 @media (max-width:600px){.secondary-grid{grid-template-columns:1fr}}
+
+
+/* R3 DESKTOP VIEWPORT FIT
+   Goal: at browser zoom 100% the full two-column login experience stays inside
+   the visible desktop viewport without vertical scrolling. Mobile/tablet keeps
+   the stacked responsive layout below 900px. */
+@media (min-width:901px){
+  html,body{width:100%;height:100%;overflow:hidden}
+  body{min-height:100vh;min-height:100svh}
+  .page{
+    width:100vw;
+    height:100vh;
+    height:100svh;
+    min-height:0;
+    overflow:hidden;
+    grid-template-columns:minmax(0,52%) minmax(0,48%);
+  }
+  .hero,
+  .login-side{
+    height:100vh;
+    height:100svh;
+    min-height:0;
+  }
+  .hero-media{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    object-position:center center;
+  }
+  .login-side{
+    padding:clamp(14px,2.2vh,28px) clamp(24px,3vw,48px);
+  }
+  .login-card{
+    width:min(100%,660px);
+    max-height:calc(100svh - 28px);
+    padding:clamp(20px,2.6vh,34px) clamp(26px,2.7vw,42px);
+    border-radius:24px;
+  }
+  .login-eyebrow{margin-bottom:7px;font-size:13px}
+  .login-title{font-size:clamp(30px,2.35vw,46px);line-height:1.08}
+  .login-description{margin-top:10px;font-size:clamp(12px,.9vw,15px);line-height:1.55}
+  .login-form{margin-top:clamp(16px,2vh,22px)}
+  .form-group{margin-bottom:clamp(11px,1.6vh,15px)}
+  .form-label{margin-bottom:6px;font-size:13px}
+  .input-box{height:clamp(50px,6.4vh,56px);border-radius:12px}
+  .input-icon{width:50px;flex-basis:50px}.input-icon svg{width:20px;height:20px}
+  .input-box input{font-size:14px}
+  .password-toggle{padding:0 14px;font-size:12px}.password-toggle svg{width:18px;height:18px}
+  .form-options{margin:2px 0 clamp(12px,1.7vh,17px);font-size:12px}
+  .remember,.forgot{font-size:12px}.remember input{width:16px;height:16px}
+  .login-button{min-height:clamp(50px,6.5vh,56px);border-radius:12px;font-size:15px}
+  .login-button svg{width:20px;height:20px}
+  .other-divider{margin:clamp(14px,1.8vh,18px) 0 clamp(11px,1.5vh,15px);font-size:12px}
+  .secondary-grid{gap:10px}
+  .secondary-button{min-height:clamp(56px,7.5vh,64px);border-radius:14px;padding:9px 13px;font-size:13px}
+  .secondary-button .sec-icon{width:36px;height:36px;flex-basis:36px;font-size:16px}
+  .secondary-button small{font-size:10px;margin-top:2px}
+  .back-home{margin-top:clamp(13px,1.7vh,18px)}.back-home a{font-size:11px}
+  .security-note{margin-top:clamp(12px,1.7vh,17px);padding:10px 13px;border-radius:12px;font-size:10px;line-height:1.45}
+}
+
+/* Compact desktop/laptop heights (e.g. 1366×768, browser chrome visible). */
+@media (min-width:901px) and (max-height:820px){
+  .login-side{padding-top:12px;padding-bottom:12px}
+  .login-card{max-height:calc(100svh - 20px);padding-top:18px;padding-bottom:18px}
+  .login-title{font-size:clamp(29px,2.15vw,40px)}
+  .login-description{margin-top:7px;line-height:1.45}
+  .login-form{margin-top:14px}
+  .form-group{margin-bottom:10px}
+  .input-box{height:48px}
+  .form-options{margin-bottom:11px}
+  .login-button{min-height:49px}
+  .other-divider{margin:12px 0 10px}
+  .secondary-button{min-height:54px;padding-top:7px;padding-bottom:7px}
+  .security-note{margin-top:10px;padding-top:8px;padding-bottom:8px}
+  .back-home{margin-top:11px}
+}
+
+@media (min-width:901px) and (max-height:700px){
+  .login-card{padding-top:14px;padding-bottom:14px}
+  .login-eyebrow{font-size:11px;margin-bottom:5px}
+  .login-title{font-size:30px}
+  .login-description{font-size:11px;line-height:1.4}
+  .login-form{margin-top:10px}
+  .form-label{font-size:12px;margin-bottom:4px}
+  .form-group{margin-bottom:8px}
+  .input-box{height:44px}
+  .login-button{min-height:45px}
+  .other-divider{margin:9px 0 8px;font-size:11px}
+  .secondary-button{min-height:48px}
+  .secondary-button .sec-icon{width:32px;height:32px;flex-basis:32px}
+  .security-note{margin-top:8px;padding:7px 10px;font-size:9px}
+  .back-home{margin-top:8px}
+}
+
 </style>
 </head>
 <body>
