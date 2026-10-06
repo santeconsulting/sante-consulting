@@ -21,7 +21,7 @@
 </div><div style="margin-top:14px"><button onclick="submitRequest()">ส่งคำขอบริการ</button></div></div>
 </div>
 <script>
-const db=window.supabase.createClient("https://cyegjwerxlxhczrfiurz.supabase.co","sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF",{auth:{storageKey:"sante-admin-auth",persistSession:true,autoRefreshToken:true}});
+const db=window.supabase.createClient("https://cyegjwerxlxhczrfiurz.supabase.co","sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF",{auth:{storageKey:"sante-member-auth",persistSession:true,autoRefreshToken:true}});
 let services=[],selectedServiceId=null,user=null;
 async function init(){const s=await db.auth.getSession();user=s.data.session?.user||null;if(!user){location.href="member-login.html";return}const r=await db.from("services").select("*").eq("is_active",true).order("sort_order");if(r.error){alert(r.error.message);return}services=r.data||[];render();const p=await db.from("profiles").select("*").eq("id",user.id).maybeSingle();const x=p.data||{};customerName.value=[x.title_th,x.firstname_th,x.lastname_th].filter(Boolean).join(" ");email.value=x.email||user.email||"";phone.value=x.phone||"";}
 function render(){serviceList.innerHTML=services.map(x=>`<div class="service-card ${selectedServiceId===x.id?"active":""}" onclick="pick('${x.id}')"><strong>${x.service_name}</strong><div class="muted">${x.category||""}</div><div style="margin-top:8px">${x.pricing_mode==="CUSTOM"?"ขอใบเสนอราคา":Number(x.base_price||0).toLocaleString("th-TH")+" บาท"}</div></div>`).join("")}

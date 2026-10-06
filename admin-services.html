@@ -959,7 +959,7 @@ table{width:100%;border-collapse:collapse;min-width:980px} th{background:#0b4f88
       <div><label>วันที่ยืนยันเข้าบริการ</label><input class="input" type="date" id="confirmedDate"></div>
       <div class="full"><label>หมายเหตุ Admin</label><textarea id="adminNote" rows="3"></textarea></div>
     </div>
-    <div class="modal-actions"><button class="btn light" onclick="closeRequestModal()">ปิด</button><button class="btn primary" onclick="saveRequest()">บันทึก</button></div>
+    <div class="modal-actions"><button class="btn yellow" onclick="createQuotationFromRequest()">สร้างใบเสนอราคา</button><button class="btn light" onclick="closeRequestModal()">ปิด</button><button class="btn primary" onclick="saveRequest()">บันทึก</button></div>
   </div>
 </div>
 
@@ -1073,6 +1073,10 @@ function openRequestModal(id){
   document.getElementById("requestModal").classList.add("show");
 }
 function closeRequestModal(){document.getElementById("requestModal").classList.remove("show")}
+function createQuotationFromRequest(){
+  if(!editingRequestId)return;
+  location.href="admin-quotations.html?request_id="+encodeURIComponent(editingRequestId);
+}
 async function saveRequest(){
   const {error}=await db.from("service_requests").update({status:editRequestStatus.value,confirmed_service_date:confirmedDate.value||null,admin_note:adminNote.value.trim()||null,updated_at:new Date().toISOString(),updated_by:currentUser.id}).eq("id",editingRequestId);
   if(error){alert(error.message);return}closeRequestModal();toast("บันทึกคำขอแล้ว");await loadAll();
