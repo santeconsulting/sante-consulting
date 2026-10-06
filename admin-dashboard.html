@@ -1068,6 +1068,226 @@ html,body{overflow-x:hidden!important}
     </div>
   </a>
 
-  <a
-    href="admin-training-sessions.html"
-    class="manage-card"
+  <a href="admin-training-sessions.html" class="manage-card">
+  <div>
+    <div class="manage-icon">🗓️</div>
+    <h3>รอบการอบรม</h3>
+    <p>จัดการรอบ วันเวลา และจำนวนที่นั่ง</p>
+  </div>
+  <div class="manage-action">จัดการรอบอบรม →</div>
+</a>
+
+<a href="admin-services.html" class="manage-card">
+  <div>
+    <div class="manage-icon">◆</div>
+    <h3>งานบริการ</h3>
+    <p>จัดการบริการ คำขอบริการ และนัดหมาย</p>
+  </div>
+  <div class="manage-action">จัดการงานบริการ →</div>
+</a>
+
+<a href="admin-quotations.html" class="manage-card">
+  <div>
+    <div class="manage-icon">▧</div>
+    <h3>ใบเสนอราคา</h3>
+    <p>สร้าง แก้ไข และติดตามใบเสนอราคา</p>
+  </div>
+  <div class="manage-action">จัดการใบเสนอราคา →</div>
+</a>
+
+</section>
+
+<div class="section-head">
+  <div>
+    <h2>ทางลัด</h2>
+    <p>ส่วนงานสำคัญของระบบ</p>
+  </div>
+</div>
+
+<section class="panel-grid">
+  <div class="panel">
+    <h3>งานที่ใช้งานบ่อย</h3>
+    <p>เข้าสู่เมนูหลักได้อย่างรวดเร็ว</p>
+    <div class="quick-list">
+      <a class="quick-item" href="admin-training-registrations.html"><span>ผู้สมัครอบรม</span><span>เปิด →</span></a>
+      <a class="quick-item" href="admin-certificates.html"><span>ใบประกาศนียบัตร</span><span>เปิด →</span></a>
+      <a class="quick-item" href="admin-question-import.html"><span>คลังข้อสอบ / นำเข้า</span><span>เปิด →</span></a>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>สถานะระบบ</h3>
+    <p id="systemStatus">กำลังโหลดข้อมูล...</p>
+    <div class="quick-list">
+      <div class="quick-item"><span>Admin authentication</span><span id="authStatus">กำลังตรวจสอบ</span></div>
+      <div class="quick-item"><span>Supabase</span><span id="dbStatus">กำลังเชื่อมต่อ</span></div>
+    </div>
+  </div>
+</section>
+
+</main>
+</div>
+
+<script>
+const SUPABASE_URL="https://cyegjwerxlxhczrfiurz.supabase.co";
+const SUPABASE_KEY="sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF";
+const AUTH_STORAGE_KEY="sante-admin-auth";
+
+const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{
+  auth:{
+    storageKey:AUTH_STORAGE_KEY,
+    persistSession:true,
+    autoRefreshToken:true,
+    detectSessionInUrl:true
+  }
+});
+
+const loadingScreen=document.getElementById("loadingScreen");
+const sidebar=document.getElementById("sidebar");
+const overlay=document.getElementById("overlay");
+const menuButton=document.getElementById("menuButton");
+const logoutButton=document.getElementById("logoutButton");
+
+function withTimeout(promise,ms,label){
+  let timer;
+  const timeout=new Promise((_,reject)=>{
+    timer=setTimeout(()=>reject(new Error(label||"Request timeout")),ms);
+  });
+  return Promise.race([promise,timeout]).finally(()=>clearTimeout(timer));
+}
+
+function hideLoading(){
+  if(loadingScreen) loadingScreen.style.display="none";
+}
+
+function showFatal(message){
+  if(!loadingScreen) return;
+  loadingScreen.innerHTML=`
+    <div style="max-width:520px;text-align:center;padding:28px">
+      <div style="font-size:18px;font-weight:600;margin-bottom:10px">ไม่สามารถเปิดแดชบอร์ดได้</div>
+      <div style="font-size:13px;line-height:1.7;color:#6f83a2;margin-bottom:18px">${String(message||"เกิดข้อผิดพลาดในการตรวจสอบสิทธิ์")}</div>
+      <button id="retryDashboard" style="border:0;border-radius:11px;background:#082d69;color:#fff;padding:11px 18px;font:600 13px Prompt;cursor:pointer">ลองใหม่</button>
+      <button id="backToLogin" style="margin-left:8px;border:1px solid #d9e5ef;border-radius:11px;background:#fff;color:#082d69;padding:10px 18px;font:600 13px Prompt;cursor:pointer">กลับหน้าเข้าสู่ระบบ</button>
+    </div>`;
+  document.getElementById("retryDashboard")?.addEventListener("click",()=>location.reload());
+  document.getElementById("backToLogin")?.addEventListener("click",async()=>{
+    try{await db.auth.signOut()}catch(_){}
+    location.replace("admin-login.html");
+  });
+}
+
+async function safeCount(table){
+  try{
+    const res=await withTimeout(
+      db.from(table).select("*",{count:"exact",head:true}),
+      7000,
+      `โหลด ${table} ใช้เวลานานเกินไป`
+    );
+    if(res.error) throw res.error;
+    return Number(res.count||0);
+  }catch(err){
+    console.warn("Count failed:",table,err);
+    return null;
+  }
+}
+
+async function safePendingPayments(){
+  try{
+    const res=await withTimeout(
+      db.from("payments").select("*",{count:"exact",head:true}).eq("status","PENDING"),
+      7000,
+      "โหลด payments ใช้เวลานานเกินไป"
+    );
+    if(res.error) throw res.error;
+    return Number(res.count||0);
+  }catch(err){
+    console.warn("Payment count failed:",err);
+    return null;
+  }
+}
+
+async function loadDashboardStats(){
+  const [courses,sessions,members,payments]=await Promise.all([
+    safeCount("courses"),
+    safeCount("training_sessions"),
+    safeCount("profiles"),
+    safePendingPayments()
+  ]);
+
+  document.getElementById("courseCount").textContent=courses??"–";
+  document.getElementById("sessionCount").textContent=sessions??"–";
+  document.getElementById("memberCount").textContent=members??"–";
+  document.getElementById("paymentCount").textContent=payments??"–";
+
+  const hasAny=[courses,sessions,members,payments].some(v=>v!==null);
+  document.getElementById("dbStatus").textContent=hasAny?"เชื่อมต่อแล้ว":"ตรวจสอบข้อมูลไม่ได้";
+  document.getElementById("systemStatus").textContent=hasAny
+    ?"ระบบพร้อมใช้งาน"
+    :"เข้าสู่ระบบได้ แต่บางสถิติยังโหลดไม่ได้";
+}
+
+async function initDashboard(){
+  try{
+    if(!window.supabase) throw new Error("ไม่สามารถโหลด Supabase library ได้");
+
+    const sessionResult=await withTimeout(
+      db.auth.getSession(),
+      7000,
+      "ตรวจสอบ Session ใช้เวลานานเกินไป"
+    );
+    const session=sessionResult?.data?.session;
+
+    if(!session?.user){
+      location.replace("admin-login.html");
+      return;
+    }
+
+    const roleResult=await withTimeout(
+      db.rpc("is_staff"),
+      7000,
+      "ตรวจสอบสิทธิ์ Admin ใช้เวลานานเกินไป"
+    );
+
+    if(roleResult.error) throw roleResult.error;
+
+    if(roleResult.data!==true){
+      await db.auth.signOut();
+      location.replace("admin-login.html");
+      return;
+    }
+
+    document.getElementById("authStatus").textContent="ผ่าน";
+    document.getElementById("adminEmail").textContent=session.user.email||"";
+    document.getElementById("adminName").textContent="ผู้ดูแลระบบ SANTE";
+
+    hideLoading();
+
+    // สถิติไม่บล็อกการเปิดหน้า Dashboard
+    loadDashboardStats();
+
+  }catch(err){
+    console.error("Dashboard init error:",err);
+    showFatal(err?.message||"เกิดข้อผิดพลาดในการตรวจสอบสิทธิ์ผู้ดูแลระบบ");
+  }
+}
+
+menuButton?.addEventListener("click",()=>{
+  sidebar?.classList.toggle("open");
+  overlay?.classList.toggle("show");
+});
+
+overlay?.addEventListener("click",()=>{
+  sidebar?.classList.remove("open");
+  overlay?.classList.remove("show");
+});
+
+logoutButton?.addEventListener("click",async()=>{
+  logoutButton.disabled=true;
+  try{await db.auth.signOut()}catch(err){console.warn(err)}
+  location.replace("admin-login.html");
+});
+
+initDashboard();
+</script>
+</body>
+</html>
