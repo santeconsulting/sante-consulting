@@ -2945,7 +2945,96 @@ function renderExamPrepStructure(){
 }
 
 function downloadQuestionTemplate(){
-  window.location.href="SANTE_Question_Bank_Import_Template_R15.xlsx";
+  try{
+    if(!window.XLSX){
+      showMessage("error","ไม่สามารถสร้าง Excel Template ได้ กรุณารีเฟรชหน้าแล้วลองใหม่");
+      return;
+    }
+
+    const rows=[
+      {
+        exam_set_code:"BOCHO-SET-01",
+        question_code:"Q001",
+        question_type:"SINGLE_CHOICE",
+        question_text:"ตัวอย่างคำถาม",
+        category:"ตัวอย่างหมวด",
+        difficulty:"MEDIUM",
+        points:1,
+        question_image_path:"",
+        choice_a:"ตัวเลือก A",
+        choice_a_image_path:"",
+        choice_b:"ตัวเลือก B",
+        choice_b_image_path:"",
+        choice_c:"ตัวเลือก C",
+        choice_c_image_path:"",
+        choice_d:"ตัวเลือก D",
+        choice_d_image_path:"",
+        choice_e:"",
+        choice_e_image_path:"",
+        correct_answer:"A",
+        accepted_text_answers:"",
+        text_answer_auto_grade:"TRUE"
+      },
+      {
+        exam_set_code:"BOCHO-SET-01",
+        question_code:"Q002",
+        question_type:"TEXT",
+        question_text:"ตัวอย่างคำถามแบบข้อความ",
+        category:"ตัวอย่างหมวด",
+        difficulty:"EASY",
+        points:1,
+        question_image_path:"",
+        choice_a:"",
+        choice_a_image_path:"",
+        choice_b:"",
+        choice_b_image_path:"",
+        choice_c:"",
+        choice_c_image_path:"",
+        choice_d:"",
+        choice_d_image_path:"",
+        choice_e:"",
+        choice_e_image_path:"",
+        correct_answer:"",
+        accepted_text_answers:"คำตอบที่ 1|คำตอบที่ 2",
+        text_answer_auto_grade:"TRUE"
+      }
+    ];
+
+    const guide=[
+      ["ชื่อคอลัมน์","วิธีกรอก"],
+      ["exam_set_code","รหัสชุดข้อสอบ เช่น BOCHO-SET-01 / WASTE-SET-01 / WATER-SET-01 / AIR-SET-01 / RSO-SET-01"],
+      ["question_code","รหัสข้อ เช่น Q001"],
+      ["question_type","SINGLE_CHOICE / MULTIPLE_CHOICE / TEXT"],
+      ["question_text","ข้อความคำถาม"],
+      ["category","หมวดคำถาม เช่น กฎหมาย / สารเคมี / ความปลอดภัย"],
+      ["difficulty","EASY / MEDIUM / HARD"],
+      ["points","คะแนนของข้อนี้"],
+      ["question_image_path","เว้นว่างได้; สำหรับระบบอัปโหลดรูปภายหลัง"],
+      ["choice_a ถึง choice_e","ข้อความตัวเลือก"],
+      ["choice_*_image_path","เว้นว่างได้; สำหรับรูปประกอบแต่ละตัวเลือก"],
+      ["correct_answer","SINGLE: A | MULTIPLE: A,B,C | TEXT: เว้นว่าง"],
+      ["accepted_text_answers","ใช้เฉพาะ TEXT; คั่นคำตอบที่ยอมรับด้วย |"],
+      ["text_answer_auto_grade","TRUE / FALSE"]
+    ];
+
+    const wb=XLSX.utils.book_new();
+    const ws=XLSX.utils.json_to_sheet(rows);
+    const guideWs=XLSX.utils.aoa_to_sheet(guide);
+    ws["!cols"]=[
+      {wch:18},{wch:14},{wch:20},{wch:40},{wch:20},{wch:14},{wch:10},{wch:24},
+      {wch:24},{wch:22},{wch:24},{wch:22},{wch:24},{wch:22},{wch:24},{wch:22},
+      {wch:24},{wch:22},{wch:18},{wch:30},{wch:20}
+    ];
+    guideWs["!cols"]=[{wch:28},{wch:90}];
+
+    XLSX.utils.book_append_sheet(wb,ws,"Questions");
+    XLSX.utils.book_append_sheet(wb,guideWs,"คู่มือ");
+    XLSX.writeFile(wb,"SANTE_Question_Bank_Import_Template_R16.xlsx");
+    showMessage("success","สร้างและดาวน์โหลด Template เรียบร้อยแล้ว");
+  }catch(error){
+    console.error(error);
+    showMessage("error","ดาวน์โหลด Template ไม่สำเร็จ: "+(error.message||error));
+  }
 }
 
 async function handleQuestionFile(file){
