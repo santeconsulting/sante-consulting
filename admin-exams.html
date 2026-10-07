@@ -320,8 +320,14 @@ th{background:var(--navy)}
   .summary{grid-template-columns:1fr}
 }
 
+
+/* ===== R15 EXAMS SINGLE-SHELL FIX =====
+   admin-exams owns its shell. Do not inject a second master shell/cover.
+================================================ */
+.au-sidebar,.au-topbar,.au-cover-wrap{display:none!important}
+body{padding-left:0!important}
+
 </style>
-<link rel="stylesheet" href="admin-member-master.css">
 </head>
 
 <body>
@@ -392,7 +398,7 @@ th{background:var(--navy)}
 
 <section class="page-head">
   <div>
-    <h1>ข้อสอบและผลสอบ</h1>
+    <h1>ข้อสอบ</h1>
     <p>ตรวจสอบชุดข้อสอบ เปิดสิทธิ์สอบ Manual และติดตามผลการทำข้อสอบรายบุคคล</p>
   </div>
   <div class="page-actions">
@@ -1314,7 +1320,5 @@ document.addEventListener("DOMContentLoaded", function(){
   });
 });
 </script>
-
-<script src="admin-member-master.js"></script>
 </body>
 </html>
