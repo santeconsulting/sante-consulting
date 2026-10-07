@@ -1053,6 +1053,50 @@ body{background:var(--bg);color:var(--text);font-size:16px}
 }
 @media(max-width:430px){.summary{grid-template-columns:1fr!important}}
 
+
+/* ===== R16 QUESTION IMPORT — SINGLE SHELL + GOOGLE-FORM BUILDER ===== */
+.au-sidebar,.au-topbar,.au-cover-wrap{display:none!important}
+body{padding-left:0!important}
+.page-actions{display:flex;align-items:center;gap:10px}
+.prep-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+.prep-card{border:1px solid var(--line);border-radius:16px;background:#fff;padding:15px}
+.prep-card h3{margin:0 0 8px;font-size:14px;color:var(--navy)}
+.prep-card .exam-code{font-size:10px;color:var(--muted);margin-bottom:10px}
+.prep-set{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 0;border-top:1px solid #edf2f7;font-size:11px}
+.prep-set:first-of-type{border-top:0}
+.prep-ok{color:#168346;font-weight:600}
+.prep-missing{color:#b42318;font-weight:600}
+
+.media-box{border:1px dashed #cddceb;border-radius:14px;padding:13px;background:#f9fcff}
+.media-box-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.media-box-head strong{display:block;font-size:13px}.media-box-head span{display:block;margin-top:3px;color:var(--muted);font-size:10px}
+.mini-upload{display:inline-flex;align-items:center;justify-content:center;min-height:36px;padding:0 11px;border-radius:9px;background:#eef5fb;color:var(--navy);font-size:11px;font-weight:600;cursor:pointer}
+.image-preview{margin-top:10px;min-height:84px;border-radius:10px;background:#fff;border:1px solid #e3ebf2;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.image-preview img{display:block;max-width:100%;max-height:220px;object-fit:contain}
+.empty-preview{color:var(--muted);font-size:11px}
+
+.choice-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:4px 0 10px}
+.choice-heading strong{display:block;font-size:14px}.choice-heading span{display:block;margin-top:3px;color:var(--muted);font-size:10px}
+.choice-list{display:grid;gap:10px}
+.choice-row{display:grid;grid-template-columns:36px 1fr auto;gap:10px;align-items:flex-start;padding:12px;border:1px solid #dce7f0;border-radius:14px;background:#fff}
+.choice-correct{padding-top:8px;text-align:center}.choice-correct input{width:20px;height:20px;accent-color:#0b447f}
+.choice-main{display:grid;gap:8px}
+.choice-main input[type="text"]{width:100%}
+.choice-media-preview{min-height:0}
+.choice-media-preview img{display:block;max-width:220px;max-height:130px;border-radius:8px;border:1px solid #e2eaf2;object-fit:contain}
+.choice-actions{display:flex;gap:6px}
+.choice-upload,.choice-remove{min-height:36px;padding:0 9px;border:1px solid var(--line);border-radius:9px;background:#fff;color:var(--navy);font-size:10px;font-weight:600;cursor:pointer}
+.choice-remove{color:#a12e2e;border-color:#f1cece}
+.form-help{font-size:10px;color:var(--muted);margin-top:4px}
+
+@media(max-width:1200px){.prep-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:767px){
+  .page-head{flex-direction:column}.page-actions{width:100%}.page-actions .btn{width:100%}
+  .prep-grid{grid-template-columns:1fr}
+  .choice-row{grid-template-columns:32px 1fr}.choice-actions{grid-column:2;flex-wrap:wrap}
+  .media-box-head,.choice-heading{align-items:flex-start;flex-direction:column}
+}
+
 </style>
 
 <style id="sante-admin-v2-scale">
@@ -1063,7 +1107,6 @@ html{font-size:16px;-webkit-text-size-adjust:100%}body,button,input,select,texta
 @media(max-width:820px){.sidebar{width:286px!important}.main{margin-left:0!important}.content{padding:18px 16px 32px!important}.topbar{min-height:68px!important;padding:0 16px!important}.page-title,.page-name,.header-title{font-size:25px!important}.page-description,.page-sub{font-size:15px!important}.stat-value,.summary-value{font-size:28px!important}.stat-label,.summary-label{font-size:14px!important}.nav-item,.nav-link,.menu-item,.nav-btn{font-size:16px!important}.table-wrap,.table-scroll{overflow-x:auto!important;-webkit-overflow-scrolling:touch}.modal-card{width:min(94vw,720px)!important;max-height:92vh!important}}
 @media(max-width:520px){body{font-size:15px!important}.content{padding:14px 12px 28px!important}.page-title,.page-name,.header-title{font-size:23px!important}.page-description,.page-sub{font-size:15px!important}.stat-value,.summary-value{font-size:27px!important}.form-input,.form-select,.form-textarea,input,select,textarea{font-size:16px!important}.primary-btn,.secondary-btn,.btn{font-size:15px!important}.course-grid,.session-grid,.stats,.summary,.stats-grid{grid-template-columns:1fr!important}}
 </style>
-<link rel="stylesheet" href="admin-member-master.css">
 </head>
 
 <body>
@@ -1150,6 +1193,9 @@ html{font-size:16px;-webkit-text-size-adjust:100%}body,button,input,select,texta
     <h1>นำเข้าข้อสอบ</h1>
     <p>เลือกสร้างข้อสอบได้ 2 วิธี: นำเข้าจาก Excel Template หรือสร้างข้อสอบทีละข้อในระบบ</p>
   </div>
+  <div class="page-actions">
+    <button class="btn btn-light" id="exportQuestionExcelBtn" type="button">↓ Export Excel</button>
+  </div>
 </section>
 
 <section class="method-grid">
@@ -1179,8 +1225,21 @@ html{font-size:16px;-webkit-text-size-adjust:100%}body,button,input,select,texta
       <div class="method-note">ข้อที่สร้างจะเข้าเป็น Draft Batch ก่อน เพื่อให้ตรวจสอบและกดนำเข้าตาม Workflow เดิม</div>
     </div>
   </article>
+
 </section>
 
+<section class="panel prep-structure-panel">
+  <div class="panel-header">
+    <div>
+      <h2>โครงสร้างข้อสอบหลักสูตรเตรียมสอบ</h2>
+      <p>แสดงจำนวนชุดข้อสอบและจำนวนข้อจริงในแต่ละชุด เพื่อป้องกันข้อมูล Master หายจากระบบ</p>
+    </div>
+    <button class="refresh" id="refreshExamStructureBtn" type="button">↻ รีเฟรชโครงสร้าง</button>
+  </div>
+  <div id="examStructureArea" class="prep-grid">
+    <div class="empty">กำลังโหลดโครงสร้างข้อสอบ...</div>
+  </div>
+</section>
 
 <!-- SUMMARY -->
 
@@ -1349,12 +1408,17 @@ html{font-size:16px;-webkit-text-size-adjust:100%}body,button,input,select,texta
 </div>
 
 
+
 <div class="modal" id="manualQuestionModal">
   <div class="modal-card manual-modal-card">
     <div class="modal-header-row">
-      <div><h2>สร้างข้อสอบใหม่</h2><p>กรอกข้อมูลทีละข้อ แล้วบันทึกเป็นชุดข้อมูล Draft เพื่อรอตรวจสอบ</p></div>
+      <div>
+        <h2>สร้างข้อสอบทีละข้อ</h2>
+        <p>รูปแบบคล้าย Google Forms: กรอกคำถาม เพิ่มรูป เลือกประเภทคำตอบ และเลือกเฉลยที่หน้าตัวเลือกได้เลย</p>
+      </div>
       <button class="modal-close-x" id="closeManualQuestionBtn" type="button">×</button>
     </div>
+
     <div class="manual-grid">
       <div class="form-group">
         <label>หลักสูตร *</label>
@@ -1365,8 +1429,8 @@ html{font-size:16px;-webkit-text-size-adjust:100%}body,button,input,select,texta
         <select id="manualExam"></select>
       </div>
       <div class="form-group">
-        <label>รหัสชุดข้อสอบ</label>
-        <input id="manualSetCode" value="SET-01" placeholder="เช่น SET-01">
+        <label>ชุดข้อสอบ *</label>
+        <select id="manualSetCode"></select>
       </div>
       <div class="form-group">
         <label>ประเภทคำถาม *</label>
@@ -1376,28 +1440,57 @@ html{font-size:16px;-webkit-text-size-adjust:100%}body,button,input,select,texta
           <option value="TEXT">ตอบเป็นข้อความ</option>
         </select>
       </div>
+
       <div class="form-group full">
         <label>คำถาม *</label>
-        <textarea id="manualQuestionText" rows="4" placeholder="กรอกคำถาม"></textarea>
+        <textarea id="manualQuestionText" rows="4" placeholder="พิมพ์คำถาม"></textarea>
       </div>
-      <div class="form-group"><label>ตัวเลือก A</label><input id="manualA"></div>
-      <div class="form-group"><label>ตัวเลือก B</label><input id="manualB"></div>
-      <div class="form-group"><label>ตัวเลือก C</label><input id="manualC"></div>
-      <div class="form-group"><label>ตัวเลือก D</label><input id="manualD"></div>
-      <div class="form-group"><label>ตัวเลือก E</label><input id="manualE"></div>
-      <div class="form-group">
-        <label>คำตอบที่ถูกต้อง</label>
-        <input id="manualCorrect" placeholder="เช่น A หรือ A,B">
+
+      <div class="form-group full media-box">
+        <div class="media-box-head">
+          <div><strong>รูปประกอบคำถาม</strong><span>ไม่บังคับ — JPG / PNG / WEBP</span></div>
+          <label class="mini-upload">＋ เพิ่มรูป
+            <input id="manualQuestionImage" type="file" accept="image/jpeg,image/png,image/webp" hidden>
+          </label>
+        </div>
+        <div id="manualQuestionImagePreview" class="image-preview empty-preview">ยังไม่มีรูปคำถาม</div>
       </div>
-      <div class="form-group full">
+
+      <div id="manualChoicesSection" class="full">
+        <div class="choice-heading">
+          <div>
+            <strong>ตัวเลือกและเฉลย</strong>
+            <span id="answerInstruction">เลือกวงกลมหน้าคำตอบที่ถูกต้อง 1 ข้อ</span>
+          </div>
+          <button class="btn btn-light" type="button" id="addChoiceBtn">+ เพิ่มตัวเลือก</button>
+        </div>
+        <div id="manualChoices" class="choice-list"></div>
+      </div>
+
+      <div id="manualTextAnswerSection" class="form-group full" style="display:none">
         <label>คำตอบข้อความที่ยอมรับ</label>
-        <input id="manualAcceptedText" placeholder="ใช้กรณี TEXT เช่น คำตอบ1|คำตอบ2">
+        <textarea id="manualAcceptedText" rows="3" placeholder="กรอกคำตอบที่ยอมรับ คั่นหลายคำตอบด้วย | เช่น กรุงเทพ|กรุงเทพฯ|Bangkok"></textarea>
+        <div class="form-help">ระบบสามารถตรวจข้อความอัตโนมัติจากคำตอบที่กำหนดไว้</div>
       </div>
+
       <div class="form-group">
         <label>คะแนน</label>
         <input id="manualPoints" type="number" min="0" step="0.5" value="1">
       </div>
+      <div class="form-group">
+        <label>ระดับความยาก</label>
+        <select id="manualDifficulty">
+          <option value="EASY">ง่าย</option>
+          <option value="MEDIUM" selected>ปานกลาง</option>
+          <option value="HARD">ยาก</option>
+        </select>
+      </div>
+      <div class="form-group full">
+        <label>หมวดคำถาม</label>
+        <input id="manualCategory" placeholder="เช่น กฎหมาย / สารเคมี / ความปลอดภัย">
+      </div>
     </div>
+
     <div class="modal-actions">
       <button class="cancel" id="cancelManualQuestionBtn" type="button">ยกเลิก</button>
       <button class="confirm" id="saveManualQuestionBtn" type="button">บันทึกเป็น Draft</button>
@@ -1491,6 +1584,11 @@ let selectedBatch = null;
 let currentRows = [];
 let qiCourses=[];
 let qiExams=[];
+let qiSets=[];
+let qiSetQuestionCounts={};
+let manualChoiceCount=4;
+const manualChoiceFiles={};
+let manualQuestionImageFile=null;
 
 
 /* ==========================================
@@ -2150,7 +2248,7 @@ async function loadRows(batchId){
         sb
           .from("question_import_rows")
           .select(
-            "id,row_number,exam_set_code,question_code,question_type,question_text,points,choice_a,choice_b,choice_c,choice_d,choice_e,correct_answer,accepted_text_answers,validation_status,validation_errors,imported_question_id"
+            "id,row_number,exam_set_code,question_code,question_type,question_text,points,category,difficulty,question_image_path,choice_a,choice_a_image_path,choice_b,choice_b_image_path,choice_c,choice_c_image_path,choice_d,choice_d_image_path,choice_e,choice_e_image_path,correct_answer,accepted_text_answers,text_answer_auto_grade,validation_status,validation_errors,imported_question_id"
           )
         .eq(
           "batch_id",
@@ -2766,15 +2864,23 @@ document
    QUESTION CREATION / FILE TEMPLATE R14
 ========================================== */
 async function loadQuestionMasters(){
-  const [c,e]=await Promise.all([
-    sb.from("courses").select("id,course_code,course_name_th").order("sort_order",{ascending:true}),
-    sb.from("exams").select("id,course_id,exam_code,exam_name_th").order("created_at",{ascending:false})
+  const [c,e,s,q]=await Promise.all([
+    sb.from("courses").select("id,course_code,course_name_th,course_type,pass_percentage").order("sort_order",{ascending:true}),
+    sb.from("exams").select("id,course_id,exam_code,exam_name_th,pass_percentage,max_attempts,is_active").order("created_at",{ascending:false}),
+    sb.from("exam_sets").select("id,exam_id,set_code,set_name,set_number,expected_question_count,sort_order,is_active").order("sort_order",{ascending:true}),
+    sb.from("exam_set_questions").select("exam_set_id")
   ]);
   if(c.error) throw c.error;
   if(e.error) throw e.error;
+  if(s.error) throw s.error;
+  if(q.error) throw q.error;
   qiCourses=c.data||[];
   qiExams=e.data||[];
+  qiSets=s.data||[];
+  qiSetQuestionCounts={};
+  (q.data||[]).forEach(x=>qiSetQuestionCounts[x.exam_set_id]=(qiSetQuestionCounts[x.exam_set_id]||0)+1);
   renderManualMasterOptions();
+  renderExamPrepStructure();
 }
 
 function renderManualMasterOptions(){
@@ -2792,59 +2898,54 @@ function refreshManualExamOptions(){
   const courseId=document.getElementById("manualCourse")?.value||"";
   const exam=document.getElementById("manualExam");
   if(!exam)return;
+  const old=exam.value;
   exam.innerHTML='<option value="">เลือกข้อสอบ / Exam</option>'+
     qiExams.filter(x=>!courseId||x.course_id===courseId)
       .map(x=>`<option value="${escapeHtml(x.id)}">${escapeHtml(x.exam_name_th||x.exam_code||"-")}</option>`).join("");
+  if(old && [...exam.options].some(o=>o.value===old)) exam.value=old;
+  refreshManualSetOptions();
+}
+
+function refreshManualSetOptions(){
+  const examId=document.getElementById("manualExam")?.value||"";
+  const set=document.getElementById("manualSetCode");
+  if(!set)return;
+  set.innerHTML='<option value="">เลือกชุดข้อสอบ</option>'+
+    qiSets.filter(x=>!examId||x.exam_id===examId)
+      .map(x=>`<option value="${escapeHtml(x.set_code)}">${escapeHtml(x.set_name||x.set_code)} (${escapeHtml(x.set_code)})</option>`).join("");
+}
+
+function renderExamPrepStructure(){
+  const area=document.getElementById("examStructureArea");
+  if(!area)return;
+  const config=[
+    ["EXAM-BOCHO","บุคลากรเฉพาะ (บฉ.)",5,80],
+    ["EXAM-WASTE","ผู้ควบคุมกากอุตสาหกรรม",4,70],
+    ["EXAM-WATER","ผู้ควบคุมน้ำ",4,70],
+    ["EXAM-AIR","ผู้ควบคุมอากาศ",3,70],
+    ["EXAM-RSO","RSO ระดับต้น",2,70]
+  ];
+  area.innerHTML=config.map(([code,label,expectedSets,pass])=>{
+    const exam=qiExams.find(x=>String(x.exam_code||"").toUpperCase()===code);
+    const sets=exam?qiSets.filter(s=>s.exam_id===exam.id).sort((a,b)=>(a.set_number||0)-(b.set_number||0)):[];
+    const setRows=Array.from({length:expectedSets},(_,i)=>{
+      const s=sets.find(x=>Number(x.set_number||0)===i+1);
+      const actual=s?(qiSetQuestionCounts[s.id]||0):0;
+      return `<div class="prep-set">
+        <span>ชุดที่ ${i+1}</span>
+        <span class="${s?'prep-ok':'prep-missing'}">${s?`${actual}/${s.expected_question_count||100} ข้อ`:"ยังไม่มี Master"}</span>
+      </div>`;
+    }).join("");
+    return `<article class="prep-card">
+      <h3>${escapeHtml(label)}</h3>
+      <div class="exam-code">${code} · ${expectedSets} ชุด × 100 ข้อ · ผ่าน ${pass}%</div>
+      ${setRows}
+    </article>`;
+  }).join("");
 }
 
 function downloadQuestionTemplate(){
-  if(!window.XLSX){showMessage("error","ไม่สามารถสร้าง Excel Template ได้");return;}
-  const rows=[
-    {
-      exam_set_code:"SET-01",
-      question_code:"Q001",
-      question_type:"SINGLE_CHOICE",
-      question_text:"ตัวอย่างคำถาม: PPE ย่อมาจากอะไร?",
-      points:1,
-      choice_a:"Personal Protective Equipment",
-      choice_b:"Process Protection Equipment",
-      choice_c:"Plant Protection Engineering",
-      choice_d:"Personal Process Evaluation",
-      choice_e:"",
-      correct_answer:"A",
-      accepted_text_answers:""
-    },
-    {
-      exam_set_code:"SET-01",
-      question_code:"Q002",
-      question_type:"TEXT",
-      question_text:"ตัวอย่างคำถามแบบข้อความ",
-      points:1,
-      choice_a:"",
-      choice_b:"",
-      choice_c:"",
-      choice_d:"",
-      choice_e:"",
-      correct_answer:"",
-      accepted_text_answers:"คำตอบที่ 1|คำตอบที่ 2"
-    }
-  ];
-  const ws=XLSX.utils.json_to_sheet(rows);
-  const wb=XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb,ws,"Questions");
-  const guide=[
-    ["Field","คำอธิบาย"],
-    ["exam_set_code","รหัสชุดข้อสอบ เช่น SET-01"],
-    ["question_code","รหัสคำถาม เช่น Q001"],
-    ["question_type","SINGLE_CHOICE / MULTIPLE_CHOICE / TEXT"],
-    ["question_text","คำถาม"],
-    ["points","คะแนน"],
-    ["choice_a - choice_e","ตัวเลือก"],
-    ["correct_answer","A หรือ A,B กรณี multiple choice"],
-    ["accepted_text_answers","กรณี TEXT คั่นหลายคำตอบด้วย |"]
-  ];
-  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(guide),"คู่มือ");
-  XLSX.writeFile(wb,"SANTE-Question-Import-Template.xlsx");
+  window.location.href="SANTE_Question_Bank_Import_Template_R15.xlsx";
 }
 
 async function handleQuestionFile(file){
@@ -2866,13 +2967,22 @@ async function handleQuestionFile(file){
       question_type:String(r.question_type||r["question_type"]||"SINGLE_CHOICE").trim().toUpperCase(),
       question_text:String(r.question_text||r["question_text"]||"").trim(),
       points:Number(r.points||1),
+      category:String(r.category||"").trim(),
+      difficulty:String(r.difficulty||"MEDIUM").trim().toUpperCase(),
+      question_image_path:String(r.question_image_path||"").trim(),
       choice_a:String(r.choice_a||"").trim(),
+      choice_a_image_path:String(r.choice_a_image_path||"").trim(),
       choice_b:String(r.choice_b||"").trim(),
+      choice_b_image_path:String(r.choice_b_image_path||"").trim(),
       choice_c:String(r.choice_c||"").trim(),
+      choice_c_image_path:String(r.choice_c_image_path||"").trim(),
       choice_d:String(r.choice_d||"").trim(),
+      choice_d_image_path:String(r.choice_d_image_path||"").trim(),
       choice_e:String(r.choice_e||"").trim(),
+      choice_e_image_path:String(r.choice_e_image_path||"").trim(),
       correct_answer:String(r.correct_answer||"").trim(),
-      accepted_text_answers:String(r.accepted_text_answers||"").trim()
+      accepted_text_answers:String(r.accepted_text_answers||"").trim(),
+      text_answer_auto_grade:String(r.text_answer_auto_grade??"TRUE").toUpperCase()!=="FALSE"
     }));
     const invalid=normalized.filter(x=>!x.question_text||!["SINGLE_CHOICE","MULTIPLE_CHOICE","TEXT"].includes(x.question_type));
     if(invalid.length) throw new Error(`พบข้อมูลไม่ครบ/ประเภทไม่ถูกต้อง ${invalid.length} แถว`);
@@ -2915,22 +3025,131 @@ async function handleQuestionFile(file){
 }
 
 function openManualQuestionModal(){
+  resetManualQuestionForm();
   document.getElementById("manualQuestionModal").classList.add("show");
 }
 function closeManualQuestionModal(){
   document.getElementById("manualQuestionModal").classList.remove("show");
 }
 
+function resetManualQuestionForm(){
+  manualChoiceCount=4;
+  Object.keys(manualChoiceFiles).forEach(k=>delete manualChoiceFiles[k]);
+  manualQuestionImageFile=null;
+  document.getElementById("manualQuestionText").value="";
+  document.getElementById("manualPoints").value="1";
+  document.getElementById("manualDifficulty").value="MEDIUM";
+  document.getElementById("manualCategory").value="";
+  document.getElementById("manualAcceptedText").value="";
+  document.getElementById("manualType").value="SINGLE_CHOICE";
+  const p=document.getElementById("manualQuestionImagePreview");
+  p.className="image-preview empty-preview";
+  p.textContent="ยังไม่มีรูปคำถาม";
+  renderManualChoices();
+  updateManualQuestionTypeUI();
+}
+
+function choiceLetter(index){return String.fromCharCode(65+index)}
+
+function renderManualChoices(){
+  const root=document.getElementById("manualChoices");
+  const type=document.getElementById("manualType").value;
+  const inputType=type==="MULTIPLE_CHOICE"?"checkbox":"radio";
+  const name=inputType==="radio"?'name="manualCorrectChoice"':"";
+  root.innerHTML=Array.from({length:manualChoiceCount},(_,i)=>{
+    const L=choiceLetter(i);
+    return `<div class="choice-row" data-choice="${L}">
+      <div class="choice-correct">
+        <input type="${inputType}" ${name} value="${L}" data-correct-choice aria-label="คำตอบที่ถูกต้อง ${L}">
+      </div>
+      <div class="choice-main">
+        <input type="text" id="manualChoice${L}" placeholder="ตัวเลือก ${L}">
+        <div id="manualChoicePreview${L}" class="choice-media-preview"></div>
+      </div>
+      <div class="choice-actions">
+        <label class="choice-upload">รูปตัวเลือก
+          <input type="file" accept="image/jpeg,image/png,image/webp" data-choice-file="${L}" hidden>
+        </label>
+        ${manualChoiceCount>2?`<button type="button" class="choice-remove" data-remove-choice="${L}">ลบ</button>`:""}
+      </div>
+    </div>`;
+  }).join("");
+  root.querySelectorAll("[data-choice-file]").forEach(input=>{
+    input.addEventListener("change",e=>{
+      const L=input.dataset.choiceFile;
+      const file=e.target.files?.[0]||null;
+      if(file){
+        manualChoiceFiles[L]=file;
+        const url=URL.createObjectURL(file);
+        document.getElementById("manualChoicePreview"+L).innerHTML=`<img src="${url}" alt="รูปตัวเลือก ${L}">`;
+      }
+    });
+  });
+  root.querySelectorAll("[data-remove-choice]").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      if(manualChoiceCount<=2)return;
+      manualChoiceCount--;
+      renderManualChoices();
+    });
+  });
+}
+
+function updateManualQuestionTypeUI(){
+  const type=document.getElementById("manualType").value;
+  const choiceSection=document.getElementById("manualChoicesSection");
+  const textSection=document.getElementById("manualTextAnswerSection");
+  if(type==="TEXT"){
+    choiceSection.style.display="none";
+    textSection.style.display="flex";
+  }else{
+    choiceSection.style.display="block";
+    textSection.style.display="none";
+    document.getElementById("answerInstruction").textContent=
+      type==="MULTIPLE_CHOICE"
+        ?"ติ๊กหน้าตัวเลือกที่ถูกต้องได้มากกว่า 1 ข้อ"
+        :"เลือกวงกลมหน้าคำตอบที่ถูกต้อง 1 ข้อ";
+    renderManualChoices();
+  }
+}
+
+function getSelectedCorrectAnswers(){
+  return [...document.querySelectorAll("[data-correct-choice]:checked")].map(x=>x.value).join(",");
+}
+
+async function uploadQuestionMedia(file,folder,name){
+  if(!file)return null;
+  if(file.size>10*1024*1024)throw new Error("รูปภาพแต่ละไฟล์ต้องไม่เกิน 10 MB");
+  const safe=(file.name||"image").replace(/[^A-Za-z0-9._-]/g,"_");
+  const path=`${folder}/${Date.now()}-${name}-${safe}`;
+  const r=await sb.storage.from("question-media").upload(path,file,{upsert:false,contentType:file.type||"application/octet-stream"});
+  if(r.error)throw r.error;
+  return r.data?.path||path;
+}
+
 async function saveManualQuestion(){
   const courseId=document.getElementById("manualCourse").value;
   const examId=document.getElementById("manualExam").value;
+  const setCode=document.getElementById("manualSetCode").value;
   const questionText=document.getElementById("manualQuestionText").value.trim();
-  if(!courseId||!examId||!questionText){
-    alert("กรุณาเลือกหลักสูตร เลือก Exam และกรอกคำถาม");
+  const type=document.getElementById("manualType").value;
+
+  if(!courseId||!examId||!setCode||!questionText){
+    alert("กรุณาเลือกหลักสูตร เลือก Exam เลือกชุดข้อสอบ และกรอกคำถาม");
     return;
   }
+
+  let correct="";
+  if(type!=="TEXT"){
+    correct=getSelectedCorrectAnswers();
+    if(!correct){
+      alert("กรุณาเลือกคำตอบที่ถูกต้องที่หน้าตัวเลือก");
+      return;
+    }
+  }
+
   const btn=document.getElementById("saveManualQuestionBtn");
   btn.disabled=true;
+  btn.textContent="กำลังบันทึก...";
   try{
     const batch=await sb.from("question_import_batches").insert({
       batch_name:`Manual Question ${new Date().toLocaleString("th-TH")}`,
@@ -2939,22 +3158,31 @@ async function saveManualQuestion(){
     }).select("id").single();
     if(batch.error)throw batch.error;
 
-    const type=document.getElementById("manualType").value;
+    const folder=`manual/${examId}/${setCode}/${batch.data.id}`;
+    const questionImagePath=await uploadQuestionMedia(manualQuestionImageFile,folder,"question");
+
+    const choiceData={};
+    for(let i=0;i<manualChoiceCount;i++){
+      const L=choiceLetter(i);
+      choiceData["choice_"+L.toLowerCase()]=document.getElementById("manualChoice"+L)?.value.trim()||null;
+      choiceData["choice_"+L.toLowerCase()+"_image_path"]=await uploadQuestionMedia(manualChoiceFiles[L],folder,L);
+    }
+
     const accepted=document.getElementById("manualAcceptedText").value.trim();
     const row=await sb.from("question_import_rows").insert({
       batch_id:batch.data.id,row_number:1,
-      exam_set_code:document.getElementById("manualSetCode").value.trim()||"SET-01",
-      question_code:"Q"+Date.now().toString().slice(-6),
+      exam_set_code:setCode,
+      question_code:"Q"+Date.now().toString().slice(-8),
       question_type:type,
       question_text:questionText,
       points:Number(document.getElementById("manualPoints").value||1),
-      choice_a:document.getElementById("manualA").value.trim()||null,
-      choice_b:document.getElementById("manualB").value.trim()||null,
-      choice_c:document.getElementById("manualC").value.trim()||null,
-      choice_d:document.getElementById("manualD").value.trim()||null,
-      choice_e:document.getElementById("manualE").value.trim()||null,
-      correct_answer:document.getElementById("manualCorrect").value.trim()||null,
-      accepted_text_answers:accepted?accepted.split("|").map(v=>v.trim()).filter(Boolean):null,
+      category:document.getElementById("manualCategory").value.trim()||null,
+      difficulty:document.getElementById("manualDifficulty").value||"MEDIUM",
+      question_image_path:questionImagePath,
+      ...choiceData,
+      correct_answer:type==="TEXT"?null:correct,
+      accepted_text_answers:type==="TEXT"&&accepted?accepted.split("|").map(v=>v.trim()).filter(Boolean):null,
+      text_answer_auto_grade:type==="TEXT",
       validation_status:"PENDING",
       validation_errors:[]
     });
@@ -2969,7 +3197,19 @@ async function saveManualQuestion(){
     alert("สร้างข้อสอบไม่สำเร็จ: "+(error.message||error));
   }finally{
     btn.disabled=false;
+    btn.textContent="บันทึกเป็น Draft";
   }
+}
+
+function exportQuestionExcel(){
+  if(!window.XLSX){showMessage("error","ไม่สามารถโหลดระบบ Export Excel ได้");return;}
+  const rows=currentRows.length?currentRows:batches.map(x=>({
+    batch_name:x.batch_name,import_status:x.import_status,total_rows:x.total_rows,
+    valid_rows:x.valid_rows,invalid_rows:x.invalid_rows,imported_rows:x.imported_rows,created_at:x.created_at
+  }));
+  const wb=XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(rows),currentRows.length?"Questions":"Batches");
+  XLSX.writeFile(wb,`SANTE-Question-Export-${new Date().toISOString().slice(0,10)}.xlsx`);
 }
 
 document.getElementById("downloadTemplateBtn")?.addEventListener("click",downloadQuestionTemplate);
@@ -2979,6 +3219,22 @@ document.getElementById("closeManualQuestionBtn")?.addEventListener("click",clos
 document.getElementById("cancelManualQuestionBtn")?.addEventListener("click",closeManualQuestionModal);
 document.getElementById("saveManualQuestionBtn")?.addEventListener("click",saveManualQuestion);
 document.getElementById("manualCourse")?.addEventListener("change",refreshManualExamOptions);
+document.getElementById("manualExam")?.addEventListener("change",refreshManualSetOptions);
+document.getElementById("manualType")?.addEventListener("change",updateManualQuestionTypeUI);
+document.getElementById("addChoiceBtn")?.addEventListener("click",()=>{if(manualChoiceCount<5){manualChoiceCount++;renderManualChoices();}});
+document.getElementById("manualQuestionImage")?.addEventListener("change",e=>{
+  manualQuestionImageFile=e.target.files?.[0]||null;
+  const preview=document.getElementById("manualQuestionImagePreview");
+  if(manualQuestionImageFile){
+    preview.className="image-preview";
+    preview.innerHTML=`<img src="${URL.createObjectURL(manualQuestionImageFile)}" alt="รูปคำถาม">`;
+  }else{
+    preview.className="image-preview empty-preview";
+    preview.textContent="ยังไม่มีรูปคำถาม";
+  }
+});
+document.getElementById("exportQuestionExcelBtn")?.addEventListener("click",exportQuestionExcel);
+document.getElementById("refreshExamStructureBtn")?.addEventListener("click",loadQuestionMasters);
 document.getElementById("manualQuestionModal")?.addEventListener("click",e=>{
   if(e.target.id==="manualQuestionModal") closeManualQuestionModal();
 });
@@ -3003,9 +3259,6 @@ document.addEventListener("DOMContentLoaded", function(){
   });
 });
 </script>
-
-<script src="admin-member-master.js"></script>
-
 <div id="buildMarker" style="position:fixed;right:10px;bottom:10px;z-index:99999;
 font:600 10px/1.2 Prompt,sans-serif;color:#60789c;background:rgba(255,255,255,.88);
 border:1px solid #dbe6f1;border-radius:8px;padding:6px 8px;">
