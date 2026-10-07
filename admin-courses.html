@@ -1,2716 +1,391 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>จัดการหลักสูตร | SANTE Admin</title>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap"
-    rel="stylesheet"
-  >
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    :root {
-      --navy: #102b4e;
-      --navy-dark: #0b203d;
-      --navy-soft: #17385f;
-      --yellow: #f6c744;
-      --yellow-soft: #fff6d7;
-      --bg: #f5f7fb;
-      --white: #ffffff;
-      --text: #1b2b40;
-      --muted: #6f7d8f;
-      --line: #e4e9f0;
-      --green: #1d9b67;
-      --green-soft: #eaf8f2;
-      --red: #d94c4c;
-      --red-soft: #fff0f0;
-      --orange: #e88a25;
-      --orange-soft: #fff4e7;
-      --blue: #2878c8;
-      --blue-soft: #edf6ff;
-      --shadow: 0 8px 28px rgba(16, 43, 78, 0.07);
-      --radius: 18px;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      font-family: "Prompt", sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      font-size: 16px;
-    }
-
-    button,
-    input,
-    select,
-    textarea {
-      font-family: "Prompt", sans-serif;
-    }
-
-    button {
-      cursor: pointer;
-    }
-
-    /* =========================
-       LOADING
-    ========================= */
-
-    .page-loading {
-      position: fixed;
-      inset: 0;
-      z-index: 9999;
-      background: var(--white);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      gap: 18px;
-    }
-
-    .loading-logo {
-      width: 100px;
-      height: 100px;
-      object-fit: contain;
-    }
-
-    .spinner {
-      width: 36px;
-      height: 36px;
-      border: 4px solid #e7ebf1;
-      border-top-color: var(--navy);
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-    }
-
-    @keyframes spin {
-      to {
-        transform: rotate(360deg);
-      }
-    }
-
-    .loading-text {
-      color: var(--muted);
-      font-size: 16px;
-    }
-
-    /* =========================
-       SIDEBAR
-    ========================= */
-
-    .sidebar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      bottom: 0;
-      width: 296px;
-      background: var(--navy);
-      color: var(--white);
-      z-index: 1000;
-      overflow-y: auto;
-    }
-
-    .brand {
-      padding: 28px 24px 24px;
-      border-bottom: 1px solid rgba(255,255,255,0.10);
-    }
-
-    .brand-row {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-
-    .brand-logo {
-      width: 56px;
-      height: 56px;
-      border-radius: 14px;
-      background: #fff;
-      padding: 5px;
-      object-fit: contain;
-    }
-
-    .brand-name {
-      font-size: 24px;
-      font-weight: 700;
-      line-height: 1.1;
-    }
-
-    .brand-subtitle {
-      margin-top: 5px;
-      font-size: 13px;
-      color: rgba(255,255,255,0.65);
-    }
-
-    .sidebar-section-title {
-      padding: 24px 24px 9px;
-      font-size: 12px;
-      color: rgba(255,255,255,0.46);
-      letter-spacing: 0.7px;
-    }
-
-    .nav {
-      padding: 0 14px 28px;
-    }
-
-    .nav-item {
-      display: flex;
-      align-items: center;
-      gap: 13px;
-      min-height: 52px;
-      padding: 12px 16px;
-      border-radius: 13px;
-      text-decoration: none;
-      color: rgba(255,255,255,0.82);
-      margin: 4px 0;
-      font-size: 15px;
-      font-weight: 400;
-      transition: 0.2s ease;
-    }
-
-    .nav-item:hover {
-      background: rgba(255,255,255,0.08);
-      color: #fff;
-    }
-
-    .nav-item.active {
-      background: var(--yellow);
-      color: var(--navy);
-      font-weight: 600;
-    }
-
-    .nav-icon {
-      width: 25px;
-      text-align: center;
-      font-size: 19px;
-      flex-shrink: 0;
-    }
-
-    /* =========================
-       MAIN
-    ========================= */
-
-    .main {
-      margin-left: 296px;
-      min-height: 100vh;
-    }
-
-    .topbar {
-      height: 80px;
-      background: var(--white);
-      border-bottom: 1px solid var(--line);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 34px;
-      position: sticky;
-      top: 0;
-      z-index: 900;
-    }
-
-    .topbar-title {
-      font-size: 20px;
-      font-weight: 600;
-      color: var(--navy);
-    }
-
-    .topbar-right {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-
-    .admin-user {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .avatar {
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
-      background: var(--navy);
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 600;
-    }
-
-    .admin-info {
-      line-height: 1.25;
-    }
-
-    .admin-name {
-      font-size: 14px;
-      font-weight: 600;
-    }
-
-    .admin-role {
-      font-size: 12px;
-      color: var(--muted);
-      margin-top: 3px;
-    }
-
-    .logout-btn {
-      border: 1px solid var(--line);
-      background: white;
-      color: var(--muted);
-      padding: 9px 14px;
-      border-radius: 10px;
-      font-size: 13px;
-    }
-
-    .logout-btn:hover {
-      color: var(--red);
-      border-color: #f0caca;
-      background: var(--red-soft);
-    }
-
-    .mobile-menu-btn {
-      display: none;
-      border: 0;
-      background: transparent;
-      font-size: 24px;
-      color: var(--navy);
-    }
-
-    .content {
-      padding: 32px 34px 60px;
-      max-width: 1700px;
-      margin: 0 auto;
-    }
-
-    /* =========================
-       PAGE HEADER
-    ========================= */
-
-    .page-header {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 20px;
-      margin-bottom: 26px;
-    }
-
-    .page-title {
-      font-size: 30px;
-      color: var(--navy);
-      font-weight: 700;
-      line-height: 1.3;
-    }
-
-    .page-description {
-      color: var(--muted);
-      font-size: 15px;
-      margin-top: 7px;
-      line-height: 1.7;
-    }
-
-    .primary-btn {
-      border: none;
-      background: var(--yellow);
-      color: var(--navy);
-      padding: 13px 20px;
-      border-radius: 12px;
-      font-weight: 600;
-      font-size: 15px;
-      min-height: 48px;
-      box-shadow: 0 5px 15px rgba(246,199,68,0.22);
-    }
-
-    .primary-btn:hover {
-      filter: brightness(0.98);
-      transform: translateY(-1px);
-    }
-
-    /* =========================
-       SUMMARY
-    ========================= */
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 18px;
-      margin-bottom: 24px;
-    }
-
-    .stat-card {
-      background: white;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      padding: 21px;
-      box-shadow: var(--shadow);
-    }
-
-    .stat-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-    }
-
-    .stat-label {
-      color: var(--muted);
-      font-size: 14px;
-    }
-
-    .stat-icon {
-      width: 42px;
-      height: 42px;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 19px;
-      background: var(--blue-soft);
-    }
-
-    .stat-value {
-      margin-top: 10px;
-      font-size: 31px;
-      font-weight: 700;
-      color: var(--navy);
-    }
-
-    /* =========================
-       TOOLBAR
-    ========================= */
-
-    .panel {
-      background: white;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-    }
-
-    .toolbar {
-      padding: 20px;
-      display: grid;
-      grid-template-columns: minmax(280px, 1fr) 230px 210px;
-      gap: 14px;
-      margin-bottom: 22px;
-    }
-
-    .field-control {
-      width: 100%;
-      height: 48px;
-      border: 1px solid var(--line);
-      border-radius: 11px;
-      background: white;
-      padding: 0 14px;
-      color: var(--text);
-      font-size: 14px;
-      outline: none;
-    }
-
-    .field-control:focus {
-      border-color: #aebdd0;
-      box-shadow: 0 0 0 3px rgba(16,43,78,0.06);
-    }
-
-    /* =========================
-       COURSE GRID
-    ========================= */
-
-    .course-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 20px;
-    }
-
-    .course-card {
-      background: white;
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      overflow: hidden;
-      box-shadow: var(--shadow);
-      display: flex;
-      flex-direction: column;
-      min-height: 330px;
-    }
-
-    .course-cover {
-      height: 8px;
-      background: var(--navy);
-    }
-
-    .course-body {
-      padding: 22px;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .course-head {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 12px;
-    }
-
-    .course-type {
-      display: inline-flex;
-      align-items: center;
-      padding: 6px 10px;
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: 500;
-      background: var(--blue-soft);
-      color: var(--blue);
-      margin-bottom: 12px;
-    }
-
-    .course-name {
-      font-size: 18px;
-      font-weight: 600;
-      color: var(--navy);
-      line-height: 1.55;
-    }
-
-    .status-badge {
-      white-space: nowrap;
-      display: inline-flex;
-      align-items: center;
-      padding: 6px 10px;
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: 500;
-    }
-
-    .status-active {
-      background: var(--green-soft);
-      color: var(--green);
-    }
-
-    .status-draft {
-      background: var(--orange-soft);
-      color: var(--orange);
-    }
-
-    .status-inactive {
-      background: #eef1f5;
-      color: #687485;
-    }
-
-    .course-description {
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.7;
-      margin-top: 10px;
-      min-height: 44px;
-    }
-
-    .course-info-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-top: 18px;
-    }
-
-    .course-info {
-      background: #f8fafc;
-      border-radius: 11px;
-      padding: 11px 12px;
-    }
-
-    .course-info-label {
-      font-size: 11px;
-      color: var(--muted);
-    }
-
-    .course-info-value {
-      margin-top: 4px;
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--navy);
-    }
-
-    .course-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 7px;
-      margin-top: 16px;
-    }
-
-    .tag {
-      font-size: 11px;
-      padding: 5px 9px;
-      border-radius: 999px;
-      background: #f0f3f7;
-      color: #59677a;
-    }
-
-    .course-actions {
-      display: flex;
-      gap: 9px;
-      margin-top: auto;
-      padding-top: 20px;
-    }
-
-    .secondary-btn {
-      flex: 1;
-      min-height: 42px;
-      border: 1px solid var(--line);
-      background: white;
-      color: var(--navy);
-      border-radius: 10px;
-      font-size: 13px;
-      font-weight: 500;
-    }
-
-    .secondary-btn:hover {
-      background: #f7f9fc;
-    }
-
-    .edit-btn {
-      background: var(--navy);
-      color: white;
-      border-color: var(--navy);
-    }
-
-    .edit-btn:hover {
-      background: var(--navy-dark);
-    }
-
-    /* =========================
-       EMPTY
-    ========================= */
-
-    .empty-state {
-      grid-column: 1 / -1;
-      background: white;
-      border: 1px dashed #ccd5e0;
-      border-radius: 18px;
-      padding: 60px 20px;
-      text-align: center;
-    }
-
-    .empty-icon {
-      font-size: 46px;
-      margin-bottom: 13px;
-    }
-
-    .empty-title {
-      color: var(--navy);
-      font-size: 19px;
-      font-weight: 600;
-    }
-
-    .empty-text {
-      margin-top: 6px;
-      color: var(--muted);
-      font-size: 14px;
-    }
-
-    /* =========================
-       MODAL
-    ========================= */
-
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 5000;
-      background: rgba(8, 25, 47, 0.55);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-    }
-
-    .modal-overlay.show {
-      display: flex;
-    }
-
-    .modal {
-      width: 100%;
-      max-width: 900px;
-      max-height: 92vh;
-      background: white;
-      border-radius: 20px;
-      overflow: hidden;
-      box-shadow: 0 25px 70px rgba(0,0,0,0.20);
-      display: flex;
-      flex-direction: column;
-    }
-
-    .modal-header {
-      padding: 21px 25px;
-      border-bottom: 1px solid var(--line);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 20px;
-    }
-
-    .modal-title {
-      color: var(--navy);
-      font-size: 21px;
-      font-weight: 700;
-    }
-
-    .close-btn {
-      width: 38px;
-      height: 38px;
-      border-radius: 50%;
-      border: 1px solid var(--line);
-      background: white;
-      font-size: 21px;
-      color: var(--muted);
-    }
-
-    .modal-body {
-      padding: 25px;
-      overflow-y: auto;
-    }
-
-    .form-section {
-      padding-bottom: 23px;
-      margin-bottom: 23px;
-      border-bottom: 1px solid var(--line);
-    }
-
-    .form-section:last-child {
-      border-bottom: none;
-      margin-bottom: 0;
-    }
-
-    .section-title {
-      font-size: 16px;
-      color: var(--navy);
-      font-weight: 600;
-      margin-bottom: 15px;
-    }
-
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 17px;
-    }
-
-    .form-group.full {
-      grid-column: 1 / -1;
-    }
-
-    .form-label {
-      display: block;
-      margin-bottom: 7px;
-      font-size: 13px;
-      font-weight: 500;
-      color: #435269;
-    }
-
-    .required {
-      color: var(--red);
-    }
-
-    .form-input,
-    .form-select,
-    .form-textarea {
-      width: 100%;
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      background: white;
-      padding: 11px 13px;
-      font-size: 14px;
-      color: var(--text);
-      outline: none;
-    }
-
-    .form-input,
-    .form-select {
-      min-height: 46px;
-    }
-
-    .form-textarea {
-      min-height: 95px;
-      resize: vertical;
-    }
-
-    .form-input:focus,
-    .form-select:focus,
-    .form-textarea:focus {
-      border-color: #aebdd0;
-      box-shadow: 0 0 0 3px rgba(16,43,78,0.05);
-    }
-
-    .helper {
-      margin-top: 6px;
-      color: var(--muted);
-      font-size: 11px;
-      line-height: 1.6;
-    }
-
-    .switch-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-    }
-
-    .check-card {
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      padding: 14px;
-      display: flex;
-      align-items: center;
-      gap: 11px;
-      cursor: pointer;
-    }
-
-    .check-card input {
-      width: 18px;
-      height: 18px;
-      accent-color: var(--navy);
-    }
-
-    .check-title {
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--navy);
-    }
-
-    .check-desc {
-      font-size: 11px;
-      color: var(--muted);
-      margin-top: 2px;
-    }
-
-    .modal-footer {
-      padding: 18px 25px;
-      border-top: 1px solid var(--line);
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      gap: 10px;
-      background: #fbfcfd;
-    }
-
-    .cancel-btn {
-      min-height: 45px;
-      padding: 0 18px;
-      border-radius: 10px;
-      border: 1px solid var(--line);
-      background: white;
-      color: var(--muted);
-      font-size: 14px;
-    }
-
-    .save-btn {
-      min-height: 45px;
-      padding: 0 22px;
-      border-radius: 10px;
-      border: none;
-      background: var(--navy);
-      color: white;
-      font-size: 14px;
-      font-weight: 600;
-    }
-
-    .save-btn:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
-
-    /* =========================
-       TOAST
-    ========================= */
-
-    .toast-container {
-      position: fixed;
-      top: 95px;
-      right: 25px;
-      z-index: 7000;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .toast {
-      min-width: 300px;
-      max-width: 430px;
-      background: white;
-      border: 1px solid var(--line);
-      border-radius: 13px;
-      padding: 14px 16px;
-      box-shadow: 0 14px 40px rgba(0,0,0,0.13);
-      font-size: 13px;
-      line-height: 1.6;
-      animation: toastIn 0.2s ease;
-    }
-
-    .toast.success {
-      border-left: 4px solid var(--green);
-    }
-
-    .toast.error {
-      border-left: 4px solid var(--red);
-    }
-
-    @keyframes toastIn {
-      from {
-        transform: translateY(-7px);
-        opacity: 0;
-      }
-      to {
-        transform: translateY(0);
-        opacity: 1;
-      }
-    }
-
-    /* =========================
-       RESPONSIVE
-    ========================= */
-
-    @media (max-width: 1250px) {
-      .course-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
-      .stats-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-    }
-
-    @media (max-width: 980px) {
-      .sidebar {
-        transform: translateX(-100%);
-        transition: 0.25s ease;
-      }
-
-      .sidebar.show {
-        transform: translateX(0);
-      }
-
-      .main {
-        margin-left: 0;
-      }
-
-      .mobile-menu-btn {
-        display: block;
-      }
-
-      .toolbar {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    @media (max-width: 720px) {
-      .topbar {
-        height: 70px;
-        padding: 0 18px;
-      }
-
-      .content {
-        padding: 23px 17px 45px;
-      }
-
-      .page-header {
-        flex-direction: column;
-      }
-
-      .primary-btn {
-        width: 100%;
-      }
-
-      .stats-grid,
-      .course-grid,
-      .form-grid,
-      .switch-row {
-        grid-template-columns: 1fr;
-      }
-
-      .admin-info {
-        display: none;
-      }
-
-      .page-title {
-        font-size: 25px;
-      }
-    }
-  
-/* ===== SANTE ADMIN VISUAL FIX R11 : COURSES ===== */
-
-/* Header identical visual language to dashboard */
-.topbar{
-  height:82px!important;
-  padding:0 28px!important;
-  background:rgba(255,255,255,.98)!important;
-  border-bottom:1px solid #e1eaf3!important;
-  box-shadow:0 2px 10px rgba(8,45,105,.02)!important;
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>SANTE Admin | หลักสูตร</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#082d69;--navy-dark:#061f4b;--navy-soft:#0d4386;
+  --yellow:#ffbf19;--yellow-soft:#fff4cf;--blue:#087df0;
+  --green:#159447;--red:#b42318;--bg:#f1f7fb;--white:#fff;
+  --text:#082d69;--muted:#6f83a2;--line:#d9e5ef;--sidebar:285px;
 }
-.dashboard-style-topbar-left{
-  display:flex;
-  align-items:center;
-  gap:14px;
-  min-width:0;
-  flex:1;
-}
-.global-search-shell{
-  width:min(590px,52vw);
-  height:46px;
-  border-radius:999px;
-  background:#edf3f9;
-  display:flex;
-  align-items:center;
-  gap:10px;
-  padding:0 18px;
-  border:1px solid transparent;
-}
-.global-search-shell:focus-within{
-  border-color:#d0deec;
-  background:#f6f9fc;
-}
-.global-search-icon{
-  color:#6f849d;
-  font-size:16px;
-  line-height:1;
-}
-.global-search-shell input{
-  width:100%;
-  border:0!important;
-  outline:0!important;
-  background:transparent!important;
-  color:#18324f;
-  font:400 13px/1.2 "Prompt",sans-serif;
-  padding:0!important;
-}
-.global-search-shell input::placeholder{color:#7d90a5}
+html,body{width:100%;min-height:100%}
+body{font-family:"Prompt",sans-serif;color:var(--text);background:var(--bg);font-size:16px;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none} button,input,select,textarea{font-family:"Prompt",sans-serif}
 
-/* User block like dashboard */
-.topbar-right{gap:14px!important}
-.admin-user{gap:10px!important}
-.avatar{
-  width:42px!important;height:42px!important;
-  background:#0b4f88!important;
-  font-size:15px!important;
-}
-.admin-name{
-  font-size:14px!important;
-  font-weight:600!important;
-  color:#102442!important;
-}
-.admin-role{
-  font-size:10px!important;
-  color:#7b8da2!important;
-}
-.logout-btn{
-  min-height:42px!important;
-  padding:0 18px!important;
-  border-radius:11px!important;
-  background:#fff!important;
-  border:1px solid #d6e1ec!important;
-  color:#102442!important;
-  font-weight:600!important;
-}
-
-/* Sidebar: remove edge artifact and match dashboard proportions */
 .sidebar{
-  width:240px!important;
-  border-right:0!important;
-  box-shadow:none!important;
-  background:linear-gradient(180deg,#0b568e 0%,#0a477a 55%,#083d6b 100%)!important;
+  position:fixed;left:0;top:0;bottom:0;z-index:300;width:var(--sidebar);
+  display:flex;flex-direction:column;
+  background:linear-gradient(180deg,#082d69 0%,#06265c 55%,#061f4b 100%);
+  color:#fff;overflow-y:auto;
 }
-.main{
-  margin-left:240px!important;
-  border-left:0!important;
-  box-shadow:none!important;
-}
-.sidebar::before,.sidebar::after,.main::before,.main::after{
-  content:none!important;display:none!important;
-}
+.sidebar-brand{min-height:128px;display:flex;align-items:center;justify-content:center;padding:22px 25px;border-bottom:1px solid rgba(255,255,255,.10)}
+.sidebar-brand img{display:block;width:190px;max-width:100%;height:82px;object-fit:contain}
+.sidebar-label{padding:26px 25px 10px;color:#9bb1d0;font-size:12px;font-weight:500;letter-spacing:1.7px}
+.nav{padding:0 15px 25px}
+.nav-link{min-height:58px;display:flex;align-items:center;gap:14px;margin:5px 0;padding:0 17px;border-radius:16px;color:#e4edfa;font-size:15px;font-weight:500;transition:.18s ease}
+.nav-link:hover{background:rgba(255,255,255,.08);color:#fff}
+.nav-link.active{background:var(--yellow);color:var(--navy);font-weight:600;box-shadow:0 7px 18px rgba(0,0,0,.10)}
+.nav-icon{width:29px;flex:0 0 29px;display:grid;place-items:center;font-size:21px;line-height:1}
+.sidebar-footer{margin:auto 15px 22px;padding:18px;border-radius:17px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.05)}
+.sidebar-footer strong{display:block;font-size:13px;font-weight:600}
+.sidebar-footer p{margin-top:6px;color:#b6c8e2;font-size:11px;line-height:1.65}
 
-/* Brand simplified to look like dashboard sidebar */
-.brand{
-  min-height:142px!important;
-  padding:22px 18px!important;
-  display:flex!important;
-  justify-content:center!important;
-  align-items:center!important;
-  border-bottom:1px solid rgba(255,255,255,.13)!important;
+.main{min-height:100vh;margin-left:var(--sidebar);padding-top:88px}
+.topbar{
+  position:fixed;top:0;left:var(--sidebar);right:0;z-index:500;height:88px;
+  display:flex;align-items:center;justify-content:space-between;gap:24px;padding:0 34px;
+  background:rgba(255,255,255,.97);border-bottom:1px solid #e2ebf3;
+  box-shadow:0 3px 14px rgba(8,45,105,.025)
 }
-.brand-row{display:block!important;text-align:center!important}
-.brand-logo{
-  width:108px!important;
-  height:82px!important;
-  border-radius:0!important;
-  background:transparent!important;
-  padding:0!important;
-  object-fit:contain!important;
-}
-.brand-name,.brand-subtitle{display:none!important}
-.sidebar-section-title{
-  padding:19px 22px 8px!important;
-  font-size:10px!important;
-  letter-spacing:.45px!important;
-  color:rgba(255,255,255,.50)!important;
-  text-transform:uppercase;
-}
-.nav{padding:0 12px 26px!important}
-.nav-item{
-  min-height:48px!important;
-  margin:4px 0!important;
-  padding:10px 13px!important;
-  border-radius:10px!important;
-  gap:11px!important;
-  font-size:12px!important;
-  color:#fff!important;
-}
-.nav-item.active{
-  background:#ffc83d!important;
-  color:#082b50!important;
-  box-shadow:none!important;
-}
-.nav-icon{font-size:16px!important;width:25px!important}
+.topbar-left{display:flex;align-items:center;gap:14px}
+.page-name{font-size:21px;line-height:1.3;font-weight:600}
+.page-sub{margin-top:4px;color:var(--muted);font-size:12px}
+.mobile-menu{display:none;width:44px;height:44px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--navy);font-size:21px;cursor:pointer}
+.admin-area{display:flex;align-items:center;gap:17px}
+.admin-copy{text-align:right}
+.admin-name{font-size:15px;font-weight:600}
+.admin-email{margin-top:2px;color:var(--muted);font-size:11px}
+.logout{min-height:46px;padding:0 18px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--navy);font-size:13px;font-weight:600;cursor:pointer}
 
-/* Page spacing aligned with dashboard */
-.content{
-  padding:30px 28px 46px!important;
-}
-.page-header{
-  margin-bottom:22px!important;
-}
+.content{width:min(1540px,calc(100% - 58px));margin:0 auto;padding:30px 0 65px}
+.page-head{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;margin:2px 4px 22px}
+.page-head h1{font-size:30px;line-height:1.3;font-weight:600}
+.page-head p{margin-top:6px;color:var(--muted);font-size:13px}
+.btn{min-height:46px;padding:0 18px;border:0;border-radius:12px;font-size:13px;font-weight:600;cursor:pointer}
+.btn-yellow{background:var(--yellow);color:var(--navy);box-shadow:0 7px 18px rgba(255,191,25,.22)}
+.btn-light{background:#fff;color:var(--navy);border:1px solid var(--line)}
+.btn-danger{background:#fff1f1;color:#a92e2e;border:1px solid #ffd3d3}
+.btn-navy{background:var(--navy);color:#fff}
 
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:17px;margin-bottom:22px}
+.stat{min-height:135px;padding:22px;background:#fff;border:1px solid var(--line);border-radius:20px;box-shadow:0 6px 18px rgba(8,45,105,.035)}
+.stat-top{display:flex;justify-content:space-between;align-items:center}
+.stat-label{color:var(--muted);font-size:13px;font-weight:500}
+.stat-icon{width:46px;height:46px;display:grid;place-items:center;border-radius:14px;background:#eaf4ff;font-size:21px}
+.stat-value{margin-top:12px;font-size:33px;font-weight:700;line-height:1}
+
+.filter-panel{display:grid;grid-template-columns:1fr 230px 210px;gap:12px;padding:16px;background:#fff;border:1px solid var(--line);border-radius:20px;margin-bottom:22px}
+.input,.select,textarea{width:100%;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--navy);font-size:14px;padding:12px 14px;outline:none}
+.input:focus,.select:focus,textarea:focus{border-color:#7ab8ef;box-shadow:0 0 0 3px rgba(8,125,240,.07)}
+
+.course-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.course-card{background:#fff;border:1px solid var(--line);border-radius:20px;overflow:hidden;box-shadow:0 5px 15px rgba(8,45,105,.025)}
+.course-strip{height:6px;background:var(--navy)}
+.course-body{padding:20px}
+.course-badges{display:flex;justify-content:space-between;gap:10px;align-items:center}
+.badge{display:inline-flex;align-items:center;padding:6px 10px;border-radius:999px;background:#edf6ff;color:#0870cf;font-size:11px;font-weight:600}
+.status-open{background:#e9f8ef;color:#238148}
+.status-draft{background:#fff2e5;color:#c46c16}
+.course-title{font-size:18px;font-weight:600;line-height:1.45;margin-top:14px}
+.course-desc{min-height:44px;margin-top:6px;color:var(--muted);font-size:12px;line-height:1.7}
+.course-meta{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:16px}
+.meta-box{background:#f6f9fc;border-radius:12px;padding:11px}
+.meta-box span{display:block;color:var(--muted);font-size:10px}
+.meta-box strong{display:block;margin-top:4px;font-size:13px}
+.tags{display:flex;gap:7px;flex-wrap:wrap;margin-top:13px}
+.tag{padding:5px 8px;border-radius:999px;background:#f0f4f8;color:#59708d;font-size:10px}
+.card-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px}
+.empty{grid-column:1/-1;padding:60px 20px;text-align:center;background:#fff;border:1px solid var(--line);border-radius:20px;color:var(--muted)}
+
+.modal-backdrop{position:fixed;inset:0;z-index:900;background:rgba(3,20,48,.52);display:none;align-items:flex-start;justify-content:center;padding:25px;overflow:auto}
+.modal-backdrop.show{display:flex}
+.modal{width:min(860px,100%);background:#fff;border-radius:22px;box-shadow:0 25px 80px rgba(0,0,0,.22);overflow:hidden}
+.modal-head{display:flex;justify-content:space-between;align-items:center;padding:19px 22px;border-bottom:1px solid var(--line)}
+.modal-head h2{font-size:21px}
+.modal-body{padding:22px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.full{grid-column:1/-1}
+label{display:block;margin-bottom:5px;font-size:12px;font-weight:600}
+.checks{display:flex;gap:20px;flex-wrap:wrap;padding:7px 0}
+.modal-actions{display:flex;justify-content:flex-end;gap:10px;padding:16px 22px;border-top:1px solid var(--line)}
+.notice{margin-top:12px;padding:11px 13px;border-radius:11px;background:#fff6da;color:#8b6500;font-size:11px;line-height:1.6}
+.loading-screen{position:fixed;inset:0;z-index:1200;display:flex;align-items:center;justify-content:center;background:#f4f9fd;color:var(--navy);font-size:15px}
+.toast{position:fixed;right:22px;bottom:22px;z-index:1500;display:none;padding:13px 16px;border-radius:12px;background:#102442;color:#fff;font-size:12px;box-shadow:0 12px 30px rgba(0,0,0,.2)}
+.toast.show{display:block}
+.overlay{display:none}
+
+@media(max-width:1200px){
+  :root{--sidebar:255px} .stats{grid-template-columns:repeat(2,1fr)} .course-grid{grid-template-columns:repeat(2,1fr)}
+}
 @media(max-width:900px){
-  .sidebar{width:240px!important}
-  .main{margin-left:0!important}
-  .global-search-shell{width:min(520px,68vw)}
+  .sidebar{width:285px;transform:translateX(-100%);transition:.2s ease}
+  .sidebar.open{transform:translateX(0)} .main{margin-left:0} .topbar{left:0}
+  .mobile-menu{display:block} .overlay{position:fixed;inset:0;z-index:250;background:rgba(3,20,48,.48)} .overlay.show{display:block}
+}
+@media(max-width:767px){
+  .main{padding-top:68px} .topbar{height:68px;padding:0 12px} .page-name{font-size:16px} .page-sub,.admin-copy{display:none}
+  .content{width:100%;padding:16px 12px 42px} .page-head{flex-direction:column} .page-head h1{font-size:24px}
+  .stats{grid-template-columns:1fr 1fr;gap:10px} .filter-panel{grid-template-columns:1fr} .course-grid{grid-template-columns:1fr}
+  .form-grid{grid-template-columns:1fr} .full{grid-column:auto} .modal-backdrop{padding:10px} .card-actions{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div id="loadingScreen" class="loading-screen">กำลังตรวจสอบสิทธิ์ผู้ดูแลระบบ...</div>
+<div id="overlay" class="overlay"></div>
+
+<aside id="sidebar" class="sidebar">
+  <div class="sidebar-brand"><img src="sante%20(en)-logo.png" alt="SANTE Consulting"></div>
+  <div class="sidebar-label">SANTE ADMIN</div>
+  <nav class="nav">
+    <a href="admin-dashboard.html" class="nav-link"><span class="nav-icon">⌂</span><span>หน้าหลัก</span></a>
+    <a href="admin-courses.html" class="nav-link active"><span class="nav-icon">▤</span><span>หลักสูตร</span></a>
+    <a href="admin-training-sessions.html" class="nav-link"><span class="nav-icon">◫</span><span>รอบอบรม</span></a>
+    <a href="admin-exams.html" class="nav-link"><span class="nav-icon">✓</span><span>ข้อสอบ</span></a>
+    <a href="admin-question-import.html" class="nav-link"><span class="nav-icon">⇧</span><span>นำเข้าข้อสอบ</span></a>
+    <a href="admin-payments.html" class="nav-link"><span class="nav-icon">฿</span><span>การชำระเงิน</span></a>
+    <a href="#" class="nav-link"><span class="nav-icon">♙</span><span>สมาชิก</span></a>
+    <a href="admin-services.html" class="nav-link"><span class="nav-icon">▣</span><span>งานบริการ</span></a>
+    <a href="admin-quotations.html" class="nav-link"><span class="nav-icon">▧</span><span>ใบเสนอราคา</span></a>
+  </nav>
+  <div class="sidebar-footer"><strong>SANTE SYSTEM</strong><p>ระบบบริหารจัดการภายใน<br>SANTE Consulting</p></div>
+</aside>
+
+<div class="main">
+<header class="topbar">
+  <div class="topbar-left">
+    <button id="menuButton" class="mobile-menu">☰</button>
+    <div><div class="page-name">หลักสูตร</div><div class="page-sub">จัดการหลักสูตรของ SANTE</div></div>
+  </div>
+  <div class="admin-area">
+    <div class="admin-copy"><div id="adminName" class="admin-name">ผู้ดูแลระบบ SANTE</div><div id="adminEmail" class="admin-email"></div></div>
+    <button id="logoutButton" class="logout">ออกจากระบบ</button>
+  </div>
+</header>
+
+<main class="content">
+  <div class="page-head">
+    <div><h1>จัดการหลักสูตร</h1><p>เพิ่ม แก้ไข ปิดใช้งาน หรือลบหลักสูตรที่ยังไม่มีข้อมูลผูกอยู่</p></div>
+    <button class="btn btn-yellow" onclick="openCourseModal()">+ เพิ่มหลักสูตร</button>
+  </div>
+
+  <section class="stats">
+    <div class="stat"><div class="stat-top"><div class="stat-label">หลักสูตรทั้งหมด</div><div class="stat-icon">▤</div></div><div id="statTotal" class="stat-value">0</div></div>
+    <div class="stat"><div class="stat-top"><div class="stat-label">เปิดใช้งาน</div><div class="stat-icon">✓</div></div><div id="statOpen" class="stat-value">0</div></div>
+    <div class="stat"><div class="stat-top"><div class="stat-label">ฉบับร่าง</div><div class="stat-icon">✎</div></div><div id="statDraft" class="stat-value">0</div></div>
+    <div class="stat"><div class="stat-top"><div class="stat-label">หลักสูตรเตรียมสอบ</div><div class="stat-icon">★</div></div><div id="statExam" class="stat-value">0</div></div>
+  </section>
+
+  <section class="filter-panel">
+    <input id="searchInput" class="input" placeholder="ค้นหาชื่อหลักสูตร / รหัสหลักสูตร...">
+    <select id="typeFilter" class="select">
+      <option value="">ทุกประเภทหลักสูตร</option>
+      <option value="EXAM_PREP">หลักสูตรเตรียมสอบ</option>
+      <option value="FREE_TRAINING">อบรมฟรี</option>
+      <option value="PAID_TRAINING">อบรมมีค่าใช้จ่าย</option>
+      <option value="INHOUSE_TRAINING">อบรม In-house</option>
+    </select>
+    <select id="statusFilter" class="select">
+      <option value="">ทุกสถานะ</option>
+      <option value="OPEN">เปิดใช้งาน</option>
+      <option value="DRAFT">ฉบับร่าง</option>
+    </select>
+  </section>
+
+  <section id="courseGrid" class="course-grid"></section>
+</main>
+</div>
+
+<div id="courseModal" class="modal-backdrop">
+  <div class="modal">
+    <div class="modal-head"><h2 id="modalTitle">เพิ่มหลักสูตร</h2><button class="btn btn-light" onclick="closeModal()">ปิด</button></div>
+    <div class="modal-body">
+      <input type="hidden" id="courseId">
+      <div class="form-grid">
+        <div class="full"><label>ชื่อหลักสูตร <span style="color:#b42318">*</span></label><input id="courseName" class="input"></div>
+        <div><label>ประเภทหลักสูตร <span style="color:#b42318">*</span></label>
+          <select id="courseType" class="select">
+            <option value="">-- เลือก --</option><option value="EXAM_PREP">หลักสูตรเตรียมสอบ</option>
+            <option value="FREE_TRAINING">อบรมฟรี</option><option value="PAID_TRAINING">อบรมมีค่าใช้จ่าย</option>
+            <option value="INHOUSE_TRAINING">อบรม In-house</option>
+          </select>
+        </div>
+        <div><label>สถานะ</label><select id="courseStatus" class="select"><option value="DRAFT">ฉบับร่าง</option><option value="OPEN">เปิดใช้งาน</option></select></div>
+        <div><label>ราคาปกติ (บาท)</label><input id="normalPrice" class="input" type="number" min="0" step="0.01"></div>
+        <div><label>ราคาขาย (บาท)</label><input id="salePrice" class="input" type="number" min="0" step="0.01"></div>
+        <div><label>ระยะเวลาสิทธิ์ (วัน)</label><input id="accessDays" class="input" type="number" min="1"></div>
+        <div><label>เกณฑ์ผ่าน (%)</label><input id="passPercentage" class="input" type="number" min="0" max="100"></div>
+        <div class="full"><label>รายละเอียด</label><textarea id="description" rows="4"></textarea></div>
+        <div class="full checks">
+          <label><input id="hasExam" type="checkbox"> มีข้อสอบ</label>
+          <label><input id="hasCertificate" type="checkbox"> มีวุฒิบัตร / ใบประกาศนียบัตร</label>
+        </div>
+      </div>
+      <div class="notice">การลบหลักสูตรจะทำได้เฉพาะหลักสูตรที่ยังไม่มีรอบอบรม/รายการธุรกรรมผูกอยู่ หากมีประวัติใช้งานแล้ว แนะนำให้เปลี่ยนสถานะเป็น “ฉบับร่าง” เพื่อรักษาข้อมูลย้อนหลัง</div>
+    </div>
+    <div class="modal-actions">
+      <button id="deleteButton" class="btn btn-danger" style="display:none;margin-right:auto" onclick="deleteCourse()">ลบหลักสูตร</button>
+      <button class="btn btn-light" onclick="closeModal()">ยกเลิก</button>
+      <button id="saveButton" class="btn btn-navy" onclick="saveCourse()">บันทึกหลักสูตร</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+const SUPABASE_URL="https://cyegjwerxlxhczrfiurz.supabase.co";
+const SUPABASE_KEY="sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF";
+const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{storageKey:"sante-admin-auth",persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+let currentUser=null, courses=[];
+
+const $=id=>document.getElementById(id);
+const typeLabels={EXAM_PREP:"หลักสูตรเตรียมสอบ",FREE_TRAINING:"อบรมฟรี",PAID_TRAINING:"อบรมมีค่าใช้จ่าย",INHOUSE_TRAINING:"อบรม In-house"};
+
+function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+function money(v){return Number(v||0).toLocaleString("th-TH",{minimumFractionDigits:0,maximumFractionDigits:2})}
+function toast(msg){$("toast").textContent=msg;$("toast").classList.add("show");setTimeout(()=> $("toast").classList.remove("show"),2600)}
+
+async function init(){
+  try{
+    const {data:{session},error}=await db.auth.getSession();
+    if(error) throw error;
+    if(!session){location="admin-login.html";return}
+    const role=await db.rpc("is_staff");
+    if(role.error||role.data!==true){await db.auth.signOut();location="admin-login.html";return}
+    currentUser=session.user;
+    $("adminEmail").textContent=currentUser.email||"";
+    const p=await db.from("profiles").select("firstname_th,lastname_th,email").eq("id",currentUser.id).maybeSingle();
+    const name=[p.data?.firstname_th,p.data?.lastname_th].filter(Boolean).join(" ").trim()||"ผู้ดูแลระบบ SANTE";
+    $("adminName").textContent=name;
+    await loadCourses();
+    $("loadingScreen").style.display="none";
+  }catch(e){
+    console.error(e);$("loadingScreen").textContent="ไม่สามารถเปิดหน้าหลักสูตรได้: "+(e.message||e);
+  }
 }
 
-</style>
-<meta name="sante-build" content="ADMIN-VISUAL-R11-COURSES">
-</head>
+async function loadCourses(){
+  const r=await db.from("courses").select("id,course_code,course_name_th,course_name_en,course_type,description,normal_price,sale_price,access_days,pass_percentage,has_exam,has_certificate,certificate_rule,course_status,slug,sort_order,created_at,updated_at").order("sort_order",{ascending:true,nullsFirst:false}).order("created_at",{ascending:true});
+  if(r.error) throw r.error;
+  courses=r.data||[];
+  updateStats(); renderCourses();
+}
 
-<body>
+function updateStats(){
+  $("statTotal").textContent=courses.length;
+  $("statOpen").textContent=courses.filter(x=>x.course_status==="OPEN").length;
+  $("statDraft").textContent=courses.filter(x=>x.course_status==="DRAFT").length;
+  $("statExam").textContent=courses.filter(x=>x.course_type==="EXAM_PREP").length;
+}
 
-  <!-- Loading -->
-  <div class="page-loading" id="pageLoading">
-    <img src="SANTE-logo.png" alt="SANTE" class="loading-logo">
-    <div class="spinner"></div>
-    <div class="loading-text">กำลังตรวจสอบสิทธิ์และโหลดข้อมูล...</div>
-  </div>
-
-  <!-- Sidebar -->
-  <aside class="sidebar" id="sidebar">
-
-    <div class="brand">
-      <div class="brand-row">
-        <img src="SANTE-logo.png" alt="SANTE" class="brand-logo">
-        <div>
-          <div class="brand-name">SANTE</div>
-          <div class="brand-subtitle">ระบบบริหารจัดการ</div>
+function renderCourses(){
+  const kw=$("searchInput").value.trim().toLowerCase(), t=$("typeFilter").value, st=$("statusFilter").value;
+  const rows=courses.filter(x=>(!kw||[x.course_code,x.course_name_th,x.course_name_en,x.description].join(" ").toLowerCase().includes(kw))&&(!t||x.course_type===t)&&(!st||x.course_status===st));
+  $("courseGrid").innerHTML=rows.map(c=>`
+    <article class="course-card">
+      <div class="course-strip"></div>
+      <div class="course-body">
+        <div class="course-badges"><span class="badge">${esc(typeLabels[c.course_type]||c.course_type||"-")}</span>
+          <span class="badge ${c.course_status==="OPEN"?"status-open":"status-draft"}">${c.course_status==="OPEN"?"เปิดใช้งาน":"ฉบับร่าง"}</span></div>
+        <div class="course-title">${esc(c.course_name_th||"ไม่มีชื่อหลักสูตร")}</div>
+        <div class="course-desc">${esc(c.description||"ยังไม่มีรายละเอียด")}</div>
+        <div class="course-meta">
+          <div class="meta-box"><span>ราคา</span><strong>${c.sale_price>0?money(c.sale_price)+" บาท":c.normal_price>0?money(c.normal_price)+" บาท":"ยังไม่ได้กำหนด"}</strong></div>
+          <div class="meta-box"><span>ระยะเวลาสิทธิ์</span><strong>${c.access_days?c.access_days+" วัน":"-"}</strong></div>
+          <div class="meta-box"><span>เกณฑ์ผ่าน</span><strong>${c.pass_percentage!=null?c.pass_percentage+"%":"-"}</strong></div>
+          <div class="meta-box"><span>การประเมินผล</span><strong>${c.has_exam?"มีข้อสอบ":"ไม่มีข้อสอบ"}</strong></div>
+        </div>
+        <div class="tags">${c.has_exam?'<span class="tag">มีข้อสอบ</span>':''}${c.has_certificate?'<span class="tag">มีวุฒิบัตร</span>':''}<span class="tag">${esc(c.course_code||"-")}</span></div>
+        <div class="card-actions">
+          <button class="btn btn-light" onclick="openCourseModal('${c.id}')">แก้ไขหลักสูตร</button>
+          <button class="btn btn-danger" onclick="confirmDeleteFromCard('${c.id}')">ลบหลักสูตร</button>
         </div>
       </div>
-    </div>
-
-    <div class="sidebar-section-title">เมนูหลัก</div>
-
-    <nav class="nav">
-      <a href="admin-dashboard.html" class="nav-item">
-        <span class="nav-icon">⌂</span>
-        <span>ภาพรวมระบบ</span>
-      </a>
-
-      <a href="admin-courses.html" class="nav-item active">
-        <span class="nav-icon">▣</span>
-        <span>หลักสูตร</span>
-      </a>
-
-      <a href="#" class="nav-item">
-        <span class="nav-icon">▤</span>
-        <span>รอบการอบรม</span>
-      </a>
-
-      <a href="admin-question-import.html" class="nav-item">
-        <span class="nav-icon">✎</span>
-        <span>คลังข้อสอบ</span>
-      </a>
-
-      <a href="#" class="nav-item">
-        <span class="nav-icon">♙</span>
-        <span>สมาชิก</span>
-      </a>
-
-      <div class="sidebar-section-title" style="padding-left:10px;">
-        งานบริการ
-      </div>
-
-      <a href="#" class="nav-item">
-        <span class="nav-icon">▦</span>
-        <span>งานบริการ</span>
-      </a>
-
-      <a href="#" class="nav-item">
-        <span class="nav-icon">▧</span>
-        <span>ใบเสนอราคา</span>
-      </a>
-
-      <a href="#" class="nav-item">
-        <span class="nav-icon">⚙</span>
-        <span>งานและนัดหมาย</span>
-      </a>
-
-      <div class="sidebar-section-title" style="padding-left:10px;">
-        การเงินและเอกสาร
-      </div>
-
-      <a href="#" class="nav-item">
-        <span class="nav-icon">฿</span>
-        <span>การเงิน</span>
-      </a>
-
-      <a href="#" class="nav-item">
-        <span class="nav-icon">▱</span>
-        <span>วุฒิบัตร</span>
-      </a>
-
-      <a href="#" class="nav-item">
-        <span class="nav-icon">☰</span>
-        <span>ตั้งค่าระบบ</span>
-      </a>
-    </nav>
-
-  </aside>
-
-  <!-- Main -->
-  <main class="main">
-
-    <header class="topbar">
-
-      <div class="dashboard-style-topbar-left">
-        <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
-        <div class="global-search-shell">
-          <span class="global-search-icon">⌕</span>
-          <input
-            id="globalAdminSearch"
-            type="text"
-            placeholder="ค้นหาหลักสูตร, สมาชิก, การสอบ, เอกสาร..."
-            autocomplete="off"
-          >
-        </div>
-      </div>
-
-      <div class="topbar-right">
-
-        <div class="admin-user">
-          <div class="avatar" id="adminAvatar">A</div>
-
-          <div class="admin-info">
-            <div class="admin-name" id="adminName">Admin</div>
-            <div class="admin-role" id="adminEmail">ผู้ดูแลระบบ</div>
-          </div>
-        </div>
-
-        <button class="logout-btn" id="logoutBtn">
-          ออกจากระบบ
-        </button>
-
-      </div>
-
-    </header>
-
-    <div class="content">
-
-      <section class="page-header">
-
-        <div>
-          <h1 class="page-title">จัดการหลักสูตร</h1>
-          <p class="page-description">
-            เพิ่ม แก้ไข และกำหนดรายละเอียดหลักสูตร การอบรม และหลักสูตรเตรียมสอบ
-          </p>
-        </div>
-
-        <button class="primary-btn" id="addCourseBtn">
-          ＋ เพิ่มหลักสูตร
-        </button>
-
-      </section>
-
-      <!-- Stats -->
-      <section class="stats-grid">
-
-        <div class="stat-card">
-          <div class="stat-top">
-            <div class="stat-label">หลักสูตรทั้งหมด</div>
-            <div class="stat-icon">▣</div>
-          </div>
-          <div class="stat-value" id="statTotal">0</div>
-        </div>
-
-        <div class="stat-card">
-          <div class="stat-top">
-            <div class="stat-label">เปิดใช้งาน</div>
-            <div class="stat-icon">✓</div>
-          </div>
-          <div class="stat-value" id="statActive">0</div>
-        </div>
-
-        <div class="stat-card">
-          <div class="stat-top">
-            <div class="stat-label">ฉบับร่าง</div>
-            <div class="stat-icon">✎</div>
-          </div>
-          <div class="stat-value" id="statDraft">0</div>
-        </div>
-
-        <div class="stat-card">
-          <div class="stat-top">
-            <div class="stat-label">หลักสูตรเตรียมสอบ</div>
-            <div class="stat-icon">★</div>
-          </div>
-          <div class="stat-value" id="statExamPrep">0</div>
-        </div>
-
-      </section>
-
-      <!-- Filter -->
-      <section class="panel toolbar">
-
-        <input
-          type="text"
-          id="searchInput"
-          class="field-control"
-          placeholder="ค้นหาชื่อหลักสูตร..."
-        >
-
-        <select id="typeFilter" class="field-control">
-          <option value="">ทุกประเภทหลักสูตร</option>
-          <option value="EXAM_PREP">หลักสูตรเตรียมสอบ</option>
-          <option value="FREE_TRAINING">Safety SANTE Sharing (อบรมฟรี)</option>
-          <option value="PAID_TRAINING">อบรม (มีค่าใช้จ่าย)</option>
-          <option value="INHOUSE_TRAINING">In-house training</option>
-        </select>
-
-        <select id="statusFilter" class="field-control">
-          <option value="">ทุกสถานะ</option>
-          <option value="OPEN">เปิดใช้งาน</option>
-          <option value="DRAFT">ฉบับร่าง</option>
-          <option value="CLOSED">ปิดใช้งาน</option>
-        </select>
-
-      </section>
-
-      <!-- Course Cards -->
-      <section class="course-grid" id="courseGrid"></section>
-
-    </div>
-
-  </main>
-
-  <!-- Modal -->
-  <div class="modal-overlay" id="courseModal">
-
-    <div class="modal">
-
-      <div class="modal-header">
-        <div class="modal-title" id="modalTitle">
-          เพิ่มหลักสูตร
-        </div>
-
-        <button class="close-btn" id="closeModalBtn">×</button>
-      </div>
-
-      <div class="modal-body">
-
-        <form id="courseForm">
-
-          <input type="hidden" id="courseId">
-
-          <!-- General -->
-          <div class="form-section">
-
-            <div class="section-title">ข้อมูลหลักสูตร</div>
-
-            <div class="form-grid">
-
-              <div class="form-group">
-                <label class="form-label">
-                  ชื่อหลักสูตร <span class="required">*</span>
-                </label>
-
-                <input
-                  type="text"
-                  id="courseNameTh"
-                  class="form-input"
-                  required
-                  placeholder="ชื่อหลักสูตรภาษาไทย"
-                >
-              </div>
-
-              <div class="form-group">
-                <label class="form-label">
-                  ประเภทหลักสูตร <span class="required">*</span>
-                </label>
-
-                <select
-                  id="courseType"
-                  class="form-select"
-                  required
-                >
-                  <option value="">เลือกประเภท</option>
-                  <option value="EXAM_PREP">หลักสูตรเตรียมสอบ</option>
-                  <option value="FREE_TRAINING">Safety SANTE Sharing (อบรมฟรี)</option>
-                  <option value="PAID_TRAINING">อบรม (มีค่าใช้จ่าย)</option>
-                  <option value="INHOUSE_TRAINING">In-house training</option>
-                </select>
-              </div>
-
-              <div class="form-group full">
-                <label class="form-label">
-                  รายละเอียดหลักสูตร
-                </label>
-
-                <textarea
-                  id="description"
-                  class="form-textarea"
-                  placeholder="รายละเอียดหรือคำอธิบายหลักสูตร"
-                ></textarea>
-              </div>
-
-            </div>
-
-          </div>
-
-          <!-- Price -->
-          <div class="form-section">
-
-            <div class="section-title">ราคาและระยะเวลาสิทธิ์</div>
-
-            <div class="form-grid">
-
-              <div class="form-group">
-                <label class="form-label">
-                  ราคาปกติ (บาท)
-                </label>
-
-                <input
-                  type="number"
-                  id="normalPrice"
-                  class="form-input"
-                  min="0"
-                  step="0.01"
-                  value="0"
-                >
-              </div>
-
-              <div class="form-group">
-                <label class="form-label">
-                  ราคาขาย (บาท)
-                </label>
-
-                <input
-                  type="number"
-                  id="salePrice"
-                  class="form-input"
-                  min="0"
-                  step="0.01"
-                  value="0"
-                >
-              </div>
-
-              <div class="form-group">
-                <label class="form-label">
-                  ระยะเวลาสิทธิ์ (วัน)
-                </label>
-
-                <input
-                  type="number"
-                  id="accessDays"
-                  class="form-input"
-                  min="1"
-                  placeholder="เช่น 365"
-                >
-
-                <div class="helper">
-                  ใช้สำหรับหลักสูตรที่มีระยะเวลาการเข้าใช้งาน
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label class="form-label">
-                  เกณฑ์ผ่าน (%)
-                </label>
-
-                <input
-                  type="number"
-                  id="passPercentage"
-                  class="form-input"
-                  min="0"
-                  max="100"
-                  step="0.01"
-                  placeholder="เช่น 70"
-                >
-              </div>
-
-            </div>
-
-          </div>
-
-          <!-- Exam -->
-          <div class="form-section">
-
-            <div class="section-title">ข้อสอบและวุฒิบัตร</div>
-
-            <div class="switch-row">
-
-              <label class="check-card">
-                <input type="checkbox" id="hasExam">
-
-                <div>
-                  <div class="check-title">มีข้อสอบ</div>
-                  <div class="check-desc">
-                    หลักสูตรนี้มีแบบทดสอบหรือข้อสอบ
-                  </div>
-                </div>
-              </label>
-
-              <label class="check-card">
-                <input type="checkbox" id="hasCertificate">
-
-                <div>
-                  <div class="check-title">มีวุฒิบัตร</div>
-                  <div class="check-desc">
-                    ผู้เรียนสามารถได้รับวุฒิบัตร
-                  </div>
-                </div>
-              </label>
-
-            </div>
-
-          </div>
-
-          <!-- Status -->
-          <div class="form-section">
-
-            <div class="section-title">สถานะหลักสูตร</div>
-
-            <div class="form-grid">
-
-              <div class="form-group">
-                <label class="form-label">
-                  สถานะ <span class="required">*</span>
-                </label>
-
-                <select
-                  id="courseStatus"
-                  class="form-select"
-                  required
-                >
-                  <option value="DRAFT">ฉบับร่าง</option>
-                  <option value="OPEN">เปิดใช้งาน</option>
-                  <option value="CLOSED">ปิดใช้งาน</option>
-                </select>
-              </div>
-
-            </div>
-
-          </div>
-
-        </form>
-
-      </div>
-
-      <div class="modal-footer">
-
-        <button
-          type="button"
-          class="cancel-btn"
-          id="cancelModalBtn"
-        >
-          ยกเลิก
-        </button>
-
-        <button
-          type="button"
-          class="save-btn"
-          id="saveCourseBtn"
-        >
-          บันทึกหลักสูตร
-        </button>
-
-      </div>
-
-    </div>
-
-  </div>
-
-  <!-- Toast -->
-  <div class="toast-container" id="toastContainer"></div>
-
-  <script>
-    /* =========================================================
-       SANTE ADMIN COURSES
-    ========================================================= */
-
-    const SUPABASE_URL =
-      "https://cyegjwerxlxhczrfiurz.supabase.co";
-
-    const SUPABASE_PUBLISHABLE_KEY =
-      "sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF";
-
-    const AUTH_STORAGE_KEY = "sante-admin-auth";
-
-    const supabaseClient = window.supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_PUBLISHABLE_KEY,
-      {
-        auth: {
-          persistSession: true,
-          autoRefreshToken: true,
-          detectSessionInUrl: true,
-          storageKey: AUTH_STORAGE_KEY
-        }
-      }
-    );
-
-    let allCourses = [];
-    let currentUser = null;
-    let editingCourse = null;
-
-    const pageLoading =
-      document.getElementById("pageLoading");
-
-    const courseGrid =
-      document.getElementById("courseGrid");
-
-    const courseModal =
-      document.getElementById("courseModal");
-
-    const searchInput =
-      document.getElementById("searchInput");
-
-    const typeFilter =
-      document.getElementById("typeFilter");
-
-    const statusFilter =
-      document.getElementById("statusFilter");
-
-
-    /* =========================================================
-       INITIALIZE
-    ========================================================= */
-
-    document.addEventListener("DOMContentLoaded", async () => {
-
-      bindEvents();
-
-      try {
-
-        await verifyAdmin();
-
-        await loadCourses();
-
-        pageLoading.style.display = "none";
-
-      } catch (error) {
-
-        console.error(error);
-
-        showToast(
-          error.message || "ไม่สามารถเปิดหน้าจัดการหลักสูตรได้",
-          "error"
-        );
-
-      }
-
-    });
-
-
-    /* =========================================================
-       EVENTS
-    ========================================================= */
-
-    function bindEvents() {
-
-      document
-        .getElementById("addCourseBtn")
-        .addEventListener("click", openCreateModal);
-
-      document
-        .getElementById("closeModalBtn")
-        .addEventListener("click", closeModal);
-
-      document
-        .getElementById("cancelModalBtn")
-        .addEventListener("click", closeModal);
-
-      document
-        .getElementById("saveCourseBtn")
-        .addEventListener("click", saveCourse);
-
-      document
-        .getElementById("logoutBtn")
-        .addEventListener("click", logout);
-
-      document
-        .getElementById("mobileMenuBtn")
-        .addEventListener("click", () => {
-          document
-            .getElementById("sidebar")
-            .classList.toggle("show");
-        });
-
-      searchInput.addEventListener("input", renderCourses);
-
-      const globalAdminSearch = document.getElementById("globalAdminSearch");
-      if (globalAdminSearch) {
-        globalAdminSearch.addEventListener("input", () => {
-          searchInput.value = globalAdminSearch.value;
-          renderCourses();
-        });
-      }
-      typeFilter.addEventListener("change", renderCourses);
-      statusFilter.addEventListener("change", renderCourses);
-
-      courseModal.addEventListener("click", event => {
-
-        if (event.target === courseModal) {
-          closeModal();
-        }
-
-      });
-
+    </article>`).join("") || '<div class="empty">ไม่พบหลักสูตรตามเงื่อนไขที่เลือก</div>';
+}
+
+function openCourseModal(id=null){
+  const c=id?courses.find(x=>x.id===id):null;
+  $("courseId").value=c?.id||"";
+  $("modalTitle").textContent=c?"แก้ไขหลักสูตร":"เพิ่มหลักสูตร";
+  $("courseName").value=c?.course_name_th||"";
+  $("courseType").value=c?.course_type||"";
+  $("courseStatus").value=c?.course_status||"DRAFT";
+  $("normalPrice").value=c?.normal_price??0;
+  $("salePrice").value=c?.sale_price??0;
+  $("accessDays").value=c?.access_days??365;
+  $("passPercentage").value=c?.pass_percentage??70;
+  $("description").value=c?.description||"";
+  $("hasExam").checked=!!c?.has_exam;
+  $("hasCertificate").checked=!!c?.has_certificate;
+  $("deleteButton").style.display=c?"inline-flex":"none";
+  $("courseModal").classList.add("show");
+}
+function closeModal(){$("courseModal").classList.remove("show")}
+
+function generateCode(type){
+  const p={EXAM_PREP:"EX",FREE_TRAINING:"FT",PAID_TRAINING:"PT",INHOUSE_TRAINING:"IH"}[type]||"CR";
+  const n=(courses.filter(x=>(x.course_code||"").startsWith(p+"-")).length+1).toString().padStart(3,"0");
+  return `${p}-${n}-${Date.now().toString().slice(-4)}`;
+}
+
+async function saveCourse(){
+  const id=$("courseId").value,name=$("courseName").value.trim(),type=$("courseType").value;
+  if(!name)return toast("กรุณากรอกชื่อหลักสูตร");
+  if(!type)return toast("กรุณาเลือกประเภทหลักสูตร");
+  const pass=$("passPercentage").value===""?null:Number($("passPercentage").value);
+  if(pass!==null&&(pass<0||pass>100))return toast("เกณฑ์ผ่านต้องอยู่ระหว่าง 0–100%");
+  const payload={
+    course_name_th:name,course_type:type,description:$("description").value.trim()||null,
+    normal_price:Number($("normalPrice").value||0),sale_price:Number($("salePrice").value||0),
+    access_days:Number($("accessDays").value||365),pass_percentage:pass,
+    has_exam:$("hasExam").checked,has_certificate:$("hasCertificate").checked,
+    course_status:$("courseStatus").value
+  };
+  $("saveButton").disabled=true;
+  try{
+    let r;
+    if(id) r=await db.from("courses").update(payload).eq("id",id);
+    else r=await db.from("courses").insert({...payload,course_code:generateCode(type),slug:(generateCode(type)+"-"+Date.now()).toLowerCase(),sort_order:courses.length+1,created_by:currentUser.id});
+    if(r.error)throw r.error;
+    toast(id?"บันทึกการแก้ไขหลักสูตรเรียบร้อย":"เพิ่มหลักสูตรเรียบร้อย");
+    closeModal(); await loadCourses();
+  }catch(e){console.error(e);toast(e.message||"บันทึกหลักสูตรไม่สำเร็จ")}
+  finally{$("saveButton").disabled=false}
+}
+
+async function confirmDeleteFromCard(id){openCourseModal(id);setTimeout(deleteCourse,50)}
+
+async function deleteCourse(){
+  const id=$("courseId").value,c=courses.find(x=>x.id===id); if(!id||!c)return;
+  if(!confirm(`ต้องการลบหลักสูตร “${c.course_name_th}” จริงหรือไม่?\n\nถ้าหลักสูตรมีรอบอบรมหรือข้อมูลประวัติ ระบบจะไม่อนุญาตให้ลบ`))return;
+  $("deleteButton").disabled=true;
+  try{
+    const checks=await Promise.all([
+      db.from("training_sessions").select("id",{count:"exact",head:true}).eq("course_id",id),
+      db.from("order_items").select("id",{count:"exact",head:true}).eq("course_id",id)
+    ]);
+    const linked=checks.some(x=>!x.error && Number(x.count||0)>0);
+    if(linked){
+      alert("หลักสูตรนี้มีข้อมูลรอบอบรมหรือธุรกรรมผูกอยู่ จึงไม่ควรลบ\n\nแนะนำให้เปลี่ยนสถานะเป็น “ฉบับร่าง” แทน เพื่อรักษาประวัติเดิม");
+      return;
     }
-
-
-    /* =========================================================
-       AUTH
-    ========================================================= */
-
-    async function verifyAdmin() {
-
-      const {
-        data: { session },
-        error: sessionError
-      } = await supabaseClient.auth.getSession();
-
-      if (sessionError) {
-        throw sessionError;
-      }
-
-      if (!session) {
-
-        window.location.href = "admin-login.html";
-        return;
-
-      }
-
-      currentUser = session.user;
-
-      const {
-        data: staffAllowed,
-        error: roleError
-      } = await supabaseClient.rpc("is_staff");
-
-      if (roleError) {
-        throw roleError;
-      }
-
-      if (staffAllowed !== true) {
-
-        await supabaseClient.auth.signOut();
-
-        alert("บัญชีนี้ไม่มีสิทธิ์เข้าใช้งานระบบผู้ดูแล");
-
-        window.location.href = "admin-login.html";
-
-        return;
-
-      }
-
-      await loadAdminProfile();
-
-    }
-
-
-    async function loadAdminProfile() {
-
-      if (!currentUser) return;
-
-      const {
-        data,
-        error
-      } = await supabaseClient
-        .from("profiles")
-        .select(`
-          firstname_th,
-          lastname_th,
-          email
-        `)
-        .eq("id", currentUser.id)
-        .maybeSingle();
-
-      let displayName = "ผู้ดูแลระบบ";
-
-      if (!error && data) {
-
-        const fullname = [
-          data.firstname_th,
-          data.lastname_th
-        ]
-        .filter(Boolean)
-        .join(" ")
-        .trim();
-
-        if (fullname) {
-          displayName = fullname;
-        } else if (data.email) {
-          displayName = data.email;
-        }
-
-      } else if (currentUser.email) {
-
-        displayName = currentUser.email;
-
-      }
-
-      document.getElementById("adminName").textContent =
-        displayName;
-
-      document.getElementById("adminAvatar").textContent =
-        displayName.charAt(0).toUpperCase();
-
-    }
-
-
-    async function logout() {
-
-      await supabaseClient.auth.signOut();
-
-      window.location.href = "admin-login.html";
-
-    }
-
-
-    /* =========================================================
-       LOAD COURSES
-    ========================================================= */
-
-    async function loadCourses() {
-
-      const {
-        data,
-        error
-      } = await supabaseClient
-        .from("courses")
-        .select(`
-          id,
-          course_code,
-          course_name_th,
-          course_name_en,
-          course_type,
-          description,
-          thumbnail_url,
-          normal_price,
-          sale_price,
-          access_days,
-          pass_percentage,
-          has_exam,
-          has_certificate,
-          certificate_rule,
-          course_status,
-          slug,
-          sort_order,
-          created_by,
-          created_at,
-          updated_at
-        `)
-        .order("sort_order", {
-          ascending: true,
-          nullsFirst: false
-        })
-        .order("created_at", {
-          ascending: true
-        });
-
-      if (error) {
-        throw error;
-      }
-
-      allCourses = data || [];
-
-      updateStats();
-      renderCourses();
-
-    }
-
-
-    /* =========================================================
-       STATS
-    ========================================================= */
-
-    function updateStats() {
-
-      const total = allCourses.length;
-
-      const active =
-        allCourses.filter(
-          course => course.course_status === "OPEN"
-        ).length;
-
-      const draft =
-        allCourses.filter(
-          course => course.course_status === "DRAFT"
-        ).length;
-
-      const examPrep =
-        allCourses.filter(
-          course => course.course_type === "EXAM_PREP"
-        ).length;
-
-      document.getElementById("statTotal").textContent =
-        total;
-
-      document.getElementById("statActive").textContent =
-        active;
-
-      document.getElementById("statDraft").textContent =
-        draft;
-
-      document.getElementById("statExamPrep").textContent =
-        examPrep;
-
-    }
-
-
-    /* =========================================================
-       RENDER
-    ========================================================= */
-
-    function renderCourses() {
-
-      const keyword =
-        searchInput.value.trim().toLowerCase();
-
-      const selectedType =
-        typeFilter.value;
-
-      const selectedStatus =
-        statusFilter.value;
-
-      const filtered =
-        allCourses.filter(course => {
-
-          const name =
-            (course.course_name_th || "")
-            .toLowerCase();
-
-          const description =
-            (course.description || "")
-            .toLowerCase();
-
-          const matchSearch =
-            !keyword ||
-            name.includes(keyword) ||
-            description.includes(keyword);
-
-          const matchType =
-            !selectedType ||
-            course.course_type === selectedType;
-
-          const matchStatus =
-            !selectedStatus ||
-            course.course_status === selectedStatus;
-
-          return (
-            matchSearch &&
-            matchType &&
-            matchStatus
-          );
-
-        });
-
-
-      if (!filtered.length) {
-
-        courseGrid.innerHTML = `
-          <div class="empty-state">
-
-            <div class="empty-icon">▣</div>
-
-            <div class="empty-title">
-              ไม่พบหลักสูตร
-            </div>
-
-            <div class="empty-text">
-              ลองเปลี่ยนคำค้นหาหรือตัวกรอง
-            </div>
-
-          </div>
-        `;
-
-        return;
-
-      }
-
-
-      courseGrid.innerHTML =
-        filtered.map(course => {
-
-          const price =
-            getDisplayPrice(course);
-
-          const access =
-            course.access_days
-              ? `${formatNumber(course.access_days)} วัน`
-              : "ตามรอบอบรม";
-
-          const pass =
-            course.pass_percentage !== null &&
-            course.pass_percentage !== undefined
-              ? `${formatNumber(course.pass_percentage)}%`
-              : "ไม่ได้กำหนด";
-
-          return `
-            <article class="course-card">
-
-              <div class="course-cover"></div>
-
-              <div class="course-body">
-
-                <div class="course-head">
-
-                  <div style="min-width:0;">
-
-                    <div class="course-type">
-                      ${escapeHtml(
-                        getCourseTypeName(course.course_type)
-                      )}
-                    </div>
-
-                    <div class="course-name">
-                      ${escapeHtml(
-                        course.course_name_th ||
-                        "ยังไม่ได้ระบุชื่อหลักสูตร"
-                      )}
-                    </div>
-
-                  </div>
-
-                  <span class="
-                    status-badge
-                    ${getStatusClass(course.course_status)}
-                  ">
-                    ${escapeHtml(
-                      getStatusName(course.course_status)
-                    )}
-                  </span>
-
-                </div>
-
-                <div class="course-description">
-                  ${
-                    course.description
-                      ? escapeHtml(course.description)
-                      : "ยังไม่ได้เพิ่มรายละเอียดหลักสูตร"
-                  }
-                </div>
-
-                <div class="course-info-grid">
-
-                  <div class="course-info">
-                    <div class="course-info-label">
-                      ราคา
-                    </div>
-
-                    <div class="course-info-value">
-                      ${escapeHtml(price)}
-                    </div>
-                  </div>
-
-                  <div class="course-info">
-                    <div class="course-info-label">
-                      ระยะเวลาสิทธิ์
-                    </div>
-
-                    <div class="course-info-value">
-                      ${escapeHtml(access)}
-                    </div>
-                  </div>
-
-                  <div class="course-info">
-                    <div class="course-info-label">
-                      เกณฑ์ผ่าน
-                    </div>
-
-                    <div class="course-info-value">
-                      ${escapeHtml(pass)}
-                    </div>
-                  </div>
-
-                  <div class="course-info">
-                    <div class="course-info-label">
-                      การประเมินผล
-                    </div>
-
-                    <div class="course-info-value">
-                      ${
-                        course.has_exam
-                          ? "มีข้อสอบ"
-                          : "ไม่มีข้อสอบ"
-                      }
-                    </div>
-                  </div>
-
-                </div>
-
-                <div class="course-tags">
-
-                  ${
-                    course.has_exam
-                      ? `<span class="tag">มีข้อสอบ</span>`
-                      : ""
-                  }
-
-                  ${
-                    course.has_certificate
-                      ? `<span class="tag">มีวุฒิบัตร</span>`
-                      : ""
-                  }
-
-                  ${
-                    course.course_type === "EXAM_PREP"
-                      ? `<span class="tag">สิทธิ์ตามอายุคอร์ส</span>`
-                      : ""
-                  }
-
-                </div>
-
-                <div class="course-actions">
-
-                  <button
-                    class="secondary-btn edit-btn"
-                    onclick="editCourse('${course.id}')"
-                  >
-                    แก้ไขหลักสูตร
-                  </button>
-
-                </div>
-
-              </div>
-
-            </article>
-          `;
-
-        }).join("");
-
-    }
-
-
-    /* =========================================================
-       CREATE
-    ========================================================= */
-
-    function openCreateModal() {
-
-      editingCourse = null;
-
-      document.getElementById("modalTitle").textContent =
-        "เพิ่มหลักสูตร";
-
-      document.getElementById("courseForm").reset();
-
-      document.getElementById("courseId").value = "";
-
-      document.getElementById("normalPrice").value = "0";
-      document.getElementById("salePrice").value = "0";
-      document.getElementById("courseStatus").value = "DRAFT";
-
-      courseModal.classList.add("show");
-
-    }
-
-
-    /* =========================================================
-       EDIT
-    ========================================================= */
-
-    function editCourse(courseId) {
-
-      const course =
-        allCourses.find(
-          item => item.id === courseId
-        );
-
-      if (!course) {
-
-        showToast(
-          "ไม่พบข้อมูลหลักสูตร",
-          "error"
-        );
-
-        return;
-
-      }
-
-      editingCourse = course;
-
-      document.getElementById("modalTitle").textContent =
-        "แก้ไขหลักสูตร";
-
-      document.getElementById("courseId").value =
-        course.id;
-
-      document.getElementById("courseNameTh").value =
-        course.course_name_th || "";
-
-      document.getElementById("courseType").value =
-        course.course_type || "";
-
-      document.getElementById("description").value =
-        course.description || "";
-
-      document.getElementById("normalPrice").value =
-        course.normal_price ?? 0;
-
-      document.getElementById("salePrice").value =
-        course.sale_price ?? 0;
-
-      document.getElementById("accessDays").value =
-        course.access_days ?? "";
-
-      document.getElementById("passPercentage").value =
-        course.pass_percentage ?? "";
-
-      document.getElementById("hasExam").checked =
-        course.has_exam === true;
-
-      document.getElementById("hasCertificate").checked =
-        course.has_certificate === true;
-
-      document.getElementById("courseStatus").value =
-        course.course_status || "DRAFT";
-
-      courseModal.classList.add("show");
-
-    }
-
-
-    window.editCourse = editCourse;
-
-
-    /* =========================================================
-       SAVE
-    ========================================================= */
-
-    async function saveCourse() {
-
-      const form =
-        document.getElementById("courseForm");
-
-      if (!form.reportValidity()) {
-        return;
-      }
-
-      const saveButton =
-        document.getElementById("saveCourseBtn");
-
-      const courseId =
-        document.getElementById("courseId").value;
-
-      const name =
-        document
-          .getElementById("courseNameTh")
-          .value
-          .trim();
-
-      const type =
-        document.getElementById("courseType").value;
-
-      const description =
-        document
-          .getElementById("description")
-          .value
-          .trim();
-
-      const normalPrice =
-        parseNullableNumber(
-          document.getElementById("normalPrice").value
-        );
-
-      const salePrice =
-        parseNullableNumber(
-          document.getElementById("salePrice").value
-        );
-
-      const accessDays =
-        parseNullableInteger(
-          document.getElementById("accessDays").value
-        );
-
-      const passPercentage =
-        parseNullableNumber(
-          document.getElementById("passPercentage").value
-        );
-
-      const hasExam =
-        document.getElementById("hasExam").checked;
-
-      const hasCertificate =
-        document.getElementById("hasCertificate").checked;
-
-      const status =
-        document.getElementById("courseStatus").value;
-
-
-      if (!name) {
-
-        showToast(
-          "กรุณาระบุชื่อหลักสูตร",
-          "error"
-        );
-
-        return;
-
-      }
-
-
-      if (!type) {
-
-        showToast(
-          "กรุณาเลือกประเภทหลักสูตร",
-          "error"
-        );
-
-        return;
-
-      }
-
-
-      if (
-        passPercentage !== null &&
-        (
-          passPercentage < 0 ||
-          passPercentage > 100
-        )
-      ) {
-
-        showToast(
-          "เกณฑ์ผ่านต้องอยู่ระหว่าง 0–100%",
-          "error"
-        );
-
-        return;
-
-      }
-
-
-      saveButton.disabled = true;
-      saveButton.textContent = "กำลังบันทึก...";
-
-
-      try {
-
-        if (courseId) {
-
-          const updatePayload = {
-            course_name_th: name,
-            course_type: type,
-            description: description || null,
-            normal_price: normalPrice ?? 0,
-            sale_price: salePrice ?? 0,
-            access_days: accessDays,
-            pass_percentage: passPercentage,
-            has_exam: hasExam,
-            has_certificate: hasCertificate,
-            course_status: status
-          };
-
-
-          const {
-            error
-          } = await supabaseClient
-            .from("courses")
-            .update(updatePayload)
-            .eq("id", courseId);
-
-
-          if (error) {
-            throw error;
-          }
-
-
-          showToast(
-            "บันทึกการแก้ไขหลักสูตรเรียบร้อย",
-            "success"
-          );
-
-
-        } else {
-
-          const generatedCode =
-            generateCourseCode(type);
-
-          const generatedSlug =
-            generateSlug(generatedCode);
-
-
-          const insertPayload = {
-            course_code: generatedCode,
-            course_name_th: name,
-            course_name_en: null,
-            course_type: type,
-            description: description || null,
-            thumbnail_url: null,
-            normal_price: normalPrice ?? 0,
-            sale_price: salePrice ?? 0,
-            access_days: accessDays,
-            pass_percentage: passPercentage,
-            has_exam: hasExam,
-            has_certificate: hasCertificate,
-            certificate_rule:
-              hasCertificate
-                ? getDefaultCertificateRule(type)
-                : null,
-            course_status: status,
-            slug: generatedSlug,
-            sort_order: getNextSortOrder(),
-            created_by: currentUser?.id || null
-          };
-
-
-          const {
-            error
-          } = await supabaseClient
-            .from("courses")
-            .insert(insertPayload);
-
-
-          if (error) {
-            throw error;
-          }
-
-
-          showToast(
-            "เพิ่มหลักสูตรเรียบร้อย",
-            "success"
-          );
-
-        }
-
-
-        closeModal();
-
-        await loadCourses();
-
-
-      } catch (error) {
-
-        console.error(error);
-
-        let message =
-          error.message ||
-          "ไม่สามารถบันทึกหลักสูตรได้";
-
-        if (
-          message.toLowerCase().includes("duplicate")
-        ) {
-          message =
-            "ไม่สามารถสร้างรหัสหลักสูตรได้ กรุณาลองอีกครั้ง";
-        }
-
-        showToast(message, "error");
-
-
-      } finally {
-
-        saveButton.disabled = false;
-        saveButton.textContent = "บันทึกหลักสูตร";
-
-      }
-
-    }
-
-
-    /* =========================================================
-       MODAL
-    ========================================================= */
-
-    function closeModal() {
-
-      courseModal.classList.remove("show");
-
-      editingCourse = null;
-
-    }
-
-
-    /* =========================================================
-       DISPLAY HELPERS
-    ========================================================= */
-
-    function getCourseTypeName(type) {
-
-      const map = {
-        EXAM_PREP: "หลักสูตรเตรียมสอบ",
-        FREE_TRAINING: "Safety SANTE Sharing (อบรมฟรี)",
-        PAID_TRAINING: "อบรม (มีค่าใช้จ่าย)",
-        INHOUSE_TRAINING: "In-house training"
-      };
-
-      return map[type] || "หลักสูตร";
-
-    }
-
-
-    function getStatusName(status) {
-
-      const map = {
-        OPEN: "เปิดใช้งาน",
-        DRAFT: "ฉบับร่าง",
-        CLOSED: "ปิดใช้งาน"
-      };
-
-      return map[status] || status || "-";
-
-    }
-
-
-    function getStatusClass(status) {
-
-      if (status === "OPEN") {
-        return "status-active";
-      }
-
-      if (status === "DRAFT") {
-        return "status-draft";
-      }
-
-      return "status-inactive";
-
-    }
-
-
-    function getDisplayPrice(course) {
-
-      const sale =
-        Number(course.sale_price || 0);
-
-      const normal =
-        Number(course.normal_price || 0);
-
-      if (sale > 0) {
-        return `${formatMoney(sale)} บาท`;
-      }
-
-      if (normal > 0) {
-        return `${formatMoney(normal)} บาท`;
-      }
-
-      if (
-        course.course_type === "FREE_TRAINING"
-      ) {
-        return "ไม่มีค่าใช้จ่าย";
-      }
-
-      return "ยังไม่ได้กำหนด";
-
-    }
-
-
-    function formatMoney(value) {
-
-      return Number(value || 0)
-        .toLocaleString("th-TH", {
-          minimumFractionDigits: 0,
-          maximumFractionDigits: 2
-        });
-
-    }
-
-
-    function formatNumber(value) {
-
-      return Number(value || 0)
-        .toLocaleString("th-TH", {
-          maximumFractionDigits: 2
-        });
-
-    }
-
-
-    /* =========================================================
-       COURSE CODE
-    ========================================================= */
-
-    function generateCourseCode(type) {
-
-      const prefixMap = {
-        EXAM_PREP: "EXAM",
-        FREE_TRAINING: "FREE",
-        PAID_TRAINING: "TRAIN",
-        INHOUSE_TRAINING: "INHOUSE"
-      };
-
-      const prefix =
-        prefixMap[type] || "COURSE";
-
-      const now = new Date();
-
-      const year =
-        now.getFullYear().toString();
-
-      const month =
-        String(now.getMonth() + 1)
-          .padStart(2, "0");
-
-      const day =
-        String(now.getDate())
-          .padStart(2, "0");
-
-      const hour =
-        String(now.getHours())
-          .padStart(2, "0");
-
-      const minute =
-        String(now.getMinutes())
-          .padStart(2, "0");
-
-      const second =
-        String(now.getSeconds())
-          .padStart(2, "0");
-
-      const millisecond =
-        String(now.getMilliseconds())
-          .padStart(3, "0");
-
-      return (
-        `${prefix}-${year}${month}${day}` +
-        `${hour}${minute}${second}${millisecond}`
-      );
-
-    }
-
-
-    function generateSlug(courseCode) {
-
-      return courseCode
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, "-")
-        .replace(/^-+|-+$/g, "");
-
-    }
-
-
-    function getDefaultCertificateRule(type) {
-
-      if (type === "EXAM_PREP") {
-        return "PASS_ANY_EXAM_SET";
-      }
-
-      return "PASS_EXAM";
-
-    }
-
-
-    function getNextSortOrder() {
-
-      if (!allCourses.length) {
-        return 1;
-      }
-
-      const max =
-        Math.max(
-          ...allCourses.map(
-            course =>
-              Number(course.sort_order || 0)
-          )
-        );
-
-      return max + 1;
-
-    }
-
-
-    /* =========================================================
-       UTILITY
-    ========================================================= */
-
-    function parseNullableNumber(value) {
-
-      if (
-        value === null ||
-        value === undefined ||
-        String(value).trim() === ""
-      ) {
-        return null;
-      }
-
-      const number = Number(value);
-
-      return Number.isFinite(number)
-        ? number
-        : null;
-
-    }
-
-
-    function parseNullableInteger(value) {
-
-      const number =
-        parseNullableNumber(value);
-
-      if (number === null) {
-        return null;
-      }
-
-      return Math.round(number);
-
-    }
-
-
-    function escapeHtml(value) {
-
-      return String(value ?? "")
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-
-    }
-
-
-    function showToast(message, type = "success") {
-
-      const container =
-        document.getElementById("toastContainer");
-
-      const toast =
-        document.createElement("div");
-
-      toast.className =
-        `toast ${type}`;
-
-      toast.textContent = message;
-
-      container.appendChild(toast);
-
-      setTimeout(() => {
-
-        toast.remove();
-
-      }, 4500);
-
-    }
-
-  </script>
-
+    const r=await db.from("courses").delete().eq("id",id);
+    if(r.error)throw r.error;
+    toast("ลบหลักสูตรเรียบร้อย");closeModal();await loadCourses();
+  }catch(e){
+    console.error(e);
+    alert("ไม่สามารถลบหลักสูตรนี้ได้ เนื่องจากอาจมีข้อมูลอื่นผูกอยู่\n\nแนะนำให้เปลี่ยนสถานะเป็น “ฉบับร่าง” แทน\n\nรายละเอียด: "+(e.message||e));
+  }finally{$("deleteButton").disabled=false}
+}
+
+$("searchInput").addEventListener("input",renderCourses);
+$("typeFilter").addEventListener("change",renderCourses);
+$("statusFilter").addEventListener("change",renderCourses);
+$("courseModal").addEventListener("click",e=>{if(e.target===$("courseModal"))closeModal()});
+$("menuButton").onclick=()=>{$("sidebar").classList.toggle("open");$("overlay").classList.toggle("show")};
+$("overlay").onclick=()=>{$("sidebar").classList.remove("open");$("overlay").classList.remove("show")};
+$("logoutButton").onclick=async()=>{await db.auth.signOut();location="admin-login.html"};
+init();
+</script>
 </body>
 </html>
