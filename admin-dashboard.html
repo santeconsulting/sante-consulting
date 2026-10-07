@@ -851,6 +851,32 @@ html,body{overflow-x:hidden!important}
   .main{margin-left:var(--sidebar)!important}
 }
 
+
+/* ===== SANTE ADMIN SHELL R12 =====
+   Keep header visible and standardize main page naming
+==================================================== */
+.topbar{
+  position:fixed!important;
+  top:0!important;
+  left:var(--sidebar)!important;
+  right:0!important;
+  width:auto!important;
+  z-index:500!important;
+}
+.main{
+  padding-top:88px!important;
+}
+@media(max-width:900px){
+  .topbar{
+    left:0!important;
+  }
+}
+@media(max-width:767px){
+  .main{
+    padding-top:68px!important;
+  }
+}
+
 </style>
 <meta name="sante-build" content="DASHBOARD-CLEAN-HERO-R1">
 <meta name="sante-build" content="ADMIN-VISUAL-R11-DASH">
@@ -874,9 +900,9 @@ html,body{overflow-x:hidden!important}
 
   <nav class="nav">
 
-    <a href="admin.html" class="nav-link active">
+    <a href="admin-dashboard.html" class="nav-link active">
       <span class="nav-icon">⌂</span>
-      <span>แดชบอร์ด</span>
+      <span>หน้าหลัก</span>
     </a>
 
     <a href="admin-courses.html" class="nav-link">
@@ -942,7 +968,7 @@ html,body{overflow-x:hidden!important}
     </button>
 
     <div>
-      <div class="page-name">แดชบอร์ด</div>
+      <div class="page-name">หน้าหลัก</div>
       <div class="page-sub">ภาพรวมระบบ SANTE</div>
     </div>
 
