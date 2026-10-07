@@ -1216,6 +1216,35 @@ body{background:var(--bg);color:var(--text);font-size:16px}
   .info-grid{grid-template-columns:1fr}
 }
 
+
+/* ===== R13 DASHBOARD HERO ===== */
+.canonical-hero{
+  width:100%;
+  margin:0 0 28px;
+  padding:10px;
+  background:#fff;
+  border-radius:28px;
+  box-shadow:0 10px 30px rgba(8,45,105,.06);
+}
+.canonical-hero picture,
+.canonical-hero img{
+  display:block;
+  width:100%;
+}
+.canonical-hero img{
+  height:auto;
+  border-radius:22px;
+  object-fit:cover;
+}
+@media(max-width:767px){
+  .canonical-hero{
+    margin-bottom:18px;
+    padding:6px;
+    border-radius:18px;
+  }
+  .canonical-hero img{border-radius:14px}
+}
+
 </style>
 </head>
 
@@ -1285,6 +1314,14 @@ body{background:var(--bg);color:var(--text);font-size:16px}
 
 
     <div class="content">
+
+<section class="canonical-hero">
+  <picture>
+    <source media="(max-width: 767px)" srcset="sante-dashboard-hero-mobile.png">
+    <img src="sante-dashboard-hero-desktop.png" alt="Trust in Safety. Trust in SANTE.">
+  </picture>
+</section>
+
 
       <!-- PAGE HEADER -->
       <section class="page-header">
@@ -2467,10 +2504,10 @@ body{background:var(--bg);color:var(--text);font-size:16px}
       }
 
 
-      document
-        .getElementById("adminAvatar")
-        .textContent =
-          name.charAt(0).toUpperCase();
+      const adminAvatarEl = document.getElementById("adminAvatar");
+      if (adminAvatarEl) {
+        adminAvatarEl.textContent = name.charAt(0).toUpperCase();
+      }
 
     }
 
