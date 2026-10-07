@@ -1036,8 +1036,77 @@ body{background:var(--bg);color:var(--text);font-size:16px}
   .page-actions{grid-template-columns:1fr}
 }
 
+
+
+/* ===== PAYMENTS MATCH DASHBOARD R1 =====
+   Visual-only alignment with admin-dashboard.
+   No payment/Supabase workflow changes.
+================================================ */
+:root{
+  --navy:#082d69;
+  --navy-dark:#061f4b;
+  --navy-soft:#0d4386;
+  --yellow:#ffbf19;
+  --blue:#087df0;
+  --green:#159447;
+  --red:#b42318;
+  --bg:#f1f7fb;
+  --white:#fff;
+  --text:#082d69;
+  --muted:#6f83a2;
+  --line:#d9e5ef;
+  --sidebar:285px;
+}
+html,body{overflow-x:hidden!important}
+body{background:var(--bg)!important;color:var(--text)!important;font-size:16px!important}
+.sidebar{
+  width:var(--sidebar)!important;
+  background:linear-gradient(180deg,#082d69 0%,#06265c 55%,#061f4b 100%)!important;
+  border-right:0!important;box-shadow:none!important;
+}
+.sidebar::before,.sidebar::after,.main::before,.main::after,.content::before,.content::after{content:none!important;display:none!important}
+.sidebar-brand{min-height:128px!important;padding:22px 25px!important}
+.sidebar-brand img{width:190px!important;max-width:100%!important;height:82px!important;object-fit:contain!important}
+.sidebar-label{padding:26px 25px 10px!important;color:#9bb1d0!important;font-size:12px!important;letter-spacing:1.7px!important}
+.nav{padding:0 15px 25px!important}
+.nav-link{min-height:58px!important;gap:14px!important;margin:5px 0!important;padding:0 17px!important;border-radius:16px!important;color:#e4edfa!important;font-size:15px!important;font-weight:500!important}
+.nav-link.active{background:var(--yellow)!important;color:var(--navy)!important;font-weight:600!important;box-shadow:0 7px 18px rgba(0,0,0,.10)!important}
+.nav-icon{width:29px!important;flex:0 0 29px!important;font-size:21px!important}
+.sidebar-footer{margin:auto 15px 22px!important;padding:18px!important;border-radius:17px!important;background:rgba(255,255,255,.07)!important;border:1px solid rgba(255,255,255,.05)!important}
+.main{margin-left:var(--sidebar)!important;width:auto!important;padding-top:88px!important;background:#f4f7fb!important;border-left:0!important;box-shadow:none!important;overflow-x:hidden!important}
+.topbar{position:fixed!important;top:0!important;left:var(--sidebar)!important;right:0!important;width:auto!important;height:88px!important;z-index:500!important;padding:0 34px!important;background:rgba(255,255,255,.97)!important;border-bottom:1px solid #e2ebf3!important;box-shadow:0 3px 14px rgba(8,45,105,.025)!important}
+.page-name{font-size:21px!important;line-height:1.3!important;font-weight:600!important}
+.page-sub{margin-top:4px!important;color:var(--muted)!important;font-size:12px!important}
+.logout{min-height:46px!important;padding:0 18px!important;border:1px solid var(--line)!important;border-radius:12px!important;background:#fff!important;color:var(--navy)!important;font-size:13px!important;font-weight:600!important}
+.content{width:min(1540px,calc(100% - 58px))!important;max-width:none!important;margin:0 auto!important;padding:30px 0 65px!important;background:#f4f7fb!important;border-left:0!important;box-shadow:none!important;overflow:visible!important}
+.dashboard-hero{position:relative!important;width:100%!important;min-height:0!important;height:auto!important;overflow:hidden!important;border-radius:25px!important;background:#fff!important;background-image:none!important;box-shadow:0 10px 28px rgba(8,45,105,.08)!important;margin:0 0 28px!important}
+.dashboard-hero-picture{position:relative!important;inset:auto!important;display:block!important;width:100%!important;height:auto!important;line-height:0!important}
+.dashboard-hero-image{position:relative!important;display:block!important;width:100%!important;height:auto!important;max-width:100%!important;object-fit:contain!important;object-position:center center!important}
+.page-header{display:flex!important;align-items:flex-end!important;justify-content:space-between!important;gap:20px!important;margin:34px 4px 17px!important}
+.page-header h1{font-size:24px!important;line-height:1.35!important;font-weight:600!important;color:var(--text)!important}
+.page-header p{margin-top:5px!important;color:var(--muted)!important;font-size:12px!important}
+.summary{gap:17px!important;margin-bottom:22px!important}
+.summary-card{background:#fff!important;border:1px solid var(--line)!important;border-radius:20px!important;box-shadow:0 6px 18px rgba(8,45,105,.035)!important}
+.toolbar,.payment-card{background:#fff!important;border:1px solid var(--line)!important;border-radius:20px!important}
+.payment-card{box-shadow:0 5px 15px rgba(8,45,105,.025)!important}
+@media(max-width:1200px){:root{--sidebar:255px}}
+@media(max-width:900px){
+  .sidebar{width:285px!important;transform:translateX(-100%)!important;transition:.2s ease!important}
+  .sidebar.open{transform:translateX(0)!important}
+  .main{margin-left:0!important}
+  .topbar{left:0!important}
+}
+@media(max-width:767px){
+  .main{padding-top:68px!important}
+  .topbar{height:68px!important;padding:0 12px!important}
+  .content{width:100%!important;padding:12px 12px 42px!important}
+  .dashboard-hero{border-radius:20px!important;margin-bottom:18px!important}
+  .dashboard-hero-image{width:100%!important;height:auto!important;object-fit:contain!important}
+  .page-header{align-items:flex-start!important;margin:27px 3px 14px!important}
+  .page-header h1{font-size:20px!important}
+}
+
 </style>
-<link rel="stylesheet" href="admin-member-master.css">
 </head>
 
 <body>
@@ -1095,10 +1164,10 @@ body{background:var(--bg);color:var(--text);font-size:16px}
 
 <main class="content">
 
-<section class="canonical-hero">
-  <picture>
-    <source media="(max-width: 767px)" srcset="sante-dashboard-hero-mobile.png">
-    <img src="sante-dashboard-hero-desktop.png" alt="Trust in Safety. Trust in SANTE.">
+<section class="dashboard-hero">
+  <picture class="dashboard-hero-picture">
+    <source media="(max-width:767px)" srcset="sante-dashboard-hero-mobile.png">
+    <img src="sante-dashboard-hero-desktop.png" alt="SANTE Admin" class="dashboard-hero-image">
   </picture>
 </section>
 
@@ -2737,6 +2806,5 @@ document.addEventListener("DOMContentLoaded", function(){
 });
 </script>
 
-<script src="admin-member-master.js"></script>
 </body>
 </html>
