@@ -241,7 +241,7 @@ label{display:block;font-size:10px;font-weight:600;margin-bottom:4px}
   #paper{position:absolute;left:0;top:0;box-shadow:none;margin:0}
 }
 </style>
-<meta name="sante-build" content="ADMIN-QUOTATIONS-DASHBOARD-R1">
+<meta name="sante-build" content="ADMIN-QUOTATIONS-DASHBOARD-R2-EDITOR-FIX">
 </head>
 <body>
 
@@ -361,7 +361,49 @@ label{display:block;font-size:10px;font-weight:600;margin-bottom:4px}
 <div id="toast" class="toast"></div>
 <script>
 const db=window.supabase.createClient("https://cyegjwerxlxhczrfiurz.supabase.co","sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF",{auth:{storageKey:"sante-admin-auth",persistSession:true,autoRefreshToken:true}});
-let currentUser=null,quotes=[],requests=[],editingId=null;const $=id=>document.getElementById(id);
+let currentUser=null,quotes=[],requests=[],editingId=null;
+const $=id=>document.getElementById(id);
+
+/* Explicit DOM bindings — do not rely on browser id-to-global behavior */
+const adminEmail=$("adminEmail");
+const search=$("search");
+const statusFilter=$("statusFilter");
+const globalSearch=$("globalSearch");
+const sAll=$("sAll");
+const sDraft=$("sDraft");
+const sSent=$("sSent");
+const sApproved=$("sApproved");
+const sClosed=$("sClosed");
+const body=$("body");
+
+const editor=$("editor");
+const editorTitle=$("editorTitle");
+const quotationNo=$("quotationNo");
+const requestId=$("requestId");
+const customerName=$("customerName");
+const organizationName=$("organizationName");
+const customerTaxId=$("customerTaxId");
+const customerBranch=$("customerBranch");
+const email=$("email");
+const phone=$("phone");
+const billingAddress=$("billingAddress");
+const documentSubject=$("documentSubject");
+const issueDate=$("issueDate");
+const validUntil=$("validUntil");
+const items=$("items");
+const vatRate=$("vatRate");
+const whtRate=$("whtRate");
+const terms=$("terms");
+const note=$("note");
+const sumSubtotal=$("sumSubtotal");
+const sumVat=$("sumVat");
+const sumGrand=$("sumGrand");
+const sumWht=$("sumWht");
+const sumNet=$("sumNet");
+const paper=$("paper");
+const logoutBtn=$("logoutBtn");
+const toastEl=$("toast");
+
 const SANTE={name:"บริษัท ซานเต้ คอนซัลติ้ง จำกัด (สำนักงานใหญ่)",nameEn:"SANTE CONSULTING CO., LTD.",address:"49 ถนนทางหลวงสาย 3191 ตำบลมาบข่า อำเภอนิคมพัฒนา จังหวัดระยอง 21180",taxId:"0215566009041",phone:"083 4874542",email:"santeconsulting45@gmail.com",website:"https://santeconsulting.co.th",bank:"ธนาคารกสิกรไทย",bankAccount:"165-8-69303-0",bankName:"บจก.ซานเต้ คอนซัลติ้ง",signer:"วลีภรณ์ หาญนภาชีวิน"};
 function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}function money(v){return Number(v||0).toLocaleString("th-TH",{minimumFractionDigits:2,maximumFractionDigits:2})}function toast(m){toastEl=$("toast");toastEl.textContent=m;toastEl.style.display="block";setTimeout(()=>toastEl.style.display="none",2200)}function addDays(d,n){const x=new Date(d);x.setDate(x.getDate()+n);return x.toISOString().slice(0,10)}
 async function init(){
@@ -448,9 +490,9 @@ async function saveQuotation(send){
    buttons.forEach(b=>b.disabled=false);
  }
 }
-search.addEventListener("input",render);
-statusFilter.addEventListener("change",render);
-globalSearch.addEventListener("input",()=>{search.value=globalSearch.value;render()});
+search?.addEventListener("input",render);
+statusFilter?.addEventListener("change",render);
+globalSearch?.addEventListener("input",()=>{search.value=globalSearch.value;render()});
 
 const sidebar=document.getElementById("sidebar");
 const overlay=document.getElementById("overlay");
