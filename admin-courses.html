@@ -126,6 +126,35 @@ label{display:block;margin-bottom:5px;font-size:12px;font-weight:600}
   .stats{grid-template-columns:1fr 1fr;gap:10px} .filter-panel{grid-template-columns:1fr} .course-grid{grid-template-columns:1fr}
   .form-grid{grid-template-columns:1fr} .full{grid-column:auto} .modal-backdrop{padding:10px} .card-actions{grid-template-columns:1fr}
 }
+
+/* ===== R13 DASHBOARD HERO ===== */
+.canonical-hero{
+  width:100%;
+  margin:0 0 28px;
+  padding:10px;
+  background:#fff;
+  border-radius:28px;
+  box-shadow:0 10px 30px rgba(8,45,105,.06);
+}
+.canonical-hero picture,
+.canonical-hero img{
+  display:block;
+  width:100%;
+}
+.canonical-hero img{
+  height:auto;
+  border-radius:22px;
+  object-fit:cover;
+}
+@media(max-width:767px){
+  .canonical-hero{
+    margin-bottom:18px;
+    padding:6px;
+    border-radius:18px;
+  }
+  .canonical-hero img{border-radius:14px}
+}
+
 </style>
 </head>
 <body>
@@ -162,6 +191,14 @@ label{display:block;margin-bottom:5px;font-size:12px;font-weight:600}
 </header>
 
 <main class="content">
+
+<section class="canonical-hero">
+  <picture>
+    <source media="(max-width: 767px)" srcset="sante-dashboard-hero-mobile.png">
+    <img src="sante-dashboard-hero-desktop.png" alt="Trust in Safety. Trust in SANTE.">
+  </picture>
+</section>
+
   <div class="page-head">
     <div><h1>จัดการหลักสูตร</h1><p>เพิ่ม แก้ไข ปิดใช้งาน หรือลบหลักสูตรที่ยังไม่มีข้อมูลผูกอยู่</p></div>
     <button class="btn btn-yellow" onclick="openCourseModal()">+ เพิ่มหลักสูตร</button>
