@@ -1141,6 +1141,359 @@
 
 </style>
 <meta name="sante-build" content="TRAINING-SESSIONS-POSTTEST-R1">
+
+<style id="sante-training-sessions-dashboard-match-r2">
+:root{
+  --sidebar:252px!important;
+  --navy:#082d69!important;
+  --navy-dark:#061f4b!important;
+  --yellow:#ffbf19!important;
+  --bg:#f4f7fb!important;
+  --line:#d9e5ef!important;
+  --muted:#6f83a2!important;
+  --text:#082d69!important;
+}
+
+html,body{
+  overflow-x:hidden!important;
+}
+
+body{
+  background:var(--bg)!important;
+  color:var(--text)!important;
+}
+
+/* SIDEBAR — same language as dashboard */
+.sidebar{
+  position:fixed!important;
+  left:0!important;
+  top:0!important;
+  bottom:0!important;
+  width:var(--sidebar)!important;
+  z-index:300!important;
+  display:flex!important;
+  flex-direction:column!important;
+  padding:0!important;
+  background:linear-gradient(180deg,#082d69 0%,#06265c 55%,#061f4b 100%)!important;
+  color:#fff!important;
+  overflow-y:auto!important;
+  border-right:0!important;
+  box-shadow:none!important;
+  transform:none!important;
+}
+.sidebar-brand{
+  min-height:128px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  padding:22px 25px!important;
+  border-bottom:1px solid rgba(255,255,255,.10)!important;
+}
+.sidebar-brand img{
+  display:block!important;
+  width:150px!important;
+  max-width:100%!important;
+  height:74px!important;
+  object-fit:contain!important;
+  background:transparent!important;
+  border:0!important;
+  border-radius:0!important;
+  padding:0!important;
+}
+.sidebar-label{
+  padding:22px 22px 9px!important;
+  color:#9bb1d0!important;
+  font-size:11px!important;
+  font-weight:500!important;
+  letter-spacing:1.6px!important;
+}
+.nav{
+  display:block!important;
+  padding:0 10px 22px!important;
+}
+.nav-link{
+  min-height:56px!important;
+  display:flex!important;
+  align-items:center!important;
+  gap:13px!important;
+  margin:4px 0!important;
+  padding:0 16px!important;
+  border-radius:15px!important;
+  color:#e4edfa!important;
+  background:transparent!important;
+  font-size:14px!important;
+  font-weight:500!important;
+  text-decoration:none!important;
+}
+.nav-link:hover{
+  background:rgba(255,255,255,.08)!important;
+  color:#fff!important;
+}
+.nav-link.active{
+  background:var(--yellow)!important;
+  color:var(--navy)!important;
+  font-weight:600!important;
+  box-shadow:0 7px 18px rgba(0,0,0,.08)!important;
+}
+.nav-icon{
+  width:28px!important;
+  flex:0 0 28px!important;
+  display:grid!important;
+  place-items:center!important;
+  text-align:center!important;
+  font-size:19px!important;
+}
+.sidebar-footer{
+  margin:auto 10px 12px!important;
+  padding:16px!important;
+  border-radius:15px!important;
+  background:rgba(255,255,255,.07)!important;
+  border:1px solid rgba(255,255,255,.05)!important;
+}
+.sidebar-footer strong{
+  display:block!important;
+  font-size:12px!important;
+  font-weight:600!important;
+}
+.sidebar-footer p{
+  margin:5px 0 0!important;
+  color:#b6c8e2!important;
+  font-size:10px!important;
+  line-height:1.55!important;
+}
+
+/* TOPBAR — same structure and spacing as dashboard */
+.main{
+  margin-left:var(--sidebar)!important;
+  min-height:100vh!important;
+  padding-top:88px!important;
+  background:var(--bg)!important;
+  border-left:0!important;
+  box-shadow:none!important;
+}
+.topbar{
+  position:fixed!important;
+  top:0!important;
+  left:var(--sidebar)!important;
+  right:0!important;
+  z-index:500!important;
+  height:88px!important;
+  min-height:88px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:24px!important;
+  padding:0 34px!important;
+  background:rgba(255,255,255,.98)!important;
+  border-bottom:1px solid #e2ebf3!important;
+  box-shadow:0 3px 14px rgba(8,45,105,.025)!important;
+}
+.topbar-left{
+  display:flex!important;
+  align-items:center!important;
+  gap:14px!important;
+}
+.page-name{
+  font-size:20px!important;
+  line-height:1.3!important;
+  font-weight:600!important;
+  color:var(--navy)!important;
+}
+.page-sub{
+  margin-top:4px!important;
+  color:var(--muted)!important;
+  font-size:11px!important;
+}
+.topbar-right{
+  display:flex!important;
+  align-items:center!important;
+  gap:16px!important;
+}
+.admin-copy{
+  text-align:right!important;
+}
+.admin-name{
+  font-size:13px!important;
+  font-weight:600!important;
+  color:var(--navy)!important;
+}
+.admin-email{
+  margin-top:2px!important;
+  color:var(--muted)!important;
+  font-size:10px!important;
+}
+.logout-btn{
+  min-height:42px!important;
+  padding:0 16px!important;
+  border:1px solid var(--line)!important;
+  border-radius:11px!important;
+  background:#fff!important;
+  color:var(--navy)!important;
+  font-size:12px!important;
+  font-weight:600!important;
+}
+.mobile-menu{
+  display:none!important;
+  width:42px!important;
+  height:42px!important;
+  border:1px solid var(--line)!important;
+  border-radius:11px!important;
+  background:#fff!important;
+  color:var(--navy)!important;
+}
+
+/* PAGE CONTENT — align to dashboard proportions */
+.content{
+  width:min(1540px,calc(100% - 58px))!important;
+  max-width:none!important;
+  margin:0 auto!important;
+  padding:30px 0 65px!important;
+  background:var(--bg)!important;
+}
+.page-header{
+  margin:0 4px 22px!important;
+  align-items:flex-start!important;
+}
+.page-title{
+  font-size:30px!important;
+  line-height:1.3!important;
+  font-weight:600!important;
+  color:var(--navy)!important;
+}
+.page-description{
+  margin-top:6px!important;
+  color:var(--muted)!important;
+  font-size:13px!important;
+}
+.primary-btn{
+  min-height:44px!important;
+  padding:0 17px!important;
+  border-radius:12px!important;
+  font-size:13px!important;
+  box-shadow:none!important;
+}
+
+/* cards */
+.stats-grid{
+  gap:14px!important;
+  margin-bottom:18px!important;
+}
+.stat-card{
+  min-height:125px!important;
+  padding:20px!important;
+  border:1px solid var(--line)!important;
+  border-radius:20px!important;
+  background:#fff!important;
+  box-shadow:0 6px 18px rgba(8,45,105,.035)!important;
+}
+.stat-label{
+  font-size:12px!important;
+  color:#536d92!important;
+}
+.stat-value{
+  font-size:31px!important;
+  color:#0a3267!important;
+}
+.stat-icon{
+  width:44px!important;
+  height:44px!important;
+  border-radius:12px!important;
+  background:#eaf4ff!important;
+  color:var(--navy)!important;
+}
+.toolbar{
+  gap:12px!important;
+  padding:17px!important;
+  border:1px solid var(--line)!important;
+  border-radius:18px!important;
+  box-shadow:0 5px 15px rgba(8,45,105,.025)!important;
+}
+.control{
+  height:46px!important;
+  border-radius:12px!important;
+  border-color:var(--line)!important;
+}
+.session-grid{
+  gap:16px!important;
+}
+.session-card{
+  border:1px solid var(--line)!important;
+  border-radius:18px!important;
+  box-shadow:0 5px 16px rgba(8,45,105,.03)!important;
+}
+.session-bar{
+  height:6px!important;
+  background:var(--navy)!important;
+}
+.session-body{
+  padding:20px!important;
+}
+.session-name{
+  color:var(--navy)!important;
+  font-size:17px!important;
+}
+.info-box{
+  background:#f7f9fc!important;
+  border-radius:11px!important;
+}
+.edit-btn{
+  min-height:42px!important;
+  border-radius:10px!important;
+  background:var(--navy)!important;
+}
+.exam-btn{
+  min-height:42px!important;
+  border-radius:10px!important;
+  background:var(--yellow)!important;
+  color:var(--navy)!important;
+}
+.modal{
+  border-radius:20px!important;
+}
+.form-input,.form-select,.form-textarea{
+  border-color:var(--line)!important;
+  border-radius:11px!important;
+}
+
+/* remove legacy decorative duplicates */
+.sidebar::before,.sidebar::after,
+.main::before,.main::after,
+.content::before,.content::after{
+  content:none!important;
+  display:none!important;
+}
+
+@media(max-width:1100px){
+  :root{--sidebar:228px!important}
+  .content{width:calc(100% - 40px)!important}
+}
+@media(max-width:900px){
+  :root{--sidebar:285px!important}
+  .sidebar{
+    width:285px!important;
+    transform:translateX(-100%)!important;
+    transition:.22s!important;
+  }
+  .sidebar.open{transform:translateX(0)!important}
+  .main{margin-left:0!important}
+  .topbar{left:0!important}
+  .mobile-menu{display:block!important}
+}
+@media(max-width:767px){
+  .main{padding-top:68px!important}
+  .topbar{height:68px!important;min-height:68px!important;padding:0 12px!important}
+  .page-name{font-size:16px!important}
+  .page-sub,.admin-copy{display:none!important}
+  .content{width:100%!important;padding:16px 12px 42px!important}
+  .page-header{flex-direction:column!important;gap:14px!important}
+  .page-title{font-size:24px!important}
+  .stats-grid{grid-template-columns:1fr 1fr!important;gap:10px!important}
+  .toolbar{grid-template-columns:1fr!important}
+  .session-grid{grid-template-columns:1fr!important}
+}
+</style>
+
+<meta name="sante-build" content="TRAINING-SESSIONS-DASHBOARD-MATCH-R2">
 </head>
 
 <body>
@@ -1164,24 +1517,47 @@
 
 
   <!-- SIDEBAR -->
-  <aside class="sidebar sante-canonical-sidebar" id="sidebar">
-<div class="sante-canonical-brand"><img src="SANTE-logo.png" alt="SANTE"></div>
-<nav class="sante-canonical-nav">
-<div class="sante-canonical-title">MAIN</div>
-<a class="sante-canonical-item" href="admin-dashboard.html"><span class="sante-canonical-icon">⌂</span><span>หน้าหลัก</span></a>
-<div class="sante-canonical-title">TRAINING &amp; LEARNING</div>
-<a class="sante-canonical-item" href="admin-courses.html"><span class="sante-canonical-icon">▤</span><span>จัดการหลักสูตร</span></a>
-<a class="sante-canonical-item" href="admin-training-registrations.html"><span class="sante-canonical-icon">♟</span><span>ผู้สมัครอบรม</span></a>
-<a class="sante-canonical-item active" href="admin-training-sessions.html"><span class="sante-canonical-icon">▦</span><span>รอบการอบรม</span></a>
-<a class="sante-canonical-item" href="admin-question-import.html"><span class="sante-canonical-icon">✎</span><span>คลังข้อสอบ / นำเข้า</span></a>
-<a class="sante-canonical-item" href="admin-exams.html"><span class="sante-canonical-icon">✓</span><span>ข้อสอบและผลสอบ</span></a>
-<a class="sante-canonical-item" href="admin-certificates.html"><span class="sante-canonical-icon">▣</span><span>ใบประกาศนียบัตร</span></a>
-<div class="sante-canonical-title">SERVICE &amp; FINANCE</div>
-<a class="sante-canonical-item" href="#"><span class="sante-canonical-icon">◆</span><span>งานบริการ</span></a>
-<a class="sante-canonical-item" href="#"><span class="sante-canonical-icon">▧</span><span>ใบเสนอราคา</span></a>
-<a class="sante-canonical-item" href="admin-payments.html"><span class="sante-canonical-icon">฿</span><span>การเงิน / การชำระเงิน</span></a>
-</nav>
-<div class="sante-canonical-foot">SANTE SYSTEM<br>ระบบบริหารจัดการภายใน</div>
+  <aside id="sidebar" class="sidebar">
+  <div class="sidebar-brand">
+    <img src="sante%20(en)-logo.png" alt="SANTE Consulting">
+  </div>
+
+  <div class="sidebar-label">SANTE ADMIN</div>
+
+  <nav class="nav">
+    <a href="admin-dashboard.html" class="nav-link">
+      <span class="nav-icon">⌂</span><span>หน้าหลัก</span>
+    </a>
+    <a href="admin-courses.html" class="nav-link">
+      <span class="nav-icon">▤</span><span>หลักสูตร</span>
+    </a>
+    <a href="admin-training-sessions.html" class="nav-link active">
+      <span class="nav-icon">◫</span><span>รอบอบรม</span>
+    </a>
+    <a href="admin-exams.html" class="nav-link">
+      <span class="nav-icon">✓</span><span>ข้อสอบ</span>
+    </a>
+    <a href="admin-question-import.html" class="nav-link">
+      <span class="nav-icon">⇧</span><span>นำเข้าข้อสอบ</span>
+    </a>
+    <a href="admin-payments.html" class="nav-link">
+      <span class="nav-icon">฿</span><span>การชำระเงิน</span>
+    </a>
+    <a href="admin-members.html" class="nav-link">
+      <span class="nav-icon">♙</span><span>สมาชิก</span>
+    </a>
+    <a href="admin-services.html" class="nav-link">
+      <span class="nav-icon">▣</span><span>งานบริการ</span>
+    </a>
+    <a href="admin-quotations.html" class="nav-link">
+      <span class="nav-icon">▧</span><span>ใบเสนอราคา</span>
+    </a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <strong>SANTE SYSTEM</strong>
+    <p>ระบบบริหารจัดการภายใน<br>SANTE Consulting</p>
+  </div>
 </aside>
 
 
@@ -1190,62 +1566,22 @@
 
     <!-- TOPBAR -->
     <header class="topbar">
+  <div class="topbar-left">
+    <button class="mobile-menu" id="mobileMenuBtn" type="button">☰</button>
+    <div>
+      <div class="page-name">รอบอบรม</div>
+      <div class="page-sub">สร้างและจัดการรอบอบรม วันรับสมัคร จำนวนที่นั่ง และการเปิดข้อสอบ</div>
+    </div>
+  </div>
 
-      <div class="topbar-left">
-
-        <button
-          class="mobile-menu"
-          id="mobileMenuBtn"
-        >
-          ☰
-        </button>
-
-        <div class="topbar-title">
-          ระบบจัดการรอบการอบรม
-        </div>
-
-      </div>
-
-
-      <div class="topbar-right">
-
-        <div class="admin-user">
-
-          <div
-            class="avatar"
-            id="adminAvatar"
-          >
-            A
-          </div>
-
-          <div class="admin-info">
-
-            <div
-              class="admin-name"
-              id="adminName"
-            >
-              ผู้ดูแลระบบ
-            </div>
-
-            <div class="admin-role">
-              ผู้ดูแลระบบ
-            </div>
-
-          </div>
-
-        </div>
-
-
-        <button
-          class="logout-btn"
-          id="logoutBtn"
-        >
-          ออกจากระบบ
-        </button>
-
-      </div>
-
-    </header>
+  <div class="topbar-right">
+    <div class="admin-copy">
+      <div class="admin-name" id="adminName">ผู้ดูแลระบบ SANTE</div>
+      <div class="admin-email" id="adminEmail">-</div>
+    </div>
+    <button class="logout-btn" id="logoutBtn" type="button">ออกจากระบบ</button>
+  </div>
+</header>
 
 
     <div class="content">
@@ -2409,16 +2745,29 @@
       }
 
 
-      document
-        .getElementById("adminName")
-        .textContent =
-          name;
+      const adminNameEl =
+        document.getElementById("adminName");
 
+      const adminEmailEl =
+        document.getElementById("adminEmail");
 
-      document
-        .getElementById("adminAvatar")
-        .textContent =
-          name.charAt(0).toUpperCase();
+      if (adminNameEl) {
+        adminNameEl.textContent =
+          "ผู้ดูแลระบบ SANTE";
+      }
+
+      if (adminEmailEl) {
+        adminEmailEl.textContent =
+          currentUser.email || "";
+      }
+
+      const adminAvatarEl =
+        document.getElementById("adminAvatar");
+
+      if (adminAvatarEl) {
+        adminAvatarEl.textContent =
+          "S";
+      }
 
     }
 
