@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -35,7 +36,7 @@ a{text-decoration:none;color:inherit}button,input,select,textarea{font-family:Pr
 .hero-row{display:flex;justify-content:space-between;gap:20px;align-items:flex-start}.hero h1{font-size:26px}.hero p{margin-top:6px;color:var(--muted);font-size:12px}
 .badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.badge{padding:6px 10px;border-radius:999px;background:#eef5fb;font-size:10px;font-weight:600}.badge.green{background:#eaf9f0;color:#146f3f}.badge.gray{background:#eef2f6;color:#65778b}
 .settings{display:grid;grid-template-columns:2fr 1fr 1fr 1fr auto;gap:10px;margin-top:18px}.field label{display:block;font-size:10px;font-weight:600;margin-bottom:5px}.input,.select,textarea{width:100%;border:1px solid var(--line);border-radius:11px;padding:10px 12px;background:#fff;color:var(--navy);font-size:13px;outline:none}.input,.select{min-height:44px}.settings .btn{align-self:end}
-.section-title{display:flex;justify-content:space-between;align-items:end;gap:20px;margin:28px 2px 14px}.section-title h2{font-size:22px}.section-title p{font-size:11px;color:var(--muted);margin-top:4px}
+.section-title{display:flex;justify-content:space-between;align-items:end;gap:20px;margin:28px 2px 14px}.question-tools{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}.test-card{padding:14px;border:1px solid var(--line);border-radius:14px;background:#fff;margin-top:12px}.test-card.correct{border-color:#b9e2c7;background:#f2fbf5}.test-card.wrong{border-color:#f1c4c8;background:#fff6f6}.test-option{display:flex;gap:10px;align-items:flex-start;padding:9px 10px;margin-top:7px;border:1px solid #e4edf4;border-radius:10px}.test-option input{width:18px;height:18px;margin-top:1px;accent-color:var(--navy)}.test-result{margin-top:16px;padding:18px;border-radius:16px;background:#f6f9fc;border:1px solid var(--line)}.score-big{font-size:34px;font-weight:700;color:var(--navy)}.result-pass{color:#168346;font-weight:700}.result-fail{color:#b42318;font-weight:700}.test-review{margin-top:12px;display:grid;gap:10px}.review-row{padding:11px 12px;border-radius:11px;background:#fff;border:1px solid var(--line);font-size:12px;line-height:1.6}.section-title h2{font-size:22px}.section-title p{font-size:11px;color:var(--muted);margin-top:4px}
 .question-list{display:grid;gap:14px}.qcard{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:0 5px 16px rgba(8,45,105,.03)}
 .qhead{display:flex;justify-content:space-between;gap:14px}.qnum{width:34px;height:34px;border-radius:10px;background:#eaf4ff;display:grid;place-items:center;font-weight:700}.qmain{flex:1}.qtitle{font-size:15px;font-weight:600;line-height:1.6}.qmeta{font-size:10px;color:var(--muted);margin-top:4px}.qactions{display:flex;gap:7px}.qimage{margin-top:12px;max-width:360px;max-height:220px;border-radius:12px;border:1px solid var(--line);object-fit:contain;background:#fff}.choices{display:grid;gap:8px;margin-top:13px}.choice{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border:1px solid #e5edf4;border-radius:12px}.choice.correct{border-color:#a9dfbd;background:#f1fbf5}.choice-key{width:24px;height:24px;border-radius:50%;background:#edf3f8;display:grid;place-items:center;font-size:10px;font-weight:700}.choice.correct .choice-key{background:#168346;color:#fff}.choice img{max-width:180px;max-height:100px;object-fit:contain;border-radius:8px;margin-top:6px}
 .empty{padding:40px;text-align:center;background:#fff;border:1px dashed #cfdce8;border-radius:18px;color:var(--muted);font-size:12px}
@@ -50,7 +51,7 @@ a{text-decoration:none;color:inherit}button,input,select,textarea{font-family:Pr
 @media(max-width:900px){.sidebar{transform:translateX(-100%);width:285px}.sidebar.open{transform:none}.main{margin-left:0}.topbar{left:0}.mobile-menu{display:block}.overlay.show{display:block;position:fixed;inset:0;background:#0006;z-index:250}.content{width:calc(100% - 24px)}}
 @media(max-width:650px){.topbar{height:68px;padding:0 12px}.main{padding-top:68px}.admin-copy{display:none}.settings,.grid{grid-template-columns:1fr}.settings .field:first-child,.full{grid-column:auto}.hero-row,.section-title,.qhead{flex-direction:column}.qactions{width:100%}.qactions .btn{flex:1}.choice-editor{grid-template-columns:32px 1fr}.choice-editor-actions{grid-column:2;flex-wrap:wrap}}
 </style>
-<meta name="sante-build" content="POSTTEST-BUILDER-V1">
+<meta name="sante-build" content="POSTTEST-BUILDER-V2-IMPORT-TEST">
 </head>
 <body>
 <div id="loading" class="loading">กำลังเปิด Exam Builder...</div>
@@ -115,8 +116,15 @@ a{text-decoration:none;color:inherit}button,input,select,textarea{font-family:Pr
   </section>
 
   <div class="section-title">
-    <div><h2>คำถาม</h2><p>สร้างคำถามแบบช้อยส์ เลือกเฉลย และแนบรูปได้ทั้งคำถามและคำตอบ</p></div>
-    <button id="addQuestionBtn" class="btn yellow">+ เพิ่มคำถาม</button>
+    <div><h2>คำถาม</h2><p>สร้างคำถามแบบช้อยส์ เลือกเฉลย แนบรูป และนำเข้าจาก Excel ได้</p></div>
+    <div class="question-tools">
+      <button id="downloadTemplateBtn" class="btn">ดาวน์โหลด Template</button>
+      <button id="importExcelBtn" class="btn">Import Excel</button>
+      <button id="exportExcelBtn" class="btn">Export Excel</button>
+      <button id="testExamBtn" class="btn success">ทดสอบข้อสอบ</button>
+      <button id="addQuestionBtn" class="btn yellow">+ เพิ่มคำถาม</button>
+      <input id="importExcelFile" type="file" accept=".xlsx,.xls" hidden>
+    </div>
   </div>
 
   <div id="questionList" class="question-list"></div>
@@ -151,6 +159,12 @@ a{text-decoration:none;color:inherit}button,input,select,textarea{font-family:Pr
         </div>
       </div>
 
+      <div class="field full" id="textAnswerSection" style="display:none">
+        <label>คำตอบที่ยอมรับสำหรับตรวจอัตโนมัติ</label>
+        <input id="qAcceptedText" class="input" placeholder="เช่น PPE|Personal Protective Equipment">
+        <div style="font-size:10px;color:var(--muted);margin-top:5px">ถ้ามีหลายคำตอบ ให้คั่นด้วยเครื่องหมาย | ระบบจะไม่สนใจตัวพิมพ์ใหญ่/เล็กและช่องว่างหัวท้าย</div>
+      </div>
+
       <div class="field full" id="choiceSection">
         <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
           <div><strong>ตัวเลือกและเฉลย</strong><div style="font-size:10px;color:var(--muted);margin-top:3px" id="choiceHelp">เลือกวงกลมหน้าคำตอบที่ถูกต้อง 1 ข้อ</div></div>
@@ -168,13 +182,36 @@ a{text-decoration:none;color:inherit}button,input,select,textarea{font-family:Pr
   </div>
 </div>
 
+
+<div class="modal-bg" id="testExamModal">
+  <div class="modal">
+    <div class="modal-head">
+      <div>
+        <h2>ทดสอบข้อสอบก่อนเผยแพร่</h2>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px">
+          ผลทดสอบนี้เป็นของ Admin เท่านั้น และไม่ถูกบันทึกลงผลสอบจริงของสมาชิก
+        </div>
+      </div>
+      <button class="btn" id="closeTestExamBtn">✕</button>
+    </div>
+
+    <div id="testExamBody" style="margin-top:18px"></div>
+
+    <div class="modal-actions">
+      <button class="btn danger" id="clearTestResultBtn" style="display:none">ลบผลการเทส</button>
+      <button class="btn" id="cancelTestExamBtn">ปิด</button>
+      <button class="btn primary" id="submitTestExamBtn">ตรวจคำตอบ / ดูคะแนน</button>
+    </div>
+  </div>
+</div>
+
 <script>
 const SUPABASE_URL="https://cyegjwerxlxhczrfiurz.supabase.co";
 const SUPABASE_KEY="sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF";
 const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{storageKey:"sante-admin-auth",persistSession:true,autoRefreshToken:true}});
 
 let exam=null, examSet=null, session=null, course=null, questions=[];
-let editingQuestionId=null, choiceCount=4, questionImageFile=null, existingQuestionImagePath=null;
+let editingQuestionId=null, choiceCount=4, questionImageFile=null, existingQuestionImagePath=null, existingTextAnswers=[];
 let choiceFiles={}, existingChoiceImages={};
 
 const $=id=>document.getElementById(id);
@@ -243,20 +280,22 @@ async function loadExam(examId){
   session=s.data;course=c.data;examSet=setRes.data;
 
   const ids=(qRes.data||[]).map(x=>x.id);
-  let choices=[],media=[],links=[];
+  let choices=[],media=[],links=[],textAnswers=[];
   if(ids.length){
-    const [cr,mr,lr]=await Promise.all([
+    const [cr,mr,lr,tr]=await Promise.all([
       db.from("question_choices").select("*").in("question_id",ids).order("sort_order"),
       db.from("question_media").select("*").in("question_id",ids).order("sort_order"),
-      db.from("exam_set_questions").select("*").eq("exam_set_id",examSet.id).in("question_id",ids).order("question_number")
+      db.from("exam_set_questions").select("*").eq("exam_set_id",examSet.id).in("question_id",ids).order("question_number"),
+      db.from("question_text_answers").select("*").in("question_id",ids)
     ]);
-    if(cr.error)throw cr.error;if(mr.error)throw mr.error;if(lr.error)throw lr.error;
-    choices=cr.data||[];media=mr.data||[];links=lr.data||[];
+    if(cr.error)throw cr.error;if(mr.error)throw mr.error;if(lr.error)throw lr.error;if(tr.error)throw tr.error;
+    choices=cr.data||[];media=mr.data||[];links=lr.data||[];textAnswers=tr.data||[];
   }
   questions=(qRes.data||[]).map(q=>({
     ...q,
     choices:choices.filter(x=>x.question_id===q.id),
     media:media.filter(x=>x.question_id===q.id),
+    text_answers:textAnswers.filter(x=>x.question_id===q.id),
     question_number:links.find(x=>x.question_id===q.id)?.question_number||999
   })).sort((a,b)=>a.question_number-b.question_number);
 
@@ -316,9 +355,9 @@ async function renderQuestions(){
 }
 
 function resetEditor(){
-  editingQuestionId=null;choiceCount=4;questionImageFile=null;existingQuestionImagePath=null;choiceFiles={};existingChoiceImages={};
+  editingQuestionId=null;choiceCount=4;questionImageFile=null;existingQuestionImagePath=null;existingTextAnswers=[];choiceFiles={};existingChoiceImages={};
   $("modalTitle").textContent="เพิ่มคำถาม";$("qType").value="SINGLE_CHOICE";$("qPoints").value="1";$("qText").value="";
-  $("qImageFile").value="";$("qImagePreview").innerHTML="ยังไม่มีรูปคำถาม";clearMsg("modalMessage");renderChoiceEditors();updateTypeUI();
+  $("qImageFile").value="";$("qImagePreview").innerHTML="ยังไม่มีรูปคำถาม";$("qAcceptedText").value="";clearMsg("modalMessage");renderChoiceEditors();updateTypeUI();
 }
 
 async function openAdd(){resetEditor();$("questionModal").classList.add("show")}
@@ -327,7 +366,7 @@ async function editQuestion(id){
   resetEditor();
   const q=questions.find(x=>x.id===id);if(!q)return;
   editingQuestionId=id;$("modalTitle").textContent=`แก้ไขคำถามที่ ${q.question_number}`;$("qType").value=q.question_type;$("qPoints").value=q.points;$("qText").value=q.question_text||"";
-  existingQuestionImagePath=q.media.find(m=>m.media_type==="IMAGE")?.storage_path||null;
+  existingQuestionImagePath=q.media.find(m=>m.media_type==="IMAGE")?.storage_path||null;existingTextAnswers=(q.text_answers||[]).map(x=>x.accepted_answer);$("qAcceptedText").value=existingTextAnswers.join("|");
   if(existingQuestionImagePath){const u=await signedUrl(existingQuestionImagePath);if(u)$("qImagePreview").innerHTML=`<img src="${u}">`}
   choiceCount=Math.max(2,q.choices.length||4);
   q.choices.forEach(ch=>{existingChoiceImages[ch.choice_key]=ch.image_path||null});
@@ -366,6 +405,7 @@ function renderChoiceEditors(existing=[]){
 function updateTypeUI(rerender=true){
   const type=$("qType").value;
   $("choiceSection").style.display=type==="TEXT"?"none":"block";
+  $("textAnswerSection").style.display=type==="TEXT"?"block":"none";
   $("choiceHelp").textContent=type==="MULTIPLE_CHOICE"?"ติ๊กหน้าตัวเลือกที่ถูกต้องได้มากกว่า 1 ข้อ":"เลือกวงกลมหน้าคำตอบที่ถูกต้อง 1 ข้อ";
   if(type!=="TEXT"&&rerender)renderChoiceEditors();
 }
@@ -401,6 +441,13 @@ async function saveQuestion(){
       p_question_image_path:qImagePath,p_choices:choices
     });
     if(r.error)throw r.error;
+
+    if(type==="TEXT"){
+      const answers=$("qAcceptedText").value.split("|").map(x=>x.trim()).filter(Boolean);
+      const tr=await db.rpc("admin_save_posttest_text_answers",{p_question_id:r.data,p_answers:answers});
+      if(tr.error)throw tr.error;
+    }
+
     $("questionModal").classList.remove("show");
     await loadExam(exam.id);
     msg("pageMessage","บันทึกคำถามแล้ว","success");
@@ -439,7 +486,295 @@ async function unpublishExam(){
   await loadExam(exam.id);msg("pageMessage","เปลี่ยนเป็น Draft แล้ว","success");
 }
 
-$("addQuestionBtn").onclick=openAdd;$("closeModalBtn").onclick=$("cancelQuestionBtn").onclick=()=>$("questionModal").classList.remove("show");
+
+function templateRows(){
+  return [
+    {
+      question_type:"SINGLE_CHOICE",
+      question_text:"ตัวอย่างคำถามแบบเลือกคำตอบเดียว",
+      points:1,
+      choice_a:"ตัวเลือก A",
+      choice_b:"ตัวเลือก B",
+      choice_c:"ตัวเลือก C",
+      choice_d:"ตัวเลือก D",
+      choice_e:"",
+      correct_answer:"A",
+      accepted_text_answers:""
+    },
+    {
+      question_type:"MULTIPLE_CHOICE",
+      question_text:"ตัวอย่างคำถามแบบเลือกได้หลายคำตอบ",
+      points:2,
+      choice_a:"ตัวเลือก A",
+      choice_b:"ตัวเลือก B",
+      choice_c:"ตัวเลือก C",
+      choice_d:"ตัวเลือก D",
+      choice_e:"",
+      correct_answer:"A,C",
+      accepted_text_answers:""
+    },
+    {
+      question_type:"TEXT",
+      question_text:"ตัวอย่างคำถามแบบข้อความ",
+      points:1,
+      choice_a:"",
+      choice_b:"",
+      choice_c:"",
+      choice_d:"",
+      choice_e:"",
+      correct_answer:"",
+      accepted_text_answers:"คำตอบที่ 1|คำตอบที่ 2"
+    }
+  ];
+}
+
+function buildWorkbook(rows){
+  if(!window.XLSX)throw new Error("ไม่สามารถโหลดระบบ Excel ได้");
+  const wb=XLSX.utils.book_new();
+  const ws=XLSX.utils.json_to_sheet(rows);
+  ws["!cols"]=[
+    {wch:20},{wch:52},{wch:10},
+    {wch:28},{wch:28},{wch:28},{wch:28},{wch:28},
+    {wch:20},{wch:34}
+  ];
+  XLSX.utils.book_append_sheet(wb,ws,"Questions");
+
+  const guide=[
+    ["ชื่อคอลัมน์","วิธีกรอก"],
+    ["question_type","SINGLE_CHOICE / MULTIPLE_CHOICE / TEXT"],
+    ["question_text","ข้อความคำถาม"],
+    ["points","คะแนนของข้อนี้ เช่น 1 หรือ 2"],
+    ["choice_a ถึง choice_e","ตัวเลือกคำตอบ เว้นว่างได้ถ้าไม่ใช้"],
+    ["correct_answer","SINGLE: A | MULTIPLE: A,C | TEXT: เว้นว่าง"],
+    ["accepted_text_answers","ใช้เฉพาะ TEXT; หลายคำตอบคั่นด้วย |"],
+    ["หมายเหตุ","Template นี้ไม่มี difficulty ตามรูปแบบ Post-training Exam"]
+  ];
+  const gw=XLSX.utils.aoa_to_sheet(guide);
+  gw["!cols"]=[{wch:28},{wch:90}];
+  XLSX.utils.book_append_sheet(wb,gw,"คู่มือ");
+  return wb;
+}
+
+function downloadTemplate(){
+  try{
+    XLSX.writeFile(buildWorkbook(templateRows()),"SANTE_Post_Training_Exam_Template.xlsx");
+    msg("pageMessage","ดาวน์โหลด Template แล้ว","success");
+  }catch(e){msg("pageMessage",e.message||String(e))}
+}
+
+function exportExamExcel(){
+  try{
+    const rows=questions.map(q=>{
+      const byKey=Object.fromEntries((q.choices||[]).map(c=>[String(c.choice_key||"").toUpperCase(),c]));
+      const correct=(q.choices||[]).filter(c=>c.is_correct).map(c=>c.choice_key).join(",");
+      return {
+        question_type:q.question_type,
+        question_text:q.question_text,
+        points:q.points,
+        choice_a:byKey.A?.choice_text||"",
+        choice_b:byKey.B?.choice_text||"",
+        choice_c:byKey.C?.choice_text||"",
+        choice_d:byKey.D?.choice_text||"",
+        choice_e:byKey.E?.choice_text||"",
+        correct_answer:q.question_type==="TEXT"?"":correct,
+        accepted_text_answers:q.question_type==="TEXT"?(q.text_answers||[]).map(x=>x.accepted_answer).join("|"):""
+      };
+    });
+    XLSX.writeFile(buildWorkbook(rows.length?rows:templateRows()),`${(exam.exam_code||"POSTTEST")}_Questions.xlsx`);
+    msg("pageMessage","Export ข้อสอบเป็น Excel แล้ว","success");
+  }catch(e){msg("pageMessage",e.message||String(e))}
+}
+
+async function importExamExcel(file){
+  if(!file)return;
+  clearMsg("pageMessage");
+  const btn=$("importExcelBtn");
+  btn.disabled=true;btn.textContent="กำลัง Import...";
+  try{
+    if(!window.XLSX)throw new Error("ไม่สามารถโหลดระบบ Excel ได้");
+    const wb=XLSX.read(await file.arrayBuffer(),{type:"array"});
+    const ws=wb.Sheets[wb.SheetNames[0]];
+    const rows=XLSX.utils.sheet_to_json(ws,{defval:""});
+    if(!rows.length)throw new Error("ไม่พบข้อมูลข้อสอบในไฟล์");
+
+    let imported=0;
+    for(let i=0;i<rows.length;i++){
+      const row=rows[i];
+      const type=String(row.question_type||"SINGLE_CHOICE").trim().toUpperCase();
+      const questionText=String(row.question_text||"").trim();
+      const points=Number(row.points||1);
+      if(!["SINGLE_CHOICE","MULTIPLE_CHOICE","TEXT"].includes(type))
+        throw new Error(`แถว ${i+2}: question_type ไม่ถูกต้อง`);
+      if(!questionText)throw new Error(`แถว ${i+2}: ไม่มี question_text`);
+      if(!Number.isFinite(points)||points<=0)throw new Error(`แถว ${i+2}: points ไม่ถูกต้อง`);
+
+      const correct=String(row.correct_answer||"")
+        .split(",").map(x=>x.trim().toUpperCase()).filter(Boolean);
+
+      const choices=[];
+      if(type!=="TEXT"){
+        ["A","B","C","D","E"].forEach((L,idx)=>{
+          const text=String(row["choice_"+L.toLowerCase()]||"").trim();
+          if(text){
+            choices.push({
+              choice_key:L,
+              choice_text:text,
+              image_path:null,
+              is_correct:correct.includes(L),
+              sort_order:idx+1
+            });
+          }
+        });
+        if(choices.length<2)throw new Error(`แถว ${i+2}: ต้องมีตัวเลือกอย่างน้อย 2 ข้อ`);
+        const count=choices.filter(x=>x.is_correct).length;
+        if(type==="SINGLE_CHOICE"&&count!==1)throw new Error(`แถว ${i+2}: SINGLE_CHOICE ต้องมีเฉลย 1 ข้อ`);
+        if(type==="MULTIPLE_CHOICE"&&count<1)throw new Error(`แถว ${i+2}: MULTIPLE_CHOICE ต้องมีเฉลยอย่างน้อย 1 ข้อ`);
+      }
+
+      const r=await db.rpc("admin_save_posttest_question",{
+        p_exam_id:exam.id,
+        p_question_id:null,
+        p_question_type:type,
+        p_question_text:questionText,
+        p_points:points,
+        p_question_image_path:null,
+        p_choices:choices
+      });
+      if(r.error)throw new Error(`แถว ${i+2}: ${r.error.message}`);
+
+      if(type==="TEXT"){
+        const answers=String(row.accepted_text_answers||"").split("|").map(x=>x.trim()).filter(Boolean);
+        const tr=await db.rpc("admin_save_posttest_text_answers",{p_question_id:r.data,p_answers:answers});
+        if(tr.error)throw new Error(`แถว ${i+2}: ${tr.error.message}`);
+      }
+      imported++;
+    }
+
+    await loadExam(exam.id);
+    msg("pageMessage",`Import สำเร็จ ${imported} ข้อ`,"success");
+  }catch(e){
+    console.error(e);
+    msg("pageMessage","Import ไม่สำเร็จ: "+(e.message||e));
+  }finally{
+    btn.disabled=false;btn.textContent="Import Excel";
+    $("importExcelFile").value="";
+  }
+}
+
+function testStorageKey(){
+  return `sante-posttest-admin-test-${exam.id}`;
+}
+
+function normalizedText(v){
+  return String(v??"").trim().toLocaleLowerCase("th-TH");
+}
+
+function renderTestExam(){
+  const body=$("testExamBody");
+  if(!questions.length){
+    body.innerHTML='<div class="empty">ยังไม่มีคำถามสำหรับทดสอบ</div>';
+    $("submitTestExamBtn").disabled=true;
+    $("clearTestResultBtn").style.display="none";
+    return;
+  }
+
+  $("submitTestExamBtn").disabled=false;
+  body.innerHTML=questions.map(q=>{
+    let answerHtml="";
+    if(q.question_type==="SINGLE_CHOICE"){
+      answerHtml=(q.choices||[]).map(c=>`
+        <label class="test-option">
+          <input type="radio" name="test-${q.id}" value="${esc(c.choice_key)}">
+          <span>${esc(c.choice_key)}. ${esc(c.choice_text||"")}</span>
+        </label>`).join("");
+    }else if(q.question_type==="MULTIPLE_CHOICE"){
+      answerHtml=(q.choices||[]).map(c=>`
+        <label class="test-option">
+          <input type="checkbox" data-test-multi="${esc(q.id)}" value="${esc(c.choice_key)}">
+          <span>${esc(c.choice_key)}. ${esc(c.choice_text||"")}</span>
+        </label>`).join("");
+    }else{
+      answerHtml=`<input class="input" data-test-text="${esc(q.id)}" placeholder="พิมพ์คำตอบ">`;
+    }
+    return `<div class="test-card" id="testCard-${q.id}">
+      <div style="font-size:10px;color:var(--muted)">ข้อ ${q.question_number} · ${q.points} คะแนน</div>
+      <div style="font-weight:600;margin-top:5px;line-height:1.6">${esc(q.question_text)}</div>
+      <div style="margin-top:10px">${answerHtml}</div>
+    </div>`;
+  }).join("")+'<div id="testResultArea"></div>';
+
+  const saved=localStorage.getItem(testStorageKey());
+  if(saved){
+    try{renderSavedTestResult(JSON.parse(saved))}catch{}
+  }
+}
+
+function renderSavedTestResult(result){
+  const area=$("testResultArea");
+  if(!area)return;
+  const pass=Number(result.percentage)>=Number(exam.pass_percentage||0);
+  area.innerHTML=`<div class="test-result">
+    <div style="font-size:11px;color:var(--muted)">ผลการทดสอบล่าสุด</div>
+    <div class="score-big">${result.earned} / ${result.total} คะแนน</div>
+    <div style="font-size:18px;font-weight:600">${result.percentage.toFixed(2)}%</div>
+    <div class="${pass?"result-pass":"result-fail"}" style="margin-top:5px">${pass?"ผ่านเกณฑ์":"ยังไม่ผ่านเกณฑ์"} · เกณฑ์ ${exam.pass_percentage||0}%</div>
+    <div style="font-size:10px;color:var(--muted);margin-top:5px">${new Date(result.created_at).toLocaleString("th-TH")}</div>
+    <div class="test-review">${result.review.map(r=>`
+      <div class="review-row">
+        <strong>ข้อ ${r.number}: ${r.correct?"✓ ถูก":"✕ ผิด"}</strong><br>
+        คำตอบที่เลือก: ${esc(r.given||"-")}<br>
+        เฉลย: ${esc(r.expected||"-")}
+      </div>`).join("")}</div>
+  </div>`;
+  $("clearTestResultBtn").style.display="inline-flex";
+}
+
+function submitTestExam(){
+  let total=0,earned=0;
+  const review=[];
+
+  for(const q of questions){
+    const pts=Number(q.points||0);
+    total+=pts;
+    let correct=false,given="",expected="";
+
+    if(q.question_type==="SINGLE_CHOICE"){
+      const selected=document.querySelector(`input[name="test-${q.id}"]:checked`);
+      given=selected?.value||"";
+      expected=(q.choices||[]).find(c=>c.is_correct)?.choice_key||"";
+      correct=given!==""&&given===expected;
+    }else if(q.question_type==="MULTIPLE_CHOICE"){
+      const givenArr=[...document.querySelectorAll(`[data-test-multi="${q.id}"]:checked`)].map(x=>x.value).sort();
+      const expectedArr=(q.choices||[]).filter(c=>c.is_correct).map(c=>c.choice_key).sort();
+      given=givenArr.join(",");
+      expected=expectedArr.join(",");
+      correct=given===expected&&expected!=="";
+    }else{
+      const input=document.querySelector(`[data-test-text="${q.id}"]`);
+      given=input?.value?.trim()||"";
+      const accepted=(q.text_answers||[]).map(x=>normalizedText(x.accepted_answer));
+      expected=(q.text_answers||[]).map(x=>x.accepted_answer).join(" | ");
+      correct=accepted.length>0&&accepted.includes(normalizedText(given));
+    }
+
+    if(correct)earned+=pts;
+    review.push({number:q.question_number,correct,given,expected});
+  }
+
+  const percentage=total>0?(earned/total*100):0;
+  const result={earned,total,percentage,review,created_at:new Date().toISOString()};
+  localStorage.setItem(testStorageKey(),JSON.stringify(result));
+  renderSavedTestResult(result);
+  $("testResultArea")?.scrollIntoView({behavior:"smooth",block:"nearest"});
+}
+
+function clearTestResult(){
+  localStorage.removeItem(testStorageKey());
+  renderTestExam();
+}
+
+
+$("downloadTemplateBtn").onclick=downloadTemplate;$("importExcelBtn").onclick=()=>$("importExcelFile").click();$("importExcelFile").onchange=e=>importExamExcel(e.target.files?.[0]);$("exportExcelBtn").onclick=exportExamExcel;$("testExamBtn").onclick=()=>{renderTestExam();$("testExamModal").classList.add("show")};$("closeTestExamBtn").onclick=$("cancelTestExamBtn").onclick=()=>$("testExamModal").classList.remove("show");$("submitTestExamBtn").onclick=submitTestExam;$("clearTestResultBtn").onclick=clearTestResult;$("addQuestionBtn").onclick=openAdd;$("closeModalBtn").onclick=$("cancelQuestionBtn").onclick=()=>$("questionModal").classList.remove("show");
 $("qType").onchange=()=>updateTypeUI();$("addChoiceBtn").onclick=()=>{choiceCount++;renderChoiceEditors()};
 $("qImageFile").onchange=e=>{const f=e.target.files?.[0];if(!f)return;questionImageFile=f;$("qImagePreview").innerHTML=`<img src="${URL.createObjectURL(f)}">`};
 $("saveQuestionBtn").onclick=saveQuestion;$("saveSettingsBtn").onclick=saveSettings;$("publishBtn").onclick=publishExam;$("unpublishBtn").onclick=unpublishExam;
