@@ -1,169 +1,588 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="th">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>SANTE Admin | สร้างข้อสอบท้ายการอบรม</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SANTE SYSTEM | ข้อสอบและผลสอบ</title>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --navy:#082d69;--navy-dark:#061f4b;--yellow:#ffbf19;--bg:#f1f7fb;
-  --text:#082d69;--muted:#6f83a2;--line:#d9e5ef;--green:#168346;--red:#b42318;
-  --sidebar:285px
+  --navy:#073b73;
+  --navy-dark:#052e5c;
+  --navy-light:#0b4d87;
+  --yellow:#ffc400;
+  --white:#fff;
+  --bg:#f3f8ff;
+  --gray:#61789b;
+  --line:#dce8f5;
+  --green:#17ad61;
+  --green-soft:#eaf9f1;
+  --red:#c73543;
+  --red-soft:#fff0f1;
+  --orange:#c98000;
+  --orange-soft:#fff4d4;
+  --blue:#1378ed;
+  --blue-soft:#edf4fb;
+  --shadow:0 8px 24px rgba(7,59,115,.08);
 }
-body{font-family:Prompt,sans-serif;background:var(--bg);color:var(--text)}
-a{text-decoration:none;color:inherit}button,input,select,textarea{font-family:Prompt,sans-serif}
-.sidebar{position:fixed;inset:0 auto 0 0;width:var(--sidebar);z-index:300;display:flex;flex-direction:column;background:linear-gradient(180deg,#082d69,#061f4b);color:#fff;overflow-y:auto}
-.sidebar-brand{min-height:128px;display:flex;align-items:center;justify-content:center;padding:22px 25px;border-bottom:1px solid #ffffff18}
-.sidebar-brand img{width:190px;height:82px;object-fit:contain}
-.sidebar-label{padding:26px 25px 10px;color:#9bb1d0;font-size:12px;letter-spacing:1.7px}
-.nav{padding:0 15px 25px}.nav-link{min-height:58px;display:flex;align-items:center;gap:14px;margin:5px 0;padding:0 17px;border-radius:16px;color:#e4edfa;font-size:15px;font-weight:500}
-.nav-link:hover{background:#ffffff12}.nav-link.active{background:var(--yellow);color:var(--navy);font-weight:600}.nav-icon{width:29px;text-align:center;font-size:20px}
-.sidebar-footer{margin:auto 15px 22px;padding:18px;border-radius:17px;background:#ffffff12}.sidebar-footer strong{font-size:13px}.sidebar-footer p{margin-top:6px;color:#b6c8e2;font-size:11px;line-height:1.6}
-.main{margin-left:var(--sidebar);min-height:100vh;padding-top:88px}
-.topbar{position:fixed;left:var(--sidebar);right:0;top:0;height:88px;z-index:500;background:#fffffff8;border-bottom:1px solid #e2ebf3;display:flex;align-items:center;justify-content:space-between;padding:0 34px}
-.topbar-left{display:flex;align-items:center;gap:14px}.page-name{font-size:21px;font-weight:600}.page-sub{font-size:12px;color:var(--muted);margin-top:4px}
-.admin-area{display:flex;align-items:center;gap:16px}.admin-copy{text-align:right}.admin-name{font-size:14px;font-weight:600}.admin-email{font-size:11px;color:var(--muted)}
-.btn{min-height:42px;border:1px solid var(--line);border-radius:11px;background:#fff;color:var(--navy);padding:0 14px;font-size:12px;font-weight:600;cursor:pointer}
-.btn.primary{background:var(--navy);color:#fff;border-color:var(--navy)}.btn.yellow{background:var(--yellow);border-color:var(--yellow)}.btn.danger{background:#fff0f1;border-color:#f0c9cf;color:var(--red)}.btn.success{background:#eaf9f0;border-color:#bde7ca;color:#146f3f}.btn:disabled{opacity:.5;cursor:not-allowed}
-.content{width:min(1280px,calc(100% - 48px));margin:auto;padding:28px 0 60px}
-.hero{background:#fff;border:1px solid var(--line);border-radius:22px;padding:22px;box-shadow:0 8px 24px rgba(8,45,105,.05)}
-.hero-row{display:flex;justify-content:space-between;gap:20px;align-items:flex-start}.hero h1{font-size:26px}.hero p{margin-top:6px;color:var(--muted);font-size:12px}
-.badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.badge{padding:6px 10px;border-radius:999px;background:#eef5fb;font-size:10px;font-weight:600}.badge.green{background:#eaf9f0;color:#146f3f}.badge.gray{background:#eef2f6;color:#65778b}
-.settings{display:grid;grid-template-columns:2fr 1fr 1fr 1fr auto;gap:10px;margin-top:18px}.field label{display:block;font-size:10px;font-weight:600;margin-bottom:5px}.input,.select,textarea{width:100%;border:1px solid var(--line);border-radius:11px;padding:10px 12px;background:#fff;color:var(--navy);font-size:13px;outline:none}.input,.select{min-height:44px}.settings .btn{align-self:end}
-.section-title{display:flex;justify-content:space-between;align-items:end;gap:20px;margin:28px 2px 14px}.section-title h2{font-size:22px}.section-title p{font-size:11px;color:var(--muted);margin-top:4px}
-.question-list{display:grid;gap:14px}.qcard{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:0 5px 16px rgba(8,45,105,.03)}
-.qhead{display:flex;justify-content:space-between;gap:14px}.qnum{width:34px;height:34px;border-radius:10px;background:#eaf4ff;display:grid;place-items:center;font-weight:700}.qmain{flex:1}.qtitle{font-size:15px;font-weight:600;line-height:1.6}.qmeta{font-size:10px;color:var(--muted);margin-top:4px}.qactions{display:flex;gap:7px}.qimage{margin-top:12px;max-width:360px;max-height:220px;border-radius:12px;border:1px solid var(--line);object-fit:contain;background:#fff}.choices{display:grid;gap:8px;margin-top:13px}.choice{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border:1px solid #e5edf4;border-radius:12px}.choice.correct{border-color:#a9dfbd;background:#f1fbf5}.choice-key{width:24px;height:24px;border-radius:50%;background:#edf3f8;display:grid;place-items:center;font-size:10px;font-weight:700}.choice.correct .choice-key{background:#168346;color:#fff}.choice img{max-width:180px;max-height:100px;object-fit:contain;border-radius:8px;margin-top:6px}
-.empty{padding:40px;text-align:center;background:#fff;border:1px dashed #cfdce8;border-radius:18px;color:var(--muted);font-size:12px}
-.modal-bg{position:fixed;inset:0;z-index:900;background:#061a2faa;display:none;align-items:center;justify-content:center;padding:18px}.modal-bg.show{display:flex}
-.modal{width:min(900px,96vw);max-height:94vh;overflow:auto;background:#fff;border-radius:22px;padding:22px}.modal-head{display:flex;justify-content:space-between;gap:16px}.modal h2{font-size:22px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}.full{grid-column:1/-1}.media-box{border:1px dashed #cddceb;border-radius:14px;padding:13px;background:#f9fcff}.media-preview{margin-top:10px;min-height:80px;border:1px solid #e3ebf2;border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:11px;overflow:hidden}.media-preview img{max-width:100%;max-height:220px;object-fit:contain}
-.choice-editor-list{display:grid;gap:10px;margin-top:10px}.choice-editor{display:grid;grid-template-columns:38px 1fr auto;gap:9px;border:1px solid var(--line);border-radius:14px;padding:11px}.choice-correct{padding-top:10px;text-align:center}.choice-correct input{width:20px;height:20px;accent-color:var(--navy)}.choice-editor-main{display:grid;gap:7px}.choice-editor-actions{display:flex;gap:6px;align-items:flex-start}.mini{min-height:36px;padding:0 9px;font-size:10px}.choice-img-preview img{max-width:180px;max-height:100px;border-radius:8px;border:1px solid var(--line)}
-.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
-.message{display:none;margin-top:12px;padding:10px 12px;border-radius:10px;font-size:11px}.message.show{display:block}.message.error{background:#fff0f1;color:#9e2630}.message.success{background:#eaf9f0;color:#146f3f}
-.loading{position:fixed;inset:0;z-index:1200;display:flex;align-items:center;justify-content:center;background:var(--bg);color:var(--navy)}
-.overlay{display:none}.mobile-menu{display:none}
-@media(max-width:1000px){.settings{grid-template-columns:1fr 1fr}.settings .field:first-child{grid-column:1/-1}}
-@media(max-width:900px){.sidebar{transform:translateX(-100%);width:285px}.sidebar.open{transform:none}.main{margin-left:0}.topbar{left:0}.mobile-menu{display:block}.overlay.show{display:block;position:fixed;inset:0;background:#0006;z-index:250}.content{width:calc(100% - 24px)}}
-@media(max-width:650px){.topbar{height:68px;padding:0 12px}.main{padding-top:68px}.admin-copy{display:none}.settings,.grid{grid-template-columns:1fr}.settings .field:first-child,.full{grid-column:auto}.hero-row,.section-title,.qhead{flex-direction:column}.qactions{width:100%}.qactions .btn{flex:1}.choice-editor{grid-template-columns:32px 1fr}.choice-editor-actions{grid-column:2;flex-wrap:wrap}}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:"Prompt",sans-serif;background:var(--bg);color:var(--navy)}
+body,button,input,select,textarea{font-family:"Prompt",sans-serif}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+button:disabled{cursor:not-allowed;opacity:.55}
+
+/* AUTH */
+.auth-gate{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--navy-dark),var(--navy-light))}
+.auth-box{width:min(450px,90%);padding:38px;text-align:center;border-radius:22px;background:#fff;box-shadow:0 25px 60px rgba(0,0,0,.22)}
+.auth-box h1{margin:0;font-size:34px;font-weight:700}.auth-box h1 span{color:var(--yellow)}
+.auth-box p{margin:8px 0 0;color:var(--gray);font-size:15px}
+.spinner{width:42px;height:42px;margin:24px auto 0;border:5px solid #e5ebf0;border-top-color:var(--yellow);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.auth-error{display:none;margin-top:17px;padding:12px;border-radius:10px;color:var(--red);background:var(--red-soft);font-size:14px}
+
+/* APP */
+.app{display:none;min-height:100vh}
+.sidebar{position:fixed;left:0;top:0;bottom:0;z-index:50;width:252px;padding:18px 14px;overflow-y:auto;color:#fff;background:linear-gradient(180deg,#073f78 0%,#06366a 55%,#052e5c 100%)}
+.brand{min-height:82px;display:flex;align-items:center;gap:12px;padding:6px 14px 20px;border-bottom:1px solid rgba(255,255,255,.1)}
+.brand img{width:54px;height:54px;object-fit:contain}.brand-name{font-size:24px;font-weight:700;line-height:1}.brand-sub{margin-top:7px;font-size:10px;font-weight:500}
+.group{padding:18px 12px 7px;color:rgba(255,255,255,.60);font-size:12px;font-weight:500}
+.nav{display:flex;flex-direction:column;gap:4px}
+.nav-btn{width:100%;min-height:48px;padding:10px 12px;border:0;border-radius:12px;display:flex;align-items:center;gap:10px;text-align:left;color:#fff;background:transparent;font-size:14px;font-weight:500}
+.nav-btn:hover{background:rgba(255,255,255,.08)}
+.nav-btn.active{color:#082c58;background:var(--yellow);font-weight:600}
+.nav-icon{width:24px;text-align:center;font-size:18px}
+.main{margin-left:252px;min-height:100vh}
+.topbar{position:sticky;top:0;z-index:30;min-height:76px;padding:0 28px;display:flex;align-items:center;justify-content:space-between;background:#fff;border-bottom:1px solid #edf3f9}
+.top-left,.top-right{display:flex;align-items:center;gap:14px}.mobile-menu{display:none;border:0;background:none;color:var(--navy);font-size:28px}
+.breadcrumb{color:var(--gray);font-size:14px}.breadcrumb strong{color:var(--navy);font-weight:600}
+.avatar{width:42px;height:42px;display:grid;place-items:center;border-radius:50%;color:var(--yellow);background:var(--navy);font-weight:700}
+.user{color:var(--gray);font-size:12px}.user strong{display:block;color:var(--navy);font-size:13px;font-weight:600}.logout{border:0;padding:8px 4px;color:#b83e48;background:none;font-size:14px}
+.content{max-width:1500px;margin:auto;padding:24px 28px 40px}
+
+/* HEADER */
+.page-header{margin-bottom:18px;padding:26px 28px;display:flex;align-items:center;justify-content:space-between;gap:20px;border-radius:18px;color:#fff;background:radial-gradient(circle at 90% 20%,#0c4b84 0,transparent 28%),linear-gradient(120deg,#052b55,#073d70);box-shadow:var(--shadow)}
+.page-header h1{margin:0;font-size:30px;font-weight:700}.page-header h1 span{color:var(--yellow)}
+.page-header p{margin:7px 0 0;color:rgba(255,255,255,.82);font-size:14px}
+.page-badge{flex:none;padding:9px 16px;border-radius:30px;color:var(--navy);background:var(--yellow);font-size:12px;font-weight:700}
+
+/* SUMMARY */
+.summary{display:grid;grid-template-columns:repeat(5,1fr);gap:13px;margin-bottom:16px}
+.summary-card{min-height:108px;padding:17px;display:flex;align-items:center;gap:14px;border:1px solid var(--line);border-radius:18px;background:#fff;box-shadow:var(--shadow)}
+.summary-icon{width:52px;height:52px;flex:none;display:grid;place-items:center;border-radius:13px;color:var(--navy);background:var(--blue-soft);font-size:22px}
+.summary-label{color:#536d92;font-size:13px;font-weight:600}.summary-value{margin-top:2px;font-size:30px;line-height:1.15;font-weight:700;color:#0a3267}
+
+/* TABS */
+.tabs{display:flex;gap:8px;margin-bottom:16px;padding:8px;border:1px solid var(--line);border-radius:16px;background:#fff;box-shadow:var(--shadow);overflow-x:auto}
+.tab-btn{flex:1;min-width:185px;border:0;padding:12px 14px;border-radius:11px;color:var(--navy);background:transparent;font-weight:600}
+.tab-btn.active{background:var(--navy);color:#fff}
+.tab-panel{display:none}.tab-panel.active{display:block}
+
+/* PANELS */
+.panel{margin-bottom:16px;padding:20px;border:1px solid var(--line);border-radius:18px;background:#fff;box-shadow:var(--shadow)}
+.panel-header{margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;gap:15px}
+.panel-header h2{margin:0;font-size:22px;font-weight:700}.panel-header p{margin:4px 0 0;color:var(--gray);font-size:13px}
+.panel-actions{display:flex;gap:8px;flex-wrap:wrap}
+.btn,.refresh{min-height:44px;border:1px solid var(--line);padding:9px 14px;border-radius:10px;color:var(--navy);background:#fff;font-size:14px;font-weight:600}
+.btn:hover,.refresh:hover{background:#f7faff}
+.btn-primary{border-color:var(--navy);color:#fff;background:var(--navy)}.btn-primary:hover{background:#062f61}
+.btn-yellow{border-color:var(--yellow);color:var(--navy);background:var(--yellow)}
+.btn-soft{border-color:#cfe0f2;background:#edf4fb}
+.btn-danger{border-color:#f1c4c8;color:#a8222d;background:#fff4f5}
+
+/* FILTERS / FORMS */
+.filters{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:10px;margin-bottom:14px}
+.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.form-grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+.form-group{display:flex;flex-direction:column;gap:6px}
+.form-group.full{grid-column:1/-1}
+.form-label{color:#405b81;font-size:13px;font-weight:600}
+.form-help{color:var(--gray);font-size:11px;line-height:1.5}
+input,select,textarea{width:100%;min-height:46px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--navy);font-size:14px;outline:none}
+textarea{min-height:100px;resize:vertical}
+input:focus,select:focus,textarea:focus{border-color:#8db9e8;box-shadow:0 0 0 3px rgba(19,120,237,.08)}
+.readonly-box{min-height:46px;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:#f7faff;font-size:13px}
+.form-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:16px}
+
+/* TABLE */
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px}
+table{width:100%;min-width:980px;border-collapse:collapse}
+th{padding:12px;text-align:left;color:#fff;background:var(--navy);font-size:12px;font-weight:500;white-space:nowrap}
+td{padding:12px;border-bottom:1px solid #edf0f3;vertical-align:top;font-size:12px;line-height:1.55}
+tbody tr:last-child td{border-bottom:0}tbody tr:hover{background:#fafcfe}
+.cell-main{font-weight:600;color:#0a3267}.cell-sub{margin-top:3px;color:var(--gray);font-size:11px}
+.table-actions{display:flex;gap:6px;flex-wrap:wrap}
+.mini-btn{border:0;padding:7px 10px;border-radius:8px;color:var(--navy);background:#e8f0f8;font-size:11px;font-weight:600}
+.mini-btn.primary{color:#fff;background:var(--navy)}
+.mini-btn.yellow{background:var(--yellow)}
+.mini-btn.green{color:#087744;background:var(--green-soft)}
+.type-note{margin-top:7px;color:var(--gray);font-size:11px}
+.posttest-session{font-weight:600;color:#0a3267}
+
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;padding:5px 9px;border-radius:20px;font-size:10px;font-weight:700;white-space:nowrap}
+.badge.active,.badge.passed,.badge.open{color:#087744;background:var(--green-soft)}
+.badge.inactive,.badge.failed,.badge.revoked{color:#ad2632;background:var(--red-soft)}
+.badge.pending,.badge.inprogress{color:#956100;background:var(--orange-soft)}
+.badge.info{color:#145b9c;background:#eaf4ff}
+.badge.neutral{color:#536d92;background:#eef2f6}
+
+/* SET CARDS */
+.set-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.set-card{padding:16px;border:1px solid var(--line);border-radius:14px;background:#fafbfd}
+.set-card h3{margin:0 0 8px;font-size:16px}.set-meta{color:var(--gray);font-size:12px;line-height:1.9}
+.progress{height:8px;margin-top:10px;border-radius:20px;background:#e5ebf0;overflow:hidden}.progress span{display:block;height:100%;background:var(--yellow)}
+
+/* ACCESS LAYOUT */
+.access-layout{display:grid;grid-template-columns:minmax(330px,.8fr) minmax(0,1.5fr);gap:16px}
+.access-form{position:sticky;top:96px;align-self:start}
+.access-note{margin-top:12px;padding:12px 14px;border-radius:10px;background:#fff9df;color:#6b5700;font-size:12px;line-height:1.6}
+
+/* MESSAGE */
+.message{display:none;margin-bottom:14px;padding:13px 15px;border-radius:10px;font-size:13px;line-height:1.6}
+.message.success{display:block;color:#087744;background:var(--green-soft)}
+.message.error{display:block;color:#a8222d;background:var(--red-soft)}
+.message.info{display:block;color:#145b9c;background:#eaf4ff}
+
+/* MODAL */
+.modal{display:none;position:fixed;inset:0;z-index:500;padding:20px;align-items:center;justify-content:center;background:rgba(0,20,40,.58)}
+.modal.show{display:flex}
+.modal-card{width:min(880px,100%);max-height:90vh;overflow-y:auto;padding:24px;border-radius:18px;background:#fff;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+.modal-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:16px}
+.modal-header h2{margin:0;font-size:22px}.modal-header p{margin:5px 0 0;color:var(--gray);font-size:12px}
+.modal-close{width:38px;height:38px;border:0;border-radius:10px;background:#edf1f5;color:var(--navy);font-size:20px}
+.detail-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.detail-item{padding:12px;border:1px solid var(--line);border-radius:10px;background:#fafcfe}
+.detail-item span{display:block;color:var(--gray);font-size:11px}.detail-item strong{display:block;margin-top:4px;font-size:13px}
+.review-box{margin-top:16px;padding:14px;border:1px solid var(--line);border-radius:12px;background:#fff}
+.review-box pre{white-space:pre-wrap;word-break:break-word;margin:0;color:#294b70;font-family:"Prompt",sans-serif;font-size:12px;line-height:1.65}
+
+/* UTILITY */
+.empty{padding:32px;text-align:center;color:var(--gray);font-size:14px}
+.muted{color:var(--gray)}
+.overlay{display:none}
+
+@media(max-width:1200px){
+  .summary{grid-template-columns:repeat(3,1fr)}
+  .set-grid{grid-template-columns:repeat(2,1fr)}
+  .access-layout{grid-template-columns:1fr}
+  .access-form{position:static}
+}
+@media(max-width:900px){
+  .sidebar{width:286px;transform:translateX(-100%);transition:.2s}.sidebar.open{transform:none}
+  .overlay.show{display:block;position:fixed;inset:0;z-index:40;background:rgba(0,0,0,.45)}
+  .main{margin-left:0}.mobile-menu{display:block}.user{display:none}
+  .content{padding:18px 16px 32px}.topbar{min-height:68px;padding:0 16px}
+  .filters,.form-grid,.form-grid.three{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+  .breadcrumb{display:none}.content{padding:14px 12px 28px}.page-header{padding:20px}.page-header h1{font-size:24px}.page-badge{display:none}
+  .summary{grid-template-columns:1fr 1fr}.summary-value{font-size:26px}.set-grid{grid-template-columns:1fr}
+  .panel{padding:16px}.detail-grid{grid-template-columns:1fr}
+}
+
+/* ===== SANTE CANONICAL ADMIN SIDEBAR R3 ===== */
+:root{--sante-side-w:270px;--sante-side:#0b4f88;--sante-side-dark:#073a68;--sante-yellow:#ffc83d}
+.sante-canonical-sidebar{
+  position:fixed!important;left:0!important;top:0!important;bottom:0!important;
+  width:var(--sante-side-w)!important;z-index:120!important;overflow-y:auto!important;
+  background:linear-gradient(180deg,var(--sante-side),var(--sante-side-dark))!important;
+  color:#fff!important;padding:0!important;display:block!important
+}
+.sante-canonical-brand{height:145px;display:flex;align-items:center;justify-content:center;border-bottom:1px solid rgba(255,255,255,.12)}
+.sante-canonical-brand img{width:112px;height:92px;object-fit:contain;display:block}
+.sante-canonical-nav{padding:18px 14px 32px}
+.sante-canonical-title{padding:10px 12px 7px;margin-top:3px;font-size:10px;font-weight:600;letter-spacing:.7px;color:rgba(255,255,255,.52)}
+.sante-canonical-item{
+  display:flex;align-items:center;gap:12px;min-height:48px;padding:10px 13px;margin:4px 0;
+  border-radius:11px;text-decoration:none;color:#fff!important;background:transparent!important;
+  font:500 13px/1.35 Prompt,sans-serif
+}
+.sante-canonical-item:hover{background:rgba(255,255,255,.08)!important}
+.sante-canonical-item.active{background:var(--sante-yellow)!important;color:#082b50!important;font-weight:700!important}
+.sante-canonical-icon{width:25px;text-align:center;font-size:17px;flex:0 0 25px}
+.sante-canonical-foot{padding:14px 18px 22px;border-top:1px solid rgba(255,255,255,.10);font-size:10px;color:rgba(255,255,255,.66)}
+@media(min-width:901px){
+  .main,.admin-main,.page-main{margin-left:var(--sante-side-w)!important}
+}
+@media(max-width:900px){
+  .sante-canonical-sidebar{transform:translateX(-100%);transition:.22s}
+  .sante-canonical-sidebar.open{transform:translateX(0)}
+  .main,.admin-main,.page-main{margin-left:0!important}
+}
+
+
+/* ===== SANTE ADMIN SHELL R13 : EXAMS ===== */
+:root{
+  --navy:#082d69;--navy-dark:#061f4b;--navy-soft:#0d4386;
+  --yellow:#ffbf19;--blue:#087df0;--green:#159447;--red:#b42318;
+  --bg:#f1f7fb;--white:#fff;--text:#082d69;--muted:#6f83a2;
+  --line:#d9e5ef;--sidebar:285px;
+}
+body{background:var(--bg);color:var(--text);font-size:16px}
+.app{min-height:100vh}
+.sidebar{
+  position:fixed;left:0;top:0;bottom:0;z-index:300;width:var(--sidebar);
+  display:flex;flex-direction:column;padding:0!important;
+  background:linear-gradient(180deg,#082d69 0%,#06265c 55%,#061f4b 100%)!important;
+  color:#fff;overflow-y:auto;transform:none;
+}
+.sidebar-brand{min-height:128px;display:flex;align-items:center;justify-content:center;padding:22px 25px;border-bottom:1px solid rgba(255,255,255,.10)}
+.sidebar-brand img{display:block;width:190px;max-width:100%;height:82px;object-fit:contain}
+.sidebar-label{padding:26px 25px 10px;color:#9bb1d0;font-size:12px;font-weight:500;letter-spacing:1.7px}
+.nav{display:block;padding:0 15px 25px}
+.nav-link{min-height:58px;display:flex;align-items:center;gap:14px;margin:5px 0;padding:0 17px;border-radius:16px;color:#e4edfa!important;background:transparent!important;font-size:15px;font-weight:500;text-decoration:none}
+.nav-link:hover{background:rgba(255,255,255,.08)!important;color:#fff!important}
+.nav-link.active{background:var(--yellow)!important;color:var(--navy)!important;font-weight:600!important;box-shadow:0 7px 18px rgba(0,0,0,.10)}
+.nav-icon{width:29px;flex:0 0 29px;display:grid;place-items:center;font-size:21px;line-height:1}
+.sidebar-footer{margin:auto 15px 22px;padding:18px;border-radius:17px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.05)}
+.sidebar-footer strong{display:block;font-size:13px;font-weight:600}
+.sidebar-footer p{margin-top:6px;color:#b6c8e2;font-size:11px;line-height:1.65}
+
+.main{min-height:100vh;margin-left:var(--sidebar)!important;padding-top:88px}
+.topbar{
+  position:fixed;top:0;left:var(--sidebar);right:0;z-index:500;height:88px;
+  display:flex;align-items:center;justify-content:space-between;gap:24px;padding:0 34px;
+  background:rgba(255,255,255,.97);border-bottom:1px solid #e2ebf3;
+  box-shadow:0 3px 14px rgba(8,45,105,.025)
+}
+.topbar-left{display:flex;align-items:center;gap:14px}
+.page-name{font-size:21px;line-height:1.3;font-weight:600}
+.page-sub{margin-top:4px;color:var(--muted);font-size:12px}
+.mobile-menu{display:none;width:44px;height:44px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--navy);font-size:21px;cursor:pointer}
+.admin-area{display:flex;align-items:center;gap:17px}
+.admin-copy{text-align:right}
+.admin-name{font-size:15px;font-weight:600}
+.admin-email{margin-top:2px;color:var(--muted);font-size:11px}
+.logout{min-height:46px;padding:0 18px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--navy);font-size:13px;font-weight:600}
+
+.content{width:min(1540px,calc(100% - 58px));max-width:none;margin:0 auto;padding:30px 0 65px}
+.canonical-hero{width:100%;margin:0 0 28px;padding:10px;background:#fff;border-radius:28px;box-shadow:0 10px 30px rgba(8,45,105,.06)}
+.canonical-hero picture,.canonical-hero img{display:block;width:100%}
+.canonical-hero img{height:auto;border-radius:22px;object-fit:cover}
+.page-head{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;margin:2px 4px 22px}
+.page-head h1{margin:0;font-size:30px;line-height:1.3;font-weight:600;color:var(--navy)}
+.page-head p{margin:6px 0 0;color:var(--muted);font-size:13px}
+.page-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+.page-badge{padding:10px 15px;border-radius:999px;background:var(--yellow);color:var(--navy);font-size:11px;font-weight:700}
+.btn-light{background:#fff!important;color:var(--navy)!important;border:1px solid var(--line)!important}
+
+.summary{grid-template-columns:repeat(5,minmax(0,1fr));gap:14px;margin-bottom:18px}
+.summary-card{min-height:125px;padding:20px;border:1px solid var(--line);border-radius:20px;background:#fff;box-shadow:0 6px 18px rgba(8,45,105,.035)}
+.summary-label{font-size:12px}.summary-value{font-size:31px}
+.tabs{border-radius:18px;box-shadow:none}
+.panel{border-radius:20px;box-shadow:0 5px 15px rgba(8,45,105,.025)}
+.filters{gap:12px}
+input,select,textarea{border-radius:12px;font-size:14px}
+.table-wrap{border-radius:14px}
+th{background:var(--navy)}
+.access-form{top:106px}
+
+@media(max-width:1200px){
+  :root{--sidebar:255px}
+  .summary{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:900px){
+  .sidebar{width:285px;transform:translateX(-100%);transition:.2s ease}
+  .sidebar.open{transform:translateX(0)}
+  .main{margin-left:0!important}
+  .topbar{left:0}
+  .mobile-menu{display:block}
+  .summary{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:767px){
+  .main{padding-top:68px}
+  .topbar{height:68px;padding:0 12px}
+  .page-name{font-size:16px}
+  .page-sub,.admin-copy{display:none}
+  .content{width:100%;padding:16px 12px 42px}
+  .canonical-hero{margin-bottom:18px;padding:6px;border-radius:18px}
+  .canonical-hero img{border-radius:14px}
+  .page-head{flex-direction:column;gap:14px}
+  .page-head h1{font-size:24px}
+  .page-actions{width:100%;justify-content:flex-start}
+  #exportExcelBtn{width:100%}
+  .page-badge{display:none}
+  .summary{grid-template-columns:1fr 1fr;gap:10px}
+  .summary-card{min-height:105px;padding:14px}
+  .summary-icon{width:44px;height:44px}
+  .summary-value{font-size:25px}
+  .tabs{overflow-x:auto}
+  .tab-btn{min-width:170px}
+  .filters,.form-grid,.form-grid.three{grid-template-columns:1fr}
+  .panel{padding:16px}
+  .access-layout{grid-template-columns:1fr}
+}
+@media(max-width:430px){
+  .summary{grid-template-columns:1fr}
+}
+
+
+/* ===== R15 EXAMS SINGLE-SHELL FIX =====
+   admin-exams owns its shell. Do not inject a second master shell/cover.
+================================================ */
+.au-sidebar,.au-topbar,.au-cover-wrap{display:none!important}
+body{padding-left:0!important}
+
 </style>
-<meta name="sante-build" content="POSTTEST-BUILDER-V1">
+<meta name="sante-build" content="ADMIN-EXAMS-POSTTEST-R1">
 </head>
+
 <body>
-<div id="loading" class="loading">กำลังเปิด Exam Builder...</div>
-<div id="overlay" class="overlay"></div>
+<div class="auth-gate" id="authGate">
+  <div class="auth-box">
+    <h1>SANTE <span>SYSTEM</span></h1>
+    <p>กำลังตรวจสอบสิทธิ์ผู้ดูแลระบบ</p>
+    <div class="spinner" id="spinner"></div>
+    <div class="auth-error" id="authError"></div>
+  </div>
+</div>
+
+<div class="overlay" id="overlay"></div>
+
+<div class="app" id="app">
 
 <aside class="sidebar" id="sidebar">
-  <div class="sidebar-brand"><img src="sante%20(en)-logo.png" alt="SANTE"></div>
+  <div class="sidebar-brand">
+    <img src="sante%20(en)-logo.png" alt="SANTE Consulting">
+  </div>
   <div class="sidebar-label">SANTE ADMIN</div>
   <nav class="nav">
-    <a href="admin-dashboard.html" class="nav-link"><span class="nav-icon">⌂</span>หน้าหลัก</a>
-    <a href="admin-courses.html" class="nav-link"><span class="nav-icon">▤</span>หลักสูตร</a>
-    <a href="admin-training-sessions.html" class="nav-link"><span class="nav-icon">◫</span>รอบอบรม</a>
-    <a href="admin-exams.html" class="nav-link active"><span class="nav-icon">✓</span>ข้อสอบ</a>
-    <a href="admin-question-import.html" class="nav-link"><span class="nav-icon">⇧</span>นำเข้าข้อสอบ</a>
-    <a href="admin-payments.html" class="nav-link"><span class="nav-icon">฿</span>การชำระเงิน</a>
-    <a href="admin-members.html" class="nav-link"><span class="nav-icon">♙</span>สมาชิก</a>
-    <a href="admin-services.html" class="nav-link"><span class="nav-icon">▣</span>งานบริการ</a>
-    <a href="admin-quotations.html" class="nav-link"><span class="nav-icon">▧</span>ใบเสนอราคา</a>
+    <a href="admin-dashboard.html" class="nav-link"><span class="nav-icon">⌂</span><span>หน้าหลัก</span></a>
+    <a href="admin-courses.html" class="nav-link"><span class="nav-icon">▤</span><span>หลักสูตร</span></a>
+    <a href="admin-training-sessions.html" class="nav-link"><span class="nav-icon">◫</span><span>รอบอบรม</span></a>
+    <a href="admin-exams.html" class="nav-link active"><span class="nav-icon">✓</span><span>ข้อสอบ</span></a>
+    <a href="admin-question-import.html" class="nav-link"><span class="nav-icon">⇧</span><span>นำเข้าข้อสอบ</span></a>
+    <a href="admin-payments.html" class="nav-link"><span class="nav-icon">฿</span><span>การชำระเงิน</span></a>
+    <a href="admin-members.html" class="nav-link"><span class="nav-icon">♙</span><span>สมาชิก</span></a>
+    <a href="admin-services.html" class="nav-link"><span class="nav-icon">▣</span><span>งานบริการ</span></a>
+    <a href="admin-quotations.html" class="nav-link"><span class="nav-icon">▧</span><span>ใบเสนอราคา</span></a>
   </nav>
-  <div class="sidebar-footer"><strong>SANTE SYSTEM</strong><p>ระบบบริหารจัดการภายใน<br>SANTE Consulting</p></div>
+  <div class="sidebar-footer">
+    <strong>SANTE SYSTEM</strong>
+    <p>ระบบบริหารจัดการภายใน<br>SANTE Consulting</p>
+  </div>
 </aside>
 
+
 <div class="main">
+
 <header class="topbar">
   <div class="topbar-left">
-    <button id="menuBtn" class="btn mobile-menu">☰</button>
-    <div><div class="page-name">สร้างข้อสอบท้ายการอบรม</div><div class="page-sub">Exam Builder แบบ Google Forms</div></div>
+    <button id="mobileMenu" class="mobile-menu" type="button">☰</button>
+    <div>
+      <div class="page-name">ข้อสอบ</div>
+      <div class="page-sub">จัดการข้อสอบ สิทธิ์สอบ และผลสอบของ SANTE</div>
+    </div>
   </div>
   <div class="admin-area">
-    <div class="admin-copy"><div class="admin-name">ผู้ดูแลระบบ SANTE</div><div id="adminEmail" class="admin-email"></div></div>
-    <button id="logoutBtn" class="btn">ออกจากระบบ</button>
+    <div class="admin-copy">
+      <div id="adminName" class="admin-name">ผู้ดูแลระบบ SANTE</div>
+      <div id="adminEmail" class="admin-email"></div>
+    </div>
+    <button class="logout" id="logoutBtn" type="button">ออกจากระบบ</button>
   </div>
 </header>
 
+
 <main class="content">
-  <section class="hero">
-    <div class="hero-row">
-      <div>
-        <h1 id="examTitle">แบบทดสอบท้ายการอบรม</h1>
-        <p id="sessionInfo">กำลังโหลดข้อมูลรอบอบรม...</p>
-        <div class="badges">
-          <span class="badge" id="examCode">-</span>
-          <span class="badge gray" id="publishBadge">DRAFT</span>
-          <span class="badge" id="questionCountBadge">0 ข้อ</span>
-        </div>
-      </div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <button class="btn" onclick="history.back()">← กลับ</button>
-        <button id="unpublishBtn" class="btn danger" style="display:none">ยกเลิกเผยแพร่</button>
-        <button id="publishBtn" class="btn success">เผยแพร่ข้อสอบ</button>
-      </div>
-    </div>
 
-    <div class="settings">
-      <div class="field"><label>ชื่อข้อสอบ</label><input id="settingName" class="input"></div>
-      <div class="field"><label>เกณฑ์ผ่าน (%)</label><input id="settingPass" class="input" type="number" min="0" max="100"></div>
-      <div class="field"><label>สอบได้กี่ครั้ง</label><input id="settingAttempts" class="input" type="number" min="1"></div>
-      <div class="field"><label>เวลาทำข้อสอบ (นาที)</label><input id="settingTime" class="input" type="number" min="1" placeholder="ไม่จำกัด"></div>
-      <button id="saveSettingsBtn" class="btn primary">บันทึกตั้งค่า</button>
-    </div>
-    <div id="pageMessage" class="message"></div>
-  </section>
+<section class="canonical-hero">
+  <picture>
+    <source media="(max-width: 767px)" srcset="sante-dashboard-hero-mobile.png">
+    <img src="sante-dashboard-hero-desktop.png" alt="Trust in Safety. Trust in SANTE.">
+  </picture>
+</section>
 
-  <div class="section-title">
-    <div><h2>คำถาม</h2><p>สร้างคำถามแบบช้อยส์ เลือกเฉลย และแนบรูปได้ทั้งคำถามและคำตอบ</p></div>
-    <button id="addQuestionBtn" class="btn yellow">+ เพิ่มคำถาม</button>
+<section class="page-head">
+  <div>
+    <h1>ข้อสอบ</h1>
+    <p>ตรวจสอบชุดข้อสอบ เปิดสิทธิ์สอบ Manual และติดตามผลการทำข้อสอบรายบุคคล</p>
   </div>
+  <div class="page-actions">
+    <button class="btn btn-light" id="exportExcelBtn" type="button">↓ Export Excel</button>
+    <span class="page-badge">EXAM ADMIN CONTROL</span>
+  </div>
+</section>
 
-  <div id="questionList" class="question-list"></div>
-</main>
+
+<section class="summary">
+  <div class="summary-card"><div class="summary-icon">☑</div><div><div class="summary-label">ข้อสอบติว</div><div class="summary-value" id="examCount">-</div></div></div>
+  <div class="summary-card"><div class="summary-icon">▤</div><div><div class="summary-label">ข้อสอบท้ายอบรม</div><div class="summary-value" id="setCount">-</div></div></div>
+  <div class="summary-card"><div class="summary-icon">🔓</div><div><div class="summary-label">สิทธิ์สอบที่เปิด</div><div class="summary-value" id="accessCount">-</div></div></div>
+  <div class="summary-card"><div class="summary-icon">✎</div><div><div class="summary-label">ทำข้อสอบทั้งหมด</div><div class="summary-value" id="attemptCount">-</div></div></div>
+  <div class="summary-card"><div class="summary-icon">✓</div><div><div class="summary-label">สอบผ่าน</div><div class="summary-value" id="passCount">-</div></div></div>
+</section>
+
+<div class="message" id="messageBox"></div>
+
+<div class="tabs">
+  <button class="tab-btn active" data-tab="overview">ข้อสอบติว / คลังข้อสอบ</button>
+  <button class="tab-btn" data-tab="posttest">ข้อสอบท้ายการอบรม</button>
+  <button class="tab-btn" data-tab="access">เปิดสิทธิ์สอบ</button>
+  <button class="tab-btn" data-tab="results">ผลสอบ / Attempts</button>
 </div>
 
-<div class="modal-bg" id="questionModal">
-  <div class="modal">
-    <div class="modal-head">
-      <div><h2 id="modalTitle">เพิ่มคำถาม</h2><div style="font-size:11px;color:var(--muted);margin-top:4px">เลือกคำตอบที่ถูกต้องได้เหมือน Google Forms Quiz</div></div>
-      <button class="btn" id="closeModalBtn">✕</button>
+<!-- TAB 1: OVERVIEW -->
+<section class="tab-panel active" id="tab-overview">
+  <section class="panel">
+    <div class="panel-header">
+      <div><h2>ข้อสอบติว / คลังข้อสอบ</h2><p>ข้อสอบระดับหลักสูตร เช่น EXAM-WATER, EXAM-AIR และชุดข้อสอบสำหรับฝึกทำ</p></div>
+      <button class="refresh" data-refresh>↻ รีเฟรชข้อมูล</button>
     </div>
 
-    <div class="grid">
-      <div class="field"><label>ประเภทคำถาม</label>
-        <select id="qType" class="select">
-          <option value="SINGLE_CHOICE">ตัวเลือกเดียว</option>
-          <option value="MULTIPLE_CHOICE">เลือกได้หลายคำตอบ</option>
-          <option value="TEXT">คำตอบข้อความ</option>
-        </select>
-      </div>
-      <div class="field"><label>คะแนน</label><input id="qPoints" class="input" type="number" min="0.1" step="0.5" value="1"></div>
-      <div class="field full"><label>คำถาม</label><textarea id="qText" rows="4" placeholder="พิมพ์คำถาม..."></textarea></div>
+    <div class="filters">
+      <input id="examSearch" placeholder="ค้นหาชื่อข้อสอบ / รหัสข้อสอบ / หลักสูตร">
+      <select id="examCourseFilter"><option value="">ทุกหลักสูตร</option></select>
+      <select id="examStatusFilter"><option value="">ทุกสถานะ</option><option value="true">เปิดใช้งาน</option><option value="false">ปิดใช้งาน</option></select>
+    </div>
 
-      <div class="field full">
-        <div class="media-box">
-          <div style="display:flex;justify-content:space-between;gap:10px;align-items:center">
-            <div><strong style="font-size:12px">รูปประกอบคำถาม</strong><div style="font-size:10px;color:var(--muted)">JPG / PNG / WEBP ไม่เกิน 10 MB</div></div>
-            <label class="btn mini">เลือกรูป<input id="qImageFile" type="file" accept="image/jpeg,image/png,image/webp" hidden></label>
-          </div>
-          <div id="qImagePreview" class="media-preview">ยังไม่มีรูปคำถาม</div>
+    <div id="examArea"><div class="empty">กำลังโหลดข้อมูล...</div></div>
+  </section>
+
+  <section class="panel">
+    <div class="panel-header">
+      <div><h2 id="setTitle">ชุดข้อสอบ</h2><p>จำนวนข้อจริงเทียบกับจำนวนข้อที่กำหนดไว้ในแต่ละชุด</p></div>
+    </div>
+    <div class="set-grid" id="setArea"><div class="empty">เลือกข้อสอบจากรายการด้านบน</div></div>
+  </section>
+</section>
+
+<!-- TAB 2: POST-TRAINING -->
+<section class="tab-panel" id="tab-posttest">
+  <section class="panel">
+    <div class="panel-header">
+      <div>
+        <h2>ข้อสอบท้ายการอบรม</h2>
+        <p>ข้อสอบที่ผูกกับรอบอบรมโดยตรง ใช้ร่วมกันทั้งรอบฟรี รอบเสียเงิน และ In-house</p>
+      </div>
+      <button class="refresh" data-refresh>↻ รีเฟรชข้อมูล</button>
+    </div>
+
+    <div class="filters">
+      <input id="posttestSearch" placeholder="ค้นหาชื่อข้อสอบ / รุ่น / หลักสูตร">
+      <select id="posttestCourseFilter"><option value="">ทุกหลักสูตร</option></select>
+      <select id="posttestStatusFilter">
+        <option value="">ทุกสถานะ</option>
+        <option value="true">Published</option>
+        <option value="false">Draft</option>
+      </select>
+    </div>
+
+    <div id="posttestArea">
+      <div class="empty">กำลังโหลดข้อมูล...</div>
+    </div>
+  </section>
+</section>
+
+<!-- TAB 3: ACCESS -->
+<section class="tab-panel" id="tab-access">
+  <div class="access-layout">
+    <section class="panel access-form">
+      <div class="panel-header">
+        <div><h2>เปิดสิทธิ์สอบ Manual</h2><p>ใช้ RPC <strong>open_training_exam_access</strong> ของระบบเดิม</p></div>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group full">
+          <label class="form-label">ข้อสอบ *</label>
+          <select id="accessExamSelect"><option value="">เลือกข้อสอบ</option></select>
+        </div>
+
+        <div class="form-group full">
+          <label class="form-label">ผู้สมัครอบรม *</label>
+          <select id="accessRegistrationSelect"><option value="">เลือกข้อสอบก่อน</option></select>
+          <div class="form-help">จะแสดงผู้สมัครจากรอบอบรมที่อยู่ในหลักสูตรเดียวกับข้อสอบ</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">ระยะเวลาสิทธิ์ (นาที)</label>
+          <input id="accessMinutes" type="number" min="1" step="1" placeholder="ใช้ค่าจากรอบอบรม">
+          <div class="form-help">เว้นว่าง = ใช้ค่า exam_access_minutes ของรอบอบรมตาม RPC</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">จำนวนครั้งสอบสูงสุด</label>
+          <input id="accessMaxAttempts" type="number" min="1" step="1" placeholder="ใช้ค่าจากรอบอบรม / Exam">
+          <div class="form-help">หากกรอก ระบบจะบันทึกลง max_attempts_override</div>
+        </div>
+
+        <div class="form-group full">
+          <label class="form-label">ค่าจากรอบอบรม</label>
+          <div class="readonly-box" id="accessDefaults">เลือกผู้สมัครอบรมเพื่อดูค่าเริ่มต้น</div>
         </div>
       </div>
 
-      <div class="field full" id="choiceSection">
-        <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
-          <div><strong>ตัวเลือกและเฉลย</strong><div style="font-size:10px;color:var(--muted);margin-top:3px" id="choiceHelp">เลือกวงกลมหน้าคำตอบที่ถูกต้อง 1 ข้อ</div></div>
-          <button id="addChoiceBtn" type="button" class="btn mini">+ เพิ่มตัวเลือก</button>
-        </div>
-        <div id="choiceEditorList" class="choice-editor-list"></div>
+      <div class="access-note">
+        ระบบจะสร้างสิทธิ์ด้วย RPC ก่อน แล้วจึงปรับ <strong>access_expires_at</strong> และ
+        <strong>max_attempts_override</strong> เฉพาะกรณีที่กรอกค่า Override
+        โดยไม่แก้โครงสร้าง Database เดิม
       </div>
+
+      <div class="form-actions">
+        <button class="btn btn-soft" id="clearAccessForm">ล้างข้อมูล</button>
+        <button class="btn btn-yellow" id="openAccessBtn">🔓 เปิดสิทธิ์สอบ</button>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-header">
+        <div><h2>สิทธิ์สอบที่มีในระบบ</h2><p>ตรวจสอบผู้เรียน ข้อสอบ วันเปิด วันหมดอายุ จำนวนครั้ง และผู้เปิดสิทธิ์</p></div>
+        <button class="refresh" data-refresh>↻ รีเฟรชข้อมูล</button>
+      </div>
+
+      <div class="filters">
+        <input id="accessSearch" placeholder="ค้นหาชื่อ / อีเมล / ข้อสอบ">
+        <select id="accessExamFilter"><option value="">ทุกข้อสอบ</option></select>
+        <select id="accessStateFilter"><option value="">ทุกสถานะ</option><option value="OPEN_NOW">ยังไม่หมดอายุ</option><option value="EXPIRED_NOW">หมดอายุแล้ว</option></select>
+      </div>
+
+      <div id="accessArea"><div class="empty">กำลังโหลดข้อมูล...</div></div>
+    </section>
+  </div>
+</section>
+
+<!-- TAB 4: RESULTS -->
+<section class="tab-panel" id="tab-results">
+  <section class="panel">
+    <div class="panel-header">
+      <div><h2>ผลสอบ / Attempts</h2><p>ดูผู้สอบ ชุดข้อสอบ ครั้งที่สอบ คะแนน เปอร์เซ็นต์ และสถานะผ่าน/ไม่ผ่าน</p></div>
+      <button class="refresh" data-refresh>↻ รีเฟรชข้อมูล</button>
     </div>
 
-    <div id="modalMessage" class="message"></div>
-    <div class="modal-actions">
-      <button class="btn" id="cancelQuestionBtn">ยกเลิก</button>
-      <button class="btn primary" id="saveQuestionBtn">บันทึกคำถาม</button>
+    <div class="filters">
+      <input id="attemptSearch" placeholder="ค้นหาชื่อ / อีเมล / ข้อสอบ">
+      <select id="attemptExamFilter"><option value="">ทุกข้อสอบ</option></select>
+      <select id="attemptPassFilter"><option value="">ทุกผลสอบ</option><option value="true">ผ่าน</option><option value="false">ไม่ผ่าน</option><option value="pending">ยังไม่ส่งข้อสอบ</option></select>
+    </div>
+
+    <div id="attemptArea"><div class="empty">กำลังโหลดข้อมูล...</div></div>
+  </section>
+</section>
+
+</main>
+</div>
+</div>
+
+<!-- ATTEMPT DETAIL MODAL -->
+<div class="modal" id="attemptModal">
+  <div class="modal-card">
+    <div class="modal-header">
+      <div><h2>รายละเอียดการทำข้อสอบ</h2><p id="attemptModalSub">-</p></div>
+      <button class="modal-close" id="closeAttemptModal">×</button>
+    </div>
+    <div class="detail-grid" id="attemptDetailGrid"></div>
+    <div class="review-box">
+      <strong>Exam Result Review</strong>
+      <div class="muted" style="font-size:11px;margin:4px 0 10px;">ข้อมูลจาก RPC get_exam_result_review()</div>
+      <pre id="attemptReview">กดดูรายละเอียดเพื่อโหลดข้อมูล...</pre>
     </div>
   </div>
 </div>
@@ -171,282 +590,875 @@ a{text-decoration:none;color:inherit}button,input,select,textarea{font-family:Pr
 <script>
 const SUPABASE_URL="https://cyegjwerxlxhczrfiurz.supabase.co";
 const SUPABASE_KEY="sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF";
-const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{storageKey:"sante-admin-auth",persistSession:true,autoRefreshToken:true}});
+const AUTH_STORAGE_KEY="sante-admin-auth";
 
-let exam=null, examSet=null, session=null, course=null, questions=[];
-let editingQuestionId=null, choiceCount=4, questionImageFile=null, existingQuestionImagePath=null;
-let choiceFiles={}, existingChoiceImages={};
+let sb=null;
+let currentUser=null;
 
-const $=id=>document.getElementById(id);
-function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
-function msg(id,text,type="error"){const e=$(id);e.textContent=text;e.className="message show "+type}
-function clearMsg(id){const e=$(id);e.textContent="";e.className="message"}
-function letter(i){return String.fromCharCode(65+i)}
+let courses=[];
+let exams=[];
+let sets=[];
+let attempts=[];
+let accesses=[];
+let registrations=[];
+let sessions=[];
+let profiles=[];
+let setQuestionCounts={};
 
-async function signedUrl(path){
-  if(!path)return null;
-  const {data,error}=await db.storage.from("question-media").createSignedUrl(path,600);
-  if(error)return null;
-  return data?.signedUrl||null;
+const el=id=>document.getElementById(id);
+const esc=v=>String(v??"")
+  .replaceAll("&","&amp;")
+  .replaceAll("<","&lt;")
+  .replaceAll(">","&gt;")
+  .replaceAll('"',"&quot;")
+  .replaceAll("'","&#039;");
+
+function showMessage(type,msg){
+  const box=el("messageBox");
+  box.className="message "+type;
+  box.textContent=msg;
+  box.scrollIntoView({behavior:"smooth",block:"nearest"});
+}
+function clearMessage(){
+  el("messageBox").className="message";
+  el("messageBox").textContent="";
+}
+function fmtDate(value){
+  if(!value)return "-";
+  const d=new Date(value);
+  if(Number.isNaN(d.getTime()))return String(value);
+  return d.toLocaleString("th-TH",{dateStyle:"medium",timeStyle:"short"});
+}
+function fmtNum(value,digits=2){
+  const n=Number(value);
+  if(Number.isNaN(n))return "-";
+  return n.toLocaleString("th-TH",{maximumFractionDigits:digits});
+}
+function courseById(id){return courses.find(x=>x.id===id)||null}
+function examById(id){return exams.find(x=>x.id===id)||null}
+function setById(id){return sets.find(x=>x.id===id)||null}
+function sessionById(id){return sessions.find(x=>x.id===id)||null}
+function registrationById(id){return registrations.find(x=>x.id===id)||null}
+function profileById(id){return profiles.find(x=>x.id===id)||null}
+function courseName(id){
+  const c=courseById(id);
+  return c?.course_name_th||c?.course_code||"ไม่ระบุหลักสูตร";
+}
+function examName(id){
+  const x=examById(id);
+  return x?.exam_name_th||x?.exam_code||"ไม่ระบุข้อสอบ";
+}
+function setName(id){
+  const x=setById(id);
+  return x?.set_name||x?.set_code||"ไม่ระบุชุด";
+}
+function personNameFromProfile(id){
+  const p=profileById(id);
+  if(!p)return "-";
+  const name=[p.title_th,p.firstname_th,p.lastname_th].filter(Boolean).join(" ").trim();
+  return name||p.email||"-";
+}
+function personNameFromRegistration(reg){
+  if(!reg)return "-";
+  return [reg.participant_title_th,reg.participant_firstname_th,reg.participant_lastname_th].filter(Boolean).join(" ").trim()
+    || reg.participant_email
+    || personNameFromProfile(reg.user_id);
+}
+function userDisplay(userId,registrationId){
+  const reg=registrationId?registrationById(registrationId):null;
+  if(reg)return personNameFromRegistration(reg);
+  return personNameFromProfile(userId);
+}
+function accessComputedState(row){
+  if(row.access_expires_at && new Date(row.access_expires_at).getTime() < Date.now())return "EXPIRED_NOW";
+  return "OPEN_NOW";
+}
+function accessStatusBadge(row){
+  const raw=String(row.access_status||"").toUpperCase();
+  const computed=accessComputedState(row);
+  if(computed==="EXPIRED_NOW")return '<span class="badge inactive">หมดอายุ</span>';
+  if(["REVOKED","CANCELLED","CLOSED","INACTIVE"].includes(raw))return `<span class="badge revoked">${esc(raw||"ปิด")}</span>`;
+  return `<span class="badge open">${esc(raw||"เปิดสิทธิ์")}</span>`;
+}
+function attemptBadge(a){
+  const status=String(a.attempt_status||"").toUpperCase();
+  if(a.passed===true)return '<span class="badge passed">ผ่าน</span>';
+  if(a.passed===false && a.submitted_at)return '<span class="badge failed">ไม่ผ่าน</span>';
+  if(status.includes("PROGRESS")||!a.submitted_at)return '<span class="badge inprogress">กำลังทำ / ยังไม่ส่ง</span>';
+  return `<span class="badge neutral">${esc(status||"-")}</span>`;
 }
 
-async function upload(file,folder,name){
-  if(!file)return null;
-  if(file.size>10*1024*1024)throw new Error("รูปภาพต้องไม่เกิน 10 MB");
-  const safe=(file.name||"image").replace(/[^A-Za-z0-9._-]/g,"_");
-  const path=`posttest/${exam.id}/${folder}/${Date.now()}-${name}-${safe}`;
-  const {data,error}=await db.storage.from("question-media").upload(path,file,{upsert:false,contentType:file.type||"application/octet-stream"});
-  if(error)throw error;
-  return data?.path||path;
+/* =========================
+   AUTH
+========================= */
+async function verifyAdmin(){
+  try{
+    if(!window.supabase)throw new Error("ไม่สามารถเชื่อมต่อ Supabase ได้");
+    sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{
+      auth:{
+        storageKey:AUTH_STORAGE_KEY,
+        persistSession:true,
+        autoRefreshToken:true,
+        detectSessionInUrl:true
+      }
+    });
+
+    const s=await sb.auth.getSession();
+    if(s.error)throw s.error;
+    if(!s.data.session){location.replace("./admin-login.html");return;}
+
+    const u=await sb.auth.getUser();
+    if(u.error)throw u.error;
+    if(!u.data.user){location.replace("./admin-login.html");return;}
+    currentUser=u.data.user;
+
+    const permission=await sb.rpc("is_staff");
+    if(permission.error)throw permission.error;
+    if(permission.data!==true)throw new Error("บัญชีนี้ไม่มีสิทธิ์เข้าใช้งานระบบผู้ดูแล");
+
+    const email=currentUser.email||"ผู้ดูแลระบบ";
+    const adminEmailEl=el("adminEmail");
+    const adminNameEl=el("adminName");
+    if(adminEmailEl) adminEmailEl.textContent=email;
+    if(adminNameEl) adminNameEl.textContent="ผู้ดูแลระบบ SANTE";
+
+    el("authGate").style.display="none";
+    el("app").style.display="block";
+
+    await loadAll();
+  }catch(error){
+    console.error(error);
+    el("spinner").style.display="none";
+    el("authError").style.display="block";
+    el("authError").textContent=error.message||"เกิดข้อผิดพลาดในการตรวจสอบสิทธิ์";
+  }
 }
 
-async function init(){
-  const {data:{session:auth}}=await db.auth.getSession();
-  if(!auth){location.href="admin-login.html";return}
-  const {data:isStaff,error:staffError}=await db.rpc("is_staff");
-  if(staffError||!isStaff){location.href="admin-login.html";return}
-  $("adminEmail").textContent=auth.user.email||"";
+/* =========================
+   LOAD DATA
+========================= */
+async function loadAll(){
+  clearMessage();
+  showMessage("info","กำลังโหลดข้อมูล Exam Admin Control...");
 
-  const params=new URLSearchParams(location.search);
-  let examId=params.get("exam_id");
-  const trainingSessionId=params.get("session_id");
+  try{
+    const [
+      c,e,s,a,q,
+      accessResult,
+      regResult,
+      sessionResult,
+      profileResult
+    ]=await Promise.all([
+      sb.from("courses").select("id,course_code,course_name_th,sort_order").order("sort_order",{ascending:true}),
+      sb.from("exams").select("id,course_id,training_session_id,exam_code,exam_name_th,exam_name_en,exam_type,pass_percentage,time_limit_minutes,max_attempts,show_correct_answers,show_explanation,is_active,created_at").order("created_at",{ascending:false}),
+      sb.from("exam_sets").select("id,exam_id,set_code,set_name,set_number,expected_question_count,sort_order,is_active").order("sort_order",{ascending:true}),
+      sb.from("exam_attempts").select("id,user_id,exam_id,exam_set_id,enrollment_id,training_registration_id,attempt_number,attempt_status,started_at,submitted_at,total_questions,answered_questions,raw_score,percentage,passed,created_at").order("created_at",{ascending:false}),
+      sb.from("exam_set_questions").select("exam_set_id"),
+      sb.from("exam_access").select("id,user_id,exam_id,training_registration_id,access_opened_at,access_expires_at,max_attempts_override,access_status,opened_by,created_at").order("created_at",{ascending:false}),
+      sb.from("training_registrations").select("id,training_session_id,user_id,registration_status,payment_required,payment_status,participant_title_th,participant_firstname_th,participant_lastname_th,participant_email,participant_phone,organization_name,registered_at,confirmed_at").order("registered_at",{ascending:false}),
+      sb.from("training_sessions").select("id,course_id,session_code,session_name,training_start_at,training_end_at,exam_access_minutes,max_exam_attempts,pass_percentage,session_status").order("training_start_at",{ascending:false}),
+      sb.from("profiles").select("id,title_th,firstname_th,lastname_th,email")
+    ]);
 
-  if(!examId && !trainingSessionId){
-    $("loading").textContent="ไม่พบ session_id หรือ exam_id";
+    const results=[c,e,s,a,q,accessResult,regResult,sessionResult,profileResult];
+    for(const r of results)if(r.error)throw r.error;
+
+    courses=c.data||[];
+    exams=e.data||[];
+    sets=s.data||[];
+    attempts=a.data||[];
+    accesses=accessResult.data||[];
+    registrations=regResult.data||[];
+    sessions=sessionResult.data||[];
+    profiles=profileResult.data||[];
+
+    setQuestionCounts={};
+    (q.data||[]).forEach(row=>{
+      setQuestionCounts[row.exam_set_id]=(setQuestionCounts[row.exam_set_id]||0)+1;
+    });
+
+    renderAll();
+    clearMessage();
+  }catch(error){
+    console.error(error);
+    showMessage("error","ไม่สามารถโหลดข้อมูล Exam Admin Control ได้: "+error.message);
+  }
+}
+
+function renderAll(){
+  renderSummary();
+  renderSelects();
+  renderExams();
+  renderPosttests();
+  renderAccesses();
+  renderAttempts();
+  updateAccessRegistrationOptions();
+}
+
+/* =========================
+   SUMMARY / SELECTS
+========================= */
+function renderSummary(){
+  el("examCount").textContent=exams.filter(x=>String(x.exam_type||"").toUpperCase()!=="TRAINING_POSTTEST").length;
+  el("setCount").textContent=exams.filter(x=>String(x.exam_type||"").toUpperCase()==="TRAINING_POSTTEST").length;
+  el("accessCount").textContent=accesses.length;
+  el("attemptCount").textContent=attempts.length;
+  el("passCount").textContent=attempts.filter(a=>a.passed===true).length;
+}
+
+function examOptions(includeAll=false){
+  const prefix=includeAll?'<option value="">ทุกข้อสอบ</option>':'<option value="">เลือกข้อสอบ</option>';
+  return prefix+exams.map(x=>`<option value="${esc(x.id)}">${esc(x.exam_name_th||x.exam_code||"ข้อสอบ")} — ${esc(courseName(x.course_id))}</option>`).join("");
+}
+function courseOptions(){
+  return '<option value="">ทุกหลักสูตร</option>'+courses.map(c=>`<option value="${esc(c.id)}">${esc(c.course_name_th||c.course_code)}</option>`).join("");
+}
+function renderSelects(){
+  const preserve={
+    course:el("examCourseFilter").value,
+    accessExam:el("accessExamSelect").value,
+    accessFilter:el("accessExamFilter").value,
+    attemptFilter:el("attemptExamFilter").value
+  };
+  el("examCourseFilter").innerHTML=courseOptions();
+  if(el("posttestCourseFilter"))el("posttestCourseFilter").innerHTML=courseOptions();
+  el("accessExamSelect").innerHTML=examOptions(false);
+  el("accessExamFilter").innerHTML=examOptions(true);
+  el("attemptExamFilter").innerHTML=examOptions(true);
+
+  if([...el("examCourseFilter").options].some(o=>o.value===preserve.course))el("examCourseFilter").value=preserve.course;
+  if([...el("accessExamSelect").options].some(o=>o.value===preserve.accessExam))el("accessExamSelect").value=preserve.accessExam;
+  if([...el("accessExamFilter").options].some(o=>o.value===preserve.accessFilter))el("accessExamFilter").value=preserve.accessFilter;
+  if([...el("attemptExamFilter").options].some(o=>o.value===preserve.attemptFilter))el("attemptExamFilter").value=preserve.attemptFilter;
+}
+
+/* =========================
+   EXAM OVERVIEW
+========================= */
+function renderExams(){
+  const term=el("examSearch").value.trim().toLowerCase();
+  const courseId=el("examCourseFilter").value;
+  const status=el("examStatusFilter").value;
+
+  const filtered=exams.filter(exam=>{
+    const text=((exam.exam_name_th||"")+" "+(exam.exam_code||"")+" "+courseName(exam.course_id)).toLowerCase();
+    return String(exam.exam_type||"").toUpperCase()!=="TRAINING_POSTTEST"
+      &&(!term||text.includes(term))
+      &&(!courseId||exam.course_id===courseId)
+      &&(!status||String(exam.is_active)===status);
+  });
+
+  if(!filtered.length){
+    el("examArea").innerHTML='<div class="empty">ไม่พบรายการข้อสอบ</div>';
     return;
   }
 
-  if(!examId){
-    const r=await db.rpc("admin_get_or_create_training_posttest",{p_training_session_id:trainingSessionId});
-    if(r.error){$("loading").textContent="สร้างข้อสอบไม่ได้: "+r.error.message;return}
-    examId=r.data.exam_id;
-    history.replaceState(null,"",`admin-exam-builder.html?exam_id=${encodeURIComponent(examId)}`);
+  el("examArea").innerHTML=`
+    <div class="table-wrap">
+      <table>
+        <thead><tr>
+          <th>ข้อสอบ</th>
+          <th>หลักสูตร</th>
+          <th>เกณฑ์ / เวลา</th>
+          <th>ชุดข้อสอบ</th>
+          <th>Attempts</th>
+          <th>ผ่าน</th>
+          <th>สถานะ</th>
+          <th></th>
+        </tr></thead>
+        <tbody>
+          ${filtered.map(exam=>{
+            const examSets=sets.filter(s=>s.exam_id===exam.id);
+            const examAttempts=attempts.filter(a=>a.exam_id===exam.id);
+            const passed=examAttempts.filter(a=>a.passed===true).length;
+            return `<tr>
+              <td><div class="cell-main">${esc(exam.exam_name_th||"ข้อสอบ")}</div><div class="cell-sub">${esc(exam.exam_code||"-")} · ${esc(exam.exam_type||"-")}</div></td>
+              <td>${esc(courseName(exam.course_id))}</td>
+              <td>${fmtNum(exam.pass_percentage,0)}% / ${exam.time_limit_minutes?esc(exam.time_limit_minutes)+" นาที":"-"}</td>
+              <td>${examSets.length} ชุด</td>
+              <td>${examAttempts.length} ครั้ง</td>
+              <td>${passed} ครั้ง</td>
+              <td><span class="badge ${exam.is_active?"active":"inactive"}">${exam.is_active?"เปิดใช้งาน":"ปิดใช้งาน"}</span></td>
+              <td><button class="mini-btn primary" data-view-sets="${esc(exam.id)}">ดูชุดข้อสอบ</button></td>
+            </tr>`;
+          }).join("")}
+        </tbody>
+      </table>
+    </div>`;
+
+  document.querySelectorAll("[data-view-sets]").forEach(btn=>{
+    btn.addEventListener("click",()=>renderSets(btn.dataset.viewSets));
+  });
+}
+
+
+function renderPosttests(){
+  const searchEl=el("posttestSearch");
+  const courseEl=el("posttestCourseFilter");
+  const statusEl=el("posttestStatusFilter");
+  const area=el("posttestArea");
+  if(!area)return;
+
+  const term=(searchEl?.value||"").trim().toLowerCase();
+  const courseId=courseEl?.value||"";
+  const status=statusEl?.value||"";
+
+  const filtered=exams.filter(exam=>{
+    if(String(exam.exam_type||"").toUpperCase()!=="TRAINING_POSTTEST")return false;
+    const session=sessionById(exam.training_session_id);
+    const text=[
+      exam.exam_name_th,exam.exam_code,courseName(exam.course_id),
+      session?.session_name,session?.session_code
+    ].join(" ").toLowerCase();
+
+    return(!term||text.includes(term))
+      &&(!courseId||exam.course_id===courseId)
+      &&(!status||String(exam.is_active)===status);
+  });
+
+  if(!filtered.length){
+    area.innerHTML=`<div class="empty">
+      ยังไม่มีข้อสอบท้ายการอบรม<br>
+      <span class="type-note">ไปที่ “รอบอบรม” แล้วกด “จัดการข้อสอบท้ายอบรม” ในรุ่นที่ต้องการ</span>
+    </div>`;
+    return;
   }
 
-  await loadExam(examId);
-  $("loading").style.display="none";
+  area.innerHTML=`<div class="table-wrap">
+    <table>
+      <thead><tr>
+        <th>ข้อสอบ</th>
+        <th>หลักสูตร / รุ่น</th>
+        <th>เกณฑ์</th>
+        <th>จำนวนข้อ</th>
+        <th>Attempts</th>
+        <th>ผ่าน</th>
+        <th>สถานะ</th>
+        <th>จัดการ</th>
+      </tr></thead>
+      <tbody>
+        ${filtered.map(exam=>{
+          const session=sessionById(exam.training_session_id);
+          const examSets=sets.filter(s=>s.exam_id===exam.id);
+          const questionCount=examSets.reduce((sum,s)=>sum+(setQuestionCounts[s.id]||0),0);
+          const examAttempts=attempts.filter(a=>a.exam_id===exam.id);
+          const passed=examAttempts.filter(a=>a.passed===true).length;
+          return `<tr>
+            <td>
+              <div class="cell-main">${esc(exam.exam_name_th||"แบบทดสอบท้ายการอบรม")}</div>
+              <div class="cell-sub">${esc(exam.exam_code||"-")} · TRAINING_POSTTEST</div>
+            </td>
+            <td>
+              <div>${esc(courseName(exam.course_id))}</div>
+              <div class="cell-sub posttest-session">${esc(session?.session_name||session?.session_code||"-")}</div>
+            </td>
+            <td>${fmtNum(exam.pass_percentage,0)}% / ${exam.max_attempts||"-"} ครั้ง</td>
+            <td>${questionCount} ข้อ</td>
+            <td>${examAttempts.length} ครั้ง</td>
+            <td>${passed} ครั้ง</td>
+            <td><span class="badge ${exam.is_active?"active":"pending"}">${exam.is_active?"Published":"Draft"}</span></td>
+            <td>
+              <div class="table-actions">
+                <a class="mini-btn primary" href="admin-exam-builder.html?exam_id=${encodeURIComponent(exam.id)}">จัดการข้อสอบ</a>
+                <button class="mini-btn" data-posttest-results="${esc(exam.id)}">ดูผลสอบ</button>
+              </div>
+            </td>
+          </tr>`;
+        }).join("")}
+      </tbody>
+    </table>
+  </div>`;
+
+  document.querySelectorAll("[data-posttest-results]").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      switchTab("results");
+      if(el("attemptExamFilter")){
+        el("attemptExamFilter").value=btn.dataset.posttestResults;
+        renderAttempts();
+      }
+    });
+  });
 }
 
-async function loadExam(examId){
-  const e=await db.from("exams").select("*").eq("id",examId).single();
-  if(e.error)throw e.error;
-  exam=e.data;
-  if(exam.exam_type!=="TRAINING_POSTTEST")throw new Error("หน้านี้ใช้สำหรับ TRAINING_POSTTEST เท่านั้น");
+function renderSets(examId){
+  const exam=examById(examId);
+  el("setTitle").textContent="ชุดข้อสอบ — "+(exam?.exam_name_th||"ข้อสอบ");
 
-  const [s,c,setRes,qRes]=await Promise.all([
-    db.from("training_sessions").select("*").eq("id",exam.training_session_id).single(),
-    db.from("courses").select("id,course_code,course_name_th,course_type").eq("id",exam.course_id).single(),
-    db.from("exam_sets").select("*").eq("exam_id",exam.id).order("set_number").limit(1).single(),
-    db.from("questions").select("*").eq("exam_id",exam.id).eq("is_active",true).order("created_at")
-  ]);
-  if(s.error)throw s.error;if(c.error)throw c.error;if(setRes.error)throw setRes.error;if(qRes.error)throw qRes.error;
-  session=s.data;course=c.data;examSet=setRes.data;
+  const list=sets
+    .filter(s=>s.exam_id===examId)
+    .sort((a,b)=>(a.set_number||a.sort_order||0)-(b.set_number||b.sort_order||0));
 
-  const ids=(qRes.data||[]).map(x=>x.id);
-  let choices=[],media=[],links=[];
-  if(ids.length){
-    const [cr,mr,lr]=await Promise.all([
-      db.from("question_choices").select("*").in("question_id",ids).order("sort_order"),
-      db.from("question_media").select("*").in("question_id",ids).order("sort_order"),
-      db.from("exam_set_questions").select("*").eq("exam_set_id",examSet.id).in("question_id",ids).order("question_number")
-    ]);
-    if(cr.error)throw cr.error;if(mr.error)throw mr.error;if(lr.error)throw lr.error;
-    choices=cr.data||[];media=mr.data||[];links=lr.data||[];
+  if(!list.length){
+    el("setArea").innerHTML='<div class="empty">ข้อสอบนี้ยังไม่มีชุดข้อสอบ</div>';
+    return;
   }
-  questions=(qRes.data||[]).map(q=>({
-    ...q,
-    choices:choices.filter(x=>x.question_id===q.id),
-    media:media.filter(x=>x.question_id===q.id),
-    question_number:links.find(x=>x.question_id===q.id)?.question_number||999
-  })).sort((a,b)=>a.question_number-b.question_number);
 
-  renderHeader();
-  await renderQuestions();
-}
+  el("setArea").innerHTML=list.map(set=>{
+    const actual=setQuestionCounts[set.id]||0;
+    const expected=Number(set.expected_question_count||0);
+    const pct=expected?Math.min(100,Math.round(actual/expected*100)):0;
+    const setAttempts=attempts.filter(a=>a.exam_set_id===set.id);
+    const passed=setAttempts.filter(a=>a.passed===true).length;
 
-function renderHeader(){
-  $("examTitle").textContent=exam.exam_name_th;
-  $("sessionInfo").textContent=`${course.course_name_th} · ${session.session_name||session.session_code}`;
-  $("examCode").textContent=exam.exam_code;
-  $("publishBadge").textContent=exam.is_active?"PUBLISHED":"DRAFT";
-  $("publishBadge").className="badge "+(exam.is_active?"green":"gray");
-  $("questionCountBadge").textContent=`${questions.length} ข้อ`;
-  $("settingName").value=exam.exam_name_th||"";
-  $("settingPass").value=exam.pass_percentage??70;
-  $("settingAttempts").value=exam.max_attempts??1;
-  $("settingTime").value=exam.time_limit_minutes??"";
-  $("publishBtn").style.display=exam.is_active?"none":"inline-flex";
-  $("unpublishBtn").style.display=exam.is_active?"inline-flex":"none";
-}
-
-async function renderQuestions(){
-  const root=$("questionList");
-  if(!questions.length){root.innerHTML='<div class="empty">ยังไม่มีคำถาม กด “+ เพิ่มคำถาม” เพื่อเริ่มสร้างข้อสอบ</div>';return}
-
-  let html="";
-  for(const q of questions){
-    const mediaPath=q.media.find(m=>m.media_type==="IMAGE")?.storage_path||null;
-    const img=mediaPath?await signedUrl(mediaPath):null;
-    let choiceHtml="";
-    for(const ch of q.choices){
-      const cu=ch.image_path?await signedUrl(ch.image_path):null;
-      choiceHtml+=`<div class="choice ${ch.is_correct?"correct":""}">
-        <div class="choice-key">${esc(ch.choice_key)}</div>
-        <div style="flex:1">${esc(ch.choice_text||"")}${cu?`<div><img src="${esc(cu)}"></div>`:""}</div>
-        ${ch.is_correct?'<strong style="font-size:10px;color:#168346">✓ เฉลย</strong>':""}
-      </div>`;
-    }
-    html+=`<article class="qcard">
-      <div class="qhead">
-        <div class="qnum">${q.question_number}</div>
-        <div class="qmain">
-          <div class="qtitle">${esc(q.question_text)}</div>
-          <div class="qmeta">${esc(q.question_type)} · ${q.points} คะแนน</div>
-          ${img?`<img class="qimage" src="${esc(img)}">`:""}
-          ${q.question_type!=="TEXT"?`<div class="choices">${choiceHtml}</div>`:""}
-        </div>
-        <div class="qactions">
-          <button class="btn" onclick="editQuestion('${q.id}')">แก้ไข</button>
-          <button class="btn danger" onclick="deleteQuestion('${q.id}')">ลบ</button>
-        </div>
+    return `<div class="set-card">
+      <h3>${esc(set.set_name||("ชุดข้อสอบที่ "+(set.set_number||"")))}</h3>
+      <div class="set-meta">
+        รหัสชุด: <strong>${esc(set.set_code||"-")}</strong><br>
+        จำนวนข้อ: <strong>${actual} / ${expected||"-"}</strong><br>
+        ทำข้อสอบแล้ว: <strong>${setAttempts.length}</strong> ครั้ง<br>
+        สอบผ่าน: <strong>${passed}</strong> ครั้ง<br>
+        สถานะ: <strong>${set.is_active?"เปิดใช้งาน":"ปิดใช้งาน"}</strong>
       </div>
-    </article>`;
-  }
-  root.innerHTML=html;
-}
-
-function resetEditor(){
-  editingQuestionId=null;choiceCount=4;questionImageFile=null;existingQuestionImagePath=null;choiceFiles={};existingChoiceImages={};
-  $("modalTitle").textContent="เพิ่มคำถาม";$("qType").value="SINGLE_CHOICE";$("qPoints").value="1";$("qText").value="";
-  $("qImageFile").value="";$("qImagePreview").innerHTML="ยังไม่มีรูปคำถาม";clearMsg("modalMessage");renderChoiceEditors();updateTypeUI();
-}
-
-async function openAdd(){resetEditor();$("questionModal").classList.add("show")}
-
-async function editQuestion(id){
-  resetEditor();
-  const q=questions.find(x=>x.id===id);if(!q)return;
-  editingQuestionId=id;$("modalTitle").textContent=`แก้ไขคำถามที่ ${q.question_number}`;$("qType").value=q.question_type;$("qPoints").value=q.points;$("qText").value=q.question_text||"";
-  existingQuestionImagePath=q.media.find(m=>m.media_type==="IMAGE")?.storage_path||null;
-  if(existingQuestionImagePath){const u=await signedUrl(existingQuestionImagePath);if(u)$("qImagePreview").innerHTML=`<img src="${u}">`}
-  choiceCount=Math.max(2,q.choices.length||4);
-  q.choices.forEach(ch=>{existingChoiceImages[ch.choice_key]=ch.image_path||null});
-  renderChoiceEditors(q.choices);
-  updateTypeUI(false);
-  $("questionModal").classList.add("show");
-}
-
-function renderChoiceEditors(existing=[]){
-  const type=$("qType").value;
-  const inputType=type==="MULTIPLE_CHOICE"?"checkbox":"radio";
-  const byKey=Object.fromEntries(existing.map(x=>[x.choice_key,x]));
-  $("choiceEditorList").innerHTML=Array.from({length:choiceCount},(_,i)=>{
-    const L=letter(i),x=byKey[L]||{};
-    return `<div class="choice-editor" data-key="${L}">
-      <div class="choice-correct"><input type="${inputType}" ${inputType==="radio"?'name="correctChoice"':""} data-correct value="${L}" ${x.is_correct?"checked":""}></div>
-      <div class="choice-editor-main">
-        <input class="input" data-choice-text="${L}" value="${esc(x.choice_text||"")}" placeholder="ตัวเลือก ${L}">
-        <div class="choice-img-preview" id="choicePreview${L}"></div>
-      </div>
-      <div class="choice-editor-actions">
-        <label class="btn mini">รูป<input type="file" accept="image/jpeg,image/png,image/webp" data-choice-file="${L}" hidden></label>
-        ${choiceCount>2?`<button class="btn danger mini" type="button" data-remove="${L}">ลบ</button>`:""}
-      </div>
+      <div class="progress"><span style="width:${pct}%"></span></div>
     </div>`;
   }).join("");
-
-  Object.entries(existingChoiceImages).forEach(async([L,path])=>{if(path){const u=await signedUrl(path);if(u&&$("choicePreview"+L))$("choicePreview"+L).innerHTML=`<img src="${u}">`}});
-
-  document.querySelectorAll("[data-choice-file]").forEach(inp=>inp.addEventListener("change",e=>{
-    const L=inp.dataset.choiceFile,f=e.target.files?.[0];if(!f)return;choiceFiles[L]=f;$("choicePreview"+L).innerHTML=`<img src="${URL.createObjectURL(f)}">`;
-  }));
-  document.querySelectorAll("[data-remove]").forEach(btn=>btn.addEventListener("click",()=>{if(choiceCount<=2)return;choiceCount--;renderChoiceEditors()}));
 }
 
-function updateTypeUI(rerender=true){
-  const type=$("qType").value;
-  $("choiceSection").style.display=type==="TEXT"?"none":"block";
-  $("choiceHelp").textContent=type==="MULTIPLE_CHOICE"?"ติ๊กหน้าตัวเลือกที่ถูกต้องได้มากกว่า 1 ข้อ":"เลือกวงกลมหน้าคำตอบที่ถูกต้อง 1 ข้อ";
-  if(type!=="TEXT"&&rerender)renderChoiceEditors();
-}
+/* =========================
+   MANUAL ACCESS
+========================= */
+function updateAccessRegistrationOptions(){
+  const examId=el("accessExamSelect").value;
+  const select=el("accessRegistrationSelect");
 
-async function saveQuestion(){
-  clearMsg("modalMessage");
-  const type=$("qType").value,text=$("qText").value.trim(),points=Number($("qPoints").value||1);
-  if(!text){msg("modalMessage","กรุณากรอกคำถาม");return}
-  const btn=$("saveQuestionBtn");btn.disabled=true;btn.textContent="กำลังบันทึก...";
-  try{
-    let qImagePath=existingQuestionImagePath;
-    if(questionImageFile)qImagePath=await upload(questionImageFile,"question","question");
+  if(!examId){
+    select.innerHTML='<option value="">เลือกข้อสอบก่อน</option>';
+    el("accessDefaults").textContent="เลือกผู้สมัครอบรมเพื่อดูค่าเริ่มต้น";
+    return;
+  }
 
-    const choices=[];
-    if(type!=="TEXT"){
-      const correct=[...document.querySelectorAll("[data-correct]:checked")].map(x=>x.value);
-      if(!correct.length)throw new Error("กรุณาเลือกคำตอบที่ถูกต้อง");
-      if(type==="SINGLE_CHOICE"&&correct.length!==1)throw new Error("คำถามตัวเลือกเดียวต้องมีเฉลย 1 ข้อ");
-      for(let i=0;i<choiceCount;i++){
-        const L=letter(i);
-        const textEl=document.querySelector(`[data-choice-text="${L}"]`);
-        let imagePath=existingChoiceImages[L]||null;
-        if(choiceFiles[L])imagePath=await upload(choiceFiles[L],"choice",L);
-        const choiceText=textEl?.value.trim()||"";
-        if(!choiceText&&!imagePath)continue;
-        choices.push({choice_key:L,choice_text:choiceText||null,image_path:imagePath,is_correct:correct.includes(L),sort_order:i+1});
-      }
-      if(choices.length<2)throw new Error("กรุณาใส่ตัวเลือกอย่างน้อย 2 ข้อ");
+  const exam=examById(examId);
+  const courseId=exam?.course_id;
+
+  const eligible=registrations.filter(reg=>{
+    const session=sessionById(reg.training_session_id);
+    if(!session)return false;
+
+    // ข้อสอบท้ายอบรมให้สิทธิ์เฉพาะผู้สมัครของรอบนั้นเท่านั้น
+    if(exam?.training_session_id){
+      return reg.training_session_id===exam.training_session_id;
     }
 
-    const r=await db.rpc("admin_save_posttest_question",{
-      p_exam_id:exam.id,p_question_id:editingQuestionId,p_question_type:type,p_question_text:text,p_points:points,
-      p_question_image_path:qImagePath,p_choices:choices
-    });
-    if(r.error)throw r.error;
-    $("questionModal").classList.remove("show");
-    await loadExam(exam.id);
-    msg("pageMessage","บันทึกคำถามแล้ว","success");
-  }catch(e){msg("modalMessage",e.message||String(e))}
-  finally{btn.disabled=false;btn.textContent="บันทึกคำถาม"}
-}
-
-async function deleteQuestion(id){
-  if(!confirm("ลบคำถามข้อนี้ออกจากข้อสอบหรือไม่?"))return;
-  const r=await db.rpc("admin_delete_posttest_question",{p_question_id:id});
-  if(r.error){msg("pageMessage",r.error.message);return}
-  await loadExam(exam.id);msg("pageMessage","ลบคำถามแล้ว","success");
-}
-
-async function saveSettings(){
-  const r=await db.rpc("admin_update_posttest_settings",{
-    p_exam_id:exam.id,p_exam_name_th:$("settingName").value.trim(),p_pass_percentage:Number($("settingPass").value||70),
-    p_max_attempts:Number($("settingAttempts").value||1),p_time_limit_minutes:$("settingTime").value?Number($("settingTime").value):null,
-    p_show_correct_answers:false
+    // ข้อสอบติวระดับหลักสูตร ใช้ผู้สมัครจากหลักสูตรเดียวกัน
+    return session.course_id===courseId;
   });
-  if(r.error){msg("pageMessage",r.error.message);return}
-  await loadExam(exam.id);msg("pageMessage","บันทึกการตั้งค่าแล้ว","success");
+
+  select.innerHTML='<option value="">เลือกผู้สมัครอบรม</option>'+eligible.map(reg=>{
+    const session=sessionById(reg.training_session_id);
+    const paidText=reg.payment_required ? `ชำระเงิน: ${reg.payment_status||"-"}` : "ไม่ต้องชำระเงิน";
+    return `<option value="${esc(reg.id)}">${esc(personNameFromRegistration(reg))} — ${esc(session?.session_name||session?.session_code||"-")} (${esc(reg.registration_status||"-")} / ${esc(paidText)})</option>`;
+  }).join("");
+
+  el("accessDefaults").textContent=eligible.length
+    ? (exam?.training_session_id
+        ? `พบผู้สมัครในรอบอบรมนี้ ${eligible.length} ราย`
+        : `พบผู้สมัครที่อยู่ในหลักสูตรเดียวกัน ${eligible.length} ราย`)
+    : (exam?.training_session_id
+        ? "ไม่พบผู้สมัครในรอบอบรมของข้อสอบนี้"
+        : "ไม่พบผู้สมัครในหลักสูตรเดียวกับข้อสอบนี้");
 }
 
-async function publishExam(){
-  if(!confirm("เผยแพร่ข้อสอบนี้ให้พร้อมเปิดสิทธิ์สอบหรือไม่?"))return;
-  const r=await db.rpc("admin_publish_training_posttest",{p_exam_id:exam.id});
-  if(r.error){msg("pageMessage",r.error.message);return}
-  await loadExam(exam.id);msg("pageMessage",`เผยแพร่แล้ว (${r.data.question_count} ข้อ)`,"success");
+function updateAccessDefaults(){
+  const reg=registrationById(el("accessRegistrationSelect").value);
+  if(!reg){
+    el("accessDefaults").textContent="เลือกผู้สมัครอบรมเพื่อดูค่าเริ่มต้น";
+    return;
+  }
+  const session=sessionById(reg.training_session_id);
+  const exam=examById(el("accessExamSelect").value);
+
+  el("accessDefaults").innerHTML=
+    `รอบอบรม: <strong>${esc(session?.session_name||session?.session_code||"-")}</strong><br>`+
+    `Exam access: <strong>${session?.exam_access_minutes??"-"} นาที</strong> · `+
+    `Max attempts รอบอบรม: <strong>${session?.max_exam_attempts??"-"}</strong> · `+
+    `Max attempts Exam: <strong>${exam?.max_attempts??"-"}</strong>`;
 }
 
-async function unpublishExam(){
-  if(!confirm("เปลี่ยนข้อสอบกลับเป็น Draft หรือไม่?"))return;
-  const r=await db.rpc("admin_unpublish_training_posttest",{p_exam_id:exam.id});
-  if(r.error){msg("pageMessage",r.error.message);return}
-  await loadExam(exam.id);msg("pageMessage","เปลี่ยนเป็น Draft แล้ว","success");
+async function openManualAccess(){
+  const examId=el("accessExamSelect").value;
+  const registrationId=el("accessRegistrationSelect").value;
+  const minutesRaw=el("accessMinutes").value.trim();
+  const maxRaw=el("accessMaxAttempts").value.trim();
+
+  if(!examId||!registrationId){
+    showMessage("error","กรุณาเลือกข้อสอบและผู้สมัครอบรม");
+    return;
+  }
+
+  const minutes=minutesRaw?Number(minutesRaw):null;
+  const maxAttempts=maxRaw?Number(maxRaw):null;
+
+  if(minutes!==null && (!Number.isInteger(minutes)||minutes<1)){
+    showMessage("error","ระยะเวลาสิทธิ์ต้องเป็นจำนวนเต็มตั้งแต่ 1 นาทีขึ้นไป");
+    return;
+  }
+  if(maxAttempts!==null && (!Number.isInteger(maxAttempts)||maxAttempts<1)){
+    showMessage("error","จำนวนครั้งสอบสูงสุดต้องเป็นจำนวนเต็มตั้งแต่ 1 ขึ้นไป");
+    return;
+  }
+
+  const btn=el("openAccessBtn");
+  btn.disabled=true;
+  clearMessage();
+  showMessage("info","กำลังเปิดสิทธิ์สอบ...");
+
+  try{
+    const rpc=await sb.rpc("open_training_exam_access",{
+      p_training_registration_id:registrationId,
+      p_exam_id:examId
+    });
+    if(rpc.error)throw rpc.error;
+
+    const accessId=rpc.data;
+    if(!accessId)throw new Error("RPC เปิดสิทธิ์สำเร็จแต่ไม่ได้คืนค่า access id");
+
+    const patch={};
+    if(minutes!==null){
+      patch.access_expires_at=new Date(Date.now()+minutes*60000).toISOString();
+    }
+    if(maxAttempts!==null){
+      patch.max_attempts_override=maxAttempts;
+    }
+
+    if(Object.keys(patch).length){
+      const update=await sb.from("exam_access").update(patch).eq("id",accessId);
+      if(update.error)throw new Error("เปิดสิทธิ์แล้ว แต่บันทึกค่า Override ไม่สำเร็จ: "+update.error.message);
+    }
+
+    showMessage("success","เปิดสิทธิ์สอบเรียบร้อยแล้ว");
+    clearAccessForm(false);
+    await loadAll();
+    switchTab("access");
+  }catch(error){
+    console.error(error);
+    showMessage("error","เปิดสิทธิ์สอบไม่สำเร็จ: "+error.message);
+  }finally{
+    btn.disabled=false;
+  }
 }
 
-$("addQuestionBtn").onclick=openAdd;$("closeModalBtn").onclick=$("cancelQuestionBtn").onclick=()=>$("questionModal").classList.remove("show");
-$("qType").onchange=()=>updateTypeUI();$("addChoiceBtn").onclick=()=>{choiceCount++;renderChoiceEditors()};
-$("qImageFile").onchange=e=>{const f=e.target.files?.[0];if(!f)return;questionImageFile=f;$("qImagePreview").innerHTML=`<img src="${URL.createObjectURL(f)}">`};
-$("saveQuestionBtn").onclick=saveQuestion;$("saveSettingsBtn").onclick=saveSettings;$("publishBtn").onclick=publishExam;$("unpublishBtn").onclick=unpublishExam;
-$("logoutBtn").onclick=async()=>{await db.auth.signOut();location.href="admin-login.html"};
-$("menuBtn").onclick=()=>{$("sidebar").classList.toggle("open");$("overlay").classList.toggle("show")};$("overlay").onclick=()=>{$("sidebar").classList.remove("open");$("overlay").classList.remove("show")};
+function clearAccessForm(clearExam=true){
+  if(clearExam)el("accessExamSelect").value="";
+  el("accessRegistrationSelect").innerHTML=clearExam?'<option value="">เลือกข้อสอบก่อน</option>':'<option value="">เลือกผู้สมัครอบรม</option>';
+  el("accessMinutes").value="";
+  el("accessMaxAttempts").value="";
+  el("accessDefaults").textContent="เลือกผู้สมัครอบรมเพื่อดูค่าเริ่มต้น";
+  if(!clearExam)updateAccessRegistrationOptions();
+}
 
-init().catch(e=>{$("loading").textContent="เกิดข้อผิดพลาด: "+(e.message||e)});
+function renderAccesses(){
+  const term=el("accessSearch").value.trim().toLowerCase();
+  const examFilter=el("accessExamFilter").value;
+  const stateFilter=el("accessStateFilter").value;
+
+  const filtered=accesses.filter(row=>{
+    const reg=registrationById(row.training_registration_id);
+    const text=(userDisplay(row.user_id,row.training_registration_id)+" "+(reg?.participant_email||"")+" "+examName(row.exam_id)).toLowerCase();
+    return(!term||text.includes(term))
+      &&(!examFilter||row.exam_id===examFilter)
+      &&(!stateFilter||accessComputedState(row)===stateFilter);
+  });
+
+  if(!filtered.length){
+    el("accessArea").innerHTML='<div class="empty">ไม่พบข้อมูลสิทธิ์สอบ</div>';
+    return;
+  }
+
+  el("accessArea").innerHTML=`
+    <div class="table-wrap">
+      <table>
+        <thead><tr>
+          <th>ผู้เรียน</th>
+          <th>ข้อสอบ / รอบอบรม</th>
+          <th>เปิดสิทธิ์</th>
+          <th>หมดอายุ</th>
+          <th>Max Attempts</th>
+          <th>ผู้เปิดสิทธิ์</th>
+          <th>สถานะ</th>
+        </tr></thead>
+        <tbody>
+          ${filtered.map(row=>{
+            const reg=registrationById(row.training_registration_id);
+            const session=reg?sessionById(reg.training_session_id):null;
+            return `<tr>
+              <td>
+                <div class="cell-main">${esc(userDisplay(row.user_id,row.training_registration_id))}</div>
+                <div class="cell-sub">${esc(reg?.participant_email||profileById(row.user_id)?.email||"-")}</div>
+              </td>
+              <td>
+                <div class="cell-main">${esc(examName(row.exam_id))}</div>
+                <div class="cell-sub">${esc(session?.session_name||session?.session_code||"-")}</div>
+              </td>
+              <td>${fmtDate(row.access_opened_at)}</td>
+              <td>${fmtDate(row.access_expires_at)}</td>
+              <td>${row.max_attempts_override??"-"}</td>
+              <td>${esc(personNameFromProfile(row.opened_by))}</td>
+              <td>${accessStatusBadge(row)}</td>
+            </tr>`;
+          }).join("")}
+        </tbody>
+      </table>
+    </div>`;
+}
+
+/* =========================
+   ATTEMPTS / REVIEW
+========================= */
+function renderAttempts(){
+  const term=el("attemptSearch").value.trim().toLowerCase();
+  const examFilter=el("attemptExamFilter").value;
+  const passFilter=el("attemptPassFilter").value;
+
+  const filtered=attempts.filter(a=>{
+    const reg=registrationById(a.training_registration_id);
+    const person=userDisplay(a.user_id,a.training_registration_id);
+    const email=reg?.participant_email||profileById(a.user_id)?.email||"";
+    const text=(person+" "+email+" "+examName(a.exam_id)+" "+setName(a.exam_set_id)).toLowerCase();
+
+    let passOk=true;
+    if(passFilter==="true")passOk=a.passed===true;
+    else if(passFilter==="false")passOk=a.passed===false && !!a.submitted_at;
+    else if(passFilter==="pending")passOk=!a.submitted_at;
+
+    return(!term||text.includes(term))
+      &&(!examFilter||a.exam_id===examFilter)
+      &&passOk;
+  });
+
+  if(!filtered.length){
+    el("attemptArea").innerHTML='<div class="empty">ไม่พบข้อมูลการทำข้อสอบ</div>';
+    return;
+  }
+
+  el("attemptArea").innerHTML=`
+    <div class="table-wrap">
+      <table>
+        <thead><tr>
+          <th>ผู้สอบ</th>
+          <th>ข้อสอบ / ชุด</th>
+          <th>ครั้งที่</th>
+          <th>ตอบแล้ว</th>
+          <th>คะแนน</th>
+          <th>เปอร์เซ็นต์</th>
+          <th>ส่งข้อสอบ</th>
+          <th>ผล</th>
+          <th></th>
+        </tr></thead>
+        <tbody>
+          ${filtered.map(a=>{
+            const reg=registrationById(a.training_registration_id);
+            return `<tr>
+              <td>
+                <div class="cell-main">${esc(userDisplay(a.user_id,a.training_registration_id))}</div>
+                <div class="cell-sub">${esc(reg?.participant_email||profileById(a.user_id)?.email||"-")}</div>
+              </td>
+              <td>
+                <div class="cell-main">${esc(examName(a.exam_id))}</div>
+                <div class="cell-sub">${esc(setName(a.exam_set_id))}</div>
+              </td>
+              <td>${a.attempt_number??"-"}</td>
+              <td>${a.answered_questions??0} / ${a.total_questions??"-"}</td>
+              <td>${a.raw_score==null?"-":fmtNum(a.raw_score)}</td>
+              <td>${a.percentage==null?"-":fmtNum(a.percentage)+"%"}</td>
+              <td>${fmtDate(a.submitted_at)}</td>
+              <td>${attemptBadge(a)}</td>
+              <td><button class="mini-btn primary" data-attempt-detail="${esc(a.id)}">รายละเอียด</button></td>
+            </tr>`;
+          }).join("")}
+        </tbody>
+      </table>
+    </div>`;
+
+  document.querySelectorAll("[data-attempt-detail]").forEach(btn=>{
+    btn.addEventListener("click",()=>openAttemptDetail(btn.dataset.attemptDetail));
+  });
+}
+
+async function openAttemptDetail(attemptId){
+  const a=attempts.find(x=>x.id===attemptId);
+  if(!a)return;
+
+  const reg=registrationById(a.training_registration_id);
+  const session=reg?sessionById(reg.training_session_id):null;
+
+  el("attemptModalSub").textContent=userDisplay(a.user_id,a.training_registration_id)+" — "+examName(a.exam_id);
+  el("attemptDetailGrid").innerHTML=[
+    ["ผู้สอบ",userDisplay(a.user_id,a.training_registration_id)],
+    ["อีเมล",reg?.participant_email||profileById(a.user_id)?.email||"-"],
+    ["ข้อสอบ",examName(a.exam_id)],
+    ["ชุดข้อสอบ",setName(a.exam_set_id)],
+    ["รอบอบรม",session?.session_name||session?.session_code||"-"],
+    ["ครั้งที่สอบ",a.attempt_number??"-"],
+    ["เริ่มสอบ",fmtDate(a.started_at)],
+    ["ส่งข้อสอบ",fmtDate(a.submitted_at)],
+    ["จำนวนข้อ",`${a.answered_questions??0} / ${a.total_questions??"-"}`],
+    ["คะแนนดิบ",a.raw_score==null?"-":fmtNum(a.raw_score)],
+    ["เปอร์เซ็นต์",a.percentage==null?"-":fmtNum(a.percentage)+"%"],
+    ["ผลสอบ",a.passed===true?"ผ่าน":a.passed===false?"ไม่ผ่าน":"ยังไม่สรุป"]
+  ].map(([label,value])=>`<div class="detail-item"><span>${esc(label)}</span><strong>${esc(value)}</strong></div>`).join("");
+
+  el("attemptReview").textContent="กำลังโหลด Exam Result Review...";
+  el("attemptModal").classList.add("show");
+
+  try{
+    const result=await sb.rpc("get_exam_result_review",{p_attempt_id:attemptId});
+    if(result.error)throw result.error;
+    el("attemptReview").textContent=JSON.stringify(result.data,null,2);
+  }catch(error){
+    console.error(error);
+    el("attemptReview").textContent="ไม่สามารถโหลด Exam Result Review ได้: "+error.message;
+  }
+}
+
+/* =========================
+   TABS / EVENTS
+========================= */
+function switchTab(name){
+  document.querySelectorAll(".tab-btn").forEach(btn=>btn.classList.toggle("active",btn.dataset.tab===name));
+  document.querySelectorAll(".tab-panel").forEach(panel=>panel.classList.toggle("active",panel.id==="tab-"+name));
+}
+
+document.querySelectorAll(".tab-btn").forEach(btn=>{
+  btn.addEventListener("click",()=>switchTab(btn.dataset.tab));
+});
+
+document.querySelectorAll("[data-refresh]").forEach(btn=>btn.addEventListener("click",loadAll));
+
+el("examSearch").addEventListener("input",renderExams);
+el("examCourseFilter").addEventListener("change",renderExams);
+el("examStatusFilter").addEventListener("change",renderExams);
+el("posttestSearch")?.addEventListener("input",renderPosttests);
+el("posttestCourseFilter")?.addEventListener("change",renderPosttests);
+el("posttestStatusFilter")?.addEventListener("change",renderPosttests);
+
+el("accessExamSelect").addEventListener("change",()=>{
+  updateAccessRegistrationOptions();
+  updateAccessDefaults();
+});
+el("accessRegistrationSelect").addEventListener("change",updateAccessDefaults);
+el("openAccessBtn").addEventListener("click",openManualAccess);
+el("clearAccessForm").addEventListener("click",()=>clearAccessForm(true));
+
+el("accessSearch").addEventListener("input",renderAccesses);
+el("accessExamFilter").addEventListener("change",renderAccesses);
+el("accessStateFilter").addEventListener("change",renderAccesses);
+
+el("attemptSearch").addEventListener("input",renderAttempts);
+el("attemptExamFilter").addEventListener("change",renderAttempts);
+el("attemptPassFilter").addEventListener("change",renderAttempts);
+
+el("closeAttemptModal").addEventListener("click",()=>el("attemptModal").classList.remove("show"));
+el("attemptModal").addEventListener("click",event=>{
+  if(event.target.id==="attemptModal")el("attemptModal").classList.remove("show");
+});
+
+el("logoutBtn").addEventListener("click",async()=>{
+  try{if(sb)await sb.auth.signOut()}catch(error){console.error(error)}
+  location.replace("./admin-login.html");
+});
+
+document.querySelectorAll("[data-coming]").forEach(node=>{
+  node.addEventListener("click",()=>alert("เมนูนี้กำลังอยู่ระหว่างการพัฒนา"));
+});
+
+const sidebar=el("sidebar");
+const overlay=el("overlay");
+el("mobileMenu").addEventListener("click",()=>{
+  sidebar.classList.toggle("open");
+  overlay.classList.toggle("show");
+});
+overlay.addEventListener("click",()=>{
+  sidebar.classList.remove("open");
+  overlay.classList.remove("show");
+});
+document.querySelectorAll(".nav-link").forEach(link=>{
+  link.addEventListener("click",()=>{
+    if(window.innerWidth<=900){
+      sidebar.classList.remove("open");
+      overlay.classList.remove("show");
+    }
+  });
+});
+
+
+function exportExamExcel(){
+  try{
+    if(!window.XLSX){
+      showMessage("error","ไม่สามารถโหลดระบบ Export Excel ได้");
+      return;
+    }
+
+    const examRows=exams.map(x=>({
+      "รหัสข้อสอบ":x.exam_code||"",
+      "ชื่อข้อสอบ":x.exam_name_th||"",
+      "หลักสูตร":courseName(x.course_id),
+      "ประเภท":x.exam_type||"",
+      "เกณฑ์ผ่าน (%)":x.pass_percentage??"",
+      "เวลาสอบ (นาที)":x.time_limit_minutes??"",
+      "จำนวนครั้งสูงสุด":x.max_attempts??"",
+      "สถานะ":x.is_active?"เปิดใช้งาน":"ปิดใช้งาน"
+    }));
+
+    const accessRows=accesses.map(x=>{
+      const reg=registrationById(x.training_registration_id);
+      const session=reg?sessionById(reg.training_session_id):null;
+      return {
+        "ผู้เรียน":userDisplay(x.user_id,x.training_registration_id),
+        "อีเมล":reg?.participant_email||profileById(x.user_id)?.email||"",
+        "ข้อสอบ":examName(x.exam_id),
+        "รอบอบรม":session?.session_name||session?.session_code||"",
+        "เปิดสิทธิ์":fmtDate(x.access_opened_at),
+        "หมดอายุ":fmtDate(x.access_expires_at),
+        "Max Attempts":x.max_attempts_override??"",
+        "สถานะ":accessComputedState(x)==="EXPIRED_NOW"?"หมดอายุ":"เปิดสิทธิ์"
+      };
+    });
+
+    const resultRows=attempts.map(a=>{
+      const reg=registrationById(a.training_registration_id);
+      return {
+        "ผู้สอบ":userDisplay(a.user_id,a.training_registration_id),
+        "อีเมล":reg?.participant_email||profileById(a.user_id)?.email||"",
+        "ข้อสอบ":examName(a.exam_id),
+        "ชุดข้อสอบ":setName(a.exam_set_id),
+        "ครั้งที่":a.attempt_number??"",
+        "จำนวนข้อ":a.total_questions??"",
+        "ตอบแล้ว":a.answered_questions??0,
+        "คะแนน":a.raw_score??"",
+        "เปอร์เซ็นต์":a.percentage??"",
+        "ผลสอบ":a.passed===true?"ผ่าน":a.passed===false?"ไม่ผ่าน":"ยังไม่สรุป",
+        "เริ่มสอบ":fmtDate(a.started_at),
+        "ส่งข้อสอบ":fmtDate(a.submitted_at)
+      };
+    });
+
+    const wb=XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(examRows),"ข้อสอบ");
+    XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(accessRows),"สิทธิ์สอบ");
+    XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(resultRows),"ผลสอบ");
+    const stamp=new Date().toISOString().slice(0,10);
+    XLSX.writeFile(wb,`SANTE-Exam-Report-${stamp}.xlsx`);
+  }catch(error){
+    console.error(error);
+    showMessage("error","Export Excel ไม่สำเร็จ: "+(error.message||error));
+  }
+}
+
+const exportExcelBtn=el("exportExcelBtn");
+if(exportExcelBtn) exportExcelBtn.addEventListener("click",exportExamExcel);
+
+verifyAdmin();
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+  document.querySelectorAll("[data-coming]").forEach(function(node){
+    node.addEventListener("click", function(event){
+      event.preventDefault();
+      alert("โมดูลนี้กำลังอยู่ระหว่างการพัฒนา");
+    });
+  });
+});
 </script>
 </body>
 </html>
