@@ -1241,7 +1241,7 @@ html,body,button,input,select,textarea{font-family:"Prompt",sans-serif!important
 }
 
 </style>
-<meta name="sante-build" content="MEMBER-COURSE-HOURS-R2">
+<meta name="sante-build" content="MEMBER-TRAINING-HOURS-R3">
 </head>
 
 <body>
@@ -2342,6 +2342,7 @@ html,body,button,input,select,textarea{font-family:"Prompt",sans-serif!important
         registration_close_date,
         training_start_at,
         training_end_at,
+        training_hours,
         delivery_method,
         online_platform,
         venue_name,
@@ -2512,9 +2513,9 @@ html,body,button,input,select,textarea{font-family:"Prompt",sans-serif!important
                 <div class="detail">
                   <div class="detail-label">ระยะเวลาอบรม</div>
                   <div class="detail-value">
-                    ${session.training_hours !== null && session.training_hours !== undefined
+                    ${session.training_hours !== null && session.training_hours !== undefined && session.training_hours !== ""
                       ? `${escapeHtml(formatCourseHours(session.training_hours))} ชั่วโมง`
-                      : (session.courses?.duration_hours !== null && session.courses?.duration_hours !== undefined
+                      : (session.courses?.duration_hours !== null && session.courses?.duration_hours !== undefined && session.courses?.duration_hours !== ""
                           ? `${escapeHtml(formatCourseHours(session.courses.duration_hours))} ชั่วโมง`
                           : "-")}
                   </div>
