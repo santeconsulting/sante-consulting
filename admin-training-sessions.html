@@ -1494,6 +1494,263 @@ body{
 </style>
 
 <meta name="sante-build" content="TRAINING-SESSIONS-DASHBOARD-MATCH-R2">
+
+<style id="sante-training-sessions-course-master-r3">
+/* =========================================================
+   ADMIN TRAINING SESSIONS — VISUAL MASTER: admin-courses(5)
+   ========================================================= */
+:root{
+  --navy:#082d69;--navy-dark:#061f4b;--navy-soft:#0d4386;
+  --yellow:#ffbf19;--yellow-soft:#fff4cf;--blue:#087df0;
+  --green:#159447;--red:#b42318;--bg:#f1f7fb;--white:#fff;
+  --text:#082d69;--muted:#6f83a2;--line:#d9e5ef;--sidebar:285px;
+}
+html,body{width:100%;min-height:100%;overflow-x:hidden}
+body{
+  font-family:"Prompt",sans-serif!important;
+  color:var(--text)!important;
+  background:var(--bg)!important;
+  font-size:16px!important;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:inherit;text-decoration:none}
+button,input,select,textarea{font-family:"Prompt",sans-serif!important}
+
+/* Sidebar */
+.sidebar{
+  position:fixed!important;left:0!important;top:0!important;bottom:0!important;
+  z-index:300!important;width:var(--sidebar)!important;
+  display:flex!important;flex-direction:column!important;
+  padding:0!important;
+  background:linear-gradient(180deg,#082d69 0%,#06265c 55%,#061f4b 100%)!important;
+  color:#fff!important;overflow-y:auto!important;
+  border:0!important;box-shadow:none!important;
+  transform:none!important;
+}
+.sidebar-brand{
+  min-height:128px!important;display:flex!important;align-items:center!important;justify-content:center!important;
+  padding:22px 25px!important;border-bottom:1px solid rgba(255,255,255,.10)!important;
+}
+.sidebar-brand img{
+  display:block!important;width:190px!important;max-width:100%!important;height:82px!important;
+  object-fit:contain!important;background:transparent!important;border:0!important;border-radius:0!important;padding:0!important;
+}
+.sidebar-label{
+  padding:26px 25px 10px!important;color:#9bb1d0!important;
+  font-size:12px!important;font-weight:500!important;letter-spacing:1.7px!important;
+}
+.nav{display:block!important;padding:0 15px 25px!important}
+.nav-link{
+  min-height:58px!important;display:flex!important;align-items:center!important;gap:14px!important;
+  margin:5px 0!important;padding:0 17px!important;border-radius:16px!important;
+  color:#e4edfa!important;background:transparent!important;
+  font-size:15px!important;font-weight:500!important;transition:.18s ease!important;
+}
+.nav-link:hover{background:rgba(255,255,255,.08)!important;color:#fff!important}
+.nav-link.active{
+  background:var(--yellow)!important;color:var(--navy)!important;font-weight:600!important;
+  box-shadow:0 7px 18px rgba(0,0,0,.10)!important;
+}
+.nav-icon{
+  width:29px!important;flex:0 0 29px!important;display:grid!important;place-items:center!important;
+  font-size:21px!important;line-height:1!important;
+}
+.sidebar-footer{
+  margin:auto 15px 22px!important;padding:18px!important;border-radius:17px!important;
+  background:rgba(255,255,255,.07)!important;border:1px solid rgba(255,255,255,.05)!important;
+}
+.sidebar-footer strong{display:block!important;font-size:13px!important;font-weight:600!important}
+.sidebar-footer p{margin-top:6px!important;color:#b6c8e2!important;font-size:11px!important;line-height:1.65!important}
+
+/* Main + Topbar */
+.main{
+  min-height:100vh!important;margin-left:var(--sidebar)!important;padding-top:88px!important;
+  background:var(--bg)!important;border:0!important;box-shadow:none!important;
+}
+.topbar{
+  position:fixed!important;top:0!important;left:var(--sidebar)!important;right:0!important;z-index:500!important;height:88px!important;
+  display:flex!important;align-items:center!important;justify-content:space-between!important;gap:24px!important;padding:0 34px!important;
+  background:rgba(255,255,255,.97)!important;border-bottom:1px solid #e2ebf3!important;
+  box-shadow:0 3px 14px rgba(8,45,105,.025)!important;
+}
+.topbar-left{display:flex!important;align-items:center!important;gap:14px!important}
+.page-name{font-size:21px!important;line-height:1.3!important;font-weight:600!important;color:var(--navy)!important}
+.page-sub{margin-top:4px!important;color:var(--muted)!important;font-size:12px!important}
+.mobile-menu{
+  display:none;width:44px;height:44px;border:1px solid var(--line);border-radius:12px;
+  background:#fff;color:var(--navy);font-size:21px;cursor:pointer;
+}
+.admin-area{display:flex!important;align-items:center!important;gap:17px!important}
+.admin-copy{text-align:right!important}
+.admin-name{font-size:15px!important;font-weight:600!important;color:var(--navy)!important}
+.admin-email{margin-top:2px!important;color:var(--muted)!important;font-size:11px!important}
+.logout{
+  min-height:46px!important;padding:0 18px!important;border:1px solid var(--line)!important;
+  border-radius:12px!important;background:#fff!important;color:var(--navy)!important;
+  font-size:13px!important;font-weight:600!important;cursor:pointer!important;
+}
+
+/* Content + Hero */
+.content{
+  width:min(1540px,calc(100% - 58px))!important;
+  max-width:none!important;margin:0 auto!important;padding:30px 0 65px!important;
+  background:var(--bg)!important;
+}
+.canonical-hero{
+  width:100%;margin:0 0 28px;padding:10px;background:#fff;
+  border-radius:28px;box-shadow:0 10px 30px rgba(8,45,105,.06);
+}
+.canonical-hero picture,.canonical-hero img{display:block;width:100%}
+.canonical-hero img{height:auto;border-radius:22px;object-fit:cover}
+
+/* Page heading */
+.page-head{
+  display:flex!important;align-items:flex-start!important;justify-content:space-between!important;
+  gap:20px!important;margin:2px 4px 22px!important;
+}
+.page-head h1{font-size:30px!important;line-height:1.3!important;font-weight:600!important;color:var(--navy)!important}
+.page-head p{margin-top:6px!important;color:var(--muted)!important;font-size:13px!important;line-height:1.7!important}
+
+/* Master buttons */
+.btn{
+  min-height:46px!important;padding:0 18px!important;border:0!important;border-radius:12px!important;
+  font-size:13px!important;font-weight:600!important;cursor:pointer!important;
+}
+.btn-yellow{
+  background:var(--yellow)!important;color:var(--navy)!important;
+  box-shadow:0 7px 18px rgba(255,191,25,.22)!important;
+}
+.btn-light{background:#fff!important;color:var(--navy)!important;border:1px solid var(--line)!important}
+.btn-danger{background:#fff1f1!important;color:#a92e2e!important;border:1px solid #ffd3d3!important}
+.btn-navy{background:var(--navy)!important;color:#fff!important}
+
+/* Statistics */
+.stats{
+  display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  gap:17px!important;margin-bottom:22px!important;
+}
+.stat{
+  min-height:135px!important;padding:22px!important;background:#fff!important;
+  border:1px solid var(--line)!important;border-radius:20px!important;
+  box-shadow:0 6px 18px rgba(8,45,105,.035)!important;
+}
+.stat-top{display:flex!important;justify-content:space-between!important;align-items:center!important}
+.stat-label{color:var(--muted)!important;font-size:13px!important;font-weight:500!important}
+.stat-icon{
+  width:46px!important;height:46px!important;display:grid!important;place-items:center!important;
+  border-radius:14px!important;background:#eaf4ff!important;color:var(--navy)!important;font-size:21px!important;
+}
+.stat-value{margin-top:12px!important;font-size:33px!important;font-weight:700!important;line-height:1!important;color:var(--navy)!important}
+
+/* Filters */
+.filter-panel{
+  display:grid!important;grid-template-columns:1fr 230px 210px!important;gap:12px!important;
+  padding:16px!important;background:#fff!important;border:1px solid var(--line)!important;
+  border-radius:20px!important;margin-bottom:22px!important;box-shadow:none!important;
+}
+.input,.select,.form-input,.form-select,.form-textarea{
+  width:100%!important;border:1px solid var(--line)!important;border-radius:12px!important;
+  background:#fff!important;color:var(--navy)!important;font-size:14px!important;padding:12px 14px!important;outline:none!important;
+}
+.input,.select,.form-input,.form-select{min-height:46px!important}
+.input:focus,.select:focus,.form-input:focus,.form-select:focus,.form-textarea:focus{
+  border-color:#7ab8ef!important;box-shadow:0 0 0 3px rgba(8,125,240,.07)!important;
+}
+
+/* Session cards — same visual family as Course cards */
+.session-grid{
+  display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:18px!important;
+}
+.session-card{
+  background:#fff!important;border:1px solid var(--line)!important;border-radius:20px!important;
+  overflow:hidden!important;box-shadow:0 5px 15px rgba(8,45,105,.025)!important;
+}
+.session-bar{height:6px!important;background:var(--navy)!important}
+.session-body{padding:20px!important}
+.course-badge{
+  display:inline-flex!important;padding:6px 10px!important;border-radius:999px!important;
+  background:#edf6ff!important;color:#0870cf!important;font-size:11px!important;font-weight:600!important;
+}
+.session-name{font-size:18px!important;font-weight:600!important;line-height:1.45!important;color:var(--navy)!important}
+.session-code{margin-top:4px!important;color:var(--muted)!important;font-size:11px!important}
+.badge{
+  display:inline-flex!important;align-items:center!important;padding:6px 10px!important;border-radius:999px!important;
+  font-size:11px!important;font-weight:600!important;
+}
+.info-grid{display:grid!important;grid-template-columns:1fr 1fr!important;gap:9px!important;margin-top:16px!important}
+.info-box{background:#f6f9fc!important;border-radius:12px!important;padding:11px!important}
+.info-label{display:block!important;color:var(--muted)!important;font-size:10px!important}
+.info-value{display:block!important;margin-top:4px!important;font-size:13px!important;color:var(--navy)!important}
+.session-tags{display:flex!important;gap:7px!important;flex-wrap:wrap!important;margin-top:13px!important}
+.tag{padding:5px 8px!important;border-radius:999px!important;background:#f0f4f8!important;color:#59708d!important;font-size:10px!important}
+.posttest-tag{background:#fff4cf!important;color:#765b00!important}
+.card-actions{display:grid!important;grid-template-columns:1fr 1fr!important;gap:8px!important;margin-top:16px!important}
+.edit-btn,.exam-btn{
+  width:100%!important;min-height:46px!important;border-radius:12px!important;
+  font-size:13px!important;font-weight:600!important;cursor:pointer!important;
+}
+.edit-btn{border:1px solid var(--line)!important;background:#fff!important;color:var(--navy)!important}
+.exam-btn{border:0!important;background:var(--yellow)!important;color:var(--navy)!important}
+
+/* Modal — match courses */
+.modal-overlay{
+  position:fixed!important;inset:0!important;z-index:900!important;background:rgba(3,20,48,.52)!important;
+  display:none;align-items:flex-start!important;justify-content:center!important;padding:25px!important;overflow:auto!important;
+}
+.modal-overlay.show{display:flex!important}
+.modal{
+  width:min(1000px,100%)!important;background:#fff!important;border-radius:22px!important;
+  box-shadow:0 25px 80px rgba(0,0,0,.22)!important;overflow:hidden!important;
+}
+.modal-header{
+  display:flex!important;justify-content:space-between!important;align-items:center!important;
+  padding:19px 22px!important;border-bottom:1px solid var(--line)!important;
+}
+.modal-title{font-size:21px!important;color:var(--navy)!important}
+.modal-body{padding:22px!important}
+.modal-footer{
+  display:flex!important;justify-content:flex-end!important;gap:10px!important;
+  padding:16px 22px!important;border-top:1px solid var(--line)!important;background:#fff!important;
+}
+.cancel-btn{min-height:46px!important;border:1px solid var(--line)!important;border-radius:12px!important;background:#fff!important;color:var(--navy)!important}
+.save-btn{min-height:46px!important;border:0!important;border-radius:12px!important;background:var(--navy)!important;color:#fff!important}
+
+/* Remove legacy pseudo decorations */
+.sidebar::before,.sidebar::after,.main::before,.main::after,.content::before,.content::after{
+  content:none!important;display:none!important;
+}
+
+@media(max-width:1200px){
+  :root{--sidebar:255px}
+  .stats{grid-template-columns:repeat(2,1fr)!important}
+  .session-grid{grid-template-columns:repeat(2,1fr)!important}
+}
+@media(max-width:900px){
+  .sidebar{width:285px!important;transform:translateX(-100%)!important;transition:.2s ease!important}
+  .sidebar.open{transform:translateX(0)!important}
+  .main{margin-left:0!important}
+  .topbar{left:0!important}
+  .mobile-menu{display:block!important}
+}
+@media(max-width:767px){
+  .main{padding-top:68px!important}
+  .topbar{height:68px!important;padding:0 12px!important}
+  .page-name{font-size:16px!important}
+  .page-sub,.admin-copy{display:none!important}
+  .content{width:100%!important;padding:16px 12px 42px!important}
+  .canonical-hero{margin-bottom:18px!important;padding:6px!important;border-radius:18px!important}
+  .canonical-hero img{border-radius:14px!important}
+  .page-head{flex-direction:column!important}
+  .page-head h1{font-size:24px!important}
+  .stats{grid-template-columns:1fr 1fr!important;gap:10px!important}
+  .filter-panel{grid-template-columns:1fr!important}
+  .session-grid{grid-template-columns:1fr!important}
+  .card-actions{grid-template-columns:1fr!important}
+  .modal-overlay{padding:10px!important}
+}
+</style>
+
+<meta name="sante-build" content="TRAINING-SESSIONS-COURSES-MASTER-R3">
 </head>
 
 <body>
@@ -1567,35 +1824,41 @@ body{
     <!-- TOPBAR -->
     <header class="topbar">
   <div class="topbar-left">
-    <button class="mobile-menu" id="mobileMenuBtn" type="button">☰</button>
+    <button id="mobileMenuBtn" class="mobile-menu">☰</button>
     <div>
       <div class="page-name">รอบอบรม</div>
       <div class="page-sub">สร้างและจัดการรอบอบรม วันรับสมัคร จำนวนที่นั่ง และการเปิดข้อสอบ</div>
     </div>
   </div>
-
-  <div class="topbar-right">
+  <div class="admin-area">
     <div class="admin-copy">
-      <div class="admin-name" id="adminName">ผู้ดูแลระบบ SANTE</div>
-      <div class="admin-email" id="adminEmail">-</div>
+      <div id="adminName" class="admin-name">ผู้ดูแลระบบ SANTE</div>
+      <div id="adminEmail" class="admin-email"></div>
     </div>
-    <button class="logout-btn" id="logoutBtn" type="button">ออกจากระบบ</button>
+    <button id="logoutBtn" class="logout">ออกจากระบบ</button>
   </div>
 </header>
 
 
     <div class="content">
 
+      <section class="canonical-hero">
+        <picture>
+          <source media="(max-width: 767px)" srcset="sante-dashboard-hero-mobile.png">
+          <img src="sante-dashboard-hero-desktop.png" alt="Trust in Safety. Trust in SANTE.">
+        </picture>
+      </section>
+
       <!-- PAGE HEADER -->
-      <section class="page-header">
+      <section class="page-head">
 
         <div>
 
-          <h1 class="page-title">
+          <h1 >
             รอบการอบรม
           </h1>
 
-          <p class="page-description">
+          <p >
             สร้างและจัดการรอบอบรม วันรับสมัคร
             จำนวนที่นั่ง การอบรม และการเปิดข้อสอบ
           </p>
@@ -1605,16 +1868,16 @@ body{
 
         <div style="display:flex;gap:10px;flex-wrap:wrap;">
           <button
-            class="primary-btn"
+            class="btn btn-light"
             id="exportExcelBtn"
             type="button"
-            style="background:#ffffff;color:#062f61;border:1px solid #dbe5ef;"
+
           >
             ↓ Export Excel
           </button>
 
           <button
-            class="primary-btn"
+            class="btn btn-yellow"
             id="addSessionBtn"
           >
             ＋ เพิ่มรอบการอบรม
@@ -1625,11 +1888,11 @@ body{
 
 
       <!-- STATS -->
-      <section class="stats-grid">
+      <section class="stats">
 
-        <div class="stat-card">
+        <div class="stat">
 
-          <div class="stat-head">
+          <div class="stat-top">
 
             <div class="stat-label">
               รอบทั้งหมด
@@ -1651,9 +1914,9 @@ body{
         </div>
 
 
-        <div class="stat-card">
+        <div class="stat">
 
-          <div class="stat-head">
+          <div class="stat-top">
 
             <div class="stat-label">
               เปิดรับสมัคร
@@ -1675,9 +1938,9 @@ body{
         </div>
 
 
-        <div class="stat-card">
+        <div class="stat">
 
-          <div class="stat-head">
+          <div class="stat-top">
 
             <div class="stat-label">
               ฉบับร่าง
@@ -1699,9 +1962,9 @@ body{
         </div>
 
 
-        <div class="stat-card">
+        <div class="stat">
 
-          <div class="stat-head">
+          <div class="stat-top">
 
             <div class="stat-label">
               เสร็จสิ้น
@@ -1726,19 +1989,19 @@ body{
 
 
       <!-- FILTER -->
-      <section class="toolbar">
+      <section class="filter-panel">
 
         <input
           type="text"
           id="searchInput"
-          class="control"
+          class="input"
           placeholder="ค้นหาชื่อรอบการอบรม..."
         >
 
 
         <select
           id="courseFilter"
-          class="control"
+          class="select"
         >
           <option value="">
             ทุกหลักสูตร
@@ -1748,7 +2011,7 @@ body{
 
         <select
           id="statusFilter"
-          class="control"
+          class="select"
         >
           <option value="">
             ทุกสถานะ
