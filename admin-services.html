@@ -242,7 +242,7 @@ tbody tr:hover{background:#fafcfe}
   .stats{grid-template-columns:1fr}
 }
 </style>
-<meta name="sante-build" content="ADMIN-SERVICES-DASHBOARD-R1">
+<meta name="sante-build" content="ADMIN-SERVICES-DASHBOARD-R2-SOFTDELETE-SORT">
 </head>
 
 <body>
@@ -373,7 +373,25 @@ tbody tr:hover{background:#fafcfe}
   <section id="scheduleTab" class="hidden">
     <div class="panel">
       <h3 style="margin-top:0">งานและนัดหมาย</h3>
-      <p class="muted" style="margin-top:5px">แสดงงานที่อนุมัติแล้วและวันนัดหมายที่ยืนยันกับลูกค้า</p>
+      <p class="muted" style="margin-top:5px">เรียงงานที่ต้องดำเนินการก่อนตามวันนัดหมาย ส่วนงานที่เสร็จแล้วจะอยู่ท้ายรายการอัตโนมัติ</p>
+    </div>
+
+    <div class="schedule-tools">
+      <div class="schedule-summary">
+        <span class="schedule-chip"><span>งานทั้งหมด</span><strong id="scheduleTotal">0</strong></span>
+        <span class="schedule-chip live"><span>กำลังดำเนินการ/กำลังจะถึง</span><strong id="scheduleOpen">0</strong></span>
+        <span class="schedule-chip done"><span>เสร็จแล้ว</span><strong id="scheduleDone">0</strong></span>
+      </div>
+      <div class="schedule-page">
+        <select class="select" id="schedulePageSize" style="width:auto;min-height:36px;padding:6px 10px">
+          <option value="10">10 รายการ/หน้า</option>
+          <option value="20" selected>20 รายการ/หน้า</option>
+          <option value="50">50 รายการ/หน้า</option>
+        </select>
+        <button class="btn light" id="schedulePrevBtn" type="button">← ก่อนหน้า</button>
+        <span class="schedule-page-info" id="schedulePageInfo">หน้า 1 / 1</span>
+        <button class="btn light" id="scheduleNextBtn" type="button">ถัดไป →</button>
+      </div>
     </div>
 
     <div class="table-wrap">
@@ -461,7 +479,7 @@ const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{
   }
 });
 
-let currentUser=null, services=[], requests=[], editingServiceId=null, editingRequestId=null;
+let currentUser=null, services=[], requests=[], editingServiceId=null, editingRequestId=null, schedulePage=1;
 
 function toast(msg){
   const t=document.getElementById("toast");
@@ -518,7 +536,7 @@ async function loadAll(){
     console.error(s.error);
     toast("โหลดรายการบริการไม่สำเร็จ");
   }else{
-    services=s.data||[];
+    services=(s.data||[]).filter(x=>!x.is_deleted && !x.deleted_at);
   }
 
   if(r.error){
@@ -583,6 +601,7 @@ function renderServices(){
       <button class="btn ${x.is_active?"danger":"primary"}" onclick="toggleService('${x.id}',${!x.is_active})">
         ${x.is_active?"ปิดใช้งาน":"เปิดใช้งาน"}
       </button>
+      <button class="btn delete" onclick="deleteService('${x.id}')">ลบ</button>
     </div>
   </div>`).join("");
 }
@@ -611,19 +630,91 @@ function renderRequests(){
 }
 
 function renderSchedule(){
-  const rows=requests.filter(x=>x.confirmed_service_date||["SCHEDULED","IN_PROGRESS","COMPLETED"].includes(x.status));
+  const source=requests.filter(x=>
+    x.confirmed_service_date ||
+    ["APPROVED","SCHEDULED","IN_PROGRESS","COMPLETED"].includes(String(x.status||"").toUpperCase())
+  );
+
+  const rank=status=>{
+    const s=String(status||"").toUpperCase();
+    if(s==="IN_PROGRESS")return 0;
+    if(s==="SCHEDULED"||s==="APPROVED")return 1;
+    if(s==="COMPLETED")return 9;
+    return 5;
+  };
+
+  const dateValue=x=>{
+    const raw=x.confirmed_service_date || x.created_at;
+    if(!raw)return Number.MAX_SAFE_INTEGER;
+    const d=new Date(
+      String(raw).length===10 ? raw+"T00:00:00" : raw
+    );
+    const t=d.getTime();
+    return Number.isFinite(t)?t:Number.MAX_SAFE_INTEGER;
+  };
+
+  const rows=[...source].sort((a,b)=>{
+    const ra=rank(a.status), rb=rank(b.status);
+    if(ra!==rb)return ra-rb;
+
+    const da=dateValue(a), db=dateValue(b);
+
+    // งานเสร็จแล้ว: ล่าสุดก่อน แต่ทั้งหมดอยู่ท้าย
+    if(ra===9)return db-da;
+
+    // งานที่ยังไม่เสร็จ: วันใกล้ที่สุดก่อน
+    return da-db;
+  });
+
+  const completed=rows.filter(x=>String(x.status||"").toUpperCase()==="COMPLETED").length;
+  const open=rows.length-completed;
+  document.getElementById("scheduleTotal").textContent=rows.length;
+  document.getElementById("scheduleOpen").textContent=open;
+  document.getElementById("scheduleDone").textContent=completed;
+
+  const pageSize=Math.max(1,Number(document.getElementById("schedulePageSize")?.value||20));
+  const totalPages=Math.max(1,Math.ceil(rows.length/pageSize));
+  if(schedulePage>totalPages)schedulePage=totalPages;
+  if(schedulePage<1)schedulePage=1;
+
+  const from=(schedulePage-1)*pageSize;
+  const pageRows=rows.slice(from,from+pageSize);
+
+  document.getElementById("schedulePageInfo").textContent=`หน้า ${schedulePage} / ${totalPages}`;
+  document.getElementById("schedulePrevBtn").disabled=schedulePage<=1;
+  document.getElementById("scheduleNextBtn").disabled=schedulePage>=totalPages;
 
   document.getElementById("scheduleEmpty").classList.toggle("hidden",!!rows.length);
 
-  document.getElementById("scheduleBody").innerHTML=rows.map(x=>`<tr>
-    <td><strong>${esc(x.request_no||"-")}</strong></td>
-    <td>${esc(x.organization_name||x.customer_name||"-")}</td>
-    <td>${esc(x.services?.service_name||"-")}</td>
-    <td>${x.confirmed_service_date?new Intl.DateTimeFormat("th-TH",{dateStyle:"long"}).format(new Date(x.confirmed_service_date+"T00:00:00")):"-"}</td>
-    <td>${esc(x.location_text||"-")}</td>
-    <td>${esc(x.contact_name||"-")}<div class="muted">${esc(x.contact_phone||"")}</div></td>
-    <td><span class="badge">${esc(x.status||"-")}</span></td>
-  </tr>`).join("");
+  document.getElementById("scheduleBody").innerHTML=pageRows.map(x=>{
+    const status=String(x.status||"").toUpperCase();
+    const rowClass=status==="COMPLETED"?"row-completed":(status==="IN_PROGRESS"?"row-inprogress":"");
+    let dateText="-";
+    let dateSub="";
+    if(x.confirmed_service_date){
+      const d=new Date(x.confirmed_service_date+"T00:00:00");
+      dateText=new Intl.DateTimeFormat("th-TH",{dateStyle:"long"}).format(d);
+      if(status!=="COMPLETED"){
+        const today=new Date(); today.setHours(0,0,0,0);
+        const target=new Date(d); target.setHours(0,0,0,0);
+        const diff=Math.round((target-today)/86400000);
+        if(diff===0)dateSub="วันนี้";
+        else if(diff===1)dateSub="พรุ่งนี้";
+        else if(diff>1)dateSub=`อีก ${diff} วัน`;
+        else dateSub=`ผ่านมา ${Math.abs(diff)} วัน`;
+      }
+    }
+
+    return `<tr class="${rowClass}">
+      <td><strong>${esc(x.request_no||"-")}</strong></td>
+      <td>${esc(x.organization_name||x.customer_name||"-")}</td>
+      <td>${esc(x.services?.service_name||"-")}</td>
+      <td><div class="date-main">${esc(dateText)}</div>${dateSub?`<div class="date-sub">${esc(dateSub)}</div>`:""}</td>
+      <td>${esc(x.location_text||"-")}</td>
+      <td>${esc(x.contact_name||"-")}<div class="muted">${esc(x.contact_phone||"")}</div></td>
+      <td><span class="badge ${status==="COMPLETED"?"gray":status==="IN_PROGRESS"?"green":""}">${esc(status||"-")}</span></td>
+    </tr>`;
+  }).join("");
 }
 
 function switchTab(name,btn){
@@ -707,6 +798,41 @@ async function toggleService(id,val){
   }
 }
 
+async function deleteService(id){
+  const service=services.find(x=>x.id===id);
+  if(!service)return;
+
+  const related=requests.filter(x=>x.service_id===id || x.services?.id===id).length;
+  const message=related
+    ? `ต้องการลบ "${service.service_name}" ออกจากหน้าระบบหรือไม่?\n\nบริการนี้มีคำขอบริการที่เกี่ยวข้อง ${related} รายการ ระบบจะซ่อนบริการจากหน้าจัดการ แต่เก็บข้อมูลเดิมไว้เพื่อไม่ให้ประวัติงาน/ใบเสนอราคาเสียหาย`
+    : `ต้องการลบ "${service.service_name}" ออกจากหน้าระบบหรือไม่?\n\nหลังลบจะไม่แสดงในรายการบริการอีก แต่ระบบยังเก็บข้อมูลไว้เพื่อความปลอดภัยของประวัติ`;
+
+  if(!confirm(message))return;
+
+  const payload={
+    is_deleted:true,
+    deleted_at:new Date().toISOString(),
+    deleted_by:currentUser?.id||null,
+    is_active:false,
+    updated_at:new Date().toISOString()
+  };
+
+  const {error}=await db.from("services").update(payload).eq("id",id);
+
+  if(error){
+    console.error(error);
+    alert(
+      "ยังไม่สามารถลบบริการได้\n\n"+
+      error.message+
+      "\n\nหากเพิ่งอัปเดตไฟล์หน้าเว็บ ให้รัน SQL SANTE_SERVICES_SOFT_DELETE_SETUP.sql ใน Supabase ก่อน"
+    );
+    return;
+  }
+
+  toast("ลบบริการออกจากหน้าระบบแล้ว");
+  await loadAll();
+}
+
 function openRequestModal(id){
   editingRequestId=id;
   const x=requests.find(r=>r.id===id);
@@ -786,6 +912,19 @@ document.getElementById("logoutBtn").onclick=async()=>{
 
 ["requestSearch","requestStatusFilter"].forEach(id=>{
   document.getElementById(id).addEventListener(id==="requestSearch"?"input":"change",renderRequests);
+});
+
+
+document.getElementById("schedulePageSize")?.addEventListener("change",()=>{
+  schedulePage=1;
+  renderSchedule();
+});
+document.getElementById("schedulePrevBtn")?.addEventListener("click",()=>{
+  if(schedulePage>1){schedulePage--;renderSchedule();}
+});
+document.getElementById("scheduleNextBtn")?.addEventListener("click",()=>{
+  schedulePage++;
+  renderSchedule();
 });
 
 init();
