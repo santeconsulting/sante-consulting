@@ -505,6 +505,214 @@ a{text-decoration:none}
 </style>
 
 <meta name="sante-unified-build" content="SANTE-ADMIN-UNIFIED-R1">
+
+<style id="sante-admin-readability-r2">
+/* =========================================================
+   SANTE ADMIN READABILITY R2
+   เพิ่มความชัดเจนของข้อความรองบน Desktop
+   และคุมสัดส่วนบน Mobile ให้สมดุล
+========================================================= */
+
+/* ---------- Topbar ---------- */
+.page-sub{
+  font-size:14px!important;
+  line-height:1.5!important;
+}
+
+/* ---------- Page / section descriptions ---------- */
+.page-head p,
+.page-header p,
+.head .muted,
+.section-head p,
+.panel-header p,
+.muted{
+  font-size:14px!important;
+  line-height:1.7!important;
+}
+
+/* ---------- Stats ---------- */
+.stat-label,
+.summary-label{
+  font-size:14px!important;
+  line-height:1.45!important;
+}
+.stat-note,
+.summary-note{
+  font-size:12px!important;
+  line-height:1.55!important;
+}
+
+/* ---------- Cards / secondary copy ---------- */
+.course-desc,
+.card p,
+.manage-card p,
+.session-code,
+.person-email,
+.payment-session,
+.type-note,
+.form-help,
+.sub,
+.meta span,
+.meta-box span,
+.info-label,
+.detail-label,
+.cell-sub,
+.batch-meta,
+.user,
+.sidebar-footer p{
+  font-size:12px!important;
+  line-height:1.6!important;
+}
+
+/* main card values and metadata */
+.meta strong,
+.meta-box strong,
+.info-value,
+.detail-value,
+.cell-main,
+.person-name{
+  font-size:13px!important;
+  line-height:1.55!important;
+}
+
+/* badges/tags were too small on desktop */
+.badge,
+.tag,
+.course-badge,
+.status,
+.current-badge{
+  font-size:11px!important;
+  line-height:1.3!important;
+}
+
+/* filters / form controls */
+.input,
+.select,
+.control,
+.search,
+input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+select,
+textarea{
+  font-size:13px!important;
+}
+
+/* table readability */
+.content .table-wrap table:not(.qtable) th,
+.content table.table th{
+  font-size:11px!important;
+}
+.content .table-wrap table:not(.qtable) td,
+.content table.table td{
+  font-size:12px!important;
+  line-height:1.55!important;
+}
+
+/* common buttons */
+.btn,
+.refresh,
+.refresh-btn,
+.export-btn,
+.mini-btn{
+  font-size:12px!important;
+}
+
+/* Admin members specific */
+.audit-item,
+.note{
+  font-size:11.5px!important;
+  line-height:1.65!important;
+}
+
+/* Dashboard quick menu */
+.quick-item{
+  font-size:13px!important;
+}
+.manage-action{
+  font-size:12px!important;
+}
+
+/* Keep mobile balanced — don't scale everything too large */
+@media(max-width:767px){
+  .page-sub{display:none!important}
+
+  .page-head p,
+  .page-header p,
+  .head .muted,
+  .section-head p,
+  .panel-header p,
+  .muted{
+    font-size:12px!important;
+    line-height:1.6!important;
+  }
+
+  .stat-label,
+  .summary-label{
+    font-size:11px!important;
+  }
+
+  .stat-note,
+  .summary-note{
+    font-size:10px!important;
+  }
+
+  .course-desc,
+  .card p,
+  .manage-card p,
+  .session-code,
+  .person-email,
+  .payment-session,
+  .type-note,
+  .form-help,
+  .sub,
+  .meta span,
+  .meta-box span,
+  .info-label,
+  .detail-label,
+  .cell-sub,
+  .batch-meta,
+  .user,
+  .sidebar-footer p{
+    font-size:10.5px!important;
+    line-height:1.55!important;
+  }
+
+  .meta strong,
+  .meta-box strong,
+  .info-value,
+  .detail-value,
+  .cell-main,
+  .person-name{
+    font-size:12px!important;
+  }
+
+  .badge,
+  .tag,
+  .course-badge,
+  .status,
+  .current-badge{
+    font-size:9.5px!important;
+  }
+
+  .input,
+  .select,
+  .control,
+  .search,
+  input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+  select,
+  textarea{
+    font-size:12px!important;
+  }
+
+  .quick-item{
+    font-size:11px!important;
+  }
+  .manage-action{
+    font-size:11px!important;
+  }
+}
+</style>
+
+<meta name="sante-readability-build" content="SANTE-ADMIN-READABILITY-R2">
 </head>
 <body>
 
