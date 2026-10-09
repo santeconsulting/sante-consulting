@@ -1272,6 +1272,269 @@ input:focus,select:focus,textarea:focus{border-color:#9dc7ef!important;box-shado
 @media(max-width:900px){.sidebar{width:285px!important;transform:translateX(-100%)!important}.sidebar.open{transform:translateX(0)!important}.main{margin-left:0!important}.topbar{left:0!important}}
 @media(max-width:767px){.main{padding-top:68px!important}.topbar{height:68px!important;min-height:68px!important;padding:0 12px!important}.content{width:100%!important;padding:12px 12px 42px!important}.canonical-hero{border-radius:20px!important}.canonical-hero img{border-radius:20px!important}.page-head{margin:27px 3px 14px!important}.page-head h1{font-size:20px!important}.page-head p{font-size:10px!important}}
 </style>
+
+<style id="sante-admin-unified-r1">
+/* =========================================================
+   SANTE ADMIN UNIFIED UI R1
+   Visual master: Dashboard / Courses canonical shell
+   This block intentionally overrides legacy page-specific shell CSS
+   without changing business logic.
+========================================================= */
+:root{
+  --navy:#082d69!important;
+  --navy-dark:#061f4b!important;
+  --navy-soft:#0d4386!important;
+  --yellow:#ffbf19!important;
+  --yellow-soft:#fff4cf!important;
+  --blue:#087df0!important;
+  --green:#159447!important;
+  --red:#b42318!important;
+  --bg:#f1f7fb!important;
+  --white:#ffffff!important;
+  --text:#082d69!important;
+  --muted:#6f83a2!important;
+  --line:#d9e5ef!important;
+  --sidebar:285px!important;
+  --shadow-soft:0 6px 18px rgba(8,45,105,.035);
+  --shadow-card:0 5px 15px rgba(8,45,105,.025);
+}
+html,body{width:100%;min-height:100%;overflow-x:hidden}
+body{font-family:"Prompt",sans-serif!important;background:var(--bg)!important;color:var(--text)!important;font-size:16px!important;-webkit-font-smoothing:antialiased}
+body,button,input,select,textarea{font-family:"Prompt",sans-serif!important}
+a{text-decoration:none}
+
+/* ---------- Sidebar ---------- */
+.sidebar{
+  position:fixed!important;inset:0 auto 0 0!important;z-index:300!important;
+  width:var(--sidebar)!important;padding:0!important;
+  display:flex!important;flex-direction:column!important;overflow-y:auto!important;
+  background:linear-gradient(180deg,#082d69 0%,#06265c 55%,#061f4b 100%)!important;
+  color:#fff!important;border:0!important;box-shadow:none!important;transform:none;
+}
+.sidebar-brand{
+  min-height:128px!important;height:auto!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  padding:22px 25px!important;border-bottom:1px solid rgba(255,255,255,.10)!important;
+}
+.sidebar-brand img{
+  display:block!important;width:190px!important;max-width:100%!important;
+  height:82px!important;object-fit:contain!important;background:transparent!important;
+  padding:0!important;border-radius:0!important;
+}
+.sidebar-label{
+  display:block!important;padding:26px 25px 10px!important;
+  color:#9bb1d0!important;font-size:12px!important;font-weight:500!important;
+  letter-spacing:1.7px!important;
+}
+.sidebar .nav{
+  display:block!important;padding:0 15px 25px!important;margin:0!important;
+}
+.sidebar .nav-link{
+  min-height:58px!important;display:flex!important;align-items:center!important;gap:14px!important;
+  margin:5px 0!important;padding:0 17px!important;border:0!important;border-radius:16px!important;
+  background:transparent!important;color:#e4edfa!important;font-size:15px!important;font-weight:500!important;
+  line-height:1.35!important;transition:.18s ease!important;text-align:left!important;
+}
+.sidebar .nav-link:hover{background:rgba(255,255,255,.08)!important;color:#fff!important}
+.sidebar .nav-link.active{
+  background:var(--yellow)!important;color:var(--navy)!important;font-weight:600!important;
+  box-shadow:0 7px 18px rgba(0,0,0,.10)!important;
+}
+.sidebar .nav-icon{
+  width:29px!important;flex:0 0 29px!important;display:grid!important;place-items:center!important;
+  font-size:21px!important;line-height:1!important;
+}
+.sidebar-footer{
+  display:block!important;margin:auto 15px 22px!important;padding:18px!important;
+  border-radius:17px!important;background:rgba(255,255,255,.07)!important;
+  border:1px solid rgba(255,255,255,.05)!important;color:#fff!important;
+}
+.sidebar-footer strong{display:block!important;font-size:13px!important;font-weight:600!important}
+.sidebar-footer p{margin:6px 0 0!important;color:#b6c8e2!important;font-size:11px!important;line-height:1.65!important}
+
+/* hide obsolete legacy sidebar fragments if any remain */
+.sante-canonical-sidebar:not(.sidebar),
+.au-sidebar{display:none!important}
+
+/* ---------- Main + Topbar ---------- */
+.main,.app>.main{
+  min-height:100vh!important;margin-left:var(--sidebar)!important;padding-top:88px!important;
+  width:auto!important;background:var(--bg)!important;border:0!important;box-shadow:none!important;
+}
+.topbar{
+  position:fixed!important;top:0!important;left:var(--sidebar)!important;right:0!important;
+  z-index:500!important;height:88px!important;min-height:88px!important;
+  display:flex!important;align-items:center!important;justify-content:space-between!important;gap:24px!important;
+  padding:0 34px!important;background:rgba(255,255,255,.97)!important;
+  border-bottom:1px solid #e2ebf3!important;box-shadow:0 3px 14px rgba(8,45,105,.025)!important;
+}
+.topbar-left{display:flex!important;align-items:center!important;gap:14px!important}
+.page-name{font-size:21px!important;line-height:1.3!important;font-weight:600!important;color:var(--navy)!important}
+.page-sub{margin-top:4px!important;color:var(--muted)!important;font-size:12px!important}
+.admin-area{display:flex!important;align-items:center!important;gap:17px!important}
+.admin-copy{text-align:right!important}
+.admin-name{font-size:15px!important;font-weight:600!important;color:var(--navy)!important}
+.admin-email{margin-top:2px!important;color:var(--muted)!important;font-size:11px!important}
+.logout,.logout-btn{
+  min-height:46px!important;padding:0 18px!important;border:1px solid var(--line)!important;
+  border-radius:12px!important;background:#fff!important;color:var(--navy)!important;
+  font-size:13px!important;font-weight:600!important;
+}
+.logout:hover,.logout-btn:hover{background:#f6faff!important;color:var(--navy)!important}
+.mobile-menu{
+  display:none!important;width:44px!important;height:44px!important;border:1px solid var(--line)!important;
+  border-radius:12px!important;background:#fff!important;color:var(--navy)!important;font-size:21px!important;
+}
+
+/* ---------- Content + Hero ---------- */
+.content{
+  width:min(1540px,calc(100% - 58px))!important;max-width:none!important;
+  margin:0 auto!important;padding:30px 0 65px!important;
+  background:transparent!important;border:0!important;
+}
+.canonical-hero,.dashboard-hero{
+  position:relative!important;width:100%!important;min-height:0!important;height:auto!important;
+  margin:0 0 28px!important;padding:10px!important;overflow:hidden!important;
+  border:0!important;border-radius:28px!important;background:#fff!important;background-image:none!important;
+  box-shadow:0 10px 30px rgba(8,45,105,.06)!important;
+}
+.canonical-hero picture,.canonical-hero img,
+.dashboard-hero picture,.dashboard-hero img,
+.dashboard-hero-picture,.dashboard-hero-image{
+  position:relative!important;inset:auto!important;display:block!important;
+  width:100%!important;height:auto!important;max-width:100%!important;line-height:0!important;
+}
+.canonical-hero img,.dashboard-hero img,.dashboard-hero-image{
+  border-radius:22px!important;object-fit:cover!important;object-position:center!important;
+}
+.dashboard-hero-content{display:none!important}
+
+/* ---------- Page heading ---------- */
+.page-head,.page-header,.head{
+  display:flex!important;align-items:flex-start!important;justify-content:space-between!important;gap:20px!important;
+  margin:2px 4px 22px!important;padding:0!important;background:transparent!important;border:0!important;
+  border-radius:0!important;box-shadow:none!important;color:var(--navy)!important;
+}
+.page-head h1,.page-header h1,.head h1{
+  margin:0!important;font-size:30px!important;line-height:1.3!important;
+  font-weight:600!important;color:var(--navy)!important;
+}
+.page-head p,.page-header p,.head .muted{
+  margin-top:6px!important;color:var(--muted)!important;font-size:13px!important;line-height:1.65!important;
+}
+.page-badge{
+  border-radius:999px!important;background:var(--yellow-soft)!important;color:#735700!important;
+  box-shadow:none!important;font-size:10px!important;font-weight:700!important;
+}
+
+/* ---------- Common controls ---------- */
+.btn,.refresh,.refresh-btn,.export-btn{
+  min-height:44px!important;padding:0 15px!important;border:1px solid var(--line)!important;
+  border-radius:11px!important;background:#fff!important;color:var(--navy)!important;
+  font-size:12px!important;font-weight:600!important;box-shadow:none!important;
+}
+.btn-primary,.btn-navy,.primary{
+  background:var(--navy)!important;border-color:var(--navy)!important;color:#fff!important;
+}
+.btn-yellow,.btn.yellow,.yellow{
+  background:var(--yellow)!important;border-color:var(--yellow)!important;color:var(--navy)!important;
+}
+.btn-light,.btn.light,.light{background:#fff!important;border-color:var(--line)!important;color:var(--navy)!important}
+.btn-danger,.btn.danger,.danger{background:#fff0f1!important;border-color:#f1c5ca!important;color:var(--red)!important}
+.input,.select,input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),select,textarea{
+  border-color:var(--line)!important;border-radius:12px!important;background:#fff!important;
+  color:var(--navy)!important;outline:none;
+}
+.input:focus,.select:focus,input:focus,select:focus,textarea:focus{
+  border-color:#8db9e8!important;box-shadow:0 0 0 3px rgba(8,125,240,.08)!important;
+}
+
+/* ---------- Stats / summary cards ---------- */
+.stats,.summary,.stats-grid{
+  gap:17px!important;margin-bottom:22px!important;
+}
+.stat,.summary-card,.stat-card{
+  min-height:135px!important;padding:22px!important;background:#fff!important;
+  border:1px solid var(--line)!important;border-radius:20px!important;
+  box-shadow:var(--shadow-soft)!important;color:var(--navy)!important;
+}
+.stat-label,.summary-label{color:var(--muted)!important;font-size:13px!important;font-weight:500!important}
+.stat-value,.summary-value{
+  margin-top:10px!important;font-size:33px!important;line-height:1!important;font-weight:700!important;color:var(--navy)!important;
+}
+.stat-icon,.summary-icon{
+  border-radius:14px!important;background:#eaf4ff!important;color:var(--navy)!important;
+}
+
+/* ---------- Panels / cards / tabs ---------- */
+.panel,.filter-panel,.filters,.toolbar{
+  border:1px solid var(--line)!important;border-radius:20px!important;background:#fff!important;
+  box-shadow:var(--shadow-card)!important;
+}
+.course-card,.session-card,.card,.payment-card,.method-card,.set-card,.manage-card{
+  border:1px solid var(--line)!important;border-radius:20px!important;background:#fff!important;
+  box-shadow:var(--shadow-card)!important;
+}
+.tabs{
+  border:1px solid var(--line)!important;border-radius:18px!important;background:#fff!important;
+  box-shadow:none!important;padding:8px!important;
+}
+.tab,.tab-btn{
+  min-height:44px!important;border-radius:11px!important;color:var(--navy)!important;
+  font-size:12px!important;font-weight:600!important;
+}
+.tab.active,.tab-btn.active{background:var(--navy)!important;color:#fff!important;border-color:var(--navy)!important}
+
+/* ---------- Tables ---------- */
+.table-wrap{
+  border:1px solid var(--line)!important;border-radius:14px!important;background:#fff!important;
+  box-shadow:none!important;
+}
+.content .table-wrap table:not(.qtable) th,
+.content table.table th{
+  background:var(--navy)!important;color:#fff!important;font-size:10px!important;font-weight:500!important;
+}
+.content .table-wrap table:not(.qtable) td,
+.content table.table td{
+  border-bottom:1px solid #e7edf3!important;color:#17304f!important;
+}
+
+/* ---------- Modal shell ---------- */
+.modal-backdrop,.modal-overlay,.modal-bg,.modal{
+  backdrop-filter:saturate(110%);
+}
+.modal-backdrop .modal,.modal-overlay .modal,.modal-bg .modal,.modal-card,.editor{
+  border-radius:22px!important;box-shadow:0 28px 80px rgba(0,0,0,.22)!important;
+}
+
+/* ---------- Mobile ---------- */
+@media(max-width:1200px){
+  :root{--sidebar:255px!important}
+}
+@media(max-width:900px){
+  :root{--sidebar:285px!important}
+  .sidebar{width:285px!important;transform:translateX(-100%)!important;transition:.2s ease!important}
+  .sidebar.open{transform:translateX(0)!important}
+  .main,.app>.main{margin-left:0!important}
+  .topbar{left:0!important}
+  .mobile-menu{display:block!important}
+  .overlay.show{display:block!important;position:fixed!important;inset:0!important;z-index:250!important;background:rgba(3,20,48,.48)!important}
+}
+@media(max-width:767px){
+  .main,.app>.main{padding-top:68px!important}
+  .topbar{height:68px!important;min-height:68px!important;padding:0 12px!important}
+  .page-name{font-size:16px!important}
+  .page-sub,.admin-copy{display:none!important}
+  .logout,.logout-btn{min-height:40px!important;padding:0 11px!important;font-size:11px!important}
+  .content{width:100%!important;padding:16px 12px 42px!important}
+  .canonical-hero,.dashboard-hero{margin-bottom:18px!important;padding:6px!important;border-radius:18px!important}
+  .canonical-hero img,.dashboard-hero img,.dashboard-hero-image{border-radius:14px!important}
+  .page-head,.page-header,.head{flex-direction:column!important;margin:2px 3px 18px!important}
+  .page-head h1,.page-header h1,.head h1{font-size:24px!important}
+}
+</style>
+
+<meta name="sante-unified-build" content="SANTE-ADMIN-UNIFIED-R1">
 </head>
 
 <body>
