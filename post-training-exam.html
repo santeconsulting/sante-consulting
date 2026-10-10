@@ -29,9 +29,18 @@ button,input,textarea{font-family:Prompt,sans-serif}
 .review-list{display:grid;gap:12px;margin-top:18px;text-align:left}.review-card{padding:15px;border:1px solid var(--line);border-radius:14px;background:#fff}.review-card.correct{border-color:#b9e2c7;background:#f3fbf5}.review-card.wrong{border-color:#f2c7cb;background:#fff6f6}.review-q{font-weight:600;line-height:1.6}.review-meta{margin-top:4px;font-size:10px;color:var(--muted)}.review-line{margin-top:8px;font-size:12px;line-height:1.65}.review-line strong{color:var(--navy)}
 
 .hidden{display:none!important}
+.time-warning-overlay{position:fixed;inset:0;z-index:5000;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(3,20,48,.56)}
+.time-warning-overlay.show{display:flex}
+.time-warning-card{width:min(430px,94vw);padding:24px;background:#fff;border-radius:20px;box-shadow:0 25px 70px rgba(0,0,0,.25);text-align:center}
+.time-warning-icon{width:58px;height:58px;margin:0 auto 12px;border-radius:50%;display:grid;place-items:center;background:#fff4cf;font-size:26px}
+.time-warning-card h3{font-size:22px;color:var(--navy)}
+.time-warning-card p{margin-top:8px;color:var(--muted);font-size:13px;line-height:1.65}
+.time-warning-card strong{color:#b42318}
+.time-warning-actions{margin-top:16px;display:flex;justify-content:center}
+
 @media(max-width:767px){.topbar{height:68px;padding:0 12px}.brand img{width:82px;height:48px}.member-copy{display:none}.page{width:calc(100% - 20px);padding:12px 0 35px}.hero{padding:5px;border-radius:16px}.hero img{border-radius:12px}.card{padding:17px;border-radius:17px}.title{font-size:21px}.sub{font-size:12px}.info-grid{grid-template-columns:1fr 1fr}.exam-top{flex-direction:column}.timer{width:100%}.question{padding:16px}.q-text{font-size:15px}.sticky-submit{bottom:7px;flex-direction:column;align-items:stretch}.sticky-submit .btn{width:100%}}
 </style>
-<meta name="sante-build" content="MEMBER-POSTTRAINING-QR-V1">
+<meta name="sante-build" content="MEMBER-POSTTRAINING-TIMER-WARNINGS-R3">
 </head>
 <body>
 <header class="topbar">
@@ -96,6 +105,18 @@ button,input,textarea{font-family:Prompt,sans-serif}
   <section id="reviewSection" class="card hidden"></section>
 </main>
 
+<div id="timeWarningModal" class="time-warning-overlay" aria-hidden="true">
+  <div class="time-warning-card">
+    <div class="time-warning-icon">⏰</div>
+    <h3 id="timeWarningTitle">แจ้งเตือนเวลา</h3>
+    <p id="timeWarningText"></p>
+    <div class="time-warning-actions">
+      <button id="timeWarningOk" class="btn primary" type="button">รับทราบ</button>
+    </div>
+  </div>
+</div>
+
+
 <script>
 const SUPABASE_URL="https://cyegjwerxlxhczrfiurz.supabase.co";
 const SUPABASE_KEY="sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF";
@@ -103,7 +124,7 @@ const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{storageKe
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
 const sessionId=new URLSearchParams(location.search).get("session");
-let state=null,attempt=null,timerInterval=null,submitting=false;
+let state=null,attempt=null,timerInterval=null,submitting=false,timeWarn5Shown=false,timeWarn1Shown=false,timeExpiredShown=false;
 
 function show(el){$(el).classList.remove("hidden")}
 function hide(el){$(el).classList.add("hidden")}
@@ -220,11 +241,80 @@ function updateProgress(){
   $("saveState").textContent=`ตอบแล้ว ${done} / ${qs.length} ข้อ · ระบบบันทึกอัตโนมัติ`
 }
 
+
+function showTimeWarning(minutes){
+  const modal=$("timeWarningModal");
+  $("timeWarningTitle").textContent=minutes===0?"หมดเวลาทำข้อสอบ":`เหลือเวลา ${minutes} นาที`;
+  $("timeWarningText").innerHTML=minutes===0
+    ? `หมดเวลาทำข้อสอบแล้ว ระบบกำลัง <strong>ส่งคำตอบอัตโนมัติ</strong> กรุณารอสักครู่`
+    : `กรุณาตรวจสอบคำตอบและกดส่งข้อสอบก่อนหมดเวลา<br><strong>${minutes===1?"เหลือเวลาเพียง 1 นาที":"เหลือเวลาอีก 5 นาที"}</strong>`;
+  modal.classList.add("show");
+  modal.setAttribute("aria-hidden","false");
+  if(minutes===0){
+    $("timeWarningOk").style.display="none";
+  }else{
+    $("timeWarningOk").style.display="inline-flex";
+  }
+}
+
+function closeTimeWarning(){
+  $("timeWarningModal").classList.remove("show");
+  $("timeWarningModal").setAttribute("aria-hidden","true");
+}
+
 function startTimer(){
   clearInterval(timerInterval);
-  if(!attempt.deadline_at){$("timer").textContent="ไม่จำกัด";return}
-  const tick=()=>{const ms=new Date(attempt.deadline_at).getTime()-Date.now();if(ms<=0){$("timer").textContent="00:00";clearInterval(timerInterval);if(!submitting)submitExam(true);return}const sec=Math.floor(ms/1000),m=Math.floor(sec/60),s=sec%60;$("timer").textContent=`${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`};
-  tick();timerInterval=setInterval(tick,1000)
+  timeWarn5Shown=false;
+  timeWarn1Shown=false;
+  timeExpiredShown=false;
+
+  if(!attempt.deadline_at){
+    $("timer").textContent="ไม่จำกัด";
+    return;
+  }
+
+  const deadline=new Date(attempt.deadline_at).getTime();
+
+  const tick=()=>{
+    const ms=deadline-Date.now();
+
+    if(ms<=0){
+      $("timer").textContent="00:00";
+      clearInterval(timerInterval);
+
+      if(!timeExpiredShown){
+        timeExpiredShown=true;
+        showTimeWarning(0);
+      }
+
+      if(!submitting){
+        setTimeout(()=>submitExam(true),700);
+      }
+      return;
+    }
+
+    const sec=Math.ceil(ms/1000);
+    const m=Math.floor(sec/60);
+    const s=sec%60;
+
+    $("timer").textContent=
+      `${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;
+
+    // Warn once when crossing 5 minutes remaining
+    if(sec<=300 && sec>60 && !timeWarn5Shown){
+      timeWarn5Shown=true;
+      showTimeWarning(5);
+    }
+
+    // Warn once when crossing 1 minute remaining
+    if(sec<=60 && !timeWarn1Shown){
+      timeWarn1Shown=true;
+      showTimeWarning(1);
+    }
+  };
+
+  tick();
+  timerInterval=setInterval(tick,1000);
 }
 
 async function saveAllBeforeSubmit(){
@@ -274,6 +364,7 @@ async function submitExam(auto=false){
   }catch(e){alert(e.message||"ส่งข้อสอบไม่สำเร็จ");$("submitBtn").disabled=false;$("submitBtn").textContent="ส่งข้อสอบ / ดูคะแนน";submitting=false}
 }
 
+$("timeWarningOk").onclick=closeTimeWarning;
 $("loginBtn").onclick=login;$("loginPassword").addEventListener("keydown",e=>{if(e.key==="Enter")login()});$("startBtn").onclick=startExam;$("submitBtn").onclick=()=>submitExam(false);$("logoutBtn").onclick=async()=>{await db.auth.signOut();location.reload()};
 init();
 </script>
