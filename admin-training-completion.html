@@ -53,7 +53,10 @@ button,input,select{font-family:Prompt,sans-serif}
 </header>
 
 <main class="content">
- <div class="page-head"><div><h1>Attendance & Certificate Eligibility</h1><p>ทำเครื่องหมายผู้เข้าอบรมและตรวจเงื่อนไขวุฒิบัตรแบบรายรุ่น</p></div><a href="admin-training-sessions.html" class="btn" style="display:inline-flex;align-items:center;text-decoration:none">← กลับรอบอบรม</a></div>
+ <div class="page-head"><div><h1>Attendance & Certificate Eligibility</h1><p>ทำเครื่องหมายผู้เข้าอบรมและตรวจเงื่อนไขวุฒิบัตรแบบรายรุ่น</p></div><div style="display:flex;gap:8px;flex-wrap:wrap">
+<a id="issueCertificatesLink" href="admin-certificates.html" class="btn yellow" style="display:inline-flex;align-items:center;text-decoration:none">ออกวุฒิบัตรผู้เข้าเกณฑ์ →</a>
+<a href="admin-training-sessions.html" class="btn" style="display:inline-flex;align-items:center;text-decoration:none">← กลับรอบอบรม</a>
+</div></div>
 
  <div id="message"></div>
 
@@ -99,6 +102,7 @@ const db=window.supabase.createClient("https://cyegjwerxlxhczrfiurz.supabase.co"
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
 const sessionId=new URLSearchParams(location.search).get("session_id");
+if(sessionId){const a=document.getElementById("issueCertificatesLink");if(a)a.href="admin-certificates.html?session="+encodeURIComponent(sessionId)}
 let payload={session:null,rows:[]},selected=new Set();
 
 function msg(text,type="info"){$("message").innerHTML=`<div class="notice" style="${type==="error"?"background:#fff0f1;color:#a52a35":type==="success"?"background:#eaf9f1;color:#087744":""}">${esc(text)}</div>`}

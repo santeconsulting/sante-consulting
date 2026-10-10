@@ -349,6 +349,20 @@ body{margin:0;background:var(--bg);font-family:"Prompt",sans-serif;color:var(--n
 
 
 /* ===== FINAL CERTIFICATE DESIGNER R10 ===== */
+
+function setIssuerModeFromRadio(mode){
+  const select=document.getElementById("issuerMode");
+  if(select)select.value=mode;
+  applyIssuerMode();
+  syncPreview();
+}
+function syncIssuerModeRadio(){
+  const mode=document.getElementById("issuerMode")?.value||"SANTE";
+  document.querySelectorAll('input[name="issuerModeRadio"]').forEach(r=>{
+    r.checked=r.value===mode;
+  });
+}
+
 .issuer-options-card,.signature-editor-card{
   margin:14px 0;padding:14px;border:1px solid #d9e4ef;border-radius:14px;background:#f8fbff
 }
@@ -375,6 +389,124 @@ body{margin:0;background:var(--bg);font-family:"Prompt",sans-serif;color:var(--n
  .brand-position-grid,.signatory-grid{grid-template-columns:1fr}
 }
 
+
+/* ===== FINAL UX R10.1 ===== */
+.final-section{
+  margin:16px 0;
+  padding:16px;
+  border:1px solid #d7e3ef;
+  border-radius:16px;
+  background:#fff;
+  box-shadow:0 6px 18px rgba(15,55,95,.04);
+}
+.final-section-head{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:14px;
+}
+.final-section-head h4{
+  margin:2px 0 4px;
+  font-size:15px;
+  color:#102442;
+}
+.final-section-head p{
+  margin:0;
+  font-size:10px;
+  line-height:1.55;
+  color:#75889d;
+}
+.final-section-kicker{
+  font-size:9px;
+  font-weight:700;
+  color:#0b568e;
+  letter-spacing:.8px;
+}
+.issuer-mode-cards{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-bottom:14px;
+}
+.issuer-mode-card{
+  position:relative;
+  display:flex!important;
+  gap:10px;
+  align-items:flex-start;
+  padding:13px!important;
+  margin:0!important;
+  border:1px solid #d8e4ef;
+  border-radius:13px;
+  background:#f8fbff;
+  cursor:pointer;
+  transition:.18s ease;
+}
+.issuer-mode-card:has(input:checked){
+  border-color:#f2bd2b;
+  background:#fff9e8;
+  box-shadow:0 0 0 2px rgba(242,189,43,.12);
+}
+.issuer-mode-card input{margin-top:4px}
+.issuer-mode-icon{
+  flex:0 0 31px;
+  width:31px;height:31px;
+  border-radius:9px;
+  display:grid;
+  place-items:center;
+  background:#0b568e;
+  color:#fff;
+  font-weight:700;
+}
+.issuer-mode-card strong{display:block;font-size:11px;color:#102442}
+.issuer-mode-card small{display:block;margin-top:3px;font-size:9px;line-height:1.5;color:#70849a}
+.issuer-config-grid{
+  display:grid;
+  grid-template-columns:1.35fr .9fr;
+  gap:10px;
+  align-items:start;
+}
+.issuer-toggle-box{
+  padding:10px 12px;
+  border:1px dashed #d5e1ed;
+  border-radius:12px;
+  background:#fafcff;
+}
+.final-client-box{
+  margin-top:10px;
+  padding:12px;
+  border:1px solid #dbe6f0;
+  border-radius:12px;
+  background:#f7fbff;
+  display:grid;
+  gap:8px;
+}
+.advanced-branding{
+  margin-top:10px;
+  border-top:1px solid #e7edf4;
+  padding-top:10px;
+}
+.advanced-branding summary{
+  cursor:pointer;
+  font-size:10px;
+  font-weight:600;
+  color:#49627c;
+}
+.signature-final-section .signature-editor-card{
+  margin:0;
+  padding:0;
+  border:0;
+  background:transparent;
+}
+.details-final-section .detail-section{
+  margin:0;
+  padding:0;
+  border:0;
+  background:transparent;
+}
+@media(max-width:1200px){
+  .issuer-mode-cards,.issuer-config-grid{grid-template-columns:1fr}
+}
+
 </style>
 <meta name="sante-build" content="CERT-BATCH-HOURS-FIX-2026-10-05">
 <meta name="sante-build" content="CERT-DATE-ISSUER-R2">
@@ -383,6 +515,8 @@ body{margin:0;background:var(--bg);font-family:"Prompt",sans-serif;color:var(--n
 <meta name="sante-build" content="CERT-THREE-DETAILS-R7">
 <meta name="sante-build" content="CERT-DESIGNER-R8-STICKY-PREVIEW">
 <meta name="sante-build" content="CERTIFICATE-FINAL-R10">
+<meta name="sante-build" content="CERTIFICATE-FINAL-R10.1-UX">
+<meta name="sante-build" content="CERT-ELIGIBILITY-STORAGE-R2">
 </head>
 <body>
 <div class="loading" id="loading"><div class="loading-box"><strong>SANTE CERTIFICATE</strong><div>กำลังตรวจสอบสิทธิ์และโหลดข้อมูล...</div><div class="spinner"></div></div></div>
@@ -484,38 +618,73 @@ body{margin:0;background:var(--bg);font-family:"Prompt",sans-serif;color:var(--n
 <div class="group"><label>ชื่อผู้รับ / ชื่อบริษัท <span style="color:#7b8da5">(ใช้ตอนออกรายบุคคล)</span></label><input id="recipientName" placeholder="เว้นว่างไว้ได้เมื่อกำลังออกแบบแม่แบบ" oninput="syncPreview()"></div>
           <div class="group" id="orgGroup"><label>หน่วยงาน / องค์กร</label><input id="recipientOrg" placeholder="เช่น บริษัท ตัวอย่าง จำกัด" oninput="syncPreview()"></div>
 
-          <div class="group">
-  <label>ออกวุฒิบัตรในนาม</label>
-  <select id="issuerMode" onchange="applyIssuerMode();syncPreview()">
+          
+<div class="final-section issuer-final-section">
+  <div class="final-section-head">
+    <div>
+      <div class="final-section-kicker">CERTIFICATE ISSUER</div>
+      <h4>รูปแบบการออกวุฒิบัตร</h4>
+      <p>เลือกก่อนว่าออกในนาม SANTE หรือออกในนามบริษัท/หน่วยงานลูกค้า</p>
+    </div>
+  </div>
+
+  <div class="issuer-mode-cards">
+    <label class="issuer-mode-card">
+      <input type="radio" name="issuerModeRadio" value="SANTE" checked onchange="setIssuerModeFromRadio('SANTE')">
+      <span class="issuer-mode-icon">S</span>
+      <span>
+        <strong>SANTE เป็นผู้ออกวุฒิบัตร</strong>
+        <small>ใช้โลโก้ ชื่อบริษัท และสามารถใช้ลายเซ็นของ SANTE</small>
+      </span>
+    </label>
+
+    <label class="issuer-mode-card">
+      <input type="radio" name="issuerModeRadio" value="CLIENT" onchange="setIssuerModeFromRadio('CLIENT')">
+      <span class="issuer-mode-icon">C</span>
+      <span>
+        <strong>บริษัท / หน่วยงานลูกค้าเป็นผู้ออก</strong>
+        <small>กรอกชื่อ อัปโหลดโลโก้ และกำหนดผู้ลงนามของลูกค้า/วิทยากรได้</small>
+      </span>
+    </label>
+  </div>
+
+  <select id="issuerMode" onchange="applyIssuerMode();syncPreview()" style="display:none">
     <option value="SANTE">บริษัท ซานเต้ คอนซัลติ้ง จำกัด</option>
     <option value="CLIENT">บริษัท / หน่วยงานลูกค้า</option>
   </select>
-</div>
-<div class="group">
-  <label>ชื่อบริษัท / หน่วยงานผู้ออกวุฒิบัตร</label>
-  <input id="issuerName" value="บริษัท ซานเต้ คอนซัลติ้ง จำกัด" oninput="syncPreview()" readonly>
-  <div class="hint">เลือก SANTE ระบบจะใส่ชื่อให้อัตโนมัติ หากเลือกบริษัทอื่นช่องนี้จะแก้ไขได้</div>
-</div>
-<div class="issuer-options-card">
-  <div class="issuer-options-title">การแสดงผลผู้ออกวุฒิบัตร</div>
-  <label class="switch-line"><input type="checkbox" id="showIssuerLogo" checked onchange="syncPreview()"> แสดงโลโก้ผู้ออกวุฒิบัตร</label>
-  <label class="switch-line"><input type="checkbox" id="showIssuerName" checked onchange="syncPreview()"> แสดงชื่อบริษัท / หน่วยงาน</label>
 
-  <div class="client-logo-box" id="clientLogoBox" style="display:none">
-    <label>โลโก้บริษัท / หน่วยงานลูกค้า</label>
-    <input type="file" id="clientLogoFile" accept="image/png,image/jpeg,image/webp" onchange="handleClientLogoUpload(this)">
-    <div class="asset-actions">
-      <button class="btn light" type="button" onclick="clearClientLogo()">ลบโลโก้ลูกค้า</button>
+  <div class="issuer-config-grid">
+    <div class="group">
+      <label>ชื่อบริษัท / หน่วยงานผู้ออกวุฒิบัตร</label>
+      <input id="issuerName" value="บริษัท ซานเต้ คอนซัลติ้ง จำกัด" oninput="syncPreview()" readonly>
+      <div class="hint" id="issuerHint">SANTE: ระบบใส่ชื่อให้อัตโนมัติ</div>
     </div>
-    <div class="hint">PNG / JPG / WebP · ระบบจะย่อภาพก่อนบันทึกลงแม่แบบ</div>
+
+    <div class="issuer-toggle-box">
+      <label class="switch-line"><input type="checkbox" id="showIssuerName" checked onchange="syncPreview()"> แสดงชื่อบริษัท / หน่วยงานบนวุฒิบัตร</label>
+      <label class="switch-line"><input type="checkbox" id="showIssuerLogo" checked onchange="syncPreview()"> แสดงโลโก้บนวุฒิบัตร</label>
+    </div>
   </div>
 
-  <div class="brand-position-grid">
-    <div><label>ตำแหน่งโลโก้ X (%)</label><input id="issuerLogoX" type="number" value="50" step="0.5" oninput="syncPreview()"></div>
-    <div><label>ตำแหน่งโลโก้ Y (%)</label><input id="issuerLogoY" type="number" value="7.5" step="0.5" oninput="syncPreview()"></div>
-    <div><label>ความกว้างโลโก้ (%)</label><input id="issuerLogoW" type="number" value="11" min="3" max="30" step="0.5" oninput="syncPreview()"></div>
+  <div class="client-logo-box final-client-box" id="clientLogoBox" style="display:none">
+    <div>
+      <strong>โลโก้บริษัท / หน่วยงานลูกค้า</strong>
+      <div class="hint">ใช้เฉพาะกรณีออกวุฒิบัตรในนามลูกค้า</div>
+    </div>
+    <input type="file" id="clientLogoFile" accept="image/png,image/jpeg,image/webp" onchange="handleClientLogoUpload(this)">
+    <button class="btn light" type="button" onclick="clearClientLogo()">ลบโลโก้ลูกค้า</button>
   </div>
+
+  <details class="advanced-branding">
+    <summary>ปรับตำแหน่งโลโก้ (ขั้นสูง)</summary>
+    <div class="brand-position-grid">
+      <div><label>ตำแหน่ง X (%)</label><input id="issuerLogoX" type="number" value="50" step="0.5" oninput="syncPreview()"></div>
+      <div><label>ตำแหน่ง Y (%)</label><input id="issuerLogoY" type="number" value="7.5" step="0.5" oninput="syncPreview()"></div>
+      <div><label>ความกว้าง (%)</label><input id="issuerLogoW" type="number" value="11" min="3" max="30" step="0.5" oninput="syncPreview()"></div>
+    </div>
+  </details>
 </div>
+
 <div class="group" id="courseGroup"><label>หลักสูตร</label><select id="courseId" onchange="applyCourse()"><option value="">-- เลือกหรือพิมพ์เอง --</option></select></div>
           <div class="group">
   <label>ชื่อหลักสูตร / ชื่องานบริการ</label>
@@ -530,8 +699,10 @@ body{margin:0;background:var(--bg);font-family:"Prompt",sans-serif;color:var(--n
   </select>
 </div>
           <div class="group"><label>ข้อความนำ</label><input id="bodyTitle" value="ผ่านการฝึกอบรมหลักสูตร" oninput="syncPreview()"></div>
-          <div class="detail-section">
-  <div class="detail-section-title">รายละเอียดเพิ่มเติมบนวุฒิบัตร (3 บรรทัด)</div>
+          <div class="final-section details-final-section">
+  <div class="final-section-head"><div><div class="final-section-kicker">ADDITIONAL DETAILS</div><h4>รายละเอียดเพิ่มเติมบนวุฒิบัตร</h4><p>แยกเป็น 3 ช่อง เพื่อควบคุมข้อความและตำแหน่งได้ชัดเจน</p></div></div>
+<div class="detail-section">
+  <div class="detail-section-title">รายละเอียด 3 บรรทัด</div>
 
   <div class="detail-line">
     <label><span>บรรทัดที่ 1</span> ฝึกอบรมให้กับ</label>
@@ -555,6 +726,7 @@ body{margin:0;background:var(--bg);font-family:"Prompt",sans-serif;color:var(--n
   </div>
 
   <div class="hint">ทั้ง 3 ช่องจะแสดงบนวุฒิบัตรทันที และสามารถเลือกเพื่อขยับตำแหน่ง/ปรับขนาดได้จาก Preview</div>
+</div>
 </div>
 
 <input type="hidden" id="bodyText" value="">
@@ -589,7 +761,9 @@ body{margin:0;background:var(--bg);font-family:"Prompt",sans-serif;color:var(--n
           </div>
 
 
-<div class="signature-editor-card">
+<div class="final-section signature-final-section">
+  <div class="final-section-head"><div><div class="final-section-kicker">SIGNATURES</div><h4>ผู้ลงนามในวุฒิบัตร</h4><p>เลือก 0 / 1 / 2 คน — 1 คนอยู่กึ่งกลาง, 2 คนจัดซ้าย–ขวาอัตโนมัติ</p></div></div>
+  <div class="signature-editor-card">
   <div class="signature-editor-head">
     <div>
       <strong>ผู้ลงนาม</strong>
@@ -641,6 +815,7 @@ body{margin:0;background:var(--bg);font-family:"Prompt",sans-serif;color:var(--n
       <button class="btn light" type="button" onclick="clearSignatureImage(2)">ลบภาพลายเซ็น</button>
     </div>
   </div>
+</div>
 </div>
 
           <div style="display:grid;gap:8px;margin-top:15px">
@@ -1354,7 +1529,7 @@ async function deleteSavedTemplate(){
 }
 
 async function loadCertificates(){
- const {data,error}=await db.from("certificates").select("id,certificate_no,certificate_status,revoked_reason,user_id,training_session_id,recipient_display_name,recipient_organization,course_name_snapshot,issue_date,template_code,certificate_subtype,verification_url,deleted_at,deleted_by,certificate_types(type_code,type_name_th)").order("created_at",{ascending:false}).limit(1000);
+ const {data,error}=await db.from("certificates").select("id,certificate_no,certificate_status,revoked_reason,user_id,training_session_id,training_registration_id,qualifying_attempt_id,recipient_display_name,recipient_organization,course_name_snapshot,issue_date,template_code,certificate_subtype,verification_url,pdf_storage_bucket,pdf_storage_path,deleted_at,deleted_by,certificate_types(type_code,type_name_th)").order("created_at",{ascending:false}).limit(1000);
  if(error){alert("โหลดวุฒิบัตรไม่สำเร็จ: "+error.message);return}
  certificates=data||[];renderList();updateStats()
 }
@@ -1375,7 +1550,10 @@ function renderList(){
  <td>${x.issue_date?formatThaiDate(x.issue_date):"-"}</td>
  <td>${x.certificate_types?.type_name_th||"-"}</td>
  <td><span class="badge ${x.certificate_status==="REVOKED"?"red":""}">${x.certificate_status||"-"}</span>${x.revoked_reason?`<div class="hint">${x.revoked_reason}</div>`:""}</td>
- <td>${x.verification_url?`<a class="btn light" style="display:inline-flex;align-items:center" href="${x.verification_url}" target="_blank">เปิด</a>`:"-"}</td>
+ <td style="white-space:nowrap">
+   ${x.verification_url?`<a class="btn light" style="display:inline-flex;align-items:center" href="${x.verification_url}" target="_blank">Verify</a>`:""}
+   ${x.pdf_storage_path?`<button class="btn light" onclick="openStoredCertificatePdf('${x.pdf_storage_bucket||"certificates"}','${x.pdf_storage_path}')">PDF</button>`:""}
+ </td>
  <td style="white-space:nowrap">
    ${x.certificate_status!=="REVOKED"?`<button class="btn light" onclick="revokeCertificate('${x.id}','${(x.certificate_no||"").replace(/'/g,"")}')">ยกเลิก</button>`:""}
    <button class="btn danger" onclick="deleteCertificate('${x.id}','${(x.certificate_no||"").replace(/'/g,"")}')">ลบ</button>
@@ -1506,27 +1684,83 @@ async function loadBulkParticipants(){
    return
  }
  refreshBulkSummary();
- list.innerHTML='<div class="empty">กำลังโหลดรายชื่อ...</div>';
- const {data,error}=await db.from("training_registrations")
-   .select("id,training_session_id,user_id,registration_status,payment_required,payment_status,participant_title_th,participant_firstname_th,participant_lastname_th,participant_email,organization_name")
-   .eq("training_session_id",id)
-   .order("registered_at",{ascending:true});
- if(error){list.innerHTML='<div class="empty">โหลดรายชื่อไม่สำเร็จ: '+error.message+'</div>';return}
- bulkParticipants=(data||[]).filter(x=>x.registration_status==="CONFIRMED" && (!x.payment_required || x.payment_status==="PAID"));
- const existing=certificates.filter(x=>x.training_session_id===id);
- const existingUsers=new Set(existing.map(x=>x.user_id).filter(Boolean));
- bulkParticipants=bulkParticipants.map(x=>({...x,already:existingUsers.has(x.user_id)}));
+ list.innerHTML='<div class="empty">กำลังตรวจ Attendance / ผลสอบ / Eligibility...</div>';
+
+ const {data,error}=await db.rpc("admin_get_training_completion",{
+   p_training_session_id:id
+ });
+ if(error){
+   list.innerHTML='<div class="empty">โหลด Eligibility ไม่สำเร็จ: '+error.message+'</div>';
+   return
+ }
+
+ const rows=data?.rows||[];
+ bulkParticipants=rows.map(x=>({
+   id:x.registration_id,
+   training_session_id:id,
+   user_id:x.user_id,
+   registration_status:x.registration_status,
+   payment_required:x.payment_required,
+   payment_status:x.payment_status,
+   participant_email:x.email,
+   organization_name:x.organization_name,
+   participant_name:x.participant_name,
+   attendance_status:x.attendance_status,
+   best_percentage:x.best_percentage,
+   exam_passed:x.exam_passed,
+   attempts_used:x.attempts_used,
+   certificate_eligible:!!x.certificate_eligible,
+   certificate_id:x.certificate_id,
+   certificate_no:x.certificate_no,
+   certificate_status:x.certificate_status,
+   qualifying_attempt_id:x.qualifying_attempt_id,
+   already:!!x.certificate_id
+ }));
+
  renderBulk();
 }
+
 function renderBulk(){
  const list=document.getElementById("bulkList");
- if(!bulkParticipants.length){list.innerHTML='<div class="empty">ไม่พบผู้สมัครที่ยืนยันแล้วและผ่านเงื่อนไขการชำระเงิน</div>';return}
- list.innerHTML=`<div class="bulk-row head"><div></div><div>ผู้รับ</div><div>อีเมล</div><div>สมัคร</div><div>ชำระเงิน</div></div>`+
+ if(!bulkParticipants.length){
+   list.innerHTML='<div class="empty">ไม่พบผู้สมัครในรอบนี้</div>';
+   return
+ }
+
+ const eligible=bulkParticipants.filter(x=>x.certificate_eligible&&!x.already).length;
+ const issued=bulkParticipants.filter(x=>x.already).length;
+
+ list.innerHTML=
+ `<div style="padding:10px 12px;background:#eef6ff;border-radius:11px;margin-bottom:10px;font-size:11px;color:#315577">
+   พร้อมออกวุฒิบัตร <strong>${eligible}</strong> คน · มีวุฒิบัตรแล้ว <strong>${issued}</strong> คน<br>
+   ระบบเลือกได้เฉพาะผู้ที่ผ่าน Registration + Payment + Attendance + Post-test ตามเงื่อนไขรอบ
+ </div>`+
+ `<div class="bulk-row head" style="grid-template-columns:42px 1.5fr 1.2fr .8fr .8fr 1fr">
+   <div></div><div>ผู้รับ</div><div>อีเมล</div><div>Attendance</div><div>ผลสอบ</div><div>Eligibility</div>
+ </div>`+
  bulkParticipants.map((x,i)=>{
-   const name=[x.participant_title_th,x.participant_firstname_th,x.participant_lastname_th].filter(Boolean).join(" ");
-   return `<div class="bulk-row"><div><input type="checkbox" class="bulk-check" data-i="${i}" ${x.already?"disabled":""}></div><div><strong>${name||"-"}</strong>${x.already?'<br><span class="badge gray">มีวุฒิบัตรแล้ว</span>':""}</div><div>${x.participant_email||"-"}</div><div>${x.registration_status||"-"}</div><div>${x.payment_required?(x.payment_status||"-"):"ไม่เสียค่าใช้จ่าย"}</div></div>`;
+   const examText=x.exam_passed
+     ? `ผ่าน ${x.best_percentage??"-"}%`
+     : (x.attempts_used>0?`ยังไม่ผ่าน ${x.best_percentage??"-"}%`:"ยังไม่สอบ");
+   const disabled=x.already||!x.certificate_eligible;
+   const certText=x.already
+     ? `<span class="badge gray">มีแล้ว ${x.certificate_no||""}</span>`
+     : (x.certificate_eligible
+        ? '<span class="badge" style="background:#eaf9f1;color:#087744">พร้อมออก</span>'
+        : '<span class="badge red">ยังไม่เข้าเกณฑ์</span>');
+   return `<div class="bulk-row" style="grid-template-columns:42px 1.5fr 1.2fr .8fr .8fr 1fr">
+     <div><input type="checkbox" class="bulk-check" data-i="${i}" ${disabled?"disabled":""}></div>
+     <div><strong>${x.participant_name||"-"}</strong>${x.organization_name?`<br><span class="hint">${x.organization_name}</span>`:""}</div>
+     <div>${x.participant_email||"-"}</div>
+     <div>${x.attendance_status==="ATTENDED"
+       ? '<span class="badge" style="background:#eaf9f1;color:#087744">ATTENDED</span>'
+       : `<span class="badge red">${x.attendance_status||"NOT_MARKED"}</span>`}</div>
+     <div>${examText}</div>
+     <div>${certText}</div>
+   </div>`;
  }).join("");
 }
+
 function toggleAllBulk(v){document.querySelectorAll(".bulk-check:not(:disabled)").forEach(x=>x.checked=v)}
 function calcDurationText(session){
  if(!session?.training_start_at||!session?.training_end_at)return "";
@@ -1543,18 +1777,112 @@ function formatDeliveryText(v){
  if(x==="HYBRID")return "(รูปแบบ Hybrid)";
  return v?`(${v})`:"";
 }
+function getBulkDurationHoursValue(session,saved){
+ const course=session?.courses||{};
+ const source=saved?.design_json?.durationSource||"TEMPLATE";
+ if(source==="COURSE") return course.duration_hours??"";
+ if(source==="SESSION") return session?.training_hours??"";
+ if(saved?.design_json?.durationHours!==null&&saved?.design_json?.durationHours!==undefined)
+   return saved.design_json.durationHours;
+ return parseHoursFromText(saved?.duration_text||"");
+}
+
+async function waitCertificateStageImages(){
+ const imgs=[...document.querySelectorAll("#certStage img")];
+ await Promise.all(imgs.map(img=>{
+   if(img.complete&&img.naturalWidth)return Promise.resolve();
+   return new Promise(resolve=>{
+     const done=()=>resolve();
+     img.addEventListener("load",done,{once:true});
+     img.addEventListener("error",done,{once:true});
+     setTimeout(done,2500);
+   });
+ }));
+}
+
+async function saveIssuedTrainingPdf(issueData,r,session,saved,issueDate){
+ const name=r.participant_name||"";
+ const course=session.courses||{};
+
+ // Render the EXACT issued certificate using the saved template.
+ document.getElementById("recipientName").value=name;
+ document.getElementById("recipientOrg").value=r.organization_name||"";
+ document.getElementById("userId").value=r.user_id||"";
+ document.getElementById("courseName").value=getBulkCourseText(session,saved);
+ document.getElementById("trainingDate").value=getBulkTrainingDate(session,saved)||"";
+ document.getElementById("issueDate").value=issueDate;
+ document.getElementById("durationHours").value=getBulkDurationHoursValue(session,saved);
+ document.getElementById("deliveryText").value=formatDeliveryText(session.delivery_method);
+ document.getElementById("previewNo").value=issueData.certificate_no||"";
+
+ lastVerificationUrl=issueData.verification_url||"";
+ syncPreview();
+ if(lastVerificationUrl)await makeQR(lastVerificationUrl);
+ await waitCertificateStageImages();
+
+ const prep=await db.rpc("admin_prepare_certificate_document",{
+   p_certificate_no:issueData.certificate_no
+ });
+ if(prep.error)throw prep.error;
+
+ const canvas=await captureStage();
+ const img=canvas.toDataURL("image/jpeg",.98);
+ const {jsPDF}=window.jspdf;
+ const pdf=new jsPDF({orientation:"landscape",unit:"mm",format:"a4"});
+ pdf.addImage(img,"JPEG",0,0,297,210);
+ const blob=pdf.output("blob");
+
+ const bucket=prep.data.storage_bucket||"certificates";
+ const path=prep.data.storage_path;
+
+ const upload=await db.storage.from(bucket).upload(path,blob,{
+   contentType:"application/pdf",
+   cacheControl:"3600",
+   upsert:false
+ });
+ if(upload.error)throw upload.error;
+
+ const fin=await db.rpc("admin_finalize_certificate_document",{
+   p_certificate_no:issueData.certificate_no,
+   p_storage_bucket:bucket,
+   p_storage_path:path,
+   p_file_size_bytes:blob.size
+ });
+ if(fin.error)throw fin.error;
+
+ return {bucket,path,size:blob.size};
+}
+
 async function issueBulk(){
  const sessionId=document.getElementById("bulkSession").value;
  const session=trainingSessions.find(x=>x.id===sessionId);
  if(!session){alert("กรุณาเลือกรอบการอบรม");return}
+
  const templateId=document.getElementById("bulkTemplate").value;
  const saved=savedTemplates.find(x=>x.id===templateId);
  if(!saved){alert("กรุณาเลือกแม่แบบวุฒิบัตรก่อน");return}
- const selected=[...document.querySelectorAll(".bulk-check:checked")].map(x=>bulkParticipants[Number(x.dataset.i)]);
- if(!selected.length){alert("กรุณาเลือกรายชื่ออย่างน้อย 1 คน");return}
- if(!confirm(`ยืนยันใช้แม่แบบ "${saved.template_name}" ออกวุฒิบัตร ${selected.length} ใบ?\nวันที่อบรมที่จะพิมพ์: ${getBulkTrainingDateText(session,saved)}\nระยะเวลาที่จะพิมพ์: ${getBulkDurationText(session,saved)}\nผู้ออกวุฒิบัตร: ${getBulkIssuerName(saved)}\nกรณีหลักสูตรมี Post-test กรุณาตรวจว่ารายชื่อที่เลือกผ่านเกณฑ์แล้ว`))return;
 
- const progress=document.getElementById("bulkProgress");progress.style.display="block";
+ const selected=[...document.querySelectorAll(".bulk-check:checked")]
+   .map(x=>bulkParticipants[Number(x.dataset.i)])
+   .filter(x=>x&&x.certificate_eligible&&!x.already);
+
+ if(!selected.length){
+   alert("กรุณาเลือกผู้ที่เข้าเกณฑ์วุฒิบัตรอย่างน้อย 1 คน");
+   return
+ }
+
+ if(!confirm(
+   `ยืนยันออกวุฒิบัตร ${selected.length} ใบ?
+
+`+
+   `ระบบจะตรวจ Eligibility ซ้ำที่ฐานข้อมูลก่อนออกทุกใบ
+`+
+   `และสร้าง PDF เก็บใน Storage ให้อัตโนมัติ`
+ ))return;
+
+ const progress=document.getElementById("bulkProgress");
+ progress.style.display="block";
+
  const issueDate=document.getElementById("bulkIssueDate").value||new Date().toISOString().slice(0,10);
  const course=session.courses||{};
  const type=saved.type_code||"FREE_TRAINING";
@@ -1564,21 +1892,34 @@ async function issueBulk(){
  const seqKey=type==="FREE_TRAINING"?"FREE_TRAINING":`${subtype}-${key}`;
  const template=type;
  const layout={fields:saved.design_json?.fields||layouts[template].fields,qr:saved.design_json?.qr||layouts[template].qr};
- let ok=0,fail=0;
- const failed=[];
+
+ // Load the saved design once; each recipient is rendered from this design.
+ await loadSavedTemplate(templateId);
+
+ let ok=0,failedCount=0,pdfWarn=0;
+ const failed=[],warnings=[];
 
  for(let i=0;i<selected.length;i++){
    const r=selected[i];
-   const name=[r.participant_title_th,r.participant_firstname_th,r.participant_lastname_th].filter(Boolean).join(" ");
+   const name=r.participant_name||"-";
    progress.textContent=`กำลังออกใบที่ ${i+1}/${selected.length}: ${name}`;
-   const {error}=await db.rpc("admin_issue_certificate",{
-     p_type_code:type,p_subtype:subtype,p_user_id:r.user_id||null,p_course_id:session.course_id,
-     p_training_session_id:session.id,p_recipient_name:name,p_recipient_organization:r.organization_name||null,
-     p_course_name:(saved.design_json?.courseSource||"TEMPLATE")==="SESSION"
-       ? (course.course_name_th||session.session_name||"")
-       : (saved.design_json?.courseText||course.course_name_th||session.session_name||""),
+
+   const issue=await db.rpc("admin_issue_training_certificate",{
+     p_training_registration_id:r.id,
+     p_type_code:type,
+     p_subtype:subtype,
+     p_user_id:r.user_id||null,
+     p_course_id:session.course_id,
+     p_training_session_id:session.id,
+     p_recipient_name:name,
+     p_recipient_organization:r.organization_name||null,
+     p_course_name:getBulkCourseText(session,saved),
      p_training_date:getBulkTrainingDateText(session,saved)!=="-"?getBulkTrainingDateText(session,saved):null,
-     p_issue_date:issueDate,p_language_code:"th",p_template_code:template,p_prefix:prefix,p_sequence_key:seqKey,
+     p_issue_date:issueDate,
+     p_language_code:"th",
+     p_template_code:template,
+     p_prefix:prefix,
+     p_sequence_key:seqKey,
      p_body_title:saved.body_title||"ผ่านการฝึกอบรมหลักสูตร",
      p_body_text:saved.body_text||"",
      p_duration_text:(saved.design_json?.durationSource||"TEMPLATE")==="COURSE"
@@ -1605,11 +1946,45 @@ async function issueBulk(){
      },
      p_verification_base_url:location.origin
    });
-   if(error){fail++;failed.push(name+": "+error.message)}else ok++;
+
+   if(issue.error){
+     failedCount++;
+     failed.push(name+": "+issue.error.message);
+     continue;
+   }
+
+   ok++;
+
+   try{
+     progress.textContent=`กำลังสร้าง PDF ${i+1}/${selected.length}: ${name}`;
+     await saveIssuedTrainingPdf(issue.data,r,session,saved,issueDate);
+   }catch(e){
+     pdfWarn++;
+     warnings.push(`${name}: ${e.message||e}`);
+   }
  }
- progress.innerHTML=`เสร็จแล้ว: สำเร็จ <strong>${ok}</strong> ใบ${fail?` · ไม่สำเร็จ <strong>${fail}</strong> ใบ<br>${failed.join("<br>")}`:""}`;
+
+ progress.innerHTML=
+   `เสร็จแล้ว: ออกวุฒิบัตรสำเร็จ <strong>${ok}</strong> ใบ`+
+   (failedCount?` · ออกไม่สำเร็จ <strong>${failedCount}</strong> ใบ`:"")+
+   (pdfWarn?` · PDF รอบันทึกซ้ำ <strong>${pdfWarn}</strong> ใบ`:"")+
+   (failed.length?`<br><br><strong>ออกไม่สำเร็จ</strong><br>${failed.join("<br>")}`:"")+
+   (warnings.length?`<br><br><strong>PDF/Storage</strong><br>${warnings.join("<br>")}`:"");
+
  await loadCertificates();
  await loadBulkParticipants();
+}
+
+
+async function openStoredCertificatePdf(bucket,path){
+ try{
+   if(!bucket||!path){alert("ยังไม่มีไฟล์ PDF ใน Storage");return}
+   const {data,error}=await db.storage.from(bucket).createSignedUrl(path,120);
+   if(error)throw error;
+   window.open(data.signedUrl,"_blank","noopener");
+ }catch(e){
+   alert("เปิด PDF ไม่สำเร็จ: "+(e.message||e));
+ }
 }
 
 async function makeQR(url){
@@ -1660,6 +2035,12 @@ async function init(){
   refreshFieldSelect();selectField("name");applyType();syncPreview();
   if(!(await auth()))return;
   await Promise.all([loadBase(),loadCertificates(),loadTemplates()]);
+  const qsSession=new URLSearchParams(location.search).get("session");
+  if(qsSession&&document.getElementById("bulkSession")){
+    document.getElementById("bulkSession").value=qsSession;
+    await loadBulkParticipants();
+    setTimeout(()=>document.getElementById("bulkSession")?.scrollIntoView({behavior:"smooth",block:"center"}),100);
+  }
   document.getElementById("loading").style.display="none"
  }catch(e){document.querySelector(".loading-box").innerHTML=`<strong>ไม่สามารถเปิดโมดูลวุฒิบัตรได้</strong><p style="color:#c63a49">${e.message||e}</p><button class="btn yellow" onclick="location.reload()">ลองอีกครั้ง</button>`}
 }
@@ -1708,10 +2089,12 @@ function clearSignatureImage(index){
 }
 function applyIssuerMode(){
   const mode=normalizeIssuerModeValue(document.getElementById("issuerMode")?.value);
+  syncIssuerModeRadio();
   const input=document.getElementById("issuerName");
   const logoBox=document.getElementById("clientLogoBox");
   if(mode==="SANTE"){
     if(input){input.value=SANTE_NAME;input.readOnly=true;input.style.background="#f4f7fb"}
+    const hint=document.getElementById("issuerHint");if(hint)hint.textContent="SANTE: ระบบใส่ชื่อและโลโก้ SANTE ให้อัตโนมัติ";
     if(logoBox)logoBox.style.display="none";
     if(!signatureImageData[1])signatureImageData[1]="signature-director.png";
     const c=document.getElementById("signatureCount");if(c&&c.value==="0")c.value="1";
@@ -1719,6 +2102,7 @@ function applyIssuerMode(){
     applySignatoryPreset(1,false);
   }else{
     if(input){input.readOnly=false;input.style.background="#fff";if(input.value===SANTE_NAME)input.value=""}
+    const hint=document.getElementById("issuerHint");if(hint)hint.textContent="CLIENT: กรอกชื่อบริษัท/หน่วยงาน และอัปโหลดโลโก้ได้";
     if(logoBox)logoBox.style.display="block";
     const s=document.getElementById("sig1Type");
     if(s&&s.value==="SANTE_DIRECTOR")s.value="CLIENT";
@@ -1905,7 +2289,10 @@ renderList=function(){
  <td>${x.issue_date?formatThaiDate(x.issue_date):"-"}</td>
  <td>${x.certificate_types?.type_name_th||"-"}</td>
  <td><span class="badge ${status==="REVOKED"||status==="DELETED"?"red":""}">${status}</span>${x.revoked_reason?`<div class="hint">${x.revoked_reason}</div>`:""}</td>
- <td>${x.verification_url?`<a class="btn light" style="display:inline-flex;align-items:center" href="${x.verification_url}" target="_blank">เปิด</a>`:"-"}</td>
+ <td style="white-space:nowrap">
+   ${x.verification_url?`<a class="btn light" style="display:inline-flex;align-items:center" href="${x.verification_url}" target="_blank">Verify</a>`:""}
+   ${x.pdf_storage_path?`<button class="btn light" onclick="openStoredCertificatePdf('${x.pdf_storage_bucket||"certificates"}','${x.pdf_storage_path}')">PDF</button>`:""}
+ </td>
  <td style="white-space:nowrap">
    ${!x.deleted_at&&x.certificate_status!=="REVOKED"?`<button class="btn light" onclick="revokeCertificate('${x.id}','${String(x.certificate_no||"").replace(/'/g,"")}')">ยกเลิก</button>`:""}
    ${!x.deleted_at?`<button class="btn danger" onclick="deleteCertificate('${x.id}','${String(x.certificate_no||"").replace(/'/g,"")}')">ลบ</button>`:`<button class="btn light" onclick="restoreCertificate('${x.id}','${String(x.certificate_no||"").replace(/'/g,"")}')">กู้คืน</button>`}
