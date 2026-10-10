@@ -1,165 +1,3003 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="th">
 <head>
-<meta charset="utf-8">
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>SANTE Admin | การแจ้งเตือน</title>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{--navy:#082d69;--navy-dark:#061f4b;--yellow:#ffbf19;--green:#159447;--red:#b42318;--blue:#087df0;--bg:#f1f7fb;--text:#082d69;--muted:#6f83a2;--line:#d9e5ef;--sidebar:285px}
-body{font-family:Prompt,sans-serif;background:var(--bg);color:var(--text)}
-button,input,select{font-family:Prompt,sans-serif}
-.sidebar{position:fixed;inset:0 auto 0 0;width:var(--sidebar);z-index:1200;display:flex;flex-direction:column;background:linear-gradient(180deg,#082d69 0%,#06265c 55%,#061f4b 100%);color:#fff;overflow-y:auto}
-.sidebar-brand{min-height:128px;display:flex;align-items:center;justify-content:center;padding:22px 25px;border-bottom:1px solid #ffffff18}.sidebar-brand img{width:190px;height:82px;object-fit:contain}.sidebar-label{padding:26px 25px 10px;color:#9bb1d0;font-size:12px;letter-spacing:1.7px}.nav{padding:0 15px 25px}.nav-link{min-height:58px;display:flex;align-items:center;gap:14px;margin:5px 0;padding:0 17px;border-radius:16px;color:#e4edfa;font-size:15px;font-weight:500;text-decoration:none}.nav-link:hover{background:#ffffff12}.nav-link.active{background:var(--yellow);color:var(--navy);font-weight:600}.nav-icon{width:29px;text-align:center;font-size:20px}.sidebar-footer{margin:auto 15px 22px;padding:18px;border-radius:17px;background:#ffffff12}.sidebar-footer p{margin-top:6px;color:#b6c8e2;font-size:11px;line-height:1.6}
-.main{margin-left:var(--sidebar);min-height:100vh;padding-top:88px}.topbar{position:fixed;left:var(--sidebar);right:0;top:0;height:88px;z-index:1000;background:#fffffff8;border-bottom:1px solid #e2ebf3;display:flex;align-items:center;justify-content:space-between;padding:0 34px}.topbar-left{display:flex;align-items:center;gap:14px}.page-name{font-size:21px;font-weight:600}.page-sub{font-size:12px;color:var(--muted);margin-top:4px}.admin-area{display:flex;align-items:center;gap:16px}.admin-copy{text-align:right}.admin-name{font-size:14px;font-weight:600}.admin-email{font-size:11px;color:var(--muted)}
-.mobile-menu{display:none}.btn{min-height:42px;border:1px solid var(--line);border-radius:11px;background:#fff;color:var(--navy);padding:0 14px;font-size:12px;font-weight:600;cursor:pointer}.btn.primary{background:var(--navy);border-color:var(--navy);color:#fff}.btn.yellow{background:var(--yellow);border-color:var(--yellow)}.btn:disabled{opacity:.45;cursor:not-allowed}
-.content{width:min(1540px,calc(100% - 58px));margin:auto;padding:30px 0 65px}.page-head{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;margin:2px 4px 22px}.page-head h1{font-size:30px}.page-head p{margin-top:6px;color:var(--muted);font-size:14px}.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:18px}.stat{min-height:112px;padding:18px;background:#fff;border:1px solid var(--line);border-radius:18px}.stat span{color:var(--muted);font-size:12px}.stat strong{display:block;margin-top:8px;font-size:29px}
-.toolbar{display:grid;grid-template-columns:1fr 180px 180px auto;gap:10px;padding:14px;background:#fff;border:1px solid var(--line);border-radius:17px;margin-bottom:12px}.input,.select{width:100%;min-height:44px;border:1px solid var(--line);border-radius:11px;padding:9px 12px;background:#fff;color:var(--navy)}
-.table-wrap{background:#fff;border:1px solid var(--line);border-radius:20px;overflow:auto}.table{width:100%;min-width:1280px;border-collapse:collapse}.table th{padding:13px 12px;background:var(--navy);color:#fff;font-size:11px;text-align:left;font-weight:500}.table td{padding:13px 12px;border-bottom:1px solid #e8eef4;font-size:12px;vertical-align:top;line-height:1.55}.name{font-size:13px;font-weight:600}.sub{margin-top:3px;color:var(--muted);font-size:10.5px}.badge{display:inline-flex;padding:5px 8px;border-radius:999px;font-size:9.5px;font-weight:600}.queued{background:#fff4cf;color:#765800}.processing{background:#eaf4ff;color:#145b9c}.sent{background:#eaf9f1;color:#087744}.failed{background:#fff0f1;color:#a52a35}.cancelled{background:#edf2f6;color:#64768c}.email{background:#edf5ff;color:#145b9c}.line{background:#ecfaef;color:#0c7a38}.empty{padding:35px;text-align:center;color:var(--muted);font-size:12px}.notice{padding:11px 12px;border-radius:11px;background:#eef6ff;color:#315577;font-size:11px;line-height:1.6;margin-bottom:12px}
-#santeMobileOverlay{display:none}
-@media(max-width:900px){.sidebar{width:min(84vw,320px);height:100dvh;transform:translateX(-102%);transition:.22s;overflow-y:auto;padding-bottom:calc(24px + env(safe-area-inset-bottom))}.sidebar.open{transform:translateX(0)}#santeMobileOverlay.show{display:block;position:fixed;inset:0;z-index:1100;background:#03143094}.main{margin-left:0;padding-top:68px}.topbar{left:0;height:68px;padding:0 12px}.mobile-menu{display:block;width:46px;height:46px}.admin-copy,.page-sub{display:none}.content{width:100%;padding:16px 12px 42px}.stats{grid-template-columns:1fr 1fr}.page-head{flex-direction:column}.page-head h1{font-size:24px}.toolbar{grid-template-columns:1fr}.sidebar-brand{min-height:118px;padding:calc(16px + env(safe-area-inset-top)) 22px 14px}.sidebar-brand img{width:170px;height:72px}}
+
+:root{
+  --navy:#082d69;
+  --navy-dark:#061f4b;
+  --navy-soft:#0d4386;
+  --yellow:#ffbf19;
+  --yellow-soft:#fff4cf;
+  --blue:#087df0;
+  --green:#159447;
+  --red:#b42318;
+  --bg:#f1f7fb;
+  --white:#fff;
+  --text:#082d69;
+  --muted:#6f83a2;
+  --line:#d9e5ef;
+  --sidebar:285px;
+}
+
+html,body{
+  width:100%;
+  min-height:100%;
+}
+
+body{
+  font-family:"Prompt",sans-serif;
+  color:var(--text);
+  background:var(--bg);
+  font-size:16px;
+  -webkit-font-smoothing:antialiased;
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+button,input{
+  font-family:"Prompt",sans-serif;
+}
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
+.sidebar{
+  position:fixed;
+  left:0;
+  top:0;
+  bottom:0;
+  z-index:300;
+  width:var(--sidebar);
+  display:flex;
+  flex-direction:column;
+  background:
+    linear-gradient(
+      180deg,
+      #082d69 0%,
+      #06265c 55%,
+      #061f4b 100%
+    );
+  color:#fff;
+  overflow-y:auto;
+}
+
+.sidebar-brand{
+  min-height:128px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:22px 25px;
+  border-bottom:1px solid rgba(255,255,255,.10);
+}
+
+.sidebar-brand img{
+  display:block;
+  width:190px;
+  max-width:100%;
+  height:82px;
+  object-fit:contain;
+}
+
+.sidebar-label{
+  padding:26px 25px 10px;
+  color:#9bb1d0;
+  font-size:12px;
+  font-weight:500;
+  letter-spacing:1.7px;
+}
+
+.nav{
+  padding:0 15px 25px;
+}
+
+.nav-link{
+  min-height:58px;
+  display:flex;
+  align-items:center;
+  gap:14px;
+  margin:5px 0;
+  padding:0 17px;
+  border-radius:16px;
+  color:#e4edfa;
+  font-size:15px;
+  font-weight:500;
+  transition:.18s ease;
+}
+
+.nav-link:hover{
+  background:rgba(255,255,255,.08);
+  color:#fff;
+}
+
+.nav-link.active{
+  background:var(--yellow);
+  color:var(--navy);
+  font-weight:600;
+  box-shadow:0 7px 18px rgba(0,0,0,.10);
+}
+
+.nav-icon{
+  width:29px;
+  flex:0 0 29px;
+  display:grid;
+  place-items:center;
+  font-size:21px;
+  line-height:1;
+}
+
+.sidebar-footer{
+  margin:auto 15px 22px;
+  padding:18px;
+  border-radius:17px;
+  background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.05);
+}
+
+.sidebar-footer strong{
+  display:block;
+  font-size:13px;
+  font-weight:600;
+}
+
+.sidebar-footer p{
+  margin-top:6px;
+  color:#b6c8e2;
+  font-size:11px;
+  line-height:1.65;
+}
+
+/* =========================================================
+   MAIN / TOPBAR
+========================================================= */
+
+.main{
+  min-height:100vh;
+  margin-left:var(--sidebar);
+}
+
+.topbar{
+  position:sticky;
+  top:0;
+  z-index:200;
+  height:88px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:24px;
+  padding:0 34px;
+  background:rgba(255,255,255,.97);
+  border-bottom:1px solid #e2ebf3;
+  box-shadow:0 3px 14px rgba(8,45,105,.025);
+}
+
+.topbar-left{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+
+.page-name{
+  font-size:21px;
+  line-height:1.3;
+  font-weight:600;
+}
+
+.page-sub{
+  margin-top:4px;
+  color:var(--muted);
+  font-size:12px;
+}
+
+.mobile-menu{
+  display:none;
+  width:44px;
+  height:44px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:#fff;
+  color:var(--navy);
+  font-size:21px;
+  cursor:pointer;
+}
+
+.admin-area{
+  display:flex;
+  align-items:center;
+  gap:17px;
+}
+
+.admin-copy{
+  text-align:right;
+}
+
+.admin-name{
+  font-size:15px;
+  font-weight:600;
+}
+
+.admin-email{
+  margin-top:2px;
+  color:var(--muted);
+  font-size:11px;
+}
+
+.logout{
+  min-height:46px;
+  padding:0 18px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:#fff;
+  color:var(--navy);
+  font-size:13px;
+  font-weight:600;
+  cursor:pointer;
+}
+
+.logout:hover{
+  background:#f6faff;
+}
+
+.content{
+  width:min(1540px,calc(100% - 58px));
+  margin:0 auto;
+  padding:30px 0 65px;
+}
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.dashboard-hero{
+  position:relative;
+  width:100%;
+  min-height:320px;
+  overflow:hidden;
+  border-radius:25px;
+  background:#fff;
+  box-shadow:0 10px 28px rgba(8,45,105,.08);
+}
+
+.dashboard-hero-picture{
+  position:absolute;
+  inset:0;
+  display:block;
+}
+
+.dashboard-hero-image{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center;
+}
+
+.dashboard-hero-content{
+  position:relative;
+  z-index:2;
+  width:48%;
+  min-height:320px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding:38px 20px 38px 48px;
+}
+
+.system-badge{
+  width:max-content;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:7px 13px;
+  border-radius:999px;
+  background:rgba(255,255,255,.94);
+  color:var(--blue);
+  font-size:11px;
+  font-weight:700;
+  box-shadow:0 3px 12px rgba(8,45,105,.08);
+}
+
+.system-dot{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:#1cad5a;
+}
+
+.dashboard-hero h1{
+  margin-top:15px;
+  font-size:31px;
+  line-height:1.25;
+  font-weight:500;
+}
+
+.dashboard-hero h1 strong{
+  display:block;
+  margin-top:2px;
+  font-size:42px;
+  line-height:1.18;
+  font-weight:700;
+}
+
+.dashboard-hero p{
+  max-width:650px;
+  margin-top:12px;
+  color:#506987;
+  font-size:13px;
+  line-height:1.75;
+}
+
+.dashboard-date{
+  margin-top:17px;
+  color:#58708f;
+  font-size:12px;
+  font-weight:500;
+}
+
+/* =========================================================
+   SECTION
+========================================================= */
+
+.section-head{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:20px;
+  margin:34px 4px 17px;
+}
+
+.section-head h2{
+  font-size:24px;
+  line-height:1.35;
+  font-weight:600;
+}
+
+.section-head p{
+  margin-top:5px;
+  color:var(--muted);
+  font-size:12px;
+}
+
+/* =========================================================
+   STATS
+========================================================= */
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:17px;
+}
+
+.stat{
+  min-height:145px;
+  padding:22px;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:20px;
+  box-shadow:0 6px 18px rgba(8,45,105,.035);
+}
+
+.stat-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+
+.stat-icon{
+  width:50px;
+  height:50px;
+  display:grid;
+  place-items:center;
+  border-radius:15px;
+  background:#eaf4ff;
+  color:var(--navy);
+  font-size:23px;
+}
+
+.stat-label{
+  color:var(--muted);
+  font-size:13px;
+  font-weight:500;
+}
+
+.stat-value{
+  margin-top:10px;
+  font-size:34px;
+  line-height:1;
+  font-weight:700;
+}
+
+.stat-note{
+  margin-top:8px;
+  color:#8496ad;
+  font-size:11px;
+}
+
+/* =========================================================
+   MANAGEMENT
+========================================================= */
+
+.management{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:17px;
+}
+
+.manage-card{
+  min-height:165px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  padding:23px;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:20px;
+  box-shadow:0 5px 15px rgba(8,45,105,.025);
+  transition:.18s ease;
+}
+
+.manage-card:hover{
+  transform:translateY(-2px);
+  box-shadow:0 12px 28px rgba(8,45,105,.08);
+}
+
+.manage-icon{
+  width:49px;
+  height:49px;
+  display:grid;
+  place-items:center;
+  border-radius:15px;
+  background:#edf6ff;
+  font-size:23px;
+}
+
+.manage-card h3{
+  margin-top:14px;
+  font-size:16px;
+  font-weight:600;
+}
+
+.manage-card p{
+  margin-top:5px;
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.6;
+}
+
+.manage-action{
+  margin-top:16px;
+  color:var(--blue);
+  font-size:11px;
+  font-weight:600;
+}
+
+/* =========================================================
+   LOWER PANELS
+========================================================= */
+
+.panel-grid{
+  display:grid;
+  grid-template-columns:1.45fr 1fr;
+  gap:17px;
+}
+
+.panel{
+  padding:24px;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:20px;
+}
+
+.panel h3{
+  font-size:17px;
+  font-weight:600;
+}
+
+.panel>p{
+  margin-top:4px;
+  color:var(--muted);
+  font-size:11px;
+}
+
+.quick-list{
+  display:grid;
+  gap:10px;
+  margin-top:18px;
+}
+
+.quick-item{
+  min-height:49px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  padding:0 15px;
+  border-radius:12px;
+  background:#f5f9fc;
+  font-size:12px;
+}
+
+.quick-item span:last-child{
+  color:var(--blue);
+  font-weight:600;
+}
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+.loading-screen{
+  position:fixed;
+  inset:0;
+  z-index:1000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#f4f9fd;
+  color:var(--navy);
+  font-size:15px;
+}
+
+.overlay{
+  display:none;
+}
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media(max-width:1200px){
+
+  :root{
+    --sidebar:255px;
+  }
+
+  .stats,
+  .management{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+
+  .dashboard-hero-content{
+    width:56%;
+  }
+}
+
+/* =========================================================
+   MOBILE SIDEBAR
+========================================================= */
+
+@media(max-width:900px){
+
+  .sidebar{
+    width:285px;
+    transform:translateX(-100%);
+    transition:.2s ease;
+  }
+
+  .sidebar.open{
+    transform:translateX(0);
+  }
+
+  .main{
+    margin-left:0;
+  }
+
+  .mobile-menu{
+    display:block;
+  }
+
+  .overlay{
+    position:fixed;
+    inset:0;
+    z-index:250;
+    background:rgba(3,20,48,.48);
+  }
+
+  .overlay.show{
+    display:block;
+  }
+
+  .panel-grid{
+    grid-template-columns:1fr;
+  }
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width:767px){
+
+  body{
+    font-size:15px;
+  }
+
+  .topbar{
+    height:68px;
+    padding:0 12px;
+  }
+
+  .page-name{
+    font-size:16px;
+  }
+
+  .page-sub,
+  .admin-copy{
+    display:none;
+  }
+
+  .logout{
+    min-height:40px;
+    padding:0 11px;
+    font-size:11px;
+  }
+
+  .content{
+    width:100%;
+    padding:12px 12px 42px;
+  }
+
+  .dashboard-hero{
+    min-height:410px;
+    border-radius:20px;
+  }
+
+  .dashboard-hero-content{
+    width:100%;
+    min-height:410px;
+    justify-content:flex-end;
+    padding:25px 21px;
+    background:
+      linear-gradient(
+        180deg,
+        rgba(255,255,255,0) 32%,
+        rgba(255,255,255,.72) 59%,
+        rgba(255,255,255,.97) 78%,
+        #fff 100%
+      );
+  }
+
+  .dashboard-hero h1{
+    font-size:22px;
+  }
+
+  .dashboard-hero h1 strong{
+    font-size:30px;
+  }
+
+  .dashboard-hero p{
+    max-width:100%;
+    font-size:11px;
+    line-height:1.6;
+  }
+
+  .dashboard-date{
+    font-size:10px;
+  }
+
+  .section-head{
+    margin:27px 3px 14px;
+  }
+
+  .section-head h2{
+    font-size:20px;
+  }
+
+  .section-head p{
+    font-size:10px;
+  }
+
+  .stats{
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+  }
+
+  .stat{
+    min-height:135px;
+    padding:16px;
+    border-radius:17px;
+  }
+
+  .stat-icon{
+    width:43px;
+    height:43px;
+    font-size:19px;
+  }
+
+  .stat-label{
+    font-size:10px;
+  }
+
+  .stat-value{
+    font-size:27px;
+  }
+
+  .stat-note{
+    font-size:9px;
+  }
+
+  .management{
+    grid-template-columns:1fr;
+    gap:10px;
+  }
+
+  .manage-card{
+    min-height:140px;
+    padding:18px;
+    border-radius:17px;
+  }
+
+  .panel{
+    padding:18px;
+    border-radius:17px;
+  }
+}
+
+@media(max-width:420px){
+
+  .stats{
+    grid-template-columns:1fr;
+  }
+}
+
+/* ===== SANTE DASHBOARD CLEAN HERO R1 ===== */
+.dashboard-hero{
+  position:relative!important;
+  width:100%!important;
+  min-height:0!important;
+  height:auto!important;
+  overflow:hidden!important;
+  border-radius:25px!important;
+  background:#fff!important;
+  background-image:none!important;
+  box-shadow:0 10px 28px rgba(8,45,105,.08)!important;
+}
+.dashboard-hero-picture{
+  position:relative!important;
+  inset:auto!important;
+  display:block!important;
+  width:100%!important;
+  height:auto!important;
+  line-height:0!important;
+}
+.dashboard-hero-image{
+  position:relative!important;
+  display:block!important;
+  width:100%!important;
+  height:auto!important;
+  max-width:100%!important;
+  object-fit:contain!important;
+  object-position:center center!important;
+}
+.dashboard-hero-content{
+  display:none!important;
+}
+.dashboard-hero::before,
+.dashboard-hero::after,
+.dashboard-hero-picture::before,
+.dashboard-hero-picture::after,
+.content::before,
+.content::after,
+.main::before,
+.main::after{
+  content:none!important;
+  display:none!important;
+}
+.main{
+  background:#f4f7fb!important;
+  overflow-x:hidden!important;
+}
+.content{
+  position:relative!important;
+  background:#f4f7fb!important;
+  overflow:visible!important;
+}
+@media(max-width:767px){
+  .dashboard-hero{
+    min-height:0!important;
+    height:auto!important;
+    border-radius:20px!important;
+  }
+  .dashboard-hero-image{
+    width:100%!important;
+    height:auto!important;
+    object-fit:contain!important;
+  }
+}
+
+
+/* ===== SANTE ADMIN VISUAL FIX R11 : DASHBOARD =====
+   Remove the thin navy strip / duplicated left edge beside sidebar
+==================================================== */
+html,body{overflow-x:hidden!important}
+.sidebar{
+  border-right:0!important;
+  box-shadow:none!important;
+}
+.sidebar::before,.sidebar::after,
+.main::before,.main::after,
+.content::before,.content::after{
+  content:none!important;
+  display:none!important;
+}
+.main{
+  border-left:0!important;
+  box-shadow:none!important;
+  margin-left:var(--sidebar)!important;
+  width:auto!important;
+}
+.content{
+  border-left:0!important;
+  box-shadow:none!important;
+}
+@media(min-width:769px){
+  .sidebar{left:0!important}
+  .main{margin-left:var(--sidebar)!important}
+}
+
+
+/* ===== SANTE ADMIN SHELL R12 =====
+   Keep header visible and standardize main page naming
+==================================================== */
+.topbar{
+  position:fixed!important;
+  top:0!important;
+  left:var(--sidebar)!important;
+  right:0!important;
+  width:auto!important;
+  z-index:500!important;
+}
+.main{
+  padding-top:88px!important;
+}
+@media(max-width:900px){
+  .topbar{
+    left:0!important;
+  }
+}
+@media(max-width:767px){
+  .main{
+    padding-top:68px!important;
+  }
+}
+
 </style>
+<meta name="sante-build" content="DASHBOARD-CLEAN-HERO-R1">
+<meta name="sante-build" content="ADMIN-VISUAL-R11-DASH">
+
+<style id="sante-admin-unified-r1">
+/* =========================================================
+   SANTE ADMIN UNIFIED UI R1
+   Visual master: Dashboard / Courses canonical shell
+   This block intentionally overrides legacy page-specific shell CSS
+   without changing business logic.
+========================================================= */
+:root{
+  --navy:#082d69!important;
+  --navy-dark:#061f4b!important;
+  --navy-soft:#0d4386!important;
+  --yellow:#ffbf19!important;
+  --yellow-soft:#fff4cf!important;
+  --blue:#087df0!important;
+  --green:#159447!important;
+  --red:#b42318!important;
+  --bg:#f1f7fb!important;
+  --white:#ffffff!important;
+  --text:#082d69!important;
+  --muted:#6f83a2!important;
+  --line:#d9e5ef!important;
+  --sidebar:285px!important;
+  --shadow-soft:0 6px 18px rgba(8,45,105,.035);
+  --shadow-card:0 5px 15px rgba(8,45,105,.025);
+}
+html,body{width:100%;min-height:100%;overflow-x:hidden}
+body{font-family:"Prompt",sans-serif!important;background:var(--bg)!important;color:var(--text)!important;font-size:16px!important;-webkit-font-smoothing:antialiased}
+body,button,input,select,textarea{font-family:"Prompt",sans-serif!important}
+a{text-decoration:none}
+
+/* ---------- Sidebar ---------- */
+.sidebar{
+  position:fixed!important;inset:0 auto 0 0!important;z-index:300!important;
+  width:var(--sidebar)!important;padding:0!important;
+  display:flex!important;flex-direction:column!important;overflow-y:auto!important;
+  background:linear-gradient(180deg,#082d69 0%,#06265c 55%,#061f4b 100%)!important;
+  color:#fff!important;border:0!important;box-shadow:none!important;transform:none;
+}
+.sidebar-brand{
+  min-height:128px!important;height:auto!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  padding:22px 25px!important;border-bottom:1px solid rgba(255,255,255,.10)!important;
+}
+.sidebar-brand img{
+  display:block!important;width:190px!important;max-width:100%!important;
+  height:82px!important;object-fit:contain!important;background:transparent!important;
+  padding:0!important;border-radius:0!important;
+}
+.sidebar-label{
+  display:block!important;padding:26px 25px 10px!important;
+  color:#9bb1d0!important;font-size:12px!important;font-weight:500!important;
+  letter-spacing:1.7px!important;
+}
+.sidebar .nav{
+  display:block!important;padding:0 15px 25px!important;margin:0!important;
+}
+.sidebar .nav-link{
+  min-height:58px!important;display:flex!important;align-items:center!important;gap:14px!important;
+  margin:5px 0!important;padding:0 17px!important;border:0!important;border-radius:16px!important;
+  background:transparent!important;color:#e4edfa!important;font-size:15px!important;font-weight:500!important;
+  line-height:1.35!important;transition:.18s ease!important;text-align:left!important;
+}
+.sidebar .nav-link:hover{background:rgba(255,255,255,.08)!important;color:#fff!important}
+.sidebar .nav-link.active{
+  background:var(--yellow)!important;color:var(--navy)!important;font-weight:600!important;
+  box-shadow:0 7px 18px rgba(0,0,0,.10)!important;
+}
+.sidebar .nav-icon{
+  width:29px!important;flex:0 0 29px!important;display:grid!important;place-items:center!important;
+  font-size:21px!important;line-height:1!important;
+}
+.sidebar-footer{
+  display:block!important;margin:auto 15px 22px!important;padding:18px!important;
+  border-radius:17px!important;background:rgba(255,255,255,.07)!important;
+  border:1px solid rgba(255,255,255,.05)!important;color:#fff!important;
+}
+.sidebar-footer strong{display:block!important;font-size:13px!important;font-weight:600!important}
+.sidebar-footer p{margin:6px 0 0!important;color:#b6c8e2!important;font-size:11px!important;line-height:1.65!important}
+
+/* hide obsolete legacy sidebar fragments if any remain */
+.sante-canonical-sidebar:not(.sidebar),
+.au-sidebar{display:none!important}
+
+/* ---------- Main + Topbar ---------- */
+.main,.app>.main{
+  min-height:100vh!important;margin-left:var(--sidebar)!important;padding-top:88px!important;
+  width:auto!important;background:var(--bg)!important;border:0!important;box-shadow:none!important;
+}
+.topbar{
+  position:fixed!important;top:0!important;left:var(--sidebar)!important;right:0!important;
+  z-index:500!important;height:88px!important;min-height:88px!important;
+  display:flex!important;align-items:center!important;justify-content:space-between!important;gap:24px!important;
+  padding:0 34px!important;background:rgba(255,255,255,.97)!important;
+  border-bottom:1px solid #e2ebf3!important;box-shadow:0 3px 14px rgba(8,45,105,.025)!important;
+}
+.topbar-left{display:flex!important;align-items:center!important;gap:14px!important}
+.page-name{font-size:21px!important;line-height:1.3!important;font-weight:600!important;color:var(--navy)!important}
+.page-sub{margin-top:4px!important;color:var(--muted)!important;font-size:12px!important}
+.admin-area{display:flex!important;align-items:center!important;gap:17px!important}
+.admin-copy{text-align:right!important}
+.admin-name{font-size:15px!important;font-weight:600!important;color:var(--navy)!important}
+.admin-email{margin-top:2px!important;color:var(--muted)!important;font-size:11px!important}
+.logout,.logout-btn{
+  min-height:46px!important;padding:0 18px!important;border:1px solid var(--line)!important;
+  border-radius:12px!important;background:#fff!important;color:var(--navy)!important;
+  font-size:13px!important;font-weight:600!important;
+}
+.logout:hover,.logout-btn:hover{background:#f6faff!important;color:var(--navy)!important}
+.mobile-menu{
+  display:none!important;width:44px!important;height:44px!important;border:1px solid var(--line)!important;
+  border-radius:12px!important;background:#fff!important;color:var(--navy)!important;font-size:21px!important;
+}
+
+/* ---------- Content + Hero ---------- */
+.content{
+  width:min(1540px,calc(100% - 58px))!important;max-width:none!important;
+  margin:0 auto!important;padding:30px 0 65px!important;
+  background:transparent!important;border:0!important;
+}
+.canonical-hero,.dashboard-hero{
+  position:relative!important;width:100%!important;min-height:0!important;height:auto!important;
+  margin:0 0 28px!important;padding:10px!important;overflow:hidden!important;
+  border:0!important;border-radius:28px!important;background:#fff!important;background-image:none!important;
+  box-shadow:0 10px 30px rgba(8,45,105,.06)!important;
+}
+.canonical-hero picture,.canonical-hero img,
+.dashboard-hero picture,.dashboard-hero img,
+.dashboard-hero-picture,.dashboard-hero-image{
+  position:relative!important;inset:auto!important;display:block!important;
+  width:100%!important;height:auto!important;max-width:100%!important;line-height:0!important;
+}
+.canonical-hero img,.dashboard-hero img,.dashboard-hero-image{
+  border-radius:22px!important;object-fit:cover!important;object-position:center!important;
+}
+.dashboard-hero-content{display:none!important}
+
+/* ---------- Page heading ---------- */
+.page-head,.page-header,.head{
+  display:flex!important;align-items:flex-start!important;justify-content:space-between!important;gap:20px!important;
+  margin:2px 4px 22px!important;padding:0!important;background:transparent!important;border:0!important;
+  border-radius:0!important;box-shadow:none!important;color:var(--navy)!important;
+}
+.page-head h1,.page-header h1,.head h1{
+  margin:0!important;font-size:30px!important;line-height:1.3!important;
+  font-weight:600!important;color:var(--navy)!important;
+}
+.page-head p,.page-header p,.head .muted{
+  margin-top:6px!important;color:var(--muted)!important;font-size:13px!important;line-height:1.65!important;
+}
+.page-badge{
+  border-radius:999px!important;background:var(--yellow-soft)!important;color:#735700!important;
+  box-shadow:none!important;font-size:10px!important;font-weight:700!important;
+}
+
+/* ---------- Common controls ---------- */
+.btn,.refresh,.refresh-btn,.export-btn{
+  min-height:44px!important;padding:0 15px!important;border:1px solid var(--line)!important;
+  border-radius:11px!important;background:#fff!important;color:var(--navy)!important;
+  font-size:12px!important;font-weight:600!important;box-shadow:none!important;
+}
+.btn-primary,.btn-navy,.primary{
+  background:var(--navy)!important;border-color:var(--navy)!important;color:#fff!important;
+}
+.btn-yellow,.btn.yellow,.yellow{
+  background:var(--yellow)!important;border-color:var(--yellow)!important;color:var(--navy)!important;
+}
+.btn-light,.btn.light,.light{background:#fff!important;border-color:var(--line)!important;color:var(--navy)!important}
+.btn-danger,.btn.danger,.danger{background:#fff0f1!important;border-color:#f1c5ca!important;color:var(--red)!important}
+.input,.select,input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),select,textarea{
+  border-color:var(--line)!important;border-radius:12px!important;background:#fff!important;
+  color:var(--navy)!important;outline:none;
+}
+.input:focus,.select:focus,input:focus,select:focus,textarea:focus{
+  border-color:#8db9e8!important;box-shadow:0 0 0 3px rgba(8,125,240,.08)!important;
+}
+
+/* ---------- Stats / summary cards ---------- */
+.stats,.summary,.stats-grid{
+  gap:17px!important;margin-bottom:22px!important;
+}
+.stat,.summary-card,.stat-card{
+  min-height:135px!important;padding:22px!important;background:#fff!important;
+  border:1px solid var(--line)!important;border-radius:20px!important;
+  box-shadow:var(--shadow-soft)!important;color:var(--navy)!important;
+}
+.stat-label,.summary-label{color:var(--muted)!important;font-size:13px!important;font-weight:500!important}
+.stat-value,.summary-value{
+  margin-top:10px!important;font-size:33px!important;line-height:1!important;font-weight:700!important;color:var(--navy)!important;
+}
+.stat-icon,.summary-icon{
+  border-radius:14px!important;background:#eaf4ff!important;color:var(--navy)!important;
+}
+
+/* ---------- Panels / cards / tabs ---------- */
+.panel,.filter-panel,.filters,.toolbar{
+  border:1px solid var(--line)!important;border-radius:20px!important;background:#fff!important;
+  box-shadow:var(--shadow-card)!important;
+}
+.course-card,.session-card,.card,.payment-card,.method-card,.set-card,.manage-card{
+  border:1px solid var(--line)!important;border-radius:20px!important;background:#fff!important;
+  box-shadow:var(--shadow-card)!important;
+}
+.tabs{
+  border:1px solid var(--line)!important;border-radius:18px!important;background:#fff!important;
+  box-shadow:none!important;padding:8px!important;
+}
+.tab,.tab-btn{
+  min-height:44px!important;border-radius:11px!important;color:var(--navy)!important;
+  font-size:12px!important;font-weight:600!important;
+}
+.tab.active,.tab-btn.active{background:var(--navy)!important;color:#fff!important;border-color:var(--navy)!important}
+
+/* ---------- Tables ---------- */
+.table-wrap{
+  border:1px solid var(--line)!important;border-radius:14px!important;background:#fff!important;
+  box-shadow:none!important;
+}
+.content .table-wrap table:not(.qtable) th,
+.content table.table th{
+  background:var(--navy)!important;color:#fff!important;font-size:10px!important;font-weight:500!important;
+}
+.content .table-wrap table:not(.qtable) td,
+.content table.table td{
+  border-bottom:1px solid #e7edf3!important;color:#17304f!important;
+}
+
+/* ---------- Modal shell ---------- */
+.modal-backdrop,.modal-overlay,.modal-bg,.modal{
+  backdrop-filter:saturate(110%);
+}
+.modal-backdrop .modal,.modal-overlay .modal,.modal-bg .modal,.modal-card,.editor{
+  border-radius:22px!important;box-shadow:0 28px 80px rgba(0,0,0,.22)!important;
+}
+
+/* ---------- Mobile ---------- */
+@media(max-width:1200px){
+  :root{--sidebar:255px!important}
+}
+@media(max-width:900px){
+  :root{--sidebar:285px!important}
+  .sidebar{width:285px!important;transform:translateX(-100%)!important;transition:.2s ease!important}
+  .sidebar.open{transform:translateX(0)!important}
+  .main,.app>.main{margin-left:0!important}
+  .topbar{left:0!important}
+  .mobile-menu{display:block!important}
+  .overlay.show{display:block!important;position:fixed!important;inset:0!important;z-index:250!important;background:rgba(3,20,48,.48)!important}
+}
+@media(max-width:767px){
+  .main,.app>.main{padding-top:68px!important}
+  .topbar{height:68px!important;min-height:68px!important;padding:0 12px!important}
+  .page-name{font-size:16px!important}
+  .page-sub,.admin-copy{display:none!important}
+  .logout,.logout-btn{min-height:40px!important;padding:0 11px!important;font-size:11px!important}
+  .content{width:100%!important;padding:16px 12px 42px!important}
+  .canonical-hero,.dashboard-hero{margin-bottom:18px!important;padding:6px!important;border-radius:18px!important}
+  .canonical-hero img,.dashboard-hero img,.dashboard-hero-image{border-radius:14px!important}
+  .page-head,.page-header,.head{flex-direction:column!important;margin:2px 3px 18px!important}
+  .page-head h1,.page-header h1,.head h1{font-size:24px!important}
+}
+</style>
+
+<meta name="sante-unified-build" content="SANTE-ADMIN-UNIFIED-R1">
+
+<style id="sante-admin-readability-r2">
+/* =========================================================
+   SANTE ADMIN READABILITY R2
+   เพิ่มความชัดเจนของข้อความรองบน Desktop
+   และคุมสัดส่วนบน Mobile ให้สมดุล
+========================================================= */
+
+/* ---------- Topbar ---------- */
+.page-sub{
+  font-size:14px!important;
+  line-height:1.5!important;
+}
+
+/* ---------- Page / section descriptions ---------- */
+.page-head p,
+.page-header p,
+.head .muted,
+.section-head p,
+.panel-header p,
+.muted{
+  font-size:14px!important;
+  line-height:1.7!important;
+}
+
+/* ---------- Stats ---------- */
+.stat-label,
+.summary-label{
+  font-size:14px!important;
+  line-height:1.45!important;
+}
+.stat-note,
+.summary-note{
+  font-size:12px!important;
+  line-height:1.55!important;
+}
+
+/* ---------- Cards / secondary copy ---------- */
+.course-desc,
+.card p,
+.manage-card p,
+.session-code,
+.person-email,
+.payment-session,
+.type-note,
+.form-help,
+.sub,
+.meta span,
+.meta-box span,
+.info-label,
+.detail-label,
+.cell-sub,
+.batch-meta,
+.user,
+.sidebar-footer p{
+  font-size:12px!important;
+  line-height:1.6!important;
+}
+
+/* main card values and metadata */
+.meta strong,
+.meta-box strong,
+.info-value,
+.detail-value,
+.cell-main,
+.person-name{
+  font-size:13px!important;
+  line-height:1.55!important;
+}
+
+/* badges/tags were too small on desktop */
+.badge,
+.tag,
+.course-badge,
+.status,
+.current-badge{
+  font-size:11px!important;
+  line-height:1.3!important;
+}
+
+/* filters / form controls */
+.input,
+.select,
+.control,
+.search,
+input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+select,
+textarea{
+  font-size:13px!important;
+}
+
+/* table readability */
+.content .table-wrap table:not(.qtable) th,
+.content table.table th{
+  font-size:11px!important;
+}
+.content .table-wrap table:not(.qtable) td,
+.content table.table td{
+  font-size:12px!important;
+  line-height:1.55!important;
+}
+
+/* common buttons */
+.btn,
+.refresh,
+.refresh-btn,
+.export-btn,
+.mini-btn{
+  font-size:12px!important;
+}
+
+/* Admin members specific */
+.audit-item,
+.note{
+  font-size:11.5px!important;
+  line-height:1.65!important;
+}
+
+/* Dashboard quick menu */
+.quick-item{
+  font-size:13px!important;
+}
+.manage-action{
+  font-size:12px!important;
+}
+
+/* Keep mobile balanced — don't scale everything too large */
+@media(max-width:767px){
+  .page-sub{display:none!important}
+
+  .page-head p,
+  .page-header p,
+  .head .muted,
+  .section-head p,
+  .panel-header p,
+  .muted{
+    font-size:12px!important;
+    line-height:1.6!important;
+  }
+
+  .stat-label,
+  .summary-label{
+    font-size:11px!important;
+  }
+
+  .stat-note,
+  .summary-note{
+    font-size:10px!important;
+  }
+
+  .course-desc,
+  .card p,
+  .manage-card p,
+  .session-code,
+  .person-email,
+  .payment-session,
+  .type-note,
+  .form-help,
+  .sub,
+  .meta span,
+  .meta-box span,
+  .info-label,
+  .detail-label,
+  .cell-sub,
+  .batch-meta,
+  .user,
+  .sidebar-footer p{
+    font-size:10.5px!important;
+    line-height:1.55!important;
+  }
+
+  .meta strong,
+  .meta-box strong,
+  .info-value,
+  .detail-value,
+  .cell-main,
+  .person-name{
+    font-size:12px!important;
+  }
+
+  .badge,
+  .tag,
+  .course-badge,
+  .status,
+  .current-badge{
+    font-size:9.5px!important;
+  }
+
+  .input,
+  .select,
+  .control,
+  .search,
+  input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+  select,
+  textarea{
+    font-size:12px!important;
+  }
+
+  .quick-item{
+    font-size:11px!important;
+  }
+  .manage-action{
+    font-size:11px!important;
+  }
+}
+</style>
+
+<meta name="sante-readability-build" content="SANTE-ADMIN-READABILITY-R2">
+
+<style id="sante-admin-responsive-hero-r3">
+/* =========================================================
+   SANTE ADMIN RESPONSIVE HERO R3
+   Desktop: approved wide hero
+   Mobile: dedicated composition inspired by member-home
+========================================================= */
+
+.admin-mobile-hero{
+  display:none;
+}
+
+/* Normalize desktop hero */
+@media(min-width:768px){
+  .canonical-hero,
+  .dashboard-hero{
+    display:block!important;
+    width:100%!important;
+    height:auto!important;
+    min-height:0!important;
+    margin:0 0 28px!important;
+    padding:10px!important;
+    overflow:hidden!important;
+    border-radius:28px!important;
+    background:#fff!important;
+    box-shadow:0 10px 30px rgba(8,45,105,.06)!important;
+  }
+
+  .canonical-hero picture,
+  .dashboard-hero picture,
+  .dashboard-hero-picture{
+    position:relative!important;
+    inset:auto!important;
+    display:block!important;
+    width:100%!important;
+    height:auto!important;
+    line-height:0!important;
+  }
+
+  .canonical-hero img,
+  .dashboard-hero img,
+  .dashboard-hero-image{
+    position:relative!important;
+    display:block!important;
+    width:100%!important;
+    height:auto!important;
+    max-width:100%!important;
+    border-radius:22px!important;
+    object-fit:contain!important;
+    object-position:center!important;
+  }
+}
+
+/* Mobile hero is a separate layout, not a stretched portrait banner */
+@media(max-width:767px){
+  .canonical-hero,
+  .dashboard-hero{
+    display:none!important;
+  }
+
+  .admin-mobile-hero{
+    position:relative;
+    display:flex!important;
+    flex-direction:column;
+    width:100%;
+    min-height:385px;
+    margin:0 0 20px;
+    padding:22px 18px 0;
+    overflow:hidden;
+    border:1px solid #dce7f2;
+    border-radius:20px;
+    background:
+      linear-gradient(
+        145deg,
+        #eaf7ff 0%,
+        #ffffff 56%,
+        #fff3c9 100%
+      );
+    box-shadow:0 8px 25px rgba(11,45,103,.07);
+  }
+
+  .admin-mobile-hero::before{
+    content:"";
+    position:absolute;
+    width:185px;
+    height:185px;
+    top:-95px;
+    right:-70px;
+    border-radius:50%;
+    background:rgba(255,191,25,.25);
+    pointer-events:none;
+  }
+
+  .admin-mobile-hero::after{
+    content:"";
+    position:absolute;
+    width:175px;
+    height:175px;
+    left:-95px;
+    bottom:-90px;
+    border-radius:50%;
+    background:rgba(64,176,245,.13);
+    pointer-events:none;
+  }
+
+  .admin-mobile-hero-copy{
+    position:relative;
+    z-index:3;
+  }
+
+  .admin-mobile-hero-badge{
+    width:max-content;
+    display:inline-flex;
+    align-items:center;
+    padding:6px 11px;
+    border-radius:999px;
+    background:var(--yellow,#ffbf19);
+    color:var(--navy,#082d69);
+    font-size:10px;
+    font-weight:700;
+    letter-spacing:.25px;
+  }
+
+  .admin-mobile-hero h1{
+    margin:12px 0 0;
+    color:var(--navy,#082d69);
+    font-size:clamp(26px,7.8vw,33px);
+    line-height:1.2;
+    font-weight:700;
+    letter-spacing:-.02em;
+  }
+
+  .admin-mobile-hero h1 span{
+    color:#087df0;
+  }
+
+  .admin-mobile-hero p{
+    max-width:330px;
+    margin:8px 0 0;
+    color:#637b9a;
+    font-size:12px!important;
+    line-height:1.6!important;
+  }
+
+  .admin-mobile-hero-visual{
+    position:relative;
+    z-index:2;
+    flex:1;
+    min-height:205px;
+    margin:4px -18px 0;
+    overflow:hidden;
+    display:flex;
+    align-items:flex-end;
+    justify-content:center;
+  }
+
+  .admin-mobile-hero-visual img{
+    display:block;
+    width:100%;
+    height:225px!important;
+    max-width:none!important;
+    object-fit:cover!important;
+    object-position:center 80%!important;
+    border-radius:0!important;
+  }
+
+  /* keep admin mobile shell balanced */
+  .content{
+    width:100%!important;
+    padding:12px 12px calc(42px + env(safe-area-inset-bottom))!important;
+  }
+
+  .topbar{
+    min-height:68px!important;
+  }
+}
+
+@media(max-width:374px){
+  .admin-mobile-hero{
+    min-height:365px;
+    padding:19px 16px 0;
+  }
+
+  .admin-mobile-hero h1{
+    font-size:25px;
+  }
+
+  .admin-mobile-hero p{
+    font-size:11.5px!important;
+  }
+
+  .admin-mobile-hero-visual{
+    margin-left:-16px;
+    margin-right:-16px;
+  }
+
+  .admin-mobile-hero-visual img{
+    height:210px!important;
+  }
+}
+</style>
+
+<meta name="sante-responsive-hero-build" content="SANTE-ADMIN-RESPONSIVE-HERO-R3">
+
+<style id="sante-admin-mobile-match-member-r4">
+/* =========================================================
+   SANTE ADMIN MOBILE = MEMBER-HOME PROPORTIONS R4
+   Desktop is intentionally untouched.
+========================================================= */
+@media(max-width:767px){
+
+  /* Mobile page rhythm mirrors member-home */
+  .content{
+    width:100%!important;
+    margin:0!important;
+    padding:
+      10px
+      12px
+      calc(35px + env(safe-area-inset-bottom))!important;
+  }
+
+  /* Desktop banner is hidden only on mobile */
+  .canonical-hero,
+  .dashboard-hero{
+    display:none!important;
+  }
+
+  /* Same card geometry as member-home .mobile-hero */
+  .admin-mobile-hero{
+    width:100%!important;
+    min-height:390px!important;
+    position:relative!important;
+    display:flex!important;
+    flex-direction:column!important;
+    overflow:hidden!important;
+
+    margin:0!important;
+    padding:
+      23px
+      20px
+      0!important;
+
+    border:0!important;
+    border-radius:20px!important;
+
+    background:
+      linear-gradient(
+        145deg,
+        #eaf7ff 0%,
+        #ffffff 58%,
+        #fff4c9 100%
+      )!important;
+
+    box-shadow:
+      0 8px 25px
+      rgba(11,45,103,.07)!important;
+  }
+
+  .admin-mobile-hero::before{
+    content:""!important;
+    position:absolute!important;
+    width:190px!important;
+    height:190px!important;
+    top:-90px!important;
+    right:-70px!important;
+    border-radius:50%!important;
+    background:rgba(255,191,25,.28)!important;
+  }
+
+  .admin-mobile-hero::after{
+    content:""!important;
+    position:absolute!important;
+    width:180px!important;
+    height:180px!important;
+    left:-90px!important;
+    bottom:-90px!important;
+    border-radius:50%!important;
+    background:rgba(64,176,245,.14)!important;
+  }
+
+  .admin-mobile-hero-copy{
+    position:relative!important;
+    z-index:5!important;
+  }
+
+  .admin-mobile-hero-badge{
+    width:max-content!important;
+    display:inline-flex!important;
+    align-items:center!important;
+    padding:6px 12px!important;
+    border-radius:999px!important;
+    background:var(--yellow,#ffbf19)!important;
+    color:var(--navy,#082d69)!important;
+    font-size:11px!important;
+    font-weight:600!important;
+    letter-spacing:.3px!important;
+  }
+
+  .admin-mobile-hero h1{
+    margin-top:13px!important;
+    color:var(--navy,#082d69)!important;
+    font-size:clamp(27px,8vw,34px)!important;
+    font-weight:700!important;
+    line-height:1.23!important;
+  }
+
+  .admin-mobile-hero h1 span{
+    color:#087df0!important;
+  }
+
+  .admin-mobile-hero p{
+    max-width:320px!important;
+    margin-top:9px!important;
+    color:#637b9a!important;
+    font-size:13px!important;
+    line-height:1.65!important;
+  }
+
+  /* Critical fix:
+     member-home does NOT crop its visual.
+     Remove the prior fixed 225px + object-fit:cover behavior. */
+  .admin-mobile-hero-visual{
+    min-height:0!important;
+    position:relative!important;
+    z-index:3!important;
+    flex:1!important;
+
+    display:flex!important;
+    align-items:flex-end!important;
+    justify-content:center!important;
+
+    margin:
+      5px
+      -20px
+      0!important;
+
+    overflow:hidden!important;
+  }
+
+  .admin-mobile-hero-visual img{
+    width:100%!important;
+    height:auto!important;
+    min-height:0!important;
+    max-width:none!important;
+    display:block!important;
+
+    object-fit:contain!important;
+    object-position:center!important;
+
+    border-radius:0!important;
+  }
+
+  /* Mobile admin topbar keeps Admin navigation, but matches member's
+     compact visual rhythm instead of oversized controls. */
+  .topbar{
+    height:auto!important;
+    min-height:64px!important;
+    gap:8px!important;
+    padding:
+      7px
+      max(12px,env(safe-area-inset-right))
+      7px
+      max(12px,env(safe-area-inset-left))!important;
+  }
+
+  .mobile-menu{
+    width:46px!important;
+    height:46px!important;
+    min-width:46px!important;
+    min-height:46px!important;
+    border-radius:11px!important;
+    font-size:20px!important;
+  }
+
+  .page-name{
+    font-size:18px!important;
+    line-height:1.3!important;
+  }
+
+  .logout,
+  .logout-btn{
+    min-height:40px!important;
+    padding:0 11px!important;
+    border-radius:10px!important;
+    font-size:11px!important;
+  }
+}
+
+@media(max-width:374px){
+  .content{
+    padding-left:10px!important;
+    padding-right:10px!important;
+  }
+
+  .admin-mobile-hero{
+    min-height:370px!important;
+    padding:
+      20px
+      17px
+      0!important;
+  }
+
+  .admin-mobile-hero h1{
+    font-size:26px!important;
+  }
+
+  .admin-mobile-hero p{
+    font-size:12px!important;
+  }
+
+  .admin-mobile-hero-visual{
+    margin-left:-17px!important;
+    margin-right:-17px!important;
+  }
+}
+</style>
+
+<meta name="sante-mobile-build" content="SANTE-ADMIN-MOBILE-MATCH-MEMBER-R4">
+
+<style id="sante-admin-mobile-exact-member-r5">
+/* =========================================================
+   SANTE ADMIN MOBILE EXACT MEMBER R5
+   Copies member-home mobile hero geometry 1:1.
+   Desktop is not changed.
+========================================================= */
+@media(max-width:767px){
+
+  .content{
+    width:100%!important;
+    margin:0!important;
+    padding:
+      10px
+      12px
+      calc(35px + env(safe-area-inset-bottom))!important;
+  }
+
+  .canonical-hero,
+  .dashboard-hero{
+    display:none!important;
+  }
+
+  .admin-mobile-hero{
+    min-height:390px!important;
+
+    position:relative!important;
+
+    display:flex!important;
+    flex-direction:column!important;
+
+    overflow:hidden!important;
+
+    margin:0!important;
+
+    padding:
+      23px
+      20px
+      0!important;
+
+    border:0!important;
+    border-radius:20px!important;
+
+    background:
+      linear-gradient(
+        145deg,
+        #eaf7ff 0%,
+        #ffffff 58%,
+        #fff4c9 100%
+      )!important;
+
+    box-shadow:
+      0 8px 25px
+      rgba(11,45,103,.07)!important;
+  }
+
+  .admin-mobile-hero::before{
+    content:""!important;
+
+    position:absolute!important;
+
+    width:190px!important;
+    height:190px!important;
+
+    top:-90px!important;
+    right:-70px!important;
+
+    border-radius:50%!important;
+
+    background:
+      rgba(255,191,25,.28)!important;
+  }
+
+  .admin-mobile-hero::after{
+    content:""!important;
+
+    position:absolute!important;
+
+    width:180px!important;
+    height:180px!important;
+
+    left:-90px!important;
+    bottom:-90px!important;
+
+    border-radius:50%!important;
+
+    background:
+      rgba(64,176,245,.14)!important;
+  }
+
+  .admin-mobile-hero-copy{
+    position:relative!important;
+    z-index:5!important;
+  }
+
+  .admin-mobile-hero-badge{
+    width:max-content!important;
+
+    display:inline-flex!important;
+    align-items:center!important;
+
+    padding:6px 12px!important;
+
+    border-radius:999px!important;
+
+    background:var(--yellow,#ffbf19)!important;
+
+    color:var(--navy,#082d69)!important;
+
+    font-size:11px!important;
+    font-weight:600!important;
+
+    letter-spacing:.3px!important;
+  }
+
+  .admin-mobile-hero h1{
+    margin-top:13px!important;
+
+    color:var(--navy,#082d69)!important;
+
+    font-size:clamp(27px,8vw,34px)!important;
+    font-weight:700!important;
+
+    line-height:1.23!important;
+  }
+
+  .admin-mobile-hero h1 span{
+    color:#087df0!important;
+  }
+
+  .admin-mobile-hero p{
+    max-width:320px!important;
+
+    margin-top:9px!important;
+
+    color:#637b9a!important;
+
+    font-size:13px!important;
+    line-height:1.65!important;
+  }
+
+  .admin-mobile-hero-visual{
+    min-height:0!important;
+
+    position:relative!important;
+    z-index:3!important;
+
+    flex:1!important;
+
+    display:flex!important;
+    align-items:flex-end!important;
+    justify-content:center!important;
+
+    margin:
+      5px
+      -20px
+      0!important;
+
+    overflow:hidden!important;
+  }
+
+  .admin-mobile-hero-visual img{
+    width:100%!important;
+    height:auto!important;
+
+    display:block!important;
+
+    object-fit:contain!important;
+    object-position:center!important;
+
+    border-radius:0!important;
+  }
+
+  /* Header keeps admin navigation but matches member-home proportions */
+  .topbar{
+    height:auto!important;
+    min-height:64px!important;
+
+    gap:8px!important;
+
+    padding:
+      7px
+      max(12px,env(safe-area-inset-right))
+      7px
+      max(12px,env(safe-area-inset-left))!important;
+  }
+
+  .mobile-menu{
+    width:46px!important;
+    height:46px!important;
+    min-width:46px!important;
+    min-height:46px!important;
+
+    padding:0!important;
+
+    border-radius:11px!important;
+
+    font-size:20px!important;
+  }
+
+  .page-name{
+    font-size:18px!important;
+    line-height:1.3!important;
+  }
+
+  .page-sub,
+  .admin-copy{
+    display:none!important;
+  }
+
+  .logout,
+  .logout-btn{
+    min-height:38px!important;
+
+    padding:0 10px!important;
+
+    border-radius:9px!important;
+
+    font-size:11px!important;
+  }
+}
+
+@media(max-width:374px){
+
+  .content{
+    padding-left:10px!important;
+    padding-right:10px!important;
+  }
+
+  .admin-mobile-hero{
+    min-height:370px!important;
+
+    padding:
+      20px
+      17px
+      0!important;
+  }
+
+  .admin-mobile-hero h1{
+    font-size:26px!important;
+  }
+
+  .admin-mobile-hero p{
+    font-size:12px!important;
+  }
+
+  .admin-mobile-hero-visual{
+    margin-left:-17px!important;
+    margin-right:-17px!important;
+  }
+}
+</style>
+
+<meta name="sante-mobile-build" content="SANTE-ADMIN-MOBILE-EXACT-MEMBER-R5">
+
+<style id="sante-admin-mobile-menu-r6">
+/* SANTE ADMIN MOBILE MENU R6 */
+@media(max-width:900px){
+  .sidebar{
+    width:285px!important;
+    transform:translateX(-100%)!important;
+    transition:transform .22s ease!important;
+    z-index:300!important;
+  }
+  .sidebar.open{
+    transform:translateX(0)!important;
+  }
+
+  #santeMobileOverlay{
+    display:none;
+    position:fixed;
+    inset:0;
+    z-index:250;
+    background:rgba(3,20,48,.48);
+    opacity:0;
+    transition:opacity .2s ease;
+  }
+  #santeMobileOverlay.show{
+    display:block;
+    opacity:1;
+  }
+
+  body.sante-menu-open{
+    overflow:hidden!important;
+    touch-action:none;
+  }
+
+  .mobile-menu{
+    cursor:pointer!important;
+    touch-action:manipulation!important;
+    -webkit-tap-highlight-color:transparent!important;
+  }
+}
+@media(min-width:901px){
+  #santeMobileOverlay{display:none!important}
+}
+</style>
+
+<meta name="sante-mobile-menu-build" content="SANTE-ADMIN-MOBILE-MENU-R6">
+
+<style id="sante-admin-mobile-final-r7">
+/* =========================================================
+   SANTE ADMIN MOBILE FINAL R7
+   - Fix drawer layer / safe area / scroll
+   - Keep desktop and hero unchanged
+   - Increase Admin table/readability on desktop + mobile
+========================================================= */
+
+/* ---------- Readability across Admin pages ---------- */
+.content .table-wrap table:not(.qtable) th,
+.content table.table th{
+  font-size:12px!important;
+  line-height:1.45!important;
+  padding:14px 12px!important;
+}
+
+.content .table-wrap table:not(.qtable) td,
+.content table.table td{
+  font-size:13px!important;
+  line-height:1.6!important;
+  padding:14px 12px!important;
+}
+
+.table .name,
+.person-name,
+.cell-main{
+  font-size:14px!important;
+  line-height:1.5!important;
+  font-weight:600!important;
+}
+
+.table .sub,
+.person-email,
+.cell-sub{
+  font-size:11.5px!important;
+  line-height:1.55!important;
+}
+
+.badge,
+.status,
+.tag,
+.current-badge{
+  font-size:10.5px!important;
+  line-height:1.35!important;
+  padding:6px 9px!important;
+}
+
+.reason div{
+  font-size:11px!important;
+  line-height:1.5!important;
+  margin-top:2px!important;
+}
+
+.stat-label,
+.summary-label{
+  font-size:13.5px!important;
+}
+
+.page-head p,
+.page-header p,
+.head .muted,
+.section-head p,
+.panel-header p{
+  font-size:14px!important;
+  line-height:1.7!important;
+}
+
+/* Attendance/Eligibility table-specific readability */
+#tableArea .table th{
+  font-size:12px!important;
+}
+#tableArea .table td{
+  font-size:13px!important;
+}
+#tableArea .table .name{
+  font-size:14px!important;
+}
+#tableArea .table .sub{
+  font-size:11.5px!important;
+}
+#tableArea .table .reason div{
+  font-size:11px!important;
+}
+
+/* ---------- Mobile Drawer final fix ---------- */
+@media(max-width:900px){
+
+  html,body{
+    width:100%!important;
+    max-width:100%!important;
+    overflow-x:hidden!important;
+  }
+
+  body.sante-menu-open{
+    overflow:hidden!important;
+    position:fixed!important;
+    width:100%!important;
+    touch-action:none!important;
+  }
+
+  .sidebar{
+    top:0!important;
+    bottom:0!important;
+    left:0!important;
+    width:min(84vw,320px)!important;
+    height:100vh!important;
+    height:100dvh!important;
+    max-height:100dvh!important;
+
+    z-index:1200!important;
+
+    transform:translateX(-102%)!important;
+    transition:transform .22s ease!important;
+
+    overflow-y:auto!important;
+    overscroll-behavior:contain!important;
+    -webkit-overflow-scrolling:touch!important;
+
+    padding-bottom:
+      calc(24px + env(safe-area-inset-bottom))!important;
+  }
+
+  .sidebar.open{
+    transform:translateX(0)!important;
+  }
+
+  .sidebar-brand{
+    min-height:118px!important;
+    padding:
+      calc(16px + env(safe-area-inset-top))
+      22px
+      14px!important;
+  }
+
+  .sidebar-brand img{
+    width:170px!important;
+    height:72px!important;
+  }
+
+  .sidebar-label{
+    padding:22px 22px 8px!important;
+    font-size:12px!important;
+  }
+
+  .sidebar .nav{
+    padding:0 14px 18px!important;
+  }
+
+  .sidebar .nav-link{
+    min-height:56px!important;
+    margin:4px 0!important;
+    padding:0 16px!important;
+    border-radius:15px!important;
+    font-size:15px!important;
+  }
+
+  .sidebar-footer{
+    margin:
+      auto
+      14px
+      calc(18px + env(safe-area-inset-bottom))!important;
+  }
+
+  #santeMobileOverlay{
+    display:none;
+    position:fixed!important;
+    inset:0!important;
+    z-index:1100!important;
+
+    background:rgba(3,20,48,.58)!important;
+
+    opacity:0!important;
+    transition:opacity .18s ease!important;
+  }
+
+  #santeMobileOverlay.show{
+    display:block!important;
+    opacity:1!important;
+  }
+
+  /* Topbar must stay behind drawer+overlay while menu is open */
+  .topbar{
+    z-index:1000!important;
+  }
+
+  .mobile-menu{
+    position:relative!important;
+    z-index:auto!important;
+    cursor:pointer!important;
+    touch-action:manipulation!important;
+    -webkit-tap-highlight-color:transparent!important;
+  }
+
+  /* Mobile table text still readable but not oversized */
+  .content .table-wrap table:not(.qtable) th,
+  .content table.table th{
+    font-size:11px!important;
+    padding:12px 10px!important;
+  }
+
+  .content .table-wrap table:not(.qtable) td,
+  .content table.table td{
+    font-size:12px!important;
+    padding:12px 10px!important;
+  }
+
+  .table .name,
+  .person-name,
+  .cell-main{
+    font-size:13px!important;
+  }
+
+  .table .sub,
+  .person-email,
+  .cell-sub{
+    font-size:10.5px!important;
+  }
+
+  .badge,
+  .status,
+  .tag,
+  .current-badge{
+    font-size:9.5px!important;
+    padding:5px 8px!important;
+  }
+
+  .reason div{
+    font-size:10px!important;
+  }
+}
+</style>
+
+<meta name="sante-admin-mobile-final" content="R7">
+
+<style id="sante-admin-notifications-dashboard-r3">
+/* Page-specific content only. Shell comes from admin-dashboard master. */
+.notification-intro{
+  margin-bottom:17px;
+  padding:17px 19px;
+  border:1px solid #d8e7f3;
+  border-radius:16px;
+  background:#eef7ff;
+  color:#315577;
+  font-size:13px;
+  line-height:1.7;
+}
+
+.notification-test-panel{
+  display:grid;
+  grid-template-columns:minmax(260px,1fr) auto;
+  gap:10px;
+  margin-bottom:22px;
+  padding:16px;
+  border:1px solid var(--line);
+  border-radius:20px;
+  background:#fff;
+  box-shadow:var(--shadow-card);
+}
+
+.notification-test-panel input{
+  width:100%;
+  min-height:46px;
+  padding:0 15px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:#fff;
+  color:var(--navy);
+  font-size:13px;
+}
+
+.notification-test-panel .btn{min-width:145px}
+
+.notification-stats{
+  display:grid;
+  grid-template-columns:repeat(5,minmax(0,1fr));
+  gap:17px;
+}
+
+.notification-filter{
+  display:grid;
+  grid-template-columns:minmax(260px,1fr) 180px 180px auto;
+  gap:10px;
+  padding:16px;
+  border:1px solid var(--line);
+  border-radius:20px;
+  background:#fff;
+  box-shadow:var(--shadow-card);
+}
+
+.notification-filter input,
+.notification-filter select{
+  width:100%;
+  min-height:46px;
+  padding:0 14px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:#fff;
+  color:var(--navy);
+  font-size:13px;
+}
+
+.notification-table{
+  width:100%;
+  min-width:1260px;
+  border-collapse:collapse;
+}
+
+.notification-table th{
+  padding:14px 12px!important;
+  background:var(--navy)!important;
+  color:#fff!important;
+  font-size:12px!important;
+  font-weight:500!important;
+  text-align:left;
+}
+
+.notification-table td{
+  padding:14px 12px!important;
+  border-bottom:1px solid #e7edf3!important;
+  color:#17304f!important;
+  font-size:13px!important;
+  line-height:1.6!important;
+  vertical-align:top;
+}
+
+.main-text{font-size:14px;font-weight:600;color:var(--navy)}
+.sub-text{margin-top:3px;color:var(--muted);font-size:11.5px;line-height:1.55}
+
+.notification-status{
+  display:inline-flex;
+  align-items:center;
+  min-height:28px;
+  padding:5px 9px;
+  border-radius:999px;
+  font-size:10.5px;
+  font-weight:600;
+  white-space:nowrap;
+}
+.notification-status.queued{background:#fff4cf;color:#765800}
+.notification-status.processing{background:#eaf4ff;color:#145b9c}
+.notification-status.sent{background:#eaf9f1;color:#087744}
+.notification-status.failed{background:#fff0f1;color:#a52a35}
+.notification-status.cancelled{background:#edf2f6;color:#64768c}
+.notification-status.email{background:#eaf4ff;color:#145b9c}
+.notification-status.line{background:#eaf9f1;color:#087744}
+
+.notification-empty{
+  padding:42px 24px;
+  color:var(--muted);
+  font-size:13px;
+  text-align:center;
+}
+
+.notification-refresh{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+@media(max-width:1200px){
+  .notification-stats{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .notification-filter{grid-template-columns:1fr 1fr}
+}
+
+@media(max-width:767px){
+  .notification-intro{font-size:12px;padding:14px}
+  .notification-test-panel{grid-template-columns:1fr;padding:13px;border-radius:17px}
+  .notification-test-panel .btn{width:100%}
+  .notification-stats{grid-template-columns:1fr 1fr;gap:10px}
+  .notification-filter{grid-template-columns:1fr;padding:13px;border-radius:17px}
+  .notification-table th{font-size:11px!important;padding:12px 10px!important}
+  .notification-table td{font-size:12px!important;padding:12px 10px!important}
+  .main-text{font-size:13px}
+  .sub-text{font-size:10.5px}
+}
+</style>
+<meta name="sante-build" content="ADMIN-NOTIFICATIONS-DASHBOARD-MATCH-R3">
+
 </head>
+
 <body>
-<aside class="sidebar" id="sidebar">
- <div class="sidebar-brand"><img src="sante%20(en)-logo.png" alt="SANTE"></div>
- <div class="sidebar-label">SANTE ADMIN</div>
- <nav class="nav">
-  <a href="admin-dashboard.html" class="nav-link"><span class="nav-icon">⌂</span>หน้าหลัก</a>
-  <a href="admin-courses.html" class="nav-link"><span class="nav-icon">▤</span>หลักสูตร</a>
-  <a href="admin-training-sessions.html" class="nav-link"><span class="nav-icon">◫</span>รอบอบรม</a>
-  <a href="admin-exams.html" class="nav-link"><span class="nav-icon">✓</span>ข้อสอบ</a>
-  <a href="admin-question-import.html" class="nav-link"><span class="nav-icon">⇧</span>นำเข้าข้อสอบ</a>
-  <a href="admin-payments.html" class="nav-link"><span class="nav-icon">฿</span>การชำระเงิน</a>
-  <a href="admin-members.html" class="nav-link"><span class="nav-icon">♙</span>สมาชิก</a>
-  <a href="admin-certificates.html" class="nav-link"><span class="nav-icon">▣</span>วุฒิบัตร</a>
-  <a href="admin-notifications.html" class="nav-link active"><span class="nav-icon">✉</span>การแจ้งเตือน</a>
-  <a href="admin-services.html" class="nav-link"><span class="nav-icon">◆</span>งานบริการ</a>
-  <a href="admin-quotations.html" class="nav-link"><span class="nav-icon">▧</span>ใบเสนอราคา</a>
- </nav>
- <div class="sidebar-footer"><strong>SANTE SYSTEM</strong><p>Email / LINE Notification Queue</p></div>
+
+<div id="loadingScreen" class="loading-screen">
+  กำลังตรวจสอบสิทธิ์ผู้ดูแลระบบ...
+</div>
+
+<div id="overlay" class="overlay"></div>
+
+<aside id="sidebar" class="sidebar">
+
+  <div class="sidebar-brand">
+    <img src="sante%20(en)-logo.png" alt="SANTE Consulting">
+  </div>
+
+  <div class="sidebar-label">SANTE ADMIN</div>
+
+  <nav class="nav">
+
+    <a href="admin-dashboard.html" class="nav-link">
+      <span class="nav-icon">⌂</span>
+      <span>หน้าหลัก</span>
+    </a>
+
+    <a href="admin-courses.html" class="nav-link">
+      <span class="nav-icon">▤</span>
+      <span>หลักสูตร</span>
+    </a>
+
+    <a href="admin-training-sessions.html" class="nav-link">
+      <span class="nav-icon">◫</span>
+      <span>รอบอบรม</span>
+    </a>
+
+    <a href="admin-exams.html" class="nav-link">
+      <span class="nav-icon">✓</span>
+      <span>ข้อสอบ</span>
+    </a>
+
+    <a href="admin-question-import.html" class="nav-link">
+      <span class="nav-icon">⇧</span>
+      <span>นำเข้าข้อสอบ</span>
+    </a>
+
+    <a href="admin-payments.html" class="nav-link">
+      <span class="nav-icon">฿</span>
+      <span>การชำระเงิน</span>
+    </a>
+
+    <a href="admin-members.html" class="nav-link">
+      <span class="nav-icon">♙</span>
+      <span>สมาชิก</span>
+    </a>
+
+    <a href="admin-services.html" class="nav-link">
+      <span class="nav-icon">▣</span>
+      <span>งานบริการ</span>
+    </a>
+
+    <a href="admin-quotations.html" class="nav-link">
+      <span class="nav-icon">▧</span>
+      <span>ใบเสนอราคา</span>
+    </a>
+
+  
+    <a href="admin-notifications.html" class="nav-link active">
+      <span class="nav-icon">✉</span>
+      <span>การแจ้งเตือน</span>
+    </a>
+</nav>
+
+  <div class="sidebar-footer">
+    <strong>SANTE SYSTEM</strong>
+    <p>
+      ระบบบริหารจัดการภายใน<br>
+      SANTE Consulting
+    </p>
+  </div>
+
 </aside>
-<div id="santeMobileOverlay"></div>
 
 <div class="main">
 <header class="topbar">
- <div class="topbar-left"><button id="menuBtn" class="btn mobile-menu">☰</button><div><div class="page-name">การแจ้งเตือน</div><div class="page-sub">ติดตาม Email / LINE ที่รอส่ง สำเร็จ หรือส่งไม่สำเร็จ</div></div></div>
- <div class="admin-area"><div class="admin-copy"><div class="admin-name">ผู้ดูแลระบบ SANTE</div><div id="adminEmail" class="admin-email"></div></div><button id="logoutBtn" class="btn">ออกจากระบบ</button></div>
+
+  <div class="topbar-left">
+
+    <button id="menuButton" class="mobile-menu">
+      ☰
+    </button>
+
+    <div>
+      <div class="page-name">การแจ้งเตือน</div>
+      <div class="page-sub">ติดตาม Email / LINE ที่รอส่ง ส่งสำเร็จ หรือส่งไม่สำเร็จ</div>
+    </div>
+
+  </div>
+
+  <div class="admin-area">
+
+    <div class="admin-copy">
+      <div id="adminName" class="admin-name">
+        ผู้ดูแลระบบ SANTE
+      </div>
+      <div id="adminEmail" class="admin-email"></div>
+    </div>
+
+    <button id="logoutButton" class="logout">
+      ออกจากระบบ
+    </button>
+
+  </div>
+
 </header>
 
 <main class="content">
- <div class="page-head"><div><h1>Notification Center</h1><p>ระบบ Queue กลางสำหรับ Registration, Payment และ Certificate</p></div><button class="btn primary" id="refreshBtn">รีเฟรช</button></div>
 
- <div class="notice">สถานะ QUEUED หมายถึงข้อมูลพร้อมส่งแล้ว แต่จะยังไม่ส่งจริงจนกว่าจะเชื่อม Email Provider / LINE Messaging API และเปิด Worker Processor</div>
- <div class="toolbar" style="grid-template-columns:minmax(220px,1fr) auto;margin-top:-2px">
-   <input id="testEmail" class="input" type="email" placeholder="อีเมลสำหรับทดสอบ เช่น testmember@santeconsulting.co.th">
-   <button id="queueTestBtn" class="btn yellow">สร้าง Test Email</button>
- </div>
+  
+<section class="admin-mobile-hero" aria-label="SANTE Admin">
+  <div class="admin-mobile-hero-copy">
+    <div class="admin-mobile-hero-badge">SANTE ADMIN</div>
+    <h1>จัดการการแจ้งเตือน<br><span>Email & LINE</span></h1>
+    <p>ติดตามคิวแจ้งเตือน การส่งสำเร็จ และข้อผิดพลาดของระบบจากหน้าผู้ดูแลเดียว</p>
+  </div>
+  <div class="admin-mobile-hero-visual">
+    <img src="sante-mobile-hero.png" alt="SANTE Admin">
+  </div>
+</section>
 
 
- <section class="stats">
-  <div class="stat"><span>ทั้งหมด</span><strong id="sAll">0</strong></div>
-  <div class="stat"><span>รอส่ง</span><strong id="sQueued">0</strong></div>
-  <div class="stat"><span>ส่งสำเร็จ</span><strong id="sSent">0</strong></div>
-  <div class="stat"><span>ส่งไม่สำเร็จ</span><strong id="sFailed">0</strong></div>
-  <div class="stat"><span>LINE</span><strong id="sLine">0</strong></div>
- </section>
+  <div class="page-head">
+    <div>
+      <h1>Notification Center</h1>
+      <p>ระบบ Queue กลางสำหรับ Registration, Payment, Certificate และการแจ้งเตือนสมาชิก</p>
+    </div>
+    <button class="btn btn-primary notification-refresh" id="refreshBtn">รีเฟรช</button>
+  </div>
 
- <div class="toolbar">
-  <input id="search" class="input" placeholder="ค้นหาชื่อ ผู้รับ Subject เลขวุฒิบัตร">
-  <select id="status" class="select">
-   <option value="">ทุกสถานะ</option>
-   <option value="QUEUED">QUEUED</option>
-   <option value="PROCESSING">PROCESSING</option>
-   <option value="SENT">SENT</option>
-   <option value="FAILED">FAILED</option>
-   <option value="CANCELLED">CANCELLED</option>
-  </select>
-  <select id="channel" class="select">
-   <option value="">ทุกช่องทาง</option>
-   <option value="EMAIL">EMAIL</option>
-   <option value="LINE">LINE</option>
-  </select>
-  <button class="btn yellow" id="applyBtn">ค้นหา</button>
- </div>
+  <div class="notification-intro">
+    สถานะ <strong>QUEUED</strong> หมายถึงข้อมูลพร้อมส่งแล้ว แต่จะยังไม่ส่งจริงจนกว่าจะเชื่อม Email Provider / LINE Messaging API และเปิด Worker Processor
+  </div>
 
- <div class="table-wrap"><div id="tableArea" class="empty">กำลังโหลด...</div></div>
+  <section class="notification-test-panel">
+    <input id="testEmail" type="email" placeholder="อีเมลสำหรับทดสอบ เช่น testmember@santeconsulting.co.th">
+    <button id="queueTestBtn" class="btn yellow">สร้าง Test Email</button>
+  </section>
+
+  <div class="section-head">
+    <div>
+      <h2>ภาพรวมการแจ้งเตือน</h2>
+      <p>สรุปสถานะของ Email และ LINE ในระบบ</p>
+    </div>
+  </div>
+
+  <section class="notification-stats stats">
+    <div class="stat">
+      <div class="stat-top"><div class="stat-icon">✉</div><div class="stat-label">ทั้งหมด</div></div>
+      <div id="sAll" class="stat-value">0</div>
+      <div class="stat-note">รายการแจ้งเตือนทั้งหมด</div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-top"><div class="stat-icon">⌛</div><div class="stat-label">รอส่ง</div></div>
+      <div id="sQueued" class="stat-value">0</div>
+      <div class="stat-note">QUEUED / PROCESSING</div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-top"><div class="stat-icon">✓</div><div class="stat-label">ส่งสำเร็จ</div></div>
+      <div id="sSent" class="stat-value">0</div>
+      <div class="stat-note">SENT</div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-top"><div class="stat-icon">!</div><div class="stat-label">ส่งไม่สำเร็จ</div></div>
+      <div id="sFailed" class="stat-value">0</div>
+      <div class="stat-note">FAILED</div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-top"><div class="stat-icon">L</div><div class="stat-label">LINE</div></div>
+      <div id="sLine" class="stat-value">0</div>
+      <div class="stat-note">รายการช่องทาง LINE</div>
+    </div>
+  </section>
+
+  <div class="section-head">
+    <div>
+      <h2>รายการแจ้งเตือน</h2>
+      <p>ค้นหา กรองสถานะ และตรวจสอบข้อผิดพลาดการส่ง</p>
+    </div>
+  </div>
+
+  <section class="notification-filter">
+    <input id="search" type="search" placeholder="ค้นหาชื่อ ผู้รับ Subject เลขวุฒิบัตร">
+    <select id="status">
+      <option value="">ทุกสถานะ</option>
+      <option value="QUEUED">QUEUED</option>
+      <option value="PROCESSING">PROCESSING</option>
+      <option value="SENT">SENT</option>
+      <option value="FAILED">FAILED</option>
+      <option value="CANCELLED">CANCELLED</option>
+    </select>
+    <select id="channel">
+      <option value="">ทุกช่องทาง</option>
+      <option value="EMAIL">EMAIL</option>
+      <option value="LINE">LINE</option>
+    </select>
+    <button id="applyBtn" class="btn yellow">ค้นหา</button>
+  </section>
+
+  <div style="height:14px"></div>
+
+  <div class="table-wrap">
+    <div id="tableArea" class="notification-empty">กำลังโหลด...</div>
+  </div>
+
 </main>
+
 </div>
 
+
 <script>
-const db=window.supabase.createClient("https://cyegjwerxlxhczrfiurz.supabase.co","sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF",{auth:{storageKey:"sante-admin-auth",persistSession:true,autoRefreshToken:true}});
+const SUPABASE_URL="https://cyegjwerxlxhczrfiurz.supabase.co";
+const SUPABASE_KEY="sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF";
+const AUTH_STORAGE_KEY="sante-admin-auth";
+
+const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{
+  auth:{
+    storageKey:AUTH_STORAGE_KEY,
+    persistSession:true,
+    autoRefreshToken:true,
+    detectSessionInUrl:true
+  }
+});
+
 const $=id=>document.getElementById(id);
-const esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
+const esc=s=>String(s??"").replace(/[&<>"']/g,m=>({
+  "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+}[m]));
+
 let rows=[];
 
-function badge(v){const c=String(v||"").toLowerCase();return `<span class="badge ${c}">${esc(v||"-")}</span>`}
-function dt(v){if(!v)return "-";return new Date(v).toLocaleString("th-TH")}
-async function init(){
- const a=await db.auth.getSession();if(!a.data.session){location="admin-login.html";return}
- const staff=await db.rpc("is_staff");if(staff.error||!staff.data){location="admin-login.html";return}
- $("adminEmail").textContent=a.data.session.user.email||"";
- await load();
+function statusBadge(value){
+  const v=String(value||"").toUpperCase();
+  return `<span class="notification-status ${v.toLowerCase()}">${esc(v||"-")}</span>`;
 }
-async function load(){
- $("tableArea").innerHTML='<div class="empty">กำลังโหลด...</div>';
- const status=$("status").value||null,channel=$("channel").value||null;
- const r=await db.rpc("admin_get_notification_queue",{p_status:status,p_channel:channel,p_limit:500});
- if(r.error){$("tableArea").innerHTML=`<div class="empty">โหลดไม่สำเร็จ: ${esc(r.error.message)}</div>`;return}
- rows=r.data||[];renderStats();render();
+
+function channelBadge(value){
+  const v=String(value||"").toUpperCase();
+  return `<span class="notification-status ${v.toLowerCase()}">${esc(v||"-")}</span>`;
 }
+
+function fmtDate(value){
+  if(!value)return "-";
+  const d=new Date(value);
+  if(Number.isNaN(d.getTime()))return "-";
+  return d.toLocaleString("th-TH");
+}
+
+async function loadQueue(){
+  $("tableArea").innerHTML='<div class="notification-empty">กำลังโหลด...</div>';
+
+  const result=await db.rpc("admin_get_notification_queue",{
+    p_status:$("status").value||null,
+    p_channel:$("channel").value||null,
+    p_limit:500
+  });
+
+  if(result.error){
+    $("tableArea").innerHTML=
+      `<div class="notification-empty">โหลดข้อมูลไม่สำเร็จ: ${esc(result.error.message)}</div>`;
+    return;
+  }
+
+  rows=result.data||[];
+  renderStats();
+  renderTable();
+}
+
 function renderStats(){
- $("sAll").textContent=rows.length;
- $("sQueued").textContent=rows.filter(x=>x.status==="QUEUED").length;
- $("sSent").textContent=rows.filter(x=>x.status==="SENT").length;
- $("sFailed").textContent=rows.filter(x=>x.status==="FAILED").length;
- $("sLine").textContent=rows.filter(x=>x.channel==="LINE").length;
+  $("sAll").textContent=rows.length;
+  $("sQueued").textContent=rows.filter(x=>["QUEUED","PROCESSING"].includes(x.status)).length;
+  $("sSent").textContent=rows.filter(x=>x.status==="SENT").length;
+  $("sFailed").textContent=rows.filter(x=>x.status==="FAILED").length;
+  $("sLine").textContent=rows.filter(x=>x.channel==="LINE").length;
 }
-function filtered(){
- const q=$("search").value.trim().toLowerCase();
- if(!q)return rows;
- return rows.filter(x=>[x.participant_name,x.recipient,x.subject,x.notification_type,x.certificate_no].join(" ").toLowerCase().includes(q));
+
+function filteredRows(){
+  const q=$("search").value.trim().toLowerCase();
+  if(!q)return rows;
+
+  return rows.filter(x=>
+    [
+      x.participant_name,
+      x.recipient,
+      x.subject,
+      x.notification_type,
+      x.certificate_no,
+      x.message
+    ].join(" ").toLowerCase().includes(q)
+  );
 }
-function render(){
- const list=filtered();
- if(!list.length){$("tableArea").innerHTML='<div class="empty">ไม่พบรายการแจ้งเตือน</div>';return}
- $("tableArea").innerHTML=`<table class="table"><thead><tr><th>เวลา</th><th>ประเภท</th><th>ช่องทาง</th><th>ผู้รับ</th><th>ข้อความ</th><th>สถานะ</th><th>Attempts</th><th>จัดการ</th></tr></thead><tbody>${list.map(x=>`<tr>
- <td>${dt(x.created_at)}</td>
- <td><div class="name">${esc(x.notification_type)}</div>${x.certificate_no?`<div class="sub">${esc(x.certificate_no)}</div>`:""}</td>
- <td>${badge(x.channel)}</td>
- <td><div class="name">${esc(x.participant_name||"-")}</div><div class="sub">${esc(x.recipient)}</div></td>
- <td><div class="name">${esc(x.subject||"-")}</div><div class="sub">${esc((x.message||"").slice(0,180))}</div>${x.error_message?`<div class="sub" style="color:#a52a35">Error: ${esc(x.error_message)}</div>`:""}</td>
- <td>${badge(x.status)}${x.sent_at?`<div class="sub">${dt(x.sent_at)}</div>`:""}</td>
- <td>${esc(x.attempt_count)}/${esc(x.max_attempts)}</td>
- <td>${["FAILED","CANCELLED"].includes(x.status)?`<button class="btn" onclick="retry('${x.id}')">Retry</button>`:"-"}</td>
- </tr>`).join("")}</tbody></table>`;
+
+function renderTable(){
+  const list=filteredRows();
+
+  if(!list.length){
+    $("tableArea").innerHTML='<div class="notification-empty">ไม่พบรายการแจ้งเตือน</div>';
+    return;
+  }
+
+  $("tableArea").innerHTML=`
+    <table class="notification-table">
+      <thead>
+        <tr>
+          <th>เวลา</th>
+          <th>ประเภท</th>
+          <th>ช่องทาง</th>
+          <th>ผู้รับ</th>
+          <th>ข้อความ</th>
+          <th>สถานะ</th>
+          <th>Attempts</th>
+          <th>จัดการ</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${list.map(x=>`
+          <tr>
+            <td>${fmtDate(x.created_at)}</td>
+            <td>
+              <div class="main-text">${esc(x.notification_type||"-")}</div>
+              ${x.certificate_no?`<div class="sub-text">${esc(x.certificate_no)}</div>`:""}
+            </td>
+            <td>${channelBadge(x.channel)}</td>
+            <td>
+              <div class="main-text">${esc(x.participant_name||"-")}</div>
+              <div class="sub-text">${esc(x.recipient||"-")}</div>
+            </td>
+            <td>
+              <div class="main-text">${esc(x.subject||"-")}</div>
+              <div class="sub-text">${esc((x.message||"").slice(0,180))}</div>
+              ${x.error_message?`<div class="sub-text" style="color:#a52a35">Error: ${esc(x.error_message)}</div>`:""}
+            </td>
+            <td>
+              ${statusBadge(x.status)}
+              ${x.sent_at?`<div class="sub-text">${fmtDate(x.sent_at)}</div>`:""}
+            </td>
+            <td>${esc(x.attempt_count||0)}/${esc(x.max_attempts||5)}</td>
+            <td>
+              ${["FAILED","CANCELLED"].includes(x.status)
+                ? `<button class="btn light" onclick="retryNotification('${x.id}')">Retry</button>`
+                : "-"
+              }
+            </td>
+          </tr>
+        `).join("")}
+      </tbody>
+    </table>
+  `;
 }
-async function retry(id){
- if(!confirm("นำรายการนี้กลับเข้าคิวส่งใหม่หรือไม่?"))return;
- const r=await db.rpc("admin_retry_notification",{p_notification_id:id});
- if(r.error){alert(r.error.message);return}
- await load();
+
+async function retryNotification(id){
+  if(!confirm("นำรายการนี้กลับเข้าคิวส่งใหม่หรือไม่?"))return;
+
+  const result=await db.rpc("admin_retry_notification",{
+    p_notification_id:id
+  });
+
+  if(result.error){
+    alert(result.error.message);
+    return;
+  }
+
+  await loadQueue();
 }
 
 async function queueTestEmail(){
- const email=$("testEmail").value.trim();
- if(!email){alert("กรุณากรอกอีเมลสำหรับทดสอบ");return}
- const r=await db.rpc("admin_enqueue_test_email",{p_recipient:email});
- if(r.error){alert("สร้าง Test Email ไม่สำเร็จ: "+r.error.message);return}
- alert("สร้าง Test Email เข้าคิวแล้ว");
- await load();
+  const email=$("testEmail").value.trim();
+
+  if(!email){
+    alert("กรุณากรอกอีเมลสำหรับทดสอบ");
+    return;
+  }
+
+  const result=await db.rpc("admin_enqueue_test_email",{
+    p_recipient:email
+  });
+
+  if(result.error){
+    alert("สร้าง Test Email ไม่สำเร็จ: "+result.error.message);
+    return;
+  }
+
+  alert("สร้าง Test Email เข้าคิวแล้ว");
+  await loadQueue();
 }
-$("queueTestBtn").onclick=queueTestEmail;
-$("search").oninput=render;$("applyBtn").onclick=load;$("refreshBtn").onclick=load;
-$("logoutBtn").onclick=async()=>{await db.auth.signOut();location="admin-login.html"};
-const sidebar=$("sidebar"),overlay=$("santeMobileOverlay");
-$("menuBtn").onclick=()=>{sidebar.classList.toggle("open");overlay.classList.toggle("show")};
-overlay.onclick=()=>{sidebar.classList.remove("open");overlay.classList.remove("show")};
+
+async function init(){
+  try{
+    const sessionResult=await db.auth.getSession();
+    const session=sessionResult?.data?.session;
+
+    if(!session?.user){
+      location.replace("admin-login.html");
+      return;
+    }
+
+    const staff=await db.rpc("is_staff");
+
+    if(staff.error||staff.data!==true){
+      await db.auth.signOut();
+      location.replace("admin-login.html");
+      return;
+    }
+
+    $("adminEmail").textContent=session.user.email||"";
+    const adminName=$("adminName");
+    if(adminName)adminName.textContent="ผู้ดูแลระบบ SANTE";
+
+    const loading=$("loadingScreen");
+    if(loading)loading.style.display="none";
+
+    await loadQueue();
+  }
+  catch(error){
+    console.error(error);
+    const loading=$("loadingScreen");
+    if(loading){
+      loading.textContent="ไม่สามารถโหลด Notification Center ได้: "+(error?.message||error);
+    }
+  }
+}
+
+$("search").addEventListener("input",renderTable);
+$("applyBtn").addEventListener("click",loadQueue);
+$("refreshBtn").addEventListener("click",loadQueue);
+$("queueTestBtn").addEventListener("click",queueTestEmail);
+
+$("logoutButton").addEventListener("click",async()=>{
+  $("logoutButton").disabled=true;
+  try{await db.auth.signOut()}catch(_){}
+  location.replace("admin-login.html");
+});
+
 init();
 </script>
+
+<script id="sante-admin-mobile-final-script-r7">
+(function(){
+  "use strict";
+
+  let savedScrollY=0;
+
+  function sidebar(){
+    return document.getElementById("sidebar") || document.querySelector(".sidebar");
+  }
+
+  function overlay(){
+    let el=document.getElementById("santeMobileOverlay");
+    if(!el){
+      el=document.createElement("div");
+      el.id="santeMobileOverlay";
+      el.setAttribute("aria-hidden","true");
+      document.body.appendChild(el);
+    }
+    return el;
+  }
+
+  function mobile(){
+    return window.matchMedia("(max-width:900px)").matches;
+  }
+
+  function openMenu(){
+    if(!mobile()) return;
+    const s=sidebar();
+    if(!s) return;
+
+    savedScrollY=window.scrollY||window.pageYOffset||0;
+
+    s.classList.remove("show");
+    s.classList.add("open");
+
+    const ov=overlay();
+    ov.classList.add("show");
+    ov.setAttribute("aria-hidden","false");
+
+    document.body.classList.add("sante-menu-open");
+    document.body.style.top=`-${savedScrollY}px`;
+  }
+
+  function closeMenu(){
+    const s=sidebar();
+    const ov=overlay();
+
+    s?.classList.remove("open","show");
+    ov.classList.remove("show");
+    ov.setAttribute("aria-hidden","true");
+
+    if(document.body.classList.contains("sante-menu-open")){
+      document.body.classList.remove("sante-menu-open");
+      document.body.style.top="";
+      window.scrollTo(0,savedScrollY);
+    }
+  }
+
+  function toggleMenu(){
+    const s=sidebar();
+    if(!s) return;
+    s.classList.contains("open") ? closeMenu() : openMenu();
+  }
+
+  function menuButton(target){
+    return target.closest("#mobileMenuBtn,#menuBtn,#menuButton,.mobile-menu");
+  }
+
+  /* Capture phase prevents legacy per-page listeners from fighting this one */
+  document.addEventListener("click",function(e){
+    if(menuButton(e.target)){
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+      toggleMenu();
+    }
+  },true);
+
+  document.addEventListener("click",function(e){
+    if(e.target.closest("#santeMobileOverlay")){
+      e.preventDefault();
+      closeMenu();
+      return;
+    }
+
+    if(mobile() && e.target.closest(".sidebar .nav-link")){
+      closeMenu();
+    }
+  });
+
+  document.addEventListener("keydown",function(e){
+    if(e.key==="Escape") closeMenu();
+  });
+
+  window.addEventListener("resize",function(){
+    if(!mobile()) closeMenu();
+  });
+
+  document.addEventListener("DOMContentLoaded",overlay);
+  if(document.readyState!=="loading") overlay();
+})();
+</script>
+
 </body>
+
 </html>
