@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>SANTE Admin | Attendance & วุฒิบัตร</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--navy:#082d69;--navy-dark:#061f4b;--yellow:#ffbf19;--yellow-soft:#fff4cf;--green:#159447;--red:#b42318;--blue:#087df0;--bg:#f1f7fb;--text:#082d69;--muted:#6f83a2;--line:#d9e5ef;--sidebar:285px}
+body{font-family:Prompt,sans-serif;background:var(--bg);color:var(--text)}
+button,input,select{font-family:Prompt,sans-serif}
+.sidebar{position:fixed;inset:0 auto 0 0;width:var(--sidebar);z-index:300;display:flex;flex-direction:column;background:linear-gradient(180deg,#082d69 0%,#06265c 55%,#061f4b 100%);color:#fff;overflow-y:auto}
+.sidebar-brand{min-height:128px;display:flex;align-items:center;justify-content:center;padding:22px 25px;border-bottom:1px solid #ffffff18}.sidebar-brand img{width:190px;height:82px;object-fit:contain}.sidebar-label{padding:26px 25px 10px;color:#9bb1d0;font-size:12px;letter-spacing:1.7px}.nav{padding:0 15px 25px}.nav-link{min-height:58px;display:flex;align-items:center;gap:14px;margin:5px 0;padding:0 17px;border-radius:16px;color:#e4edfa;font-size:15px;font-weight:500;text-decoration:none}.nav-link:hover{background:#ffffff12}.nav-link.active{background:var(--yellow);color:var(--navy);font-weight:600}.nav-icon{width:29px;text-align:center;font-size:20px}.sidebar-footer{margin:auto 15px 22px;padding:18px;border-radius:17px;background:#ffffff12}.sidebar-footer p{margin-top:6px;color:#b6c8e2;font-size:11px;line-height:1.6}
+.main{margin-left:var(--sidebar);min-height:100vh;padding-top:88px}.topbar{position:fixed;left:var(--sidebar);right:0;top:0;height:88px;z-index:500;background:#fffffff8;border-bottom:1px solid #e2ebf3;display:flex;align-items:center;justify-content:space-between;padding:0 34px}.topbar-left{display:flex;align-items:center;gap:14px}.page-name{font-size:21px;font-weight:600}.page-sub{font-size:12px;color:var(--muted);margin-top:4px}.admin-area{display:flex;align-items:center;gap:16px}.admin-copy{text-align:right}.admin-name{font-size:14px;font-weight:600}.admin-email{font-size:11px;color:var(--muted)}
+.mobile-menu{display:none}.btn{min-height:42px;border:1px solid var(--line);border-radius:11px;background:#fff;color:var(--navy);padding:0 14px;font-size:12px;font-weight:600;cursor:pointer}.btn.primary{background:var(--navy);border-color:var(--navy);color:#fff}.btn.yellow{background:var(--yellow);border-color:var(--yellow)}.btn.green{background:#eaf9f1;border-color:#bfe8cf;color:#087744}.btn.red{background:#fff0f1;border-color:#f1c5ca;color:#a52a35}.btn:disabled{opacity:.45;cursor:not-allowed}
+.content{width:min(1540px,calc(100% - 58px));margin:auto;padding:30px 0 65px}.page-head{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;margin:2px 4px 22px}.page-head h1{font-size:30px}.page-head p{margin-top:6px;color:var(--muted);font-size:13px}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:17px;margin-bottom:20px}.stat{min-height:120px;padding:20px;background:#fff;border:1px solid var(--line);border-radius:20px}.stat span{color:var(--muted);font-size:12px}.stat strong{display:block;margin-top:10px;font-size:31px}
+.session-card{padding:18px 20px;background:#fff;border:1px solid var(--line);border-radius:20px;margin-bottom:18px}.session-card h2{font-size:19px}.session-card p{margin-top:5px;color:var(--muted);font-size:12px}.chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}.chip{padding:5px 9px;border-radius:999px;background:#eef6ff;color:#145b9c;font-size:10px;font-weight:600}
+.toolbar{display:grid;grid-template-columns:1fr 190px;gap:10px;padding:14px;background:#fff;border:1px solid var(--line);border-radius:17px;margin-bottom:12px}.input,.select{width:100%;min-height:44px;border:1px solid var(--line);border-radius:11px;padding:9px 12px;background:#fff;color:var(--navy)}
+.bulk{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px;padding:12px;background:#fff;border:1px solid var(--line);border-radius:15px}.bulk-note{margin-left:auto;align-self:center;color:var(--muted);font-size:11px}
+.table-wrap{background:#fff;border:1px solid var(--line);border-radius:20px;overflow:auto}.table{width:100%;min-width:1250px;border-collapse:collapse}.table th{padding:12px;background:var(--navy);color:#fff;font-size:10px;text-align:left;font-weight:500}.table td{padding:12px;border-bottom:1px solid #e8eef4;font-size:11px;vertical-align:middle}.name{font-size:12px;font-weight:600}.sub{margin-top:3px;color:var(--muted);font-size:9.5px}.badge{display:inline-flex;padding:5px 8px;border-radius:999px;font-size:9.5px;font-weight:600}.b-green{background:#eaf9f1;color:#087744}.b-red{background:#fff0f1;color:#a52a35}.b-yellow{background:#fff4cf;color:#765800}.b-blue{background:#eaf4ff;color:#145b9c}.b-gray{background:#edf2f6;color:#64768c}.reason{display:grid;gap:3px}.reason div{font-size:9.5px;color:#64768c}.reason .ok{color:#087744}.reason .no{color:#a52a35}.empty{padding:35px;text-align:center;color:var(--muted);font-size:12px}
+.notice{padding:11px 12px;border-radius:11px;background:#eef6ff;color:#315577;font-size:11px;line-height:1.6;margin-bottom:12px}
+#santeMobileOverlay{display:none}
+@media(max-width:900px){.sidebar{width:285px;transform:translateX(-100%);transition:.22s;z-index:300}.sidebar.open{transform:translateX(0)}#santeMobileOverlay.show{display:block;position:fixed;inset:0;z-index:250;background:#0314307a}.main{margin-left:0;padding-top:68px}.topbar{left:0;height:68px;padding:0 12px}.mobile-menu{display:block;width:46px;height:46px}.admin-copy,.page-sub{display:none}.content{width:100%;padding:16px 12px 42px}.stats{grid-template-columns:1fr 1fr}.page-head{flex-direction:column}.page-head h1{font-size:24px}.toolbar{grid-template-columns:1fr}.bulk-note{width:100%;margin:0}.session-card{padding:16px}}
+</style>
+</head>
+<body>
+<aside class="sidebar" id="sidebar">
+ <div class="sidebar-brand"><img src="sante%20(en)-logo.png" alt="SANTE"></div>
+ <div class="sidebar-label">SANTE ADMIN</div>
+ <nav class="nav">
+  <a href="admin-dashboard.html" class="nav-link"><span class="nav-icon">⌂</span>หน้าหลัก</a>
+  <a href="admin-courses.html" class="nav-link"><span class="nav-icon">▤</span>หลักสูตร</a>
+  <a href="admin-training-sessions.html" class="nav-link active"><span class="nav-icon">◫</span>รอบอบรม</a>
+  <a href="admin-exams.html" class="nav-link"><span class="nav-icon">✓</span>ข้อสอบ</a>
+  <a href="admin-question-import.html" class="nav-link"><span class="nav-icon">⇧</span>นำเข้าข้อสอบ</a>
+  <a href="admin-payments.html" class="nav-link"><span class="nav-icon">฿</span>การชำระเงิน</a>
+  <a href="admin-members.html" class="nav-link"><span class="nav-icon">♙</span>สมาชิก</a>
+  <a href="admin-services.html" class="nav-link"><span class="nav-icon">▣</span>งานบริการ</a>
+  <a href="admin-quotations.html" class="nav-link"><span class="nav-icon">▧</span>ใบเสนอราคา</a>
+ </nav>
+ <div class="sidebar-footer"><strong>SANTE SYSTEM</strong><p>Attendance · Eligibility · Documents</p></div>
+</aside>
+<div id="santeMobileOverlay"></div>
+
+<div class="main">
+<header class="topbar">
+ <div class="topbar-left"><button id="menuBtn" class="btn mobile-menu">☰</button><div><div class="page-name">Attendance & วุฒิบัตร</div><div class="page-sub">เช็กการเข้าอบรมและตรวจสิทธิ์ออกวุฒิบัตร</div></div></div>
+ <div class="admin-area"><div class="admin-copy"><div class="admin-name">ผู้ดูแลระบบ SANTE</div><div id="adminEmail" class="admin-email"></div></div><button id="logoutBtn" class="btn">ออกจากระบบ</button></div>
+</header>
+
+<main class="content">
+ <div class="page-head"><div><h1>Attendance & Certificate Eligibility</h1><p>ทำเครื่องหมายผู้เข้าอบรมและตรวจเงื่อนไขวุฒิบัตรแบบรายรุ่น</p></div><a href="admin-training-sessions.html" class="btn" style="display:inline-flex;align-items:center;text-decoration:none">← กลับรอบอบรม</a></div>
+
+ <div id="message"></div>
+
+ <section id="sessionCard" class="session-card"><h2>กำลังโหลด...</h2></section>
+
+ <section class="stats">
+  <div class="stat"><span>ผู้สมัครทั้งหมด</span><strong id="statTotal">0</strong></div>
+  <div class="stat"><span>เข้าร่วมอบรม</span><strong id="statAttended">0</strong></div>
+  <div class="stat"><span>เข้าเกณฑ์วุฒิบัตร</span><strong id="statEligible">0</strong></div>
+  <div class="stat"><span>มีวุฒิบัตรแล้ว</span><strong id="statIssued">0</strong></div>
+ </section>
+
+ <div class="notice">
+  เกณฑ์: ยืนยันการสมัคร + ชำระเงินแล้ว (ถ้ามีค่าใช้จ่าย) + เข้าร่วมอบรม + สอบผ่านหากรอบนี้กำหนด Post-test
+ </div>
+
+ <div class="toolbar">
+  <input id="search" class="input" placeholder="ค้นหาชื่อ อีเมล บริษัท">
+  <select id="filter" class="select">
+   <option value="">ทุกสถานะ</option>
+   <option value="NOT_MARKED">ยังไม่เช็กชื่อ</option>
+   <option value="ATTENDED">เข้าร่วม</option>
+   <option value="ABSENT">ไม่เข้าร่วม</option>
+   <option value="ELIGIBLE">พร้อมออกวุฒิบัตร</option>
+   <option value="NOT_ELIGIBLE">ยังไม่เข้าเกณฑ์</option>
+  </select>
+ </div>
+
+ <div class="bulk">
+  <button id="selectAllBtn" class="btn">เลือกทั้งหมดที่เห็น</button>
+  <button id="attendedBtn" class="btn green">✓ เข้าร่วมอบรม</button>
+  <button id="absentBtn" class="btn red">✕ ไม่เข้าร่วม</button>
+  <button id="clearBtn" class="btn">ล้างสถานะ Attendance</button>
+  <div id="selectedCount" class="bulk-note">เลือก 0 คน</div>
+ </div>
+
+ <div class="table-wrap"><div id="tableArea" class="empty">กำลังโหลดข้อมูล...</div></div>
+</main>
+</div>
+
+<script>
+const db=window.supabase.createClient("https://cyegjwerxlxhczrfiurz.supabase.co","sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF",{auth:{storageKey:"sante-admin-auth",persistSession:true,autoRefreshToken:true}});
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
+const sessionId=new URLSearchParams(location.search).get("session_id");
+let payload={session:null,rows:[]},selected=new Set();
+
+function msg(text,type="info"){$("message").innerHTML=`<div class="notice" style="${type==="error"?"background:#fff0f1;color:#a52a35":type==="success"?"background:#eaf9f1;color:#087744":""}">${esc(text)}</div>`}
+function attendanceBadge(s){return s==="ATTENDED"?'<span class="badge b-green">เข้าร่วม</span>':s==="ABSENT"?'<span class="badge b-red">ไม่เข้าร่วม</span>':s==="EXCUSED"?'<span class="badge b-yellow">ลา/ยกเว้น</span>':'<span class="badge b-gray">ยังไม่เช็ก</span>'}
+function examBadge(r){if(!payload.session?.requires_posttest)return '<span class="badge b-gray">ไม่กำหนดสอบ</span>';if(r.exam_passed)return `<span class="badge b-green">ผ่าน ${r.best_percentage??"-"}%</span>`;if(r.attempts_used>0)return `<span class="badge b-red">ยังไม่ผ่าน ${r.best_percentage??"-"}%</span>`;return '<span class="badge b-yellow">ยังไม่สอบ</span>'}
+function certBadge(r){if(r.certificate_id)return `<span class="badge b-blue">${esc(r.certificate_status||"มีวุฒิบัตร")}</span>`;return r.certificate_eligible?'<span class="badge b-green">พร้อมออก</span>':'<span class="badge b-gray">ยังไม่พร้อม</span>'}
+
+async function init(){
+ if(!sessionId){msg("ไม่พบ session_id","error");return}
+ const a=await db.auth.getSession();if(!a.data.session){location="admin-login.html";return}
+ const staff=await db.rpc("is_staff");if(staff.error||!staff.data){location="admin-login.html";return}
+ $("adminEmail").textContent=a.data.session.user.email||"";
+ await load();
+}
+async function load(){
+ const r=await db.rpc("admin_get_training_completion",{p_training_session_id:sessionId});
+ if(r.error){msg(r.error.message,"error");$("tableArea").innerHTML='<div class="empty">โหลดข้อมูลไม่สำเร็จ</div>';return}
+ payload=r.data||{session:null,rows:[]};selected.clear();renderHeader();render();
+}
+function renderHeader(){
+ const s=payload.session||{};
+ $("sessionCard").innerHTML=`<h2>${esc(s.session_name||s.course_name||"-")}</h2><p>${esc(s.course_name||"")} · ${s.training_start_at?new Date(s.training_start_at).toLocaleString("th-TH"):"-"}</p><div class="chips"><span class="chip">${s.requires_posttest?"ต้องสอบท้ายอบรม":"ไม่กำหนด Post-test"}</span>${s.pass_percentage!=null?`<span class="chip">ผ่าน ${esc(s.pass_percentage)}%</span>`:""}${s.training_hours!=null?`<span class="chip">${esc(s.training_hours)} ชั่วโมง</span>`:""}</div>`;
+ const rows=payload.rows||[];$("statTotal").textContent=rows.length;$("statAttended").textContent=rows.filter(x=>x.attendance_status==="ATTENDED").length;$("statEligible").textContent=rows.filter(x=>x.certificate_eligible).length;$("statIssued").textContent=rows.filter(x=>x.certificate_id).length
+}
+function visibleRows(){
+ const q=$("search").value.trim().toLowerCase(),f=$("filter").value;
+ return (payload.rows||[]).filter(r=>{
+  const match=[r.participant_name,r.email,r.organization_name].join(" ").toLowerCase().includes(q);
+  const filt=!f||(f==="ELIGIBLE"&&r.certificate_eligible)||(f==="NOT_ELIGIBLE"&&!r.certificate_eligible)||r.attendance_status===f;
+  return match&&filt
+ })
+}
+function render(){
+ const rows=visibleRows();updateSelected();
+ if(!rows.length){$("tableArea").innerHTML='<div class="empty">ไม่พบข้อมูล</div>';return}
+ $("tableArea").innerHTML=`<table class="table"><thead><tr><th><input type="checkbox" id="headCheck"></th><th>ผู้เข้าอบรม</th><th>การสมัคร / ชำระเงิน</th><th>Attendance</th><th>ผลสอบ</th><th>Eligibility</th><th>วุฒิบัตร</th></tr></thead><tbody>${rows.map(r=>`<tr><td><input class="row-check" type="checkbox" data-id="${r.registration_id}" ${selected.has(r.registration_id)?"checked":""}></td><td><div class="name">${esc(r.participant_name||"-")}</div><div class="sub">${esc(r.email||"-")} · ${esc(r.organization_name||"-")}</div></td><td><div>${esc(r.registration_status||"-")}</div><div class="sub">${r.payment_required?`Payment: ${esc(r.payment_status||"-")}`:"ไม่ต้องชำระเงิน"}</div></td><td>${attendanceBadge(r.attendance_status)}${r.attendance_note?`<div class="sub">${esc(r.attendance_note)}</div>`:""}</td><td>${examBadge(r)}</td><td>${r.certificate_eligible?'<span class="badge b-green">เข้าเกณฑ์</span>':'<span class="badge b-red">ยังไม่เข้าเกณฑ์</span>'}<div class="reason"><div class="${r.registration_ok?"ok":"no"}">${r.registration_ok?"✓":"✕"} สมัครยืนยัน</div><div class="${r.payment_ok?"ok":"no"}">${r.payment_ok?"✓":"✕"} Payment</div><div class="${r.attendance_ok?"ok":"no"}">${r.attendance_ok?"✓":"✕"} Attendance</div><div class="${r.posttest_ok?"ok":"no"}">${r.posttest_ok?"✓":"✕"} Post-test</div></div></td><td>${certBadge(r)}${r.certificate_no?`<div class="sub">${esc(r.certificate_no)}</div>`:""}</td></tr>`).join("")}</tbody></table>`;
+ document.querySelectorAll(".row-check").forEach(x=>x.onchange=()=>{x.checked?selected.add(x.dataset.id):selected.delete(x.dataset.id);updateSelected()});
+ $("headCheck").onchange=e=>{rows.forEach(r=>e.target.checked?selected.add(r.registration_id):selected.delete(r.registration_id));render()}
+}
+function updateSelected(){$("selectedCount").textContent=`เลือก ${selected.size} คน`}
+async function mark(status){
+ if(!selected.size){alert("กรุณาเลือกผู้เข้าอบรมก่อน");return}
+ const labels={ATTENDED:"เข้าร่วมอบรม",ABSENT:"ไม่เข้าร่วม",NOT_MARKED:"ล้าง Attendance"};
+ if(!confirm(`${labels[status]} จำนวน ${selected.size} คนหรือไม่?`))return;
+ const note=status==="NOT_MARKED"?null:(prompt("หมายเหตุ (เว้นว่างได้)")||null);
+ const r=await db.rpc("admin_mark_training_attendance",{p_registration_ids:[...selected],p_status:status,p_note:note});
+ if(r.error){msg(r.error.message,"error");return}msg(`บันทึก Attendance แล้ว ${r.data?.updated||selected.size} คน`,"success");await load()
+}
+$("search").oninput=render;$("filter").onchange=render;$("selectAllBtn").onclick=()=>{visibleRows().forEach(r=>selected.add(r.registration_id));render()};$("attendedBtn").onclick=()=>mark("ATTENDED");$("absentBtn").onclick=()=>mark("ABSENT");$("clearBtn").onclick=()=>mark("NOT_MARKED");$("logoutBtn").onclick=async()=>{await db.auth.signOut();location="admin-login.html"};
+const sidebar=$("sidebar"),overlay=$("santeMobileOverlay");$("menuBtn").onclick=()=>{sidebar.classList.toggle("open");overlay.classList.toggle("show")};overlay.onclick=()=>{sidebar.classList.remove("open");overlay.classList.remove("show")};document.querySelectorAll(".sidebar .nav-link").forEach(a=>a.addEventListener("click",()=>{sidebar.classList.remove("open");overlay.classList.remove("show")}));
+init();
+</script>
+</body>
+</html>

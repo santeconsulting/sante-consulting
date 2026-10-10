@@ -2225,9 +2225,9 @@ textarea{
 <meta name="sante-readability-build" content="SANTE-ADMIN-READABILITY-R2">
 
 <style id="sante-qr-posttest-admin-v1">
-.card-actions{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important}
+.card-actions{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:8px!important}
 .qr-btn{width:100%;min-height:42px;border:1px solid #b8d3ec;border-radius:9px;background:#eef6ff;color:#082d69;font-size:13px;font-weight:600}
-.qr-btn:hover{background:#e4f1ff}
+.qr-btn:hover{background:#e4f1ff}.completion-btn{width:100%;min-height:42px;border:1px solid #b8e2c8;border-radius:9px;background:#effaf3;color:#087744;font-size:12px;font-weight:600}.completion-btn:hover{background:#e6f7ed}
 .qr-modal-backdrop{position:fixed;inset:0;z-index:7000;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(3,20,48,.62)}
 .qr-modal-backdrop.show{display:flex}
 .qr-modal{width:min(880px,96vw);max-height:92vh;overflow:auto;background:#fff;border-radius:22px;box-shadow:0 28px 80px rgba(0,0,0,.25)}
@@ -2246,6 +2246,10 @@ textarea{
 .qr-link{padding:12px;border-radius:12px;background:#f5f9fc;border:1px solid var(--line);font-size:11px;word-break:break-all}
 .qr-form label{display:block;margin-bottom:5px;font-size:11px;font-weight:600}
 .qr-form input{width:100%;min-height:44px;border:1px solid var(--line);border-radius:11px;padding:9px 11px}
+.qr-close-grid{display:grid;grid-template-columns:1fr 150px;gap:8px}
+.qr-close-grid input,.qr-close-grid select{width:100%;min-height:44px;border:1px solid var(--line);border-radius:11px;padding:9px 11px;background:#fff;color:var(--navy)}
+.qr-quick-times{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.qr-quick-times .btn{min-height:34px;padding:0 10px;font-size:10px}
+
 .qr-actions{display:flex;gap:8px;flex-wrap:wrap}
 .qr-note{padding:11px 12px;border-radius:11px;background:#fff6da;color:#765800;font-size:11px;line-height:1.6}
 @media(max-width:900px){.card-actions{grid-template-columns:1fr!important}.qr-layout{grid-template-columns:1fr}.qr-box{min-height:260px}.qr-summary{grid-template-columns:1fr 1fr}}
@@ -2670,305 +2674,6 @@ textarea{
 </style>
 
 <meta name="sante-mobile-build" content="SANTE-ADMIN-MOBILE-MATCH-MEMBER-R4">
-
-<style id="sante-admin-mobile-exact-member-r5">
-/* =========================================================
-   SANTE ADMIN MOBILE EXACT MEMBER R5
-   Copies member-home mobile hero geometry 1:1.
-   Desktop is not changed.
-========================================================= */
-@media(max-width:767px){
-
-  .content{
-    width:100%!important;
-    margin:0!important;
-    padding:
-      10px
-      12px
-      calc(35px + env(safe-area-inset-bottom))!important;
-  }
-
-  .canonical-hero,
-  .dashboard-hero{
-    display:none!important;
-  }
-
-  .admin-mobile-hero{
-    min-height:390px!important;
-
-    position:relative!important;
-
-    display:flex!important;
-    flex-direction:column!important;
-
-    overflow:hidden!important;
-
-    margin:0!important;
-
-    padding:
-      23px
-      20px
-      0!important;
-
-    border:0!important;
-    border-radius:20px!important;
-
-    background:
-      linear-gradient(
-        145deg,
-        #eaf7ff 0%,
-        #ffffff 58%,
-        #fff4c9 100%
-      )!important;
-
-    box-shadow:
-      0 8px 25px
-      rgba(11,45,103,.07)!important;
-  }
-
-  .admin-mobile-hero::before{
-    content:""!important;
-
-    position:absolute!important;
-
-    width:190px!important;
-    height:190px!important;
-
-    top:-90px!important;
-    right:-70px!important;
-
-    border-radius:50%!important;
-
-    background:
-      rgba(255,191,25,.28)!important;
-  }
-
-  .admin-mobile-hero::after{
-    content:""!important;
-
-    position:absolute!important;
-
-    width:180px!important;
-    height:180px!important;
-
-    left:-90px!important;
-    bottom:-90px!important;
-
-    border-radius:50%!important;
-
-    background:
-      rgba(64,176,245,.14)!important;
-  }
-
-  .admin-mobile-hero-copy{
-    position:relative!important;
-    z-index:5!important;
-  }
-
-  .admin-mobile-hero-badge{
-    width:max-content!important;
-
-    display:inline-flex!important;
-    align-items:center!important;
-
-    padding:6px 12px!important;
-
-    border-radius:999px!important;
-
-    background:var(--yellow,#ffbf19)!important;
-
-    color:var(--navy,#082d69)!important;
-
-    font-size:11px!important;
-    font-weight:600!important;
-
-    letter-spacing:.3px!important;
-  }
-
-  .admin-mobile-hero h1{
-    margin-top:13px!important;
-
-    color:var(--navy,#082d69)!important;
-
-    font-size:clamp(27px,8vw,34px)!important;
-    font-weight:700!important;
-
-    line-height:1.23!important;
-  }
-
-  .admin-mobile-hero h1 span{
-    color:#087df0!important;
-  }
-
-  .admin-mobile-hero p{
-    max-width:320px!important;
-
-    margin-top:9px!important;
-
-    color:#637b9a!important;
-
-    font-size:13px!important;
-    line-height:1.65!important;
-  }
-
-  .admin-mobile-hero-visual{
-    min-height:0!important;
-
-    position:relative!important;
-    z-index:3!important;
-
-    flex:1!important;
-
-    display:flex!important;
-    align-items:flex-end!important;
-    justify-content:center!important;
-
-    margin:
-      5px
-      -20px
-      0!important;
-
-    overflow:hidden!important;
-  }
-
-  .admin-mobile-hero-visual img{
-    width:100%!important;
-    height:auto!important;
-
-    display:block!important;
-
-    object-fit:contain!important;
-    object-position:center!important;
-
-    border-radius:0!important;
-  }
-
-  /* Header keeps admin navigation but matches member-home proportions */
-  .topbar{
-    height:auto!important;
-    min-height:64px!important;
-
-    gap:8px!important;
-
-    padding:
-      7px
-      max(12px,env(safe-area-inset-right))
-      7px
-      max(12px,env(safe-area-inset-left))!important;
-  }
-
-  .mobile-menu{
-    width:46px!important;
-    height:46px!important;
-    min-width:46px!important;
-    min-height:46px!important;
-
-    padding:0!important;
-
-    border-radius:11px!important;
-
-    font-size:20px!important;
-  }
-
-  .page-name{
-    font-size:18px!important;
-    line-height:1.3!important;
-  }
-
-  .page-sub,
-  .admin-copy{
-    display:none!important;
-  }
-
-  .logout,
-  .logout-btn{
-    min-height:38px!important;
-
-    padding:0 10px!important;
-
-    border-radius:9px!important;
-
-    font-size:11px!important;
-  }
-}
-
-@media(max-width:374px){
-
-  .content{
-    padding-left:10px!important;
-    padding-right:10px!important;
-  }
-
-  .admin-mobile-hero{
-    min-height:370px!important;
-
-    padding:
-      20px
-      17px
-      0!important;
-  }
-
-  .admin-mobile-hero h1{
-    font-size:26px!important;
-  }
-
-  .admin-mobile-hero p{
-    font-size:12px!important;
-  }
-
-  .admin-mobile-hero-visual{
-    margin-left:-17px!important;
-    margin-right:-17px!important;
-  }
-}
-</style>
-
-<meta name="sante-mobile-build" content="SANTE-ADMIN-MOBILE-EXACT-MEMBER-R5">
-
-<style id="sante-admin-mobile-menu-r6">
-/* SANTE ADMIN MOBILE MENU R6 */
-@media(max-width:900px){
-  .sidebar{
-    width:285px!important;
-    transform:translateX(-100%)!important;
-    transition:transform .22s ease!important;
-    z-index:300!important;
-  }
-  .sidebar.open{
-    transform:translateX(0)!important;
-  }
-
-  #santeMobileOverlay{
-    display:none;
-    position:fixed;
-    inset:0;
-    z-index:250;
-    background:rgba(3,20,48,.48);
-    opacity:0;
-    transition:opacity .2s ease;
-  }
-  #santeMobileOverlay.show{
-    display:block;
-    opacity:1;
-  }
-
-  body.sante-menu-open{
-    overflow:hidden!important;
-    touch-action:none;
-  }
-
-  .mobile-menu{
-    cursor:pointer!important;
-    touch-action:manipulation!important;
-    -webkit-tap-highlight-color:transparent!important;
-  }
-}
-@media(min-width:901px){
-  #santeMobileOverlay{display:none!important}
-}
-</style>
-
-<meta name="sante-mobile-menu-build" content="SANTE-ADMIN-MOBILE-MENU-R6">
 </head>
 
 <body>
@@ -3071,10 +2776,10 @@ textarea{
   <div class="admin-mobile-hero-copy">
     <div class="admin-mobile-hero-badge">SANTE ADMIN</div>
     <h1>Trust in Safety.<br><span>Trust in SANTE.</span></h1>
-    <p>จัดการระบบ SANTE ได้จากบัญชีผู้ดูแลเดียว ทั้งหลักสูตร รอบอบรม ข้อสอบ สมาชิก งานบริการ การชำระเงิน และเอกสาร</p>
+    <p>ระบบบริหารจัดการของ SANTE สำหรับหลักสูตร รอบอบรม ข้อสอบ สมาชิก งานบริการ การชำระเงิน และเอกสาร</p>
   </div>
   <div class="admin-mobile-hero-visual">
-    <img src="sante-mobile-hero.png" alt="SANTE Admin">
+    <img src="sante-dashboard-hero-mobile.png" alt="SANTE Admin">
   </div>
 </section>
 
@@ -3952,7 +3657,16 @@ textarea{
           </div>
           <div class="qr-form">
             <label>กำหนดเวลาปิดสอบ (ไม่บังคับ)</label>
-            <input id="qrCloseAt" type="datetime-local">
+            <div class="qr-close-grid">
+              <input id="qrCloseDate" type="date">
+              <select id="qrCloseTime"></select>
+            </div>
+            <div class="qr-quick-times">
+              <button type="button" class="btn" data-close-minutes="30">+30 นาที</button>
+              <button type="button" class="btn" data-close-minutes="60">+1 ชม.</button>
+              <button type="button" class="btn" data-close-minutes="120">+2 ชม.</button>
+              <button type="button" class="btn" id="qrCloseClearBtn">ไม่กำหนด</button>
+            </div>
           </div>
           <div class="qr-actions">
             <button id="qrCopyBtn" class="btn" type="button">Copy Link</button>
@@ -5127,6 +4841,13 @@ textarea{
                       QR / เปิดสอบ
                     </button>
 
+                    <button
+                      class="completion-btn"
+                      onclick="location.href='admin-training-completion.html?session_id=${session.id}'"
+                    >
+                      Attendance / วุฒิบัตร
+                    </button>
+
                   </div>
 
                 </div>
@@ -5156,12 +4877,50 @@ textarea{
         encodeURIComponent(sessionId);
     }
 
-    function toLocalDateTimeValue(value) {
-      if (!value) return "";
-      const d = new Date(value);
-      if (Number.isNaN(d.getTime())) return "";
-      const p = n => String(n).padStart(2,"0");
-      return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}`;
+    function localDateParts(value) {
+      if (!value) return {date:"",time:""};
+      const d=new Date(value);
+      if(Number.isNaN(d.getTime())) return {date:"",time:""};
+      const p=n=>String(n).padStart(2,"0");
+      return {
+        date:`${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}`,
+        time:`${p(d.getHours())}:${p(Math.floor(d.getMinutes()/15)*15)}`
+      };
+    }
+
+    function fillQrTimeOptions(){
+      const sel=document.getElementById("qrCloseTime");
+      if(!sel || sel.options.length) return;
+      sel.innerHTML='<option value="">-- เวลา --</option>';
+      for(let h=0;h<24;h++){
+        for(let m=0;m<60;m+=15){
+          const p=n=>String(n).padStart(2,"0");
+          const v=`${p(h)}:${p(m)}`;
+          sel.insertAdjacentHTML("beforeend",`<option value="${v}">${v} น.</option>`);
+        }
+      }
+    }
+
+    function setQrCloseFromDate(d){
+      fillQrTimeOptions();
+      const p=n=>String(n).padStart(2,"0");
+      document.getElementById("qrCloseDate").value=`${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}`;
+      const min=Math.ceil(d.getMinutes()/15)*15;
+      let hh=d.getHours(),mm=min;
+      if(mm>=60){hh+=1;mm=0}
+      if(hh>=24){d.setDate(d.getDate()+1);hh=0;document.getElementById("qrCloseDate").value=`${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}`}
+      document.getElementById("qrCloseTime").value=`${p(hh)}:${p(mm)}`;
+    }
+
+    function getQrCloseIso(){
+      const date=document.getElementById("qrCloseDate").value;
+      const time=document.getElementById("qrCloseTime").value;
+      if(!date && !time) return null;
+      if(!date || !time) throw new Error("กรุณาเลือกทั้งวันที่และเวลาปิดสอบ");
+      const d=new Date(`${date}T${time}:00`);
+      if(Number.isNaN(d.getTime())) throw new Error("วัน/เวลาปิดสอบไม่ถูกต้อง");
+      if(d.getTime()<=Date.now()) throw new Error("เวลาปิดสอบต้องเป็นเวลาในอนาคต");
+      return d.toISOString();
     }
 
     async function openPosttestQr(sessionId) {
@@ -5200,8 +4959,10 @@ textarea{
           `${qrCurrentData.max_attempts ?? "-"} ครั้ง`;
 
         document.getElementById("qrShareLink").textContent = shareUrl;
-        document.getElementById("qrCloseAt").value =
-          toLocalDateTimeValue(qrCurrentData.posttest_close_at);
+        fillQrTimeOptions();
+        const closeParts=localDateParts(qrCurrentData.posttest_close_at);
+        document.getElementById("qrCloseDate").value=closeParts.date;
+        document.getElementById("qrCloseTime").value=closeParts.time;
 
         renderQrOpenState();
 
@@ -5258,8 +5019,9 @@ textarea{
       if (!qrCurrentSessionId || !qrCurrentData) return;
 
       const opening = !qrCurrentData.posttest_is_open;
-      const closeRaw = document.getElementById("qrCloseAt").value;
-      const closeAt = closeRaw ? new Date(closeRaw).toISOString() : null;
+      let closeAt=null;
+      try{ closeAt=getQrCloseIso(); }
+      catch(e){ showToast(e.message||String(e),"error"); return; }
 
       if (opening && !qrCurrentData.exam_published) {
         showToast("กรุณา Publish ข้อสอบก่อนเปิดสิทธิ์", "error");
@@ -5327,6 +5089,15 @@ textarea{
     }
 
     document.addEventListener("DOMContentLoaded", () => {
+      fillQrTimeOptions();
+      document.querySelectorAll("[data-close-minutes]").forEach(btn=>btn.addEventListener("click",()=>{
+        const mins=Number(btn.dataset.closeMinutes||0);
+        setQrCloseFromDate(new Date(Date.now()+mins*60000));
+      }));
+      document.getElementById("qrCloseClearBtn")?.addEventListener("click",()=>{
+        document.getElementById("qrCloseDate").value="";
+        document.getElementById("qrCloseTime").value="";
+      });
       document.getElementById("qrToggleBtn")?.addEventListener("click", togglePosttestQrAccess);
       document.getElementById("qrCopyBtn")?.addEventListener("click", copyPosttestLink);
       document.getElementById("qrDownloadBtn")?.addEventListener("click", downloadPosttestQr);
@@ -6705,109 +6476,6 @@ textarea{
     }
 
   </script>
-
-
-<script id="sante-admin-mobile-menu-script-r6">
-(function(){
-  "use strict";
-
-  function getSidebar(){
-    return document.getElementById("sidebar") || document.querySelector(".sidebar");
-  }
-
-  function getOverlay(){
-    let ov=document.getElementById("santeMobileOverlay");
-    if(!ov){
-      ov=document.createElement("div");
-      ov.id="santeMobileOverlay";
-      ov.setAttribute("aria-hidden","true");
-      document.body.appendChild(ov);
-    }
-    return ov;
-  }
-
-  function isMobile(){
-    return window.matchMedia("(max-width:900px)").matches;
-  }
-
-  function openMenu(){
-    if(!isMobile()) return;
-    const sidebar=getSidebar();
-    if(!sidebar) return;
-    const ov=getOverlay();
-
-    sidebar.classList.remove("show");
-    sidebar.classList.add("open");
-    ov.classList.add("show");
-    ov.setAttribute("aria-hidden","false");
-    document.body.classList.add("sante-menu-open");
-  }
-
-  function closeMenu(){
-    const sidebar=getSidebar();
-    const ov=getOverlay();
-
-    sidebar?.classList.remove("open","show");
-    ov.classList.remove("show");
-    ov.setAttribute("aria-hidden","true");
-    document.body.classList.remove("sante-menu-open");
-  }
-
-  function toggleMenu(){
-    const sidebar=getSidebar();
-    if(!sidebar) return;
-    sidebar.classList.contains("open") ? closeMenu() : openMenu();
-  }
-
-  function isMenuButton(target){
-    return target.closest(
-      "#mobileMenuBtn,#menuBtn,#menuButton,.mobile-menu"
-    );
-  }
-
-  // Capture phase intentionally overrides legacy per-page listeners,
-  // some of which used `.show` while the current CSS expects `.open`.
-  document.addEventListener("click",function(e){
-    const btn=isMenuButton(e.target);
-    if(!btn) return;
-
-    e.preventDefault();
-    e.stopPropagation();
-    e.stopImmediatePropagation();
-
-    toggleMenu();
-  },true);
-
-  document.addEventListener("click",function(e){
-    if(e.target.closest("#santeMobileOverlay")){
-      e.preventDefault();
-      closeMenu();
-      return;
-    }
-
-    if(isMobile() && e.target.closest(".sidebar .nav-link")){
-      closeMenu();
-    }
-  });
-
-  document.addEventListener("keydown",function(e){
-    if(e.key==="Escape") closeMenu();
-  });
-
-  window.addEventListener("resize",function(){
-    if(!isMobile()) closeMenu();
-  });
-
-  document.addEventListener("DOMContentLoaded",function(){
-    getOverlay();
-  });
-
-  // In case script loads after DOMContentLoaded
-  if(document.readyState!=="loading"){
-    getOverlay();
-  }
-})();
-</script>
 
 </body>
 </html>
