@@ -55,6 +55,11 @@ button,input,select{font-family:Prompt,sans-serif}
  <div class="page-head"><div><h1>Notification Center</h1><p>ระบบ Queue กลางสำหรับ Registration, Payment และ Certificate</p></div><button class="btn primary" id="refreshBtn">รีเฟรช</button></div>
 
  <div class="notice">สถานะ QUEUED หมายถึงข้อมูลพร้อมส่งแล้ว แต่จะยังไม่ส่งจริงจนกว่าจะเชื่อม Email Provider / LINE Messaging API และเปิด Worker Processor</div>
+ <div class="toolbar" style="grid-template-columns:minmax(220px,1fr) auto;margin-top:-2px">
+   <input id="testEmail" class="input" type="email" placeholder="อีเมลสำหรับทดสอบ เช่น testmember@santeconsulting.co.th">
+   <button id="queueTestBtn" class="btn yellow">สร้าง Test Email</button>
+ </div>
+
 
  <section class="stats">
   <div class="stat"><span>ทั้งหมด</span><strong id="sAll">0</strong></div>
@@ -139,6 +144,16 @@ async function retry(id){
  if(r.error){alert(r.error.message);return}
  await load();
 }
+
+async function queueTestEmail(){
+ const email=$("testEmail").value.trim();
+ if(!email){alert("กรุณากรอกอีเมลสำหรับทดสอบ");return}
+ const r=await db.rpc("admin_enqueue_test_email",{p_recipient:email});
+ if(r.error){alert("สร้าง Test Email ไม่สำเร็จ: "+r.error.message);return}
+ alert("สร้าง Test Email เข้าคิวแล้ว");
+ await load();
+}
+$("queueTestBtn").onclick=queueTestEmail;
 $("search").oninput=render;$("applyBtn").onclick=load;$("refreshBtn").onclick=load;
 $("logoutBtn").onclick=async()=>{await db.auth.signOut();location="admin-login.html"};
 const sidebar=$("sidebar"),overlay=$("santeMobileOverlay");
