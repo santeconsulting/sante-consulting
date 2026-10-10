@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>SANTE | แบบทดสอบท้ายการอบรม</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--navy:#082d69;--navy-dark:#061f4b;--yellow:#ffbf19;--blue:#087df0;--green:#159447;--red:#b42318;--bg:#f1f7fb;--muted:#6f83a2;--line:#d9e5ef}
+body{font-family:Prompt,sans-serif;background:var(--bg);color:var(--navy);font-size:16px}
+button,input,textarea{font-family:Prompt,sans-serif}
+.topbar{height:88px;padding:0 max(24px,calc((100% - 1450px)/2));background:#fff;border-bottom:1px solid #e2ebf3;display:flex;align-items:center;justify-content:space-between;gap:20px;position:sticky;top:0;z-index:50}
+.brand img{width:120px;height:62px;object-fit:contain}.member{display:flex;align-items:center;gap:14px;text-align:right}.member-name{font-size:14px;font-weight:600}.member-email{font-size:11px;color:var(--muted);margin-top:2px}
+.btn{min-height:44px;padding:0 16px;border:1px solid var(--line);border-radius:11px;background:#fff;color:var(--navy);font-size:12px;font-weight:600;cursor:pointer}.btn.primary{background:var(--navy);border-color:var(--navy);color:#fff}.btn.yellow{background:var(--yellow);border-color:var(--yellow)}.btn.danger{background:#fff0f1;border-color:#f1c5ca;color:var(--red)}.btn:disabled{opacity:.5;cursor:not-allowed}
+.page{width:min(1180px,calc(100% - 32px));margin:auto;padding:26px 0 60px}.hero{padding:9px;background:#fff;border-radius:25px;box-shadow:0 10px 30px rgba(8,45,105,.06);margin-bottom:22px}.hero img{display:block;width:100%;border-radius:19px}
+.card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:22px;box-shadow:0 6px 18px rgba(8,45,105,.03);margin-bottom:16px}.title{font-size:26px;font-weight:600;line-height:1.35}.sub{margin-top:6px;color:var(--muted);font-size:13px;line-height:1.65}.chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:14px}.chip{padding:6px 10px;border-radius:999px;background:#eef6ff;color:#145b9c;font-size:10px;font-weight:600}.chip.green{background:#eaf9f1;color:#087744}.chip.yellow{background:#fff4cf;color:#765800}.chip.red{background:#fff0f1;color:#a52a35}
+.info-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:18px}.info{padding:12px;border-radius:12px;background:#f6f9fc}.info span{display:block;color:var(--muted);font-size:10px}.info strong{display:block;margin-top:4px;font-size:14px}
+.notice{padding:14px 15px;border-radius:13px;font-size:12px;line-height:1.7;margin-top:14px}.notice.info{background:#eef6ff;color:#24557e}.notice.warn{background:#fff7df;color:#765800}.notice.error{background:#fff0f1;color:#a52a35}.notice.success{background:#eaf9f1;color:#087744}
+.login-card{width:min(520px,100%);margin:35px auto;background:#fff;border:1px solid var(--line);border-radius:22px;padding:25px;box-shadow:0 14px 40px rgba(8,45,105,.07)}.login-card h2{font-size:22px}.field{margin-top:13px}.field label{display:block;font-size:11px;font-weight:600;margin-bottom:6px}.input{width:100%;min-height:48px;border:1px solid var(--line);border-radius:12px;padding:10px 13px;font-size:14px;outline:none}.input:focus{border-color:#8db9e8;box-shadow:0 0 0 3px rgba(8,125,240,.08)}
+.question{background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px;margin-bottom:13px}.q-head{display:flex;justify-content:space-between;gap:12px}.q-no{width:34px;height:34px;flex:0 0 34px;border-radius:10px;background:#eaf4ff;display:grid;place-items:center;font-weight:700}.q-copy{flex:1}.q-text{font-size:16px;font-weight:600;line-height:1.65}.q-meta{margin-top:3px;color:var(--muted);font-size:10px}.q-image{display:block;max-width:min(520px,100%);max-height:320px;object-fit:contain;margin:12px 0;border-radius:12px}
+.option{display:flex;gap:10px;align-items:flex-start;padding:11px 12px;border:1px solid #e0e9f1;border-radius:12px;margin-top:8px;cursor:pointer}.option:hover{background:#f8fbfe}.option input{width:18px;height:18px;margin-top:1px;accent-color:var(--navy)}.choice-image{display:block;max-width:220px;max-height:140px;object-fit:contain;margin-top:7px;border-radius:9px}.text-answer{width:100%;min-height:48px;margin-top:10px;border:1px solid var(--line);border-radius:12px;padding:11px 12px;font-size:14px}
+.exam-top{display:flex;justify-content:space-between;gap:16px;align-items:flex-start}.timer{min-width:135px;padding:12px;border-radius:13px;background:#fff4cf;text-align:center}.timer span{display:block;font-size:9px;color:#806100}.timer strong{display:block;font-size:21px;margin-top:3px}.progress{height:8px;border-radius:20px;background:#e7eef5;overflow:hidden;margin-top:15px}.progress span{display:block;height:100%;background:var(--yellow);width:0}
+.sticky-submit{position:sticky;bottom:12px;z-index:30;display:flex;justify-content:space-between;align-items:center;gap:14px;padding:14px 16px;border:1px solid var(--line);border-radius:16px;background:#fffffff3;box-shadow:0 10px 30px rgba(8,45,105,.12);backdrop-filter:blur(8px)}.save-state{font-size:11px;color:var(--muted)}
+.result{text-align:center;padding:30px}.score{font-size:46px;font-weight:700;line-height:1}.result h2{font-size:25px;margin-top:10px}.result p{color:var(--muted);font-size:13px;margin-top:7px}.result.pass .score,.result.pass h2{color:#087744}.result.fail .score,.result.fail h2{color:#b42318}
+.hidden{display:none!important}
+@media(max-width:767px){.topbar{height:68px;padding:0 12px}.brand img{width:82px;height:48px}.member-copy{display:none}.page{width:calc(100% - 20px);padding:12px 0 35px}.hero{padding:5px;border-radius:16px}.hero img{border-radius:12px}.card{padding:17px;border-radius:17px}.title{font-size:21px}.sub{font-size:12px}.info-grid{grid-template-columns:1fr 1fr}.exam-top{flex-direction:column}.timer{width:100%}.question{padding:16px}.q-text{font-size:15px}.sticky-submit{bottom:7px;flex-direction:column;align-items:stretch}.sticky-submit .btn{width:100%}}
+</style>
+<meta name="sante-build" content="MEMBER-POSTTRAINING-QR-V1">
+</head>
+<body>
+<header class="topbar">
+  <a href="member-home.html" class="brand"><img src="sante%20(en)-logo.png" alt="SANTE"></a>
+  <div class="member">
+    <div class="member-copy"><div id="memberName" class="member-name">SANTE Member</div><div id="memberEmail" class="member-email"></div></div>
+    <button id="logoutBtn" class="btn hidden" type="button">ออกจากระบบ</button>
+  </div>
+</header>
+
+<main class="page">
+  <section class="hero"><img src="sante-member-hero.png" alt="Trust in Safety. Trust in SANTE."></section>
+
+  <div id="loadingCard" class="card"><div class="title">กำลังตรวจสอบสิทธิ์...</div><div class="sub">กรุณารอสักครู่ ระบบกำลังตรวจสอบรอบอบรมและบัญชีสมาชิกของคุณ</div></div>
+
+  <section id="loginSection" class="login-card hidden">
+    <h2>เข้าสู่ระบบเพื่อทำข้อสอบ</h2>
+    <p class="sub">ใช้บัญชี SANTE เดียวกับที่ใช้สมัครอบรม ระบบจะกลับมาตรวจสิทธิ์ของรอบนี้โดยอัตโนมัติ</p>
+    <div class="field"><label>อีเมล</label><input id="loginEmail" class="input" type="email" autocomplete="email"></div>
+    <div class="field"><label>รหัสผ่าน</label><input id="loginPassword" class="input" type="password" autocomplete="current-password"></div>
+    <div id="loginMessage"></div>
+    <button id="loginBtn" class="btn primary" style="width:100%;margin-top:15px">เข้าสู่ระบบและตรวจสิทธิ์</button>
+  </section>
+
+  <section id="accessSection" class="card hidden">
+    <div class="exam-top">
+      <div>
+        <div class="title" id="examName">แบบทดสอบท้ายการอบรม</div>
+        <div class="sub" id="sessionName"></div>
+        <div class="chips" id="chips"></div>
+      </div>
+    </div>
+    <div class="info-grid">
+      <div class="info"><span>เกณฑ์ผ่าน</span><strong id="passInfo">-</strong></div>
+      <div class="info"><span>จำนวนครั้งสูงสุด</span><strong id="attemptInfo">-</strong></div>
+      <div class="info"><span>สิทธิ์ที่เหลือ</span><strong id="remainingInfo">-</strong></div>
+      <div class="info"><span>เวลาทำข้อสอบ</span><strong id="timeInfo">-</strong></div>
+    </div>
+    <div id="accessMessage"></div>
+    <div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap">
+      <button id="startBtn" class="btn yellow hidden">เริ่มทำข้อสอบ</button>
+      <a href="member-home.html" class="btn" style="display:inline-flex;align-items:center">กลับหน้าสมาชิก</a>
+    </div>
+  </section>
+
+  <section id="examSection" class="hidden">
+    <div class="card">
+      <div class="exam-top">
+        <div><div class="title" id="doingExamName">แบบทดสอบท้ายการอบรม</div><div class="sub" id="doingMeta"></div></div>
+        <div class="timer"><span>เวลาคงเหลือ</span><strong id="timer">--:--</strong></div>
+      </div>
+      <div class="progress"><span id="answerProgress"></span></div>
+    </div>
+    <div id="questionsArea"></div>
+    <div class="sticky-submit">
+      <div id="saveState" class="save-state">ระบบบันทึกคำตอบอัตโนมัติ</div>
+      <button id="submitBtn" class="btn primary">ส่งข้อสอบ / ดูคะแนน</button>
+    </div>
+  </section>
+
+  <section id="resultSection" class="card hidden"></section>
+</main>
+
+<script>
+const SUPABASE_URL="https://cyegjwerxlxhczrfiurz.supabase.co";
+const SUPABASE_KEY="sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF";
+const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{storageKey:"sante-member-auth",persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
+const sessionId=new URLSearchParams(location.search).get("session");
+let state=null,attempt=null,timerInterval=null,submitting=false;
+
+function show(el){$(el).classList.remove("hidden")}
+function hide(el){$(el).classList.add("hidden")}
+function notice(type,text){return `<div class="notice ${type}">${esc(text)}</div>`}
+function publicMedia(path,bucket="question-media"){if(!path)return"";return db.storage.from(bucket||"question-media").getPublicUrl(path).data.publicUrl||""}
+
+async function init(){
+  if(!sessionId){$("loadingCard").innerHTML='<div class="title">ลิงก์ไม่ถูกต้อง</div>'+notice("error","ไม่พบรหัสรอบการอบรมในลิงก์");return}
+  const {data:{session}}=await db.auth.getSession();
+  if(!session?.user){hide("loadingCard");show("loginSection");return}
+  $("logoutBtn").classList.remove("hidden");
+  await loadMemberProfile(session.user.id);
+  await loadAccess();
+}
+
+async function loadMemberProfile(uid){
+  const r=await db.from("profiles").select("title_th,firstname_th,lastname_th,email").eq("id",uid).maybeSingle();
+  if(!r.error&&r.data){$("memberName").textContent=[r.data.title_th,r.data.firstname_th,r.data.lastname_th].filter(Boolean).join(" ")||"SANTE Member";$("memberEmail").textContent=r.data.email||""}
+}
+
+async function login(){
+  const email=$("loginEmail").value.trim(),password=$("loginPassword").value;
+  if(!email||!password){$("loginMessage").innerHTML=notice("error","กรุณากรอกอีเมลและรหัสผ่าน");return}
+  const btn=$("loginBtn");btn.disabled=true;btn.textContent="กำลังเข้าสู่ระบบ...";
+  try{
+    const {data,error}=await db.auth.signInWithPassword({email,password});if(error)throw error;
+    const pr=await db.from("profiles").select("account_status").eq("id",data.user.id).maybeSingle();
+    if(pr.data&&String(pr.data.account_status||"ACTIVE").toUpperCase()!=="ACTIVE"){await db.auth.signOut();throw new Error("บัญชีนี้ยังไม่พร้อมใช้งาน กรุณาติดต่อ SANTE")}
+    hide("loginSection");show("loadingCard");$("loadingCard").innerHTML='<div class="title">เข้าสู่ระบบสำเร็จ</div><div class="sub">กำลังตรวจสอบสิทธิ์ของรอบอบรม...</div>';
+    $("logoutBtn").classList.remove("hidden");await loadMemberProfile(data.user.id);await loadAccess();
+  }catch(e){$("loginMessage").innerHTML=notice("error",e.message==="Invalid login credentials"?"อีเมลหรือรหัสผ่านไม่ถูกต้อง":(e.message||"เข้าสู่ระบบไม่สำเร็จ"))}
+  finally{btn.disabled=false;btn.textContent="เข้าสู่ระบบและตรวจสิทธิ์"}
+}
+
+async function loadAccess(){
+  const {data,error}=await db.rpc("member_get_training_posttest_access",{p_training_session_id:sessionId});
+  if(error){$("loadingCard").innerHTML='<div class="title">ตรวจสอบสิทธิ์ไม่สำเร็จ</div>'+notice("error",error.message);return}
+  state=data||{};
+  hide("loadingCard");show("accessSection");
+  $("examName").textContent=state.exam_name||"แบบทดสอบท้ายการอบรม";
+  $("sessionName").textContent=[state.course_name,state.session_name].filter(Boolean).join(" · ");
+  $("passInfo").textContent=state.pass_percentage!=null?state.pass_percentage+"%":"-";
+  $("attemptInfo").textContent=state.max_attempts!=null?state.max_attempts+" ครั้ง":"-";
+  $("remainingInfo").textContent=state.attempts_remaining!=null?state.attempts_remaining+" ครั้ง":"-";
+  $("timeInfo").textContent=state.time_limit_minutes?state.time_limit_minutes+" นาที":"ไม่จำกัด";
+  $("chips").innerHTML=`<span class="chip">${esc(state.status||"-")}</span>`+(state.member_name?`<span class="chip green">${esc(state.member_name)}</span>`:"");
+  renderAccessState();
+}
+
+function renderAccessState(){
+  const s=state.status;
+  const box=$("accessMessage");const btn=$("startBtn");btn.classList.add("hidden");
+  if(s==="READY"){box.innerHTML=notice("success","สิทธิ์พร้อมแล้ว คุณสามารถเริ่มทำข้อสอบได้");btn.textContent="เริ่มทำข้อสอบ";btn.classList.remove("hidden")}
+  else if(s==="IN_PROGRESS"){box.innerHTML=notice("info","คุณมีข้อสอบที่เริ่มทำไว้แล้ว ระบบจะเปิดข้อสอบเดิมต่อให้");btn.textContent="ทำข้อสอบต่อ";btn.classList.remove("hidden")}
+  else if(s==="PASSED"){box.innerHTML=notice("success",`คุณผ่านข้อสอบแล้ว คะแนนดีที่สุด ${state.best_percentage??"-"}% ผลนี้พร้อมใช้ประกอบการออกวุฒิบัตร`)}
+  else if(s==="NOT_OPEN"){box.innerHTML=notice("warn","ข้อสอบยังไม่เปิด กรุณารอผู้ดูแลหรือวิทยากรแจ้งให้เริ่มทำข้อสอบ")}
+  else if(s==="CLOSED"){box.innerHTML=notice("warn","หมดเวลาที่เปิดให้ทำข้อสอบของรอบนี้แล้ว กรุณาติดต่อ SANTE")}
+  else if(s==="PAYMENT_REQUIRED"){box.innerHTML=notice("warn","หลักสูตรนี้ยังไม่ยืนยันการชำระเงิน จึงยังไม่สามารถทำข้อสอบได้")}
+  else if(s==="NOT_REGISTERED"){box.innerHTML=notice("error","บัญชีนี้ไม่พบการสมัครในรอบอบรมดังกล่าว กรุณาเข้าสู่ระบบด้วยบัญชีที่ใช้สมัครอบรม")}
+  else if(s==="EXAM_NOT_PUBLISHED"){box.innerHTML=notice("warn","ข้อสอบยังไม่พร้อมใช้งาน กรุณารอผู้ดูแลระบบ Publish ข้อสอบ")}
+  else if(s==="EXAM_NOT_CREATED"){box.innerHTML=notice("warn","รอบอบรมนี้ยังไม่มีข้อสอบท้ายการอบรม")}
+  else if(s==="ATTEMPTS_EXHAUSTED"){box.innerHTML=notice("error",`ใช้สิทธิ์สอบครบ ${state.max_attempts||0} ครั้งแล้ว คะแนนดีที่สุด ${state.best_percentage??"-"}%`)}
+  else{box.innerHTML=notice("error","ไม่สามารถเปิดข้อสอบได้ สถานะ: "+(s||"UNKNOWN"))}
+}
+
+async function startExam(){
+  const btn=$("startBtn");btn.disabled=true;btn.textContent="กำลังเตรียมข้อสอบ...";
+  try{
+    const {data,error}=await db.rpc("member_start_training_posttest",{p_training_session_id:sessionId});if(error)throw error;
+    attempt=data;hide("accessSection");show("examSection");
+    $("doingExamName").textContent=state.exam_name||"แบบทดสอบท้ายการอบรม";
+    $("doingMeta").textContent=`ครั้งที่ ${attempt.attempt_number} · ${state.pass_percentage}% ผ่าน`;
+    renderQuestions();startTimer();
+  }catch(e){$("accessMessage").innerHTML=notice("error",e.message||"ไม่สามารถเริ่มข้อสอบได้")}
+  finally{btn.disabled=false;btn.textContent=state.status==="IN_PROGRESS"?"ทำข้อสอบต่อ":"เริ่มทำข้อสอบ"}
+}
+
+function renderQuestions(){
+  const answers=attempt.answers||{};
+  const qs=attempt.questions||[];
+  $("questionsArea").innerHTML=qs.map(q=>{
+    const saved=answers[q.question_id]||{};
+    const media=(q.media||[]).filter(m=>m.media_type==="IMAGE").map(m=>`<img class="q-image" src="${esc(publicMedia(m.storage_path,m.storage_bucket))}" alt="${esc(m.alt_text||"รูปคำถาม")}">`).join("");
+    let ans="";
+    if(q.question_type==="SINGLE_CHOICE"){
+      ans=(q.choices||[]).map(c=>`<label class="option"><input type="radio" name="q-${q.question_id}" value="${esc(c.choice_key)}" ${(saved.choices||[]).includes(c.choice_key)?"checked":""}><div><div><strong>${esc(c.choice_key)}.</strong> ${esc(c.choice_text||"")}</div>${c.image_path?`<img class="choice-image" src="${esc(publicMedia(c.image_path,c.image_bucket))}">`:""}</div></label>`).join("")
+    }else if(q.question_type==="MULTIPLE_CHOICE"){
+      ans=(q.choices||[]).map(c=>`<label class="option"><input type="checkbox" data-multi="${q.question_id}" value="${esc(c.choice_key)}" ${(saved.choices||[]).includes(c.choice_key)?"checked":""}><div><div><strong>${esc(c.choice_key)}.</strong> ${esc(c.choice_text||"")}</div>${c.image_path?`<img class="choice-image" src="${esc(publicMedia(c.image_path,c.image_bucket))}">`:""}</div></label>`).join("")
+    }else{
+      ans=`<textarea class="text-answer" data-text="${q.question_id}" placeholder="พิมพ์คำตอบ">${esc(saved.text||"")}</textarea>`
+    }
+    return `<article class="question" data-question="${q.question_id}" data-type="${q.question_type}"><div class="q-head"><div class="q-no">${q.question_number}</div><div class="q-copy"><div class="q-text">${esc(q.question_text)}</div><div class="q-meta">${q.points} คะแนน</div>${media}${ans}</div></div></article>`
+  }).join("");
+  document.querySelectorAll('input[type="radio"],input[type="checkbox"],.text-answer').forEach(el=>el.addEventListener("change",()=>saveQuestionFromElement(el)));
+  document.querySelectorAll(".text-answer").forEach(el=>el.addEventListener("blur",()=>saveQuestionFromElement(el)));
+  updateProgress();
+}
+
+async function saveQuestionFromElement(el){
+  const article=el.closest("[data-question]"),qid=article.dataset.question,type=article.dataset.type;let payload={};
+  if(type==="SINGLE_CHOICE"){const x=article.querySelector('input[type="radio"]:checked');payload={choices:x?[x.value]:[]}}
+  else if(type==="MULTIPLE_CHOICE"){payload={choices:[...article.querySelectorAll('input[type="checkbox"]:checked')].map(x=>x.value)}}
+  else{payload={text:article.querySelector(".text-answer")?.value?.trim()||""}}
+  $("saveState").textContent="กำลังบันทึกคำตอบ...";
+  const {error}=await db.rpc("member_save_training_posttest_answer",{p_attempt_id:attempt.attempt_id,p_question_id:qid,p_answer:payload});
+  $("saveState").textContent=error?"บันทึกคำตอบไม่สำเร็จ":"บันทึกคำตอบแล้ว";
+  if(error)console.error(error);updateProgress()
+}
+
+function updateProgress(){
+  const qs=[...document.querySelectorAll("[data-question]")];let done=0;
+  qs.forEach(a=>{const t=a.dataset.type;if(t==="TEXT"){if(a.querySelector(".text-answer")?.value?.trim())done++}else if(a.querySelector("input:checked"))done++});
+  $("answerProgress").style.width=qs.length?`${done/qs.length*100}%`:"0%";
+  $("saveState").textContent=`ตอบแล้ว ${done} / ${qs.length} ข้อ · ระบบบันทึกอัตโนมัติ`
+}
+
+function startTimer(){
+  clearInterval(timerInterval);
+  if(!attempt.deadline_at){$("timer").textContent="ไม่จำกัด";return}
+  const tick=()=>{const ms=new Date(attempt.deadline_at).getTime()-Date.now();if(ms<=0){$("timer").textContent="00:00";clearInterval(timerInterval);if(!submitting)submitExam(true);return}const sec=Math.floor(ms/1000),m=Math.floor(sec/60),s=sec%60;$("timer").textContent=`${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`};
+  tick();timerInterval=setInterval(tick,1000)
+}
+
+async function saveAllBeforeSubmit(){
+  const arts=[...document.querySelectorAll("[data-question]")];
+  for(const a of arts){const type=a.dataset.type,qid=a.dataset.question;let payload={};if(type==="SINGLE_CHOICE"){const x=a.querySelector('input[type="radio"]:checked');payload={choices:x?[x.value]:[]}}else if(type==="MULTIPLE_CHOICE"){payload={choices:[...a.querySelectorAll('input[type="checkbox"]:checked')].map(x=>x.value)}}else{payload={text:a.querySelector(".text-answer")?.value?.trim()||""}};const {error}=await db.rpc("member_save_training_posttest_answer",{p_attempt_id:attempt.attempt_id,p_question_id:qid,p_answer:payload});if(error)throw error}
+}
+
+async function submitExam(auto=false){
+  if(submitting)return;if(!auto&&!confirm("ยืนยันส่งข้อสอบและดูคะแนนหรือไม่?"))return;
+  submitting=true;$("submitBtn").disabled=true;$("submitBtn").textContent="กำลังตรวจคำตอบ...";
+  try{
+    await saveAllBeforeSubmit();
+    const {data,error}=await db.rpc("member_submit_training_posttest",{p_attempt_id:attempt.attempt_id});if(error)throw error;
+    clearInterval(timerInterval);hide("examSection");show("resultSection");
+    $("resultSection").className="card";
+    $("resultSection").innerHTML=`<div class="result ${data.passed?"pass":"fail"}"><div class="score">${Number(data.percentage||0).toFixed(2)}%</div><h2>${data.passed?"ผ่านเกณฑ์":"ยังไม่ผ่านเกณฑ์"}</h2><p>${data.raw_score} / ${data.total_points} คะแนน · เกณฑ์ผ่าน ${data.pass_percentage}%</p><div class="notice ${data.passed?"success":"warn"}">${data.passed?"ผลสอบถูกบันทึกแล้ว ระบบจะนำผลนี้ไปใช้สำหรับขั้นตอนวุฒิบัตร":"หากยังมีสิทธิ์สอบเหลือ สามารถกลับมาทำข้อสอบใหม่ได้"}</div><div style="margin-top:16px;display:flex;justify-content:center;gap:8px;flex-wrap:wrap"><button class="btn primary" onclick="location.reload()">ตรวจสอบสถานะล่าสุด</button><a class="btn" style="display:inline-flex;align-items:center" href="member-home.html">กลับหน้าสมาชิก</a></div></div>`
+  }catch(e){alert(e.message||"ส่งข้อสอบไม่สำเร็จ");$("submitBtn").disabled=false;$("submitBtn").textContent="ส่งข้อสอบ / ดูคะแนน";submitting=false}
+}
+
+$("loginBtn").onclick=login;$("loginPassword").addEventListener("keydown",e=>{if(e.key==="Enter")login()});$("startBtn").onclick=startExam;$("submitBtn").onclick=()=>submitExam(false);$("logoutBtn").onclick=async()=>{await db.auth.signOut();location.reload()};
+init();
+</script>
+</body>
+</html>

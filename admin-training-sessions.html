@@ -16,6 +16,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 
   <style>
     * {
@@ -2013,7 +2014,7 @@ a{text-decoration:none}
 }
 </style>
 
-<meta name="sante-unified-build" content="SANTE-ADMIN-UNIFIED-R1">
+<meta name="sante-unified-build" content="SANTE-ADMIN-UNIFIED-R1-QR-V1">
 
 <style id="sante-admin-readability-r2">
 /* =========================================================
@@ -2222,6 +2223,35 @@ textarea{
 </style>
 
 <meta name="sante-readability-build" content="SANTE-ADMIN-READABILITY-R2">
+
+<style id="sante-qr-posttest-admin-v1">
+.card-actions{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important}
+.qr-btn{width:100%;min-height:42px;border:1px solid #b8d3ec;border-radius:9px;background:#eef6ff;color:#082d69;font-size:13px;font-weight:600}
+.qr-btn:hover{background:#e4f1ff}
+.qr-modal-backdrop{position:fixed;inset:0;z-index:7000;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(3,20,48,.62)}
+.qr-modal-backdrop.show{display:flex}
+.qr-modal{width:min(880px,96vw);max-height:92vh;overflow:auto;background:#fff;border-radius:22px;box-shadow:0 28px 80px rgba(0,0,0,.25)}
+.qr-modal-head{display:flex;align-items:flex-start;justify-content:space-between;gap:15px;padding:22px 24px;border-bottom:1px solid var(--line)}
+.qr-modal-head h2{font-size:22px}.qr-modal-head p{margin-top:5px;color:var(--muted);font-size:12px}
+.qr-modal-body{padding:22px 24px 24px}
+.qr-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+.qr-summary-card{padding:13px;border:1px solid var(--line);border-radius:13px;background:#f8fbfe}
+.qr-summary-card span{display:block;color:var(--muted);font-size:10px}.qr-summary-card strong{display:block;margin-top:5px;font-size:14px}
+.qr-state{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:15px;border-radius:14px;background:#f6f9fc;border:1px solid var(--line);margin-bottom:16px}
+.qr-state strong{font-size:15px}.qr-open{color:#087744}.qr-closed{color:#b42318}
+.qr-layout{display:grid;grid-template-columns:300px 1fr;gap:20px;align-items:start}
+.qr-box{display:flex;align-items:center;justify-content:center;min-height:300px;padding:18px;border:1px solid var(--line);border-radius:18px;background:#fff}
+.qr-box canvas,.qr-box img{max-width:100%;height:auto!important}
+.qr-controls{display:grid;gap:12px}
+.qr-link{padding:12px;border-radius:12px;background:#f5f9fc;border:1px solid var(--line);font-size:11px;word-break:break-all}
+.qr-form label{display:block;margin-bottom:5px;font-size:11px;font-weight:600}
+.qr-form input{width:100%;min-height:44px;border:1px solid var(--line);border-radius:11px;padding:9px 11px}
+.qr-actions{display:flex;gap:8px;flex-wrap:wrap}
+.qr-note{padding:11px 12px;border-radius:11px;background:#fff6da;color:#765800;font-size:11px;line-height:1.6}
+@media(max-width:900px){.card-actions{grid-template-columns:1fr!important}.qr-layout{grid-template-columns:1fr}.qr-box{min-height:260px}.qr-summary{grid-template-columns:1fr 1fr}}
+@media(max-width:520px){.qr-summary{grid-template-columns:1fr}.qr-modal-body{padding:16px}.qr-modal-head{padding:18px}}
+</style>
+
 </head>
 
 <body>
@@ -3162,6 +3192,53 @@ textarea{
   ></div>
 
 
+
+<div id="posttestQrModal" class="qr-modal-backdrop">
+  <div class="qr-modal">
+    <div class="qr-modal-head">
+      <div>
+        <h2>QR / เปิดข้อสอบท้ายการอบรม</h2>
+        <p id="qrModalSub">กำลังโหลดข้อมูล...</p>
+      </div>
+      <button class="btn btn-light" type="button" onclick="closePosttestQr()">✕</button>
+    </div>
+    <div class="qr-modal-body">
+      <div id="qrMessage"></div>
+      <div class="qr-summary">
+        <div class="qr-summary-card"><span>ข้อสอบ</span><strong id="qrExamStatus">-</strong></div>
+        <div class="qr-summary-card"><span>จำนวนข้อ</span><strong id="qrQuestionCount">-</strong></div>
+        <div class="qr-summary-card"><span>เกณฑ์ผ่าน</span><strong id="qrPass">-</strong></div>
+        <div class="qr-summary-card"><span>สอบได้</span><strong id="qrAttempts">-</strong></div>
+      </div>
+      <div class="qr-state">
+        <div><span style="font-size:10px;color:var(--muted)">สถานะการเปิดสอบ</span><strong id="qrOpenState" class="qr-closed">ปิด</strong></div>
+        <button id="qrToggleBtn" class="btn btn-yellow" type="button">เปิดสอบตอนนี้</button>
+      </div>
+      <div class="qr-layout">
+        <div class="qr-box"><div id="posttestQrCode"></div></div>
+        <div class="qr-controls">
+          <div>
+            <div style="font-size:11px;font-weight:600;margin-bottom:5px">ลิงก์สำหรับผู้เข้าอบรม</div>
+            <div id="qrShareLink" class="qr-link">-</div>
+          </div>
+          <div class="qr-form">
+            <label>กำหนดเวลาปิดสอบ (ไม่บังคับ)</label>
+            <input id="qrCloseAt" type="datetime-local">
+          </div>
+          <div class="qr-actions">
+            <button id="qrCopyBtn" class="btn" type="button">Copy Link</button>
+            <button id="qrDownloadBtn" class="btn" type="button">Download QR</button>
+            <button id="qrOpenPageBtn" class="btn btn-primary" type="button">เปิดหน้าข้อสอบ</button>
+          </div>
+          <div class="qr-note">
+            QR เดียวใช้ได้ทั้งรุ่น แต่ระบบจะตรวจบัญชีสมาชิก การสมัครในรอบนี้ สถานะชำระเงิน และจำนวนครั้งที่สอบก่อนอนุญาตให้ทำข้อสอบ
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
   <script>
 
     /* =========================================================
@@ -3634,6 +3711,11 @@ textarea{
             training_start_at,
             training_end_at,
             training_hours,
+            requires_posttest,
+            posttest_is_open,
+            posttest_open_at,
+            posttest_close_at,
+            posttest_auto_open,
             delivery_method,
             online_platform,
             meeting_url,
@@ -4307,6 +4389,15 @@ textarea{
                       จัดการข้อสอบท้ายอบรม
                     </button>
 
+                    <button
+                      class="qr-btn"
+                      onclick="openPosttestQr(
+                        '${session.id}'
+                      )"
+                    >
+                      QR / เปิดสอบ
+                    </button>
+
                   </div>
 
                 </div>
@@ -4319,6 +4410,204 @@ textarea{
         .join("");
 
     }
+
+
+
+    /* =========================================================
+       QR / SHARED POST-TRAINING EXAM ACCESS
+    ========================================================= */
+
+    let qrCurrentSessionId = null;
+    let qrCurrentData = null;
+    let qrInstance = null;
+
+    function getPosttestShareUrl(sessionId) {
+      return location.origin +
+        "/post-training-exam.html?session=" +
+        encodeURIComponent(sessionId);
+    }
+
+    function toLocalDateTimeValue(value) {
+      if (!value) return "";
+      const d = new Date(value);
+      if (Number.isNaN(d.getTime())) return "";
+      const p = n => String(n).padStart(2,"0");
+      return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}`;
+    }
+
+    async function openPosttestQr(sessionId) {
+      qrCurrentSessionId = sessionId;
+      qrCurrentData = null;
+
+      const modal = document.getElementById("posttestQrModal");
+      modal.classList.add("show");
+      document.getElementById("qrModalSub").textContent = "กำลังโหลดข้อมูล...";
+      document.getElementById("qrMessage").innerHTML = "";
+      document.getElementById("posttestQrCode").innerHTML = "";
+
+      try {
+        const {data,error} = await supabaseClient.rpc(
+          "admin_get_training_posttest_share",
+          {p_training_session_id: sessionId}
+        );
+        if (error) throw error;
+
+        qrCurrentData = data || {};
+        const shareUrl = getPosttestShareUrl(sessionId);
+
+        document.getElementById("qrModalSub").textContent =
+          `${qrCurrentData.course_name || "-"} · ${qrCurrentData.session_name || "-"}`;
+
+        document.getElementById("qrExamStatus").textContent =
+          qrCurrentData.exam_published ? "Published" : "Draft / ยังไม่พร้อม";
+
+        document.getElementById("qrQuestionCount").textContent =
+          `${qrCurrentData.question_count || 0} ข้อ`;
+
+        document.getElementById("qrPass").textContent =
+          `${qrCurrentData.pass_percentage ?? "-"}%`;
+
+        document.getElementById("qrAttempts").textContent =
+          `${qrCurrentData.max_attempts ?? "-"} ครั้ง`;
+
+        document.getElementById("qrShareLink").textContent = shareUrl;
+        document.getElementById("qrCloseAt").value =
+          toLocalDateTimeValue(qrCurrentData.posttest_close_at);
+
+        renderQrOpenState();
+
+        if (window.QRCode) {
+          qrInstance = new QRCode(
+            document.getElementById("posttestQrCode"),
+            {
+              text: shareUrl,
+              width: 250,
+              height: 250,
+              colorDark: "#082d69",
+              colorLight: "#ffffff",
+              correctLevel: QRCode.CorrectLevel.H
+            }
+          );
+        } else {
+          throw new Error("ไม่สามารถโหลด QR Code library ได้");
+        }
+
+      } catch (e) {
+        console.error(e);
+        document.getElementById("qrMessage").innerHTML =
+          `<div class="notice" style="background:#fff0f1;color:#a52a35;margin-bottom:14px">
+            โหลดข้อมูล QR ไม่สำเร็จ: ${escapeHtml(e.message || e)}
+          </div>`;
+      }
+    }
+
+    function renderQrOpenState() {
+      if (!qrCurrentData) return;
+
+      const isOpen = !!qrCurrentData.posttest_is_open;
+      const state = document.getElementById("qrOpenState");
+      const btn = document.getElementById("qrToggleBtn");
+
+      state.textContent = isOpen ? "เปิดให้ทำข้อสอบแล้ว" : "ยังไม่เปิด";
+      state.className = isOpen ? "qr-open" : "qr-closed";
+
+      btn.textContent = isOpen ? "ปิดสอบ" : "เปิดสอบตอนนี้";
+      btn.className = isOpen ? "btn btn-danger" : "btn btn-yellow";
+
+      btn.disabled =
+        !isOpen &&
+        (!qrCurrentData.exam_id ||
+         !qrCurrentData.exam_published ||
+         Number(qrCurrentData.question_count || 0) <= 0);
+    }
+
+    function closePosttestQr() {
+      document.getElementById("posttestQrModal").classList.remove("show");
+    }
+
+    async function togglePosttestQrAccess() {
+      if (!qrCurrentSessionId || !qrCurrentData) return;
+
+      const opening = !qrCurrentData.posttest_is_open;
+      const closeRaw = document.getElementById("qrCloseAt").value;
+      const closeAt = closeRaw ? new Date(closeRaw).toISOString() : null;
+
+      if (opening && !qrCurrentData.exam_published) {
+        showToast("กรุณา Publish ข้อสอบก่อนเปิดสิทธิ์", "error");
+        return;
+      }
+
+      if (!confirm(opening
+        ? "เปิดข้อสอบให้ผู้สมัครในรอบนี้ผ่าน QR / Link ตอนนี้หรือไม่?"
+        : "ปิดการเข้าทำข้อสอบผ่าน QR ของรอบนี้หรือไม่?")) {
+        return;
+      }
+
+      const btn = document.getElementById("qrToggleBtn");
+      btn.disabled = true;
+
+      try {
+        const {error} = await supabaseClient.rpc(
+          "admin_set_training_posttest_open",
+          {
+            p_training_session_id: qrCurrentSessionId,
+            p_is_open: opening,
+            p_close_at: opening ? closeAt : null
+          }
+        );
+        if (error) throw error;
+
+        qrCurrentData.posttest_is_open = opening;
+        qrCurrentData.posttest_close_at = opening ? closeAt : null;
+        renderQrOpenState();
+        showToast(opening ? "เปิดข้อสอบเรียบร้อยแล้ว" : "ปิดข้อสอบเรียบร้อยแล้ว", "success");
+        await loadSessions();
+
+      } catch (e) {
+        console.error(e);
+        showToast("ดำเนินการไม่สำเร็จ: " + (e.message || e), "error");
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    async function copyPosttestLink() {
+      const link = document.getElementById("qrShareLink").textContent.trim();
+      if (!link || link === "-") return;
+      try {
+        await navigator.clipboard.writeText(link);
+        showToast("คัดลอกลิงก์แล้ว", "success");
+      } catch {
+        prompt("คัดลอกลิงก์นี้", link);
+      }
+    }
+
+    function downloadPosttestQr() {
+      const box = document.getElementById("posttestQrCode");
+      const canvas = box.querySelector("canvas");
+      const img = box.querySelector("img");
+      const src = canvas ? canvas.toDataURL("image/png") : img?.src;
+      if (!src) {
+        showToast("ยังไม่มี QR สำหรับดาวน์โหลด", "error");
+        return;
+      }
+      const a = document.createElement("a");
+      a.href = src;
+      a.download = `SANTE-POSTTEST-${qrCurrentSessionId}.png`;
+      a.click();
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      document.getElementById("qrToggleBtn")?.addEventListener("click", togglePosttestQrAccess);
+      document.getElementById("qrCopyBtn")?.addEventListener("click", copyPosttestLink);
+      document.getElementById("qrDownloadBtn")?.addEventListener("click", downloadPosttestQr);
+      document.getElementById("qrOpenPageBtn")?.addEventListener("click", () => {
+        if (qrCurrentSessionId) window.open(getPosttestShareUrl(qrCurrentSessionId), "_blank", "noopener");
+      });
+      document.getElementById("posttestQrModal")?.addEventListener("click", e => {
+        if (e.target.id === "posttestQrModal") closePosttestQr();
+      });
+    });
 
 
     /* =========================================================
