@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>SANTE Admin | การแจ้งเตือน</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--navy:#082d69;--navy-dark:#061f4b;--yellow:#ffbf19;--green:#159447;--red:#b42318;--blue:#087df0;--bg:#f1f7fb;--text:#082d69;--muted:#6f83a2;--line:#d9e5ef;--sidebar:285px}
+body{font-family:Prompt,sans-serif;background:var(--bg);color:var(--text)}
+button,input,select{font-family:Prompt,sans-serif}
+.sidebar{position:fixed;inset:0 auto 0 0;width:var(--sidebar);z-index:1200;display:flex;flex-direction:column;background:linear-gradient(180deg,#082d69 0%,#06265c 55%,#061f4b 100%);color:#fff;overflow-y:auto}
+.sidebar-brand{min-height:128px;display:flex;align-items:center;justify-content:center;padding:22px 25px;border-bottom:1px solid #ffffff18}.sidebar-brand img{width:190px;height:82px;object-fit:contain}.sidebar-label{padding:26px 25px 10px;color:#9bb1d0;font-size:12px;letter-spacing:1.7px}.nav{padding:0 15px 25px}.nav-link{min-height:58px;display:flex;align-items:center;gap:14px;margin:5px 0;padding:0 17px;border-radius:16px;color:#e4edfa;font-size:15px;font-weight:500;text-decoration:none}.nav-link:hover{background:#ffffff12}.nav-link.active{background:var(--yellow);color:var(--navy);font-weight:600}.nav-icon{width:29px;text-align:center;font-size:20px}.sidebar-footer{margin:auto 15px 22px;padding:18px;border-radius:17px;background:#ffffff12}.sidebar-footer p{margin-top:6px;color:#b6c8e2;font-size:11px;line-height:1.6}
+.main{margin-left:var(--sidebar);min-height:100vh;padding-top:88px}.topbar{position:fixed;left:var(--sidebar);right:0;top:0;height:88px;z-index:1000;background:#fffffff8;border-bottom:1px solid #e2ebf3;display:flex;align-items:center;justify-content:space-between;padding:0 34px}.topbar-left{display:flex;align-items:center;gap:14px}.page-name{font-size:21px;font-weight:600}.page-sub{font-size:12px;color:var(--muted);margin-top:4px}.admin-area{display:flex;align-items:center;gap:16px}.admin-copy{text-align:right}.admin-name{font-size:14px;font-weight:600}.admin-email{font-size:11px;color:var(--muted)}
+.mobile-menu{display:none}.btn{min-height:42px;border:1px solid var(--line);border-radius:11px;background:#fff;color:var(--navy);padding:0 14px;font-size:12px;font-weight:600;cursor:pointer}.btn.primary{background:var(--navy);border-color:var(--navy);color:#fff}.btn.yellow{background:var(--yellow);border-color:var(--yellow)}.btn:disabled{opacity:.45;cursor:not-allowed}
+.content{width:min(1540px,calc(100% - 58px));margin:auto;padding:30px 0 65px}.page-head{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;margin:2px 4px 22px}.page-head h1{font-size:30px}.page-head p{margin-top:6px;color:var(--muted);font-size:14px}.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:18px}.stat{min-height:112px;padding:18px;background:#fff;border:1px solid var(--line);border-radius:18px}.stat span{color:var(--muted);font-size:12px}.stat strong{display:block;margin-top:8px;font-size:29px}
+.toolbar{display:grid;grid-template-columns:1fr 180px 180px auto;gap:10px;padding:14px;background:#fff;border:1px solid var(--line);border-radius:17px;margin-bottom:12px}.input,.select{width:100%;min-height:44px;border:1px solid var(--line);border-radius:11px;padding:9px 12px;background:#fff;color:var(--navy)}
+.table-wrap{background:#fff;border:1px solid var(--line);border-radius:20px;overflow:auto}.table{width:100%;min-width:1280px;border-collapse:collapse}.table th{padding:13px 12px;background:var(--navy);color:#fff;font-size:11px;text-align:left;font-weight:500}.table td{padding:13px 12px;border-bottom:1px solid #e8eef4;font-size:12px;vertical-align:top;line-height:1.55}.name{font-size:13px;font-weight:600}.sub{margin-top:3px;color:var(--muted);font-size:10.5px}.badge{display:inline-flex;padding:5px 8px;border-radius:999px;font-size:9.5px;font-weight:600}.queued{background:#fff4cf;color:#765800}.processing{background:#eaf4ff;color:#145b9c}.sent{background:#eaf9f1;color:#087744}.failed{background:#fff0f1;color:#a52a35}.cancelled{background:#edf2f6;color:#64768c}.email{background:#edf5ff;color:#145b9c}.line{background:#ecfaef;color:#0c7a38}.empty{padding:35px;text-align:center;color:var(--muted);font-size:12px}.notice{padding:11px 12px;border-radius:11px;background:#eef6ff;color:#315577;font-size:11px;line-height:1.6;margin-bottom:12px}
+#santeMobileOverlay{display:none}
+@media(max-width:900px){.sidebar{width:min(84vw,320px);height:100dvh;transform:translateX(-102%);transition:.22s;overflow-y:auto;padding-bottom:calc(24px + env(safe-area-inset-bottom))}.sidebar.open{transform:translateX(0)}#santeMobileOverlay.show{display:block;position:fixed;inset:0;z-index:1100;background:#03143094}.main{margin-left:0;padding-top:68px}.topbar{left:0;height:68px;padding:0 12px}.mobile-menu{display:block;width:46px;height:46px}.admin-copy,.page-sub{display:none}.content{width:100%;padding:16px 12px 42px}.stats{grid-template-columns:1fr 1fr}.page-head{flex-direction:column}.page-head h1{font-size:24px}.toolbar{grid-template-columns:1fr}.sidebar-brand{min-height:118px;padding:calc(16px + env(safe-area-inset-top)) 22px 14px}.sidebar-brand img{width:170px;height:72px}}
+</style>
+</head>
+<body>
+<aside class="sidebar" id="sidebar">
+ <div class="sidebar-brand"><img src="sante%20(en)-logo.png" alt="SANTE"></div>
+ <div class="sidebar-label">SANTE ADMIN</div>
+ <nav class="nav">
+  <a href="admin-dashboard.html" class="nav-link"><span class="nav-icon">⌂</span>หน้าหลัก</a>
+  <a href="admin-courses.html" class="nav-link"><span class="nav-icon">▤</span>หลักสูตร</a>
+  <a href="admin-training-sessions.html" class="nav-link"><span class="nav-icon">◫</span>รอบอบรม</a>
+  <a href="admin-exams.html" class="nav-link"><span class="nav-icon">✓</span>ข้อสอบ</a>
+  <a href="admin-question-import.html" class="nav-link"><span class="nav-icon">⇧</span>นำเข้าข้อสอบ</a>
+  <a href="admin-payments.html" class="nav-link"><span class="nav-icon">฿</span>การชำระเงิน</a>
+  <a href="admin-members.html" class="nav-link"><span class="nav-icon">♙</span>สมาชิก</a>
+  <a href="admin-certificates.html" class="nav-link"><span class="nav-icon">▣</span>วุฒิบัตร</a>
+  <a href="admin-notifications.html" class="nav-link active"><span class="nav-icon">✉</span>การแจ้งเตือน</a>
+  <a href="admin-services.html" class="nav-link"><span class="nav-icon">◆</span>งานบริการ</a>
+  <a href="admin-quotations.html" class="nav-link"><span class="nav-icon">▧</span>ใบเสนอราคา</a>
+ </nav>
+ <div class="sidebar-footer"><strong>SANTE SYSTEM</strong><p>Email / LINE Notification Queue</p></div>
+</aside>
+<div id="santeMobileOverlay"></div>
+
+<div class="main">
+<header class="topbar">
+ <div class="topbar-left"><button id="menuBtn" class="btn mobile-menu">☰</button><div><div class="page-name">การแจ้งเตือน</div><div class="page-sub">ติดตาม Email / LINE ที่รอส่ง สำเร็จ หรือส่งไม่สำเร็จ</div></div></div>
+ <div class="admin-area"><div class="admin-copy"><div class="admin-name">ผู้ดูแลระบบ SANTE</div><div id="adminEmail" class="admin-email"></div></div><button id="logoutBtn" class="btn">ออกจากระบบ</button></div>
+</header>
+
+<main class="content">
+ <div class="page-head"><div><h1>Notification Center</h1><p>ระบบ Queue กลางสำหรับ Registration, Payment และ Certificate</p></div><button class="btn primary" id="refreshBtn">รีเฟรช</button></div>
+
+ <div class="notice">สถานะ QUEUED หมายถึงข้อมูลพร้อมส่งแล้ว แต่จะยังไม่ส่งจริงจนกว่าจะเชื่อม Email Provider / LINE Messaging API และเปิด Worker Processor</div>
+
+ <section class="stats">
+  <div class="stat"><span>ทั้งหมด</span><strong id="sAll">0</strong></div>
+  <div class="stat"><span>รอส่ง</span><strong id="sQueued">0</strong></div>
+  <div class="stat"><span>ส่งสำเร็จ</span><strong id="sSent">0</strong></div>
+  <div class="stat"><span>ส่งไม่สำเร็จ</span><strong id="sFailed">0</strong></div>
+  <div class="stat"><span>LINE</span><strong id="sLine">0</strong></div>
+ </section>
+
+ <div class="toolbar">
+  <input id="search" class="input" placeholder="ค้นหาชื่อ ผู้รับ Subject เลขวุฒิบัตร">
+  <select id="status" class="select">
+   <option value="">ทุกสถานะ</option>
+   <option value="QUEUED">QUEUED</option>
+   <option value="PROCESSING">PROCESSING</option>
+   <option value="SENT">SENT</option>
+   <option value="FAILED">FAILED</option>
+   <option value="CANCELLED">CANCELLED</option>
+  </select>
+  <select id="channel" class="select">
+   <option value="">ทุกช่องทาง</option>
+   <option value="EMAIL">EMAIL</option>
+   <option value="LINE">LINE</option>
+  </select>
+  <button class="btn yellow" id="applyBtn">ค้นหา</button>
+ </div>
+
+ <div class="table-wrap"><div id="tableArea" class="empty">กำลังโหลด...</div></div>
+</main>
+</div>
+
+<script>
+const db=window.supabase.createClient("https://cyegjwerxlxhczrfiurz.supabase.co","sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF",{auth:{storageKey:"sante-admin-auth",persistSession:true,autoRefreshToken:true}});
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
+let rows=[];
+
+function badge(v){const c=String(v||"").toLowerCase();return `<span class="badge ${c}">${esc(v||"-")}</span>`}
+function dt(v){if(!v)return "-";return new Date(v).toLocaleString("th-TH")}
+async function init(){
+ const a=await db.auth.getSession();if(!a.data.session){location="admin-login.html";return}
+ const staff=await db.rpc("is_staff");if(staff.error||!staff.data){location="admin-login.html";return}
+ $("adminEmail").textContent=a.data.session.user.email||"";
+ await load();
+}
+async function load(){
+ $("tableArea").innerHTML='<div class="empty">กำลังโหลด...</div>';
+ const status=$("status").value||null,channel=$("channel").value||null;
+ const r=await db.rpc("admin_get_notification_queue",{p_status:status,p_channel:channel,p_limit:500});
+ if(r.error){$("tableArea").innerHTML=`<div class="empty">โหลดไม่สำเร็จ: ${esc(r.error.message)}</div>`;return}
+ rows=r.data||[];renderStats();render();
+}
+function renderStats(){
+ $("sAll").textContent=rows.length;
+ $("sQueued").textContent=rows.filter(x=>x.status==="QUEUED").length;
+ $("sSent").textContent=rows.filter(x=>x.status==="SENT").length;
+ $("sFailed").textContent=rows.filter(x=>x.status==="FAILED").length;
+ $("sLine").textContent=rows.filter(x=>x.channel==="LINE").length;
+}
+function filtered(){
+ const q=$("search").value.trim().toLowerCase();
+ if(!q)return rows;
+ return rows.filter(x=>[x.participant_name,x.recipient,x.subject,x.notification_type,x.certificate_no].join(" ").toLowerCase().includes(q));
+}
+function render(){
+ const list=filtered();
+ if(!list.length){$("tableArea").innerHTML='<div class="empty">ไม่พบรายการแจ้งเตือน</div>';return}
+ $("tableArea").innerHTML=`<table class="table"><thead><tr><th>เวลา</th><th>ประเภท</th><th>ช่องทาง</th><th>ผู้รับ</th><th>ข้อความ</th><th>สถานะ</th><th>Attempts</th><th>จัดการ</th></tr></thead><tbody>${list.map(x=>`<tr>
+ <td>${dt(x.created_at)}</td>
+ <td><div class="name">${esc(x.notification_type)}</div>${x.certificate_no?`<div class="sub">${esc(x.certificate_no)}</div>`:""}</td>
+ <td>${badge(x.channel)}</td>
+ <td><div class="name">${esc(x.participant_name||"-")}</div><div class="sub">${esc(x.recipient)}</div></td>
+ <td><div class="name">${esc(x.subject||"-")}</div><div class="sub">${esc((x.message||"").slice(0,180))}</div>${x.error_message?`<div class="sub" style="color:#a52a35">Error: ${esc(x.error_message)}</div>`:""}</td>
+ <td>${badge(x.status)}${x.sent_at?`<div class="sub">${dt(x.sent_at)}</div>`:""}</td>
+ <td>${esc(x.attempt_count)}/${esc(x.max_attempts)}</td>
+ <td>${["FAILED","CANCELLED"].includes(x.status)?`<button class="btn" onclick="retry('${x.id}')">Retry</button>`:"-"}</td>
+ </tr>`).join("")}</tbody></table>`;
+}
+async function retry(id){
+ if(!confirm("นำรายการนี้กลับเข้าคิวส่งใหม่หรือไม่?"))return;
+ const r=await db.rpc("admin_retry_notification",{p_notification_id:id});
+ if(r.error){alert(r.error.message);return}
+ await load();
+}
+$("search").oninput=render;$("applyBtn").onclick=load;$("refreshBtn").onclick=load;
+$("logoutBtn").onclick=async()=>{await db.auth.signOut();location="admin-login.html"};
+const sidebar=$("sidebar"),overlay=$("santeMobileOverlay");
+$("menuBtn").onclick=()=>{sidebar.classList.toggle("open");overlay.classList.toggle("show")};
+overlay.onclick=()=>{sidebar.classList.remove("open");overlay.classList.remove("show")};
+init();
+</script>
+</body>
+</html>
