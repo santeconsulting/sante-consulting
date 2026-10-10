@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>SANTE Member | เอกสารของฉัน</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Prompt,sans-serif;background:#f3f8fc;color:#082d69}
+.header{height:78px;background:#fff;border-bottom:1px solid #dce7f2;display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:20}
+.brand img{width:165px;height:58px;object-fit:contain}.actions{display:flex;align-items:center;gap:8px}.btn{min-height:42px;padding:0 14px;border:1px solid #d7e4ef;border-radius:11px;background:#fff;color:#082d69;font:600 12px Prompt;text-decoration:none;display:inline-flex;align-items:center;cursor:pointer}.btn.primary{background:#082d69;color:#fff;border-color:#082d69}
+.wrap{width:min(1180px,calc(100% - 32px));margin:26px auto 60px}.hero{padding:25px 28px;border-radius:22px;background:linear-gradient(145deg,#eaf7ff,#fff 58%,#fff4cf);border:1px solid #ddeaf3;margin-bottom:20px}.hero h1{margin:0;font-size:29px}.hero p{margin:7px 0 0;color:#647b98;font-size:13px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}.stat{background:#fff;border:1px solid #dce7f2;border-radius:17px;padding:16px}.stat span{font-size:11px;color:#7286a2}.stat strong{display:block;margin-top:5px;font-size:24px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.card{background:#fff;border:1px solid #dce7f2;border-radius:18px;padding:18px;box-shadow:0 8px 24px rgba(8,45,105,.035)}.tag{display:inline-flex;padding:5px 8px;border-radius:999px;background:#eaf4ff;color:#145b9c;font-size:10px;font-weight:700}.card h2{margin:10px 0 0;font-size:17px;line-height:1.45}.meta{display:grid;grid-template-columns:110px 1fr;gap:7px;margin-top:13px;font-size:11px}.meta span{color:#7589a4}.meta strong{font-weight:500}.card-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}.empty{padding:38px;text-align:center;background:#fff;border:1px solid #dce7f2;border-radius:18px;color:#7286a2}.msg{padding:12px;border-radius:12px;background:#fff0f1;color:#a52a35;margin-bottom:12px;font-size:12px}
+@media(max-width:720px){.header{height:68px;padding:0 12px}.brand img{width:125px;height:48px}.actions .home{display:none}.wrap{width:calc(100% - 24px);margin-top:14px}.hero{padding:20px}.hero h1{font-size:24px}.stats{grid-template-columns:1fr 1fr 1fr}.stat{padding:12px}.stat strong{font-size:20px}.grid{grid-template-columns:1fr}.meta{grid-template-columns:95px 1fr}.card{padding:15px}}
+</style>
+</head>
+<body>
+<header class="header">
+ <a class="brand" href="member-home.html"><img src="sante%20(en)-logo.png" alt="SANTE"></a>
+ <div class="actions">
+  <a class="btn home" href="member-home.html">หน้าหลัก</a>
+  <a class="btn" href="training-register.html">การอบรมของฉัน</a>
+  <button id="logout" class="btn">ออกจากระบบ</button>
+ </div>
+</header>
+<main class="wrap">
+ <section class="hero"><h1>เอกสารของฉัน</h1><p>วุฒิบัตรและเอกสารที่ SANTE ออกให้คุณ เก็บไว้ในระบบและเปิดดูซ้ำได้ทุกเมื่อ</p></section>
+ <div id="message"></div>
+ <section class="stats">
+  <div class="stat"><span>เอกสารทั้งหมด</span><strong id="total">0</strong></div>
+  <div class="stat"><span>วุฒิบัตร</span><strong id="certs">0</strong></div>
+  <div class="stat"><span>เวอร์ชันปัจจุบัน</span><strong id="versions">0</strong></div>
+ </section>
+ <section id="list" class="grid"><div class="empty">กำลังโหลดเอกสาร...</div></section>
+</main>
+<script>
+const db=window.supabase.createClient("https://cyegjwerxlxhczrfiurz.supabase.co","sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF",{auth:{storageKey:"sante-member-auth",persistSession:true,autoRefreshToken:true}});
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
+function fmtDate(v){if(!v)return "-";return new Intl.DateTimeFormat("th-TH",{day:"numeric",month:"short",year:"numeric"}).format(new Date(v))}
+function bytes(n){if(!n)return "-";if(n<1024*1024)return Math.round(n/1024)+" KB";return (n/1024/1024).toFixed(1)+" MB"}
+async function openDoc(bucket,path){
+ const {data,error}=await db.storage.from(bucket).createSignedUrl(path,120);
+ if(error){alert("เปิดเอกสารไม่สำเร็จ: "+error.message);return}
+ window.open(data.signedUrl,"_blank","noopener");
+}
+async function init(){
+ const a=await db.auth.getSession();
+ if(!a.data.session){location="member-login.html";return}
+ const r=await db.rpc("member_get_my_documents");
+ if(r.error){$("message").innerHTML=`<div class="msg">${esc(r.error.message)}</div>`;$("list").innerHTML="";return}
+ const rows=r.data||[];
+ $("total").textContent=rows.length;
+ $("certs").textContent=rows.filter(x=>x.document_type==="CERTIFICATE").length;
+ $("versions").textContent=rows.reduce((m,x)=>Math.max(m,Number(x.version_no||0)),0);
+ if(!rows.length){$("list").innerHTML='<div class="empty">ยังไม่มีเอกสารที่ออกให้บัญชีนี้</div>';return}
+ $("list").innerHTML=rows.map(x=>`<article class="card">
+  <span class="tag">${esc(x.document_type==="CERTIFICATE"?"วุฒิบัตร":x.document_type)}</span>
+  <h2>${esc(x.title||x.course_name||"เอกสาร")}</h2>
+  <div class="meta">
+   <span>เลขวุฒิบัตร</span><strong>${esc(x.certificate_no||"-")}</strong>
+   <span>หลักสูตร</span><strong>${esc(x.course_name||"-")}</strong>
+   <span>วันที่อบรม</span><strong>${esc(x.training_date||"-")}</strong>
+   <span>วันที่ออก</span><strong>${fmtDate(x.issue_date)}</strong>
+   <span>ไฟล์</span><strong>PDF · ${bytes(x.file_size_bytes)} · Version ${esc(x.version_no||1)}</strong>
+  </div>
+  <div class="card-actions">
+   <button class="btn primary" onclick="openDoc('${esc(x.storage_bucket)}','${esc(x.storage_path)}')">เปิด PDF</button>
+   ${x.verification_url?`<a class="btn" href="${esc(x.verification_url)}" target="_blank">ตรวจสอบ QR</a>`:""}
+  </div>
+ </article>`).join("");
+}
+$("logout").onclick=async()=>{await db.auth.signOut();location="member-login.html"};
+init();
+</script>
+</body>
+</html>
