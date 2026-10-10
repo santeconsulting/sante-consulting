@@ -26,6 +26,8 @@ button,input,textarea{font-family:Prompt,sans-serif}
 .exam-top{display:flex;justify-content:space-between;gap:16px;align-items:flex-start}.timer{min-width:135px;padding:12px;border-radius:13px;background:#fff4cf;text-align:center}.timer span{display:block;font-size:9px;color:#806100}.timer strong{display:block;font-size:21px;margin-top:3px}.progress{height:8px;border-radius:20px;background:#e7eef5;overflow:hidden;margin-top:15px}.progress span{display:block;height:100%;background:var(--yellow);width:0}
 .sticky-submit{position:sticky;bottom:12px;z-index:30;display:flex;justify-content:space-between;align-items:center;gap:14px;padding:14px 16px;border:1px solid var(--line);border-radius:16px;background:#fffffff3;box-shadow:0 10px 30px rgba(8,45,105,.12);backdrop-filter:blur(8px)}.save-state{font-size:11px;color:var(--muted)}
 .result{text-align:center;padding:30px}.score{font-size:46px;font-weight:700;line-height:1}.result h2{font-size:25px;margin-top:10px}.result p{color:var(--muted);font-size:13px;margin-top:7px}.result.pass .score,.result.pass h2{color:#087744}.result.fail .score,.result.fail h2{color:#b42318}
+.review-list{display:grid;gap:12px;margin-top:18px;text-align:left}.review-card{padding:15px;border:1px solid var(--line);border-radius:14px;background:#fff}.review-card.correct{border-color:#b9e2c7;background:#f3fbf5}.review-card.wrong{border-color:#f2c7cb;background:#fff6f6}.review-q{font-weight:600;line-height:1.6}.review-meta{margin-top:4px;font-size:10px;color:var(--muted)}.review-line{margin-top:8px;font-size:12px;line-height:1.65}.review-line strong{color:var(--navy)}
+
 .hidden{display:none!important}
 @media(max-width:767px){.topbar{height:68px;padding:0 12px}.brand img{width:82px;height:48px}.member-copy{display:none}.page{width:calc(100% - 20px);padding:12px 0 35px}.hero{padding:5px;border-radius:16px}.hero img{border-radius:12px}.card{padding:17px;border-radius:17px}.title{font-size:21px}.sub{font-size:12px}.info-grid{grid-template-columns:1fr 1fr}.exam-top{flex-direction:column}.timer{width:100%}.question{padding:16px}.q-text{font-size:15px}.sticky-submit{bottom:7px;flex-direction:column;align-items:stretch}.sticky-submit .btn{width:100%}}
 </style>
@@ -91,6 +93,7 @@ button,input,textarea{font-family:Prompt,sans-serif}
   </section>
 
   <section id="resultSection" class="card hidden"></section>
+  <section id="reviewSection" class="card hidden"></section>
 </main>
 
 <script>
@@ -155,14 +158,14 @@ function renderAccessState(){
   const box=$("accessMessage");const btn=$("startBtn");btn.classList.add("hidden");
   if(s==="READY"){box.innerHTML=notice("success","สิทธิ์พร้อมแล้ว คุณสามารถเริ่มทำข้อสอบได้");btn.textContent="เริ่มทำข้อสอบ";btn.classList.remove("hidden")}
   else if(s==="IN_PROGRESS"){box.innerHTML=notice("info","คุณมีข้อสอบที่เริ่มทำไว้แล้ว ระบบจะเปิดข้อสอบเดิมต่อให้");btn.textContent="ทำข้อสอบต่อ";btn.classList.remove("hidden")}
-  else if(s==="PASSED"){box.innerHTML=notice("success",`คุณผ่านข้อสอบแล้ว คะแนนดีที่สุด ${state.best_percentage??"-"}% ผลนี้พร้อมใช้ประกอบการออกวุฒิบัตร`)}
+  else if(s==="PASSED"){box.innerHTML=notice("success",`คุณผ่านข้อสอบแล้ว คะแนนดีที่สุด ${state.best_percentage??"-"}% ผลนี้พร้อมใช้ประกอบการออกวุฒิบัตร`)+(state.latest_attempt_id?`<button class="btn" style="margin-top:10px" onclick="loadReview('${state.latest_attempt_id}')">ดูคำตอบและเฉลย</button>`:"")}
   else if(s==="NOT_OPEN"){box.innerHTML=notice("warn","ข้อสอบยังไม่เปิด กรุณารอผู้ดูแลหรือวิทยากรแจ้งให้เริ่มทำข้อสอบ")}
   else if(s==="CLOSED"){box.innerHTML=notice("warn","หมดเวลาที่เปิดให้ทำข้อสอบของรอบนี้แล้ว กรุณาติดต่อ SANTE")}
   else if(s==="PAYMENT_REQUIRED"){box.innerHTML=notice("warn","หลักสูตรนี้ยังไม่ยืนยันการชำระเงิน จึงยังไม่สามารถทำข้อสอบได้")}
   else if(s==="NOT_REGISTERED"){box.innerHTML=notice("error","บัญชีนี้ไม่พบการสมัครในรอบอบรมดังกล่าว กรุณาเข้าสู่ระบบด้วยบัญชีที่ใช้สมัครอบรม")}
   else if(s==="EXAM_NOT_PUBLISHED"){box.innerHTML=notice("warn","ข้อสอบยังไม่พร้อมใช้งาน กรุณารอผู้ดูแลระบบ Publish ข้อสอบ")}
   else if(s==="EXAM_NOT_CREATED"){box.innerHTML=notice("warn","รอบอบรมนี้ยังไม่มีข้อสอบท้ายการอบรม")}
-  else if(s==="ATTEMPTS_EXHAUSTED"){box.innerHTML=notice("error",`ใช้สิทธิ์สอบครบ ${state.max_attempts||0} ครั้งแล้ว คะแนนดีที่สุด ${state.best_percentage??"-"}%`)}
+  else if(s==="ATTEMPTS_EXHAUSTED"){box.innerHTML=notice("error",`ใช้สิทธิ์สอบครบ ${state.max_attempts||0} ครั้งแล้ว คะแนนดีที่สุด ${state.best_percentage??"-"}%`)+(state.latest_attempt_id?`<button class="btn" style="margin-top:10px" onclick="loadReview('${state.latest_attempt_id}')">ดูคำตอบและเฉลย</button>`:"")}
   else{box.innerHTML=notice("error","ไม่สามารถเปิดข้อสอบได้ สถานะ: "+(s||"UNKNOWN"))}
 }
 
@@ -229,6 +232,35 @@ async function saveAllBeforeSubmit(){
   for(const a of arts){const type=a.dataset.type,qid=a.dataset.question;let payload={};if(type==="SINGLE_CHOICE"){const x=a.querySelector('input[type="radio"]:checked');payload={choices:x?[x.value]:[]}}else if(type==="MULTIPLE_CHOICE"){payload={choices:[...a.querySelectorAll('input[type="checkbox"]:checked')].map(x=>x.value)}}else{payload={text:a.querySelector(".text-answer")?.value?.trim()||""}};const {error}=await db.rpc("member_save_training_posttest_answer",{p_attempt_id:attempt.attempt_id,p_question_id:qid,p_answer:payload});if(error)throw error}
 }
 
+
+async function loadReview(attemptId){
+  const {data,error}=await db.rpc("member_get_training_posttest_review",{p_attempt_id:attemptId});
+  if(error){alert(error.message||"โหลดเฉลยไม่สำเร็จ");return}
+  if(!data?.unlocked){alert("ยังไม่เปิดดูเฉลย เพราะคุณยังมีสิทธิ์สอบเหลืออยู่");return}
+  const qs=data.questions||[];
+  hide("examSection");hide("accessSection");hide("resultSection");show("reviewSection");
+  $("reviewSection").innerHTML=`<div class="title">คำตอบและเฉลยของคุณ</div>
+    <div class="sub">ครั้งที่ ${data.attempt_number} · ${Number(data.percentage||0).toFixed(2)}% · ${data.passed?"ผ่าน":"ไม่ผ่าน"}</div>
+    <div class="review-list">${qs.map((q,i)=>{
+      const given=q.question_type==="TEXT"
+        ? (q.answer?.text||"-")
+        : ((q.answer?.choices||[]).join(", ")||"-");
+      const expected=q.question_type==="TEXT"
+        ? ((q.accepted_text_answers||[]).join(" | ")||"-")
+        : ((q.correct_choices||[]).map(x=>`${x.choice_key}. ${x.choice_text||""}`).join(" / ")||"-");
+      return `<div class="review-card ${q.is_correct?"correct":"wrong"}">
+        <div class="review-q">ข้อ ${i+1}. ${esc(q.question_text)}</div>
+        <div class="review-meta">${q.is_correct?"✓ ตอบถูก":"✕ ตอบผิด"} · ได้ ${q.awarded_points||0}/${q.points||0} คะแนน</div>
+        <div class="review-line"><strong>คำตอบของคุณ:</strong> ${esc(given)}</div>
+        <div class="review-line"><strong>เฉลย:</strong> ${esc(expected)}</div>
+      </div>`}).join("")}</div>
+    <div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn primary" onclick="location.reload()">กลับสถานะข้อสอบ</button>
+      <a class="btn" style="display:inline-flex;align-items:center" href="training-register.html">การอบรมของฉัน</a>
+    </div>`;
+  $("reviewSection").scrollIntoView({behavior:"smooth",block:"start"});
+}
+
 async function submitExam(auto=false){
   if(submitting)return;if(!auto&&!confirm("ยืนยันส่งข้อสอบและดูคะแนนหรือไม่?"))return;
   submitting=true;$("submitBtn").disabled=true;$("submitBtn").textContent="กำลังตรวจคำตอบ...";
@@ -237,7 +269,8 @@ async function submitExam(auto=false){
     const {data,error}=await db.rpc("member_submit_training_posttest",{p_attempt_id:attempt.attempt_id});if(error)throw error;
     clearInterval(timerInterval);hide("examSection");show("resultSection");
     $("resultSection").className="card";
-    $("resultSection").innerHTML=`<div class="result ${data.passed?"pass":"fail"}"><div class="score">${Number(data.percentage||0).toFixed(2)}%</div><h2>${data.passed?"ผ่านเกณฑ์":"ยังไม่ผ่านเกณฑ์"}</h2><p>${data.raw_score} / ${data.total_points} คะแนน · เกณฑ์ผ่าน ${data.pass_percentage}%</p><div class="notice ${data.passed?"success":"warn"}">${data.passed?"ผลสอบถูกบันทึกแล้ว ระบบจะนำผลนี้ไปใช้สำหรับขั้นตอนวุฒิบัตร":"หากยังมีสิทธิ์สอบเหลือ สามารถกลับมาทำข้อสอบใหม่ได้"}</div><div style="margin-top:16px;display:flex;justify-content:center;gap:8px;flex-wrap:wrap"><button class="btn primary" onclick="location.reload()">ตรวจสอบสถานะล่าสุด</button><a class="btn" style="display:inline-flex;align-items:center" href="member-home.html">กลับหน้าสมาชิก</a></div></div>`
+    const reviewButton=data.passed?`<button class="btn" onclick="loadReview('${data.attempt_id}')">ดูคำตอบและเฉลย</button>`:"";
+    $("resultSection").innerHTML=`<div class="result ${data.passed?"pass":"fail"}"><div class="score">${Number(data.percentage||0).toFixed(2)}%</div><h2>${data.passed?"ผ่านเกณฑ์":"ยังไม่ผ่านเกณฑ์"}</h2><p>${data.raw_score} / ${data.total_points} คะแนน · เกณฑ์ผ่าน ${data.pass_percentage}%</p><div class="notice ${data.passed?"success":"warn"}">${data.passed?"ผลสอบถูกบันทึกแล้ว และคุณสามารถเปิดดูคำตอบ/เฉลยได้":"หากยังมีสิทธิ์สอบเหลือ ระบบจะยังไม่แสดงเฉลยจนกว่าจะสอบผ่านหรือใช้สิทธิ์ครบ"}</div><div style="margin-top:16px;display:flex;justify-content:center;gap:8px;flex-wrap:wrap">${reviewButton}<button class="btn primary" onclick="location.reload()">ตรวจสอบสถานะล่าสุด</button><a class="btn" style="display:inline-flex;align-items:center" href="training-register.html">การอบรมของฉัน</a></div></div>`
   }catch(e){alert(e.message||"ส่งข้อสอบไม่สำเร็จ");$("submitBtn").disabled=false;$("submitBtn").textContent="ส่งข้อสอบ / ดูคะแนน";submitting=false}
 }
 

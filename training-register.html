@@ -1240,8 +1240,18 @@ html,body,button,input,select,textarea{font-family:"Prompt",sans-serif!important
   .mobile-training-visual img{width:100%!important;height:auto!important;object-fit:contain!important}
 }
 
+
+/* ===== MY TRAINING / POSTTEST RESULT R2 ===== */
+.my-training-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-bottom:26px}
+.my-training-card{padding:18px;background:#fff;border:1px solid #dce7f2;border-radius:18px;box-shadow:0 6px 18px rgba(11,45,103,.035)}
+.my-training-card h3{font-size:17px;line-height:1.45;color:#082d69}.my-training-card p{margin-top:4px;color:#6f82a0;font-size:12px}
+.my-result-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:13px}.my-result-box{padding:10px;border-radius:11px;background:#f6f9fc}.my-result-box span{display:block;color:#7184a3;font-size:9px}.my-result-box strong{display:block;margin-top:3px;font-size:13px;color:#082d69}
+.exam-result-badge{display:inline-flex;margin-top:12px;padding:6px 10px;border-radius:999px;font-size:10px;font-weight:700}.exam-result-badge.pass{background:#eaf9f1;color:#087744}.exam-result-badge.fail{background:#fff0f1;color:#a52a35}.exam-result-badge.wait{background:#fff5d8;color:#806000}.exam-result-badge.ready{background:#eaf4ff;color:#145b9c}
+.my-training-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.my-training-actions a,.my-training-actions button{min-height:38px;padding:0 12px;border:1px solid #dce7f2;border-radius:10px;background:#fff;color:#082d69;font:600 11px Prompt,sans-serif;display:inline-flex;align-items:center;text-decoration:none}.my-training-actions .primary{background:#082d69;color:#fff;border-color:#082d69}
+@media(max-width:767px){.my-training-grid{grid-template-columns:1fr}.my-result-row{grid-template-columns:1fr 1fr 1fr}.my-training-card{padding:15px}.my-training-card h3{font-size:16px}}
+
 </style>
-<meta name="sante-build" content="MEMBER-TRAINING-HOURS-R3">
+<meta name="sante-build" content="MEMBER-COURSE-HOURS-R2">
 </head>
 
 <body>
@@ -1302,6 +1312,18 @@ html,body,button,input,select,textarea{font-family:"Prompt",sans-serif!important
         <div class="info-label">เบอร์โทรศัพท์</div>
         <div id="profilePhone" class="info-value">-</div>
       </div>
+    </div>
+  </section>
+
+  <section id="myTrainingSection">
+    <div class="training-heading">
+      <div>
+        <h2>การอบรมของฉัน</h2>
+        <p>ดูสถานะการสมัครและผลแบบทดสอบท้ายการอบรมของคุณ</p>
+      </div>
+    </div>
+    <div id="myTrainingGrid" class="my-training-grid">
+      <div class="state-card"><div class="state-title">กำลังโหลดข้อมูลการอบรมของคุณ</div></div>
     </div>
   </section>
 
@@ -1823,6 +1845,7 @@ html,body,button,input,select,textarea{font-family:"Prompt",sans-serif!important
   let currentProfile = null;
   let trainingSessions = [];
   let myRegistrations = [];
+  let myTrainingResults = [];
   let billingProfilesData = [];
   let selectedSession = null;
   let selectedBillingProfileId = null;
@@ -1831,6 +1854,7 @@ html,body,button,input,select,textarea{font-family:"Prompt",sans-serif!important
 
   const messageBox = document.getElementById("messageBox");
   const trainingGrid = document.getElementById("trainingGrid");
+  const myTrainingGrid = document.getElementById("myTrainingGrid");
   const searchInput = document.getElementById("searchInput");
 
   const registrationModal =
@@ -2331,6 +2355,51 @@ html,body,button,input,select,textarea{font-family:"Prompt",sans-serif!important
     myRegistrations = Array.isArray(data) ? data : [];
   }
 
+
+  async function loadMyTrainingResults() {
+    const {data,error}=await db.rpc("member_get_my_training_posttest_results");
+    if(error){
+      console.warn("Posttest results RPC error:",error);
+      myTrainingResults=[];
+      return;
+    }
+    myTrainingResults=Array.isArray(data)?data:[];
+  }
+
+  function renderMyTrainingResults(){
+    if(!myTrainingGrid)return;
+    if(!myTrainingResults.length){
+      myTrainingGrid.innerHTML=`<div class="state-card"><div class="state-icon">📘</div><div class="state-title">ยังไม่มีประวัติการอบรม</div><div class="state-description">เมื่อสมัครอบรมแล้ว รายการจะมาแสดงที่นี่</div></div>`;
+      return;
+    }
+    myTrainingGrid.innerHTML=myTrainingResults.map(x=>{
+      const pct=x.best_percentage===null||x.best_percentage===undefined?"-":`${Number(x.best_percentage).toFixed(2)}%`;
+      let badgeText="รอการสอบ",badgeClass="wait";
+      if(x.exam_status==="PASSED"){badgeText=`สอบผ่าน ${pct}`;badgeClass="pass"}
+      else if(x.exam_status==="FAILED_FINAL"){badgeText=`สอบไม่ผ่าน ${pct}`;badgeClass="fail"}
+      else if(x.exam_status==="FAILED_RETRY"){badgeText=`ยังไม่ผ่าน ${pct}`;badgeClass="wait"}
+      else if(x.exam_status==="READY"){badgeText="พร้อมทำข้อสอบ";badgeClass="ready"}
+      else if(x.exam_status==="NO_EXAM"){badgeText="ไม่มีข้อสอบท้ายอบรม";badgeClass="wait"}
+      const examUrl=`post-training-exam.html?session=${encodeURIComponent(x.training_session_id)}`;
+      const canExam=["READY","FAILED_RETRY"].includes(x.exam_status);
+      const canReview=["PASSED","FAILED_FINAL"].includes(x.exam_status) && x.latest_attempt_id;
+      return `<article class="my-training-card">
+        <h3>${escapeHtml(x.session_name||x.course_name||"การอบรม")}</h3>
+        <p>${escapeHtml(x.course_name||"")}</p>
+        <span class="exam-result-badge ${badgeClass}">${escapeHtml(badgeText)}</span>
+        <div class="my-result-row">
+          <div class="my-result-box"><span>คะแนนดีที่สุด</span><strong>${escapeHtml(pct)}</strong></div>
+          <div class="my-result-box"><span>เกณฑ์ผ่าน</span><strong>${x.pass_percentage!=null?escapeHtml(String(x.pass_percentage))+"%":"-"}</strong></div>
+          <div class="my-result-box"><span>สอบแล้ว</span><strong>${escapeHtml(String(x.attempts_used||0))} ครั้ง</strong></div>
+        </div>
+        <div class="my-training-actions">
+          ${canExam?`<a class="primary" href="${examUrl}">ทำข้อสอบ${x.exam_status==="FAILED_RETRY"?"ใหม่":""}</a>`:""}
+          ${canReview?`<a href="${examUrl}">ดูผลและเฉลย</a>`:""}
+        </div>
+      </article>`;
+    }).join("");
+  }
+
   async function loadTrainingSessions() {
     const { data, error } = await db
       .from("training_sessions")
@@ -2342,7 +2411,6 @@ html,body,button,input,select,textarea{font-family:"Prompt",sans-serif!important
         registration_close_date,
         training_start_at,
         training_end_at,
-        training_hours,
         delivery_method,
         online_platform,
         venue_name,
@@ -2513,9 +2581,9 @@ html,body,button,input,select,textarea{font-family:"Prompt",sans-serif!important
                 <div class="detail">
                   <div class="detail-label">ระยะเวลาอบรม</div>
                   <div class="detail-value">
-                    ${session.training_hours !== null && session.training_hours !== undefined && session.training_hours !== ""
+                    ${session.training_hours !== null && session.training_hours !== undefined
                       ? `${escapeHtml(formatCourseHours(session.training_hours))} ชั่วโมง`
-                      : (session.courses?.duration_hours !== null && session.courses?.duration_hours !== undefined && session.courses?.duration_hours !== ""
+                      : (session.courses?.duration_hours !== null && session.courses?.duration_hours !== undefined
                           ? `${escapeHtml(formatCourseHours(session.courses.duration_hours))} ชั่วโมง`
                           : "-")}
                   </div>
@@ -3412,8 +3480,10 @@ html,body,button,input,select,textarea{font-family:"Prompt",sans-serif!important
 
         await loadMyRegistrations();
         await loadTrainingSessions();
+        await loadMyTrainingResults();
 
         renderTrainingSessions();
+        renderMyTrainingResults();
 
       } catch (error) {
         console.error(error);
@@ -3509,10 +3579,12 @@ html,body,button,input,select,textarea{font-family:"Prompt",sans-serif!important
 
       await Promise.all([
         loadMyRegistrations(),
-        loadTrainingSessions()
+        loadTrainingSessions(),
+        loadMyTrainingResults()
       ]);
 
       renderTrainingSessions();
+      renderMyTrainingResults();
 
     } catch (error) {
       console.error(error);
