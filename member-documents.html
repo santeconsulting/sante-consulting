@@ -1,81 +1,2153 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="th">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>SANTE Member | เอกสารของฉัน</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<style>
-*{box-sizing:border-box}body{margin:0;font-family:Prompt,sans-serif;background:#f3f8fc;color:#082d69}
-.header{height:78px;background:#fff;border-bottom:1px solid #dce7f2;display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:20}
-.brand img{width:165px;height:58px;object-fit:contain}.actions{display:flex;align-items:center;gap:8px}.btn{min-height:42px;padding:0 14px;border:1px solid #d7e4ef;border-radius:11px;background:#fff;color:#082d69;font:600 12px Prompt;text-decoration:none;display:inline-flex;align-items:center;cursor:pointer}.btn.primary{background:#082d69;color:#fff;border-color:#082d69}
-.wrap{width:min(1180px,calc(100% - 32px));margin:26px auto 60px}.hero{padding:25px 28px;border-radius:22px;background:linear-gradient(145deg,#eaf7ff,#fff 58%,#fff4cf);border:1px solid #ddeaf3;margin-bottom:20px}.hero h1{margin:0;font-size:29px}.hero p{margin:7px 0 0;color:#647b98;font-size:13px}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}.stat{background:#fff;border:1px solid #dce7f2;border-radius:17px;padding:16px}.stat span{font-size:11px;color:#7286a2}.stat strong{display:block;margin-top:5px;font-size:24px}
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.card{background:#fff;border:1px solid #dce7f2;border-radius:18px;padding:18px;box-shadow:0 8px 24px rgba(8,45,105,.035)}.tag{display:inline-flex;padding:5px 8px;border-radius:999px;background:#eaf4ff;color:#145b9c;font-size:10px;font-weight:700}.card h2{margin:10px 0 0;font-size:17px;line-height:1.45}.meta{display:grid;grid-template-columns:110px 1fr;gap:7px;margin-top:13px;font-size:11px}.meta span{color:#7589a4}.meta strong{font-weight:500}.card-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}.empty{padding:38px;text-align:center;background:#fff;border:1px solid #dce7f2;border-radius:18px;color:#7286a2}.msg{padding:12px;border-radius:12px;background:#fff0f1;color:#a52a35;margin-bottom:12px;font-size:12px}
-@media(max-width:720px){.header{height:68px;padding:0 12px}.brand img{width:125px;height:48px}.actions .home{display:none}.wrap{width:calc(100% - 24px);margin-top:14px}.hero{padding:20px}.hero h1{font-size:24px}.stats{grid-template-columns:1fr 1fr 1fr}.stat{padding:12px}.stat strong{font-size:20px}.grid{grid-template-columns:1fr}.meta{grid-template-columns:95px 1fr}.card{padding:15px}}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>SANTE Member | เอกสารของฉัน</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+
+
+    /* =========================================================
+       RESET
+    ========================================================= */
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --navy: #082d69;
+      --navy-dark: #061f4d;
+      --blue: #087df0;
+      --yellow: #ffbf19;
+      --yellow-dark: #b77d00;
+      --green: #188d49;
+
+      --text: #082d69;
+      --muted: #6f82a0;
+
+      --line: #dce7f2;
+
+      --soft-blue: #eaf5ff;
+      --soft-yellow: #fff5d8;
+
+      --white: #ffffff;
+
+      --shadow:
+        0 10px 30px rgba(11, 45, 103, 0.07);
+    }
+
+    html {
+      width: 100%;
+      min-height: 100%;
+      overflow-x: hidden;
+    }
+
+    body {
+      width: 100%;
+      min-height: 100vh;
+
+      overflow-x: hidden;
+
+      font-family: "Prompt", sans-serif;
+
+      color: var(--text);
+
+      background:
+        linear-gradient(
+          180deg,
+          #ffffff 0%,
+          #f7fbfe 32%,
+          #eef7fc 100%
+        );
+    }
+
+    img {
+      max-width: 100%;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input {
+      font-family: "Prompt", sans-serif;
+    }
+
+    button {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+
+    /* =========================================================
+       LOADING
+    ========================================================= */
+
+    .loading {
+      position: fixed;
+      inset: 0;
+
+      z-index: 9999;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      padding: 30px;
+
+      background: #ffffff;
+
+      color: var(--navy);
+
+      font-size: 16px;
+      font-weight: 500;
+
+      text-align: center;
+    }
+
+    .loading.hidden {
+      display: none;
+    }
+
+
+    /* =========================================================
+       HEADER
+    ========================================================= */
+
+    .topbar {
+      width: 100%;
+      height: 82px;
+
+      position: sticky;
+      top: 0;
+      z-index: 100;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      gap: 30px;
+
+      padding:
+        0
+        max(28px, calc((100vw - 1480px) / 2));
+
+      background: rgba(255, 255, 255, 0.97);
+
+      border-bottom: 1px solid #e7eef6;
+
+      box-shadow:
+        0 3px 16px rgba(11, 45, 103, 0.04);
+
+      backdrop-filter: blur(10px);
+    }
+
+    .brand {
+      min-width: 0;
+
+      display: flex;
+      align-items: center;
+    }
+
+    .brand-logo {
+      width: 220px;
+      height: 68px;
+
+      display: block;
+
+      object-fit: contain;
+      object-position: left center;
+    }
+
+    .member-area {
+      min-width: 0;
+
+      display: flex;
+      align-items: center;
+
+      gap: 18px;
+    }
+
+    .member-copy {
+      min-width: 0;
+
+      text-align: right;
+    }
+
+    .member-name {
+      max-width: 320px;
+
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+
+      color: var(--navy);
+
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .member-email {
+      max-width: 320px;
+
+      margin-top: 2px;
+
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+
+      color: #7184a3;
+
+      font-size: 13px;
+    }
+
+    .logout-button {
+      min-height: 44px;
+
+      flex-shrink: 0;
+
+      padding: 0 18px;
+
+      border: 1px solid #d5e1ef;
+      border-radius: 11px;
+
+      background: #ffffff;
+
+      color: var(--navy);
+
+      font-size: 14px;
+      font-weight: 600;
+
+      cursor: pointer;
+
+      transition: 0.2s;
+    }
+
+    .logout-button:hover {
+      background: #f5f9fd;
+
+      border-color: #b9cde4;
+    }
+
+
+    /* =========================================================
+       PAGE
+    ========================================================= */
+
+    .page {
+      width: min(1480px, calc(100% - 48px));
+
+      margin: 0 auto;
+
+      padding:
+        24px
+        0
+        60px;
+    }
+
+
+    /* =========================================================
+       DESKTOP HERO
+    ========================================================= */
+
+    .desktop-hero {
+      width: 100%;
+
+      overflow: hidden;
+
+      border-radius: 28px;
+
+      background: #ffffff;
+
+      box-shadow: var(--shadow);
+    }
+
+    .desktop-hero img {
+      width: 100%;
+      height: auto;
+
+      display: block;
+    }
+
+
+    /* =========================================================
+       MOBILE HERO
+       hidden on desktop
+    ========================================================= */
+
+    .mobile-hero {
+      display: none;
+    }
+
+
+    /* =========================================================
+       SECTION HEADING
+    ========================================================= */
+
+    .section-heading {
+      display: flex;
+      align-items: center;
+
+      gap: 15px;
+
+      margin:
+        30px
+        8px
+        16px;
+    }
+
+    .section-icon {
+      width: 54px;
+      height: 54px;
+
+      flex: 0 0 54px;
+
+      display: grid;
+      place-items: center;
+
+      border-radius: 50%;
+
+      background: #e4f3ff;
+
+      color: var(--blue);
+
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .section-heading h2 {
+      color: var(--navy);
+
+      font-size: clamp(25px, 2vw, 30px);
+      font-weight: 700;
+
+      line-height: 1.25;
+    }
+
+    .section-heading p {
+      margin-top: 4px;
+
+      color: var(--muted);
+
+      font-size: 15px;
+
+      line-height: 1.6;
+    }
+
+
+    /* =========================================================
+       SERVICE GRID
+    ========================================================= */
+
+    .service-grid {
+      display: grid;
+
+      grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+      gap: 18px;
+    }
+
+    .service-card {
+      min-width: 0;
+      min-height: 182px;
+
+      position: relative;
+
+      display: grid;
+
+      grid-template-columns:
+        68px
+        minmax(0, 1fr)
+        auto;
+
+      align-items: start;
+
+      gap: 19px;
+
+      padding: 25px;
+
+      overflow: hidden;
+
+      background: rgba(255, 255, 255, 0.98);
+
+      border: 1px solid var(--line);
+      border-radius: 22px;
+
+      box-shadow:
+        0 7px 20px rgba(25, 75, 130, 0.04);
+    }
+
+    .service-card::after {
+      content: "";
+
+      position: absolute;
+
+      width: 170px;
+      height: 170px;
+
+      right: -65px;
+      bottom: -90px;
+
+      border-radius: 50%;
+
+      background: #f2f8fd;
+
+      pointer-events: none;
+    }
+
+    .service-card.active {
+      cursor: pointer;
+
+      transition:
+        transform 0.18s ease,
+        box-shadow 0.18s ease,
+        border-color 0.18s ease;
+    }
+
+    .service-card.active:hover {
+      transform: translateY(-3px);
+
+      border-color: #c9dced;
+
+      box-shadow:
+        0 14px 30px rgba(11, 45, 103, 0.09);
+    }
+
+    .service-icon {
+      width: 64px;
+      height: 64px;
+
+      position: relative;
+      z-index: 2;
+
+      display: grid;
+      place-items: center;
+
+      border-radius: 18px;
+
+      background: var(--soft-blue);
+
+      color: var(--blue);
+
+      font-size: 29px;
+      font-weight: 700;
+    }
+
+    .training-card .service-icon {
+      background: var(--soft-yellow);
+
+      color: #e5a200;
+    }
+
+    .service-content {
+      min-width: 0;
+
+      position: relative;
+      z-index: 2;
+    }
+
+    .service-content h3 {
+      color: var(--navy);
+
+      font-size: 24px;
+      font-weight: 700;
+
+      line-height: 1.35;
+    }
+
+    .service-content p {
+      max-width: 680px;
+
+      margin-top: 7px;
+
+      color: #6c809f;
+
+      font-size: 15px;
+
+      line-height: 1.75;
+    }
+
+    .service-action {
+      display: inline-block;
+
+      margin-top: 10px;
+
+      color: var(--yellow-dark);
+
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .service-action.disabled {
+      color: #7588a6;
+    }
+
+    .service-status {
+      position: relative;
+      z-index: 3;
+
+      height: max-content;
+
+      padding: 7px 13px;
+
+      border-radius: 999px;
+
+      background: #eef3f8;
+
+      color: #7990ad;
+
+      font-size: 12px;
+      font-weight: 500;
+
+      white-space: nowrap;
+    }
+
+    .service-status.ready {
+      background: #e8f8ed;
+
+      color: var(--green);
+    }
+
+
+    /* =========================================================
+       QUICK GRID
+    ========================================================= */
+
+    .quick-grid {
+      display: grid;
+
+      grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+      gap: 18px;
+
+      margin-top: 18px;
+    }
+
+    .quick-card {
+      min-width: 0;
+      min-height: 100px;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      gap: 20px;
+
+      padding: 20px 24px;
+
+      background: #ffffff;
+
+      border: 1px solid var(--line);
+      border-radius: 18px;
+    }
+
+    .quick-card > div {
+      min-width: 0;
+    }
+
+    .quick-card h4 {
+      color: var(--navy);
+
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .quick-card p {
+      margin-top: 4px;
+
+      color: var(--muted);
+
+      font-size: 14px;
+
+      line-height: 1.6;
+    }
+
+    .quick-status {
+      flex-shrink: 0;
+
+      color: #8192a9;
+
+      font-size: 12px;
+
+      white-space: nowrap;
+    }
+
+
+    /* =========================================================
+       TRAINING SECTION
+    ========================================================= */
+
+    .training-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      gap: 25px;
+
+      margin:
+        30px
+        8px
+        16px;
+    }
+
+    .training-heading-left {
+      min-width: 0;
+
+      display: flex;
+      align-items: center;
+
+      gap: 15px;
+    }
+
+    .training-heading h2 {
+      color: var(--navy);
+
+      font-size: clamp(24px, 2vw, 29px);
+      font-weight: 700;
+    }
+
+    .training-heading p {
+      margin-top: 3px;
+
+      color: var(--muted);
+
+      font-size: 14px;
+    }
+
+    .search-box {
+      width: min(410px, 35vw);
+      height: 48px;
+
+      flex-shrink: 0;
+
+      padding: 0 17px;
+
+      border: 1px solid #d7e2ef;
+      border-radius: 12px;
+
+      outline: none;
+
+      background: #ffffff;
+
+      color: var(--navy);
+
+      font-size: 14px;
+    }
+
+    .search-box:focus {
+      border-color: #7db9ee;
+
+      box-shadow:
+        0 0 0 3px
+        rgba(8, 125, 240, 0.08);
+    }
+
+
+    /* =========================================================
+       TRAINING PREVIEW
+    ========================================================= */
+
+    .training-preview {
+      min-width: 0;
+      min-height: 160px;
+
+      display: flex;
+      align-items: center;
+
+      gap: 22px;
+
+      padding: 19px;
+
+      background: #ffffff;
+
+      border: 1px solid var(--line);
+      border-radius: 20px;
+
+      box-shadow:
+        0 6px 18px rgba(11, 45, 103, 0.04);
+    }
+
+    .training-preview-image {
+      width: 190px;
+      height: 122px;
+
+      flex: 0 0 190px;
+
+      display: grid;
+      place-items: center;
+
+      border-radius: 15px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #e4f3ff,
+          #fff2c7
+        );
+
+      font-size: 48px;
+    }
+
+    .training-preview-content {
+      min-width: 0;
+    }
+
+    .training-preview h3 {
+      color: var(--navy);
+
+      font-size: 21px;
+      font-weight: 700;
+
+      line-height: 1.4;
+    }
+
+    .training-preview p {
+      margin-top: 6px;
+
+      color: var(--muted);
+
+      font-size: 14px;
+
+      line-height: 1.7;
+    }
+
+    .training-button {
+      min-height: 42px;
+
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+
+      margin-top: 12px;
+
+      padding: 9px 18px;
+
+      border-radius: 10px;
+
+      background: var(--yellow);
+
+      color: var(--navy);
+
+      font-size: 14px;
+      font-weight: 600;
+
+      transition: 0.2s;
+    }
+
+    .training-button:hover {
+      background: #f5b600;
+    }
+
+
+    /* =========================================================
+       TABLET
+       768 - 1023
+    ========================================================= */
+
+    @media
+    (min-width: 768px)
+    and
+    (max-width: 1023px) {
+
+      .topbar {
+        height: 76px;
+
+        padding: 0 24px;
+      }
+
+      .brand-logo {
+        width: 180px;
+        height: 62px;
+      }
+
+      .member-name {
+        max-width: 220px;
+
+        font-size: 14px;
+      }
+
+      .member-email {
+        max-width: 220px;
+
+        font-size: 11px;
+      }
+
+      .page {
+        width: calc(100% - 36px);
+
+        padding-top: 18px;
+      }
+
+      .desktop-hero {
+        border-radius: 22px;
+      }
+
+      .service-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .service-card {
+        min-height: 165px;
+      }
+
+      .quick-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .training-heading {
+        align-items: flex-end;
+      }
+
+      .search-box {
+        width: 320px;
+      }
+
+    }
+
+
+    /* =========================================================
+       MOBILE
+       <= 767px
+    ========================================================= */
+
+    @media (max-width: 767px) {
+
+      body {
+        background:
+          linear-gradient(
+            180deg,
+            #ffffff 0%,
+            #f6fbff 45%,
+            #eef7fc 100%
+          );
+      }
+
+
+      /* -------------------------
+         MOBILE HEADER
+      ------------------------- */
+
+      .topbar {
+        height: auto;
+        min-height: 64px;
+
+        position: sticky;
+
+        gap: 8px;
+
+        padding:
+          7px
+          12px;
+
+        padding-left:
+          max(12px, env(safe-area-inset-left));
+
+        padding-right:
+          max(12px, env(safe-area-inset-right));
+      }
+
+      .brand {
+        flex: 1 1 auto;
+
+        min-width: 0;
+      }
+
+      .brand-logo {
+        width: 118px;
+        height: 50px;
+
+        flex-shrink: 0;
+      }
+
+      .member-area {
+        flex: 0 1 auto;
+
+        gap: 7px;
+      }
+
+      .member-copy {
+        display: none;
+      }
+
+      .logout-button {
+        min-height: 38px;
+
+        padding: 0 10px;
+
+        border-radius: 9px;
+
+        font-size: 11px;
+      }
+
+
+      /* -------------------------
+         MOBILE PAGE
+      ------------------------- */
+
+      .page {
+        width: 100%;
+
+        margin: 0;
+
+        padding:
+          10px
+          12px
+          calc(35px + env(safe-area-inset-bottom));
+      }
+
+
+      /* -------------------------
+         HIDE DESKTOP HERO
+      ------------------------- */
+
+      .desktop-hero {
+        display: none;
+      }
+
+
+      /* -------------------------
+         MOBILE HERO
+      ------------------------- */
+
+      .mobile-hero {
+        min-height: 390px;
+
+        position: relative;
+
+        display: flex;
+        flex-direction: column;
+
+        overflow: hidden;
+
+        padding:
+          23px
+          20px
+          0;
+
+        border-radius: 20px;
+
+        background:
+          linear-gradient(
+            145deg,
+            #eaf7ff 0%,
+            #ffffff 58%,
+            #fff4c9 100%
+          );
+
+        box-shadow:
+          0 8px 25px
+          rgba(11, 45, 103, 0.07);
+      }
+
+      .mobile-hero::before {
+        content: "";
+
+        position: absolute;
+
+        width: 190px;
+        height: 190px;
+
+        top: -90px;
+        right: -70px;
+
+        border-radius: 50%;
+
+        background:
+          rgba(255, 191, 25, 0.28);
+      }
+
+      .mobile-hero::after {
+        content: "";
+
+        position: absolute;
+
+        width: 180px;
+        height: 180px;
+
+        left: -90px;
+        bottom: -90px;
+
+        border-radius: 50%;
+
+        background:
+          rgba(64, 176, 245, 0.14);
+      }
+
+      .mobile-hero-content {
+        position: relative;
+        z-index: 5;
+      }
+
+      .mobile-hero-badge {
+        width: max-content;
+
+        display: inline-flex;
+        align-items: center;
+
+        padding: 6px 12px;
+
+        border-radius: 999px;
+
+        background: var(--yellow);
+
+        color: var(--navy);
+
+        font-size: 11px;
+        font-weight: 600;
+
+        letter-spacing: 0.3px;
+      }
+
+      .mobile-hero h1 {
+        margin-top: 13px;
+
+        color: var(--navy);
+
+        font-size: clamp(27px, 8vw, 34px);
+        font-weight: 700;
+
+        line-height: 1.23;
+      }
+
+      .mobile-hero h1 span {
+        color: #087df0;
+      }
+
+      .mobile-hero-description {
+        max-width: 320px;
+
+        margin-top: 9px;
+
+        color: #637b9a;
+
+        font-size: 13px;
+
+        line-height: 1.65;
+      }
+
+      .mobile-hero-visual {
+        min-height: 0;
+
+        position: relative;
+        z-index: 3;
+
+        flex: 1;
+
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+
+        margin:
+          5px
+          -20px
+          0;
+
+        overflow: hidden;
+      }
+
+      .mobile-hero-visual img {
+        width: 100%;
+        height: auto;
+        display: block;
+        object-fit: contain;
+        object-position: center;
+      }
+
+      .mobile-hero-visual::before { display: none; }
+
+
+      /* -------------------------
+         MOBILE SECTION HEADING
+      ------------------------- */
+
+      .section-heading {
+        gap: 11px;
+
+        margin:
+          23px
+          2px
+          13px;
+      }
+
+      .section-icon {
+        width: 44px;
+        height: 44px;
+
+        flex-basis: 44px;
+
+        font-size: 19px;
+      }
+
+      .section-heading h2 {
+        font-size: 21px;
+
+        line-height: 1.3;
+      }
+
+      .section-heading p {
+        margin-top: 2px;
+
+        font-size: 12px;
+
+        line-height: 1.5;
+      }
+
+
+      /* -------------------------
+         MOBILE SERVICE
+      ------------------------- */
+
+      .service-grid {
+        grid-template-columns: 1fr;
+
+        gap: 11px;
+      }
+
+      .service-card {
+        width: 100%;
+        min-height: 0;
+
+        display: grid;
+
+        grid-template-columns:
+          52px
+          minmax(0, 1fr);
+
+        gap:
+          8px
+          12px;
+
+        padding: 16px;
+
+        border-radius: 17px;
+      }
+
+      .service-card::after {
+        width: 120px;
+        height: 120px;
+
+        right: -60px;
+        bottom: -65px;
+      }
+
+      .service-icon {
+        width: 50px;
+        height: 50px;
+
+        grid-column: 1;
+        grid-row: 1;
+
+        border-radius: 14px;
+
+        font-size: 22px;
+      }
+
+      .service-content {
+        grid-column: 2;
+        grid-row: 1 / span 2;
+
+        padding-right: 0;
+      }
+
+      .service-content h3 {
+        padding-right: 0;
+
+        font-size: 18px;
+
+        line-height: 1.4;
+      }
+
+      .service-content p {
+        margin-top: 5px;
+
+        font-size: 12.5px;
+
+        line-height: 1.65;
+      }
+
+      .service-action {
+        margin-top: 8px;
+
+        font-size: 12.5px;
+      }
+
+      .service-status {
+        grid-column: 1 / -1;
+        grid-row: 3;
+
+        justify-self: start;
+
+        margin-top: 2px;
+
+        padding: 5px 9px;
+
+        font-size: 10px;
+      }
+
+
+      /* -------------------------
+         MOBILE QUICK
+      ------------------------- */
+
+      .quick-grid {
+        grid-template-columns: 1fr;
+
+        gap: 10px;
+
+        margin-top: 11px;
+      }
+
+      .quick-card {
+        width: 100%;
+        min-height: 0;
+
+        align-items: flex-start;
+
+        gap: 10px;
+
+        padding: 15px;
+
+        border-radius: 15px;
+      }
+
+      .quick-card h4 {
+        font-size: 15px;
+
+        line-height: 1.4;
+      }
+
+      .quick-card p {
+        margin-top: 3px;
+
+        font-size: 11.5px;
+
+        line-height: 1.55;
+      }
+
+      .quick-status {
+        padding-top: 2px;
+
+        font-size: 10px;
+      }
+
+
+      /* -------------------------
+         MOBILE TRAINING TITLE
+      ------------------------- */
+
+      .training-heading {
+        display: block;
+
+        margin:
+          24px
+          2px
+          13px;
+      }
+
+      .training-heading-left {
+        gap: 11px;
+      }
+
+      .training-heading h2 {
+        font-size: 20px;
+
+        line-height: 1.35;
+      }
+
+      .training-heading p {
+        margin-top: 2px;
+
+        font-size: 11.5px;
+      }
+
+      .search-box {
+        width: 100%;
+        height: 44px;
+
+        margin-top: 12px;
+
+        padding: 0 14px;
+
+        border-radius: 11px;
+
+        font-size: 13px;
+      }
+
+
+      /* -------------------------
+         MOBILE TRAINING PREVIEW
+      ------------------------- */
+
+      .training-preview {
+        width: 100%;
+        min-height: 0;
+
+        display: block;
+
+        padding: 14px;
+
+        border-radius: 17px;
+      }
+
+      .training-preview-image {
+        width: 100%;
+        height: 105px;
+
+        margin-bottom: 13px;
+
+        border-radius: 13px;
+
+        font-size: 38px;
+      }
+
+      .training-preview h3 {
+        font-size: 17px;
+
+        line-height: 1.4;
+      }
+
+      .training-preview p {
+        margin-top: 5px;
+
+        font-size: 12px;
+
+        line-height: 1.65;
+      }
+
+      .training-button {
+        width: 100%;
+        min-height: 43px;
+
+        margin-top: 11px;
+
+        font-size: 13px;
+      }
+
+    }
+
+
+    /* =========================================================
+       SMALL MOBILE
+       <= 374px
+    ========================================================= */
+
+    @media (max-width: 374px) {
+
+      .page {
+        padding-left: 10px;
+        padding-right: 10px;
+      }
+
+      .brand-logo {
+        width: 104px;
+      }
+
+      .logout-button {
+        padding: 0 8px;
+
+        font-size: 10px;
+      }
+
+      .mobile-hero {
+        min-height: 370px;
+
+        padding:
+          20px
+          17px
+          0;
+      }
+
+      .mobile-hero h1 {
+        font-size: 26px;
+      }
+
+      .mobile-hero-description {
+        font-size: 12px;
+      }
+
+      .mobile-hero-visual {
+        margin-left: -17px;
+        margin-right: -17px;
+      }
+
+      .service-card {
+        padding: 14px;
+      }
+
+      .service-content h3 {
+        font-size: 17px;
+      }
+
+      .service-content p {
+        font-size: 12px;
+      }
+
+    }
+
+
+    /* =========================================================
+       LARGE DESKTOP
+    ========================================================= */
+
+    @media (min-width: 1600px) {
+
+      .page {
+        width: min(1520px, calc(100% - 80px));
+      }
+
+      .topbar {
+        padding-left:
+          max(40px, calc((100vw - 1520px) / 2));
+
+        padding-right:
+          max(40px, calc((100vw - 1520px) / 2));
+      }
+
+      .service-content h3 {
+        font-size: 26px;
+      }
+
+      .service-content p {
+        font-size: 16px;
+      }
+
+    }
+
+  
+
+/* =========================================================
+   MEMBER DOCUMENTS — MATCH MEMBER HOME
+========================================================= */
+
+.documents-heading{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+  margin:30px 8px 16px;
+}
+
+.documents-heading-left{
+  min-width:0;
+  display:flex;
+  align-items:center;
+  gap:15px;
+}
+
+.documents-heading h2{
+  color:var(--navy);
+  font-size:clamp(25px,2vw,30px);
+  font-weight:700;
+  line-height:1.25;
+}
+
+.documents-heading p{
+  margin-top:4px;
+  color:var(--muted);
+  font-size:15px;
+  line-height:1.6;
+}
+
+.documents-back{
+  min-height:44px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:0 16px;
+  border:1px solid #d5e1ef;
+  border-radius:11px;
+  background:#fff;
+  color:var(--navy);
+  font-size:13px;
+  font-weight:600;
+}
+
+.documents-stats{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:18px;
+  margin-bottom:18px;
+}
+
+.documents-stat{
+  min-height:118px;
+  padding:21px 23px;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:18px;
+  box-shadow:0 6px 18px rgba(11,45,103,.04);
+}
+
+.documents-stat span{
+  color:var(--muted);
+  font-size:13px;
+}
+
+.documents-stat strong{
+  display:block;
+  margin-top:8px;
+  color:var(--navy);
+  font-size:30px;
+  font-weight:700;
+}
+
+.documents-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:18px;
+}
+
+.document-card{
+  min-width:0;
+  position:relative;
+  overflow:hidden;
+  padding:23px 24px;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:20px;
+  box-shadow:0 7px 20px rgba(25,75,130,.04);
+}
+
+.document-card::after{
+  content:"";
+  position:absolute;
+  right:-70px;
+  bottom:-80px;
+  width:165px;
+  height:165px;
+  border-radius:50%;
+  background:#f2f8fd;
+  pointer-events:none;
+}
+
+.document-top,
+.document-body,
+.document-actions{
+  position:relative;
+  z-index:2;
+}
+
+.document-top{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+}
+
+.document-type{
+  display:inline-flex;
+  align-items:center;
+  min-height:30px;
+  padding:5px 11px;
+  border-radius:999px;
+  background:var(--soft-yellow);
+  color:#946700;
+  font-size:11px;
+  font-weight:600;
+}
+
+.document-version{
+  color:#7c8ea8;
+  font-size:11px;
+  white-space:nowrap;
+}
+
+.document-card h3{
+  margin-top:13px;
+  color:var(--navy);
+  font-size:20px;
+  font-weight:700;
+  line-height:1.45;
+}
+
+.document-meta{
+  display:grid;
+  grid-template-columns:125px minmax(0,1fr);
+  gap:8px 12px;
+  margin-top:16px;
+  font-size:13px;
+  line-height:1.55;
+}
+
+.document-meta dt{
+  color:var(--muted);
+}
+
+.document-meta dd{
+  min-width:0;
+  margin:0;
+  color:var(--navy);
+  font-weight:500;
+  overflow-wrap:anywhere;
+}
+
+.document-actions{
+  display:flex;
+  gap:9px;
+  flex-wrap:wrap;
+  margin-top:18px;
+}
+
+.document-button{
+  min-height:42px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:8px 16px;
+  border:1px solid #d4e1ee;
+  border-radius:10px;
+  background:#fff;
+  color:var(--navy);
+  font-family:"Prompt",sans-serif;
+  font-size:13px;
+  font-weight:600;
+  cursor:pointer;
+}
+
+.document-button.primary{
+  border-color:var(--yellow);
+  background:var(--yellow);
+}
+
+.document-button:hover{
+  transform:translateY(-1px);
+}
+
+.documents-empty,
+.documents-message{
+  grid-column:1/-1;
+  padding:32px 24px;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:20px;
+  color:var(--muted);
+  font-size:14px;
+  text-align:center;
+}
+
+.documents-message.error{
+  margin-bottom:15px;
+  border-color:#efc5ca;
+  background:#fff1f2;
+  color:#a62c39;
+}
+
+@media (min-width:768px) and (max-width:1023px){
+  .documents-grid{grid-template-columns:1fr}
+}
+
+@media (max-width:767px){
+  .documents-heading{
+    display:block;
+    margin:23px 2px 13px;
+  }
+
+  .documents-heading-left{
+    gap:11px;
+  }
+
+  .documents-heading h2{
+    font-size:21px;
+  }
+
+  .documents-heading p{
+    font-size:12px;
+  }
+
+  .documents-back{
+    width:100%;
+    margin-top:12px;
+  }
+
+  .documents-stats{
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:8px;
+    margin-bottom:11px;
+  }
+
+  .documents-stat{
+    min-height:90px;
+    padding:13px 12px;
+    border-radius:15px;
+  }
+
+  .documents-stat span{
+    font-size:10px;
+    line-height:1.35;
+  }
+
+  .documents-stat strong{
+    margin-top:6px;
+    font-size:22px;
+  }
+
+  .documents-grid{
+    grid-template-columns:1fr;
+    gap:11px;
+  }
+
+  .document-card{
+    padding:16px;
+    border-radius:17px;
+  }
+
+  .document-card h3{
+    font-size:17px;
+  }
+
+  .document-meta{
+    grid-template-columns:98px minmax(0,1fr);
+    gap:6px 9px;
+    font-size:11.5px;
+  }
+
+  .document-button{
+    flex:1 1 140px;
+    min-height:43px;
+    font-size:12px;
+  }
+
+  .documents-empty,
+  .documents-message{
+    padding:24px 16px;
+    border-radius:17px;
+    font-size:12px;
+  }
+}
+
+  </style>
+  <meta name="sante-build" content="MEMBER-DOCUMENTS-MATCH-HOME-R4">
 </head>
+
 <body>
-<header class="header">
- <a class="brand" href="member-home.html"><img src="sante%20(en)-logo.png" alt="SANTE"></a>
- <div class="actions">
-  <a class="btn home" href="member-home.html">หน้าหลัก</a>
-  <a class="btn" href="training-register.html">การอบรมของฉัน</a>
-  <button id="logout" class="btn">ออกจากระบบ</button>
- </div>
-</header>
-<main class="wrap">
- <section class="hero"><h1>เอกสารของฉัน</h1><p>วุฒิบัตรและเอกสารที่ SANTE ออกให้คุณ เก็บไว้ในระบบและเปิดดูซ้ำได้ทุกเมื่อ</p></section>
- <div id="message"></div>
- <section class="stats">
-  <div class="stat"><span>เอกสารทั้งหมด</span><strong id="total">0</strong></div>
-  <div class="stat"><span>วุฒิบัตร</span><strong id="certs">0</strong></div>
-  <div class="stat"><span>เวอร์ชันปัจจุบัน</span><strong id="versions">0</strong></div>
- </section>
- <section id="list" class="grid"><div class="empty">กำลังโหลดเอกสาร...</div></section>
-</main>
-<script>
-const db=window.supabase.createClient("https://cyegjwerxlxhczrfiurz.supabase.co","sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF",{auth:{storageKey:"sante-member-auth",persistSession:true,autoRefreshToken:true}});
-const $=id=>document.getElementById(id);
-const esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
-function fmtDate(v){if(!v)return "-";return new Intl.DateTimeFormat("th-TH",{day:"numeric",month:"short",year:"numeric"}).format(new Date(v))}
-function bytes(n){if(!n)return "-";if(n<1024*1024)return Math.round(n/1024)+" KB";return (n/1024/1024).toFixed(1)+" MB"}
-async function openDoc(bucket,path){
- const {data,error}=await db.storage.from(bucket).createSignedUrl(path,120);
- if(error){alert("เปิดเอกสารไม่สำเร็จ: "+error.message);return}
- window.open(data.signedUrl,"_blank","noopener");
-}
-async function init(){
- const a=await db.auth.getSession();
- if(!a.data.session){location="member-login.html";return}
- const r=await db.rpc("member_get_my_documents");
- if(r.error){$("message").innerHTML=`<div class="msg">${esc(r.error.message)}</div>`;$("list").innerHTML="";return}
- const rows=r.data||[];
- $("total").textContent=rows.length;
- $("certs").textContent=rows.filter(x=>x.document_type==="CERTIFICATE").length;
- $("versions").textContent=rows.reduce((m,x)=>Math.max(m,Number(x.version_no||0)),0);
- if(!rows.length){$("list").innerHTML='<div class="empty">ยังไม่มีเอกสารที่ออกให้บัญชีนี้</div>';return}
- $("list").innerHTML=rows.map(x=>`<article class="card">
-  <span class="tag">${esc(x.document_type==="CERTIFICATE"?"วุฒิบัตร":x.document_type)}</span>
-  <h2>${esc(x.title||x.course_name||"เอกสาร")}</h2>
-  <div class="meta">
-   <span>เลขวุฒิบัตร</span><strong>${esc(x.certificate_no||"-")}</strong>
-   <span>หลักสูตร</span><strong>${esc(x.course_name||"-")}</strong>
-   <span>วันที่อบรม</span><strong>${esc(x.training_date||"-")}</strong>
-   <span>วันที่ออก</span><strong>${fmtDate(x.issue_date)}</strong>
-   <span>ไฟล์</span><strong>PDF · ${bytes(x.file_size_bytes)} · Version ${esc(x.version_no||1)}</strong>
-  </div>
-  <div class="card-actions">
-   <button class="btn primary" onclick="openDoc('${esc(x.storage_bucket)}','${esc(x.storage_path)}')">เปิด PDF</button>
-   ${x.verification_url?`<a class="btn" href="${esc(x.verification_url)}" target="_blank">ตรวจสอบ QR</a>`:""}
-  </div>
- </article>`).join("");
-}
-$("logout").onclick=async()=>{await db.auth.signOut();location="member-login.html"};
-init();
-</script>
+
+  <div id="loading" class="loading">กำลังโหลดเอกสารของคุณ...</div>
+
+  <header class="topbar">
+    <a class="brand" href="member-home.html" aria-label="SANTE Member Home">
+      <img src="sante%20(en)-logo.png" alt="SANTE Consulting" class="brand-logo">
+    </a>
+
+    <div class="member-area">
+      <div class="member-copy">
+        <div id="memberName" class="member-name">สมาชิก SANTE</div>
+        <div id="memberEmail" class="member-email"></div>
+      </div>
+
+      <button id="logoutButton" class="logout-button" type="button">
+        ออกจากระบบ
+      </button>
+    </div>
+  </header>
+
+  <main class="page">
+
+    <!-- Desktop hero identical to member-home -->
+    <section class="desktop-hero">
+      <img src="sante-member-hero.png" alt="Trust in Safety. Trust in SANTE.">
+    </section>
+
+    <!-- Mobile hero identical to member-home -->
+    <section class="mobile-hero">
+      <div class="mobile-hero-content">
+        <div class="mobile-hero-badge">SANTE MEMBER</div>
+
+        <h1>
+          เอกสารของคุณ<br>
+          <span>อยู่ที่นี่ครบ</span>
+        </h1>
+
+        <p class="mobile-hero-description">
+          ดูวุฒิบัตรและเอกสารที่ SANTE ออกให้
+          พร้อมเปิด PDF และตรวจสอบ QR ได้จากบัญชีเดียว
+        </p>
+      </div>
+
+      <div class="mobile-hero-visual">
+        <img src="sante-mobile-hero.png" alt="SANTE Member">
+      </div>
+    </section>
+
+    <section class="documents-heading">
+      <div class="documents-heading-left">
+        <div class="section-icon">▣</div>
+        <div>
+          <h2>เอกสารของฉัน</h2>
+          <p>วุฒิบัตรและเอกสาร PDF ที่ SANTE ออกให้คุณ</p>
+        </div>
+      </div>
+
+      <a class="documents-back" href="member-home.html">← กลับหน้าหลัก</a>
+    </section>
+
+    <div id="message"></div>
+
+    <section class="documents-stats">
+      <div class="documents-stat">
+        <span>เอกสารทั้งหมด</span>
+        <strong id="total">0</strong>
+      </div>
+
+      <div class="documents-stat">
+        <span>วุฒิบัตร</span>
+        <strong id="certs">0</strong>
+      </div>
+
+      <div class="documents-stat">
+        <span>เวอร์ชันล่าสุด</span>
+        <strong id="versions">0</strong>
+      </div>
+    </section>
+
+    <section id="list" class="documents-grid">
+      <div class="documents-empty">กำลังโหลดเอกสาร...</div>
+    </section>
+
+  </main>
+
+  <script>
+    const SUPABASE_URL =
+      "https://cyegjwerxlxhczrfiurz.supabase.co";
+
+    const SUPABASE_KEY =
+      "sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF";
+
+    const db =
+      window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY,
+        {
+          auth: {
+            persistSession: true,
+            autoRefreshToken: true,
+            detectSessionInUrl: true,
+            storageKey: "sante-member-auth"
+          }
+        }
+      );
+
+    const $ = id => document.getElementById(id);
+
+    const esc = value =>
+      String(value ?? "").replace(
+        /[&<>"']/g,
+        c => ({
+          "&":"&amp;",
+          "<":"&lt;",
+          ">":"&gt;",
+          '"':"&quot;",
+          "'":"&#039;"
+        }[c])
+      );
+
+    function getThaiFullName(profile) {
+      return [
+        profile?.title_th,
+        profile?.firstname_th,
+        profile?.lastname_th
+      ]
+      .filter(Boolean)
+      .join(" ")
+      .replace(/\s+/g," ")
+      .trim();
+    }
+
+    function formatDate(value) {
+      if(!value) return "-";
+
+      const date = new Date(value);
+
+      if(Number.isNaN(date.getTime())) {
+        return String(value);
+      }
+
+      return new Intl.DateTimeFormat(
+        "th-TH",
+        {
+          day:"numeric",
+          month:"short",
+          year:"numeric"
+        }
+      ).format(date);
+    }
+
+    function formatBytes(value) {
+      const n = Number(value || 0);
+
+      if(!n) return "-";
+
+      if(n < 1024 * 1024) {
+        return Math.round(n / 1024) + " KB";
+      }
+
+      return (n / 1024 / 1024).toFixed(1) + " MB";
+    }
+
+    async function openDocument(bucket,path) {
+      try {
+        if(!bucket || !path) {
+          alert("ยังไม่มีไฟล์ PDF สำหรับเอกสารนี้");
+          return;
+        }
+
+        const {data,error} =
+          await db
+            .storage
+            .from(bucket)
+            .createSignedUrl(path,120);
+
+        if(error) throw error;
+
+        window.open(
+          data.signedUrl,
+          "_blank",
+          "noopener"
+        );
+      }
+      catch(error) {
+        alert(
+          "เปิดเอกสารไม่สำเร็จ: " +
+          (error?.message || error)
+        );
+      }
+    }
+
+    function renderDocuments(rows) {
+      $("total").textContent =
+        rows.length.toLocaleString("th-TH");
+
+      $("certs").textContent =
+        rows
+          .filter(x => x.document_type === "CERTIFICATE")
+          .length
+          .toLocaleString("th-TH");
+
+      $("versions").textContent =
+        rows.length
+          ? Math.max(...rows.map(x => Number(x.version_no || 0)))
+          : 0;
+
+      if(!rows.length) {
+        $("list").innerHTML =
+          '<div class="documents-empty">ยังไม่มีเอกสารที่ออกให้บัญชีนี้</div>';
+
+        return;
+      }
+
+      $("list").innerHTML =
+        rows.map(x => `
+          <article class="document-card">
+
+            <div class="document-top">
+              <span class="document-type">
+                ${x.document_type === "CERTIFICATE"
+                  ? "วุฒิบัตร"
+                  : esc(x.document_type || "เอกสาร")}
+              </span>
+
+              <span class="document-version">
+                Version ${esc(x.version_no || 1)}
+              </span>
+            </div>
+
+            <div class="document-body">
+
+              <h3>
+                ${esc(
+                  x.title ||
+                  x.course_name ||
+                  "เอกสาร SANTE"
+                )}
+              </h3>
+
+              <dl class="document-meta">
+
+                <dt>เลขวุฒิบัตร</dt>
+                <dd>${esc(x.certificate_no || "-")}</dd>
+
+                <dt>หลักสูตร</dt>
+                <dd>${esc(x.course_name || "-")}</dd>
+
+                <dt>วันที่อบรม</dt>
+                <dd>${esc(x.training_date || "-")}</dd>
+
+                <dt>วันที่ออก</dt>
+                <dd>${formatDate(x.issue_date)}</dd>
+
+                <dt>ไฟล์</dt>
+                <dd>
+                  PDF · ${formatBytes(x.file_size_bytes)}
+                </dd>
+
+              </dl>
+
+            </div>
+
+            <div class="document-actions">
+
+              <button
+                class="document-button primary"
+                type="button"
+                onclick="openDocument(
+                  '${esc(x.storage_bucket)}',
+                  '${esc(x.storage_path)}'
+                )"
+              >
+                เปิด PDF
+              </button>
+
+              ${x.verification_url
+                ? `
+                  <a
+                    class="document-button"
+                    href="${esc(x.verification_url)}"
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    ตรวจสอบ QR
+                  </a>
+                `
+                : ""
+              }
+
+            </div>
+
+          </article>
+        `).join("");
+    }
+
+    async function initialize() {
+      try {
+        const {
+          data: sessionData,
+          error: sessionError
+        } =
+          await db.auth.getSession();
+
+        if(sessionError) throw sessionError;
+
+        const session =
+          sessionData?.session;
+
+        if(!session?.user) {
+          window.location.replace(
+            "member-login.html"
+          );
+
+          return;
+        }
+
+        $("memberEmail").textContent =
+          session.user.email || "";
+
+        const {
+          data: profile,
+          error: profileError
+        } =
+          await db
+            .from("profiles")
+            .select(`
+              title_th,
+              firstname_th,
+              lastname_th,
+              email,
+              account_status
+            `)
+            .eq("id",session.user.id)
+            .maybeSingle();
+
+        if(profileError) {
+          console.warn(
+            "Profile:",
+            profileError
+          );
+        }
+
+        $("memberName").textContent =
+          getThaiFullName(profile) ||
+          "สมาชิก SANTE";
+
+        if(profile?.email) {
+          $("memberEmail").textContent =
+            profile.email;
+        }
+
+        const {
+          data: documents,
+          error: documentsError
+        } =
+          await db.rpc(
+            "member_get_my_documents"
+          );
+
+        if(documentsError) {
+          throw documentsError;
+        }
+
+        renderDocuments(
+          documents || []
+        );
+
+        $("loading").classList.add(
+          "hidden"
+        );
+      }
+      catch(error) {
+        console.error(
+          "Member Documents:",
+          error
+        );
+
+        $("message").innerHTML =
+          '<div class="documents-message error">' +
+          esc(
+            error?.message ||
+            "ไม่สามารถโหลดเอกสารได้"
+          ) +
+          "</div>";
+
+        $("list").innerHTML = "";
+
+        $("loading").classList.add(
+          "hidden"
+        );
+      }
+    }
+
+    $("logoutButton")
+      .addEventListener(
+        "click",
+        async function() {
+          $("logoutButton").disabled = true;
+          $("logoutButton").textContent =
+            "กำลังออก...";
+
+          try {
+            await db.auth.signOut();
+          }
+          finally {
+            window.location.replace(
+              "member-login.html"
+            );
+          }
+        }
+      );
+
+    initialize();
+  </script>
+
 </body>
 </html>
