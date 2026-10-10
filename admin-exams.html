@@ -1007,6 +1007,475 @@ textarea{
 </style>
 
 <meta name="sante-responsive-hero-build" content="SANTE-ADMIN-RESPONSIVE-HERO-R3">
+
+<style id="sante-admin-mobile-match-member-r4">
+/* =========================================================
+   SANTE ADMIN MOBILE = MEMBER-HOME PROPORTIONS R4
+   Desktop is intentionally untouched.
+========================================================= */
+@media(max-width:767px){
+
+  /* Mobile page rhythm mirrors member-home */
+  .content{
+    width:100%!important;
+    margin:0!important;
+    padding:
+      10px
+      12px
+      calc(35px + env(safe-area-inset-bottom))!important;
+  }
+
+  /* Desktop banner is hidden only on mobile */
+  .canonical-hero,
+  .dashboard-hero{
+    display:none!important;
+  }
+
+  /* Same card geometry as member-home .mobile-hero */
+  .admin-mobile-hero{
+    width:100%!important;
+    min-height:390px!important;
+    position:relative!important;
+    display:flex!important;
+    flex-direction:column!important;
+    overflow:hidden!important;
+
+    margin:0!important;
+    padding:
+      23px
+      20px
+      0!important;
+
+    border:0!important;
+    border-radius:20px!important;
+
+    background:
+      linear-gradient(
+        145deg,
+        #eaf7ff 0%,
+        #ffffff 58%,
+        #fff4c9 100%
+      )!important;
+
+    box-shadow:
+      0 8px 25px
+      rgba(11,45,103,.07)!important;
+  }
+
+  .admin-mobile-hero::before{
+    content:""!important;
+    position:absolute!important;
+    width:190px!important;
+    height:190px!important;
+    top:-90px!important;
+    right:-70px!important;
+    border-radius:50%!important;
+    background:rgba(255,191,25,.28)!important;
+  }
+
+  .admin-mobile-hero::after{
+    content:""!important;
+    position:absolute!important;
+    width:180px!important;
+    height:180px!important;
+    left:-90px!important;
+    bottom:-90px!important;
+    border-radius:50%!important;
+    background:rgba(64,176,245,.14)!important;
+  }
+
+  .admin-mobile-hero-copy{
+    position:relative!important;
+    z-index:5!important;
+  }
+
+  .admin-mobile-hero-badge{
+    width:max-content!important;
+    display:inline-flex!important;
+    align-items:center!important;
+    padding:6px 12px!important;
+    border-radius:999px!important;
+    background:var(--yellow,#ffbf19)!important;
+    color:var(--navy,#082d69)!important;
+    font-size:11px!important;
+    font-weight:600!important;
+    letter-spacing:.3px!important;
+  }
+
+  .admin-mobile-hero h1{
+    margin-top:13px!important;
+    color:var(--navy,#082d69)!important;
+    font-size:clamp(27px,8vw,34px)!important;
+    font-weight:700!important;
+    line-height:1.23!important;
+  }
+
+  .admin-mobile-hero h1 span{
+    color:#087df0!important;
+  }
+
+  .admin-mobile-hero p{
+    max-width:320px!important;
+    margin-top:9px!important;
+    color:#637b9a!important;
+    font-size:13px!important;
+    line-height:1.65!important;
+  }
+
+  /* Critical fix:
+     member-home does NOT crop its visual.
+     Remove the prior fixed 225px + object-fit:cover behavior. */
+  .admin-mobile-hero-visual{
+    min-height:0!important;
+    position:relative!important;
+    z-index:3!important;
+    flex:1!important;
+
+    display:flex!important;
+    align-items:flex-end!important;
+    justify-content:center!important;
+
+    margin:
+      5px
+      -20px
+      0!important;
+
+    overflow:hidden!important;
+  }
+
+  .admin-mobile-hero-visual img{
+    width:100%!important;
+    height:auto!important;
+    min-height:0!important;
+    max-width:none!important;
+    display:block!important;
+
+    object-fit:contain!important;
+    object-position:center!important;
+
+    border-radius:0!important;
+  }
+
+  /* Mobile admin topbar keeps Admin navigation, but matches member's
+     compact visual rhythm instead of oversized controls. */
+  .topbar{
+    height:auto!important;
+    min-height:64px!important;
+    gap:8px!important;
+    padding:
+      7px
+      max(12px,env(safe-area-inset-right))
+      7px
+      max(12px,env(safe-area-inset-left))!important;
+  }
+
+  .mobile-menu{
+    width:46px!important;
+    height:46px!important;
+    min-width:46px!important;
+    min-height:46px!important;
+    border-radius:11px!important;
+    font-size:20px!important;
+  }
+
+  .page-name{
+    font-size:18px!important;
+    line-height:1.3!important;
+  }
+
+  .logout,
+  .logout-btn{
+    min-height:40px!important;
+    padding:0 11px!important;
+    border-radius:10px!important;
+    font-size:11px!important;
+  }
+}
+
+@media(max-width:374px){
+  .content{
+    padding-left:10px!important;
+    padding-right:10px!important;
+  }
+
+  .admin-mobile-hero{
+    min-height:370px!important;
+    padding:
+      20px
+      17px
+      0!important;
+  }
+
+  .admin-mobile-hero h1{
+    font-size:26px!important;
+  }
+
+  .admin-mobile-hero p{
+    font-size:12px!important;
+  }
+
+  .admin-mobile-hero-visual{
+    margin-left:-17px!important;
+    margin-right:-17px!important;
+  }
+}
+</style>
+
+<meta name="sante-mobile-build" content="SANTE-ADMIN-MOBILE-MATCH-MEMBER-R4">
+
+<style id="sante-admin-mobile-exact-member-r5">
+/* =========================================================
+   SANTE ADMIN MOBILE EXACT MEMBER R5
+   Copies member-home mobile hero geometry 1:1.
+   Desktop is not changed.
+========================================================= */
+@media(max-width:767px){
+
+  .content{
+    width:100%!important;
+    margin:0!important;
+    padding:
+      10px
+      12px
+      calc(35px + env(safe-area-inset-bottom))!important;
+  }
+
+  .canonical-hero,
+  .dashboard-hero{
+    display:none!important;
+  }
+
+  .admin-mobile-hero{
+    min-height:390px!important;
+
+    position:relative!important;
+
+    display:flex!important;
+    flex-direction:column!important;
+
+    overflow:hidden!important;
+
+    margin:0!important;
+
+    padding:
+      23px
+      20px
+      0!important;
+
+    border:0!important;
+    border-radius:20px!important;
+
+    background:
+      linear-gradient(
+        145deg,
+        #eaf7ff 0%,
+        #ffffff 58%,
+        #fff4c9 100%
+      )!important;
+
+    box-shadow:
+      0 8px 25px
+      rgba(11,45,103,.07)!important;
+  }
+
+  .admin-mobile-hero::before{
+    content:""!important;
+
+    position:absolute!important;
+
+    width:190px!important;
+    height:190px!important;
+
+    top:-90px!important;
+    right:-70px!important;
+
+    border-radius:50%!important;
+
+    background:
+      rgba(255,191,25,.28)!important;
+  }
+
+  .admin-mobile-hero::after{
+    content:""!important;
+
+    position:absolute!important;
+
+    width:180px!important;
+    height:180px!important;
+
+    left:-90px!important;
+    bottom:-90px!important;
+
+    border-radius:50%!important;
+
+    background:
+      rgba(64,176,245,.14)!important;
+  }
+
+  .admin-mobile-hero-copy{
+    position:relative!important;
+    z-index:5!important;
+  }
+
+  .admin-mobile-hero-badge{
+    width:max-content!important;
+
+    display:inline-flex!important;
+    align-items:center!important;
+
+    padding:6px 12px!important;
+
+    border-radius:999px!important;
+
+    background:var(--yellow,#ffbf19)!important;
+
+    color:var(--navy,#082d69)!important;
+
+    font-size:11px!important;
+    font-weight:600!important;
+
+    letter-spacing:.3px!important;
+  }
+
+  .admin-mobile-hero h1{
+    margin-top:13px!important;
+
+    color:var(--navy,#082d69)!important;
+
+    font-size:clamp(27px,8vw,34px)!important;
+    font-weight:700!important;
+
+    line-height:1.23!important;
+  }
+
+  .admin-mobile-hero h1 span{
+    color:#087df0!important;
+  }
+
+  .admin-mobile-hero p{
+    max-width:320px!important;
+
+    margin-top:9px!important;
+
+    color:#637b9a!important;
+
+    font-size:13px!important;
+    line-height:1.65!important;
+  }
+
+  .admin-mobile-hero-visual{
+    min-height:0!important;
+
+    position:relative!important;
+    z-index:3!important;
+
+    flex:1!important;
+
+    display:flex!important;
+    align-items:flex-end!important;
+    justify-content:center!important;
+
+    margin:
+      5px
+      -20px
+      0!important;
+
+    overflow:hidden!important;
+  }
+
+  .admin-mobile-hero-visual img{
+    width:100%!important;
+    height:auto!important;
+
+    display:block!important;
+
+    object-fit:contain!important;
+    object-position:center!important;
+
+    border-radius:0!important;
+  }
+
+  /* Header keeps admin navigation but matches member-home proportions */
+  .topbar{
+    height:auto!important;
+    min-height:64px!important;
+
+    gap:8px!important;
+
+    padding:
+      7px
+      max(12px,env(safe-area-inset-right))
+      7px
+      max(12px,env(safe-area-inset-left))!important;
+  }
+
+  .mobile-menu{
+    width:46px!important;
+    height:46px!important;
+    min-width:46px!important;
+    min-height:46px!important;
+
+    padding:0!important;
+
+    border-radius:11px!important;
+
+    font-size:20px!important;
+  }
+
+  .page-name{
+    font-size:18px!important;
+    line-height:1.3!important;
+  }
+
+  .page-sub,
+  .admin-copy{
+    display:none!important;
+  }
+
+  .logout,
+  .logout-btn{
+    min-height:38px!important;
+
+    padding:0 10px!important;
+
+    border-radius:9px!important;
+
+    font-size:11px!important;
+  }
+}
+
+@media(max-width:374px){
+
+  .content{
+    padding-left:10px!important;
+    padding-right:10px!important;
+  }
+
+  .admin-mobile-hero{
+    min-height:370px!important;
+
+    padding:
+      20px
+      17px
+      0!important;
+  }
+
+  .admin-mobile-hero h1{
+    font-size:26px!important;
+  }
+
+  .admin-mobile-hero p{
+    font-size:12px!important;
+  }
+
+  .admin-mobile-hero-visual{
+    margin-left:-17px!important;
+    margin-right:-17px!important;
+  }
+}
+</style>
+
+<meta name="sante-mobile-build" content="SANTE-ADMIN-MOBILE-EXACT-MEMBER-R5">
 </head>
 
 <body>
@@ -1079,10 +1548,10 @@ textarea{
   <div class="admin-mobile-hero-copy">
     <div class="admin-mobile-hero-badge">SANTE ADMIN</div>
     <h1>Trust in Safety.<br><span>Trust in SANTE.</span></h1>
-    <p>ระบบบริหารจัดการของ SANTE สำหรับหลักสูตร รอบอบรม ข้อสอบ สมาชิก งานบริการ การชำระเงิน และเอกสาร</p>
+    <p>จัดการระบบ SANTE ได้จากบัญชีผู้ดูแลเดียว ทั้งหลักสูตร รอบอบรม ข้อสอบ สมาชิก งานบริการ การชำระเงิน และเอกสาร</p>
   </div>
   <div class="admin-mobile-hero-visual">
-    <img src="sante-dashboard-hero-mobile.png" alt="SANTE Admin">
+    <img src="sante-mobile-hero.png" alt="SANTE Admin">
   </div>
 </section>
 
