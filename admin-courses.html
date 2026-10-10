@@ -627,6 +627,209 @@ textarea{
 </style>
 
 <meta name="sante-readability-build" content="SANTE-ADMIN-READABILITY-R2">
+
+<style id="sante-admin-responsive-hero-r3">
+/* =========================================================
+   SANTE ADMIN RESPONSIVE HERO R3
+   Desktop: approved wide hero
+   Mobile: dedicated composition inspired by member-home
+========================================================= */
+
+.admin-mobile-hero{
+  display:none;
+}
+
+/* Normalize desktop hero */
+@media(min-width:768px){
+  .canonical-hero,
+  .dashboard-hero{
+    display:block!important;
+    width:100%!important;
+    height:auto!important;
+    min-height:0!important;
+    margin:0 0 28px!important;
+    padding:10px!important;
+    overflow:hidden!important;
+    border-radius:28px!important;
+    background:#fff!important;
+    box-shadow:0 10px 30px rgba(8,45,105,.06)!important;
+  }
+
+  .canonical-hero picture,
+  .dashboard-hero picture,
+  .dashboard-hero-picture{
+    position:relative!important;
+    inset:auto!important;
+    display:block!important;
+    width:100%!important;
+    height:auto!important;
+    line-height:0!important;
+  }
+
+  .canonical-hero img,
+  .dashboard-hero img,
+  .dashboard-hero-image{
+    position:relative!important;
+    display:block!important;
+    width:100%!important;
+    height:auto!important;
+    max-width:100%!important;
+    border-radius:22px!important;
+    object-fit:contain!important;
+    object-position:center!important;
+  }
+}
+
+/* Mobile hero is a separate layout, not a stretched portrait banner */
+@media(max-width:767px){
+  .canonical-hero,
+  .dashboard-hero{
+    display:none!important;
+  }
+
+  .admin-mobile-hero{
+    position:relative;
+    display:flex!important;
+    flex-direction:column;
+    width:100%;
+    min-height:385px;
+    margin:0 0 20px;
+    padding:22px 18px 0;
+    overflow:hidden;
+    border:1px solid #dce7f2;
+    border-radius:20px;
+    background:
+      linear-gradient(
+        145deg,
+        #eaf7ff 0%,
+        #ffffff 56%,
+        #fff3c9 100%
+      );
+    box-shadow:0 8px 25px rgba(11,45,103,.07);
+  }
+
+  .admin-mobile-hero::before{
+    content:"";
+    position:absolute;
+    width:185px;
+    height:185px;
+    top:-95px;
+    right:-70px;
+    border-radius:50%;
+    background:rgba(255,191,25,.25);
+    pointer-events:none;
+  }
+
+  .admin-mobile-hero::after{
+    content:"";
+    position:absolute;
+    width:175px;
+    height:175px;
+    left:-95px;
+    bottom:-90px;
+    border-radius:50%;
+    background:rgba(64,176,245,.13);
+    pointer-events:none;
+  }
+
+  .admin-mobile-hero-copy{
+    position:relative;
+    z-index:3;
+  }
+
+  .admin-mobile-hero-badge{
+    width:max-content;
+    display:inline-flex;
+    align-items:center;
+    padding:6px 11px;
+    border-radius:999px;
+    background:var(--yellow,#ffbf19);
+    color:var(--navy,#082d69);
+    font-size:10px;
+    font-weight:700;
+    letter-spacing:.25px;
+  }
+
+  .admin-mobile-hero h1{
+    margin:12px 0 0;
+    color:var(--navy,#082d69);
+    font-size:clamp(26px,7.8vw,33px);
+    line-height:1.2;
+    font-weight:700;
+    letter-spacing:-.02em;
+  }
+
+  .admin-mobile-hero h1 span{
+    color:#087df0;
+  }
+
+  .admin-mobile-hero p{
+    max-width:330px;
+    margin:8px 0 0;
+    color:#637b9a;
+    font-size:12px!important;
+    line-height:1.6!important;
+  }
+
+  .admin-mobile-hero-visual{
+    position:relative;
+    z-index:2;
+    flex:1;
+    min-height:205px;
+    margin:4px -18px 0;
+    overflow:hidden;
+    display:flex;
+    align-items:flex-end;
+    justify-content:center;
+  }
+
+  .admin-mobile-hero-visual img{
+    display:block;
+    width:100%;
+    height:225px!important;
+    max-width:none!important;
+    object-fit:cover!important;
+    object-position:center 80%!important;
+    border-radius:0!important;
+  }
+
+  /* keep admin mobile shell balanced */
+  .content{
+    width:100%!important;
+    padding:12px 12px calc(42px + env(safe-area-inset-bottom))!important;
+  }
+
+  .topbar{
+    min-height:68px!important;
+  }
+}
+
+@media(max-width:374px){
+  .admin-mobile-hero{
+    min-height:365px;
+    padding:19px 16px 0;
+  }
+
+  .admin-mobile-hero h1{
+    font-size:25px;
+  }
+
+  .admin-mobile-hero p{
+    font-size:11.5px!important;
+  }
+
+  .admin-mobile-hero-visual{
+    margin-left:-16px;
+    margin-right:-16px;
+  }
+
+  .admin-mobile-hero-visual img{
+    height:210px!important;
+  }
+}
+</style>
+
+<meta name="sante-responsive-hero-build" content="SANTE-ADMIN-RESPONSIVE-HERO-R3">
 </head>
 <body>
 <div id="loadingScreen" class="loading-screen">กำลังตรวจสอบสิทธิ์ผู้ดูแลระบบ...</div>
@@ -669,6 +872,18 @@ textarea{
     <img src="sante-dashboard-hero-desktop.png" alt="Trust in Safety. Trust in SANTE.">
   </picture>
 </section>
+
+<section class="admin-mobile-hero" aria-label="SANTE Admin">
+  <div class="admin-mobile-hero-copy">
+    <div class="admin-mobile-hero-badge">SANTE ADMIN</div>
+    <h1>Trust in Safety.<br><span>Trust in SANTE.</span></h1>
+    <p>ระบบบริหารจัดการของ SANTE สำหรับหลักสูตร รอบอบรม ข้อสอบ สมาชิก งานบริการ การชำระเงิน และเอกสาร</p>
+  </div>
+  <div class="admin-mobile-hero-visual">
+    <img src="sante-dashboard-hero-mobile.png" alt="SANTE Admin">
+  </div>
+</section>
+
 
   <div class="page-head">
     <div><h1>จัดการหลักสูตร</h1><p>เพิ่ม แก้ไข ปิดใช้งาน หรือลบหลักสูตรที่ยังไม่มีข้อมูลผูกอยู่</p></div>
