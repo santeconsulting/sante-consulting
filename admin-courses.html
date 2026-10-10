@@ -1299,6 +1299,51 @@ textarea{
 </style>
 
 <meta name="sante-mobile-build" content="SANTE-ADMIN-MOBILE-EXACT-MEMBER-R5">
+
+<style id="sante-admin-mobile-menu-r6">
+/* SANTE ADMIN MOBILE MENU R6 */
+@media(max-width:900px){
+  .sidebar{
+    width:285px!important;
+    transform:translateX(-100%)!important;
+    transition:transform .22s ease!important;
+    z-index:300!important;
+  }
+  .sidebar.open{
+    transform:translateX(0)!important;
+  }
+
+  #santeMobileOverlay{
+    display:none;
+    position:fixed;
+    inset:0;
+    z-index:250;
+    background:rgba(3,20,48,.48);
+    opacity:0;
+    transition:opacity .2s ease;
+  }
+  #santeMobileOverlay.show{
+    display:block;
+    opacity:1;
+  }
+
+  body.sante-menu-open{
+    overflow:hidden!important;
+    touch-action:none;
+  }
+
+  .mobile-menu{
+    cursor:pointer!important;
+    touch-action:manipulation!important;
+    -webkit-tap-highlight-color:transparent!important;
+  }
+}
+@media(min-width:901px){
+  #santeMobileOverlay{display:none!important}
+}
+</style>
+
+<meta name="sante-mobile-menu-build" content="SANTE-ADMIN-MOBILE-MENU-R6">
 </head>
 <body>
 <div id="loadingScreen" class="loading-screen">กำลังตรวจสอบสิทธิ์ผู้ดูแลระบบ...</div>
@@ -1579,5 +1624,108 @@ $("overlay").onclick=()=>{$("sidebar").classList.remove("open");$("overlay").cla
 $("logoutButton").onclick=async()=>{await db.auth.signOut();location="admin-login.html"};
 init();
 </script>
+
+<script id="sante-admin-mobile-menu-script-r6">
+(function(){
+  "use strict";
+
+  function getSidebar(){
+    return document.getElementById("sidebar") || document.querySelector(".sidebar");
+  }
+
+  function getOverlay(){
+    let ov=document.getElementById("santeMobileOverlay");
+    if(!ov){
+      ov=document.createElement("div");
+      ov.id="santeMobileOverlay";
+      ov.setAttribute("aria-hidden","true");
+      document.body.appendChild(ov);
+    }
+    return ov;
+  }
+
+  function isMobile(){
+    return window.matchMedia("(max-width:900px)").matches;
+  }
+
+  function openMenu(){
+    if(!isMobile()) return;
+    const sidebar=getSidebar();
+    if(!sidebar) return;
+    const ov=getOverlay();
+
+    sidebar.classList.remove("show");
+    sidebar.classList.add("open");
+    ov.classList.add("show");
+    ov.setAttribute("aria-hidden","false");
+    document.body.classList.add("sante-menu-open");
+  }
+
+  function closeMenu(){
+    const sidebar=getSidebar();
+    const ov=getOverlay();
+
+    sidebar?.classList.remove("open","show");
+    ov.classList.remove("show");
+    ov.setAttribute("aria-hidden","true");
+    document.body.classList.remove("sante-menu-open");
+  }
+
+  function toggleMenu(){
+    const sidebar=getSidebar();
+    if(!sidebar) return;
+    sidebar.classList.contains("open") ? closeMenu() : openMenu();
+  }
+
+  function isMenuButton(target){
+    return target.closest(
+      "#mobileMenuBtn,#menuBtn,#menuButton,.mobile-menu"
+    );
+  }
+
+  // Capture phase intentionally overrides legacy per-page listeners,
+  // some of which used `.show` while the current CSS expects `.open`.
+  document.addEventListener("click",function(e){
+    const btn=isMenuButton(e.target);
+    if(!btn) return;
+
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+
+    toggleMenu();
+  },true);
+
+  document.addEventListener("click",function(e){
+    if(e.target.closest("#santeMobileOverlay")){
+      e.preventDefault();
+      closeMenu();
+      return;
+    }
+
+    if(isMobile() && e.target.closest(".sidebar .nav-link")){
+      closeMenu();
+    }
+  });
+
+  document.addEventListener("keydown",function(e){
+    if(e.key==="Escape") closeMenu();
+  });
+
+  window.addEventListener("resize",function(){
+    if(!isMobile()) closeMenu();
+  });
+
+  document.addEventListener("DOMContentLoaded",function(){
+    getOverlay();
+  });
+
+  // In case script loads after DOMContentLoaded
+  if(document.readyState!=="loading"){
+    getOverlay();
+  }
+})();
+</script>
+
 </body>
 </html>
