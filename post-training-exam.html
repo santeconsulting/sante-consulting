@@ -40,7 +40,7 @@ button,input,textarea{font-family:Prompt,sans-serif}
 
 @media(max-width:767px){.topbar{height:68px;padding:0 12px}.brand img{width:82px;height:48px}.member-copy{display:none}.page{width:calc(100% - 20px);padding:12px 0 35px}.hero{padding:5px;border-radius:16px}.hero img{border-radius:12px}.card{padding:17px;border-radius:17px}.title{font-size:21px}.sub{font-size:12px}.info-grid{grid-template-columns:1fr 1fr}.exam-top{flex-direction:column}.timer{width:100%}.question{padding:16px}.q-text{font-size:15px}.sticky-submit{bottom:7px;flex-direction:column;align-items:stretch}.sticky-submit .btn{width:100%}}
 </style>
-<meta name="sante-build" content="MEMBER-POSTTRAINING-TIMER-WARNINGS-R3">
+<meta name="sante-build" content="MEMBER-POSTTRAINING-EFFECTIVE-DEADLINE-R4">
 </head>
 <body>
 <header class="topbar">
@@ -90,7 +90,11 @@ button,input,textarea{font-family:Prompt,sans-serif}
     <div class="card">
       <div class="exam-top">
         <div><div class="title" id="doingExamName">แบบทดสอบท้ายการอบรม</div><div class="sub" id="doingMeta"></div></div>
-        <div class="timer"><span>เวลาคงเหลือ</span><strong id="timer">--:--</strong></div>
+        <div class="timer">
+          <span id="timerLabel">เวลาคงเหลือ</span>
+          <strong id="timer">--:--</strong>
+          <div id="deadlineInfo" style="margin-top:4px;font-size:9px;line-height:1.45;color:#806100"></div>
+        </div>
       </div>
       <div class="progress"><span id="answerProgress"></span></div>
     </div>
@@ -169,7 +173,9 @@ async function loadAccess(){
   $("passInfo").textContent=state.pass_percentage!=null?state.pass_percentage+"%":"-";
   $("attemptInfo").textContent=state.max_attempts!=null?state.max_attempts+" ครั้ง":"-";
   $("remainingInfo").textContent=state.attempts_remaining!=null?state.attempts_remaining+" ครั้ง":"-";
-  $("timeInfo").textContent=state.time_limit_minutes?state.time_limit_minutes+" นาที":"ไม่จำกัด";
+  $("timeInfo").textContent=state.posttest_close_at
+    ? `ปิดรับ ${formatThaiClock(state.posttest_close_at)}`
+    : (state.time_limit_minutes?state.time_limit_minutes+" นาที":"ไม่จำกัด");
   $("chips").innerHTML=`<span class="chip">${esc(state.status||"-")}</span>`+(state.member_name?`<span class="chip green">${esc(state.member_name)}</span>`:"");
   renderAccessState();
 }
@@ -197,7 +203,7 @@ async function startExam(){
     attempt=data;hide("accessSection");show("examSection");
     $("doingExamName").textContent=state.exam_name||"แบบทดสอบท้ายการอบรม";
     $("doingMeta").textContent=`ครั้งที่ ${attempt.attempt_number} · ${state.pass_percentage}% ผ่าน`;
-    renderQuestions();startTimer();
+    renderQuestions();renderDeadlineInfo();startTimer();
   }catch(e){$("accessMessage").innerHTML=notice("error",e.message||"ไม่สามารถเริ่มข้อสอบได้")}
   finally{btn.disabled=false;btn.textContent=state.status==="IN_PROGRESS"?"ทำข้อสอบต่อ":"เริ่มทำข้อสอบ"}
 }
@@ -260,6 +266,46 @@ function showTimeWarning(minutes){
 function closeTimeWarning(){
   $("timeWarningModal").classList.remove("show");
   $("timeWarningModal").setAttribute("aria-hidden","true");
+}
+
+
+function formatThaiClock(value){
+  if(!value) return "";
+  const d=new Date(value);
+  if(Number.isNaN(d.getTime())) return "";
+  return d.toLocaleTimeString("th-TH",{
+    hour:"2-digit",
+    minute:"2-digit",
+    hour12:false
+  })+" น.";
+}
+
+function renderDeadlineInfo(){
+  const info=$("deadlineInfo");
+  const label=$("timerLabel");
+  if(!attempt){
+    info.textContent="";
+    return;
+  }
+
+  if(attempt.deadline_source==="SESSION_CLOSE"){
+    label.textContent="เวลาคงเหลือ";
+    info.textContent=`ปิดรับคำตอบ ${formatThaiClock(attempt.deadline_at)}`;
+    return;
+  }
+
+  if(attempt.deadline_source==="TIME_LIMIT"){
+    label.textContent="เวลาคงเหลือ";
+    if(attempt.time_limit_minutes){
+      info.textContent=`เวลาทำข้อสอบ ${attempt.time_limit_minutes} นาที`;
+    }else{
+      info.textContent="";
+    }
+    return;
+  }
+
+  label.textContent="เวลาทำข้อสอบ";
+  info.textContent="ไม่จำกัดเวลา";
 }
 
 function startTimer(){
