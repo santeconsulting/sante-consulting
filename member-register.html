@@ -1,377 +1,563 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="th">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>สมัครสมาชิก | SANTE Member</title>
-<meta name="sante-build" content="MEMBER-REGISTER-R2-UNIFIED">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SANTE Member Register</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --navy:#082d69;--navy-dark:#061f4b;--navy-soft:#0d4386;
-  --yellow:#ffbf19;--yellow-soft:#fff4cf;--blue:#2f80ed;
-  --green:#53c865;--green-dark:#219653;--red:#a53b42;
-  --bg:#eef6fb;--text:#082d69;--muted:#7185a1;--line:#d7e4ef;
-  --white:#fff;--shadow:0 12px 36px rgba(8,45,105,.08);
+  --navy:#082f61;
+  --yellow:#ffc321;
+  --line:#d9e5f0;
+  --text:#173654;
+  --muted:#71849b;
+  --bg:#f7fbff;
 }
-html{scroll-behavior:smooth}
-body{
-  font-family:"Prompt",sans-serif;background:var(--bg);color:var(--text);
-  min-height:100vh;
-}
+*{box-sizing:border-box}
+html{font-size:16px;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+html,body{margin:0;min-height:100%;font-family:"Prompt",sans-serif;color:var(--text);background:var(--bg)}
+body{min-height:100vh;min-height:100dvh;overflow-x:hidden}
+a{color:inherit}
 button,input,select{font-family:inherit}
-a{text-decoration:none}
 
-/* TOPBAR — same member-system language */
-.member-topbar{
-  height:84px;background:#fff;border-bottom:1px solid var(--line);
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 max(24px,calc((100vw - 1440px)/2));
-  position:sticky;top:0;z-index:50;
+/* Same split-screen shell as member-login */
+.page{
+  width:100%;
+  min-height:100vh;
+  min-height:100dvh;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  background:#fff;
 }
-.member-brand{display:flex;align-items:center;gap:14px}
-.member-brand img{width:154px;height:62px;object-fit:contain}
-.member-brand-copy strong{display:block;font-size:14px;color:var(--navy)}
-.member-brand-copy span{display:block;font-size:10px;color:var(--muted);margin-top:2px}
-.top-actions{display:flex;align-items:center;gap:9px}
-.top-link{
-  min-height:42px;padding:0 16px;border:1px solid var(--line);border-radius:13px;
-  background:#fff;color:var(--navy);font-size:12px;font-weight:600;
-  display:inline-flex;align-items:center;justify-content:center
+.hero{
+  position:relative;
+  min-width:0;
+  min-height:100vh;
+  min-height:100dvh;
+  overflow:hidden;
+  background:#eef7ff;
 }
-.top-link.primary{background:var(--navy);border-color:var(--navy);color:#fff}
-
-/* PAGE */
-.page-shell{
-  width:min(1440px,calc(100% - 44px));margin:0 auto;padding:28px 0 56px;
+.hero-media{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  display:block;
+  object-fit:cover;
+  object-position:center center;
 }
-
-/* DESKTOP HERO — same rounded wide banner approach */
-.member-hero{
-  position:relative;overflow:hidden;border-radius:28px;
-  min-height:340px;border:1px solid var(--line);
-  background:
-    linear-gradient(90deg,rgba(255,255,255,.98) 0%,rgba(255,255,255,.91) 35%,rgba(255,255,255,.18) 70%,rgba(255,255,255,.03) 100%),
-    url("sante-member-hero.png") center/cover no-repeat;
-  box-shadow:var(--shadow);
-  margin-bottom:22px;
+.register-side{
+  min-width:0;
+  min-height:100vh;
+  min-height:100dvh;
+  display:grid;
+  place-items:center;
+  padding:clamp(14px,2.2vh,30px) clamp(18px,2.8vw,48px);
+  background:linear-gradient(135deg,#f9fcff 0%,#fff 58%,#f8fbff 100%);
 }
-.hero-content{
-  position:absolute;left:44px;top:42px;width:min(520px,46%);
+.register-card{
+  width:min(100%,760px);
+  background:rgba(255,255,255,.98);
+  border:1px solid #dbe6f0;
+  border-radius:clamp(18px,2.4vh,26px);
+  padding:clamp(18px,2.4vh,30px) clamp(22px,2.5vw,38px);
+  box-shadow:0 20px 55px rgba(8,47,97,.08);
 }
-.hero-pill{
-  display:inline-flex;padding:8px 16px;border-radius:999px;
-  background:var(--yellow);color:var(--navy);font-size:13px;font-weight:700;
-  margin-bottom:16px;
+.register-eyebrow{
+  margin:0 0 clamp(5px,.8vh,9px);
+  color:#c98e00;
+  font-size:clamp(11px,1.45vh,14px);
+  font-weight:700;
+  letter-spacing:.02em;
 }
-.hero-content h1{
-  font-size:42px;line-height:1.14;letter-spacing:-.4px;color:var(--navy)
+.register-title{
+  margin:0;
+  color:var(--navy);
+  font-size:clamp(28px,4vh,44px);
+  line-height:1.08;
+  letter-spacing:-.025em;
+  font-weight:700;
 }
-.hero-content h1 span{color:var(--blue)}
-.hero-content p{
-  color:#637b99;font-size:15px;line-height:1.9;margin-top:15px;max-width:480px
+.register-description{
+  margin:clamp(7px,1.2vh,12px) 0 0;
+  color:var(--muted);
+  font-size:clamp(11px,1.45vh,14px);
+  line-height:1.55;
 }
-
-/* GRID */
-.register-grid{
-  display:grid;grid-template-columns:minmax(0,1fr) 390px;gap:20px;align-items:start;
+.register-form{margin-top:clamp(13px,1.8vh,20px)}
+.section-label{
+  margin:clamp(10px,1.4vh,14px) 0 clamp(7px,1vh,10px);
+  padding-bottom:7px;
+  border-bottom:1px solid #e2eaf2;
+  color:#0c2f5d;
+  font-size:clamp(11px,1.4vh,13px);
+  font-weight:700;
 }
-.register-card,.side-card{
-  background:#fff;border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow)
+.form-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:clamp(8px,1.15vh,12px) 12px;
 }
-.register-card{padding:28px}
-.card-head{margin-bottom:22px}
-.card-head h2{font-size:26px;line-height:1.2;color:var(--navy)}
-.card-head p{color:var(--muted);font-size:12.5px;margin-top:7px;line-height:1.7}
-.section-title{
-  font-size:14px;font-weight:700;color:var(--navy);
-  margin:22px 0 13px;padding-bottom:10px;border-bottom:1px solid var(--line)
+.form-group{margin:0}
+.form-group.full{grid-column:1/-1}
+.form-label{
+  display:block;
+  margin-bottom:clamp(4px,.6vh,6px);
+  font-size:clamp(10px,1.3vh,12px);
+  font-weight:600;
+  color:#0c2f5d;
 }
-.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
-.field.full{grid-column:1/-1}
-label{display:block;color:#3f5e80;font-size:11.5px;font-weight:600;margin-bottom:6px}
-.req{color:#c3444d}
-input,select{
-  width:100%;height:48px;border:1px solid var(--line);border-radius:12px;
-  background:#fff;padding:0 13px;color:#173a61;outline:none;font-size:13.5px
+.required{color:#d64045}
+.input-box{
+  height:clamp(44px,5.6vh,52px);
+  border:1.5px solid #d8e4ef;
+  border-radius:clamp(10px,1.4vh,13px);
+  display:flex;
+  align-items:center;
+  background:#fff;
+  overflow:hidden;
+  transition:border-color .2s ease,box-shadow .2s ease;
 }
-input:focus,select:focus{border-color:#8fb9e8;box-shadow:0 0 0 3px rgba(47,128,237,.08)}
-.hint{color:var(--muted);font-size:10px;line-height:1.55;margin-top:5px}
-.password-wrap{position:relative}
-.password-wrap input{padding-right:64px}
-.show-pass{
-  position:absolute;right:7px;top:7px;height:34px;padding:0 10px;border:0;border-radius:9px;
-  background:#eef4f9;color:var(--navy);font-size:10px;font-weight:600
+.input-box:focus-within{
+  border-color:#85b7df;
+  box-shadow:0 0 0 3px rgba(50,133,199,.08)
+}
+.input-icon{
+  width:clamp(42px,5.3vh,48px);
+  display:grid;
+  place-items:center;
+  color:#6f89a8;
+  flex:0 0 clamp(42px,5.3vh,48px)
+}
+.input-icon svg{
+  width:clamp(17px,2.2vh,19px);
+  height:clamp(17px,2.2vh,19px)
+}
+.input-box input,.input-box select{
+  min-width:0;
+  border:0!important;
+  outline:0!important;
+  box-shadow:none!important;
+  flex:1;
+  height:100%;
+  font-size:clamp(12px,1.5vh,14px);
+  background:transparent;
+  color:#163451;
+  padding:0 8px;
+}
+.input-box select{appearance:auto}
+.input-box input::placeholder{color:#9aaabc}
+.password-toggle{
+  height:100%;
+  border:0;
+  background:transparent;
+  padding:0 clamp(10px,1.5vw,14px);
+  color:#44617f;
+  font-size:clamp(10px,1.3vh,12px);
+  font-weight:500;
+  display:flex;
+  gap:6px;
+  align-items:center;
+  cursor:pointer;
+  white-space:nowrap;
+}
+.hint{
+  margin-top:4px;
+  color:#8a9aad;
+  font-size:clamp(8px,1vh,10px);
+  line-height:1.4;
 }
 .agree{
-  display:flex;align-items:flex-start;gap:10px;margin-top:18px;padding:13px 14px;
-  background:#f5f9fd;border:1px solid #e5eef6;border-radius:14px
+  display:flex;
+  align-items:flex-start;
+  gap:8px;
+  margin:clamp(10px,1.4vh,14px) 0;
+  color:#6e8198;
+  font-size:clamp(9px,1.18vh,11px);
+  line-height:1.55;
 }
-.agree input{width:18px;height:18px;margin-top:2px;accent-color:var(--navy)}
-.agree div{font-size:11px;line-height:1.7;color:#516d8d}
-.agree a{color:var(--blue);font-weight:600}
-.submit{
-  width:100%;height:52px;margin-top:18px;border:0;border-radius:14px;
-  background:var(--yellow);color:var(--navy);font-size:15px;font-weight:700
+.agree input{
+  width:clamp(14px,1.8vh,16px);
+  height:clamp(14px,1.8vh,16px);
+  accent-color:#f1b400;
+  margin-top:2px;
 }
-.submit:hover{filter:brightness(.98)}
-.submit:disabled{opacity:.6}
-.message{display:none;margin-top:14px;border-radius:12px;padding:12px 14px;font-size:12px;line-height:1.65}
+.agree a{color:#1670d1;font-weight:600;text-decoration:none}
+.message{
+  display:none;
+  border-radius:10px;
+  padding:9px 11px;
+  margin:0 0 10px;
+  font-size:11px;
+  background:#fff0f1;
+  color:#a52a35
+}
 .message.show{display:block}
-.message.error{background:#fff1f1;color:#94343a;border:1px solid #efc9cd}
-.message.success{background:#edf9f1;color:#16723a;border:1px solid #ccebd7}
+.message.success{background:#edf9f1;color:#28794b}
+.register-button{
+  height:clamp(46px,6.2vh,56px);
+  width:100%;
+  border:0;
+  border-radius:clamp(10px,1.4vh,13px);
+  background:linear-gradient(90deg,#ffbd13,#ffc935);
+  color:#082f61;
+  font-size:clamp(13px,1.7vh,15px);
+  font-weight:700;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:9px;
+  cursor:pointer;
+  box-shadow:0 10px 25px rgba(255,190,20,.22)
+}
+.register-button:disabled{opacity:.65;cursor:wait}
+.other-divider{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin:clamp(10px,1.5vh,16px) 0 clamp(8px,1.2vh,12px);
+  color:#8496aa;
+  font-size:clamp(10px,1.3vh,12px);
+  text-align:center
+}
+.other-divider:before,.other-divider:after{
+  content:"";
+  height:1px;
+  background:#dce6ef;
+  flex:1
+}
+.secondary-button{
+  min-height:clamp(50px,6.6vh,60px);
+  border:1.5px solid #d6e4f0;
+  border-radius:clamp(11px,1.5vh,14px);
+  text-decoration:none;
+  color:#0d3f75;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:8px 12px;
+  font-size:clamp(11px,1.45vh,13px);
+  font-weight:600;
+  background:#fff;
+}
+.secondary-button .sec-icon{
+  width:clamp(32px,4.4vh,38px);
+  height:clamp(32px,4.4vh,38px);
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:#eef6ff;
+  font-size:clamp(14px,1.9vh,16px);
+  flex:0 0 clamp(32px,4.4vh,38px)
+}
+.secondary-button small{
+  display:block;
+  color:#8193a6;
+  font-weight:400;
+  font-size:clamp(9px,1.1vh,10px);
+  margin-top:2px;
+  line-height:1.35
+}
+.back-home{
+  text-align:center;
+  margin-top:clamp(9px,1.3vh,13px)
+}
+.back-home a{
+  text-decoration:none;
+  color:#778da5;
+  font-size:clamp(9px,1.2vh,11px)
+}
 
-/* RIGHT SIDE — aligns with other member cards */
-.side-card{overflow:hidden}
-.side-card .side-banner{
-  min-height:190px;background:url("sante-mobile-hero.png") center/cover no-repeat;
-}
-.side-body{padding:20px}
-.side-title{font-size:18px;font-weight:700;color:var(--navy)}
-.side-text{color:var(--muted);font-size:11.5px;line-height:1.8;margin-top:7px}
-.benefits{display:grid;gap:9px;margin-top:15px}
-.benefit{
-  display:flex;gap:10px;align-items:flex-start;padding:11px 12px;
-  background:#f6f9fc;border-radius:12px
-}
-.benefit-icon{
-  width:30px;height:30px;border-radius:50%;background:#e9f3ff;color:var(--navy);
-  display:flex;align-items:center;justify-content:center;flex:0 0 30px;font-size:13px;font-weight:700
-}
-.benefit strong{display:block;font-size:11.5px;color:var(--navy)}
-.benefit span{display:block;font-size:10px;color:var(--muted);margin-top:2px;line-height:1.45}
-.login-box{
-  margin-top:15px;padding:13px;border-radius:13px;background:var(--yellow-soft);
-  font-size:11px;color:#5d5870;line-height:1.7
-}
-.login-box a{font-weight:700;color:var(--navy)}
-
-.footer{
-  text-align:center;color:var(--muted);font-size:10.5px;padding:24px 10px 0
-}
-
-/* MOBILE — matches accepted member-home/member-line-connect language */
-@media(max-width:767px){
-  body{background:#f4f9fd}
-  .member-topbar{
-    height:68px;padding:0 14px;position:relative
+/* Match approved desktop geometry from member-login R6 */
+@media (min-width:901px){
+  html,body{
+    width:100%;
+    height:100%;
+    overflow:hidden
   }
-  .member-brand img{width:118px;height:48px}
-  .member-brand-copy{display:none}
-  .top-actions .top-link:first-child{display:none}
-  .top-link{min-height:38px;padding:0 13px;font-size:11px}
-  .page-shell{width:100%;padding:0 0 30px}
-
-  .member-hero{
-    min-height:390px;border-radius:0;border:0;margin:0;
-    box-shadow:none;
-    background:
-      linear-gradient(180deg,rgba(255,255,255,.02) 0%,rgba(255,255,255,.08) 100%),
-      url("sante-mobile-hero.png") center/cover no-repeat;
+  .page{
+    width:100vw;
+    height:100vh;
+    height:100dvh;
+    min-height:0;
+    display:grid;
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+    overflow:hidden
   }
-  .hero-content{
-    left:22px;right:22px;top:24px;width:auto;
-    background:rgba(255,255,255,.92);
-    border-radius:20px;padding:19px 20px;
-    box-shadow:0 10px 30px rgba(8,45,105,.08)
+  .hero,.register-side{
+    width:100%;
+    height:100vh;
+    height:100dvh;
+    min-width:0;
+    min-height:0
   }
-  .hero-pill{font-size:11px;padding:7px 13px;margin-bottom:11px}
-  .hero-content h1{font-size:31px;line-height:1.15}
-  .hero-content p{font-size:12px;line-height:1.75;margin-top:10px}
-
-  .register-grid{display:block}
+  .hero{
+    position:relative;
+    overflow:hidden;
+    background:#eef7ff
+  }
+  .hero-media{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    object-position:center center;
+    background:#eef7ff;
+    transform:translateY(clamp(8px,1.25vh,15px)) scale(.985);
+    transform-origin:center center
+  }
+  .register-side{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:clamp(18px,2.4vh,30px) clamp(28px,4vw,64px);
+    overflow:auto
+  }
   .register-card{
-    margin:-24px 12px 0;position:relative;z-index:3;
-    border-radius:24px;padding:21px 17px;box-shadow:0 12px 34px rgba(8,45,105,.08)
+    width:min(92%,760px);
+    max-width:760px;
+    max-height:calc(100dvh - 32px);
+    overflow:auto;
+    scrollbar-width:thin
   }
-  .card-head h2{font-size:24px}
-  .card-head p{font-size:11.5px}
-  .form-grid{grid-template-columns:1fr;gap:12px}
-  .field.full{grid-column:auto}
-  input,select{font-size:16px;height:50px}
-  .submit{height:54px;font-size:16px}
-  .side-card{
-    margin:14px 12px 0;border-radius:22px
+}
+@media (min-width:901px) and (max-height:820px){
+  .register-card{
+    padding-top:18px;
+    padding-bottom:18px
   }
-  .side-card .side-banner{min-height:155px}
-  .side-body{padding:17px}
-  .footer{font-size:10px;padding-top:18px}
+  .register-title{font-size:clamp(28px,3.7vh,38px)}
+  .register-description{font-size:clamp(10px,1.3vh,13px)}
+  .register-form{margin-top:12px}
+  .section-label{margin-top:8px;margin-bottom:6px}
+  .input-box{height:44px}
+}
+@media (min-width:901px) and (max-height:740px){
+  .register-card{max-height:calc(100dvh - 20px)}
+}
+
+/* Tablet / Mobile: exactly same stacking rule as member-login */
+@media (max-width:900px){
+  html,body{height:auto;overflow-x:hidden;overflow-y:auto}
+  .page{display:block;min-height:100dvh;background:#f7fbff}
+  .hero{min-height:0;height:auto;overflow:visible;background:#eef7ff}
+  .hero-media{
+    position:relative;
+    inset:auto;
+    width:100%;
+    height:auto;
+    object-fit:contain;
+    object-position:center top;
+    transform:none
+  }
+  .register-side{
+    min-height:auto;
+    height:auto;
+    padding:18px 16px 28px;
+    background:#f7fbff;
+    overflow:visible
+  }
+  .register-card{
+    width:100%;
+    max-width:680px;
+    max-height:none;
+    overflow:visible;
+    border-radius:24px;
+    padding:28px 24px;
+    box-shadow:0 16px 38px rgba(8,47,97,.07)
+  }
+  .register-title{font-size:clamp(28px,6vw,40px)}
+  .register-description{font-size:13px}
+  .input-box input,.input-box select{font-size:16px}
+}
+@media (max-width:600px){
+  .register-side{padding:14px 12px calc(22px + env(safe-area-inset-bottom))}
+  .register-card{border-radius:20px;padding:24px 18px 20px}
+  .register-eyebrow{font-size:12px;margin-bottom:8px}
+  .register-title{font-size:clamp(28px,8.6vw,36px)}
+  .register-description{font-size:12px;line-height:1.6}
+  .register-form{margin-top:20px}
+  .form-grid{grid-template-columns:1fr;gap:14px}
+  .form-group.full{grid-column:auto}
+  .section-label{margin-top:18px}
+  .input-box{height:54px;border-radius:12px}
+  .input-icon{width:46px;flex-basis:46px}
+  .input-icon svg{width:20px;height:20px}
+  .password-toggle{padding:0 12px;font-size:12px}
+  .agree{font-size:11px;margin:16px 0}
+  .register-button{height:56px;border-radius:12px}
+  .other-divider{margin:21px 0 16px;font-size:12px;gap:10px}
+  .secondary-button{min-height:66px;border-radius:14px;padding:10px 13px;font-size:13px}
+  .secondary-button .sec-icon{width:38px;height:38px;flex-basis:38px}
 }
 </style>
+<meta name="sante-register-build" content="SANTE-MEMBER-REGISTER-R3-LOGIN-MATCH">
 </head>
+
 <body>
-
-<header class="member-topbar">
-  <div class="member-brand">
-    <img src="sante%20(en)-logo.png" alt="SANTE">
-    <div class="member-brand-copy">
-      <strong>SANTE MEMBER</strong>
-      <span>ระบบสมาชิกและการอบรมออนไลน์</span>
-    </div>
-  </div>
-  <div class="top-actions">
-    <a class="top-link" href="index.html">เว็บไซต์หลัก</a>
-    <a class="top-link primary" href="member-login.html">เข้าสู่ระบบ</a>
-  </div>
-</header>
-
-<div class="page-shell">
-
-  <section class="member-hero">
-    <div class="hero-content">
-      <div class="hero-pill">SANTE MEMBER</div>
-      <h1>สมัครสมาชิก<br><span>SANTE SYSTEM</span></h1>
-      <p>
-        สร้างบัญชีสำหรับลงทะเบียนอบรม ชำระเงิน ทำข้อสอบ
-        ตรวจสอบผลการอบรม ดาวน์โหลดวุฒิบัตร และเชื่อมต่อ LINE Notification
-      </p>
-    </div>
+<main class="page member-page">
+  <section class="hero" aria-label="SANTE Member Hero">
+    <img class="hero-media" src="sante-member-login-hero.png" alt="SANTE Member">
   </section>
 
-  <div class="register-grid">
+  <section class="register-side">
+    <div class="register-card">
+      <div class="register-eyebrow">SANTE MEMBER</div>
+      <h1 class="register-title">สมัครสมาชิก</h1>
+      <p class="register-description">
+        สร้างบัญชี SANTE Member สำหรับสมัครอบรม งานตรวจวัด งานบริการ งานที่ปรึกษา
+        พร้อมติดตามการชำระเงิน ผลสอบ เอกสาร และวุฒิบัตรในที่เดียว
+      </p>
 
-    <section class="register-card">
-      <div class="card-head">
-        <h2>สร้างบัญชีสมาชิก</h2>
-        <p>กรอกข้อมูลให้ครบถ้วน ข้อมูลนี้จะใช้ในการลงทะเบียนอบรมและออกเอกสารของ SANTE</p>
-      </div>
-
-      <form id="registerForm" novalidate>
-
-        <div class="section-title">ข้อมูลส่วนตัว</div>
-
-        <div class="form-grid">
-          <div class="field">
-            <label>คำนำหน้า <span class="req">*</span></label>
-            <select id="titleTh" required>
-              <option value="">เลือกคำนำหน้า</option>
-              <option value="นาย">นาย</option>
-              <option value="นาง">นาง</option>
-              <option value="นางสาว">นางสาว</option>
-              <option value="อื่นๆ">อื่นๆ</option>
-            </select>
-          </div>
-
-          <div class="field">
-            <label>ชื่อ <span class="req">*</span></label>
-            <input id="firstnameTh" autocomplete="given-name" required placeholder="ชื่อ">
-          </div>
-
-          <div class="field">
-            <label>นามสกุล <span class="req">*</span></label>
-            <input id="lastnameTh" autocomplete="family-name" required placeholder="นามสกุล">
-          </div>
-
-          <div class="field">
-            <label>เบอร์โทรศัพท์</label>
-            <input id="phone" autocomplete="tel" inputmode="tel" placeholder="เช่น 0812345678">
-          </div>
-
-          <div class="field full">
-            <label>บริษัท / หน่วยงาน</label>
-            <input id="organizationName" autocomplete="organization" placeholder="ชื่อบริษัทหรือหน่วยงาน">
-          </div>
-        </div>
-
-        <div class="section-title">ข้อมูลสำหรับเข้าสู่ระบบ</div>
+      <form id="registerForm" class="register-form" novalidate>
+        <div class="section-label">ข้อมูลสมาชิก</div>
 
         <div class="form-grid">
-          <div class="field full">
-            <label>อีเมล <span class="req">*</span></label>
-            <input id="email" type="email" autocomplete="email" required placeholder="name@example.com">
-            <div class="hint">ใช้อีเมลนี้สำหรับเข้าสู่ระบบและรับการแจ้งเตือนจาก SANTE</div>
-          </div>
-
-          <div class="field">
-            <label>รหัสผ่าน <span class="req">*</span></label>
-            <div class="password-wrap">
-              <input id="password" type="password" autocomplete="new-password" required minlength="8" placeholder="อย่างน้อย 8 ตัวอักษร">
-              <button class="show-pass" type="button" data-target="password">แสดง</button>
+          <div class="form-group">
+            <label class="form-label" for="titleTh">คำนำหน้า <span class="required">*</span></label>
+            <div class="input-box">
+              <span class="input-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0116 0"></path>
+                </svg>
+              </span>
+              <select id="titleTh" required>
+                <option value="">เลือกคำนำหน้า</option>
+                <option value="นาย">นาย</option>
+                <option value="นาง">นาง</option>
+                <option value="นางสาว">นางสาว</option>
+                <option value="อื่นๆ">อื่นๆ</option>
+              </select>
             </div>
           </div>
 
-          <div class="field">
-            <label>ยืนยันรหัสผ่าน <span class="req">*</span></label>
-            <div class="password-wrap">
-              <input id="confirmPassword" type="password" autocomplete="new-password" required minlength="8" placeholder="กรอกรหัสผ่านอีกครั้ง">
-              <button class="show-pass" type="button" data-target="confirmPassword">แสดง</button>
+          <div class="form-group">
+            <label class="form-label" for="firstnameTh">ชื่อ <span class="required">*</span></label>
+            <div class="input-box">
+              <span class="input-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0116 0"></path>
+                </svg>
+              </span>
+              <input id="firstnameTh" type="text" autocomplete="given-name" placeholder="ชื่อ" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="lastnameTh">นามสกุล <span class="required">*</span></label>
+            <div class="input-box">
+              <span class="input-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0116 0"></path>
+                </svg>
+              </span>
+              <input id="lastnameTh" type="text" autocomplete="family-name" placeholder="นามสกุล" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="phone">เบอร์โทรศัพท์</label>
+            <div class="input-box">
+              <span class="input-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6A19.79 19.79 0 012.12 4.18 2 2 0 014.11 2h3a2 2 0 012 1.72c.12.9.33 1.78.62 2.63a2 2 0 01-.45 2.11L8 9.73a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.85.29 1.73.5 2.63.62A2 2 0 0122 16.92z"></path>
+                </svg>
+              </span>
+              <input id="phone" type="tel" autocomplete="tel" placeholder="เช่น 0812345678">
+            </div>
+          </div>
+
+          <div class="form-group full">
+            <label class="form-label" for="organizationName">บริษัท / หน่วยงาน</label>
+            <div class="input-box">
+              <span class="input-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M3 21h18"></path><path d="M6 21V4h12v17"></path><path d="M9 8h2M13 8h2M9 12h2M13 12h2M9 16h2M13 16h2"></path>
+                </svg>
+              </span>
+              <input id="organizationName" type="text" autocomplete="organization" placeholder="ชื่อบริษัทหรือหน่วยงาน">
+            </div>
+          </div>
+        </div>
+
+        <div class="section-label">ข้อมูลเข้าสู่ระบบ</div>
+
+        <div class="form-grid">
+          <div class="form-group full">
+            <label class="form-label" for="email">อีเมล <span class="required">*</span></label>
+            <div class="input-box">
+              <span class="input-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M3 7l9 6 9-6"></path>
+                </svg>
+              </span>
+              <input id="email" type="email" autocomplete="email" placeholder="กรอกอีเมล" required>
+            </div>
+            <div class="hint">อีเมลนี้จะใช้สำหรับเข้าสู่ระบบและรับการแจ้งเตือนจาก SANTE</div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="password">รหัสผ่าน <span class="required">*</span></label>
+            <div class="input-box">
+              <span class="input-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="5" y="10" width="14" height="10" rx="2"></rect><path d="M8 10V7a4 4 0 018 0v3"></path>
+                </svg>
+              </span>
+              <input id="password" type="password" autocomplete="new-password" placeholder="อย่างน้อย 8 ตัวอักษร" required minlength="8">
+              <button class="password-toggle" type="button" data-target="password">แสดง</button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="confirmPassword">ยืนยันรหัสผ่าน <span class="required">*</span></label>
+            <div class="input-box">
+              <span class="input-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="5" y="10" width="14" height="10" rx="2"></rect><path d="M8 10V7a4 4 0 018 0v3"></path>
+                </svg>
+              </span>
+              <input id="confirmPassword" type="password" autocomplete="new-password" placeholder="กรอกรหัสผ่านอีกครั้ง" required minlength="8">
+              <button class="password-toggle" type="button" data-target="confirmPassword">แสดง</button>
             </div>
           </div>
         </div>
 
         <label class="agree">
           <input id="acceptTerms" type="checkbox">
-          <div>
-            ฉันยอมรับ
-            <a href="terms.html" target="_blank">ข้อกำหนดการใช้งาน</a>
-            และรับทราบ
-            <a href="privacy-policy.html" target="_blank">นโยบายความเป็นส่วนตัว</a>
-            ของบริษัท ซานเต้ คอนซัลติ้ง จำกัด
-          </div>
+          <span>
+            ฉันยอมรับ <a href="terms.html" target="_blank">ข้อกำหนดการใช้งาน</a>
+            และรับทราบ <a href="privacy-policy.html" target="_blank">นโยบายความเป็นส่วนตัว</a>
+          </span>
         </label>
 
-        <button class="submit" id="submitBtn" type="submit">สมัครสมาชิก</button>
+        <div id="message" class="message" role="alert"></div>
 
-        <div class="message error" id="errorBox"></div>
-        <div class="message success" id="successBox"></div>
+        <button id="registerButton" class="register-button" type="submit">
+          <span id="registerButtonText">สมัครสมาชิก</span>
+        </button>
       </form>
-    </section>
 
-    <aside class="side-card">
-      <div class="side-banner"></div>
-      <div class="side-body">
-        <div class="side-title">บัญชีเดียว ใช้งานได้ครบ</div>
-        <div class="side-text">
-          บัญชี SANTE Member ใช้สำหรับทุกบริการที่เกี่ยวข้องกับการอบรมและเอกสารของคุณ
-        </div>
+      <div class="other-divider"><span>มีบัญชีสมาชิก SANTE แล้ว?</span></div>
 
-        <div class="benefits">
-          <div class="benefit">
-            <div class="benefit-icon">✓</div>
-            <div><strong>ลงทะเบียนอบรม</strong><span>สมัครและตรวจสอบสถานะรอบอบรม</span></div>
-          </div>
-          <div class="benefit">
-            <div class="benefit-icon">฿</div>
-            <div><strong>ชำระเงิน</strong><span>ตรวจสอบสถานะและหลักฐานการชำระเงิน</span></div>
-          </div>
-          <div class="benefit">
-            <div class="benefit-icon">A</div>
-            <div><strong>ข้อสอบและผลสอบ</strong><span>ทำ Post-test และดูผลการสอบ</span></div>
-          </div>
-          <div class="benefit">
-            <div class="benefit-icon">▣</div>
-            <div><strong>วุฒิบัตร</strong><span>ดูและดาวน์โหลดเอกสารเมื่อผ่านเงื่อนไข</span></div>
-          </div>
-          <div class="benefit">
-            <div class="benefit-icon">L</div>
-            <div><strong>LINE Notification</strong><span>เชื่อม LINE เพื่อรับการแจ้งเตือนเพิ่มเติม</span></div>
-          </div>
-        </div>
+      <a href="member-login.html" class="secondary-button">
+        <span class="sec-icon">🔐</span>
+        <span>เข้าสู่ระบบสมาชิก<small>กลับไปยังหน้า SANTE Member Login</small></span>
+      </a>
 
-        <div class="login-box">
-          มีบัญชีอยู่แล้ว? <a href="member-login.html">เข้าสู่ระบบสมาชิก</a>
-        </div>
-      </div>
-    </aside>
-
-  </div>
-
-  <div class="footer">
-    © SANTE Consulting Co., Ltd. ·
-    <a href="privacy-policy.html">Privacy Policy</a> ·
-    <a href="terms.html">Terms of Use</a>
-  </div>
-</div>
+      <div class="back-home"><a href="index.html">← กลับหน้าหลัก SANTE</a></div>
+    </div>
+  </section>
+</main>
 
 <script>
 const SUPABASE_URL="https://cyegjwerxlxhczrfiurz.supabase.co";
 const SUPABASE_KEY="sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF";
-
 const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{
   auth:{
     storageKey:"sante-member-auth",
@@ -381,68 +567,68 @@ const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{
   }
 });
 
-const $=id=>document.getElementById(id);
+const registerForm=document.getElementById("registerForm");
+const registerButton=document.getElementById("registerButton");
+const registerButtonText=document.getElementById("registerButtonText");
+const message=document.getElementById("message");
 
-function showError(message){
-  $("successBox").classList.remove("show");
-  $("errorBox").textContent=message;
-  $("errorBox").classList.add("show");
+function showMessage(text,success=false){
+  message.className="message show"+(success?" success":"");
+  message.textContent=text;
 }
-function showSuccess(message){
-  $("errorBox").classList.remove("show");
-  $("successBox").textContent=message;
-  $("successBox").classList.add("show");
+function clearMessage(){
+  message.className="message";
+  message.textContent="";
 }
-function cleanPhone(value){
-  return String(value||"").replace(/[^\d+]/g,"");
+function setLoading(v){
+  registerButton.disabled=v;
+  registerButtonText.textContent=v?"กำลังสมัครสมาชิก...":"สมัครสมาชิก";
 }
-function setBusy(busy){
-  $("submitBtn").disabled=busy;
-  $("submitBtn").textContent=busy?"กำลังสมัครสมาชิก...":"สมัครสมาชิก";
+function cleanPhone(v){
+  return String(v||"").replace(/[^\d+]/g,"");
 }
 
-document.querySelectorAll(".show-pass").forEach(btn=>{
+document.querySelectorAll(".password-toggle").forEach(btn=>{
   btn.addEventListener("click",()=>{
-    const input=$(btn.dataset.target);
-    const visible=input.type==="text";
-    input.type=visible?"password":"text";
-    btn.textContent=visible?"แสดง":"ซ่อน";
+    const input=document.getElementById(btn.dataset.target);
+    const hidden=input.type==="password";
+    input.type=hidden?"text":"password";
+    btn.textContent=hidden?"ซ่อน":"แสดง";
   });
 });
 
-$("registerForm").addEventListener("submit",async e=>{
+registerForm.addEventListener("submit",async e=>{
   e.preventDefault();
+  clearMessage();
 
-  $("errorBox").classList.remove("show");
-  $("successBox").classList.remove("show");
-
-  const titleTh=$("titleTh").value.trim();
-  const firstnameTh=$("firstnameTh").value.trim();
-  const lastnameTh=$("lastnameTh").value.trim();
-  const phone=cleanPhone($("phone").value);
-  const organizationName=$("organizationName").value.trim();
-  const email=$("email").value.trim().toLowerCase();
-  const password=$("password").value;
-  const confirmPassword=$("confirmPassword").value;
+  const titleTh=document.getElementById("titleTh").value.trim();
+  const firstnameTh=document.getElementById("firstnameTh").value.trim();
+  const lastnameTh=document.getElementById("lastnameTh").value.trim();
+  const phone=cleanPhone(document.getElementById("phone").value);
+  const organizationName=document.getElementById("organizationName").value.trim();
+  const email=document.getElementById("email").value.trim().toLowerCase();
+  const password=document.getElementById("password").value;
+  const confirmPassword=document.getElementById("confirmPassword").value;
+  const accepted=document.getElementById("acceptTerms").checked;
 
   if(!titleTh||!firstnameTh||!lastnameTh||!email||!password){
-    showError("กรุณากรอกข้อมูลที่มีเครื่องหมาย * ให้ครบ");
+    showMessage("กรุณากรอกข้อมูลที่มีเครื่องหมาย * ให้ครบ");
     return;
   }
   if(password.length<8){
-    showError("รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร");
+    showMessage("รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร");
     return;
   }
   if(password!==confirmPassword){
-    showError("รหัสผ่านและยืนยันรหัสผ่านไม่ตรงกัน");
+    showMessage("รหัสผ่านและยืนยันรหัสผ่านไม่ตรงกัน");
     return;
   }
-  if(!$("acceptTerms").checked){
-    showError("กรุณายอมรับข้อกำหนดการใช้งานและนโยบายความเป็นส่วนตัว");
+  if(!accepted){
+    showMessage("กรุณายอมรับข้อกำหนดการใช้งานและนโยบายความเป็นส่วนตัว");
     return;
   }
 
-  setBusy(true);
+  setLoading(true);
 
   try{
     const {data,error}=await db.auth.signUp({
@@ -476,31 +662,33 @@ $("registerForm").addEventListener("submit",async e=>{
         console.warn("Profile upsert:",profileError);
       }
 
-      showSuccess("สมัครสมาชิกสำเร็จ กำลังเข้าสู่หน้าสมาชิก...");
-      setTimeout(()=>location.href="member-home.html",1000);
+      showMessage("สมัครสมาชิกสำเร็จ กำลังเปิดหน้าสมาชิก...",true);
+      setTimeout(()=>location.replace("member-home.html"),500);
       return;
     }
 
-    showSuccess("สมัครสมาชิกสำเร็จ กรุณาตรวจสอบอีเมลเพื่อยืนยันบัญชี แล้วกลับมาเข้าสู่ระบบ");
-    $("registerForm").reset();
+    showMessage("สมัครสมาชิกสำเร็จ กรุณาตรวจสอบอีเมลเพื่อยืนยันบัญชี แล้วกลับมาเข้าสู่ระบบ",true);
+    registerForm.reset();
 
-  }catch(error){
-    console.error(error);
-    const msg=String(error?.message||error||"");
-
+  }catch(e){
+    const msg=String(e?.message||e||"");
     if(/already registered|already exists|user already/i.test(msg)){
-      showError("อีเมลนี้มีบัญชีสมาชิกอยู่แล้ว กรุณาเข้าสู่ระบบ");
+      showMessage("อีเมลนี้มีบัญชีสมาชิกอยู่แล้ว กรุณาเข้าสู่ระบบ");
     }else if(/password/i.test(msg)){
-      showError("รหัสผ่านไม่ผ่านเงื่อนไขของระบบ กรุณาตั้งรหัสผ่านใหม่");
+      showMessage("รหัสผ่านไม่ผ่านเงื่อนไขของระบบ กรุณาตั้งรหัสผ่านใหม่");
     }else if(/email/i.test(msg)){
-      showError("ไม่สามารถใช้อีเมลนี้สมัครสมาชิกได้ กรุณาตรวจสอบอีเมลอีกครั้ง");
+      showMessage("ไม่สามารถใช้อีเมลนี้สมัครสมาชิกได้ กรุณาตรวจสอบอีเมลอีกครั้ง");
     }else{
-      showError("สมัครสมาชิกไม่สำเร็จ: "+msg);
+      showMessage("สมัครสมาชิกไม่สำเร็จ: "+msg);
     }
-  }finally{
-    setBusy(false);
+    setLoading(false);
   }
 });
+
+(async()=>{
+  const {data:{session}}=await db.auth.getSession();
+  if(session?.user) location.replace("member-home.html");
+})();
 </script>
 </body>
 </html>
