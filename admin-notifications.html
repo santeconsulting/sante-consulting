@@ -878,7 +878,7 @@ html,body{overflow-x:hidden!important}
 }
 
 </style>
-<meta name="sante-build" content="DASHBOARD-CLEAN-HERO-R1">
+<meta name="sante-build" content="ADMIN-NOTIFICATIONS-DASHBOARD-EXACT-R5">
 <meta name="sante-build" content="ADMIN-VISUAL-R11-DASH">
 
 <style id="sante-admin-unified-r1">
@@ -2542,6 +2542,47 @@ textarea{
 }
 </style>
 
+
+<style id="sante-notification-dashboard-shell-r5">
+.notification-main-head{
+  align-items:flex-end!important;
+  margin-top:0!important;
+}
+.notification-head-actions{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:8px;
+  flex-wrap:wrap;
+}
+#refreshBtn{
+  min-width:92px!important;
+  position:relative!important;
+  pointer-events:auto!important;
+  cursor:pointer!important;
+}
+#refreshBtn.is-loading{
+  opacity:.72!important;
+  cursor:wait!important;
+}
+#refreshBtn:disabled{
+  opacity:.72!important;
+  cursor:wait!important;
+}
+@media(max-width:767px){
+  .notification-main-head{
+    margin-top:24px!important;
+  }
+  .notification-head-actions{
+    width:100%;
+    justify-content:stretch;
+  }
+  .notification-head-actions .btn{
+    flex:1 1 145px;
+  }
+}
+</style>
+
 </head>
 
 <body>
@@ -2649,7 +2690,7 @@ textarea{
       <div id="adminEmail" class="admin-email"></div>
     </div>
 
-    <button id="logoutButton" class="logout">
+    <button type="button" id="logoutButton" class="logout">
       ออกจากระบบ
     </button>
 
@@ -2660,6 +2701,21 @@ textarea{
 <main class="content">
 
   
+
+<section class="dashboard-hero canonical-hero">
+  <picture class="dashboard-hero-picture">
+    <source
+      media="(max-width:767px)"
+      srcset="sante-dashboard-hero-mobile.png"
+    >
+    <img
+      src="sante-dashboard-hero-desktop.png"
+      alt="SANTE Admin"
+      class="dashboard-hero-image"
+    >
+  </picture>
+</section>
+
 <section class="admin-mobile-hero" aria-label="SANTE Admin">
   <div class="admin-mobile-hero-copy">
     <div class="admin-mobile-hero-badge">SANTE ADMIN</div>
@@ -2672,16 +2728,19 @@ textarea{
 </section>
 
 
-  <div class="page-head">
-    <div>
-      <h1>Notification Center</h1>
-      <p>ระบบ Queue กลางสำหรับ Registration, Payment, Certificate และการแจ้งเตือนสมาชิก</p>
-    </div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <button class="btn yellow" id="newNotificationBtn">+ เพิ่มการแจ้งเตือน</button>
-      <button class="btn btn-primary notification-refresh" id="refreshBtn">รีเฟรช</button>
-    </div>
+  
+<div class="section-head notification-main-head">
+  <div>
+    <h2>Notification Center</h2>
+    <p>ระบบ Queue กลางสำหรับ Registration, Payment, Certificate และการแจ้งเตือนสมาชิก</p>
   </div>
+
+  <div class="notification-head-actions">
+    <button type="button" class="btn yellow" id="newNotificationBtn">+ เพิ่มการแจ้งเตือน</button>
+    <button type="button" class="btn btn-primary notification-refresh" id="refreshBtn">รีเฟรช</button>
+  </div>
+</div>
+
 
   <div class="notification-intro">
     สถานะ <strong>QUEUED</strong> หมายถึงข้อมูลพร้อมส่งแล้ว แต่จะยังไม่ส่งจริงจนกว่าจะเชื่อม Email Provider / LINE Messaging API และเปิด Worker Processor
@@ -2689,7 +2748,7 @@ textarea{
 
   <section class="notification-test-panel">
     <input id="testEmail" type="email" placeholder="อีเมลสำหรับทดสอบ เช่น testmember@santeconsulting.co.th">
-    <button id="queueTestBtn" class="btn yellow">สร้าง Test Email</button>
+    <button type="button" id="queueTestBtn" class="btn yellow">สร้าง Test Email</button>
   </section>
 
   <div class="section-head">
@@ -2753,7 +2812,7 @@ textarea{
       <option value="EMAIL">EMAIL</option>
       <option value="LINE">LINE</option>
     </select>
-    <button id="applyBtn" class="btn yellow">ค้นหา</button>
+    <button type="button" id="applyBtn" class="btn yellow">ค้นหา</button>
   </section>
 
   <div style="height:14px"></div>
@@ -2794,8 +2853,8 @@ textarea{
     </div>
 
     <div class="notification-modal-actions">
-      <button class="btn" id="closeNotificationModalBtn">ยกเลิก</button>
-      <button class="btn yellow" id="saveNotificationBtn">บันทึก</button>
+      <button type="button" class="btn" id="closeNotificationModalBtn">ยกเลิก</button>
+      <button type="button" class="btn yellow" id="saveNotificationBtn">บันทึก</button>
     </div>
   </div>
 </div>
@@ -3109,7 +3168,30 @@ async function init(){
 
 $("search").addEventListener("input",renderTable);
 $("applyBtn").addEventListener("click",loadQueue);
-$("refreshBtn").addEventListener("click",loadQueue);
+
+$("refreshBtn").addEventListener("click",async function(event){
+  event.preventDefault();
+  event.stopPropagation();
+
+  const btn=$("refreshBtn");
+  if(btn.disabled)return;
+
+  const original=btn.textContent;
+  btn.disabled=true;
+  btn.classList.add("is-loading");
+  btn.textContent="กำลังรีเฟรช...";
+
+  try{
+    await loadQueue();
+  }catch(error){
+    console.error("Refresh notification queue failed:",error);
+    alert("รีเฟรชไม่สำเร็จ: "+(error?.message||error));
+  }finally{
+    btn.disabled=false;
+    btn.classList.remove("is-loading");
+    btn.textContent=original;
+  }
+});
 $("queueTestBtn").addEventListener("click",queueTestEmail);
 
 $("logoutButton").addEventListener("click",async()=>{
