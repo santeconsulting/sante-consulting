@@ -1141,7 +1141,7 @@
 }
 
 </style>
-<meta name="sante-build" content="TRAINING-SESSIONS-POSTTEST-R1">
+<meta name="sante-build" content="TRAINING-SESSIONS-REGISTRATIONS-LINK-R1">
 
 <style id="sante-training-sessions-dashboard-match-r2">
 :root{
@@ -3203,6 +3203,28 @@ textarea{
 </style>
 
 <meta name="sante-admin-mobile-final" content="R7">
+
+<style id="sante-registrations-link-r1">
+.registration-btn{
+  min-height:42px;
+  border:1px solid #c9d9ea;
+  border-radius:9px;
+  background:#eef6ff;
+  color:#082d69;
+  font-size:13px;
+  font-weight:600;
+}
+.registration-btn:hover{background:#dfeeff}
+@media(min-width:901px){
+  .card-actions{
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  }
+}
+@media(max-width:900px){
+  .card-actions{grid-template-columns:1fr!important}
+}
+</style>
+
 </head>
 
 <body>
@@ -5346,6 +5368,13 @@ textarea{
                       )"
                     >
                       แก้ไขรอบการอบรม
+                    </button>
+
+                    <button
+                      class="registration-btn"
+                      onclick="window.location.href='admin-training-registrations.html?session=${session.id}'"
+                    >
+                      ผู้ลงทะเบียน
                     </button>
 
                     <button
