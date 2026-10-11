@@ -2447,6 +2447,101 @@ textarea{
 </style>
 <meta name="sante-build" content="ADMIN-NOTIFICATIONS-DASHBOARD-MATCH-R3">
 
+
+<style id="sante-notification-actions-r4">
+.notification-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+}
+.notification-mini{
+  min-height:34px!important;
+  padding:0 10px!important;
+  border-radius:9px!important;
+  font-size:10.5px!important;
+}
+.notification-mini.edit{
+  background:#eef6ff!important;
+  border-color:#cfe0f0!important;
+  color:#145b9c!important;
+}
+.notification-mini.cancel{
+  background:#fff5e8!important;
+  border-color:#f3d7ad!important;
+  color:#8a5a00!important;
+}
+.notification-mini.delete{
+  background:#fff0f1!important;
+  border-color:#efc5ca!important;
+  color:#a52a35!important;
+}
+.notification-mini.retry{
+  background:#eaf9f1!important;
+  border-color:#ccebd8!important;
+  color:#087744!important;
+}
+
+.notification-modal-backdrop{
+  position:fixed;
+  inset:0;
+  z-index:1500;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:rgba(3,20,48,.58);
+}
+.notification-modal-backdrop.show{display:flex}
+.notification-modal{
+  width:min(720px,100%);
+  max-height:90vh;
+  overflow:auto;
+  padding:22px;
+  border-radius:22px;
+  background:#fff;
+  box-shadow:0 28px 80px rgba(0,0,0,.22);
+}
+.notification-modal h3{
+  margin:0 0 15px;
+  font-size:20px;
+  color:var(--navy);
+}
+.notification-form{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+.notification-field{display:grid;gap:6px}
+.notification-field.full{grid-column:1/-1}
+.notification-field label{
+  font-size:11px;
+  color:var(--muted);
+}
+.notification-field input,
+.notification-field select,
+.notification-field textarea{
+  width:100%;
+  min-height:44px;
+  padding:10px 12px;
+  border:1px solid var(--line);
+  border-radius:11px;
+  background:#fff;
+  color:var(--navy);
+  font:13px Prompt,sans-serif;
+}
+.notification-field textarea{min-height:120px;resize:vertical}
+.notification-modal-actions{
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
+  margin-top:16px;
+}
+@media(max-width:767px){
+  .notification-form{grid-template-columns:1fr}
+  .notification-field.full{grid-column:auto}
+}
+</style>
+
 </head>
 
 <body>
@@ -2582,7 +2677,10 @@ textarea{
       <h1>Notification Center</h1>
       <p>ระบบ Queue กลางสำหรับ Registration, Payment, Certificate และการแจ้งเตือนสมาชิก</p>
     </div>
-    <button class="btn btn-primary notification-refresh" id="refreshBtn">รีเฟรช</button>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn yellow" id="newNotificationBtn">+ เพิ่มการแจ้งเตือน</button>
+      <button class="btn btn-primary notification-refresh" id="refreshBtn">รีเฟรช</button>
+    </div>
   </div>
 
   <div class="notification-intro">
@@ -2665,6 +2763,43 @@ textarea{
   </div>
 
 </main>
+
+<div id="notificationModalBackdrop" class="notification-modal-backdrop">
+  <div class="notification-modal" role="dialog" aria-modal="true">
+    <h3 id="notificationModalTitle">เพิ่มการแจ้งเตือน</h3>
+
+    <div class="notification-form">
+      <div class="notification-field">
+        <label>ช่องทาง</label>
+        <select id="modalChannel">
+          <option value="EMAIL">EMAIL</option>
+          <option value="LINE">LINE</option>
+        </select>
+      </div>
+
+      <div class="notification-field">
+        <label>ผู้รับ</label>
+        <input id="modalRecipient" placeholder="email หรือ LINE user id">
+      </div>
+
+      <div class="notification-field full">
+        <label>Subject / หัวข้อ</label>
+        <input id="modalSubject" placeholder="หัวข้อการแจ้งเตือน">
+      </div>
+
+      <div class="notification-field full">
+        <label>ข้อความ</label>
+        <textarea id="modalMessage" placeholder="ข้อความที่ต้องการส่ง"></textarea>
+      </div>
+    </div>
+
+    <div class="notification-modal-actions">
+      <button class="btn" id="closeNotificationModalBtn">ยกเลิก</button>
+      <button class="btn yellow" id="saveNotificationBtn">บันทึก</button>
+    </div>
+  </div>
+</div>
+
 
 </div>
 
@@ -2797,10 +2932,21 @@ function renderTable(){
             </td>
             <td>${esc(x.attempt_count||0)}/${esc(x.max_attempts||5)}</td>
             <td>
-              ${["FAILED","CANCELLED"].includes(x.status)
-                ? `<button class="btn light" onclick="retryNotification('${x.id}')">Retry</button>`
-                : "-"
-              }
+              <div class="notification-actions">
+                ${x.status==="QUEUED"
+                  ? `<button class="btn notification-mini edit" onclick="openEditNotification('${x.id}')">แก้ไข</button>
+                     <button class="btn notification-mini cancel" onclick="cancelNotification('${x.id}')">ยกเลิก</button>`
+                  : ""
+                }
+                ${["FAILED","CANCELLED"].includes(x.status)
+                  ? `<button class="btn notification-mini retry" onclick="retryNotification('${x.id}')">Retry</button>`
+                  : ""
+                }
+                ${["QUEUED","FAILED","CANCELLED"].includes(x.status)
+                  ? `<button class="btn notification-mini delete" onclick="deleteNotification('${x.id}')">ลบ</button>`
+                  : ""
+                }
+              </div>
             </td>
           </tr>
         `).join("")}
@@ -2842,6 +2988,86 @@ async function queueTestEmail(){
   }
 
   alert("สร้าง Test Email เข้าคิวแล้ว");
+  await loadQueue();
+}
+
+
+let editingNotificationId=null;
+
+function openNotificationModal(mode,row=null){
+  editingNotificationId=mode==="edit" ? row?.id || null : null;
+  $("notificationModalTitle").textContent=mode==="edit" ? "แก้ไขการแจ้งเตือน" : "เพิ่มการแจ้งเตือน";
+  $("modalChannel").value=row?.channel || "EMAIL";
+  $("modalRecipient").value=row?.recipient || "";
+  $("modalSubject").value=row?.subject || "";
+  $("modalMessage").value=row?.message || "";
+  $("notificationModalBackdrop").classList.add("show");
+}
+
+function closeNotificationModal(){
+  $("notificationModalBackdrop").classList.remove("show");
+  editingNotificationId=null;
+}
+
+function openEditNotification(id){
+  const row=rows.find(x=>x.id===id);
+  if(!row)return;
+  if(row.status!=="QUEUED"){
+    alert("แก้ไขได้เฉพาะรายการที่ยังเป็น QUEUED");
+    return;
+  }
+  openNotificationModal("edit",row);
+}
+
+async function saveNotification(){
+  const channel=$("modalChannel").value;
+  const recipient=$("modalRecipient").value.trim();
+  const subject=$("modalSubject").value.trim();
+  const message=$("modalMessage").value.trim();
+
+  if(!recipient || !message){
+    alert("กรุณากรอกผู้รับและข้อความ");
+    return;
+  }
+
+  let result;
+  if(editingNotificationId){
+    result=await db.rpc("admin_update_notification",{
+      p_notification_id:editingNotificationId,
+      p_channel:channel,
+      p_recipient:recipient,
+      p_subject:subject || null,
+      p_message:message
+    });
+  }else{
+    result=await db.rpc("admin_create_manual_notification",{
+      p_channel:channel,
+      p_recipient:recipient,
+      p_subject:subject || null,
+      p_message:message
+    });
+  }
+
+  if(result.error){
+    alert("บันทึกไม่สำเร็จ: "+result.error.message);
+    return;
+  }
+
+  closeNotificationModal();
+  await loadQueue();
+}
+
+async function cancelNotification(id){
+  if(!confirm("ยกเลิกรายการนี้หรือไม่? รายการจะไม่ถูกส่ง"))return;
+  const result=await db.rpc("admin_cancel_notification",{p_notification_id:id});
+  if(result.error){alert(result.error.message);return}
+  await loadQueue();
+}
+
+async function deleteNotification(id){
+  if(!confirm("ลบรายการนี้ออกจาก Notification Center หรือไม่?"))return;
+  const result=await db.rpc("admin_delete_notification",{p_notification_id:id});
+  if(result.error){alert(result.error.message);return}
   await loadQueue();
 }
 
@@ -2890,6 +3116,14 @@ $("logoutButton").addEventListener("click",async()=>{
   $("logoutButton").disabled=true;
   try{await db.auth.signOut()}catch(_){}
   location.replace("admin-login.html");
+});
+
+
+$("newNotificationBtn").addEventListener("click",()=>openNotificationModal("new"));
+$("closeNotificationModalBtn").addEventListener("click",closeNotificationModal);
+$("saveNotificationBtn").addEventListener("click",saveNotification);
+$("notificationModalBackdrop").addEventListener("click",e=>{
+  if(e.target===$("notificationModalBackdrop"))closeNotificationModal();
 });
 
 init();
