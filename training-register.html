@@ -1250,40 +1250,413 @@ html,body,button,input,select,textarea{font-family:"Prompt",sans-serif!important
 .my-training-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.my-training-actions a,.my-training-actions button{min-height:38px;padding:0 12px;border:1px solid #dce7f2;border-radius:10px;background:#fff;color:#082d69;font:600 11px Prompt,sans-serif;display:inline-flex;align-items:center;text-decoration:none}.my-training-actions .primary{background:#082d69;color:#fff;border-color:#082d69}
 @media(max-width:767px){.my-training-grid{grid-template-columns:1fr}.my-result-row{grid-template-columns:1fr 1fr 1fr}.my-training-card{padding:15px}.my-training-card h3{font-size:16px}}
 
+
+/* =========================================================
+   MEMBER SHELL R6 — MATCH MEMBER-HOME
+   Visual shell only. Registration / payment logic unchanged.
+========================================================= */
+
+:root{
+  --member-navy:#082d69;
+  --member-blue:#087df0;
+  --member-yellow:#ffbf19;
+  --member-muted:#6f82a0;
+  --member-line:#dce7f2;
+}
+
+/* HEADER — identical geometry to member-home */
+.topbar{
+  width:100%!important;
+  height:82px!important;
+  min-height:82px!important;
+  position:sticky!important;
+  top:0!important;
+  z-index:1000!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:30px!important;
+  padding:0 max(28px,calc((100vw - 1480px)/2))!important;
+  background:rgba(255,255,255,.97)!important;
+  border-bottom:1px solid #e7eef6!important;
+  box-shadow:0 3px 16px rgba(11,45,103,.04)!important;
+  backdrop-filter:blur(10px)!important;
+}
+
+.topbar .brand{
+  min-width:0!important;
+  height:auto!important;
+  display:flex!important;
+  align-items:center!important;
+  overflow:visible!important;
+}
+
+.topbar .brand-logo{
+  width:220px!important;
+  height:68px!important;
+  max-width:none!important;
+  max-height:none!important;
+  display:block!important;
+  object-fit:contain!important;
+  object-position:left center!important;
+}
+
+.member-area{
+  min-width:0;
+  display:flex;
+  align-items:center;
+  gap:18px;
+}
+
+.member-copy{
+  min-width:0;
+  text-align:right;
+}
+
+.member-name{
+  max-width:320px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  color:var(--member-navy);
+  font-size:16px;
+  line-height:1.35;
+  font-weight:600;
+}
+
+.member-email{
+  max-width:320px;
+  margin-top:2px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  color:#7184a3;
+  font-size:13px;
+  line-height:1.35;
+}
+
+.topbar .logout-button{
+  min-height:44px!important;
+  flex-shrink:0;
+  padding:0 18px!important;
+  border:1px solid #d5e1ef!important;
+  border-radius:11px!important;
+  background:#fff!important;
+  color:var(--member-navy)!important;
+  font-size:14px!important;
+  font-weight:600!important;
+}
+
+/* HERO — same width and placement as member-home */
+.member-shell-page{
+  width:min(1480px,calc(100% - 48px));
+  margin:0 auto;
+  padding:24px 0 0;
+}
+
+.desktop-hero{
+  width:100%;
+  overflow:hidden;
+  border-radius:28px;
+  background:#fff;
+  box-shadow:0 10px 30px rgba(11,45,103,.07);
+}
+
+.desktop-hero img{
+  width:100%;
+  height:auto;
+  display:block;
+}
+
+.mobile-hero{
+  display:none;
+}
+
+/* Main content aligned to same shell width on desktop */
+.container{
+  width:min(1480px,calc(100% - 48px))!important;
+  max-width:none!important;
+  margin:30px auto 80px!important;
+}
+
+/* Tablet follows member-home */
+@media (min-width:768px) and (max-width:1023px){
+  .topbar{
+    height:76px!important;
+    min-height:76px!important;
+    padding:0 24px!important;
+  }
+
+  .topbar .brand-logo{
+    width:180px!important;
+    height:62px!important;
+  }
+
+  .member-name{
+    max-width:220px;
+    font-size:14px;
+  }
+
+  .member-email{
+    max-width:220px;
+    font-size:11px;
+  }
+
+  .member-shell-page,
+  .container{
+    width:calc(100% - 36px)!important;
+  }
+
+  .member-shell-page{
+    padding-top:18px;
+  }
+
+  .desktop-hero{
+    border-radius:22px;
+  }
+}
+
+/* Mobile is intentionally the same visual grammar as member-home */
+@media (max-width:767px){
+  body{
+    background:linear-gradient(180deg,#fff 0%,#f6fbff 45%,#eef7fc 100%)!important;
+  }
+
+  .topbar{
+    height:auto!important;
+    min-height:64px!important;
+    gap:8px!important;
+    padding:7px 12px!important;
+    padding-left:max(12px,env(safe-area-inset-left))!important;
+    padding-right:max(12px,env(safe-area-inset-right))!important;
+  }
+
+  .topbar .brand{
+    flex:1 1 auto!important;
+    min-width:0!important;
+  }
+
+  .topbar .brand-logo{
+    width:118px!important;
+    height:50px!important;
+    flex-shrink:0!important;
+  }
+
+  .member-area{
+    flex:0 1 auto;
+    gap:7px;
+  }
+
+  .member-copy{
+    display:none;
+  }
+
+  .topbar .logout-button{
+    min-height:38px!important;
+    padding:0 10px!important;
+    border-radius:9px!important;
+    font-size:11px!important;
+  }
+
+  .member-shell-page{
+    width:100%;
+    margin:0;
+    padding:10px 12px 0;
+  }
+
+  .desktop-hero{
+    display:none;
+  }
+
+  .mobile-hero{
+    min-height:390px;
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+    padding:23px 20px 0;
+    border-radius:20px;
+    background:linear-gradient(145deg,#eaf7ff 0%,#fff 58%,#fff4c9 100%);
+    box-shadow:0 8px 25px rgba(11,45,103,.07);
+  }
+
+  .mobile-hero::before{
+    content:"";
+    position:absolute;
+    width:190px;
+    height:190px;
+    top:-90px;
+    right:-70px;
+    border-radius:50%;
+    background:rgba(255,191,25,.28);
+  }
+
+  .mobile-hero::after{
+    content:"";
+    position:absolute;
+    width:180px;
+    height:180px;
+    left:-90px;
+    bottom:-90px;
+    border-radius:50%;
+    background:rgba(64,176,245,.14);
+  }
+
+  .mobile-hero-content{
+    position:relative;
+    z-index:5;
+  }
+
+  .mobile-hero-badge{
+    width:max-content;
+    display:inline-flex;
+    align-items:center;
+    padding:6px 12px;
+    border-radius:999px;
+    background:var(--member-yellow);
+    color:var(--member-navy);
+    font-size:11px;
+    font-weight:600;
+    letter-spacing:.3px;
+  }
+
+  .mobile-hero h1{
+    margin-top:13px;
+    color:var(--member-navy);
+    font-size:clamp(27px,8vw,34px);
+    font-weight:700;
+    line-height:1.23;
+  }
+
+  .mobile-hero h1 span{
+    color:var(--member-blue);
+  }
+
+  .mobile-hero-description{
+    max-width:320px;
+    margin-top:9px;
+    color:#637b9a;
+    font-size:13px;
+    line-height:1.65;
+  }
+
+  .mobile-hero-visual{
+    min-height:0;
+    position:relative;
+    z-index:3;
+    flex:1;
+    display:flex;
+    align-items:flex-end;
+    justify-content:center;
+    margin:5px -20px 0;
+    overflow:hidden;
+  }
+
+  .mobile-hero-visual img{
+    width:100%;
+    height:auto;
+    display:block;
+    object-fit:contain;
+    object-position:center;
+  }
+
+  .container{
+    width:100%!important;
+    margin:0!important;
+    padding:23px 12px calc(35px + env(safe-area-inset-bottom))!important;
+  }
+}
+
+@media (max-width:374px){
+  .member-shell-page,
+  .container{
+    padding-left:10px!important;
+    padding-right:10px!important;
+  }
+
+  .topbar .brand-logo{
+    width:104px!important;
+  }
+
+  .topbar .logout-button{
+    padding:0 8px!important;
+    font-size:10px!important;
+  }
+
+  .mobile-hero{
+    min-height:370px;
+    padding:20px 17px 0;
+  }
+
+  .mobile-hero h1{
+    font-size:26px;
+  }
+
+  .mobile-hero-description{
+    font-size:12px;
+  }
+
+  .mobile-hero-visual{
+    margin-left:-17px;
+    margin-right:-17px;
+  }
+}
+
+@media (min-width:1600px){
+  .member-shell-page,
+  .container{
+    width:min(1520px,calc(100% - 80px))!important;
+  }
+
+  .topbar{
+    padding-left:max(40px,calc((100vw - 1520px)/2))!important;
+    padding-right:max(40px,calc((100vw - 1520px)/2))!important;
+  }
+}
+
 </style>
-<meta name="sante-build" content="MEMBER-COURSE-HOURS-R2">
+<meta name="sante-build" content="TRAINING-REGISTER-MATCH-MEMBER-HOME-R6">
 </head>
 
 <body>
 
-<header class="site-header">
+<header class="topbar">
   <a class="brand" href="member-home.html" aria-label="SANTE Member Home">
     <img src="sante%20(en)-logo.png" alt="SANTE Consulting" class="brand-logo">
   </a>
 
-  <div class="header-right">
-    <a class="home-button" href="member-home.html">หน้าหลัก</a>
-    <div class="header-user">
-      <div id="headerUserName" class="header-user-name">สมาชิก SANTE</div>
-      <div id="headerUserEmail" class="header-user-email"></div>
+  <div class="member-area">
+    <div class="member-copy">
+      <div id="headerUserName" class="member-name">สมาชิก SANTE</div>
+      <div id="headerUserEmail" class="member-email"></div>
     </div>
-    <button type="button" id="logoutButton" class="logout-button">ออกจากระบบ</button>
+
+    <button type="button" id="logoutButton" class="logout-button">
+      ออกจากระบบ
+    </button>
   </div>
 </header>
 
-<div class="hero-wrap">
-  <section class="hero">
-    <img class="desktop-training-hero" src="sante-member-hero.png" alt="Trust in Safety. Trust in SANTE.">
-    <div class="mobile-training-hero">
-      <div class="mobile-training-copy">
-        <div class="mobile-training-badge">SANTE TRAINING</div>
-        <h1>สมัครเข้าร่วมการอบรม</h1>
-        <p>เลือกรอบการอบรมที่ต้องการ ระบบจะดึงข้อมูลสมาชิกของคุณมาใช้โดยอัตโนมัติ</p>
-        <div class="mobile-member">เข้าสู่ระบบในชื่อ<br><strong id="heroMemberName">กำลังโหลด...</strong></div>
-      </div>
-      <div class="mobile-training-visual"><img src="sante-member-hero.png" alt="SANTE Training"></div>
+<div class="member-shell-page">
+  <section class="desktop-hero">
+    <img src="sante-member-hero.png" alt="Trust in Safety. Trust in SANTE.">
+  </section>
+
+  <section class="mobile-hero">
+    <div class="mobile-hero-content">
+      <div class="mobile-hero-badge">SANTE MEMBER</div>
+      <h1>สมัครเข้าร่วม<br><span>การอบรม</span></h1>
+      <p class="mobile-hero-description">
+        เลือกรอบการอบรมที่ต้องการ สมัครและติดตามสถานะการอบรม
+        จากบัญชีสมาชิก SANTE ของคุณ
+      </p>
+      <span id="heroMemberName" style="display:none">กำลังโหลด...</span>
+      <span id="heroMemberNameDesktop" style="display:none"></span>
     </div>
-    <span id="heroMemberNameDesktop" style="display:none"></span>
+
+    <div class="mobile-hero-visual">
+      <img src="sante-mobile-hero.png" alt="SANTE Member">
+    </div>
   </section>
 </div>
 

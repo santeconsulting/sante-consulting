@@ -1,335 +1,450 @@
 <!DOCTYPE html>
 <html lang="th">
-
 <head>
-
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>SANTE Member | บริการของ SANTE</title>
 
-<title>SANTE Services</title>
-
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#082d69;
+  --navy-dark:#061f4d;
+  --blue:#087df0;
+  --yellow:#ffbf19;
+  --yellow-dark:#b77d00;
+  --green:#188d49;
+  --text:#082d69;
+  --muted:#6f82a0;
+  --line:#dce7f2;
+  --soft-blue:#eaf5ff;
+  --soft-yellow:#fff5d8;
+  --white:#fff;
+  --shadow:0 10px 30px rgba(11,45,103,.07);
+}
+html{width:100%;min-height:100%;overflow-x:hidden}
 body{
-    margin:0;
-    font-family:"Prompt",Arial,sans-serif;
-    color:#222;
+  width:100%;
+  min-height:100vh;
+  overflow-x:hidden;
+  font-family:"Prompt",sans-serif;
+  color:var(--text);
+  background:linear-gradient(180deg,#fff 0%,#f7fbfe 32%,#eef7fc 100%);
+}
+img{max-width:100%}
+a{color:inherit;text-decoration:none}
+button{font-family:"Prompt",sans-serif;-webkit-tap-highlight-color:transparent}
+
+.loading{
+  position:fixed;inset:0;z-index:9999;
+  display:flex;align-items:center;justify-content:center;
+  padding:30px;background:#fff;color:var(--navy);
+  font-size:16px;font-weight:500;text-align:center
+}
+.loading.hidden{display:none}
+
+/* MEMBER-HOME HEADER */
+.topbar{
+  width:100%;height:82px;position:sticky;top:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;gap:30px;
+  padding:0 max(28px,calc((100vw - 1480px)/2));
+  background:rgba(255,255,255,.97);
+  border-bottom:1px solid #e7eef6;
+  box-shadow:0 3px 16px rgba(11,45,103,.04);
+  backdrop-filter:blur(10px)
+}
+.brand{min-width:0;display:flex;align-items:center}
+.brand-logo{width:220px;height:68px;display:block;object-fit:contain;object-position:left center}
+.member-area{min-width:0;display:flex;align-items:center;gap:18px}
+.member-copy{min-width:0;text-align:right}
+.member-name{
+  max-width:320px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  color:var(--navy);font-size:16px;font-weight:600
+}
+.member-email{
+  max-width:320px;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  color:#7184a3;font-size:13px
+}
+.logout-button{
+  min-height:44px;flex-shrink:0;padding:0 18px;
+  border:1px solid #d5e1ef;border-radius:11px;background:#fff;
+  color:var(--navy);font-size:14px;font-weight:600;cursor:pointer
 }
 
+/* PAGE + HERO */
+.page{width:min(1480px,calc(100% - 48px));margin:0 auto;padding:24px 0 60px}
+.desktop-hero{
+  width:100%;overflow:hidden;border-radius:28px;background:#fff;box-shadow:var(--shadow)
+}
+.desktop-hero img{width:100%;height:auto;display:block}
+.mobile-hero{display:none}
 
-header{
+/* CONTENT */
+.section-heading{
+  display:flex;align-items:center;gap:15px;margin:30px 8px 16px
+}
+.section-icon{
+  width:54px;height:54px;flex:0 0 54px;display:grid;place-items:center;
+  border-radius:50%;background:#e4f3ff;color:var(--blue);font-size:24px;font-weight:700
+}
+.section-heading h1,.section-heading h2{
+  color:var(--navy);font-size:clamp(25px,2vw,30px);font-weight:700;line-height:1.25
+}
+.section-heading p{margin-top:4px;color:var(--muted);font-size:15px;line-height:1.6}
 
-    background:#111827;
-    color:white;
-    padding:70px 10%;
+.service-grid{
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px
+}
+.service-card{
+  min-width:0;min-height:310px;position:relative;overflow:hidden;
+  display:flex;flex-direction:column;padding:25px;
+  background:rgba(255,255,255,.98);
+  border:1px solid var(--line);border-radius:22px;
+  box-shadow:0 7px 20px rgba(25,75,130,.04)
+}
+.service-card::after{
+  content:"";position:absolute;width:170px;height:170px;
+  right:-65px;bottom:-90px;border-radius:50%;background:#f2f8fd;pointer-events:none
+}
+.service-icon{
+  width:64px;height:64px;position:relative;z-index:2;
+  display:grid;place-items:center;border-radius:18px;
+  background:var(--soft-blue);color:var(--blue);
+  font-size:29px;font-weight:700
+}
+.service-card.training .service-icon{background:var(--soft-yellow);color:#e5a200}
+.service-card h2{
+  position:relative;z-index:2;margin-top:18px;
+  color:var(--navy);font-size:22px;line-height:1.35
+}
+.service-card p{
+  position:relative;z-index:2;margin-top:8px;
+  color:#6c809f;font-size:14px;line-height:1.7
+}
+.service-list{
+  position:relative;z-index:2;margin:15px 0 0 18px;
+  color:#526d8e;font-size:13px;line-height:1.8
+}
+.service-action{
+  position:relative;z-index:2;margin-top:auto;padding-top:18px;
+  color:var(--yellow-dark);font-size:14px;font-weight:600
 }
 
+.why-grid{
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px
+}
+.why-card{
+  min-height:130px;padding:21px 23px;background:#fff;
+  border:1px solid var(--line);border-radius:18px
+}
+.why-card h3{color:var(--navy);font-size:18px;font-weight:600}
+.why-card p{margin-top:5px;color:var(--muted);font-size:13px;line-height:1.65}
 
-.logo{
-
-    font-size:40px;
-    color:#f5c542;
-    font-weight:bold;
-
+/* TABLET */
+@media (min-width:768px) and (max-width:1023px){
+  .topbar{height:76px;padding:0 24px}
+  .brand-logo{width:180px;height:62px}
+  .member-name{max-width:220px;font-size:14px}
+  .member-email{max-width:220px;font-size:11px}
+  .page{width:calc(100% - 36px);padding-top:18px}
+  .desktop-hero{border-radius:22px}
+  .service-grid{grid-template-columns:1fr}
 }
 
+/* MOBILE — same structure as member-home */
+@media (max-width:767px){
+  body{background:linear-gradient(180deg,#fff 0%,#f6fbff 45%,#eef7fc 100%)}
 
-h1{
+  .topbar{
+    height:auto;min-height:64px;gap:8px;padding:7px 12px;
+    padding-left:max(12px,env(safe-area-inset-left));
+    padding-right:max(12px,env(safe-area-inset-right))
+  }
+  .brand{flex:1 1 auto;min-width:0}
+  .brand-logo{width:118px;height:50px;flex-shrink:0}
+  .member-area{flex:0 1 auto;gap:7px}
+  .member-copy{display:none}
+  .logout-button{min-height:38px;padding:0 10px;border-radius:9px;font-size:11px}
 
-    font-size:45px;
+  .page{
+    width:100%;margin:0;
+    padding:10px 12px calc(35px + env(safe-area-inset-bottom))
+  }
+  .desktop-hero{display:none}
 
+  .mobile-hero{
+    min-height:390px;position:relative;display:flex;flex-direction:column;
+    overflow:hidden;padding:23px 20px 0;border-radius:20px;
+    background:linear-gradient(145deg,#eaf7ff 0%,#fff 58%,#fff4c9 100%);
+    box-shadow:0 8px 25px rgba(11,45,103,.07)
+  }
+  .mobile-hero::before{
+    content:"";position:absolute;width:190px;height:190px;top:-90px;right:-70px;
+    border-radius:50%;background:rgba(255,191,25,.28)
+  }
+  .mobile-hero::after{
+    content:"";position:absolute;width:180px;height:180px;left:-90px;bottom:-90px;
+    border-radius:50%;background:rgba(64,176,245,.14)
+  }
+  .mobile-hero-content{position:relative;z-index:5}
+  .mobile-hero-badge{
+    width:max-content;display:inline-flex;align-items:center;padding:6px 12px;
+    border-radius:999px;background:var(--yellow);color:var(--navy);
+    font-size:11px;font-weight:600;letter-spacing:.3px
+  }
+  .mobile-hero h1{
+    margin-top:13px;color:var(--navy);
+    font-size:clamp(27px,8vw,34px);font-weight:700;line-height:1.23
+  }
+  .mobile-hero h1 span{color:var(--blue)}
+  .mobile-hero-description{
+    max-width:320px;margin-top:9px;color:#637b9a;font-size:13px;line-height:1.65
+  }
+  .mobile-hero-visual{
+    min-height:0;position:relative;z-index:3;flex:1;
+    display:flex;align-items:flex-end;justify-content:center;
+    margin:5px -20px 0;overflow:hidden
+  }
+  .mobile-hero-visual img{
+    width:100%;height:auto;display:block;object-fit:contain;object-position:center
+  }
+
+  .section-heading{gap:11px;margin:23px 2px 13px}
+  .section-icon{width:44px;height:44px;flex-basis:44px;font-size:19px}
+  .section-heading h1,.section-heading h2{font-size:21px;line-height:1.3}
+  .section-heading p{margin-top:2px;font-size:12px;line-height:1.5}
+
+  .service-grid,.why-grid{grid-template-columns:1fr;gap:11px}
+  .service-card{min-height:0;padding:16px;border-radius:17px}
+  .service-icon{width:50px;height:50px;border-radius:14px;font-size:22px}
+  .service-card h2{margin-top:13px;font-size:18px}
+  .service-card p{font-size:12.5px;line-height:1.65}
+  .service-list{font-size:12px;line-height:1.7}
+  .service-action{font-size:12.5px}
+  .why-card{min-height:0;padding:15px;border-radius:15px}
+  .why-card h3{font-size:15px}
+  .why-card p{font-size:11.5px}
 }
 
-
-section{
-
-    padding:60px 10%;
-
+@media (max-width:374px){
+  .page{padding-left:10px;padding-right:10px}
+  .brand-logo{width:104px}
+  .logout-button{padding:0 8px;font-size:10px}
+  .mobile-hero{min-height:370px;padding:20px 17px 0}
+  .mobile-hero h1{font-size:26px}
+  .mobile-hero-description{font-size:12px}
+  .mobile-hero-visual{margin-left:-17px;margin-right:-17px}
 }
 
-
-.title{
-
-    text-align:center;
-    font-size:35px;
-    margin-bottom:40px;
-
+@media (min-width:1600px){
+  .page{width:min(1520px,calc(100% - 80px))}
+  .topbar{
+    padding-left:max(40px,calc((100vw - 1520px)/2));
+    padding-right:max(40px,calc((100vw - 1520px)/2))
+  }
 }
-
-
-.cards{
-
-    display:flex;
-    gap:25px;
-    flex-wrap:wrap;
-
-}
-
-
-.card{
-
-    flex:1;
-    min-width:280px;
-    padding:35px;
-    border-radius:20px;
-    box-shadow:0 10px 30px rgba(0,0,0,0.1);
-
-}
-
-
-.card h2{
-
-    color:#b88a00;
-
-}
-
-
-footer{
-
-    background:#111827;
-    color:white;
-    text-align:center;
-    padding:30px;
-
-}
-
-
 </style>
 
-
+<meta name="sante-build" content="SERVICES-MATCH-MEMBER-HOME-R6">
 </head>
 
-
 <body>
+<div id="loading" class="loading">กำลังโหลดข้อมูลสมาชิก...</div>
 
+<header class="topbar">
+  <a class="brand" href="member-home.html" aria-label="SANTE Member Home">
+    <img src="sante%20(en)-logo.png" alt="SANTE Consulting" class="brand-logo">
+  </a>
 
+  <div class="member-area">
+    <div class="member-copy">
+      <div id="memberName" class="member-name">สมาชิก SANTE</div>
+      <div id="memberEmail" class="member-email"></div>
+    </div>
 
-<header>
-
-<div class="logo">
-SANTE
-</div>
-
-
-<h1>
-Our Services
-</h1>
-
-
-<p>
-บริการด้านความปลอดภัย อาชีวอนามัย สิ่งแวดล้อม
-และระบบอบรมสำหรับองค์กร
-</p>
-
-
+    <button id="logoutButton" class="logout-button" type="button">
+      ออกจากระบบ
+    </button>
+  </div>
 </header>
 
-
-
-
-<section>
-
-
-<h2 class="title">
-บริการของ SANTE
-</h2>
-
-
-
-<div class="cards">
-
-
-
-<div class="card">
-
-
-<h2>
-📚 SANTE Learn
-</h2>
-
-
-<p>
-ระบบอบรมออนไลน์และอบรมสด
-สำหรับบุคลากรด้านความปลอดภัย
-</p>
-
-
-<ul>
-
-<li>Online Training</li>
-
-<li>Live Training ผ่าน Microsoft Teams</li>
-
-<li>Free Training</li>
-
-<li>In-house Training</li>
-
-<li>Certificate Online</li>
-
-</ul>
-
-
-</div>
-
-
-
-
-
-<div class="card">
-
-
-<h2>
-🌱 Environmental Service
-</h2>
-
-
-<p>
-บริการตรวจวัดและประเมินสภาพแวดล้อม
-ในการทำงาน
-</p>
-
-
-<ul>
-
-<li>ตรวจวัดแสงสว่าง</li>
-
-<li>ตรวจวัดระดับเสียง</li>
-
-<li>ตรวจวัดความร้อน</li>
-
-<li>Noise Contour Map</li>
-
-<li>ตรวจประเมินบริภัณฑ์ไฟฟ้า</li>
-
-</ul>
-
-
-</div>
-
-
-
-
-
-
-<div class="card">
-
-
-<h2>
-🦺 Safety Consulting
-</h2>
-
-
-<p>
-ให้คำปรึกษาด้านระบบความปลอดภัย
-และกฎหมายที่เกี่ยวข้อง
-</p>
-
-
-<ul>
-
-<li>Safety Management System</li>
-
-<li>Risk Assessment</li>
-
-<li>Legal Compliance</li>
-
-<li>พัฒนาระบบความปลอดภัยองค์กร</li>
-
-</ul>
-
-
-</div>
-
-
-
-</div>
-
-
-</section>
-
-
-
-
-<section>
-
-
-<h2 class="title">
-ทำไมเลือก SANTE
-</h2>
-
-
-<div class="cards">
-
-
-<div class="card">
-
-<h2>
-Professional
-</h2>
-
-<p>
-ทีมงานที่มีความรู้ด้านความปลอดภัย
-และสิ่งแวดล้อม
-</p>
-
-</div>
-
-
-
-<div class="card">
-
-<h2>
-Digital System
-</h2>
-
-<p>
-พัฒนาระบบออนไลน์
-เพื่อให้บริการง่ายและรวดเร็ว
-</p>
-
-</div>
-
-
-
-<div class="card">
-
-<h2>
-Trust
-</h2>
-
-<p>
-มุ่งเน้นคุณภาพ ความถูกต้อง
-และความน่าเชื่อถือ
-</p>
-
-</div>
-
-
-</div>
-
-
-</section>
-
-
-
-
-<footer>
-
-<p>
-SANTE CONSULTING CO., LTD.
-</p>
-
-
-<p>
-Trust in Safety. Trust in SANTE.
-</p>
-
-
-</footer>
-
-
-
+<main class="page">
+  <section class="desktop-hero">
+    <img src="sante-member-hero.png" alt="Trust in Safety. Trust in SANTE.">
+  </section>
+
+  <section class="mobile-hero">
+    <div class="mobile-hero-content">
+      <div class="mobile-hero-badge">SANTE MEMBER</div>
+      <h1>บริการของ<br><span>SANTE</span></h1>
+      <p class="mobile-hero-description">
+        เลือกบริการด้านการอบรม สิ่งแวดล้อม และงานที่ปรึกษา
+        จากบัญชีสมาชิกของคุณ
+      </p>
+    </div>
+
+    <div class="mobile-hero-visual">
+      <img src="sante-mobile-hero.png" alt="SANTE Member">
+    </div>
+  </section>
+
+  <div class="section-heading">
+    <div class="section-icon">▤</div>
+    <div>
+      <h1>บริการของ SANTE</h1>
+      <p>บริการด้านความปลอดภัย อาชีวอนามัย สิ่งแวดล้อม และระบบอบรมสำหรับองค์กร</p>
+    </div>
+  </div>
+
+  <section class="service-grid">
+    <a href="training-register.html" class="service-card training">
+      <div class="service-icon">◆</div>
+      <h2>📚 SANTE Learn</h2>
+      <p>ระบบอบรมออนไลน์และอบรมสด สำหรับบุคลากรด้านความปลอดภัย</p>
+      <ul class="service-list">
+        <li>Online Training</li>
+        <li>Live Training ผ่าน Microsoft Teams</li>
+        <li>Free Training</li>
+        <li>In-house Training</li>
+        <li>Certificate Online</li>
+      </ul>
+      <span class="service-action">ดูรอบอบรม →</span>
+    </a>
+
+    <a href="service-request.html?type=SERVICE" class="service-card">
+      <div class="service-icon">🌱</div>
+      <h2>Environmental Service</h2>
+      <p>บริการตรวจวัดและประเมินสภาพแวดล้อมในการทำงาน</p>
+      <ul class="service-list">
+        <li>ตรวจวัดแสงสว่าง</li>
+        <li>ตรวจวัดระดับเสียง</li>
+        <li>ตรวจวัดความร้อน</li>
+        <li>Noise Contour Map</li>
+        <li>ตรวจประเมินบริภัณฑ์ไฟฟ้า</li>
+      </ul>
+      <span class="service-action">ขอรับบริการ →</span>
+    </a>
+
+    <a href="service-request.html?type=CONSULTING" class="service-card">
+      <div class="service-icon">🦺</div>
+      <h2>Safety Consulting</h2>
+      <p>ให้คำปรึกษาด้านระบบความปลอดภัย และกฎหมายที่เกี่ยวข้อง</p>
+      <ul class="service-list">
+        <li>Safety Management System</li>
+        <li>Risk Assessment</li>
+        <li>Legal Compliance</li>
+        <li>พัฒนาระบบความปลอดภัยองค์กร</li>
+      </ul>
+      <span class="service-action">ขอคำปรึกษา →</span>
+    </a>
+  </section>
+
+  <div class="section-heading">
+    <div class="section-icon">✓</div>
+    <div>
+      <h2>ทำไมเลือก SANTE</h2>
+      <p>มาตรฐานการบริการที่เน้นความสะดวก ความถูกต้อง และความน่าเชื่อถือ</p>
+    </div>
+  </div>
+
+  <section class="why-grid">
+    <div class="why-card">
+      <h3>Professional</h3>
+      <p>ทีมงานที่มีความรู้ด้านความปลอดภัยและสิ่งแวดล้อม</p>
+    </div>
+
+    <div class="why-card">
+      <h3>Digital System</h3>
+      <p>พัฒนาระบบออนไลน์เพื่อให้บริการง่ายและรวดเร็ว</p>
+    </div>
+
+    <div class="why-card">
+      <h3>Trust</h3>
+      <p>มุ่งเน้นคุณภาพ ความถูกต้อง และความน่าเชื่อถือ</p>
+    </div>
+  </section>
+</main>
+
+<script>
+const SUPABASE_URL="https://cyegjwerxlxhczrfiurz.supabase.co";
+const SUPABASE_KEY="sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF";
+
+const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{
+  auth:{
+    persistSession:true,
+    autoRefreshToken:true,
+    detectSessionInUrl:true,
+    storageKey:"sante-member-auth"
+  }
+});
+
+const loading=document.getElementById("loading");
+const memberName=document.getElementById("memberName");
+const memberEmail=document.getElementById("memberEmail");
+const logoutButton=document.getElementById("logoutButton");
+
+function getThaiFullName(profile){
+  return [
+    profile?.title_th,
+    profile?.firstname_th,
+    profile?.lastname_th
+  ].filter(Boolean).join(" ").replace(/\s+/g," ").trim();
+}
+
+async function initialize(){
+  try{
+    const {data:{session},error}=await db.auth.getSession();
+    if(error)throw error;
+
+    if(!session?.user){
+      location.replace("member-login.html");
+      return;
+    }
+
+    memberEmail.textContent=session.user.email||"";
+
+    const {data:profile,error:profileError}=await db
+      .from("profiles")
+      .select("title_th,firstname_th,lastname_th,email,account_status")
+      .eq("id",session.user.id)
+      .maybeSingle();
+
+    if(profileError)console.warn("Profile:",profileError);
+
+    if(profile && String(profile.account_status||"ACTIVE").toUpperCase()!=="ACTIVE"){
+      await db.auth.signOut();
+      location.replace("member-login.html");
+      return;
+    }
+
+    memberName.textContent=getThaiFullName(profile)||"สมาชิก SANTE";
+    if(profile?.email)memberEmail.textContent=profile.email;
+
+    loading.classList.add("hidden");
+  }catch(error){
+    console.error("Services:",error);
+    loading.textContent="ไม่สามารถโหลดข้อมูลสมาชิกได้ กรุณาเข้าสู่ระบบใหม่";
+
+    setTimeout(async()=>{
+      try{await db.auth.signOut()}catch(e){}
+      location.replace("member-login.html");
+    },1400);
+  }
+}
+
+logoutButton.addEventListener("click",async()=>{
+  logoutButton.disabled=true;
+  logoutButton.textContent="กำลังออก...";
+  try{await db.auth.signOut()}
+  finally{location.replace("member-login.html")}
+});
+
+initialize();
+</script>
 </body>
-
 </html>
