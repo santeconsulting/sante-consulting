@@ -1425,12 +1425,12 @@
   
 
 .line-page{
-  width:min(1080px,calc(100% - 40px));
+  width:min(1280px,100%);
   margin:0 auto;
-  padding:32px 0 70px;
+  padding:34px 0 70px;
 }
 .line-card{
-  padding:26px;
+  padding:32px 34px;
   border:1px solid var(--line);
   border-radius:22px;
   background:#fff;
@@ -1440,34 +1440,46 @@
 .line-status{
   display:flex;
   align-items:center;
-  gap:14px;
+  gap:18px;
 }
 .line-dot{
-  width:14px;height:14px;border-radius:50%;
+  width:16px;height:16px;border-radius:50%;
+  flex:0 0 16px;
   background:#9aa9bc;
-  box-shadow:0 0 0 6px #eef2f7;
+  box-shadow:0 0 0 7px #eef2f7;
 }
-.line-dot.on{background:#06c755;box-shadow:0 0 0 6px #e8f8ee}
-.line-copy h2{color:var(--navy);font-size:22px}
-.line-copy p{margin-top:5px;color:var(--muted);font-size:13px;line-height:1.7}
-.line-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+.line-dot.on{background:#06c755;box-shadow:0 0 0 7px #e8f8ee}
+.line-copy h2{color:var(--navy);font-size:26px;line-height:1.35}
+.line-copy p{margin-top:6px;color:var(--muted);font-size:15px;line-height:1.7}
+.line-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}
 .line-btn{
-  min-height:44px;display:inline-flex;align-items:center;justify-content:center;
-  padding:0 18px;border:1px solid var(--line);border-radius:11px;
-  font:600 13px Prompt,sans-serif;cursor:pointer;background:#fff;color:var(--navy)
+  min-height:46px;display:inline-flex;align-items:center;justify-content:center;
+  padding:0 20px;border:1px solid var(--line);border-radius:11px;
+  font:600 14px Prompt,sans-serif;cursor:pointer;background:#fff;color:var(--navy)
 }
 .line-btn.primary{background:#06c755;border-color:#06c755;color:#fff}
 .line-btn.danger{background:#fff0f1;border-color:#efc5ca;color:#a52a35}
-.line-info{margin-top:18px;padding:14px 16px;border-radius:14px;background:#eef6ff;color:#315577;font-size:12px;line-height:1.7}
+.line-info{margin-top:20px;padding:16px 18px;border-radius:14px;background:#eef6ff;color:#315577;font-size:14px;line-height:1.7}
 .line-success{background:#eaf9f1;color:#087744}
 .line-error{background:#fff0f1;color:#a52a35}
+@media(max-width:1023px) and (min-width:768px){
+ .line-page{width:100%;padding:26px 0 58px}
+ .line-card{padding:26px 28px}
+}
 @media(max-width:767px){
- .line-page{width:calc(100% - 24px);padding:18px 0 46px}
+ .line-page{width:100%;padding:18px 0 46px}
  .line-card{padding:18px;border-radius:18px}
- .line-actions .line-btn{flex:1 1 150px}
+ .line-status{gap:14px}
+ .line-dot{width:14px;height:14px;flex-basis:14px;box-shadow:0 0 0 6px #eef2f7}
+ .line-dot.on{box-shadow:0 0 0 6px #e8f8ee}
+ .line-copy h2{font-size:20px}
+ .line-copy p{font-size:12px}
+ .line-actions{gap:9px;margin-top:18px}
+ .line-actions .line-btn{flex:1 1 150px;min-height:43px;font-size:12px;padding:0 12px}
+ .line-info{margin-top:16px;padding:13px 14px;font-size:11.5px}
 }
 </style>
-<meta name="sante-build" content="MEMBER-LINE-CONNECT-R1">
+<meta name="sante-build" content="MEMBER-LINE-CONNECT-R2-DESKTOP-BALANCE">
 </head>
 <body>
 <div id="loading" class="loading">กำลังตรวจสอบบัญชี...</div>
