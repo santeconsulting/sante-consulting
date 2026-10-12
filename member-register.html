@@ -1,13 +1,40 @@
 <!doctype html>
 <html lang="th">
+
 <head>
+
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>SANTE Member Register</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1, viewport-fit=cover"
+>
+
+<title>
+  SANTE Member Register
+</title>
+
+
+<link
+  rel="preconnect"
+  href="https://fonts.googleapis.com"
+>
+
+<link
+  rel="preconnect"
+  href="https://fonts.gstatic.com"
+  crossorigin
+>
+
+<link
+  href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap"
+  rel="stylesheet"
+>
+
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
 <style>
 
 :root{
@@ -18,667 +45,1926 @@
   --muted:#71849b;
   --bg:#f7fbff;
 }
-*{box-sizing:border-box}
-html{font-size:16px;-webkit-text-size-adjust:100%;text-size-adjust:100%}
-html,body{margin:0;min-height:100%;font-family:"Prompt",sans-serif;color:var(--text);background:var(--bg)}
-body{min-height:100vh;min-height:100dvh;overflow-x:hidden}
-a{color:inherit}
-button,input{font-family:inherit}
 
-/* Desktop: both halves share the same viewport and therefore scale together. */
+*{
+  box-sizing:border-box;
+}
+
+html{
+  font-size:16px;
+  -webkit-text-size-adjust:100%;
+  text-size-adjust:100%;
+}
+
+html,
+body{
+  margin:0;
+
+  min-height:100%;
+
+  font-family:"Prompt",sans-serif;
+
+  color:var(--text);
+
+  background:var(--bg);
+}
+
+body{
+  min-height:100vh;
+  min-height:100dvh;
+
+  overflow-x:hidden;
+}
+
+a{
+  color:inherit;
+}
+
+button,
+input,
+select{
+  font-family:inherit;
+}
+
+
+/* =========================
+   SAME MASTER AS ADMIN
+========================= */
+
 .page{
   width:100%;
+
   min-height:100vh;
   min-height:100dvh;
+
   display:grid;
-  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+
+  grid-template-columns:
+    minmax(0,1fr)
+    minmax(0,1fr);
+
   background:#fff;
 }
+
+
 .hero{
   position:relative;
+
   min-width:0;
+
   min-height:100vh;
   min-height:100dvh;
+
   overflow:hidden;
+
   background:#eef7ff;
 }
+
+
 .hero-media{
   position:absolute;
+
   inset:0;
+
   width:100%;
+
   height:100%;
+
   display:block;
-  object-fit:cover;
+
+  object-fit:contain;
+
   object-position:center center;
+
+  background:#eef7ff;
 }
+
+
 .login-side{
   min-width:0;
+
   min-height:100vh;
   min-height:100dvh;
-  display:grid;
-  place-items:center;
-  padding:clamp(14px,2.2vh,30px) clamp(18px,2.8vw,48px);
-  background:linear-gradient(135deg,#f9fcff 0%,#fff 58%,#f8fbff 100%);
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  padding:
+    clamp(20px,3vh,36px)
+    clamp(28px,4vw,64px);
+
+  background:
+    linear-gradient(
+      135deg,
+      #f9fcff 0%,
+      #fff 58%,
+      #f8fbff 100%
+    );
+
+  overflow:hidden;
 }
+
+
 .login-card{
-  width:min(100%,660px);
-  background:rgba(255,255,255,.98);
-  border:1px solid #dbe6f0;
-  border-radius:clamp(18px,2.4vh,26px);
-  padding:clamp(18px,2.7vh,34px) clamp(22px,2.7vw,40px);
-  box-shadow:0 20px 55px rgba(8,47,97,.08);
+  width:min(88%,720px);
+
+  max-width:720px;
+
+  max-height:
+    calc(100dvh - 40px);
+
+  background:
+    rgba(255,255,255,.98);
+
+  border:
+    1px solid #dbe6f0;
+
+  border-radius:
+    clamp(18px,2.4vh,26px);
+
+  padding:
+    clamp(22px,2.8vh,34px)
+    clamp(26px,2.7vw,40px);
+
+  box-shadow:
+    0 20px 55px
+    rgba(8,47,97,.08);
 }
-.login-eyebrow{margin:0 0 clamp(5px,.8vh,9px);color:#c98e00;font-size:clamp(11px,1.45vh,14px);font-weight:700;letter-spacing:.02em}
-.login-title{margin:0;color:var(--navy);font-size:clamp(28px,4.2vh,46px);line-height:1.08;letter-spacing:-.025em;font-weight:700}
-.login-description{margin:clamp(7px,1.2vh,12px) 0 0;color:var(--muted);font-size:clamp(11px,1.55vh,15px);line-height:1.55}
-.login-form{margin-top:clamp(13px,2.1vh,22px)}
-.form-group{margin-bottom:clamp(9px,1.45vh,15px)}
-.form-label{display:block;margin-bottom:clamp(4px,.7vh,7px);font-size:clamp(11px,1.45vh,13px);font-weight:600;color:#0c2f5d}
-.required{color:#d64045}
-.input-box{height:clamp(46px,6.1vh,56px);border:1.5px solid #d8e4ef;border-radius:clamp(10px,1.4vh,13px);display:flex;align-items:center;background:#fff;overflow:hidden;transition:border-color .2s ease,box-shadow .2s ease}
-.input-box:focus-within{border-color:#85b7df;box-shadow:0 0 0 3px rgba(50,133,199,.08)}
-.input-icon{width:clamp(44px,5.5vh,50px);display:grid;place-items:center;color:#6f89a8;flex:0 0 clamp(44px,5.5vh,50px)}
-.input-icon svg{width:clamp(18px,2.3vh,20px);height:clamp(18px,2.3vh,20px)}
-.input-box input{min-width:0;border:0!important;outline:0!important;box-shadow:none!important;flex:1;height:100%;font-size:clamp(12px,1.55vh,14px);background:transparent;color:#163451;padding:0 8px}
-.input-box input::placeholder{color:#9aaabc}
-.password-toggle{height:100%;border:0;background:transparent;padding:0 clamp(10px,1.5vw,14px);color:#44617f;font-size:clamp(10px,1.35vh,12px);font-weight:500;display:flex;gap:6px;align-items:center;cursor:pointer;white-space:nowrap}
-.password-toggle svg{width:clamp(16px,2vh,18px);height:clamp(16px,2vh,18px)}
-.form-options{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:2px 0 clamp(10px,1.55vh,16px)}
-.remember{display:flex;align-items:center;gap:7px;color:#6e8198;font-size:clamp(10px,1.35vh,12px)}
-.remember input{width:clamp(14px,1.8vh,16px);height:clamp(14px,1.8vh,16px);accent-color:#f1b400}
-.forgot{border:0;background:transparent;color:#1670d1;font-size:clamp(10px,1.35vh,12px);font-weight:600;cursor:pointer;padding:0}
-.message{display:none;border-radius:10px;padding:9px 11px;margin:0 0 10px;font-size:11px;background:#fff0f1;color:#a52a35}
-.message.show{display:block}.message.success{background:#edf9f1;color:#28794b}.message.info{background:#edf5ff;color:#245c9c}
-.login-button{height:clamp(46px,6.2vh,56px);width:100%;border:0;border-radius:clamp(10px,1.4vh,13px);background:linear-gradient(90deg,#ffbd13,#ffc935);color:#082f61;font-size:clamp(13px,1.7vh,15px);font-weight:700;display:flex;align-items:center;justify-content:center;gap:9px;cursor:pointer;box-shadow:0 10px 25px rgba(255,190,20,.22)}
-.login-button svg{width:clamp(18px,2.3vh,20px);height:clamp(18px,2.3vh,20px)}.login-button:disabled{opacity:.65;cursor:wait}
-.other-divider{display:flex;align-items:center;gap:12px;margin:clamp(10px,1.65vh,17px) 0 clamp(8px,1.3vh,14px);color:#8496aa;font-size:clamp(10px,1.35vh,12px);text-align:center}
-.other-divider:before,.other-divider:after{content:"";height:1px;background:#dce6ef;flex:1}
-.secondary-grid{display:grid;gap:9px}
-.secondary-button{min-height:clamp(52px,7vh,62px);border:1.5px solid #d6e4f0;border-radius:clamp(11px,1.5vh,14px);text-decoration:none;color:#0d3f75;display:flex;align-items:center;gap:10px;padding:8px 12px;font-size:clamp(11px,1.45vh,13px);font-weight:600;background:#fff;transition:.2s ease box-shadow,.2s ease transform}
-.secondary-button:hover{transform:translateY(-1px);box-shadow:0 10px 22px rgba(11,79,136,.08)}
-.secondary-button .sec-icon{width:clamp(32px,4.4vh,38px);height:clamp(32px,4.4vh,38px);border-radius:50%;display:grid;place-items:center;background:#eef6ff;font-size:clamp(14px,1.9vh,16px);flex:0 0 clamp(32px,4.4vh,38px)}
-.secondary-button small{display:block;color:#8193a6;font-weight:400;font-size:clamp(9px,1.1vh,10px);margin-top:2px;line-height:1.35}
-.back-home{text-align:center;margin-top:clamp(10px,1.55vh,16px)}.back-home a{text-decoration:none;color:#778da5;font-size:clamp(9px,1.2vh,11px)}
-.security-note{margin-top:clamp(9px,1.45vh,15px);padding:clamp(8px,1.1vh,11px) 12px;background:#eef7ff;border-radius:11px;color:#6f839b;font-size:clamp(9px,1.05vh,10px);line-height:1.4;display:flex;gap:9px;align-items:flex-start}
-.security-note span:first-child{font-size:14px;line-height:1}
 
-/* Admin has two shortcut cards; member has one. */
-.admin-page .secondary-grid{grid-template-columns:1fr 1fr}
-.member-page .secondary-grid{grid-template-columns:1fr}
 
-/* True desktop fit: viewport itself is the frame, so no vertical page scrollbar at 100%. */
+/* =========================
+   TYPOGRAPHY
+========================= */
+
+.login-eyebrow{
+  margin:
+    0 0 clamp(5px,.8vh,9px);
+
+  color:#c98e00;
+
+  font-size:
+    clamp(11px,1.45vh,14px);
+
+  font-weight:700;
+
+  letter-spacing:.02em;
+}
+
+
+.login-title{
+  margin:0;
+
+  color:var(--navy);
+
+  font-size:
+    clamp(28px,4.2vh,46px);
+
+  line-height:1.08;
+
+  letter-spacing:-.025em;
+
+  font-weight:700;
+}
+
+
+.login-description{
+  margin:
+    clamp(7px,1.2vh,12px)
+    0 0;
+
+  color:var(--muted);
+
+  font-size:
+    clamp(11px,1.55vh,15px);
+
+  line-height:1.55;
+}
+
+
+/* =========================
+   FORM BASE
+========================= */
+
+.form-group{
+  margin-bottom:
+    clamp(9px,1.45vh,15px);
+}
+
+
+.form-label{
+  display:block;
+
+  margin-bottom:
+    clamp(4px,.7vh,7px);
+
+  font-size:
+    clamp(11px,1.45vh,13px);
+
+  font-weight:600;
+
+  color:#0c2f5d;
+}
+
+
+.required{
+  color:#d64045;
+}
+
+
+.input-box{
+  height:
+    clamp(46px,6.1vh,56px);
+
+  border:
+    1.5px solid #d8e4ef;
+
+  border-radius:
+    clamp(10px,1.4vh,13px);
+
+  display:flex;
+
+  align-items:center;
+
+  background:#fff;
+
+  overflow:hidden;
+
+  transition:
+    border-color .2s ease,
+    box-shadow .2s ease;
+}
+
+
+.input-box:focus-within{
+  border-color:#85b7df;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(50,133,199,.08);
+}
+
+
+.input-icon{
+  width:
+    clamp(44px,5.5vh,50px);
+
+  display:grid;
+
+  place-items:center;
+
+  color:#6f89a8;
+
+  flex:
+    0 0
+    clamp(44px,5.5vh,50px);
+}
+
+
+.input-icon svg{
+  width:
+    clamp(18px,2.3vh,20px);
+
+  height:
+    clamp(18px,2.3vh,20px);
+}
+
+
+.input-box input,
+.input-box select{
+  min-width:0;
+
+  border:0!important;
+
+  outline:0!important;
+
+  box-shadow:none!important;
+
+  flex:1;
+
+  height:100%;
+
+  font-size:
+    clamp(12px,1.55vh,14px);
+
+  background:transparent;
+
+  color:#163451;
+
+  padding:0 8px;
+}
+
+
+.input-box input::placeholder{
+  color:#9aaabc;
+}
+
+
+.password-toggle{
+  height:100%;
+
+  border:0;
+
+  background:transparent;
+
+  padding:
+    0 clamp(10px,1.5vw,14px);
+
+  color:#44617f;
+
+  font-size:
+    clamp(10px,1.35vh,12px);
+
+  font-weight:500;
+
+  display:flex;
+
+  align-items:center;
+
+  gap:6px;
+
+  cursor:pointer;
+
+  white-space:nowrap;
+}
+
+
+/* =========================
+   REGISTER ONLY
+========================= */
+
+.register-card{
+  overflow:auto;
+
+  scrollbar-width:thin;
+}
+
+
+.register-form{
+  margin-top:
+    clamp(12px,1.7vh,18px);
+}
+
+
+.register-section{
+  margin:
+    clamp(8px,1.15vh,12px)
+    0
+    clamp(6px,.85vh,9px);
+
+  padding-bottom:6px;
+
+  border-bottom:
+    1px solid #dce6ef;
+
+  color:#0c2f5d;
+
+  font-size:
+    clamp(10px,1.28vh,12px);
+
+  font-weight:700;
+}
+
+
+.register-grid{
+  display:grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap:
+    clamp(8px,1.05vh,11px)
+    10px;
+}
+
+
+.register-grid .form-group{
+  margin-bottom:0;
+}
+
+
+.register-grid .full{
+  grid-column:1/-1;
+}
+
+
+.register-hint{
+  margin-top:4px;
+
+  color:#8b9caf;
+
+  font-size:
+    clamp(8px,1vh,10px);
+
+  line-height:1.35;
+}
+
+
+.register-agree{
+  display:flex;
+
+  align-items:flex-start;
+
+  gap:8px;
+
+  margin:
+    clamp(9px,1.25vh,12px)
+    0;
+
+  color:#6e8198;
+
+  font-size:
+    clamp(9px,1.15vh,11px);
+
+  line-height:1.5;
+}
+
+
+.register-agree input{
+  width:
+    clamp(14px,1.8vh,16px);
+
+  height:
+    clamp(14px,1.8vh,16px);
+
+  accent-color:#f1b400;
+
+  margin-top:2px;
+}
+
+
+.register-agree a{
+  color:#1670d1;
+
+  text-decoration:none;
+
+  font-weight:600;
+}
+
+
+/* =========================
+   MESSAGE
+========================= */
+
+.message{
+  display:none;
+
+  border-radius:10px;
+
+  padding:9px 11px;
+
+  margin:0 0 10px;
+
+  font-size:11px;
+
+  background:#fff0f1;
+
+  color:#a52a35;
+}
+
+
+.message.show{
+  display:block;
+}
+
+
+.message.success{
+  background:#edf9f1;
+
+  color:#28794b;
+}
+
+
+/* =========================
+   BUTTON
+========================= */
+
+.login-button{
+  height:
+    clamp(46px,6.2vh,56px);
+
+  width:100%;
+
+  border:0;
+
+  border-radius:
+    clamp(10px,1.4vh,13px);
+
+  background:
+    linear-gradient(
+      90deg,
+      #ffbd13,
+      #ffc935
+    );
+
+  color:#082f61;
+
+  font-size:
+    clamp(13px,1.7vh,15px);
+
+  font-weight:700;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  gap:9px;
+
+  cursor:pointer;
+
+  box-shadow:
+    0 10px 25px
+    rgba(255,190,20,.22);
+}
+
+
+.login-button svg{
+  width:
+    clamp(18px,2.3vh,20px);
+
+  height:
+    clamp(18px,2.3vh,20px);
+}
+
+
+.login-button:disabled{
+  opacity:.65;
+
+  cursor:wait;
+}
+
+
+/* =========================
+   SECONDARY
+========================= */
+
+.other-divider{
+  display:flex;
+
+  align-items:center;
+
+  gap:12px;
+
+  margin:
+    clamp(10px,1.65vh,17px)
+    0
+    clamp(8px,1.3vh,14px);
+
+  color:#8496aa;
+
+  font-size:
+    clamp(10px,1.35vh,12px);
+
+  text-align:center;
+}
+
+
+.other-divider:before,
+.other-divider:after{
+  content:"";
+
+  height:1px;
+
+  background:#dce6ef;
+
+  flex:1;
+}
+
+
+.secondary-grid{
+  display:grid;
+
+  gap:9px;
+}
+
+
+.member-page .secondary-grid{
+  grid-template-columns:1fr;
+}
+
+
+.secondary-button{
+  min-height:
+    clamp(52px,7vh,62px);
+
+  border:
+    1.5px solid #d6e4f0;
+
+  border-radius:
+    clamp(11px,1.5vh,14px);
+
+  text-decoration:none;
+
+  color:#0d3f75;
+
+  display:flex;
+
+  align-items:center;
+
+  gap:10px;
+
+  padding:8px 12px;
+
+  font-size:
+    clamp(11px,1.45vh,13px);
+
+  font-weight:600;
+
+  background:#fff;
+}
+
+
+.secondary-button .sec-icon{
+  width:
+    clamp(32px,4.4vh,38px);
+
+  height:
+    clamp(32px,4.4vh,38px);
+
+  border-radius:50%;
+
+  display:grid;
+
+  place-items:center;
+
+  background:#eef6ff;
+
+  flex:
+    0 0 clamp(32px,4.4vh,38px);
+}
+
+
+.secondary-button small{
+  display:block;
+
+  color:#8193a6;
+
+  font-weight:400;
+
+  font-size:
+    clamp(9px,1.1vh,10px);
+
+  margin-top:2px;
+}
+
+
+.back-home{
+  text-align:center;
+
+  margin-top:
+    clamp(10px,1.55vh,16px);
+}
+
+
+.back-home a{
+  text-decoration:none;
+
+  color:#778da5;
+
+  font-size:
+    clamp(9px,1.2vh,11px);
+}
+
+
+/* =========================
+   DESKTOP
+========================= */
+
 @media (min-width:901px){
-  html,body{width:100%;height:100%;overflow:hidden}
-  .page{height:100vh;height:100dvh;min-height:0;overflow:hidden}
-  .hero,.login-side{height:100vh;height:100dvh;min-height:0}
-  .login-card{max-height:calc(100dvh - 24px)}
-}
 
-.login-side{padding-left:20px;padding-right:20px}
-}
-
-
-/* R5 desktop geometry
-   The approved artwork was designed around a portrait hero panel (~836 x 941).
-   Keep that aspect instead of forcing 50/50 on wide desktop screens. This prevents
-   the logo/artwork from being cropped and lets the left and right sides resize as
-   one balanced composition. */
-@media (min-width:901px){
-  .page{
-    grid-template-columns:min(50vw,88.85dvh) minmax(0,1fr);
-    width:100vw;
-    height:100vh;
-    height:100dvh;
-  }
-  .hero{
+  html,
+  body{
     width:100%;
-    height:100vh;
-    height:100dvh;
-  }
-  .hero-media{
-    width:100%;
+
     height:100%;
-    object-fit:contain;
-    object-position:center center;
-    background:#eef7ff;
-  }
-  .login-side{
-    width:100%;
-    height:100vh;
-    height:100dvh;
-    padding:1.6dvh clamp(24px,3vw,56px);
+
     overflow:hidden;
   }
-  .login-card{
-    width:min(84%,720px);
-    max-height:none;
-    zoom:.92;
-  }
-}
-@media (min-width:901px) and (max-height:820px){
-  .login-card{zoom:.84}
-}
-@media (min-width:901px) and (max-height:740px){
-  .login-card{zoom:.78}
-}
 
-/* Tablet / mobile becomes stacked and scrollable by design. */
-@media (max-width:900px){
-  html,body{height:auto;overflow-x:hidden;overflow-y:auto}
-  .page{display:block;min-height:100dvh;background:#f7fbff}
-  .hero{min-height:0;height:auto;overflow:visible;background:#eef7ff}
-  .hero-media{position:relative;inset:auto;width:100%;height:auto;object-fit:contain;object-position:center top}
-  .login-side{min-height:auto;height:auto;padding:18px 16px 28px;background:#f7fbff}
-  .login-card{width:100%;max-width:680px;max-height:none;border-radius:24px;padding:28px 24px;box-shadow:0 16px 38px rgba(8,47,97,.07)}
-  .login-title{font-size:clamp(28px,6vw,40px)}
-  .login-description{font-size:13px}
-  .input-box input{font-size:16px}
-}
-@media (max-width:600px){
-  .login-side{padding:14px 12px calc(22px + env(safe-area-inset-bottom))}
-  .login-card{border-radius:20px;padding:24px 18px 20px}
-  .login-eyebrow{font-size:12px;margin-bottom:8px}
-  .login-title{font-size:clamp(28px,8.6vw,36px)}
-  .login-description{font-size:12px;line-height:1.6}
-  .login-form{margin-top:22px}
-  .form-group{margin-bottom:15px}
-  .input-box{height:54px;border-radius:12px}
-  .input-icon{width:46px;flex-basis:46px}.input-icon svg{width:20px;height:20px}
-  .password-toggle{padding:0 12px;font-size:12px}
-  .form-options{align-items:flex-start;gap:10px;flex-wrap:wrap;margin-bottom:18px}
-  .remember,.forgot{font-size:12px}
-  .login-button{height:56px;border-radius:12px}
-  .other-divider{margin:21px 0 16px;font-size:12px;gap:10px}
-  .secondary-button{min-height:66px;border-radius:14px;padding:10px 13px;font-size:13px}
-  .secondary-button .sec-icon{width:38px;height:38px;flex-basis:38px}
-  .admin-page .secondary-grid{grid-template-columns:1fr}
-  .security-note{margin-top:18px;font-size:10px}
-}
-
-</style>
-
-<style id="sante-login-balance-r6">
-/* =========================================================
-   SANTE LOGIN BALANCE R6
-   - Desktop ซ้าย/ขวา resize พร้อมกันทั้งหน้า
-   - ยกเลิก CSS zoom ที่ทำให้เฉพาะ Login Card ย่อ/ขยาย
-   - ขยับ artwork ฝั่งซ้ายลงเล็กน้อยเพื่อให้โลโก้สมดุลขึ้น
-========================================================= */
-@media (min-width:901px){
-  html,body{
-    width:100%!important;
-    height:100%!important;
-    overflow:hidden!important;
-  }
 
   .page{
-    width:100vw!important;
-    height:100vh!important;
-    height:100dvh!important;
-    min-height:0!important;
-    display:grid!important;
-    grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
-    overflow:hidden!important;
+    width:100vw;
+
+    height:100vh;
+    height:100dvh;
+
+    min-height:0;
+
+    overflow:hidden;
   }
+
 
   .hero,
   .login-side{
-    width:100%!important;
-    height:100vh!important;
-    height:100dvh!important;
-    min-width:0!important;
-    min-height:0!important;
+    width:100%;
+
+    height:100vh;
+    height:100dvh;
+
+    min-height:0;
   }
 
-  .hero{
-    position:relative!important;
-    overflow:hidden!important;
-    background:#eef7ff!important;
-  }
 
   .hero-media{
-    position:absolute!important;
-    inset:0!important;
-    width:100%!important;
-    height:100%!important;
-    object-fit:contain!important;
-    object-position:center center!important;
-    background:#eef7ff!important;
+    transform:
+      translateY(
+        clamp(8px,1.25vh,15px)
+      )
+      scale(.985);
 
-    /* ขยับ artwork ลงอย่างนุ่มนวลโดยไม่ crop โลโก้/ตัวละคร */
-    transform:translateY(clamp(8px,1.25vh,15px)) scale(.985)!important;
-    transform-origin:center center!important;
+    transform-origin:center center;
   }
 
-  .login-side{
-    display:flex!important;
-    align-items:center!important;
-    justify-content:center!important;
-    padding:clamp(20px,3vh,36px) clamp(28px,4vw,64px)!important;
-    overflow:hidden!important;
-  }
-
-  .login-card{
-    width:min(88%,720px)!important;
-    max-width:720px!important;
-    max-height:calc(100dvh - 40px)!important;
-    padding:clamp(22px,2.8vh,34px) clamp(26px,2.7vw,40px)!important;
-
-    /* สำคัญ: ไม่ใช้ zoom เพื่อไม่ให้ด้านขวาย่อ/ขยายแยกจากทั้งหน้า */
-    zoom:1!important;
-    transform:none!important;
-  }
 }
 
-/* ล้าง behavior เก่าที่ปรับเฉพาะ card ตามความสูง viewport */
-@media (min-width:901px) and (max-height:820px){
-  .login-card{
-    zoom:1!important;
-    padding-top:clamp(18px,2.2vh,26px)!important;
-    padding-bottom:clamp(18px,2.2vh,26px)!important;
-  }
-  .login-title{font-size:clamp(28px,4vh,40px)!important}
-  .login-description{font-size:clamp(11px,1.45vh,14px)!important}
-  .login-form{margin-top:clamp(12px,1.8vh,18px)!important}
-  .form-group{margin-bottom:clamp(8px,1.2vh,13px)!important}
-  .input-box{height:clamp(44px,5.6vh,54px)!important}
-  .secondary-button{min-height:clamp(50px,6.5vh,60px)!important}
-}
 
-@media (min-width:901px) and (max-height:740px){
-  .login-card{zoom:1!important}
-  .security-note{margin-top:8px!important}
-}
+/* =========================
+   TABLET / MOBILE
+========================= */
 
-/* Tablet / Mobile: stack normally and keep artwork complete */
 @media (max-width:900px){
-  html,body{
-    height:auto!important;
-    overflow-x:hidden!important;
-    overflow-y:auto!important;
+
+  html,
+  body{
+    height:auto;
+
+    overflow-x:hidden;
+
+    overflow-y:auto;
   }
+
+
   .page{
-    display:block!important;
-    width:100%!important;
-    height:auto!important;
-    min-height:100dvh!important;
-    overflow:visible!important;
+    display:block;
+
+    width:100%;
+
+    height:auto;
+
+    min-height:100dvh;
+
+    overflow:visible;
+
+    background:#f7fbff;
   }
+
+
   .hero{
-    height:auto!important;
-    min-height:0!important;
-    overflow:visible!important;
+    height:auto;
+
+    min-height:0;
+
+    overflow:visible;
   }
+
+
   .hero-media{
-    position:relative!important;
-    inset:auto!important;
-    width:100%!important;
-    height:auto!important;
-    object-fit:contain!important;
-    object-position:center top!important;
-    transform:none!important;
+    position:relative;
+
+    inset:auto;
+
+    width:100%;
+
+    height:auto;
+
+    object-fit:contain;
+
+    object-position:center top;
+
+    transform:none;
   }
+
+
   .login-side{
-    height:auto!important;
-    min-height:auto!important;
-    padding:18px 16px 28px!important;
-    overflow:visible!important;
+    height:auto;
+
+    min-height:auto;
+
+    padding:
+      18px 16px 28px;
+
+    overflow:visible;
+
+    background:#f7fbff;
   }
+
+
   .login-card{
-    width:100%!important;
-    max-width:680px!important;
-    max-height:none!important;
-    zoom:1!important;
-    transform:none!important;
-  }
-}
-</style>
+    width:100%;
 
-<meta name="sante-login-build" content="SANTE-MEMBER-REGISTER-ADMIN-MASTER-R7">
+    max-width:680px;
 
-<style id="sante-register-admin-master-extra">
-.register-card{
-  width:min(88%,720px)!important;
-  max-width:720px!important;
-}
-.register-form{margin-top:clamp(12px,1.7vh,18px)}
-.register-section{
-  margin:clamp(8px,1.15vh,12px) 0 clamp(6px,.85vh,9px);
-  padding-bottom:6px;
-  border-bottom:1px solid #dce6ef;
-  color:#0c2f5d;
-  font-size:clamp(10px,1.28vh,12px);
-  font-weight:700;
-}
-.register-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:clamp(8px,1.05vh,11px) 10px;
-}
-.register-grid .form-group{margin-bottom:0}
-.register-grid .full{grid-column:1/-1}
-.input-box select{
-  min-width:0;border:0!important;outline:0!important;box-shadow:none!important;
-  flex:1;height:100%;font-size:clamp(12px,1.55vh,14px);
-  background:transparent;color:#163451;padding:0 8px
-}
-.register-hint{margin-top:4px;color:#8b9caf;font-size:clamp(8px,1vh,10px);line-height:1.35}
-.register-agree{
-  display:flex;align-items:flex-start;gap:8px;
-  margin:clamp(9px,1.25vh,12px) 0;
-  color:#6e8198;font-size:clamp(9px,1.15vh,11px);line-height:1.5
-}
-.register-agree input{
-  width:clamp(14px,1.8vh,16px);height:clamp(14px,1.8vh,16px);
-  accent-color:#f1b400;margin-top:2px
-}
-.register-agree a{color:#1670d1;text-decoration:none;font-weight:600}
-@media (min-width:901px){
-  .login-side{overflow:auto!important}
-  .register-card{
-    max-height:calc(100dvh - 40px)!important;
-    overflow:auto!important;
-    scrollbar-width:thin;
+    max-height:none;
+
+    border-radius:24px;
+
+    padding:28px 24px;
+
+    box-shadow:
+      0 16px 38px
+      rgba(8,47,97,.07);
   }
-}
-@media (max-width:900px){
+
+
   .register-card{
-    width:100%!important;max-width:680px!important;max-height:none!important;
-    overflow:visible!important
+    overflow:visible;
   }
+
+
+  .input-box input,
+  .input-box select{
+    font-size:16px;
+  }
+
 }
+
+
+/* =========================
+   MOBILE
+========================= */
+
 @media (max-width:600px){
-  .register-grid{grid-template-columns:1fr;gap:14px}
-  .register-grid .full{grid-column:auto}
-  .register-section{margin-top:18px}
-  .register-agree{font-size:11px;margin:16px 0}
-  .input-box select{font-size:16px}
+
+  .login-side{
+    padding:
+      14px 12px
+      calc(
+        22px +
+        env(safe-area-inset-bottom)
+      );
+  }
+
+
+  .login-card{
+    border-radius:20px;
+
+    padding:
+      24px 18px 20px;
+  }
+
+
+  .login-eyebrow{
+    font-size:12px;
+
+    margin-bottom:8px;
+  }
+
+
+  .login-title{
+    font-size:
+      clamp(28px,8.6vw,36px);
+  }
+
+
+  .login-description{
+    font-size:12px;
+
+    line-height:1.6;
+  }
+
+
+  .register-grid{
+    grid-template-columns:1fr;
+
+    gap:14px;
+  }
+
+
+  .register-grid .full{
+    grid-column:auto;
+  }
+
+
+  .register-section{
+    margin-top:18px;
+  }
+
+
+  .register-agree{
+    font-size:11px;
+
+    margin:
+      16px 0;
+  }
+
+
+  .input-box{
+    height:54px;
+
+    border-radius:12px;
+  }
+
+
+  .input-icon{
+    width:46px;
+
+    flex-basis:46px;
+  }
+
+
+  .input-icon svg{
+    width:20px;
+
+    height:20px;
+  }
+
+
+  .password-toggle{
+    padding:0 12px;
+
+    font-size:12px;
+  }
+
+
+  .login-button{
+    height:56px;
+
+    border-radius:12px;
+  }
+
+
+  .other-divider{
+    margin:
+      21px 0 16px;
+
+    font-size:12px;
+
+    gap:10px;
+  }
+
+
+  .secondary-button{
+    min-height:66px;
+
+    border-radius:14px;
+
+    padding:
+      10px 13px;
+
+    font-size:13px;
+  }
+
 }
+
 </style>
+
+
+<meta
+  name="sante-register-build"
+  content="SANTE-MEMBER-REGISTER-R8-ADMIN-MASTER"
+>
+
 </head>
 
+
 <body>
+
+
 <main class="page member-page">
-  <section class="hero" aria-label="SANTE Member Hero">
-    <img class="hero-media" src="sante-member-login-hero.png" alt="SANTE Member">
+
+
+  <section
+    class="hero"
+    aria-label="SANTE Member Hero"
+  >
+
+    <img
+      class="hero-media"
+      src="sante-member-hero.png"
+      alt="SANTE Member"
+    >
+
   </section>
+
 
   <section class="login-side">
+
+
     <div class="login-card register-card">
-      <div class="login-eyebrow">SANTE MEMBER</div>
-      <h1 class="login-title">สมัครสมาชิก</h1>
-      <p class="login-description">
-        สร้างบัญชี SANTE Member สำหรับสมัครอบรม งานตรวจวัด งานบริการ และงานที่ปรึกษา
-        พร้อมติดตามการชำระเงิน ผลสอบ เอกสาร และวุฒิบัตรในที่เดียว
-      </p>
 
-      <form id="registerForm" class="register-form" novalidate>
 
-        <div class="register-section">ข้อมูลสมาชิก</div>
-
-        <div class="register-grid">
-          <div class="form-group">
-            <label class="form-label" for="titleTh">คำนำหน้า <span class="required">*</span></label>
-            <div class="input-box">
-              <span class="input-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0116 0"></path>
-                </svg>
-              </span>
-              <select id="titleTh" required>
-                <option value="">เลือกคำนำหน้า</option>
-                <option value="นาย">นาย</option>
-                <option value="นาง">นาง</option>
-                <option value="นางสาว">นางสาว</option>
-                <option value="อื่นๆ">อื่นๆ</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label" for="firstnameTh">ชื่อ <span class="required">*</span></label>
-            <div class="input-box">
-              <span class="input-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0116 0"></path>
-                </svg>
-              </span>
-              <input id="firstnameTh" type="text" autocomplete="given-name" placeholder="ชื่อ" required>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label" for="lastnameTh">นามสกุล <span class="required">*</span></label>
-            <div class="input-box">
-              <span class="input-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0116 0"></path>
-                </svg>
-              </span>
-              <input id="lastnameTh" type="text" autocomplete="family-name" placeholder="นามสกุล" required>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label" for="phone">เบอร์โทรศัพท์</label>
-            <div class="input-box">
-              <span class="input-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6A19.79 19.79 0 012.12 4.18 2 2 0 014.11 2h3a2 2 0 012 1.72c.12.9.33 1.78.62 2.63a2 2 0 01-.45 2.11L8 9.73a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.85.29 1.73.5 2.63.62A2 2 0 0122 16.92z"></path>
-                </svg>
-              </span>
-              <input id="phone" type="tel" autocomplete="tel" placeholder="เช่น 0812345678">
-            </div>
-          </div>
-
-          <div class="form-group full">
-            <label class="form-label" for="organizationName">บริษัท / หน่วยงาน</label>
-            <div class="input-box">
-              <span class="input-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M3 21h18"></path><path d="M6 21V4h12v17"></path><path d="M9 8h2M13 8h2M9 12h2M13 12h2M9 16h2M13 16h2"></path>
-                </svg>
-              </span>
-              <input id="organizationName" type="text" autocomplete="organization" placeholder="ชื่อบริษัทหรือหน่วยงาน">
-            </div>
-          </div>
-        </div>
-
-        <div class="register-section">ข้อมูลเข้าสู่ระบบ</div>
-
-        <div class="register-grid">
-          <div class="form-group full">
-            <label class="form-label" for="email">อีเมล <span class="required">*</span></label>
-            <div class="input-box">
-              <span class="input-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M3 7l9 6 9-6"></path>
-                </svg>
-              </span>
-              <input id="email" type="email" autocomplete="email" placeholder="กรอกอีเมล" required>
-            </div>
-            <div class="register-hint">อีเมลนี้จะใช้สำหรับเข้าสู่ระบบและรับการแจ้งเตือนจาก SANTE</div>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label" for="password">รหัสผ่าน <span class="required">*</span></label>
-            <div class="input-box">
-              <span class="input-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <rect x="5" y="10" width="14" height="10" rx="2"></rect><path d="M8 10V7a4 4 0 018 0v3"></path>
-                </svg>
-              </span>
-              <input id="password" type="password" autocomplete="new-password" placeholder="อย่างน้อย 8 ตัวอักษร" required minlength="8">
-              <button class="password-toggle" type="button" data-target="password">แสดง</button>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label" for="confirmPassword">ยืนยันรหัสผ่าน <span class="required">*</span></label>
-            <div class="input-box">
-              <span class="input-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <rect x="5" y="10" width="14" height="10" rx="2"></rect><path d="M8 10V7a4 4 0 018 0v3"></path>
-                </svg>
-              </span>
-              <input id="confirmPassword" type="password" autocomplete="new-password" placeholder="กรอกรหัสผ่านอีกครั้ง" required minlength="8">
-              <button class="password-toggle" type="button" data-target="confirmPassword">แสดง</button>
-            </div>
-          </div>
-        </div>
-
-        <label class="register-agree">
-          <input id="acceptTerms" type="checkbox">
-          <span>
-            ฉันยอมรับ <a href="terms.html" target="_blank">ข้อกำหนดการใช้งาน</a>
-            และรับทราบ <a href="privacy-policy.html" target="_blank">นโยบายความเป็นส่วนตัว</a>
-          </span>
-        </label>
-
-        <div id="message" class="message" role="alert"></div>
-
-        <button id="registerButton" class="login-button" type="submit">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 5v14M5 12h14"></path>
-          </svg>
-          <span id="registerButtonText">สมัครสมาชิก</span>
-        </button>
-      </form>
-
-      <div class="other-divider"><span>มีบัญชีสมาชิก SANTE แล้ว?</span></div>
-
-      <div class="secondary-grid">
-        <a href="member-login.html" class="secondary-button">
-          <span class="sec-icon">🔐</span>
-          <span>เข้าสู่ระบบสมาชิก<small>กลับไปหน้า SANTE Member Login</small></span>
-        </a>
+      <div class="login-eyebrow">
+        SANTE MEMBER
       </div>
 
-      <div class="back-home"><a href="index.html">← กลับหน้าหลัก SANTE</a></div>
+
+      <h1 class="login-title">
+        สมัครสมาชิก
+      </h1>
+
+
+      <p class="login-description">
+        สร้างบัญชี SANTE Member
+        สำหรับสมัครอบรม งานตรวจวัด
+        งานบริการ และงานที่ปรึกษา
+        พร้อมติดตามการชำระเงิน ผลสอบ
+        เอกสาร และวุฒิบัตรในที่เดียว
+      </p>
+
+
+      <form
+        id="registerForm"
+        class="register-form"
+        novalidate
+      >
+
+
+        <div class="register-section">
+          ข้อมูลสมาชิก
+        </div>
+
+
+        <div class="register-grid">
+
+
+          <div class="form-group">
+
+            <label
+              class="form-label"
+              for="titleTh"
+            >
+              คำนำหน้า
+              <span class="required">*</span>
+            </label>
+
+            <div class="input-box">
+
+              <span class="input-icon">
+                👤
+              </span>
+
+              <select
+                id="titleTh"
+                required
+              >
+                <option value="">
+                  เลือกคำนำหน้า
+                </option>
+
+                <option value="นาย">
+                  นาย
+                </option>
+
+                <option value="นาง">
+                  นาง
+                </option>
+
+                <option value="นางสาว">
+                  นางสาว
+                </option>
+
+                <option value="อื่นๆ">
+                  อื่นๆ
+                </option>
+
+              </select>
+
+            </div>
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label
+              class="form-label"
+              for="firstnameTh"
+            >
+              ชื่อ
+              <span class="required">*</span>
+            </label>
+
+            <div class="input-box">
+
+              <span class="input-icon">
+                👤
+              </span>
+
+              <input
+                id="firstnameTh"
+                type="text"
+                autocomplete="given-name"
+                placeholder="ชื่อ"
+                required
+              >
+
+            </div>
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label
+              class="form-label"
+              for="lastnameTh"
+            >
+              นามสกุล
+              <span class="required">*</span>
+            </label>
+
+            <div class="input-box">
+
+              <span class="input-icon">
+                👤
+              </span>
+
+              <input
+                id="lastnameTh"
+                type="text"
+                autocomplete="family-name"
+                placeholder="นามสกุล"
+                required
+              >
+
+            </div>
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label
+              class="form-label"
+              for="phone"
+            >
+              เบอร์โทรศัพท์
+            </label>
+
+            <div class="input-box">
+
+              <span class="input-icon">
+                ☎
+              </span>
+
+              <input
+                id="phone"
+                type="tel"
+                autocomplete="tel"
+                placeholder="เช่น 0812345678"
+              >
+
+            </div>
+
+          </div>
+
+
+          <div class="form-group full">
+
+            <label
+              class="form-label"
+              for="organizationName"
+            >
+              บริษัท / หน่วยงาน
+            </label>
+
+            <div class="input-box">
+
+              <span class="input-icon">
+                ▦
+              </span>
+
+              <input
+                id="organizationName"
+                type="text"
+                autocomplete="organization"
+                placeholder="ชื่อบริษัทหรือหน่วยงาน"
+              >
+
+            </div>
+
+          </div>
+
+
+        </div>
+
+
+        <div class="register-section">
+          ข้อมูลเข้าสู่ระบบ
+        </div>
+
+
+        <div class="register-grid">
+
+
+          <div class="form-group full">
+
+            <label
+              class="form-label"
+              for="email"
+            >
+              อีเมล
+              <span class="required">*</span>
+            </label>
+
+            <div class="input-box">
+
+              <span class="input-icon">
+                ✉
+              </span>
+
+              <input
+                id="email"
+                type="email"
+                autocomplete="email"
+                placeholder="กรอกอีเมล"
+                required
+              >
+
+            </div>
+
+
+            <div class="register-hint">
+              อีเมลนี้จะใช้สำหรับเข้าสู่ระบบ
+              และรับการแจ้งเตือนจาก SANTE
+            </div>
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label
+              class="form-label"
+              for="password"
+            >
+              รหัสผ่าน
+              <span class="required">*</span>
+            </label>
+
+            <div class="input-box">
+
+              <span class="input-icon">
+                🔒
+              </span>
+
+              <input
+                id="password"
+                type="password"
+                autocomplete="new-password"
+                placeholder="อย่างน้อย 8 ตัวอักษร"
+                minlength="8"
+                required
+              >
+
+              <button
+                class="password-toggle"
+                type="button"
+                data-target="password"
+              >
+                แสดง
+              </button>
+
+            </div>
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label
+              class="form-label"
+              for="confirmPassword"
+            >
+              ยืนยันรหัสผ่าน
+              <span class="required">*</span>
+            </label>
+
+            <div class="input-box">
+
+              <span class="input-icon">
+                🔒
+              </span>
+
+              <input
+                id="confirmPassword"
+                type="password"
+                autocomplete="new-password"
+                placeholder="กรอกรหัสผ่านอีกครั้ง"
+                minlength="8"
+                required
+              >
+
+              <button
+                class="password-toggle"
+                type="button"
+                data-target="confirmPassword"
+              >
+                แสดง
+              </button>
+
+            </div>
+
+          </div>
+
+
+        </div>
+
+
+        <label class="register-agree">
+
+          <input
+            id="acceptTerms"
+            type="checkbox"
+          >
+
+          <span>
+
+            ฉันยอมรับ
+
+            <a
+              href="terms.html"
+              target="_blank"
+            >
+              ข้อกำหนดการใช้งาน
+            </a>
+
+            และรับทราบ
+
+            <a
+              href="privacy-policy.html"
+              target="_blank"
+            >
+              นโยบายความเป็นส่วนตัว
+            </a>
+
+          </span>
+
+        </label>
+
+
+        <div
+          id="message"
+          class="message"
+          role="alert"
+        ></div>
+
+
+        <button
+          id="registerButton"
+          class="login-button"
+          type="submit"
+        >
+
+          <span>
+            ＋
+          </span>
+
+          <span id="registerButtonText">
+            สมัครสมาชิก
+          </span>
+
+        </button>
+
+
+      </form>
+
+
+      <div class="other-divider">
+
+        <span>
+          มีบัญชีสมาชิก SANTE แล้ว?
+        </span>
+
+      </div>
+
+
+      <div class="secondary-grid">
+
+
+        <a
+          href="member-login.html"
+          class="secondary-button"
+        >
+
+          <span class="sec-icon">
+            🔐
+          </span>
+
+          <span>
+
+            เข้าสู่ระบบสมาชิก
+
+            <small>
+              กลับไปหน้า SANTE Member Login
+            </small>
+
+          </span>
+
+        </a>
+
+
+      </div>
+
+
+      <div class="back-home">
+
+        <a href="index.html">
+          ← กลับหน้าหลัก SANTE
+        </a>
+
+      </div>
+
+
     </div>
+
+
   </section>
+
+
 </main>
 
+
 <script>
-const SUPABASE_URL="https://cyegjwerxlxhczrfiurz.supabase.co";
-const SUPABASE_KEY="sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF";
-const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{storageKey:"sante-member-auth",persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
 
-const registerForm=document.getElementById("registerForm");
-const registerButton=document.getElementById("registerButton");
-const registerButtonText=document.getElementById("registerButtonText");
-const message=document.getElementById("message");
+const SUPABASE_URL =
+  "https://cyegjwerxlxhczrfiurz.supabase.co";
 
-function showMessage(text,success=false){
-  message.className="message show"+(success?" success":"");
+const SUPABASE_KEY =
+  "sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF";
+
+
+const db =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY,
+    {
+      auth:{
+        storageKey:"sante-member-auth",
+        persistSession:true,
+        autoRefreshToken:true,
+        detectSessionInUrl:true
+      }
+    }
+  );
+
+
+const registerForm =
+  document.getElementById(
+    "registerForm"
+  );
+
+const registerButton =
+  document.getElementById(
+    "registerButton"
+  );
+
+const registerButtonText =
+  document.getElementById(
+    "registerButtonText"
+  );
+
+const message =
+  document.getElementById(
+    "message"
+  );
+
+
+function showMessage(
+  text,
+  success=false
+){
+
+  message.className =
+    "message show" +
+    (
+      success
+        ? " success"
+        : ""
+    );
+
   message.textContent=text;
+
 }
-function clearMessage(){message.className="message";message.textContent=""}
-function setLoading(v){registerButton.disabled=v;registerButtonText.textContent=v?"กำลังสมัครสมาชิก...":"สมัครสมาชิก"}
-function cleanPhone(v){return String(v||"").replace(/[^\d+]/g,"")}
 
-document.querySelectorAll(".password-toggle").forEach(btn=>{
-  btn.addEventListener("click",()=>{
-    const input=document.getElementById(btn.dataset.target);
-    const hidden=input.type==="password";
-    input.type=hidden?"text":"password";
-    btn.textContent=hidden?"ซ่อน":"แสดง";
-  });
-});
 
-registerForm.addEventListener("submit",async e=>{
-  e.preventDefault();
-  clearMessage();
+function clearMessage(){
 
-  const titleTh=document.getElementById("titleTh").value.trim();
-  const firstnameTh=document.getElementById("firstnameTh").value.trim();
-  const lastnameTh=document.getElementById("lastnameTh").value.trim();
-  const phone=cleanPhone(document.getElementById("phone").value);
-  const organizationName=document.getElementById("organizationName").value.trim();
-  const email=document.getElementById("email").value.trim().toLowerCase();
-  const password=document.getElementById("password").value;
-  const confirmPassword=document.getElementById("confirmPassword").value;
+  message.className="message";
 
-  if(!titleTh||!firstnameTh||!lastnameTh||!email||!password){
-    showMessage("กรุณากรอกข้อมูลที่มีเครื่องหมาย * ให้ครบ");
-    return;
-  }
-  if(password.length<8){
-    showMessage("รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร");
-    return;
-  }
-  if(password!==confirmPassword){
-    showMessage("รหัสผ่านและยืนยันรหัสผ่านไม่ตรงกัน");
-    return;
-  }
-  if(!document.getElementById("acceptTerms").checked){
-    showMessage("กรุณายอมรับข้อกำหนดการใช้งานและนโยบายความเป็นส่วนตัว");
-    return;
-  }
+  message.textContent="";
 
-  setLoading(true);
+}
 
-  try{
-    const {data,error}=await db.auth.signUp({
-      email,
-      password,
-      options:{
-        emailRedirectTo:"https://santeconsulting.co.th/member-login.html",
-        data:{
-          title_th:titleTh,
-          firstname_th:firstnameTh,
-          lastname_th:lastnameTh,
-          phone:phone||null,
-          organization_name:organizationName||null
+
+function setLoading(v){
+
+  registerButton.disabled=v;
+
+  registerButtonText.textContent =
+    v
+      ? "กำลังสมัครสมาชิก..."
+      : "สมัครสมาชิก";
+
+}
+
+
+function cleanPhone(v){
+
+  return String(
+    v || ""
+  ).replace(
+    /[^\d+]/g,
+    ""
+  );
+
+}
+
+
+document
+  .querySelectorAll(
+    ".password-toggle"
+  )
+  .forEach(
+    btn=>{
+
+      btn.addEventListener(
+        "click",
+        ()=>{
+
+          const input =
+            document.getElementById(
+              btn.dataset.target
+            );
+
+          const hidden =
+            input.type ===
+            "password";
+
+          input.type =
+            hidden
+              ? "text"
+              : "password";
+
+          btn.textContent =
+            hidden
+              ? "ซ่อน"
+              : "แสดง";
+
         }
-      }
-    });
+      );
 
-    if(error)throw error;
+    }
+  );
 
-    if(data?.user && data?.session){
-      try{
-        await db.from("profiles").upsert({
-          id:data.user.id,
-          title_th:titleTh,
-          firstname_th:firstnameTh,
-          lastname_th:lastnameTh,
-          email,
-          phone:phone||null
-        },{onConflict:"id"});
-      }catch(profileError){
-        console.warn("Profile upsert:",profileError);
-      }
 
-      showMessage("สมัครสมาชิกสำเร็จ กำลังเปิดหน้าสมาชิก...",true);
-      setTimeout(()=>location.replace("member-home.html"),500);
+registerForm.addEventListener(
+  "submit",
+  async e=>{
+
+    e.preventDefault();
+
+    clearMessage();
+
+
+    const titleTh =
+      document
+        .getElementById(
+          "titleTh"
+        )
+        .value
+        .trim();
+
+
+    const firstnameTh =
+      document
+        .getElementById(
+          "firstnameTh"
+        )
+        .value
+        .trim();
+
+
+    const lastnameTh =
+      document
+        .getElementById(
+          "lastnameTh"
+        )
+        .value
+        .trim();
+
+
+    const phone =
+      cleanPhone(
+        document
+          .getElementById(
+            "phone"
+          )
+          .value
+      );
+
+
+    const organizationName =
+      document
+        .getElementById(
+          "organizationName"
+        )
+        .value
+        .trim();
+
+
+    const email =
+      document
+        .getElementById(
+          "email"
+        )
+        .value
+        .trim()
+        .toLowerCase();
+
+
+    const password =
+      document
+        .getElementById(
+          "password"
+        )
+        .value;
+
+
+    const confirmPassword =
+      document
+        .getElementById(
+          "confirmPassword"
+        )
+        .value;
+
+
+    if(
+      !titleTh ||
+      !firstnameTh ||
+      !lastnameTh ||
+      !email ||
+      !password
+    ){
+
+      showMessage(
+        "กรุณากรอกข้อมูลที่มีเครื่องหมาย * ให้ครบ"
+      );
+
       return;
+
     }
 
-    showMessage("สมัครสมาชิกสำเร็จ กรุณาตรวจสอบอีเมลเพื่อยืนยันบัญชี แล้วกลับมาเข้าสู่ระบบ",true);
-    registerForm.reset();
-    setLoading(false);
 
-  }catch(e){
-    const msg=String(e?.message||e||"");
-    if(/already registered|already exists|user already/i.test(msg)){
-      showMessage("อีเมลนี้มีบัญชีสมาชิกอยู่แล้ว กรุณาเข้าสู่ระบบ");
-    }else if(/password/i.test(msg)){
-      showMessage("รหัสผ่านไม่ผ่านเงื่อนไขของระบบ กรุณาตั้งรหัสผ่านใหม่");
-    }else if(/email/i.test(msg)){
-      showMessage("ไม่สามารถใช้อีเมลนี้สมัครสมาชิกได้ กรุณาตรวจสอบอีเมลอีกครั้ง");
-    }else{
-      showMessage("สมัครสมาชิกไม่สำเร็จ: "+msg);
+    if(
+      password.length < 8
+    ){
+
+      showMessage(
+        "รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร"
+      );
+
+      return;
+
     }
-    setLoading(false);
+
+
+    if(
+      password !==
+      confirmPassword
+    ){
+
+      showMessage(
+        "รหัสผ่านและยืนยันรหัสผ่านไม่ตรงกัน"
+      );
+
+      return;
+
+    }
+
+
+    if(
+      !document
+        .getElementById(
+          "acceptTerms"
+        )
+        .checked
+    ){
+
+      showMessage(
+        "กรุณายอมรับข้อกำหนดการใช้งานและนโยบายความเป็นส่วนตัว"
+      );
+
+      return;
+
+    }
+
+
+    setLoading(true);
+
+
+    try{
+
+
+      const {
+        data,
+        error
+      } =
+        await db.auth.signUp({
+
+          email,
+
+          password,
+
+          options:{
+
+            emailRedirectTo:
+              "https://santeconsulting.co.th/member-login.html",
+
+            data:{
+
+              title_th:
+                titleTh,
+
+              firstname_th:
+                firstnameTh,
+
+              lastname_th:
+                lastnameTh,
+
+              phone:
+                phone || null,
+
+              organization_name:
+                organizationName ||
+                null
+
+            }
+
+          }
+
+        });
+
+
+      if(error){
+        throw error;
+      }
+
+
+      if(
+        data?.user &&
+        data?.session
+      ){
+
+        try{
+
+          await db
+            .from("profiles")
+            .upsert(
+              {
+
+                id:
+                  data.user.id,
+
+                title_th:
+                  titleTh,
+
+                firstname_th:
+                  firstnameTh,
+
+                lastname_th:
+                  lastnameTh,
+
+                email,
+
+                phone:
+                  phone || null
+
+              },
+              {
+                onConflict:"id"
+              }
+            );
+
+        }
+        catch(profileError){
+
+          console.warn(
+            "Profile upsert:",
+            profileError
+          );
+
+        }
+
+
+        showMessage(
+          "สมัครสมาชิกสำเร็จ กำลังเปิดหน้าสมาชิก...",
+          true
+        );
+
+
+        setTimeout(
+          ()=>{
+            location.replace(
+              "member-home.html"
+            );
+          },
+          500
+        );
+
+
+        return;
+
+      }
+
+
+      showMessage(
+        "สมัครสมาชิกสำเร็จ กรุณาตรวจสอบอีเมลเพื่อยืนยันบัญชี แล้วกลับมาเข้าสู่ระบบ",
+        true
+      );
+
+
+      registerForm.reset();
+
+
+      setLoading(false);
+
+    }
+    catch(e){
+
+      const msg =
+        String(
+          e?.message ||
+          e ||
+          ""
+        );
+
+
+      if(
+        /already registered|already exists|user already/i.test(
+          msg
+        )
+      ){
+
+        showMessage(
+          "อีเมลนี้มีบัญชีสมาชิกอยู่แล้ว กรุณาเข้าสู่ระบบ"
+        );
+
+      }
+      else if(
+        /password/i.test(
+          msg
+        )
+      ){
+
+        showMessage(
+          "รหัสผ่านไม่ผ่านเงื่อนไขของระบบ กรุณาตั้งรหัสผ่านใหม่"
+        );
+
+      }
+      else if(
+        /email/i.test(
+          msg
+        )
+      ){
+
+        showMessage(
+          "ไม่สามารถใช้อีเมลนี้สมัครสมาชิกได้ กรุณาตรวจสอบอีเมลอีกครั้ง"
+        );
+
+      }
+      else{
+
+        showMessage(
+          "สมัครสมาชิกไม่สำเร็จ: " +
+          msg
+        );
+
+      }
+
+
+      setLoading(false);
+
+    }
+
   }
-});
+);
+
 
 (async()=>{
-  const {data:{session}}=await db.auth.getSession();
-  if(session?.user) location.replace("member-home.html");
-})();
-</script>
-</body>
 
+  const {
+    data:{session}
+  } =
+    await db.auth.getSession();
+
+
+  if(session?.user){
+
+    location.replace(
+      "member-home.html"
+    );
+
+  }
+
+})();
+
+</script>
+
+
+</body>
 </html>
