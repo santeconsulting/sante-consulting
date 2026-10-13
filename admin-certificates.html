@@ -350,19 +350,6 @@ body{margin:0;background:var(--bg);font-family:"Prompt",sans-serif;color:var(--n
 
 /* ===== FINAL CERTIFICATE DESIGNER R10 ===== */
 
-function setIssuerModeFromRadio(mode){
-  const select=document.getElementById("issuerMode");
-  if(select)select.value=mode;
-  applyIssuerMode();
-  syncPreview();
-}
-function syncIssuerModeRadio(){
-  const mode=document.getElementById("issuerMode")?.value||"SANTE";
-  document.querySelectorAll('input[name="issuerModeRadio"]').forEach(r=>{
-    r.checked=r.value===mode;
-  });
-}
-
 .issuer-options-card,.signature-editor-card{
   margin:14px 0;padding:14px;border:1px solid #d9e4ef;border-radius:14px;background:#f8fbff
 }
@@ -618,6 +605,7 @@ body{font-family:"Prompt",sans-serif!important;background:var(--bg)!important;co
 </style>
 
 <meta name="sante-sidebar-build" content="UNIFIED-ADMIN-SIDEBAR-R1-ADMIN-CERTIFICATES.HTML">
+<meta name="sante-build" content="CERTIFICATE-SYNC-ISSUER-FIX-R4">
 </head>
 <body>
 <div class="loading" id="loading"><div class="loading-box"><strong>SANTE CERTIFICATE</strong><div>กำลังตรวจสอบสิทธิ์และโหลดข้อมูล...</div><div class="spinner"></div></div></div>
@@ -1066,6 +1054,22 @@ body{font-family:"Prompt",sans-serif!important;background:var(--bg)!important;co
 </main>
 
 <script>
+
+/* R4: These functions were previously embedded inside a <style> block,
+   so the browser treated them as invalid CSS and they never existed. */
+function setIssuerModeFromRadio(mode){
+  const select=document.getElementById("issuerMode");
+  if(select) select.value=mode;
+  applyIssuerMode();
+  syncPreview();
+}
+function syncIssuerModeRadio(){
+  const mode=document.getElementById("issuerMode")?.value||"SANTE";
+  document.querySelectorAll('input[name="issuerModeRadio"]').forEach(r=>{
+    r.checked=r.value===mode;
+  });
+}
+
 const SUPABASE_URL="https://cyegjwerxlxhczrfiurz.supabase.co";
 const SUPABASE_KEY="sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF";
 const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{storageKey:"sante-admin-auth",persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});

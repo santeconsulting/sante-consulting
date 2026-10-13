@@ -119,6 +119,64 @@ body{font-family:"Prompt",sans-serif!important;background:var(--bg)!important;co
 </style>
 
 <meta name="sante-sidebar-build" content="UNIFIED-ADMIN-SIDEBAR-R1-ADMIN-TRAINING-COMPLETION.HTML">
+
+<style id="sante-training-admin-hero-r2">
+.admin-canonical-hero{
+  width:100%!important;
+  display:block!important;
+  overflow:hidden!important;
+  margin:0 0 22px!important;
+  padding:6px!important;
+  border-radius:24px!important;
+  background:#fff!important;
+  box-shadow:0 10px 30px rgba(11,45,103,.07)!important;
+}
+.admin-canonical-hero picture,
+.admin-canonical-hero img{display:block!important;width:100%!important}
+.admin-canonical-hero img{
+  height:auto!important;
+  object-fit:contain!important;
+  border-radius:18px!important;
+}
+.module-head{
+  display:flex!important;
+  justify-content:space-between!important;
+  align-items:flex-start!important;
+  gap:18px!important;
+  margin:0 4px 20px!important;
+}
+.module-head h1{
+  margin:0!important;
+  color:#082d69!important;
+  font-size:30px!important;
+  line-height:1.3!important;
+  font-weight:700!important;
+}
+.module-head p{
+  margin:6px 0 0!important;
+  color:#6f83a2!important;
+  font-size:13px!important;
+  line-height:1.55!important;
+}
+.module-actions{
+  display:flex!important;
+  gap:8px!important;
+  flex-wrap:wrap!important;
+  align-items:center!important;
+}
+@media(max-width:900px){
+  .admin-canonical-hero{margin-bottom:16px!important;border-radius:20px!important}
+  .module-head{flex-direction:column!important;margin:0 2px 16px!important}
+  .module-head h1{font-size:24px!important}
+  .module-actions{width:100%!important}
+}
+@media(max-width:767px){
+  .admin-canonical-hero{padding:5px!important;border-radius:18px!important}
+  .admin-canonical-hero img{border-radius:14px!important}
+}
+</style>
+
+<meta name="sante-build" content="TRAINING-COMPLETION-VISUAL-R2">
 </head>
 <body>
 <aside class="sidebar" id="sidebar">
@@ -148,17 +206,31 @@ body{font-family:"Prompt",sans-serif!important;background:var(--bg)!important;co
 </aside>
 <div id="santeMobileOverlay"></div>
 
-<div class="main">
+<main class="main">
 <header class="topbar">
  <div class="topbar-left"><button id="menuBtn" class="btn mobile-menu">☰</button><div><div class="page-name">Attendance & วุฒิบัตร</div><div class="page-sub">เช็กการเข้าอบรมและตรวจสิทธิ์ออกวุฒิบัตร</div></div></div>
  <div class="admin-area"><div class="admin-copy"><div class="admin-name">ผู้ดูแลระบบ SANTE</div><div id="adminEmail" class="admin-email"></div></div><button id="logoutBtn" class="btn">ออกจากระบบ</button></div>
 </header>
 
-<main class="content">
- <div class="page-head"><div><h1>Attendance & Certificate Eligibility</h1><p>ทำเครื่องหมายผู้เข้าอบรมและตรวจเงื่อนไขวุฒิบัตรแบบรายรุ่น</p></div><div style="display:flex;gap:8px;flex-wrap:wrap">
-<a id="issueCertificatesLink" href="admin-certificates.html" class="btn yellow" style="display:inline-flex;align-items:center;text-decoration:none">ออกวุฒิบัตรผู้เข้าเกณฑ์ →</a>
-<a href="admin-training-sessions.html" class="btn" style="display:inline-flex;align-items:center;text-decoration:none">← กลับรอบอบรม</a>
-</div></div>
+<div class="content">
+
+<section class="admin-canonical-hero" aria-label="SANTE Admin">
+  <picture>
+    <source media="(max-width:767px)" srcset="sante-dashboard-hero-mobile.png">
+    <img src="sante-dashboard-hero-desktop.png" alt="Trust in Safety. Trust in SANTE.">
+  </picture>
+</section>
+
+ <section class="module-head">
+   <div>
+     <h1>Attendance & Certificate Eligibility</h1>
+     <p>ทำเครื่องหมายผู้เข้าอบรมและตรวจเงื่อนไขการออกวุฒิบัตรแบบรายรอบอบรม</p>
+   </div>
+   <div class="module-actions">
+     <a id="issueCertificatesLink" href="admin-certificates.html" class="btn yellow" style="display:inline-flex;align-items:center;text-decoration:none">ออกวุฒิบัตรผู้เข้าเกณฑ์ →</a>
+     <a href="admin-training-sessions.html" class="btn" style="display:inline-flex;align-items:center;text-decoration:none">← กลับรอบอบรม</a>
+   </div>
+ </section>
 
  <div id="message"></div>
 
@@ -196,8 +268,8 @@ body{font-family:"Prompt",sans-serif!important;background:var(--bg)!important;co
  </div>
 
  <div class="table-wrap"><div id="tableArea" class="empty">กำลังโหลดข้อมูล...</div></div>
-</main>
 </div>
+</main>
 
 <script>
 const db=window.supabase.createClient("https://cyegjwerxlxhczrfiurz.supabase.co","sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF",{auth:{storageKey:"sante-admin-auth",persistSession:true,autoRefreshToken:true}});
@@ -213,7 +285,12 @@ function examBadge(r){if(!payload.session?.requires_posttest)return '<span class
 function certBadge(r){if(r.certificate_id)return `<span class="badge b-blue">${esc(r.certificate_status||"มีวุฒิบัตร")}</span>`;return r.certificate_eligible?'<span class="badge b-green">พร้อมออก</span>':'<span class="badge b-gray">ยังไม่พร้อม</span>'}
 
 async function init(){
- if(!sessionId){msg("ไม่พบ session_id","error");return}
+ if(!sessionId){
+   msg("กรุณาเลือกรอบอบรมก่อนเข้าสู่หน้า Attendance & Certificate Eligibility","info");
+   $("sessionCard").innerHTML=`<h2>ยังไม่ได้เลือกรอบอบรม</h2><p>กลับไปที่เมนู “รอบอบรม” แล้วเลือก Attendance / Completion ของรอบที่ต้องการ</p><div class="chips"><a href="admin-training-sessions.html" class="btn yellow" style="display:inline-flex;text-decoration:none">เลือกรอบอบรม →</a></div>`;
+   $("tableArea").innerHTML='<div class="empty">เลือก รอบอบรม เพื่อแสดงรายชื่อและตรวจสิทธิ์วุฒิบัตร</div>';
+   return
+ }
  const a=await db.auth.getSession();if(!a.data.session){location="admin-login.html";return}
  const staff=await db.rpc("is_staff");if(staff.error||!staff.data){location="admin-login.html";return}
  $("adminEmail").textContent=a.data.session.user.email||"";

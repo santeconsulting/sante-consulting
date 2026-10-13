@@ -206,6 +206,64 @@ body{font-family:"Prompt",sans-serif!important;background:var(--bg)!important;co
 </style>
 
 <meta name="sante-sidebar-build" content="UNIFIED-ADMIN-SIDEBAR-R1-ADMIN-TRAINING-REGISTRATIONS.HTML">
+
+<style id="sante-training-admin-hero-r2">
+.admin-canonical-hero{
+  width:100%!important;
+  display:block!important;
+  overflow:hidden!important;
+  margin:0 0 22px!important;
+  padding:6px!important;
+  border-radius:24px!important;
+  background:#fff!important;
+  box-shadow:0 10px 30px rgba(11,45,103,.07)!important;
+}
+.admin-canonical-hero picture,
+.admin-canonical-hero img{display:block!important;width:100%!important}
+.admin-canonical-hero img{
+  height:auto!important;
+  object-fit:contain!important;
+  border-radius:18px!important;
+}
+.module-head{
+  display:flex!important;
+  justify-content:space-between!important;
+  align-items:flex-start!important;
+  gap:18px!important;
+  margin:0 4px 20px!important;
+}
+.module-head h1{
+  margin:0!important;
+  color:#082d69!important;
+  font-size:30px!important;
+  line-height:1.3!important;
+  font-weight:700!important;
+}
+.module-head p{
+  margin:6px 0 0!important;
+  color:#6f83a2!important;
+  font-size:13px!important;
+  line-height:1.55!important;
+}
+.module-actions{
+  display:flex!important;
+  gap:8px!important;
+  flex-wrap:wrap!important;
+  align-items:center!important;
+}
+@media(max-width:900px){
+  .admin-canonical-hero{margin-bottom:16px!important;border-radius:20px!important}
+  .module-head{flex-direction:column!important;margin:0 2px 16px!important}
+  .module-head h1{font-size:24px!important}
+  .module-actions{width:100%!important}
+}
+@media(max-width:767px){
+  .admin-canonical-hero{padding:5px!important;border-radius:18px!important}
+  .admin-canonical-hero img{border-radius:14px!important}
+}
+</style>
+
+<meta name="sante-build" content="TRAINING-REGISTRATIONS-VISUAL-R2">
 </head>
 <body>
 <div class="loading" id="loading"><div class="spinner"></div><div>กำลังโหลดผู้ลงทะเบียน...</div></div>
@@ -250,9 +308,20 @@ body{font-family:"Prompt",sans-serif!important;background:var(--bg)!important;co
   </header>
 
   <div class="content">
-    <section class="hero">
-      <div><h2>ผู้ลงทะเบียน</h2><p id="heroDesc">เลือก รอบอบรม เพื่อดูและจัดการรายชื่อผู้สมัคร</p></div>
-      <div class="hero-actions">
+
+<section class="admin-canonical-hero" aria-label="SANTE Admin">
+  <picture>
+    <source media="(max-width:767px)" srcset="sante-dashboard-hero-mobile.png">
+    <img src="sante-dashboard-hero-desktop.png" alt="Trust in Safety. Trust in SANTE.">
+  </picture>
+</section>
+
+    <section class="module-head">
+      <div>
+        <h1>ผู้ลงทะเบียนอบรม</h1>
+        <p id="heroDesc">เลือกรอบอบรมเพื่อตรวจสอบ ยืนยัน และติดตามสถานะผู้สมัคร</p>
+      </div>
+      <div class="module-actions">
         <button class="btn" id="backBtn" type="button">← กลับไปรอบอบรม</button>
         <button class="btn blue" id="refreshBtn" type="button">รีเฟรช</button>
       </div>

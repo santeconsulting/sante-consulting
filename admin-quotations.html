@@ -1737,6 +1737,18 @@ textarea{
 
 <meta name="sante-build" content="QUOTATIONS-ACCOUNTING-TABS-R2">
 <meta name="sante-build" content="QUOTATION-CREATE-BUTTON-FIX-R3">
+
+<style id="quotation-modal-r4">
+#editor.modal-bg{display:none!important}
+#editor.modal-bg.show{
+  display:block!important;
+  position:fixed!important;inset:0!important;z-index:5000!important;
+  overflow:auto!important;background:rgba(4,20,43,.62)!important;
+}
+#editor .editor{display:grid!important}
+</style>
+
+<meta name="sante-build" content="QUOTATION-CRITICAL-FIX-R4">
 </head>
 <body>
 
@@ -1819,7 +1831,7 @@ textarea{
         <h1>ใบเสนอราคา</h1>
         <div class="muted">สร้างจากคำขอบริการ แก้ไขรายละเอียดราคา คำนวณ VAT/WHT และส่งให้ลูกค้าอนุมัติ</div>
       </div>
-      <button class="btn yellow" onclick="openEditor()">+ สร้างใบเสนอราคาใหม่</button>
+      <button id="createQuotationBtn" class="btn yellow" type="button">+ สร้างใบเสนอราคาใหม่</button>
     </div>
 
     <section class="stats">
@@ -1924,7 +1936,7 @@ const logoutBtn=$("logoutBtn");
 const toastEl=$("toast");
 
 const SANTE={name:"บริษัท ซานเต้ คอนซัลติ้ง จำกัด (สำนักงานใหญ่)",nameEn:"SANTE CONSULTING CO., LTD.",address:"49 ถนนทางหลวงสาย 3191 ตำบลมาบข่า อำเภอนิคมพัฒนา จังหวัดระยอง 21180",taxId:"0215566009041",phone:"083 4874542",email:"santeconsulting45@gmail.com",website:"https://santeconsulting.co.th",bank:"ธนาคารกสิกรไทย",bankAccount:"165-8-69303-0",bankName:"บจก.ซานเต้ คอนซัลติ้ง",signer:"วลีภรณ์ หาญนภาชีวิน"};
-function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}function money(v){return Number(v||0).toLocaleString("th-TH",{minimumFractionDigits:2,maximumFractionDigits:2})}function toast(m){toastEl=$("toast");toastEl.textContent=m;toastEl.style.display="block";setTimeout(()=>toastEl.style.display="none",2200)}function addDays(d,n){const x=new Date(d);x.setDate(x.getDate()+n);return x.toISOString().slice(0,10)}
+function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}function money(v){return Number(v||0).toLocaleString("th-TH",{minimumFractionDigits:2,maximumFractionDigits:2})}function toast(m){if(!toastEl)return;toastEl.textContent=m;toastEl.style.display="block";setTimeout(()=>toastEl.style.display="none",2200)}function addDays(d,n){const x=new Date(d);x.setDate(x.getDate()+n);return x.toISOString().slice(0,10)}
 async function init(){
  const s=await db.auth.getSession();
  if(!s.data.session){location="admin-login.html";return}
@@ -2009,6 +2021,27 @@ async function saveQuotation(send){
    buttons.forEach(b=>b.disabled=false);
  }
 }
+
+/* R4: Explicitly expose quotation editor functions and bind the create button.
+   This avoids browser differences around inline onclick/global function resolution. */
+window.openEditor=openEditor;
+window.closeEditor=closeEditor;
+window.addItem=addItem;
+window.recalc=recalc;
+
+const createQuotationBtn=document.getElementById("createQuotationBtn");
+createQuotationBtn?.addEventListener("click",async()=>{
+  try{
+    // Open the modal immediately so the user gets visible feedback.
+    editor?.classList.add("show");
+    await openEditor();
+  }catch(err){
+    console.error("open quotation editor failed",err);
+    editor?.classList.remove("show");
+    alert("ไม่สามารถเปิดหน้าสร้างใบเสนอราคาได้\n"+(err?.message||err));
+  }
+});
+
 search?.addEventListener("input",render);
 statusFilter?.addEventListener("change",render);
 globalSearch?.addEventListener("input",()=>{search.value=globalSearch.value;render()});
