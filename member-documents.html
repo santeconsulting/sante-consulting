@@ -1730,6 +1730,7 @@
 
   </style>
   <meta name="sante-build" content="MEMBER-DOCUMENTS-MATCH-HOME-R4">
+<meta name="sante-build" content="MEMBER-DOCUMENTS-ACCOUNTING-R1">
 </head>
 
 <body>
@@ -1953,9 +1954,7 @@
 
             <div class="document-top">
               <span class="document-type">
-                ${x.document_type === "CERTIFICATE"
-                  ? "วุฒิบัตร"
-                  : esc(x.document_type || "เอกสาร")}
+                ${({CERTIFICATE:"วุฒิบัตร",QUOTATION:"ใบเสนอราคา",INVOICE:"ใบแจ้งหนี้",RECEIPT_TAX_INVOICE:"ใบเสร็จรับเงิน / ใบกำกับภาษี",CREDIT_NOTE:"ใบลดหนี้",PAYMENT_DOCUMENT:"เอกสารการชำระเงิน",TRAINING_DOCUMENT:"เอกสารการอบรม",ATTENDANCE_DOCUMENT:"เอกสารการเข้าร่วม"})[x.document_type] || esc(x.document_type || "เอกสาร")}
               </span>
 
               <span class="document-version">
