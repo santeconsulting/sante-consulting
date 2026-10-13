@@ -1,8 +1,14 @@
-SANTE SYSTEM R12 FINAL PATCH
+SANTE SYSTEM R13 Layout and Save Fix
 
-ใช้สำหรับ:
-- แก้ customer_name_snapshot null
-- ปรับช่องรายละเอียดรายการ
-- เตรียมปรับลายเซ็นและตราประทับ
+ขั้นตอน:
+1. Backup GitHub repository
+2. Merge files เข้ากับ project เดิม
+3. Run supabase_r13_fix.sql
+4. Test:
+   - Create quotation
+   - Save draft
+   - Send customer
+   - Generate PDF
 
-ก่อน Deploy ให้สำรอง GitHub และตรวจสอบ Framework เดิมก่อน Merge
+หมายเหตุ:
+ต้อง merge กับ PDF generator เดิม เนื่องจาก source production เต็มรูปแบบไม่ได้อยู่ใน patch นี้

@@ -1,0 +1,19 @@
+/* R13 Document Layout */
+
+.document-header {
+  display:flex;
+  justify-content:space-between;
+}
+
+.document-footer {
+  margin-top:30px;
+}
+
+.signature-box {
+  min-height:100px;
+}
+
+.stamp-box {
+  width:90px;
+  height:90px;
+}
