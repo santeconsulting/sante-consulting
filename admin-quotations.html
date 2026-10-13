@@ -1665,6 +1665,55 @@ textarea{
 
 <meta name="sante-admin-mobile-final" content="R7">
 <meta name="sante-build" content="ADMIN-QUOTATIONS-ACCOUNTING-NAV-R1">
+
+<style id="sante-unified-admin-sidebar-r1">
+.sidebar{
+  position:fixed!important;left:0!important;top:0!important;bottom:0!important;
+  width:285px!important;z-index:1200!important;padding:0 16px 22px!important;
+  overflow-y:auto!important;overflow-x:hidden!important;
+  background:linear-gradient(180deg,#082d69 0%,#06265c 55%,#061f4b 100%)!important;color:#fff!important;
+}
+.sidebar-brand{height:108px!important;display:flex!important;align-items:center!important;justify-content:center!important}
+.sidebar-brand img{width:190px!important;height:82px!important;max-width:100%!important;object-fit:contain!important}
+.sidebar-label{padding:0 10px 8px!important;font-size:10px!important;letter-spacing:1.7px!important;opacity:.58!important}
+.sidebar .nav{display:grid!important;gap:5px!important}
+.sidebar .nav-link{
+  min-height:54px!important;padding:0 14px!important;border-radius:15px!important;
+  display:flex!important;align-items:center!important;gap:12px!important;
+  color:#fff!important;text-decoration:none!important;font:500 14px/1.25 Prompt,sans-serif!important;
+}
+.sidebar .nav-link:hover{background:rgba(255,255,255,.08)!important}
+.sidebar .nav-link.active{background:#ffbf19!important;color:#082d69!important;font-weight:700!important}
+.sidebar .nav-icon{width:22px!important;min-width:22px!important;text-align:center!important;font-size:17px!important}
+.sidebar-footer{margin-top:18px!important;padding:15px 10px!important;border-top:1px solid rgba(255,255,255,.12)!important;font-size:11px!important;line-height:1.55!important;opacity:.72!important}
+.sidebar-footer p{margin:4px 0 0!important}
+@media(max-width:1200px) and (min-width:901px){.sidebar{width:255px!important}}
+@media(max-width:900px){
+  .sidebar{width:min(84vw,320px)!important;height:100dvh!important;transform:translateX(-100%)!important;transition:transform .22s ease!important}
+  .sidebar.open{transform:translateX(0)!important}
+}
+</style>
+
+
+<style id="sante-accounting-subnav-r1">
+.accounting-subnav{
+  display:flex;gap:8px;flex-wrap:wrap;margin:0 0 18px;
+  padding:8px;background:#fff;border:1px solid #d9e5ef;border-radius:16px;
+  box-shadow:0 4px 16px rgba(8,45,105,.035)
+}
+.accounting-subnav a{
+  min-height:40px;padding:0 14px;border-radius:10px;display:inline-flex;align-items:center;
+  color:#082d69;text-decoration:none;font:600 12px Prompt,sans-serif
+}
+.accounting-subnav a:hover{background:#eef6fc}
+.accounting-subnav a.active{background:#082d69;color:#fff}
+@media(max-width:600px){
+  .accounting-subnav{display:grid;grid-template-columns:1fr 1fr}
+  .accounting-subnav a{justify-content:center;text-align:center}
+}
+</style>
+
+<meta name="sante-sidebar-build" content="UNIFIED-ADMIN-SIDEBAR-R1-ADMIN-QUOTATIONS.HTML">
 </head>
 <body>
 
@@ -1679,22 +1728,20 @@ textarea{
     <a href="admin-dashboard.html" class="nav-link"><span class="nav-icon">⌂</span><span>หน้าหลัก</span></a>
     <a href="admin-courses.html" class="nav-link"><span class="nav-icon">▤</span><span>หลักสูตร</span></a>
     <a href="admin-training-sessions.html" class="nav-link"><span class="nav-icon">◫</span><span>รอบอบรม</span></a>
+    <a href="admin-training-registrations.html" class="nav-link"><span class="nav-icon">◉</span><span>ผู้ลงทะเบียน</span></a>
+    <a href="admin-training-completion.html" class="nav-link"><span class="nav-icon">✓</span><span>การจบการอบรม</span></a>
     <a href="admin-exams.html" class="nav-link"><span class="nav-icon">✓</span><span>ข้อสอบ</span></a>
-    <a href="admin-question-import.html" class="nav-link"><span class="nav-icon">⇧</span><span>นำเข้าข้อสอบ</span></a>
+    <a href="admin-question-import.html" class="nav-link"><span class="nav-icon">⇩</span><span>นำเข้าข้อสอบ</span></a>
     <a href="admin-payments.html" class="nav-link"><span class="nav-icon">฿</span><span>การชำระเงิน</span></a>
-    <a href="admin-members.html" class="nav-link"><span class="nav-icon">♙</span><span>สมาชิก</span></a>
-    <a href="admin-services.html" class="nav-link"><span class="nav-icon">▣</span><span>งานบริการ</span></a>
-    <a href="admin-quotations.html" class="nav-link active"><span class="nav-icon">▧</span><span>ใบเสนอราคา</span></a>
-    <a href="admin-accounting-documents.html" class="nav-link"><span class="nav-icon">▣</span><span>เอกสารบัญชี</span></a>
-  
-    <a href="admin-notifications.html" class="nav-link">
-      <span class="nav-icon">✉</span>
-      <span>การแจ้งเตือน</span>
-    </a>
-</nav>
+    <a href="admin-members.html" class="nav-link"><span class="nav-icon">●</span><span>สมาชิก</span></a>
+    <a href="admin-services.html" class="nav-link"><span class="nav-icon">⚙</span><span>งานบริการ</span></a>
+    <a href="admin-accounting-documents.html" class="nav-link active"><span class="nav-icon">▣</span><span>เอกสารบัญชี</span></a>
+    <a href="admin-certificates.html" class="nav-link"><span class="nav-icon">◇</span><span>วุฒิบัตร</span></a>
+    <a href="admin-notifications.html" class="nav-link"><span class="nav-icon">◌</span><span>การแจ้งเตือน</span></a>
+  </nav>
   <div class="sidebar-footer">
     <strong>SANTE SYSTEM</strong>
-    <p>ระบบบริหารจัดการภายใน<br>SANTE Consulting</p>
+    <p>ระบบบริหารจัดการภายใน SANTE Consulting</p>
   </div>
 </aside>
 
