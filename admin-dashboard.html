@@ -2652,7 +2652,7 @@ async function safeCount(table){
 async function safePendingPayments(){
   try{
     const res=await withTimeout(
-      db.from("payments").select("*",{count:"exact",head:true}).eq("status","PENDING"),
+      db.from("payments").select("*",{count:"exact",head:true}).eq("payment_status","PENDING"),
       7000,
       "โหลด payments ใช้เวลานานเกินไป"
     );
