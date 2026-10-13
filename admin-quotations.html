@@ -1714,6 +1714,28 @@ textarea{
 </style>
 
 <meta name="sante-sidebar-build" content="UNIFIED-ADMIN-SIDEBAR-R1-ADMIN-QUOTATIONS.HTML">
+
+<style id="sante-accounting-subnav-r2">
+.accounting-subnav{
+  display:flex!important;gap:8px!important;flex-wrap:wrap!important;
+  margin:0 0 18px!important;padding:8px!important;
+  background:#fff!important;border:1px solid #d9e5ef!important;border-radius:16px!important;
+  box-shadow:0 4px 16px rgba(8,45,105,.035)!important
+}
+.accounting-subnav a{
+  min-height:40px!important;padding:0 14px!important;border-radius:10px!important;
+  display:inline-flex!important;align-items:center!important;
+  color:#082d69!important;text-decoration:none!important;font:600 12px Prompt,sans-serif!important
+}
+.accounting-subnav a:hover{background:#eef6fc!important}
+.accounting-subnav a.active{background:#082d69!important;color:#fff!important}
+@media(max-width:600px){
+  .accounting-subnav{display:grid!important;grid-template-columns:1fr 1fr!important}
+  .accounting-subnav a{justify-content:center!important;text-align:center!important}
+}
+</style>
+
+<meta name="sante-build" content="QUOTATIONS-ACCOUNTING-TABS-R2">
 </head>
 <body>
 
@@ -1781,6 +1803,14 @@ textarea{
     <img src="sante-mobile-hero.png" alt="SANTE Admin">
   </div>
 </section>
+
+
+<div class="accounting-subnav" aria-label="เมนูเอกสารบัญชี">
+  <a href="admin-accounting-documents.html">ภาพรวมเอกสารบัญชี</a>
+  <a href="admin-quotations.html" class="active">ใบเสนอราคา</a>
+  <a href="admin-accounting-documents.html?type=INVOICE">ใบแจ้งหนี้</a>
+  <a href="admin-accounting-documents.html?type=RECEIPT_TAX_INVOICE">ใบเสร็จ / ใบกำกับภาษี</a>
+</div>
 
 
     <div class="head">

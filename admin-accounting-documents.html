@@ -107,6 +107,23 @@ label{display:block;font-size:11px;font-weight:600;margin-bottom:5px}.input,text
 </style>
 
 <meta name="sante-sidebar-build" content="UNIFIED-ADMIN-SIDEBAR-R1-ADMIN-ACCOUNTING-DOCUMENTS.HTML">
+
+<style id="sante-accounting-hero-r2">
+.accounting-hero{
+  width:100%;display:block;overflow:hidden;margin-bottom:18px;
+  padding:6px;border-radius:24px;background:#fff;
+  box-shadow:0 10px 30px rgba(11,45,103,.07)
+}
+.accounting-hero picture,.accounting-hero img{display:block;width:100%}
+.accounting-hero img{height:auto;object-fit:contain;border-radius:18px}
+@media(max-width:767px){
+  .accounting-hero{padding:5px;border-radius:18px;margin-bottom:14px}
+  .accounting-hero img{border-radius:14px}
+}
+.accounting-subnav a.active{background:#082d69!important;color:#fff!important}
+</style>
+
+<meta name="sante-build" content="ACCOUNTING-TABS-HERO-FIX-R2">
 </head>
 <body>
 <div id="loading" class="loading">กำลังโหลดเอกสารบัญชี...</div>
@@ -147,11 +164,19 @@ label{display:block;font-size:11px;font-weight:600;margin-bottom:5px}.input,text
 </header>
 
 <main class="main"><div class="content">
+
+<section class="accounting-hero" aria-label="SANTE Admin">
+  <picture>
+    <source media="(max-width:767px)" srcset="sante-dashboard-hero-mobile.png">
+    <img src="sante-dashboard-hero-desktop.png" alt="Trust in Safety. Trust in SANTE.">
+  </picture>
+</section>
+
 <div class="accounting-subnav" aria-label="เมนูเอกสารบัญชี">
-  <a href="admin-accounting-documents.html" class="active">ภาพรวมเอกสารบัญชี</a>
-  <a href="admin-quotations.html" class="">ใบเสนอราคา</a>
-  <a href="admin-accounting-documents.html?type=INVOICE">ใบแจ้งหนี้</a>
-  <a href="admin-accounting-documents.html?type=RECEIPT_TAX_INVOICE">ใบเสร็จ / ใบกำกับภาษี</a>
+  <a id="tabOverview" href="admin-accounting-documents.html" class="active">ภาพรวมเอกสารบัญชี</a>
+  <a id="tabQuotation" href="admin-quotations.html">ใบเสนอราคา</a>
+  <a id="tabInvoice" href="admin-accounting-documents.html?type=INVOICE">ใบแจ้งหนี้</a>
+  <a id="tabReceipt" href="admin-accounting-documents.html?type=RECEIPT_TAX_INVOICE">ใบเสร็จ / ใบกำกับภาษี</a>
 </div>
  <section class="hero">
   <div><h1>Accounting Documents</h1><p>ใบเสนอราคาและใบแจ้งหนี้ออกได้อัตโนมัติ · ใบเสร็จ/ใบกำกับภาษีต้องอนุมัติก่อนทุกครั้ง</p></div>
@@ -261,6 +286,27 @@ function money(v){return new Intl.NumberFormat("th-TH",{minimumFractionDigits:2,
 function typeLabel(t){return ({QUOTATION:"ใบเสนอราคา",INVOICE:"ใบแจ้งหนี้",RECEIPT_TAX_INVOICE:"ใบเสร็จ/ใบกำกับภาษี",CREDIT_NOTE:"ใบลดหนี้"})[t]||t}
 function statusBadge(s){const c=s==="ISSUED"?"ok":s==="WAITING_APPROVAL"?"wait":s==="APPROVED"||s==="READY_TO_ISSUE"?"issue":s==="CANCELLED"?"cancel":"";return `<span class="badge ${c}">${esc(s)}</span>`}
 function refText(x){return x.quotation_no||x.payment_no||"-"}
+
+
+function applyAccountingTabFromUrl(){
+  const params=new URLSearchParams(location.search);
+  const type=params.get("type")||"";
+  const tf=document.getElementById("typeFilter");
+  if(tf) tf.value=type;
+
+  ["tabOverview","tabQuotation","tabInvoice","tabReceipt"].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el) el.classList.remove("active");
+  });
+
+  if(type==="INVOICE"){
+    document.getElementById("tabInvoice")?.classList.add("active");
+  }else if(type==="RECEIPT_TAX_INVOICE"){
+    document.getElementById("tabReceipt")?.classList.add("active");
+  }else{
+    document.getElementById("tabOverview")?.classList.add("active");
+  }
+}
 
 async function ensureStaff(){
  const {data:{session}}=await db.auth.getSession();
@@ -490,6 +536,7 @@ overlay.onclick=()=>{sidebar.classList.remove("open");overlay.classList.remove("
 (async()=>{
  try{
   if(!await ensureStaff())return;
+  applyAccountingTabFromUrl();
   await loadDocs();
   $("loading").classList.add("hidden");
  }catch(e){console.error(e);$("loading").textContent="โหลดเอกสารบัญชีไม่สำเร็จ: "+(e.message||e)}
