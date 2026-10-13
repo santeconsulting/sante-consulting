@@ -26,6 +26,69 @@ button,input,select{font-family:Prompt,sans-serif}
 #santeMobileOverlay{display:none}
 @media(max-width:900px){.sidebar{width:285px;transform:translateX(-100%);transition:.22s;z-index:300}.sidebar.open{transform:translateX(0)}#santeMobileOverlay.show{display:block;position:fixed;inset:0;z-index:250;background:#0314307a}.main{margin-left:0;padding-top:68px}.topbar{left:0;height:68px;padding:0 12px}.mobile-menu{display:block;width:46px;height:46px}.admin-copy,.page-sub{display:none}.content{width:100%;padding:16px 12px 42px}.stats{grid-template-columns:1fr 1fr}.page-head{flex-direction:column}.page-head h1{font-size:24px}.toolbar{grid-template-columns:1fr}.bulk-note{width:100%;margin:0}.session-card{padding:16px}}
 </style>
+
+<style id="sante-admin-canonical-r1">
+/* =========================================================
+   SANTE ADMIN CANONICAL SHELL
+   Desktop: sidebar 285 / topbar 88
+   Mobile: drawer / topbar 68
+========================================================= */
+:root{
+  --navy:#082d69!important;--navy-dark:#061f4b!important;--yellow:#ffbf19!important;
+  --bg:#f1f7fb!important;--text:#082d69!important;--muted:#6f83a2!important;--line:#d9e5ef!important;
+  --sidebar:285px!important;
+}
+body{font-family:"Prompt",sans-serif!important;background:var(--bg)!important;color:var(--text)!important}
+.sidebar{
+  position:fixed!important;left:0!important;top:0!important;bottom:0!important;z-index:1200!important;
+  width:var(--sidebar)!important;padding:0!important;
+  background:linear-gradient(180deg,#082d69 0%,#06265c 55%,#061f4b 100%)!important;color:#fff!important;
+}
+.sidebar-brand img{width:190px!important;max-width:100%!important;height:82px!important;object-fit:contain!important}
+.nav-link,.nav-item,.menu-item,.nav-btn{min-height:58px!important;border-radius:16px!important;font-size:15px!important}
+.nav-link.active,.nav-item.active,.menu-item.active,.nav-btn.active{background:var(--yellow)!important;color:var(--navy)!important;font-weight:600!important}
+.main,.admin-main,.page-main{
+  min-height:100vh!important;margin-left:var(--sidebar)!important;padding-top:88px!important;background:var(--bg)!important;
+}
+.topbar{
+  position:fixed!important;top:0!important;left:var(--sidebar)!important;right:0!important;z-index:1000!important;
+  height:88px!important;min-height:88px!important;padding:0 34px!important;
+  background:rgba(255,255,255,.97)!important;border-bottom:1px solid #e2ebf3!important;
+  box-shadow:0 3px 14px rgba(8,45,105,.025)!important;
+}
+.content{
+  width:min(1540px,calc(100% - 58px))!important;margin:0 auto!important;padding:26px 0 46px!important;
+}
+.page-name{font-size:21px!important;line-height:1.3!important;font-weight:600!important}
+.page-sub{font-size:12px!important;color:var(--muted)!important}
+.mobile-menu,.menu-btn{display:none}
+#santeMobileOverlay{display:none}
+@media(max-width:1200px){
+  :root{--sidebar:255px!important}
+}
+@media(max-width:900px){
+  :root{--sidebar:285px!important}
+  .sidebar{
+    width:min(84vw,320px)!important;transform:translateX(-100%)!important;transition:.22s ease!important;
+    height:100dvh!important;overflow-y:auto!important;
+  }
+  .sidebar.open{transform:translateX(0)!important}
+  .main,.admin-main,.page-main{margin-left:0!important;padding-top:68px!important}
+  .topbar{left:0!important;height:68px!important;min-height:68px!important;padding:0 12px!important}
+  .mobile-menu,.menu-btn{display:inline-flex!important;align-items:center!important;justify-content:center!important;min-width:44px!important;height:44px!important}
+  .admin-copy,.page-sub{display:none!important}
+  .content{width:100%!important;padding:14px 12px 42px!important}
+  #santeMobileOverlay.show{display:block!important;position:fixed!important;inset:0!important;z-index:1100!important;background:rgba(3,20,48,.55)!important}
+}
+@media(max-width:767px){
+  .page-name{font-size:18px!important}
+  .page-head h1,.page-title,.header-title{font-size:22px!important;line-height:1.3!important}
+  .panel,.card,.table-card,.session-card,.stat-card,.summary-card{border-radius:17px!important}
+  input,select,textarea{font-size:16px!important}
+}
+</style>
+
+<meta name="sante-shell-build" content="ADMIN-CANONICAL-R1-ADMIN-TRAINING-COMPLETION.HTML">
 </head>
 <body>
 <aside class="sidebar" id="sidebar">

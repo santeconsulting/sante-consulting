@@ -30,12 +30,147 @@ label{display:block;font-size:11px;font-weight:600;margin:0 0 5px}.req{color:#c3
 .page{font-size:16px}.page-title h1{font-size:34px}.page-title p{font-size:15px}
 label{font-size:14px}.input,.select,textarea{font-size:15px;padding:13px 14px}.hint{font-size:12px}.type-card strong{font-size:19px}.type-card span{font-size:13px}.section-title{font-size:21px}.btn{font-size:14px}
 @media(max-width:767px){.page{font-size:15px}.page-title h1{font-size:26px}.page-title p{font-size:13px}label{font-size:13px}.input,.select,textarea{font-size:14px}.section-title{font-size:18px}.btn{font-size:13px}}
-</style></head>
+</style>
+<style id="sante-member-standard-r1">
+/* =========================================================
+   SANTE MEMBER STANDARD SHELL
+   Master: member-home.html
+========================================================= */
+:root{
+  --member-navy:#082d69;
+  --member-blue:#087df0;
+  --member-yellow:#ffbf19;
+  --member-muted:#6f82a0;
+  --member-line:#dce7f2;
+}
+
+.topbar{
+  width:100%!important;height:82px!important;min-height:82px!important;
+  position:sticky!important;top:0!important;z-index:100!important;
+  display:flex!important;align-items:center!important;justify-content:space-between!important;gap:30px!important;
+  padding:0 max(28px,calc((100vw - 1480px)/2))!important;
+  background:rgba(255,255,255,.97)!important;border-bottom:1px solid #e7eef6!important;
+  box-shadow:0 3px 16px rgba(11,45,103,.04)!important;backdrop-filter:blur(10px)!important;
+}
+.brand,.topbar>a:first-child{min-width:0!important;display:flex!important;align-items:center!important}
+.brand-logo,.topbar .brand img{
+  width:220px!important;height:68px!important;max-width:none!important;max-height:none!important;
+  display:block!important;object-fit:contain!important;object-position:left center!important;
+}
+.member-area,.member,.top-actions{display:flex!important;align-items:center!important;gap:18px!important;min-width:0!important}
+.member-copy{min-width:0!important;text-align:right!important}
+.member-name{max-width:320px!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important;color:var(--member-navy)!important;font-size:16px!important;font-weight:600!important}
+.member-email{max-width:320px!important;margin-top:2px!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important;color:#7184a3!important;font-size:13px!important}
+.logout,.logout-button,.topbar .btn{
+  min-height:44px!important;height:auto!important;flex-shrink:0!important;padding:0 18px!important;
+  border:1px solid #d5e1ef!important;border-radius:11px!important;background:#fff!important;
+  color:var(--member-navy)!important;font:600 14px Prompt,sans-serif!important;
+}
+
+.page,.member-shell-page{
+  width:min(1480px,calc(100% - 48px))!important;
+  margin:0 auto!important;
+}
+.page{padding:24px 0 60px!important}
+.member-shell-page{padding:24px 0 0!important}
+
+.desktop-hero{
+  width:100%!important;display:block!important;overflow:hidden!important;border-radius:28px!important;
+  background:#fff!important;box-shadow:0 10px 30px rgba(11,45,103,.07)!important;padding:0!important;
+}
+.desktop-hero img{width:100%!important;height:auto!important;display:block!important}
+.mobile-hero{display:none!important}
+.member-shell-hero{display:none!important}
+
+@media (min-width:768px) and (max-width:1023px){
+  .topbar{height:76px!important;min-height:76px!important;padding:0 24px!important}
+  .brand-logo,.topbar .brand img{width:180px!important;height:62px!important}
+  .member-name{max-width:220px!important;font-size:14px!important}
+  .member-email{max-width:220px!important;font-size:11px!important}
+  .page,.member-shell-page{width:calc(100% - 36px)!important}
+  .page{padding-top:18px!important}.member-shell-page{padding-top:18px!important}
+  .desktop-hero{border-radius:22px!important}
+}
+
+@media (max-width:767px){
+  body{background:linear-gradient(180deg,#fff 0%,#f6fbff 45%,#eef7fc 100%)!important}
+  .topbar{
+    height:auto!important;min-height:64px!important;gap:8px!important;padding:7px 12px!important;
+    padding-left:max(12px,env(safe-area-inset-left))!important;
+    padding-right:max(12px,env(safe-area-inset-right))!important;
+  }
+  .brand,.topbar>a:first-child{flex:1 1 auto!important;min-width:0!important}
+  .brand-logo,.topbar .brand img{width:118px!important;height:50px!important;flex-shrink:0!important}
+  .member-area,.member,.top-actions{flex:0 1 auto!important;gap:7px!important}
+  .member-copy{display:none!important}
+  .logout,.logout-button,.topbar .btn{
+    min-height:38px!important;padding:0 10px!important;border-radius:9px!important;font-size:11px!important;
+  }
+
+  .page,.member-shell-page{width:100%!important;margin:0!important}
+  .page{padding:10px 12px calc(35px + env(safe-area-inset-bottom))!important}
+  .member-shell-page{padding:10px 12px 0!important}
+  .desktop-hero{display:none!important}
+
+  .mobile-hero{
+    min-height:390px!important;position:relative!important;display:flex!important;flex-direction:column!important;
+    overflow:hidden!important;padding:23px 20px 0!important;border-radius:20px!important;
+    background:linear-gradient(145deg,#eaf7ff 0%,#fff 58%,#fff4c9 100%)!important;
+    box-shadow:0 8px 25px rgba(11,45,103,.07)!important;
+  }
+  .mobile-hero::before{
+    content:""!important;position:absolute!important;width:190px!important;height:190px!important;top:-90px!important;right:-70px!important;
+    border-radius:50%!important;background:rgba(255,191,25,.28)!important;
+  }
+  .mobile-hero::after{
+    content:""!important;position:absolute!important;width:180px!important;height:180px!important;left:-90px!important;bottom:-90px!important;
+    border-radius:50%!important;background:rgba(64,176,245,.14)!important;
+  }
+  .mobile-hero-content{position:relative!important;z-index:5!important}
+  .mobile-hero-badge{
+    width:max-content!important;display:inline-flex!important;align-items:center!important;padding:6px 12px!important;border-radius:999px!important;
+    background:var(--member-yellow)!important;color:var(--member-navy)!important;font-size:11px!important;font-weight:600!important;letter-spacing:.3px!important;
+  }
+  .mobile-hero h1{margin:13px 0 0!important;color:var(--member-navy)!important;font-size:clamp(27px,8vw,34px)!important;font-weight:700!important;line-height:1.23!important}
+  .mobile-hero h1 span{color:var(--member-blue)!important}
+  .mobile-hero-description{max-width:320px!important;margin-top:9px!important;color:#637b9a!important;font-size:13px!important;line-height:1.65!important}
+  .mobile-hero-visual{
+    min-height:0!important;position:relative!important;z-index:3!important;flex:1!important;
+    display:flex!important;align-items:flex-end!important;justify-content:center!important;margin:5px -20px 0!important;overflow:hidden!important;
+  }
+  .mobile-hero-visual img{width:100%!important;height:auto!important;display:block!important;object-fit:contain!important;object-position:center!important}
+}
+@media (max-width:374px){
+  .page,.member-shell-page{padding-left:10px!important;padding-right:10px!important}
+  .brand-logo,.topbar .brand img{width:104px!important}
+  .logout,.logout-button,.topbar .btn{padding:0 8px!important;font-size:10px!important}
+  .mobile-hero{min-height:370px!important;padding:20px 17px 0!important}
+  .mobile-hero h1{font-size:26px!important}.mobile-hero-description{font-size:12px!important}
+  .mobile-hero-visual{margin-left:-17px!important;margin-right:-17px!important}
+}
+@media (min-width:1600px){
+  .page,.member-shell-page{width:min(1520px,calc(100% - 80px))!important}
+  .topbar{padding-left:max(40px,calc((100vw - 1520px)/2))!important;padding-right:max(40px,calc((100vw - 1520px)/2))!important}
+}
+</style>
+
+</head>
 <body>
 <div id="loading" class="loading">กำลังเตรียมแบบคำขอ...</div>
-<header class="topbar"><a href="member-home.html"><img class="brand-logo" src="sante%20(en)-logo.png" alt="SANTE"></a>
-<div class="member-area"><div class="member-copy"><div id="memberName" class="member-name">สมาชิก SANTE</div><div id="memberEmail" class="member-email"></div></div><button id="logout" class="logout">ออกจากระบบ</button></div></header><section class="member-shell-hero"><img src="sante-member-hero.png" alt="Trust in Safety. Trust in SANTE."></section>
+<header class="topbar">
+<a class="brand" href="member-home.html"><img class="brand-logo" src="sante%20(en)-logo.png" alt="SANTE Consulting"></a>
+<div class="member-area"><div class="member-copy"><div id="memberName" class="member-name">สมาชิก SANTE</div><div id="memberEmail" class="member-email"></div></div><button id="logout" class="logout-button">ออกจากระบบ</button></div>
+</header>
 <main class="page">
+<section class="desktop-hero"><img src="sante-member-hero.png" alt="Trust in Safety. Trust in SANTE."></section>
+<section class="mobile-hero">
+  <div class="mobile-hero-content">
+    <div class="mobile-hero-badge">SANTE MEMBER</div>
+    <h1>ขอรับบริการ<br><span>จาก SANTE</span></h1>
+    <p class="mobile-hero-description">ส่งคำขอรับบริการ งานตรวจวัด และงานที่ปรึกษา พร้อมติดตามสถานะผ่านบัญชีสมาชิกของคุณ</p>
+  </div>
+  <div class="mobile-hero-visual"><img src="sante-mobile-hero.png" alt="SANTE Member"></div>
+</section>
 <div class="crumbs"><a href="member-home.html">หน้าหลักสมาชิก</a> › ขอรับบริการ</div>
 <div class="page-title"><h1>ขอรับบริการจาก SANTE</h1><p>เลือกประเภทคำขอได้ครั้งละ 1 ประเภท ระบบจะแสดงเฉพาะข้อมูลที่จำเป็นสำหรับการประเมินราคา</p></div>
 

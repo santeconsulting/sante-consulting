@@ -748,6 +748,32 @@ a{
 
 }
 </style>
+
+<style id="sante-member-focus-r1">
+/* Member Focus Page: Payment / Exam — same family, no large hero */
+.topbar{
+  height:82px!important;min-height:82px!important;
+  padding:0 max(28px,calc((100vw - 1480px)/2))!important;
+  background:rgba(255,255,255,.97)!important;border-bottom:1px solid #e7eef6!important;
+  box-shadow:0 3px 16px rgba(11,45,103,.04)!important;
+}
+.brand-logo,.brand img{width:220px!important;height:68px!important;object-fit:contain!important}
+.page{width:min(1180px,calc(100% - 48px))!important;margin:0 auto!important;padding:30px 0 60px!important}
+.hero{display:none!important}
+.page-heading,.focus-heading{
+  margin-bottom:18px!important;padding:22px 24px!important;background:#fff!important;border:1px solid #dce7f2!important;
+  border-radius:20px!important;box-shadow:0 6px 18px rgba(11,45,103,.035)!important;
+}
+.page-heading h1,.focus-heading h1,.title{color:#082d69!important}
+@media(max-width:767px){
+  .topbar{height:auto!important;min-height:64px!important;padding:7px 12px!important}
+  .brand-logo,.brand img{width:118px!important;height:50px!important}
+  .member-copy{display:none!important}
+  .page{width:100%!important;padding:12px 12px calc(35px + env(safe-area-inset-bottom))!important}
+  .page-heading,.focus-heading{padding:17px!important;border-radius:17px!important}
+}
+</style>
+
 </head>
 
 <body>
@@ -777,7 +803,6 @@ a{
   </div>
 
 </header>
-
 
 <main class="page">
 
