@@ -124,6 +124,23 @@ label{display:block;font-size:11px;font-weight:600;margin-bottom:5px}.input,text
 </style>
 
 <meta name="sante-build" content="ACCOUNTING-TABS-HERO-FIX-R2">
+
+<style id="sante-accounting-copy-r3">
+.copy-mode-bar{
+  display:flex;gap:7px;align-items:center;flex-wrap:wrap;
+  padding:8px 10px;margin:0 0 10px;border:1px solid #d9e5ef;
+  background:#f8fbfd;border-radius:12px
+}
+.copy-mode-bar span{font-size:11px;color:#6f83a2;font-weight:600}
+.copy-mode-bar label{
+  display:inline-flex;align-items:center;gap:5px;margin:0;
+  min-height:32px;padding:0 10px;border:1px solid #d9e5ef;
+  border-radius:9px;background:#fff;font-size:11px;cursor:pointer
+}
+.paper .copy-label{text-align:right;font-size:10px;font-weight:600;margin-bottom:4px}
+</style>
+
+<meta name="sante-build" content="ACCOUNTING-COPY-MODE-R3">
 </head>
 <body>
 <div id="loading" class="loading">กำลังโหลดเอกสารบัญชี...</div>
@@ -223,6 +240,11 @@ label{display:block;font-size:11px;font-weight:600;margin-bottom:5px}.input,text
 
 <div id="editorBg" class="modal-bg"><div class="modal">
  <div class="modal-head"><div><h2 id="editorTitle">ตรวจสอบเอกสาร</h2><div id="editorRef" class="muted"></div></div><button class="btn" onclick="closeEditor()">ปิด</button></div>
+ <div class="copy-mode-bar">
+  <span>รูปแบบเอกสาร PDF</span>
+  <label><input type="radio" name="accountingCopyMode" value="ORIGINAL" checked> ต้นฉบับ</label>
+  <label><input type="radio" name="accountingCopyMode" value="COPY"> สำเนา</label>
+ </div>
  <div class="form-grid">
   <div><label>ชื่อลูกค้า</label><input id="fCustomer" class="input"></div>
   <div><label>บริษัท / หน่วยงาน</label><input id="fOrg" class="input"></div>
@@ -439,13 +461,16 @@ async function approveEditing(){
  await loadDocs();fillEditor(data);
 }
 
+function accountingCopyLabel(){
+  return document.querySelector('input[name="accountingCopyMode"]:checked')?.value==="COPY"?"(สำเนา)":"(ต้นฉบับ)";
+}
 function paperHtml(x){
  const items=Array.isArray(x.items)?x.items:[];
  const rows=items.length?items.map((i,n)=>`<tr><td>${n+1}. ${esc(i.description||x.document_subject||"")}</td><td>${money(i.quantity||1)}</td><td>${esc(i.unit||"งาน")}</td><td style="text-align:right">${money(i.unit_price)}</td><td style="text-align:right">${money(i.discount_amount)}</td><td style="text-align:right">${money(i.line_total)}</td></tr>`).join(""):`<tr><td>1. ${esc(x.document_subject||"ค่าบริการ / ค่าอบรม SANTE")}</td><td>1.00</td><td>งาน</td><td style="text-align:right">${money(x.subtotal)}</td><td style="text-align:right">0.00</td><td style="text-align:right">${money(x.subtotal)}</td></tr>`;
  return `<div class="paper">
   <div class="head">
    <div><img class="paper-logo" src="SANTE-logo-primary.png"><div class="seller"><b>${SANTE.name}</b><br>${SANTE.address}<br>เลขประจำตัวผู้เสียภาษี ${SANTE.taxId}<br>${SANTE.phone} · ${SANTE.email}<br>${SANTE.website}</div></div>
-   <div><div class="doc-title">${esc(typeLabel(x.document_type))}</div><div class="doc-meta"><b>${esc(x.document_no||"-")}</b><br>วันที่ออก: ${esc(x.issue_date||new Date().toISOString().slice(0,10))}${x.due_date?`<br>ครบกำหนด: ${esc(x.due_date)}`:""}</div></div>
+   <div><div class="copy-label">${accountingCopyLabel()}</div><div class="doc-title">${esc(typeLabel(x.document_type))}</div><div class="doc-meta"><b>${esc(x.document_no||"-")}</b><br>วันที่ออก: ${esc(x.issue_date||new Date().toISOString().slice(0,10))}${x.due_date?`<br>ครบกำหนด: ${esc(x.due_date)}`:""}</div></div>
   </div>
   <div class="party">
    <div class="box"><b>ลูกค้า</b><br>${esc(x.organization_name||x.customer_name||"-")}<br>${esc(x.billing_address||"")}<br>เลขประจำตัวผู้เสียภาษี: ${esc(x.customer_tax_id||"-")} ${esc(x.customer_branch||"")}</div>

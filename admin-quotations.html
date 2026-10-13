@@ -2037,6 +2037,93 @@ textarea{
 </style>
 
 <meta name="sante-build" content="QUOTATION-UX-TEMPLATE-R6">
+
+<style id="sante-quotation-r8">
+/* ===== R8 document copy selector ===== */
+.doc-copy-switch{
+  display:flex;gap:6px;align-items:center;flex-wrap:wrap;
+  margin:0 0 10px;padding:7px 9px;border:1px solid #d9e5ef;
+  border-radius:12px;background:#f8fbfd
+}
+.doc-copy-switch span{font-size:11px;font-weight:600;color:#6f83a2;margin-right:3px}
+.doc-copy-switch label{
+  display:inline-flex;align-items:center;gap:5px;margin:0;
+  min-height:32px;padding:0 10px;border:1px solid #d9e5ef;border-radius:9px;
+  background:#fff;cursor:pointer;font-size:11px
+}
+.doc-copy-switch input{accent-color:#082d69}
+.copy-label{
+  text-align:right;font-size:9pt;font-weight:600;color:#213b57;
+  margin-bottom:2mm
+}
+
+/* ===== R8 items: always open, textarea auto-grows ===== */
+.item-head{grid-template-columns:minmax(0,1fr) auto!important}
+.item-toggle{display:none!important}
+.item-detail{
+  display:grid!important;
+  grid-template-columns:minmax(0,2.2fr) .55fr .65fr .85fr .7fr auto!important;
+  gap:8px!important;align-items:end!important;padding:11px!important
+}
+.item textarea.desc{
+  min-height:54px!important;height:auto!important;resize:none!important;
+  overflow:hidden!important;line-height:1.45!important
+}
+.item-summary{
+  white-space:normal!important;
+  display:-webkit-box!important;-webkit-line-clamp:2!important;-webkit-box-orient:vertical!important
+}
+.items-help{margin-bottom:10px!important}
+
+/* ===== R8 seller/customer layout to match reference more closely ===== */
+.doc-head{
+  grid-template-columns:minmax(0,1.34fr) minmax(61mm,.66fr)!important;
+  gap:7mm!important
+}
+.seller{
+  grid-template-columns:18mm minmax(0,1fr)!important;
+  gap:4.5mm!important
+}
+.paper-logo{width:16mm!important;height:16mm!important}
+.seller-company{font-size:9pt!important}
+.seller-info{font-size:8.4pt!important;line-height:1.38!important}
+.party{
+  grid-template-columns:minmax(0,1.35fr) minmax(52mm,.65fr)!important;
+  gap:6mm!important
+}
+.party-company{font-size:9pt!important}
+.qtable th,.qtable td{font-size:8pt!important}
+.doc-spacer{min-height:27mm!important}
+
+/* signatures smaller, stamp larger */
+.sig{
+  height:9.5mm!important;
+  max-width:29mm!important;
+  margin-bottom:1.5mm!important
+}
+.stamp{
+  width:34mm!important;height:34mm!important;
+  margin-bottom:0!important
+}
+.cert{grid-template-columns:1fr 1fr .82fr!important;gap:4mm!important}
+.cert > div{min-height:37mm!important}
+.cert small{font-size:7.4pt!important}
+
+/* make the preview slightly wider / more balanced */
+#editor .editor-body{
+  grid-template-columns:minmax(520px,.88fr) minmax(700px,1.12fr)!important
+}
+@media(max-width:1300px) and (min-width:1101px){
+  #editor .editor-body{grid-template-columns:minmax(500px,.95fr) minmax(580px,1.05fr)!important}
+}
+@media(max-width:700px){
+  .item-detail{grid-template-columns:1fr 1fr!important}
+  .item-detail .desc-wrap{grid-column:1/-1!important}
+  .item-detail .danger{grid-column:1/-1!important}
+}
+</style>
+
+<meta name="sante-build" content="QUOTATION-R8-REFERENCE-UX">
 </head>
 <body>
 
@@ -2175,6 +2262,13 @@ textarea{
 <div class="full"><label>เงื่อนไขการชำระเงิน</label><textarea id="terms" rows="3">ใบเสนอราคามีอายุ 60 วัน และเครดิตเทอม 30 วัน หลังการให้บริการ</textarea></div>
 <div class="full"><label>หมายเหตุ</label><textarea id="note" rows="2"></textarea></div></div>
 <div class="summary"><span>มูลค่าหลังส่วนลด</span><span id="sumSubtotal">0.00</span><span>VAT</span><span id="sumVat">0.00</span><span>ยอดรวมทั้งสิ้น</span><strong id="sumGrand">0.00</strong><span>หัก ณ ที่จ่าย</span><span id="sumWht">0.00</span><span>ยอดชำระสุทธิ</span><strong id="sumNet">0.00</strong></div>
+
+<div class="doc-copy-switch">
+  <span>รูปแบบเอกสาร</span>
+  <label><input type="radio" name="quotationCopyMode" value="ORIGINAL" checked> ต้นฉบับ</label>
+  <label><input type="radio" name="quotationCopyMode" value="COPY"> สำเนา</label>
+</div>
+
 <div class="actions"><button class="btn light" type="button" onclick="recalc();setTimeout(()=>window.print(),80)">พิมพ์ / PDF</button><button class="btn primary" onclick="saveQuotation(false)">บันทึก Draft</button><button class="btn yellow" onclick="saveQuotation(true)">บันทึกและส่งลูกค้า</button></div>
 </div><div class="preview-wrap"><div class="paper" id="paper"></div></div></div></div></div>
 <div id="toast" class="toast"></div>
@@ -2253,12 +2347,16 @@ function fillRequests(){requestId.innerHTML='<option value="">ไม่ผูก
 function resetEditor(){editingId=null;editorTitle.textContent="สร้างใบเสนอราคา";quotationNo.textContent="";requestId.value="";customerName.value=organizationName.value=customerTaxId.value=customerBranch.value=email.value=phone.value=billingAddress.value=documentSubject.value=note.value="";issueDate.value=new Date().toISOString().slice(0,10);validUntil.value=addDays(issueDate.value,60);vatRate.value=7;whtRate.value=3;terms.value="ใบเสนอราคามีอายุ 60 วัน และเครดิตเทอม 30 วัน หลังการให้บริการ";items.innerHTML="";addItem();recalc()}
 function requestAddress(r){return [r.address_no,r.moo&&"หมู่ "+r.moo,r.building,r.soi&&"ซอย "+r.soi,r.road&&"ถนน"+r.road,r.subdistrict,r.district,r.province,r.postcode].filter(Boolean).join(" ")}
 function requestDescription(r){if(r.request_type==="TRAINING")return `${r.course_name||"อบรม In-house"} จำนวน ${r.participant_count||"-"} คน`;if(r.request_type==="CONSULTING")return r.service_detail?.subject||"งานที่ปรึกษา";if(r.service_group==="ELECTRICAL")return "ตรวจสอบและรับรองระบบไฟฟ้าและบริภัณฑ์ไฟฟ้า";const m=r.service_detail?.measurements||{};return Object.values(m).map(x=>`${x.name} จำนวน ${x.count||0} ${x.unit||""}`).join("\n")||"บริการตรวจวัดด้านสุขศาสตร์อุตสาหกรรม"}
-function applyRequest(){const r=requests.find(x=>x.id===requestId.value);if(!r)return;customerName.value=r.customer_name||r.contact_name||"";organizationName.value=r.organization_name||"";customerTaxId.value=r.company_tax_id||"";customerBranch.value=r.company_branch_type==="BRANCH"?"สาขา "+(r.company_branch_no||""):"สำนักงานใหญ่";email.value=r.email||"";phone.value=r.phone||r.contact_phone||"";billingAddress.value=requestAddress(r);documentSubject.value=requestDescription(r);items.innerHTML="";addItemFrom({description:requestDescription(r),quantity:1,unit:r.request_type==="TRAINING"?"งาน":"งาน",unit_price:0,discount_amount:0},true);recalc()}
+function applyRequest(){const r=requests.find(x=>x.id===requestId.value);if(!r)return;customerName.value=r.customer_name||r.contact_name||"";organizationName.value=r.organization_name||"";customerTaxId.value=r.company_tax_id||"";customerBranch.value=r.company_branch_type==="BRANCH"?"สาขา "+(r.company_branch_no||""):"สำนักงานใหญ่";email.value=r.email||"";phone.value=r.phone||r.contact_phone||"";billingAddress.value=requestAddress(r);documentSubject.value=requestDescription(r);items.innerHTML="";addItemFrom({description:requestDescription(r),quantity:1,unit:r.request_type==="TRAINING"?"งาน":"งาน",unit_price:0,discount_amount:0});recalc()}
+function autoGrow(el){
+  if(!el)return;
+  el.style.height="auto";
+  el.style.height=Math.max(54,el.scrollHeight)+"px";
+}
 function updateItemCard(r){
   if(!r)return;
   const desc=String(r.querySelector("textarea.desc")?.value||"").trim();
   const qty=Number(r.querySelector("input.qty")?.value||0);
-  const unit=String(r.querySelector("input.unit")?.value||"").trim();
   const price=Number(r.querySelector("input.price")?.value||0);
   const disc=Number(r.querySelector("input.disc")?.value||0);
   const total=Math.max(0,qty*price-disc);
@@ -2273,12 +2371,6 @@ function renumberItems(){
     if(index)index.textContent=`รายการที่ ${i+1}`;
   });
 }
-function toggleItem(btn){
-  const r=btn?.closest(".item");
-  if(!r)return;
-  r.classList.toggle("expanded");
-  btn.textContent=r.classList.contains("expanded")?"ย่อรายละเอียด":"ดูรายละเอียด";
-}
 function removeItem(btn){
   const r=btn?.closest(".item");
   if(!r)return;
@@ -2286,9 +2378,9 @@ function removeItem(btn){
   renumberItems();
   recalc();
 }
-function addItemFrom(x={},expand=false){
+function addItemFrom(x={}){
   const d=document.createElement("div");
-  d.className="item"+(expand?" expanded":"");
+  d.className="item expanded";
   d.innerHTML=`
     <div class="item-head">
       <div class="item-title-wrap">
@@ -2296,12 +2388,11 @@ function addItemFrom(x={},expand=false){
         <span class="item-summary">${esc(x.description||"รายการใหม่")}</span>
       </div>
       <div class="item-money">0.00 บาท</div>
-      <button class="item-toggle" type="button" onclick="toggleItem(this)">${expand?"ย่อรายละเอียด":"ดูรายละเอียด"}</button>
     </div>
     <div class="item-detail">
       <div class="desc-wrap">
         <label>รายละเอียด</label>
-        <textarea class="input desc" rows="3">${esc(x.description||"")}</textarea>
+        <textarea class="input desc" rows="2">${esc(x.description||"")}</textarea>
       </div>
       <div><label>จำนวน</label><input class="input qty" type="number" step=".01" value="${x.quantity??1}"></div>
       <div><label>หน่วย</label><input class="input unit" value="${esc(x.unit||"งาน")}"></div>
@@ -2309,16 +2400,18 @@ function addItemFrom(x={},expand=false){
       <div><label>ส่วนลด</label><input class="input disc" type="number" step=".01" value="${x.discount_amount??0}"></div>
       <button class="btn danger" type="button" onclick="removeItem(this)">ลบรายการ</button>
     </div>`;
+  const ta=d.querySelector("textarea.desc");
   d.querySelectorAll("textarea,input").forEach(el=>el.addEventListener("input",()=>{
+    if(el===ta)autoGrow(ta);
     updateItemCard(d);
     recalc();
   }));
   items.appendChild(d);
   renumberItems();
   updateItemCard(d);
-  if(expand)setTimeout(()=>d.querySelector("textarea.desc")?.focus(),0);
+  requestAnimationFrame(()=>autoGrow(ta));
 }
-function addItem(){addItemFrom({},true)}
+function addItem(){addItemFrom({})}
 function collectItems(){
   return [...items.querySelectorAll(".item")].map((r,i)=>{
     const qtyEl=r.querySelector("input.qty");
@@ -2346,17 +2439,18 @@ function collectItems(){
 }
 function calc(){const a=collectItems(),subtotal=a.reduce((s,x)=>s+x.line_total,0),vat=subtotal*Number(vatRate.value||0)/100,grand=subtotal+vat,wht=subtotal*Number(whtRate.value||0)/100,net=grand-wht;return{a,subtotal,vat,grand,wht,net}}
 function recalc(){const c=calc();sumSubtotal.textContent=money(c.subtotal);sumVat.textContent=money(c.vat);sumGrand.textContent=money(c.grand);sumWht.textContent=money(c.wht);sumNet.textContent=money(c.net);renderPaper(c)}
-function renderPaper(c){paper.innerHTML=`<div class="doc-head"><div class="seller"><img class="paper-logo" src="SANTE-logo-primary.png"><div class="seller-info"><strong class="seller-company">${SANTE.name}</strong><div>${SANTE.address}</div><div>เลขประจำตัวผู้เสียภาษี: ${SANTE.taxId}</div><div>โทร: ${SANTE.phone} · ${SANTE.email}</div><div>${SANTE.website}</div></div></div><div><div class="doc-title">ใบเสนอราคา</div><div class="docbox"><b>เลขที่เอกสาร</b><span>${quotationNo.textContent.split(" · ")[0]||"(สร้างเมื่อบันทึก)"}</span><b>วันที่ออก</b><span>${issueDate.value||"-"}</span><b>ใช้ได้ถึง</b><span>${validUntil.value||"-"}</span><b>อ้างอิง</b><span>${requestId.value?requests.find(x=>x.id===requestId.value)?.request_no||"-":"-"}</span></div></div></div>
+function renderPaper(c){paper.innerHTML=`<div class="doc-head"><div class="seller"><img class="paper-logo" src="SANTE-logo-primary.png"><div class="seller-info"><strong class="seller-company">${SANTE.name}</strong><div>${sellerAddressHtml()}</div><div>เลขประจำตัวผู้เสียภาษี: ${SANTE.taxId}</div><div>โทร: ${SANTE.phone} · ${SANTE.email}</div><div>${SANTE.website}</div></div></div><div><div class="copy-label">${quotationCopyLabel()}</div><div class="doc-title">ใบเสนอราคา</div><div class="docbox"><b>เลขที่เอกสาร</b><span>${quotationNo.textContent.split(" · ")[0]||"(สร้างเมื่อบันทึก)"}</span><b>วันที่ออก</b><span>${issueDate.value||"-"}</span><b>ใช้ได้ถึง</b><span>${validUntil.value||"-"}</span><b>อ้างอิง</b><span>${requestId.value?requests.find(x=>x.id===requestId.value)?.request_no||"-":"-"}</span></div></div></div>
 <div class="party"><div><h4>ลูกค้า</h4><strong class="party-company">${esc(organizationName.value||customerName.value||"-")}</strong><div>${esc(billingAddress.value||"-")}</div><div>เลขที่ภาษี: ${esc(customerTaxId.value||"-")} ${esc(customerBranch.value||"")}</div></div><div><h4>ติดต่อกลับที่</h4><div>${esc(customerName.value||"-")}</div><div>${esc(phone.value||"-")}</div><div>${esc(email.value||"-")}</div></div></div>
 <table class="qtable"><thead><tr><th>คำอธิบาย</th><th>จำนวน</th><th>หน่วย</th><th>ราคา</th><th>ส่วนลด</th><th>VAT</th><th>มูลค่า</th></tr></thead><tbody>${c.a.length ? c.a.map((x,i)=>`<tr><td>${i+1}. ${esc(x.description).replaceAll("\n","<br>")}</td><td>${money(x.quantity)}</td><td>${esc(x.unit)}</td><td>${money(x.unit_price)}</td><td>${money(x.discount_amount)}</td><td>${vatRate.value}%</td><td>${money(x.line_total)}</td></tr>`).join("") : `<tr><td colspan="7" style="padding:28px;text-align:center;color:#72869b">ยังไม่มีรายการ</td></tr>`}</tbody></table><div class="doc-spacer"></div>
 <div class="doc-summary"><div><b>สรุป</b><div class="sumrow"><span>มูลค่าที่คำนวณภาษี</span><span>${money(c.subtotal)} บาท</span></div><div class="sumrow"><span>ภาษีมูลค่าเพิ่ม ${vatRate.value}%</span><span>${money(c.vat)} บาท</span></div><div class="sumrow"><span>หัก ณ ที่จ่าย ${whtRate.value}%</span><span>${money(c.wht)} บาท</span></div></div><div><div class="totalbox"><span>จำนวนเงินทั้งสิ้น</span><span>${money(c.grand)} บาท</span></div><div class="sumrow"><b>จำนวนเงินที่ชำระสุทธิ</b><b>${money(c.net)} บาท</b></div></div></div>
 <div class="bank"><b>ชำระเงิน</b> · ${SANTE.bank} · ชื่อบัญชี ${SANTE.bankName} · เลขบัญชี ${SANTE.bankAccount}</div><div class="footer-note"><b>เงื่อนไข:</b> ${esc(terms.value)}<br><b>หมายเหตุ:</b> ${esc(note.value||"-")}</div>
 <div class="cert"><div><img class="sig" src="sante-signature-director.png"><small><b>${SANTE.signer}</b><br>ผู้ออกเอกสาร (ผู้ขาย)</small></div><div><img class="sig" src="sante-signature-director.png"><small><b>${SANTE.signer}</b><br>ผู้อนุมัติเอกสาร (ผู้ขาย)</small></div><div><img class="stamp" src="sante-company-stamp.png"><small>ตราประทับ (ผู้ขาย)</small></div></div>`}
-async function openEditor(id=null,req=null){resetEditor();editingId=id;if(id){const q=quotes.find(x=>x.id===id);if(!q)return;editorTitle.textContent="แก้ไขใบเสนอราคา";quotationNo.textContent=q.quotation_no+" · Rev."+(q.revision_no||0);requestId.value=q.service_request_id||"";customerName.value=q.customer_name||"";organizationName.value=q.organization_name||"";customerTaxId.value=q.customer_tax_id||"";customerBranch.value=q.customer_branch||"";email.value=q.email||"";phone.value=q.phone||"";billingAddress.value=q.billing_address||"";documentSubject.value=q.document_subject||"";issueDate.value=q.issue_date||"";validUntil.value=q.valid_until||"";vatRate.value=q.vat_rate??7;whtRate.value=q.wht_rate??3;note.value=q.note||"";terms.value=q.terms||"";const ir=await db.from("quotation_items").select("*").eq("quotation_id",id).order("sort_order");items.innerHTML="";(ir.data||[]).forEach(x=>addItemFrom(x,false));if(!(ir.data||[]).length)addItem();recalc()}else if(req){requestId.value=req;applyRequest()}editor.classList.add("show");editor.scrollTop=0;recalc()}
+async function openEditor(id=null,req=null){resetEditor();editingId=id;if(id){const q=quotes.find(x=>x.id===id);if(!q)return;editorTitle.textContent="แก้ไขใบเสนอราคา";quotationNo.textContent=q.quotation_no+" · Rev."+(q.revision_no||0);requestId.value=q.service_request_id||"";customerName.value=q.customer_name||"";organizationName.value=q.organization_name||"";customerTaxId.value=q.customer_tax_id||"";customerBranch.value=q.customer_branch||"";email.value=q.email||"";phone.value=q.phone||"";billingAddress.value=q.billing_address||"";documentSubject.value=q.document_subject||"";issueDate.value=q.issue_date||"";validUntil.value=q.valid_until||"";vatRate.value=q.vat_rate??7;whtRate.value=q.wht_rate??3;note.value=q.note||"";terms.value=q.terms||"";const ir=await db.from("quotation_items").select("*").eq("quotation_id",id).order("sort_order");items.innerHTML="";(ir.data||[]).forEach(x=>addItemFrom(x));if(!(ir.data||[]).length)addItem();recalc()}else if(req){requestId.value=req;applyRequest()}editor.classList.add("show");editor.scrollTop=0;recalc()}
 function closeEditor(){editor.classList.remove("show")}
 async function saveQuotation(send){
  const c=calc();
  if(!String(organizationName?.value||"").trim()&&!String(customerName?.value||"").trim())return toast("กรุณากรอกลูกค้าหรือบริษัท");
+ if(!requestId.value)return alert("กรุณาเลือกคำขอบริการก่อนบันทึกใบเสนอราคา");
  if(!c.a.length)return toast("กรุณาเพิ่มรายการ");
  const params={
    p_quotation_id:editingId||null,
@@ -2403,7 +2497,6 @@ async function saveQuotation(send){
 window.openEditor=openEditor;
 window.closeEditor=closeEditor;
 window.addItem=addItem;
-window.toggleItem=toggleItem;
 window.removeItem=removeItem;
 window.recalc=recalc;
 
@@ -2420,6 +2513,7 @@ createQuotationBtn?.addEventListener("click",async()=>{
   }
 });
 
+document.querySelectorAll('input[name="quotationCopyMode"]').forEach(r=>r.addEventListener("change",recalc));
 search?.addEventListener("input",render);
 statusFilter?.addEventListener("change",render);
 globalSearch?.addEventListener("input",()=>{search.value=globalSearch.value;render()});
