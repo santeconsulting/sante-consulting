@@ -1,0 +1,38 @@
+/* SANTE SYSTEM R14.1 PDF Footer Balance Fix */
+
+.pdf-signature-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 60px;
+    width: 100%;
+    margin-top: 30px;
+    text-align: center;
+    align-items: start;
+}
+
+.pdf-sign-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 150px;
+}
+
+.pdf-signature-image {
+    width: 150px;
+    height: 70px;
+    object-fit: contain;
+    margin-bottom: 10px;
+}
+
+.pdf-company-stamp {
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
+    margin-top: -5px;
+}
+
+.pdf-role {
+    font-size: 11px;
+    margin-top: 5px;
+}
