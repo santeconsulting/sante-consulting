@@ -607,33 +607,58 @@ body{font-family:"Prompt",sans-serif!important;background:var(--bg)!important;co
 <meta name="sante-sidebar-build" content="UNIFIED-ADMIN-SIDEBAR-R1-ADMIN-CERTIFICATES.HTML">
 <meta name="sante-build" content="CERTIFICATE-SYNC-ISSUER-FIX-R4">
 
-<style id="sante-certificates-dashboard-alignment-final">
-/* SANTE Admin Certificates alignment with Dashboard/Courses shell */
-:root{
-  --sidebar:285px;
+<style id="sante-certificates-unified-shell-v2">
+/* Unified with admin-dashboard.html / admin-courses.html */
+body{
+  background:#f4f8fc;
 }
+.sidebar{
+  width:260px;
+}
+.main-content,
 .main{
-  margin-left:var(--sidebar);
+  margin-left:260px;
+  min-height:100vh;
 }
 .topbar{
-  position:fixed;
-  top:0;
-  left:var(--sidebar);
-  right:0;
-  z-index:500;
+  height:74px;
+  padding:0 28px;
 }
-.content{
-  padding-top:30px;
+.page-container,
+.content,
+.container{
+  max-width:none;
+  padding-left:28px;
+  padding-right:28px;
 }
-.panel,.card,.certificate-panel{
+.hero,
+.hero-banner,
+.banner{
+  border-radius:24px;
+  overflow:hidden;
+}
+.card,
+.panel,
+.stat-card,
+.content-card{
   border-radius:20px;
+  border:1px solid #dbe7f3;
 }
-.btn,.button{
+button,
+.btn{
   border-radius:12px;
 }
+.table-wrap,
+.table-container{
+  border-radius:18px;
+  overflow:hidden;
+}
 @media(max-width:900px){
-  .main{margin-left:0;}
-  .topbar{left:0;}
+ .main-content,.main{margin-left:0;}
+ .page-container,.content,.container{
+   padding-left:16px;
+   padding-right:16px;
+ }
 }
 </style>
 
