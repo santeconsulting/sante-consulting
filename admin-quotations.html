@@ -2125,6 +2125,7 @@ textarea{
 
 <meta name="sante-build" content="QUOTATION-R8-REFERENCE-UX">
 <meta name="sante-build" content="QUOTATION-R9-SELLER-ADDRESS-FIX">
+<meta name="sante-build" content="QUOTATION-CREATE-FIX-R10">
 </head>
 <body>
 
@@ -2345,7 +2346,7 @@ async function init(){
 async function loadAll(){const [q,r]=await Promise.all([db.from("quotations").select("*").order("created_at",{ascending:false}),db.from("service_requests").select("*").order("created_at",{ascending:false})]);if(q.error){alert(q.error.message);return}quotes=q.data||[];requests=r.data||[];render();fillRequests()}
 function render(){const q=search.value.toLowerCase().trim(),st=statusFilter.value;const rows=quotes.filter(x=>(!q||[x.quotation_no,x.customer_name,x.organization_name].join(" ").toLowerCase().includes(q))&&(!st||x.status===st));sAll.textContent=quotes.length;sDraft.textContent=quotes.filter(x=>x.status==="DRAFT").length;sSent.textContent=quotes.filter(x=>x.status==="SENT").length;sApproved.textContent=quotes.filter(x=>x.status==="APPROVED").length;sClosed.textContent=quotes.filter(x=>["REJECTED","EXPIRED"].includes(x.status)).length;body.innerHTML=rows.length?rows.map(x=>`<tr><td><strong>${esc(x.quotation_no)}</strong></td><td>${esc(x.organization_name||x.customer_name||"-")}<div class="muted">${esc(x.customer_name||"")}</div></td><td>${esc(x.issue_date||"-")}</td><td>${esc(x.valid_until||"-")}</td><td>${x.revision_no||0}</td><td>${money(x.grand_total)}</td><td>${money(x.wht_amount)}</td><td>${money(x.net_receivable)}</td><td><span class="badge">${esc(x.status)}</span></td><td><button class="btn light" onclick="openEditor('${x.id}')">เปิด / แก้ไข</button></td></tr>`).join(""):`<tr><td colspan="10" style="padding:28px;text-align:center;color:#72869b">ยังไม่มีใบเสนอราคา — ไปที่ งานบริการ → คำขอบริการ → เปิดรายละเอียด → สร้างใบเสนอราคา</td></tr>`}
 function fillRequests(){requestId.innerHTML='<option value="">ไม่ผูกคำขอ</option>'+requests.map(x=>`<option value="${x.id}">${esc(x.request_no||"-")} · ${esc(x.organization_name||x.customer_name||"")}</option>`).join("")}
-function resetEditor(){editingId=null;editorTitle.textContent="สร้างใบเสนอราคา";quotationNo.textContent="";requestId.value="";customerName.value=organizationName.value=customerTaxId.value=customerBranch.value=email.value=phone.value=billingAddress.value=documentSubject.value=note.value="";issueDate.value=new Date().toISOString().slice(0,10);validUntil.value=addDays(issueDate.value,60);vatRate.value=7;whtRate.value=3;terms.value="ใบเสนอราคามีอายุ 60 วัน และเครดิตเทอม 30 วัน หลังการให้บริการ";items.innerHTML="";addItem();recalc()}
+function resetEditor(){editingId=null;editorTitle.textContent="สร้างใบเสนอราคา";quotationNo.textContent="";requestId.value="";customerName.value=organizationName.value=customerTaxId.value=customerBranch.value=email.value=phone.value=billingAddress.value=documentSubject.value=note.value="";issueDate.value=new Date().toISOString().slice(0,10);validUntil.value=addDays(issueDate.value,60);vatRate.value=7;whtRate.value=3;terms.value="ใบเสนอราคามีอายุ 60 วัน และเครดิตเทอม 30 วัน หลังการให้บริการ";items.innerHTML="";addItem();try{recalc()}catch(e){console.warn('initial preview error',e)}}
 function requestAddress(r){return [r.address_no,r.moo&&"หมู่ "+r.moo,r.building,r.soi&&"ซอย "+r.soi,r.road&&"ถนน"+r.road,r.subdistrict,r.district,r.province,r.postcode].filter(Boolean).join(" ")}
 function requestDescription(r){if(r.request_type==="TRAINING")return `${r.course_name||"อบรม In-house"} จำนวน ${r.participant_count||"-"} คน`;if(r.request_type==="CONSULTING")return r.service_detail?.subject||"งานที่ปรึกษา";if(r.service_group==="ELECTRICAL")return "ตรวจสอบและรับรองระบบไฟฟ้าและบริภัณฑ์ไฟฟ้า";const m=r.service_detail?.measurements||{};return Object.values(m).map(x=>`${x.name} จำนวน ${x.count||0} ${x.unit||""}`).join("\n")||"บริการตรวจวัดด้านสุขศาสตร์อุตสาหกรรม"}
 function applyRequest(){const r=requests.find(x=>x.id===requestId.value);if(!r)return;customerName.value=r.customer_name||r.contact_name||"";organizationName.value=r.organization_name||"";customerTaxId.value=r.company_tax_id||"";customerBranch.value=r.company_branch_type==="BRANCH"?"สาขา "+(r.company_branch_no||""):"สำนักงานใหญ่";email.value=r.email||"";phone.value=r.phone||r.contact_phone||"";billingAddress.value=requestAddress(r);documentSubject.value=requestDescription(r);items.innerHTML="";addItemFrom({description:requestDescription(r),quantity:1,unit:r.request_type==="TRAINING"?"งาน":"งาน",unit_price:0,discount_amount:0});recalc()}
@@ -2440,13 +2441,70 @@ function collectItems(){
 }
 function calc(){const a=collectItems(),subtotal=a.reduce((s,x)=>s+x.line_total,0),vat=subtotal*Number(vatRate.value||0)/100,grand=subtotal+vat,wht=subtotal*Number(whtRate.value||0)/100,net=grand-wht;return{a,subtotal,vat,grand,wht,net}}
 function recalc(){const c=calc();sumSubtotal.textContent=money(c.subtotal);sumVat.textContent=money(c.vat);sumGrand.textContent=money(c.grand);sumWht.textContent=money(c.wht);sumNet.textContent=money(c.net);renderPaper(c)}
+
+function quotationCopyMode(){
+  return document.querySelector('input[name="quotationCopyMode"]:checked')?.value || "ORIGINAL";
+}
+function quotationCopyLabel(){
+  return quotationCopyMode()==="COPY" ? "(สำเนา)" : "(ต้นฉบับ)";
+}
+
 function renderPaper(c){paper.innerHTML=`<div class="doc-head"><div class="seller"><img class="paper-logo" src="SANTE-logo-primary.png"><div class="seller-info"><strong class="seller-company">${SANTE.name}</strong><div>49 ถนนทางหลวงสาย 3191 ตำบลมาบข่า อำเภอนิคมพัฒนา<br>จังหวัดระยอง 21180</div><div>เลขประจำตัวผู้เสียภาษี: ${SANTE.taxId}</div><div>โทร: ${SANTE.phone} · ${SANTE.email}</div><div>${SANTE.website}</div></div></div><div><div class="copy-label">${quotationCopyLabel()}</div><div class="doc-title">ใบเสนอราคา</div><div class="docbox"><b>เลขที่เอกสาร</b><span>${quotationNo.textContent.split(" · ")[0]||"(สร้างเมื่อบันทึก)"}</span><b>วันที่ออก</b><span>${issueDate.value||"-"}</span><b>ใช้ได้ถึง</b><span>${validUntil.value||"-"}</span><b>อ้างอิง</b><span>${requestId.value?requests.find(x=>x.id===requestId.value)?.request_no||"-":"-"}</span></div></div></div>
 <div class="party"><div><h4>ลูกค้า</h4><strong class="party-company">${esc(organizationName.value||customerName.value||"-")}</strong><div>${esc(billingAddress.value||"-")}</div><div>เลขที่ภาษี: ${esc(customerTaxId.value||"-")} ${esc(customerBranch.value||"")}</div></div><div><h4>ติดต่อกลับที่</h4><div>${esc(customerName.value||"-")}</div><div>${esc(phone.value||"-")}</div><div>${esc(email.value||"-")}</div></div></div>
 <table class="qtable"><thead><tr><th>คำอธิบาย</th><th>จำนวน</th><th>หน่วย</th><th>ราคา</th><th>ส่วนลด</th><th>VAT</th><th>มูลค่า</th></tr></thead><tbody>${c.a.length ? c.a.map((x,i)=>`<tr><td>${i+1}. ${esc(x.description).replaceAll("\n","<br>")}</td><td>${money(x.quantity)}</td><td>${esc(x.unit)}</td><td>${money(x.unit_price)}</td><td>${money(x.discount_amount)}</td><td>${vatRate.value}%</td><td>${money(x.line_total)}</td></tr>`).join("") : `<tr><td colspan="7" style="padding:28px;text-align:center;color:#72869b">ยังไม่มีรายการ</td></tr>`}</tbody></table><div class="doc-spacer"></div>
 <div class="doc-summary"><div><b>สรุป</b><div class="sumrow"><span>มูลค่าที่คำนวณภาษี</span><span>${money(c.subtotal)} บาท</span></div><div class="sumrow"><span>ภาษีมูลค่าเพิ่ม ${vatRate.value}%</span><span>${money(c.vat)} บาท</span></div><div class="sumrow"><span>หัก ณ ที่จ่าย ${whtRate.value}%</span><span>${money(c.wht)} บาท</span></div></div><div><div class="totalbox"><span>จำนวนเงินทั้งสิ้น</span><span>${money(c.grand)} บาท</span></div><div class="sumrow"><b>จำนวนเงินที่ชำระสุทธิ</b><b>${money(c.net)} บาท</b></div></div></div>
 <div class="bank"><b>ชำระเงิน</b> · ${SANTE.bank} · ชื่อบัญชี ${SANTE.bankName} · เลขบัญชี ${SANTE.bankAccount}</div><div class="footer-note"><b>เงื่อนไข:</b> ${esc(terms.value)}<br><b>หมายเหตุ:</b> ${esc(note.value||"-")}</div>
 <div class="cert"><div><img class="sig" src="sante-signature-director.png"><small><b>${SANTE.signer}</b><br>ผู้ออกเอกสาร (ผู้ขาย)</small></div><div><img class="sig" src="sante-signature-director.png"><small><b>${SANTE.signer}</b><br>ผู้อนุมัติเอกสาร (ผู้ขาย)</small></div><div><img class="stamp" src="sante-company-stamp.png"><small>ตราประทับ (ผู้ขาย)</small></div></div>`}
-async function openEditor(id=null,req=null){resetEditor();editingId=id;if(id){const q=quotes.find(x=>x.id===id);if(!q)return;editorTitle.textContent="แก้ไขใบเสนอราคา";quotationNo.textContent=q.quotation_no+" · Rev."+(q.revision_no||0);requestId.value=q.service_request_id||"";customerName.value=q.customer_name||"";organizationName.value=q.organization_name||"";customerTaxId.value=q.customer_tax_id||"";customerBranch.value=q.customer_branch||"";email.value=q.email||"";phone.value=q.phone||"";billingAddress.value=q.billing_address||"";documentSubject.value=q.document_subject||"";issueDate.value=q.issue_date||"";validUntil.value=q.valid_until||"";vatRate.value=q.vat_rate??7;whtRate.value=q.wht_rate??3;note.value=q.note||"";terms.value=q.terms||"";const ir=await db.from("quotation_items").select("*").eq("quotation_id",id).order("sort_order");items.innerHTML="";(ir.data||[]).forEach(x=>addItemFrom(x));if(!(ir.data||[]).length)addItem();recalc()}else if(req){requestId.value=req;applyRequest()}editor.classList.add("show");editor.scrollTop=0;recalc()}
+async function openEditor(id=null,req=null){
+  resetEditor();
+  editingId=id;
+
+  if(id){
+    const q=quotes.find(x=>x.id===id);
+    if(!q)return;
+    editorTitle.textContent="แก้ไขใบเสนอราคา";
+    quotationNo.textContent=q.quotation_no+" · Rev."+(q.revision_no||0);
+    requestId.value=q.service_request_id||"";
+    customerName.value=q.customer_name||"";
+    organizationName.value=q.organization_name||"";
+    customerTaxId.value=q.customer_tax_id||"";
+    customerBranch.value=q.customer_branch||"";
+    email.value=q.email||"";
+    phone.value=q.phone||"";
+    billingAddress.value=q.billing_address||"";
+    documentSubject.value=q.document_subject||"";
+    issueDate.value=q.issue_date||"";
+    validUntil.value=q.valid_until||"";
+    vatRate.value=q.vat_rate??7;
+    whtRate.value=q.wht_rate??3;
+    note.value=q.note||"";
+    terms.value=q.terms||"";
+
+    const ir=await db.from("quotation_items")
+      .select("*")
+      .eq("quotation_id",id)
+      .order("sort_order");
+
+    items.innerHTML="";
+    (ir.data||[]).forEach(x=>addItemFrom(x));
+    if(!(ir.data||[]).length)addItem();
+  }else if(req){
+    requestId.value=req;
+    applyRequest();
+  }
+
+  editor.classList.add("show");
+  editor.scrollTop=0;
+
+  try{
+    recalc();
+  }catch(previewErr){
+    console.error("quotation preview render error",previewErr);
+    if(paper){
+      paper.innerHTML='<div style="padding:24px;color:#6f83a2;text-align:center">กำลังเตรียมตัวอย่างเอกสาร กรุณากรอกข้อมูลต่อได้ตามปกติ</div>';
+    }
+  }
+}
 function closeEditor(){editor.classList.remove("show")}
 async function saveQuotation(send){
  const c=calc();
@@ -2504,12 +2562,9 @@ window.recalc=recalc;
 const createQuotationBtn=document.getElementById("createQuotationBtn");
 createQuotationBtn?.addEventListener("click",async()=>{
   try{
-    // Open the modal immediately so the user gets visible feedback.
-    editor?.classList.add("show");
     await openEditor();
   }catch(err){
     console.error("open quotation editor failed",err);
-    editor?.classList.remove("show");
     alert("ไม่สามารถเปิดหน้าสร้างใบเสนอราคาได้\n"+(err?.message||err));
   }
 });
