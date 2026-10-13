@@ -1749,6 +1749,7 @@ textarea{
 </style>
 
 <meta name="sante-build" content="QUOTATION-CRITICAL-FIX-R4">
+<meta name="sante-build" content="QUOTATION-EDITOR-FIX-R5">
 </head>
 <body>
 
@@ -1967,7 +1968,31 @@ function requestAddress(r){return [r.address_no,r.moo&&"หมู่ "+r.moo,r.b
 function requestDescription(r){if(r.request_type==="TRAINING")return `${r.course_name||"อบรม In-house"} จำนวน ${r.participant_count||"-"} คน`;if(r.request_type==="CONSULTING")return r.service_detail?.subject||"งานที่ปรึกษา";if(r.service_group==="ELECTRICAL")return "ตรวจสอบและรับรองระบบไฟฟ้าและบริภัณฑ์ไฟฟ้า";const m=r.service_detail?.measurements||{};return Object.values(m).map(x=>`${x.name} จำนวน ${x.count||0} ${x.unit||""}`).join("\n")||"บริการตรวจวัดด้านสุขศาสตร์อุตสาหกรรม"}
 function applyRequest(){const r=requests.find(x=>x.id===requestId.value);if(!r)return;customerName.value=r.customer_name||r.contact_name||"";organizationName.value=r.organization_name||"";customerTaxId.value=r.company_tax_id||"";customerBranch.value=r.company_branch_type==="BRANCH"?"สาขา "+(r.company_branch_no||""):"สำนักงานใหญ่";email.value=r.email||"";phone.value=r.phone||r.contact_phone||"";billingAddress.value=requestAddress(r);documentSubject.value=requestDescription(r);items.innerHTML="";addItemFrom({description:requestDescription(r),quantity:1,unit:r.request_type==="TRAINING"?"งาน":"งาน",unit_price:0,discount_amount:0});recalc()}
 function addItemFrom(x={}){const d=document.createElement("div");d.className="item";d.innerHTML=`<div class="desc"><label>รายละเอียด</label><textarea class="input desc" rows="2" oninput="recalc()">${esc(x.description||"")}</textarea></div><div><label>จำนวน</label><input class="input qty" type="number" step=".01" value="${x.quantity??1}" oninput="recalc()"></div><div><label>หน่วย</label><input class="input unit" value="${esc(x.unit||"งาน")}" oninput="recalc()"></div><div><label>ราคา/หน่วย</label><input class="input price" type="number" step=".01" value="${x.unit_price??0}" oninput="recalc()"></div><div><label>ส่วนลด</label><input class="input disc" type="number" step=".01" value="${x.discount_amount??0}" oninput="recalc()"></div><button class="btn danger" onclick="this.parentElement.remove();recalc()">ลบ</button>`;items.appendChild(d)}function addItem(){addItemFrom()}
-function collectItems(){return [...items.querySelectorAll(".item")].map((r,i)=>{const q=Number(r.querySelector(".qty").value||0),p=Number(r.querySelector(".price").value||0),d=Number(r.querySelector(".disc").value||0);return{sort_order:i,description:r.querySelector(".desc").value.trim(),quantity:q,unit:r.querySelector(".unit").value.trim(),unit_price:p,discount_amount:d,line_total:Math.max(0,q*p-d),vat_applicable:true,wht_applicable:true,vat_rate:Number(vatRate.value||7),wht_rate:Number(whtRate.value||3)}}).filter(x=>x.description)}
+function collectItems(){
+  return [...items.querySelectorAll(".item")].map((r,i)=>{
+    const qtyEl=r.querySelector("input.qty");
+    const priceEl=r.querySelector("input.price");
+    const discEl=r.querySelector("input.disc");
+    const descEl=r.querySelector("textarea.desc");
+    const unitEl=r.querySelector("input.unit");
+    const q=Number(qtyEl?.value||0);
+    const p=Number(priceEl?.value||0);
+    const d=Number(discEl?.value||0);
+    return{
+      sort_order:i,
+      description:String(descEl?.value||"").trim(),
+      quantity:q,
+      unit:String(unitEl?.value||"").trim(),
+      unit_price:p,
+      discount_amount:d,
+      line_total:Math.max(0,q*p-d),
+      vat_applicable:true,
+      wht_applicable:true,
+      vat_rate:Number(vatRate.value||7),
+      wht_rate:Number(whtRate.value||3)
+    }
+  }).filter(x=>x.description)
+}
 function calc(){const a=collectItems(),subtotal=a.reduce((s,x)=>s+x.line_total,0),vat=subtotal*Number(vatRate.value||0)/100,grand=subtotal+vat,wht=subtotal*Number(whtRate.value||0)/100,net=grand-wht;return{a,subtotal,vat,grand,wht,net}}
 function recalc(){const c=calc();sumSubtotal.textContent=money(c.subtotal);sumVat.textContent=money(c.vat);sumGrand.textContent=money(c.grand);sumWht.textContent=money(c.wht);sumNet.textContent=money(c.net);renderPaper(c)}
 function renderPaper(c){paper.innerHTML=`<div class="doc-head"><div class="seller"><img class="paper-logo" src="SANTE-logo-primary.png"><div><strong>${SANTE.name}</strong><div>${SANTE.address}</div><div>เลขประจำตัวผู้เสียภาษี: ${SANTE.taxId}</div><div>โทร: ${SANTE.phone} · ${SANTE.email}</div><div>${SANTE.website}</div></div></div><div><div class="doc-title">ใบเสนอราคา</div><div class="docbox"><b>เลขที่เอกสาร</b><span>${quotationNo.textContent.split(" · ")[0]||"(สร้างเมื่อบันทึก)"}</span><b>วันที่ออก</b><span>${issueDate.value||"-"}</span><b>ใช้ได้ถึง</b><span>${validUntil.value||"-"}</span><b>อ้างอิง</b><span>${requestId.value?requests.find(x=>x.id===requestId.value)?.request_no||"-":"-"}</span></div></div></div>
@@ -1980,25 +2005,25 @@ async function openEditor(id=null,req=null){resetEditor();editingId=id;if(id){co
 function closeEditor(){editor.classList.remove("show")}
 async function saveQuotation(send){
  const c=calc();
- if(!organizationName.value.trim()&&!customerName.value.trim())return toast("กรุณากรอกลูกค้าหรือบริษัท");
+ if(!String(organizationName?.value||"").trim()&&!String(customerName?.value||"").trim())return toast("กรุณากรอกลูกค้าหรือบริษัท");
  if(!c.a.length)return toast("กรุณาเพิ่มรายการ");
  const params={
    p_quotation_id:editingId||null,
    p_service_request_id:requestId.value||null,
-   p_customer_name:customerName.value.trim()||null,
-   p_organization_name:organizationName.value.trim()||null,
-   p_customer_tax_id:customerTaxId.value.trim()||null,
-   p_customer_branch:customerBranch.value.trim()||null,
-   p_email:email.value.trim()||null,
-   p_phone:phone.value.trim()||null,
-   p_billing_address:billingAddress.value.trim()||null,
-   p_document_subject:documentSubject.value.trim()||null,
+   p_customer_name:String(customerName?.value||"").trim()||null,
+   p_organization_name:String(organizationName?.value||"").trim()||null,
+   p_customer_tax_id:String(customerTaxId?.value||"").trim()||null,
+   p_customer_branch:String(customerBranch?.value||"").trim()||null,
+   p_email:String(email?.value||"").trim()||null,
+   p_phone:String(phone?.value||"").trim()||null,
+   p_billing_address:String(billingAddress?.value||"").trim()||null,
+   p_document_subject:String(documentSubject?.value||"").trim()||null,
    p_issue_date:issueDate.value||null,
    p_valid_until:validUntil.value||null,
    p_vat_rate:Number(vatRate.value||7),
    p_wht_rate:Number(whtRate.value||3),
-   p_note:note.value.trim()||null,
-   p_terms:terms.value.trim()||null,
+   p_note:String(note?.value||"").trim()||null,
+   p_terms:String(terms?.value||"").trim()||null,
    p_items:c.a,
    p_send:!!send
  };
