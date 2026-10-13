@@ -607,61 +607,45 @@ body{font-family:"Prompt",sans-serif!important;background:var(--bg)!important;co
 <meta name="sante-sidebar-build" content="UNIFIED-ADMIN-SIDEBAR-R1-ADMIN-CERTIFICATES.HTML">
 <meta name="sante-build" content="CERTIFICATE-SYNC-ISSUER-FIX-R4">
 
-<style id="sante-certificates-unified-shell-v2">
-/* Unified with admin-dashboard.html / admin-courses.html */
-body{
-  background:#f4f8fc;
+
+
+
+<style id="sante-certificates-match-admin-courses-final">
+/* Match admin-courses master shell exactly */
+:root{--sidebar:285px!important}
+.sidebar{width:285px!important}
+.main{margin-left:var(--sidebar)!important;padding-top:88px!important}
+.topbar{left:var(--sidebar)!important;height:88px!important;padding:0 34px!important}
+.content{width:min(1540px,calc(100% - 58px))!important;margin:0 auto!important;padding:30px 0 65px!important}
+.canonical-hero,.dashboard-hero{
+ width:100%!important;
+ margin:0 0 28px!important;
+ padding:10px!important;
+ border-radius:28px!important;
+ background:#fff!important;
+ box-shadow:0 10px 30px rgba(8,45,105,.06)!important;
 }
-.sidebar{
-  width:260px;
+.canonical-hero img,.dashboard-hero img{
+ border-radius:22px!important;
+ width:100%!important;
+ height:auto!important;
+ object-fit:contain!important;
 }
-.main-content,
-.main{
-  margin-left:260px;
-  min-height:100vh;
+.page-head,.page-header,.head{
+ margin:2px 4px 22px!important;
 }
-.topbar{
-  height:74px;
-  padding:0 28px;
+.card,.panel,.content-card,.certificate-card,.issuer-card,.table-wrap{
+ border-radius:20px!important;
+ border:1px solid #d9e5ef!important;
 }
-.page-container,
-.content,
-.container{
-  max-width:none;
-  padding-left:28px;
-  padding-right:28px;
-}
-.hero,
-.hero-banner,
-.banner{
-  border-radius:24px;
-  overflow:hidden;
-}
-.card,
-.panel,
-.stat-card,
-.content-card{
-  border-radius:20px;
-  border:1px solid #dbe7f3;
-}
-button,
-.btn{
-  border-radius:12px;
-}
-.table-wrap,
-.table-container{
-  border-radius:18px;
-  overflow:hidden;
-}
+.btn{border-radius:12px!important}
 @media(max-width:900px){
- .main-content,.main{margin-left:0;}
- .page-container,.content,.container{
-   padding-left:16px;
-   padding-right:16px;
- }
+ .sidebar{width:min(84vw,320px)!important}
+ .main{margin-left:0!important}
+ .topbar{left:0!important}
+ .content{width:100%!important;padding:10px 12px 42px!important}
 }
 </style>
-
 </head>
 <body>
 <div class="loading" id="loading"><div class="loading-box"><strong>SANTE CERTIFICATE</strong><div>กำลังตรวจสอบสิทธิ์และโหลดข้อมูล...</div><div class="spinner"></div></div></div>
