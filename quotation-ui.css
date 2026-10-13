@@ -1,0 +1,9 @@
+.quotation-description textarea {
+ width:100%;
+ min-height:120px;
+ resize:none;
+ overflow:hidden;
+ line-height:1.6;
+}
+.signature-area img.signature { width:180px; }
+.signature-area img.stamp { width:90px; }
