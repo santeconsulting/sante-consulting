@@ -662,6 +662,26 @@ button{
   cursor:not-allowed;
 }
 
+.resend-btn{
+  min-height:48px;
+  padding:0 21px;
+  border:1px solid #cfe0f0;
+  border-radius:11px;
+  background:#eef6ff;
+  color:#145b9c;
+  font-size:13px;
+  font-weight:600;
+}
+
+.resend-btn:hover{
+  background:#e4f1ff;
+}
+
+.resend-btn:disabled{
+  opacity:.5;
+  cursor:not-allowed;
+}
+
 .message{
   display:none;
   margin:0 24px 18px;
@@ -2531,7 +2551,7 @@ textarea{
 </style>
 
 <meta name="sante-admin-mobile-final" content="R7">
-<meta name="sante-build" content="ADMIN-PAYMENTS-ACCOUNTING-LINK-R1">
+<meta name="sante-build" content="ADMIN-PAYMENTS-NOTIFY-R3-RESEND">
 
 <style id="sante-unified-admin-sidebar-r1">
 .sidebar{
@@ -2918,6 +2938,15 @@ textarea{
     </button>
 
     <button
+      id="resendNotificationButton"
+      class="resend-btn"
+      type="button"
+      style="display:none"
+    >
+      ↻ ส่งแจ้งเตือนอีกครั้ง
+    </button>
+
+    <button
       id="verifyButton"
       class="verify-btn"
     >
@@ -2935,6 +2964,9 @@ const SUPABASE_URL =
 
 const SUPABASE_KEY =
   "sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF";
+
+const WORKER_BASE =
+  "https://sante-notification-dispatcher.santeconsulting45.workers.dev";
 
 const db =
   supabase.createClient(
@@ -2954,6 +2986,7 @@ let payments = [];
 let currentFilter = "REVIEW";
 let selectedPayment = null;
 let verifying = false;
+let currentAdminSession = null;
 
 const list =
   document.getElementById(
@@ -2968,6 +3001,11 @@ const modal =
 const verifyButton =
   document.getElementById(
     "verifyButton"
+  );
+
+const resendNotificationButton =
+  document.getElementById(
+    "resendNotificationButton"
   );
 
 const modalMessage =
@@ -3188,6 +3226,8 @@ async function requireAdmin(){
     return null;
   }
 
+  currentAdminSession = session;
+
   document.getElementById(
     "adminEmail"
   ).textContent =
@@ -3269,7 +3309,7 @@ async function loadPayments(){
             db
             .from("profiles")
             .select(
-              "id,title_th,firstname_th,lastname_th,email"
+              "id,title_th,firstname_th,lastname_th,email,line_user_id,line_notifications_enabled"
             )
             .eq(
               "id",
@@ -3719,6 +3759,15 @@ async function openPayment(id){
       ? "✓ ชำระเงินแล้ว"
       : "✓ ยืนยันการชำระเงิน";
 
+  resendNotificationButton.style.display =
+    verified
+      ? "inline-flex"
+      : "none";
+
+  resendNotificationButton.disabled = false;
+  resendNotificationButton.textContent =
+    "↻ ส่งแจ้งเตือนอีกครั้ง";
+
   modal.classList.add(
     "show"
   );
@@ -3842,6 +3891,179 @@ async function loadSlipPreview(
   }
 }
 
+
+/* ======================================================
+   PAYMENT NOTIFICATION
+======================================================= */
+
+async function createPaymentNotification(
+  channel,
+  recipient,
+  subject,
+  message
+){
+  if(!recipient){
+    return {skipped:true};
+  }
+
+  const {
+    data,
+    error
+  } =
+    await db.rpc(
+      "admin_create_manual_notification",
+      {
+        p_channel:channel,
+        p_recipient:recipient,
+        p_subject:subject || null,
+        p_message:message
+      }
+    );
+
+  if(error){
+    throw error;
+  }
+
+  return {data};
+}
+
+
+async function enqueuePaymentVerifiedNotifications(
+  payment
+){
+  if(!payment){
+    return {
+      email:false,
+      line:false,
+      errors:[]
+    };
+  }
+
+  const participant =
+    fullName(payment.profile);
+
+  const course =
+    payment.course?.course_name_th ||
+    payment.item?.description ||
+    "รายการอบรม SANTE";
+
+  const session =
+    payment.session?.session_name ||
+    "-";
+
+  const paymentNo =
+    payment.payment_no || "-";
+
+  const amount =
+    money(payment.amount);
+
+  const subject =
+    "SANTE | ยืนยันการชำระเงินเรียบร้อยแล้ว";
+
+  const message = [
+    "SANTE SYSTEM",
+    "",
+    `เรียน ${participant}`,
+    "เราได้รับและยืนยันการชำระเงินของคุณเรียบร้อยแล้ว ✅",
+    `เลขที่ชำระเงิน: ${paymentNo}`,
+    `รายการ: ${course}`,
+    `รอบอบรม: ${session}`,
+    `ยอดชำระ: ${amount}`,
+    "",
+    "กรุณาเข้าสู่ระบบสมาชิก SANTE เพื่อตรวจสอบรายละเอียดและสิทธิ์การอบรม"
+  ].join("\n");
+
+  let email = false;
+  let line = false;
+  const errors = [];
+
+  if(payment.profile?.email){
+    try{
+      await createPaymentNotification(
+        "EMAIL",
+        payment.profile.email,
+        subject,
+        message
+      );
+      email = true;
+    }catch(error){
+      errors.push(
+        "EMAIL: " +
+        (error?.message || error)
+      );
+    }
+  }
+
+  if(
+    payment.profile?.line_user_id &&
+    payment.profile?.line_notifications_enabled !== false
+  ){
+    try{
+      await createPaymentNotification(
+        "LINE",
+        payment.profile.line_user_id,
+        subject,
+        message
+      );
+      line = true;
+    }catch(error){
+      errors.push(
+        "LINE: " +
+        (error?.message || error)
+      );
+    }
+  }
+
+  return {
+    email,
+    line,
+    errors
+  };
+}
+
+
+async function processNotificationsNow(){
+  const token =
+    currentAdminSession?.access_token;
+
+  if(!token){
+    throw new Error(
+      "ไม่พบ Admin session"
+    );
+  }
+
+  const response =
+    await fetch(
+      WORKER_BASE +
+      "/api/notifications/process-now",
+      {
+        method:"POST",
+        headers:{
+          "authorization":
+            `Bearer ${token}`,
+          "content-type":
+            "application/json"
+        },
+        body:"{}"
+      }
+    );
+
+  const data =
+    await response
+      .json()
+      .catch(()=>({}));
+
+  if(!response.ok){
+    throw new Error(
+      data.error ||
+      `HTTP ${response.status}`
+    );
+  }
+
+  return data;
+}
+
+
 /* ======================================================
    VERIFY
 ======================================================= */
@@ -3941,6 +4163,84 @@ async function verifyPayment(){
         new Date()
         .toISOString();
 
+    try{
+
+      const notifyResult =
+        await enqueuePaymentVerifiedNotifications(
+          selectedPayment
+        );
+
+      const channels = [];
+
+      if(notifyResult.email){
+        channels.push("Email");
+      }
+
+      if(notifyResult.line){
+        channels.push("LINE");
+      }
+
+      if(notifyResult.errors?.length){
+        console.warn(
+          "Payment notification enqueue warning:",
+          notifyResult.errors
+        );
+      }
+
+      if(channels.length){
+
+        try{
+
+          const processed =
+            await processNotificationsNow();
+
+          setModalMessage(
+            "success",
+            "ยืนยันการชำระเงินเรียบร้อยแล้ว และส่งแจ้งเตือน "+
+            channels.join(" + ")+
+            " แล้ว"+
+            (processed?.processed
+              ? ` (${processed.processed} รายการ)`
+              : "")
+          );
+
+        }catch(processError){
+
+          console.warn(
+            "Immediate payment notification processing failed; Cron will retry.",
+            processError
+          );
+
+          setModalMessage(
+            "success",
+            "ยืนยันการชำระเงินเรียบร้อยแล้ว และสร้างคิวแจ้งเตือน "+
+            channels.join(" + ")+
+            " แล้ว ระบบจะส่งซ้ำอัตโนมัติด้วย Cron"
+          );
+        }
+
+      }else{
+
+        setModalMessage(
+          "success",
+          "ยืนยันการชำระเงินเรียบร้อยแล้ว แต่ยังไม่พบช่องทางแจ้งเตือนที่พร้อมใช้งาน"
+        );
+      }
+
+    }catch(notificationError){
+
+      console.error(
+        "Payment notification error:",
+        notificationError
+      );
+
+      setModalMessage(
+        "success",
+        "ยืนยันการชำระเงินเรียบร้อยแล้ว แต่สร้างการแจ้งเตือนไม่สำเร็จ: "+
+        (notificationError?.message || notificationError)
+      );
+    }
+
     updateSummary();
     render();
 
@@ -3965,6 +4265,125 @@ async function verifyPayment(){
     verifying = false;
   }
 }
+
+
+async function resendPaymentNotification(){
+
+  if(
+    !selectedPayment ||
+    String(
+      selectedPayment.payment_status || ""
+    ).toUpperCase() !== "VERIFIED"
+  ){
+    return;
+  }
+
+  const confirmed =
+    confirm(
+      "ส่ง Email / LINE แจ้งยืนยันการชำระเงินรายการนี้อีกครั้งหรือไม่?\n\n"+
+      "การส่งซ้ำจะไม่เปลี่ยนสถานะการชำระเงิน และไม่กระทบข้อมูลบัญชี"
+    );
+
+  if(!confirmed){
+    return;
+  }
+
+  resendNotificationButton.disabled = true;
+  resendNotificationButton.textContent =
+    "กำลังส่งแจ้งเตือน...";
+
+  clearModalMessage();
+
+  try{
+
+    const notifyResult =
+      await enqueuePaymentVerifiedNotifications(
+        selectedPayment
+      );
+
+    const channels = [];
+
+    if(notifyResult.email){
+      channels.push("Email");
+    }
+
+    if(notifyResult.line){
+      channels.push("LINE");
+    }
+
+    if(notifyResult.errors?.length){
+      console.warn(
+        "Resend payment notification warnings:",
+        notifyResult.errors
+      );
+    }
+
+    if(!channels.length){
+
+      setModalMessage(
+        "error",
+        "ยังไม่พบ Email หรือ LINE ที่พร้อมใช้สำหรับสมาชิกนี้"
+      );
+
+      return;
+    }
+
+    try{
+
+      const processed =
+        await processNotificationsNow();
+
+      setModalMessage(
+        "success",
+        "ส่งแจ้งเตือนซ้ำ "+
+        channels.join(" + ")+
+        " เรียบร้อยแล้ว"+
+        (processed?.processed
+          ? ` (${processed.processed} รายการ)`
+          : "")
+      );
+
+    }catch(processError){
+
+      console.warn(
+        "Immediate resend processing failed; Cron will retry.",
+        processError
+      );
+
+      setModalMessage(
+        "success",
+        "สร้างคิวส่งแจ้งเตือนซ้ำ "+
+        channels.join(" + ")+
+        " แล้ว ระบบจะส่งอัตโนมัติด้วย Cron"
+      );
+    }
+
+  }catch(error){
+
+    console.error(
+      "Resend payment notification error:",
+      error
+    );
+
+    setModalMessage(
+      "error",
+      error?.message ||
+      "ไม่สามารถส่งแจ้งเตือนซ้ำได้"
+    );
+
+  }finally{
+
+    resendNotificationButton.disabled = false;
+    resendNotificationButton.textContent =
+      "↻ ส่งแจ้งเตือนอีกครั้ง";
+  }
+}
+
+
+resendNotificationButton.addEventListener(
+  "click",
+  resendPaymentNotification
+);
 
 verifyButton.addEventListener(
   "click",
