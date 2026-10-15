@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>ผู้ลงทะเบียนอบรม | SANTE Admin</title>
-<meta name="sante-build" content="TRAINING-REGISTRATIONS-R1">
+<meta name="sante-build" content="TRAINING-REGISTRATIONS-R3-IMMEDIATE-NOTIFY">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -350,7 +350,7 @@ body{font-family:"Prompt",sans-serif!important;background:var(--bg)!important;co
 
     <section class="panel">
       <div class="panel-head">
-        <div><h3 id="panelTitle">รายชื่อผู้ลงทะเบียน</h3><p>การเปลี่ยนสถานะเป็น CONFIRMED จะให้ Auto Notification Trigger ทำงานตามระบบที่ตั้งไว้</p></div>
+        <div><h3 id="panelTitle">รายชื่อผู้ลงทะเบียน</h3><p>เมื่อยืนยันเป็น CONFIRMED ระบบจะสร้างคิวแจ้งเตือน Email และ LINE สำหรับสมาชิกที่เชื่อมต่อ LINE แล้ว</p></div>
       </div>
       <div class="table-wrap">
         <table>
@@ -374,7 +374,85 @@ const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{
   auth:{storageKey:"sante-admin-auth",persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}
 });
 const $=id=>document.getElementById(id);
+const WORKER_BASE="https://sante-notification-dispatcher.santeconsulting45.workers.dev";
 let sessions=[], registrations=[], currentSessionId="";
+let currentAdminSession=null;
+
+function sessionOf(reg){
+  return sessions.find(s=>s.id===reg?.training_session_id)||null;
+}
+
+function trainingDateText(session){
+  if(!session?.training_start_at)return "-";
+  const d=new Date(session.training_start_at);
+  if(Number.isNaN(d.getTime()))return "-";
+  return new Intl.DateTimeFormat("th-TH",{dateStyle:"long",timeStyle:"short"}).format(d);
+}
+
+async function createNotification(channel,recipient,subject,message){
+  if(!recipient)return {skipped:true};
+  const {data,error}=await db.rpc("admin_create_manual_notification",{
+    p_channel:channel,
+    p_recipient:recipient,
+    p_subject:subject||null,
+    p_message:message
+  });
+  if(error)throw error;
+  return {data};
+}
+
+async function enqueueRegistrationConfirmedNotifications(reg){
+  if(!reg)return {email:false,line:false};
+
+  const session=sessionOf(reg);
+  const participant=nameOf(reg);
+  const course=session?.session_name||session?.session_code||"รอบอบรม SANTE";
+  const dateText=trainingDateText(session);
+
+  const subject="SANTE | ยืนยันการลงทะเบียนอบรมแล้ว";
+  const message=[
+    "SANTE SYSTEM",
+    "",
+    `เรียน ${participant}`,
+    "การลงทะเบียนอบรมของคุณได้รับการยืนยันแล้ว ✅",
+    `หลักสูตร/รอบอบรม: ${course}`,
+    `วันอบรม: ${dateText}`,
+    "",
+    "กรุณาเข้าสู่ระบบสมาชิก SANTE เพื่อตรวจสอบรายละเอียดเพิ่มเติม"
+  ].join("\n");
+
+  let email=false,line=false;
+  const errors=[];
+
+  if(reg.participant_email){
+    try{
+      await createNotification("EMAIL",reg.participant_email,subject,message);
+      email=true;
+    }catch(e){
+      errors.push("EMAIL: "+(e?.message||e));
+    }
+  }
+
+  if(reg.user_id){
+    try{
+      const {data:profile,error}=await db.from("profiles")
+        .select("line_user_id,line_notifications_enabled")
+        .eq("id",reg.user_id)
+        .maybeSingle();
+
+      if(error)throw error;
+
+      if(profile?.line_user_id && profile?.line_notifications_enabled!==false){
+        await createNotification("LINE",profile.line_user_id,subject,message);
+        line=true;
+      }
+    }catch(e){
+      errors.push("LINE: "+(e?.message||e));
+    }
+  }
+
+  return {email,line,errors};
+}
 
 function esc(v){return String(v??"").replace(/[&<>"']/g,s=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[s]))}
 function fmtDate(v){
@@ -399,10 +477,29 @@ function showNotice(text){$("notice").textContent=text;$("notice").classList.add
 async function requireAdmin(){
   const {data:{session}}=await db.auth.getSession();
   if(!session){location.replace("admin-login.html");return null}
+  currentAdminSession=session;
   $("adminEmail").textContent=session.user.email||"-";
   const {data:staff,error}=await db.rpc("is_staff");
   if(error||!staff){await db.auth.signOut();location.replace("admin-login.html");return null}
   return session;
+}
+
+async function processNotificationsNow(){
+  const token=currentAdminSession?.access_token;
+  if(!token)throw new Error("ไม่พบ Admin session");
+
+  const r=await fetch(WORKER_BASE+"/api/notifications/process-now",{
+    method:"POST",
+    headers:{
+      "authorization":`Bearer ${token}`,
+      "content-type":"application/json"
+    },
+    body:"{}"
+  });
+
+  const data=await r.json().catch(()=>({}));
+  if(!r.ok)throw new Error(data.error||`HTTP ${r.status}`);
+  return data;
 }
 
 async function loadSessions(){
@@ -481,11 +578,50 @@ function render(){
 
 async function setStatus(id,status){
   if(!confirm(`เปลี่ยนสถานะเป็น ${status} ?`))return;
+
+  const original=registrations.find(r=>r.id===id)||null;
+  const previousStatus=String(original?.registration_status||"").toUpperCase();
+
   const patch={registration_status:status};
   if(status==="CONFIRMED")patch.confirmed_at=new Date().toISOString();
+
   const {error}=await db.from("training_registrations").update(patch).eq("id",id);
   if(error){alert("บันทึกไม่สำเร็จ: "+error.message);return}
-  showNotice(`เปลี่ยนสถานะเป็น ${status} แล้ว`);
+
+  if(status==="CONFIRMED" && previousStatus!=="CONFIRMED"){
+    try{
+      const result=await enqueueRegistrationConfirmedNotifications({
+        ...original,
+        ...patch
+      });
+
+      const sent=[];
+      if(result.email)sent.push("Email");
+      if(result.line)sent.push("LINE");
+
+      if(result.errors?.length){
+        console.warn("Notification enqueue warning:",result.errors);
+      }
+
+      if(sent.length){
+        try{
+          const processed=await processNotificationsNow();
+          showNotice(`ยืนยันการลงทะเบียนแล้ว • สร้างคิว ${sent.join(" + ")} • ส่งทันที ${processed.processed||0} รายการ`);
+        }catch(processError){
+          console.warn("Immediate notification processing failed; Cron will retry.",processError);
+          showNotice(`ยืนยันการลงทะเบียนแล้ว และสร้างคิว ${sent.join(" + ")} เรียบร้อย • Cron จะส่งซ้ำอัตโนมัติ`);
+        }
+      }else{
+        showNotice("ยืนยันการลงทะเบียนแล้ว แต่ยังไม่พบช่องทางแจ้งเตือนที่พร้อมใช้งาน");
+      }
+    }catch(e){
+      console.error("enqueue registration notification failed",e);
+      showNotice("ยืนยันการลงทะเบียนแล้ว แต่สร้างคิวแจ้งเตือนไม่สำเร็จ: "+(e?.message||e));
+    }
+  }else{
+    showNotice(`เปลี่ยนสถานะเป็น ${status} แล้ว`);
+  }
+
   await loadRegistrations();
 }
 async function confirmRegistration(id){return setStatus(id,"CONFIRMED")}
