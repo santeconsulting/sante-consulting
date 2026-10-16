@@ -878,7 +878,7 @@ html,body{overflow-x:hidden!important}
 }
 
 </style>
-<meta name="sante-build" content="ADMIN-NOTIFICATIONS-DASHBOARD-EXACT-R5">
+<meta name="sante-build" content="ADMIN-NOTIFICATIONS-R2-STORAGE-TEST-R6">
 <meta name="sante-build" content="ADMIN-VISUAL-R11-DASH">
 
 <style id="sante-admin-unified-r1">
@@ -2727,12 +2727,15 @@ textarea{
 
 
   <div class="notification-intro">
-    สถานะ <strong>QUEUED</strong> หมายถึงข้อมูลพร้อมส่งแล้ว แต่จะยังไม่ส่งจริงจนกว่าจะเชื่อม Email Provider / LINE Messaging API และเปิด Worker Processor
+    ระบบ Email / LINE และ Worker Processor เปิดใช้งานแล้ว • ใช้หน้านี้ตรวจสอบ Queue, SENT/FAILED และทดสอบ Cloudflare R2 Storage
   </div>
 
   <section class="notification-test-panel">
     <input id="testEmail" type="email" placeholder="อีเมลสำหรับทดสอบ เช่น testmember@santeconsulting.co.th">
-    <button type="button" id="queueTestBtn" class="btn yellow">สร้าง Test Email</button>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button type="button" id="queueTestBtn" class="btn yellow">สร้าง Test Email</button>
+      <button type="button" id="r2TestBtn" class="btn btn-primary">ทดสอบ R2 Storage</button>
+    </div>
   </section>
 
   <div class="section-head">
@@ -2849,6 +2852,7 @@ textarea{
 
 <script>
 const SUPABASE_URL="https://cyegjwerxlxhczrfiurz.supabase.co";
+const WORKER_BASE="https://sante-notification-dispatcher.santeconsulting45.workers.dev";
 const SUPABASE_KEY="sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF";
 const AUTH_STORAGE_KEY="sante-admin-auth";
 
@@ -2867,6 +2871,7 @@ const esc=s=>String(s??"").replace(/[&<>"']/g,m=>({
 }[m]));
 
 let rows=[];
+let currentAdminSession=null;
 
 function statusBadge(value){
   const v=String(value||"").toUpperCase();
@@ -3114,6 +3119,54 @@ async function deleteNotification(id){
   await loadQueue();
 }
 
+async function testR2Storage(){
+  const btn=$("r2TestBtn");
+  if(!btn)return;
+
+  const token=currentAdminSession?.access_token;
+  if(!token){
+    alert("ไม่พบ Admin session");
+    return;
+  }
+
+  const original=btn.textContent;
+  btn.disabled=true;
+  btn.textContent="กำลังทดสอบ R2...";
+
+  try{
+    const response=await fetch(WORKER_BASE+"/api/r2/test",{
+      method:"POST",
+      headers:{
+        "authorization":`Bearer ${token}`,
+        "content-type":"application/json"
+      },
+      body:"{}"
+    });
+
+    const data=await response.json().catch(()=>({}));
+
+    if(!response.ok || data?.ok!==true){
+      throw new Error(data?.error||`HTTP ${response.status}`);
+    }
+
+    const r2=data.r2||{};
+    alert(
+      "R2 Storage ใช้งานได้เรียบร้อย ✅\\n\\n"+
+      `Key: ${r2.key||"-"}\\n`+
+      `Upload: ${r2.uploaded?"ผ่าน":"ไม่ผ่าน"}\\n`+
+      `Read back: ${r2.readBack?"ผ่าน":"ไม่ผ่าน"}\\n`+
+      `Size: ${r2.size??"-"} bytes`
+    );
+  }catch(error){
+    console.error("R2 test failed:",error);
+    alert("ทดสอบ R2 ไม่สำเร็จ: "+(error?.message||error));
+  }finally{
+    btn.disabled=false;
+    btn.textContent=original;
+  }
+}
+
+
 async function init(){
   try{
     const sessionResult=await db.auth.getSession();
@@ -3132,6 +3185,7 @@ async function init(){
       return;
     }
 
+    currentAdminSession=session;
     $("adminEmail").textContent=session.user.email||"";
     const adminName=$("adminName");
     if(adminName)adminName.textContent="ผู้ดูแลระบบ SANTE";
@@ -3177,6 +3231,7 @@ $("refreshBtn").addEventListener("click",async function(event){
   }
 });
 $("queueTestBtn").addEventListener("click",queueTestEmail);
+$("r2TestBtn").addEventListener("click",testR2Storage);
 
 $("logoutButton").addEventListener("click",async()=>{
   $("logoutButton").disabled=true;
