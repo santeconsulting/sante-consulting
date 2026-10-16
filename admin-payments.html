@@ -2551,7 +2551,7 @@ textarea{
 </style>
 
 <meta name="sante-admin-mobile-final" content="R7">
-<meta name="sante-build" content="ADMIN-PAYMENTS-NOTIFY-R3-RESEND">
+<meta name="sante-build" content="ADMIN-PAYMENTS-NOTIFY-R4-MEMBER-LINK">
 
 <style id="sante-unified-admin-sidebar-r1">
 .sidebar{
@@ -3970,7 +3970,8 @@ async function enqueuePaymentVerifiedNotifications(
     `รอบอบรม: ${session}`,
     `ยอดชำระ: ${amount}`,
     "",
-    "กรุณาเข้าสู่ระบบสมาชิก SANTE เพื่อตรวจสอบรายละเอียดและสิทธิ์การอบรม"
+    "กรุณาเข้าสู่ระบบสมาชิก SANTE เพื่อตรวจสอบรายละเอียดและสิทธิ์การอบรม",
+    "https://santeconsulting.co.th/member-home.html"
   ].join("\n");
 
   let email = false;
