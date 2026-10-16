@@ -141,6 +141,29 @@ label{display:block;font-size:11px;font-weight:600;margin-bottom:5px}.input,text
 </style>
 
 <meta name="sante-build" content="ACCOUNTING-COPY-MODE-R3">
+
+<style id="sante-accounting-r4">
+/* ACCOUNTING WORKFLOW R4 */
+.accounting-subnav a{position:relative}
+.accounting-subnav a.active:after{content:"";position:absolute;left:14px;right:14px;bottom:4px;height:2px;border-radius:2px;background:#ffbf19}
+.hero-actions .context-hidden{display:none!important}
+.workflow-hint{margin-top:12px;padding:10px 12px;border:1px solid #dce8f3;background:#f8fbff;border-radius:12px;color:#49657f;font-size:11px}
+.workflow-hint b{color:#082d69}
+.paper{padding:42px 44px 40px}
+.paper .head{border-bottom:2px solid #082d69;padding-bottom:14px}
+.paper .seller{font-size:10px}
+.paper .doc-title{font-size:24px}
+.paper .doc-title-en{font-size:11px;color:#6f83a2;font-weight:600;text-align:right;margin-top:2px}
+.paper .party{grid-template-columns:1.35fr .65fr}
+.paper .box{border-radius:7px}
+.paper table{margin-top:16px;border:1px solid #cfddea}
+.paper th,.paper td{border:1px solid #dce6ef}
+.paper th{font-weight:700;color:#173654}
+.paper .doc-kind{display:inline-block;padding:3px 7px;border:1px solid #9db2c8;border-radius:4px;font-size:9px;margin-bottom:6px}
+.paper .accounting-foot{margin-top:20px;padding-top:10px;border-top:1px solid #dce6ef;font-size:9px;color:#5f7186;line-height:1.55}
+@media print{.paper{box-shadow:none}}
+</style>
+<meta name="sante-build" content="ACCOUNTING-WORKFLOW-R4">
 </head>
 <body>
 <div id="loading" class="loading">กำลังโหลดเอกสารบัญชี...</div>
@@ -199,9 +222,11 @@ label{display:block;font-size:11px;font-weight:600;margin-bottom:5px}.input,text
   <div><h1>Accounting Documents</h1><p>ใบเสนอราคาและใบแจ้งหนี้ออกได้อัตโนมัติ · ใบเสร็จ/ใบกำกับภาษีต้องอนุมัติก่อนทุกครั้ง</p></div>
   <div class="hero-actions">
    <button id="syncQuotesBtn" class="btn yellow">ซิงก์ใบเสนอราคา</button>
-   <button id="generateReadyBtn" class="btn">สร้าง PDF ที่พร้อมออกทั้งหมด</button>
+   <button id="generateReadyBtn" class="btn">สร้าง PDF ที่พร้อมออก</button>
    <button id="newReceiptBtn" class="btn">สร้าง Draft ใบเสร็จจาก Payment</button>
   </div>
+ </section>
+ <div id="workflowHint" class="workflow-hint"></div>
  </section>
 
  <section class="stats">
@@ -330,6 +355,24 @@ function applyAccountingTabFromUrl(){
   }
 }
 
+function getVisibleDocs(){
+  const q=$("search").value.trim().toLowerCase(),tf=$("typeFilter").value,sf=$("statusFilter").value;
+  return docs.filter(x=>
+    (!tf||x.document_type===tf)&&
+    (!sf||x.document_status===sf)&&
+    (!q||[x.document_no,x.customer_name,x.organization_name,x.email,x.payment_no,x.quotation_no].join(" ").toLowerCase().includes(q))
+  );
+}
+function updateWorkflowActions(){
+  const type=$("typeFilter")?.value||"";
+  const isReceipt=type==="RECEIPT_TAX_INVOICE";
+  $("syncQuotesBtn").style.display=isReceipt?"none":"inline-flex";
+  $("newReceiptBtn").style.display=isReceipt||!type?"inline-flex":"none";
+  $("workflowHint").innerHTML=isReceipt
+    ? "<b>ขั้นตอนใบเสร็จ/ใบกำกับภาษี:</b> 1) เลือก Payment ที่ VERIFIED/PAID → 2) สร้าง Draft → 3) ตรวจข้อมูลลูกค้า/VAT/WHT → 4) อนุมัติ → 5) สร้าง PDF และออกเลข"
+    : "<b>ขั้นตอนเอกสาร:</b> ใบเสนอราคา/ใบแจ้งหนี้ใช้ข้อมูลจากรายการต้นทางและสามารถสร้าง PDF ได้เมื่อสถานะพร้อมออก";
+}
+
 async function ensureStaff(){
  const {data:{session}}=await db.auth.getSession();
  if(!session?.user){location.replace("admin-login.html");return false}
@@ -346,8 +389,9 @@ async function loadDocs(){
 }
 
 function render(){
- const q=$("search").value.trim().toLowerCase(),tf=$("typeFilter").value,sf=$("statusFilter").value;
- const rows=docs.filter(x=>(!tf||x.document_type===tf)&&(!sf||x.document_status===sf)&&(!q||[x.document_no,x.customer_name,x.organization_name,x.email,x.payment_no,x.quotation_no].join(" ").toLowerCase().includes(q)));
+ const tf=$("typeFilter").value;
+ const rows=getVisibleDocs();
+ updateWorkflowActions();
  $("sAll").textContent=docs.length;
  $("sReady").textContent=docs.filter(x=>x.document_status==="READY_TO_ISSUE").length;
  $("sWait").textContent=docs.filter(x=>x.document_status==="WAITING_APPROVAL").length;
@@ -470,7 +514,7 @@ function paperHtml(x){
  return `<div class="paper">
   <div class="head">
    <div><img class="paper-logo" src="SANTE-logo-primary.png"><div class="seller"><b>${SANTE.name}</b><br>${SANTE.address}<br>เลขประจำตัวผู้เสียภาษี ${SANTE.taxId}<br>${SANTE.phone} · ${SANTE.email}<br>${SANTE.website}</div></div>
-   <div><div class="copy-label">${accountingCopyLabel()}</div><div class="doc-title">${esc(typeLabel(x.document_type))}</div><div class="doc-meta"><b>${esc(x.document_no||"-")}</b><br>วันที่ออก: ${esc(x.issue_date||new Date().toISOString().slice(0,10))}${x.due_date?`<br>ครบกำหนด: ${esc(x.due_date)}`:""}</div></div>
+   <div><div class="copy-label">${accountingCopyLabel()}</div><div class="doc-kind">${esc(x.document_type)}</div><div class="doc-title">${esc(typeLabel(x.document_type))}</div><div class="doc-title-en">${x.document_type==="QUOTATION"?"QUOTATION":x.document_type==="INVOICE"?"INVOICE":"RECEIPT / TAX INVOICE"}</div><div class="doc-meta"><b>${esc(x.document_no||"-")}</b><br>วันที่ออก / Issue Date: ${esc(x.issue_date||new Date().toISOString().slice(0,10))}${x.due_date?`<br>ครบกำหนด / Due Date: ${esc(x.due_date)}`:""}</div></div>
   </div>
   <div class="party">
    <div class="box"><b>ลูกค้า</b><br>${esc(x.organization_name||x.customer_name||"-")}<br>${esc(x.billing_address||"")}<br>เลขประจำตัวผู้เสียภาษี: ${esc(x.customer_tax_id||"-")} ${esc(x.customer_branch||"")}</div>
@@ -485,7 +529,8 @@ function paperHtml(x){
    ${x.document_type==="RECEIPT_TAX_INVOICE"?`<div class="total-row"><b>ยอดรับเงินจริง</b><b>${money(x.amount_received??x.net_receivable)} บาท</b></div>`:""}
   </div>
   <div class="paper-note"><b>เรื่อง:</b> ${esc(x.document_subject||"-")}<br>${x.terms?`<b>เงื่อนไข:</b> ${esc(x.terms)}<br>`:""}${x.note?`<b>หมายเหตุ:</b> ${esc(x.note)}`:""}</div>
-  <div class="footer-sign"><div>................................................<br>ผู้จัดทำ / ผู้ขาย</div><div>................................................<br>${x.document_type==="RECEIPT_TAX_INVOICE"?"ผู้อนุมัติเอกสารภาษี":"ผู้อนุมัติเอกสาร"}</div></div>
+  <div class="footer-sign"><div>................................................<br>ผู้จัดทำ / Prepared by</div><div>................................................<br>${x.document_type==="RECEIPT_TAX_INVOICE"?"ผู้อนุมัติเอกสารภาษี / Tax Approval":"ผู้อนุมัติเอกสาร / Authorized by"}</div></div>
+  <div class="accounting-foot">เอกสารฉบับนี้จัดทำจากระบบ SANTE Accounting Documents · กรุณาตรวจสอบเลขประจำตัวผู้เสียภาษี ชื่อ/ที่อยู่ และยอด VAT/WHT ก่อนนำไปใช้งานจริง</div>
  </div>`;
 }
 
@@ -499,33 +544,58 @@ async function generateBlob(x){
  return pdf.output("blob");
 }
 
-async function issueOne(id){
+async function issueOne(id,silent=false){
  let x=docs.find(d=>d.id===id);
- if(!x)return;
- if(x.document_type==="RECEIPT_TAX_INVOICE"&&x.document_status!=="APPROVED"){alert("ใบเสร็จ/ใบกำกับภาษีต้องผ่านการอนุมัติก่อน");return}
- if(!["READY_TO_ISSUE","APPROVED"].includes(x.document_status)){return}
- const btn=$("pdfBtn");if(btn&&editing?.id===id){btn.disabled=true;btn.textContent="กำลังสร้าง PDF..."}
+ if(!x)return false;
+ if(x.document_type==="RECEIPT_TAX_INVOICE"&&x.document_status!=="APPROVED"){
+   if(!silent)alert("ใบเสร็จ/ใบกำกับภาษีต้องผ่านการอนุมัติก่อน");
+   return false;
+ }
+ if(!["READY_TO_ISSUE","APPROVED"].includes(x.document_status))return false;
+ const btn=$("pdfBtn");
+ if(btn&&editing?.id===id){btn.disabled=true;btn.textContent="กำลังสร้าง PDF..."}
  try{
   const blob=await generateBlob(x);
   const safe=(x.document_no||x.id).replace(/[^A-Za-z0-9_-]/g,"_");
   const path=`accounting/${new Date().getFullYear()}/${x.document_type}/${safe}.pdf`;
   const up=await db.storage.from(BUCKET).upload(path,blob,{contentType:"application/pdf",upsert:true});
   if(up.error)throw up.error;
-  const fin=await db.rpc("admin_finalize_accounting_document",{p_document_id:x.id,p_storage_bucket:BUCKET,p_storage_path:path,p_original_filename:`${x.document_no}.pdf`,p_file_size_bytes:blob.size});
+  const fin=await db.rpc("admin_finalize_accounting_document",{
+    p_document_id:x.id,p_storage_bucket:BUCKET,p_storage_path:path,
+    p_original_filename:`${x.document_no||safe}.pdf`,p_file_size_bytes:blob.size
+  });
   if(fin.error)throw fin.error;
   await loadDocs();
   if(editing?.id===id){const fresh=docs.find(d=>d.id===id);if(fresh)fillEditor(fresh)}
- }catch(e){alert("ออกเอกสารไม่สำเร็จ: "+(e.message||e))}
- finally{if(btn){btn.disabled=false;btn.textContent="สร้าง PDF และออกเอกสาร"}}
+  return true;
+ }catch(e){
+  console.error("ACCOUNTING ISSUE ERROR",e);
+  if(!silent)alert("ออกเอกสารไม่สำเร็จ: "+(e.message||e));
+  return false;
+ }finally{
+  if(btn){btn.disabled=false;btn.textContent="สร้าง PDF และออกเอกสาร"}
+ }
 }
 
 async function issueReadyAll(){
- const ready=docs.filter(x=>["READY_TO_ISSUE","APPROVED"].includes(x.document_status));
- if(!ready.length){alert("ไม่มีเอกสารที่พร้อมออก");return}
- if(!confirm(`สร้าง PDF และเผยแพร่ ${ready.length} รายการไปยัง Member Documents?`))return;
+ const visible=getVisibleDocs();
+ const ready=visible.filter(x=>["READY_TO_ISSUE","APPROVED"].includes(x.document_status));
+ if(!ready.length){
+   const type=$("typeFilter").value;
+   if(type==="RECEIPT_TAX_INVOICE"){
+     alert("ยังไม่มีใบเสร็จ/ใบกำกับภาษีที่พร้อมออก\nให้สร้าง Draft จาก Payment ก่อน แล้วตรวจสอบและอนุมัติ");
+   }else{
+     alert("ไม่มีเอกสารที่พร้อมออกในรายการที่กำลังแสดง");
+   }
+   return;
+ }
+ if(!confirm(`สร้าง PDF และออกเอกสาร ${ready.length} รายการตามรายการที่กำลังแสดง?`))return;
  $("generateReadyBtn").disabled=true;
  let ok=0,fail=0;
- for(const x of ready){try{await issueOne(x.id);ok++}catch(e){console.error(e);fail++}}
+ for(const x of ready){
+   const success=await issueOne(x.id,true);
+   if(success)ok++; else fail++;
+ }
  $("generateReadyBtn").disabled=false;
  await loadDocs();
  alert(`เสร็จแล้ว ${ok} รายการ${fail?` · ไม่สำเร็จ ${fail}`:""}`);
@@ -546,7 +616,9 @@ async function createReceiptDraft(){
  $("receiptBg").classList.remove("show");await loadDocs();openEditor(data.id);
 }
 
-$("search").addEventListener("input",render);$("typeFilter").addEventListener("change",render);$("statusFilter").addEventListener("change",render);
+$("search").addEventListener("input",render);
+$("typeFilter").addEventListener("change",render);
+$("statusFilter").addEventListener("change",render);
 $("syncQuotesBtn").onclick=syncQuotes;$("generateReadyBtn").onclick=issueReadyAll;$("saveBtn").onclick=async()=>{try{await saveEditing();alert("บันทึกแล้ว")}catch(e){alert(e.message)}};
 $("approveBtn").onclick=async()=>{try{await approveEditing()}catch(e){alert(e.message)}};
 $("pdfBtn").onclick=()=>editing&&issueOne(editing.id);
