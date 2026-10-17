@@ -3140,6 +3140,104 @@ textarea{
 </style>
 <meta name="sante-build" content="QUOTATION-R25-CUSTOMER-DETAILS-SUMMARY">
 
+
+<style id="sante-quotation-r26-header-notes-printcolor">
+/* Header aligned to supplied reference */
+.reference-qo .ref-head{
+  grid-template-columns:minmax(0,1fr) 70mm!important;
+  gap:7mm!important;
+  align-items:start!important;
+}
+.reference-qo .ref-seller-block{
+  display:grid!important;
+  grid-template-columns:19mm minmax(0,1fr)!important;
+  gap:4mm!important;
+  align-items:start!important;
+}
+.reference-qo .ref-logo{
+  width:17.5mm!important;
+  height:21mm!important;
+  max-width:17.5mm!important;
+  max-height:21mm!important;
+  object-fit:contain!important;
+  object-position:center top!important;
+  margin-top:1mm!important;
+}
+.reference-qo .ref-seller-body{
+  display:grid!important;
+  grid-template-columns:minmax(0,1.45fr) minmax(0,.9fr)!important;
+  gap:4mm!important;
+  min-width:0!important;
+  align-items:start!important;
+  font-size:7.7pt!important;
+  line-height:1.42!important;
+}
+.reference-qo .ref-seller-main{
+  display:grid!important;
+  gap:1mm!important;
+  min-width:0!important;
+}
+.reference-qo .ref-seller-row{
+  display:grid!important;
+  grid-template-columns:29mm minmax(0,1fr)!important;
+  gap:2mm!important;
+  align-items:start!important;
+}
+.reference-qo .ref-company-name{
+  white-space:nowrap!important;
+  font-size:7.55pt!important;
+  font-weight:700!important;
+  line-height:1.35!important;
+}
+.reference-qo .ref-seller-contact{
+  display:grid!important;
+  gap:2mm!important;
+  padding-top:.3mm!important;
+  min-width:0!important;
+}
+.reference-qo .ref-seller-contact-row{
+  display:grid!important;
+  grid-template-columns:5mm minmax(0,1fr)!important;
+  gap:1.5mm!important;
+  align-items:start!important;
+}
+.reference-qo .ref-seller-contact-row b{
+  text-align:center!important;
+  font-size:8.1pt!important;
+  line-height:1.35!important;
+}
+.reference-qo .ref-website{
+  overflow-wrap:anywhere!important;
+  word-break:break-word!important;
+}
+
+/* Preserve line breaks entered in Note textarea */
+.reference-qo .ref-note-value{
+  white-space:pre-wrap!important;
+  overflow-wrap:anywhere!important;
+  word-break:break-word!important;
+  line-height:1.55!important;
+}
+
+/* Preserve purple fills/colors when printing or saving PDF */
+#paper.reference-qo,
+#paper.reference-qo *{
+  -webkit-print-color-adjust:exact!important;
+  print-color-adjust:exact!important;
+  color-adjust:exact!important;
+}
+.reference-qo .ref-title{color:#6f70ea!important}
+.reference-qo .ref-docbox,
+.reference-qo .ref-items th,
+.reference-qo .ref-total-box{
+  background:#eeeeff!important;
+  -webkit-print-color-adjust:exact!important;
+  print-color-adjust:exact!important;
+  color-adjust:exact!important;
+}
+</style>
+<meta name="sante-build" content="QUOTATION-R26-HEADER-NOTES-PRINTCOLOR">
+
 </head>
 <body>
 
@@ -3597,24 +3695,26 @@ function renderPaper(c){
     <div class="ref-head">
       <div class="ref-seller-block">
         <img class="ref-logo" src="SANTE-logo-primary.png" alt="SANTE">
-        <div class="ref-seller-grid">
-          <div class="ref-label">ผู้ขาย :</div>
-          <div class="ref-company-name">บริษัท ซานเต้ คอนซัลติ้ง จำกัด (สำนักงานใหญ่)</div>
-
-          <div class="ref-label">ที่อยู่ :</div>
-          <div class="ref-seller-address">49 ถนนทางหลวง สาย 3191<br>ตำบลมาบข่า อำเภอนิคมพัฒนา<br>จังหวัดระยอง 21180</div>
-
-          <div class="ref-label ref-tax-label">เลขประจำตัวผู้เสียภาษี :</div>
-          <div>${SANTE.taxId}</div>
-
-          <div class="ref-label">โทรศัพท์ :</div>
-          <div>${SANTE.phone||"-"}</div>
-
-          <div class="ref-label">อีเมล :</div>
-          <div>${SANTE.email||"-"}</div>
-
-          <div class="ref-label">เว็บไซต์ :</div>
-          <div class="ref-website">${SANTE.website||"-"}</div>
+        <div class="ref-seller-body">
+          <div class="ref-seller-main">
+            <div class="ref-seller-row">
+              <div class="ref-label">ผู้ขาย :</div>
+              <div class="ref-company-name">บริษัท ซานเต้ คอนซัลติ้ง จำกัด (สำนักงานใหญ่)</div>
+            </div>
+            <div class="ref-seller-row">
+              <div class="ref-label">ที่อยู่ :</div>
+              <div class="ref-seller-address">49 ถนนทางหลวง สาย 3191<br>ตำบลมาบข่า อำเภอนิคมพัฒนา<br>จังหวัดระยอง 21180</div>
+            </div>
+            <div class="ref-seller-row">
+              <div class="ref-label ref-tax-label">เลขประจำตัวผู้เสียภาษี :</div>
+              <div>${SANTE.taxId}</div>
+            </div>
+          </div>
+          <div class="ref-seller-contact">
+            <div class="ref-seller-contact-row"><b>☎</b><div>${SANTE.phone||"-"}</div></div>
+            <div class="ref-seller-contact-row"><b>✉</b><div>${SANTE.email||"-"}</div></div>
+            <div class="ref-seller-contact-row"><b>◉</b><div class="ref-website">${SANTE.website||"-"}</div></div>
+          </div>
         </div>
       </div>
       <div class="ref-doc-side">
@@ -3679,7 +3779,7 @@ function renderPaper(c){
 
     <div class="ref-note">
       <div><b>● หมายเหตุ</b></div>
-      <div>${esc(note.value||"")}</div>
+      <div class="ref-note-value">${esc(note.value||"")}</div>
     </div>
 
     <div class="ref-cert">
@@ -3815,8 +3915,18 @@ async function printQuotation(){
         min-height:297mm!important;
         background:#fff!important;
         overflow:visible!important;
+        -webkit-print-color-adjust:exact!important;
+        print-color-adjust:exact!important;
+        color-adjust:exact!important;
       }
-      body *{visibility:visible!important}
+      body *,
+      #paper,
+      #paper *{
+        visibility:visible!important;
+        -webkit-print-color-adjust:exact!important;
+        print-color-adjust:exact!important;
+        color-adjust:exact!important;
+      }
       #paper{
         display:block!important;
         position:relative!important;
