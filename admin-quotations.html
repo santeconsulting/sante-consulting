@@ -2346,6 +2346,261 @@ textarea{
 </style>
 <meta name="sante-build" content="QUOTATION-FINAL-R15-PREVIEW-STAMP">
 
+
+<style id="sante-quotation-reference-layout-r16">
+/* =========================================================
+   R16 - Quotation document layout aligned to supplied reference
+   Scope: PDF/preview document only. Business logic unchanged.
+========================================================= */
+#paper.reference-qo{
+  width:210mm!important;
+  min-height:297mm!important;
+  padding:12mm 10mm 10mm!important;
+  color:#1b2736!important;
+  background:#fff!important;
+  font-family:Prompt,sans-serif!important;
+  font-size:8.2pt!important;
+}
+
+/* Header */
+.reference-qo .ref-head{
+  display:grid!important;
+  grid-template-columns:minmax(0,1.25fr) 82mm!important;
+  gap:8mm!important;
+  align-items:start!important;
+}
+.reference-qo .ref-seller-block{
+  display:grid!important;
+  grid-template-columns:18mm minmax(0,1fr)!important;
+  gap:4.5mm!important;
+  align-items:start!important;
+}
+.reference-qo .ref-logo{
+  width:15mm!important;
+  height:18mm!important;
+  object-fit:contain!important;
+  object-position:left top!important;
+}
+.reference-qo .ref-seller-grid{
+  display:grid!important;
+  grid-template-columns:17mm minmax(0,1fr) 5mm minmax(0,1fr)!important;
+  gap:1.2mm 2mm!important;
+  line-height:1.45!important;
+  font-size:8pt!important;
+}
+.reference-qo .ref-label{font-weight:700!important;color:#17283d!important}
+.reference-qo .ref-icon{font-weight:700!important;text-align:center!important}
+.reference-qo .ref-doc-side{text-align:right!important}
+.reference-qo .copy-label{margin:0 0 2mm!important;font-size:8pt!important}
+.reference-qo .ref-title{
+  color:#6f70ea!important;
+  font-size:25pt!important;
+  line-height:1.05!important;
+  font-weight:700!important;
+  text-align:right!important;
+  margin-bottom:5mm!important;
+}
+.reference-qo .ref-docbox{
+  margin-left:auto!important;
+  width:100%!important;
+  background:#eeeeff!important;
+  border-radius:1.8mm!important;
+  padding:3.6mm 4mm!important;
+  display:grid!important;
+  grid-template-columns:25mm minmax(0,1fr)!important;
+  gap:1.2mm 3mm!important;
+  text-align:left!important;
+  font-size:8.2pt!important;
+  line-height:1.45!important;
+}
+
+/* Buyer/contact */
+.reference-qo .ref-party{
+  display:grid!important;
+  grid-template-columns:minmax(0,1.23fr) minmax(0,.77fr)!important;
+  gap:8mm!important;
+  margin-top:4.5mm!important;
+  padding-top:4mm!important;
+  border-top:1px solid #d7d9df!important;
+  font-size:8.2pt!important;
+  line-height:1.5!important;
+}
+.reference-qo .ref-party-title{font-weight:700!important;margin-bottom:1.3mm!important}
+.reference-qo .ref-party-row{
+  display:grid!important;
+  grid-template-columns:17mm minmax(0,1fr)!important;
+  gap:1.5mm!important;
+  margin:.8mm 0!important;
+}
+.reference-qo .ref-contact-row{
+  display:grid!important;
+  grid-template-columns:5mm minmax(0,1fr)!important;
+  gap:1.8mm!important;
+  margin:1mm 0!important;
+}
+
+/* Item table */
+.reference-qo .ref-items{
+  width:100%!important;
+  min-width:0!important;
+  margin-top:4.5mm!important;
+  border-collapse:collapse!important;
+  table-layout:fixed!important;
+}
+.reference-qo .ref-items th{
+  background:#eeeeff!important;
+  color:#20253a!important;
+  border:0!important;
+  padding:2.7mm 2mm!important;
+  font-size:8pt!important;
+  font-weight:700!important;
+  text-align:right!important;
+}
+.reference-qo .ref-items th:first-child{text-align:left!important;border-radius:1.5mm 0 0 1.5mm!important}
+.reference-qo .ref-items th:last-child{border-radius:0 1.5mm 1.5mm 0!important}
+.reference-qo .ref-items td{
+  border:0!important;
+  border-bottom:1px solid #dedfe4!important;
+  padding:2.6mm 2mm!important;
+  font-size:8pt!important;
+  line-height:1.45!important;
+  vertical-align:top!important;
+  text-align:right!important;
+}
+.reference-qo .ref-items td:first-child{text-align:left!important}
+.reference-qo .ref-desc-grid{
+  display:grid!important;
+  grid-template-columns:6mm minmax(0,1fr)!important;
+  gap:1mm!important;
+}
+.reference-qo .ref-desc-no{color:#646b78!important;text-align:right!important}
+.reference-qo .ref-desc-main{font-weight:700!important;color:#161e2a!important}
+.reference-qo .ref-desc-sub{margin-top:1mm!important;color:#4e5868!important;font-weight:400!important}
+.reference-qo .ref-doc-spacer{min-height:43mm!important}
+
+/* Summary */
+.reference-qo .ref-summary{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) 73mm!important;
+  gap:7mm!important;
+  border-top:1px solid #d8d9de!important;
+  padding-top:4mm!important;
+}
+.reference-qo .ref-summary-left{
+  display:grid!important;
+  grid-template-columns:15mm minmax(0,1fr) 30mm!important;
+  gap:1.3mm 3mm!important;
+  align-content:start!important;
+  font-size:8.2pt!important;
+}
+.reference-qo .ref-summary-icon{font-weight:700!important}
+.reference-qo .ref-summary-left .amount{text-align:right!important;white-space:nowrap!important}
+.reference-qo .ref-total-box{
+  background:#eeeeff!important;
+  border-radius:1.5mm!important;
+  padding:4mm 3.5mm!important;
+  display:flex!important;
+  justify-content:space-between!important;
+  gap:4mm!important;
+  align-items:center!important;
+  font-size:9.5pt!important;
+}
+.reference-qo .ref-total-box strong{font-size:15pt!important;color:#45459a!important}
+.reference-qo .ref-total-line{
+  display:flex!important;
+  justify-content:space-between!important;
+  gap:3mm!important;
+  padding:1.2mm 0!important;
+  font-size:8.2pt!important;
+}
+
+/* Payment + note */
+.reference-qo .ref-payment{
+  margin-top:4mm!important;
+  padding:3.2mm 0!important;
+  border-top:1px solid #d8d9de!important;
+  border-bottom:1px solid #d8d9de!important;
+  display:grid!important;
+  grid-template-columns:19mm minmax(0,1fr)!important;
+  gap:3mm!important;
+  align-items:start!important;
+  font-size:8.2pt!important;
+  line-height:1.5!important;
+}
+.reference-qo .ref-note{
+  padding:3mm 0!important;
+  border-bottom:1px solid #d8d9de!important;
+  display:grid!important;
+  grid-template-columns:19mm minmax(0,1fr)!important;
+  gap:3mm!important;
+  min-height:12mm!important;
+  font-size:8.2pt!important;
+}
+
+/* Certification row like supplied example */
+.reference-qo .ref-cert{
+  margin-top:3mm!important;
+  display:grid!important;
+  grid-template-columns:27mm 1fr 1fr 1fr 1fr!important;
+  gap:3mm!important;
+  align-items:end!important;
+  text-align:center!important;
+}
+.reference-qo .ref-cert-label{
+  grid-column:1/-1!important;
+  text-align:left!important;
+  font-weight:700!important;
+  margin-bottom:1mm!important;
+}
+.reference-qo .ref-cert-cell{
+  min-height:34mm!important;
+  display:grid!important;
+  grid-template-rows:22mm auto!important;
+  align-items:end!important;
+  justify-items:center!important;
+  font-size:7.1pt!important;
+  line-height:1.35!important;
+}
+.reference-qo .ref-empty-box{
+  width:22mm!important;
+  height:22mm!important;
+  border:1px dashed #d1d4da!important;
+  align-self:end!important;
+}
+.reference-qo .ref-signature{
+  width:auto!important;
+  height:10mm!important;
+  max-width:29mm!important;
+  object-fit:contain!important;
+  object-position:center bottom!important;
+  align-self:end!important;
+  margin-bottom:1mm!important;
+}
+.reference-qo .ref-stamp-frame{
+  width:28mm!important;
+  height:22mm!important;
+  display:flex!important;
+  align-items:flex-end!important;
+  justify-content:center!important;
+  overflow:visible!important;
+  align-self:end!important;
+}
+.reference-qo .ref-stamp{
+  width:26mm!important;
+  height:22mm!important;
+  object-fit:contain!important;
+  object-position:center!important;
+  transform:scale(1.75)!important;
+  transform-origin:center bottom!important;
+}
+.reference-qo .ref-cert-caption{min-height:10mm!important}
+
+@media print{
+  #paper.reference-qo{box-shadow:none!important;margin:0!important}
+}
+</style>
+<meta name="sante-build" content="QUOTATION-REFERENCE-LAYOUT-R16">
+
 </head>
 <body>
 
@@ -2683,12 +2938,131 @@ function quotationDescriptionHtml(desc,index){
   return `<div class="quotation-desc-layout"><span class="quotation-desc-no">${index+1}.</span><div><div class="quotation-desc-main">${esc(first)}</div>${rest}</div></div>`;
 }
 
-function renderPaper(c){paper.innerHTML=`<div class="doc-head"><div class="seller"><img class="paper-logo" src="SANTE-logo-primary.png"><div class="seller-info"><strong class="seller-company">${SANTE.name}</strong><div>49 ถนนทางหลวงสาย 3191 ตำบลมาบข่า อำเภอนิคมพัฒนา<br>จังหวัดระยอง 21180</div><div>เลขประจำตัวผู้เสียภาษี: ${SANTE.taxId}</div><div>โทร: ${SANTE.phone} · ${SANTE.email}</div><div>${SANTE.website}</div></div></div><div><div class="copy-label">${quotationCopyLabel()}</div><div class="doc-title">ใบเสนอราคา</div><div class="docbox"><b>เลขที่เอกสาร</b><span>${quotationNo.textContent.split(" · ")[0]||"(สร้างเมื่อบันทึก)"}</span><b>วันที่ออก</b><span>${issueDate.value||"-"}</span><b>ใช้ได้ถึง</b><span>${validUntil.value||"-"}</span><b>อ้างอิง</b><span>${requestId.value?requests.find(x=>x.id===requestId.value)?.request_no||"-":"-"}</span></div></div></div>
-<div class="party"><div><h4>ลูกค้า</h4><strong class="party-company">${esc(organizationName.value||customerName.value||"-")}</strong><div>${esc(billingAddress.value||"-")}</div><div>เลขที่ภาษี: ${esc(customerTaxId.value||"-")} ${esc(customerBranch.value||"")}</div></div><div><h4>ติดต่อกลับที่</h4><div>${esc(customerName.value||"-")}</div><div>${esc(phone.value||"-")}</div><div>${esc(email.value||"-")}</div></div></div>
-<table class="qtable"><thead><tr><th>คำอธิบาย</th><th>จำนวน</th><th>หน่วย</th><th>ราคา</th><th>ส่วนลด</th><th>VAT</th><th>มูลค่า</th></tr></thead><tbody>${c.a.length ? c.a.map((x,i)=>`<tr><td class="quotation-desc-cell">${quotationDescriptionHtml(x.description,i)}</td><td>${money(x.quantity)}</td><td>${esc(x.unit)}</td><td>${money(x.unit_price)}</td><td>${money(x.discount_amount)}</td><td>${vatRate.value}%</td><td>${money(x.line_total)}</td></tr>`).join("") : `<tr><td colspan="7" style="padding:28px;text-align:center;color:#72869b">ยังไม่มีรายการ</td></tr>`}</tbody></table><div class="doc-spacer"></div>
-<div class="doc-summary"><div><b>สรุป</b><div class="sumrow"><span>มูลค่าที่คำนวณภาษี</span><span>${money(c.subtotal)} บาท</span></div><div class="sumrow"><span>ภาษีมูลค่าเพิ่ม ${vatRate.value}%</span><span>${money(c.vat)} บาท</span></div><div class="sumrow"><span>หัก ณ ที่จ่าย ${whtRate.value}%</span><span>${money(c.wht)} บาท</span></div></div><div><div class="totalbox"><span>จำนวนเงินทั้งสิ้น</span><span>${money(c.grand)} บาท</span></div><div class="sumrow"><b>จำนวนเงินที่ชำระสุทธิ</b><b>${money(c.net)} บาท</b></div></div></div>
-<div class="bank"><b>ชำระเงิน</b> · ${SANTE.bank} · ชื่อบัญชี ${SANTE.bankName} · เลขบัญชี ${SANTE.bankAccount}</div><div class="footer-note"><b>เงื่อนไข:</b> ${esc(terms.value)}<br><b>หมายเหตุ:</b> ${esc(note.value||"-")}</div>
-<div class="cert"><div><img class="sig" src="sante-signature-director.png"><small><b>${SANTE.signer}</b><br>ผู้ออกเอกสาร (ผู้ขาย)</small></div><div><img class="sig" src="sante-signature-director.png"><small><b>${SANTE.signer}</b><br>ผู้อนุมัติเอกสาร (ผู้ขาย)</small></div><div><img class="stamp" src="sante-company-stamp.png"><small>ตราประทับ (ผู้ขาย)</small></div></div>`}
+
+function quotationReferenceDescription(desc,index){
+  const lines=String(desc||"").replace(/\r/g,"").split("\n").map(x=>x.trim()).filter(Boolean);
+  const main=lines.shift()||"-";
+  const sub=lines.length?`<div class="ref-desc-sub">${lines.map(esc).join("<br>")}</div>`:"";
+  return `<div class="ref-desc-grid"><div class="ref-desc-no">${index+1}.</div><div><div class="ref-desc-main">${esc(main)}</div>${sub}</div></div>`;
+}
+
+function renderPaper(c){
+  const quoteNo=quotationNo.textContent.split(" · ")[0]||"(สร้างเมื่อบันทึก)";
+  const refNo=requestId.value?requests.find(x=>x.id===requestId.value)?.request_no||"-":"-";
+  const sellerAddress=`49 ถนนทางหลวงสาย 3191 ตำบลมาบข่า อำเภอนิคมพัฒนา จังหวัดระยอง 21180`;
+  const itemRows=c.a.length
+    ? c.a.map((x,i)=>`<tr>
+        <td>${quotationReferenceDescription(x.description,i)}</td>
+        <td>${money(x.quantity)}</td>
+        <td>${esc(x.unit)}</td>
+        <td>${money(x.unit_price)}</td>
+        <td>${money(x.discount_amount)}</td>
+        <td>${vatRate.value}%</td>
+        <td>${money(x.line_total)}</td>
+      </tr>`).join("")
+    : `<tr><td colspan="7" style="padding:8mm;text-align:center;color:#7b8492">ยังไม่มีรายการ</td></tr>`;
+
+  paper.classList.add("reference-qo");
+  paper.innerHTML=`
+    <div class="ref-head">
+      <div class="ref-seller-block">
+        <img class="ref-logo" src="SANTE-logo-primary.png" alt="SANTE">
+        <div class="ref-seller-grid">
+          <div class="ref-label">ผู้ขาย :</div><div><b>${SANTE.name}</b></div><div class="ref-icon">☎</div><div>${SANTE.phone||"-"}</div>
+          <div class="ref-label">ที่อยู่ :</div><div>${sellerAddress}</div><div class="ref-icon">✉</div><div>${SANTE.email||"-"}</div>
+          <div class="ref-label">เลขที่ภาษี :</div><div>${SANTE.taxId}</div><div class="ref-icon">⌾</div><div>${SANTE.website||"-"}</div>
+        </div>
+      </div>
+      <div class="ref-doc-side">
+        <div class="copy-label">${quotationCopyLabel()}</div>
+        <div class="ref-title">ใบเสนอราคา</div>
+        <div class="ref-docbox">
+          <b>เลขที่เอกสาร :</b><span>${esc(quoteNo)}</span>
+          <b>วันที่ออก :</b><span>${esc(issueDate.value||"-")}</span>
+          <b>วันที่ต่อรับ :</b><span>-</span>
+          <b>ใช้ได้ถึง :</b><span>${esc(validUntil.value||"-")}</span>
+          <b>อ้างอิง :</b><span>${esc(refNo)}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="ref-party">
+      <div>
+        <div class="ref-party-title">ลูกค้า :</div>
+        <div class="ref-party-row"><b>ชื่อ :</b><div><b>${esc(organizationName.value||customerName.value||"-")}</b></div></div>
+        <div class="ref-party-row"><b>ที่อยู่ :</b><div>${esc(billingAddress.value||"-")}</div></div>
+        <div class="ref-party-row"><b>เลขที่ภาษี :</b><div>${esc(customerTaxId.value||"-")} ${esc(customerBranch.value||"")}</div></div>
+        <div class="ref-party-row"><b>เรียน :</b><div>${esc(documentSubject.value||"-")}</div></div>
+      </div>
+      <div>
+        <div class="ref-party-title">ติดต่อกลับที่ :</div>
+        <div class="ref-contact-row"><b>♟</b><div>${esc(customerName.value||"-")}</div></div>
+        <div class="ref-contact-row"><b>☎</b><div>${esc(phone.value||"-")}</div></div>
+        <div class="ref-contact-row"><b>✉</b><div>${esc(email.value||"-")}</div></div>
+      </div>
+    </div>
+
+    <table class="ref-items">
+      <colgroup>
+        <col style="width:55%"><col style="width:8%"><col style="width:8%"><col style="width:9%"><col style="width:8%"><col style="width:5%"><col style="width:10%">
+      </colgroup>
+      <thead><tr>
+        <th>คำอธิบาย</th><th>จำนวน</th><th>หน่วย</th><th>ราคา</th><th>ส่วนลด</th><th>VAT</th><th>มูลค่าก่อนภาษี</th>
+      </tr></thead>
+      <tbody>${itemRows}</tbody>
+    </table>
+
+    <div class="ref-doc-spacer"></div>
+
+    <div class="ref-summary">
+      <div class="ref-summary-left">
+        <div class="ref-summary-icon">▣ สรุป</div><div>มูลค่าที่คำนวณภาษี ${vatRate.value}%</div><div class="amount">${money(c.subtotal)} บาท</div>
+        <div></div><div>ภาษีมูลค่าเพิ่ม ${vatRate.value}%</div><div class="amount">${money(c.vat)} บาท</div>
+        <div></div><div>หัก ณ ที่จ่าย ${whtRate.value}%</div><div class="amount">${money(c.wht)} บาท</div>
+      </div>
+      <div>
+        <div class="ref-total-box"><span>จำนวนเงินทั้งสิ้น</span><strong>${money(c.grand)}</strong><span>บาท</span></div>
+        <div class="ref-total-line"><span>จำนวนเงินที่ถูกหัก ณ ที่จ่าย</span><span>${money(c.wht)} บาท</span></div>
+        <div class="ref-total-line"><b>จำนวนเงินที่ชำระ</b><b>${money(c.net)} บาท</b></div>
+      </div>
+    </div>
+
+    <div class="ref-payment">
+      <div><b>▣ ชำระเงิน</b></div>
+      <div><b>${SANTE.bank}</b> · ชื่อบัญชี ${SANTE.bankName} · เลขบัญชี ${SANTE.bankAccount}</div>
+    </div>
+
+    <div class="ref-note">
+      <div><b>● หมายเหตุ</b></div>
+      <div>${esc(note.value||"")}</div>
+    </div>
+
+    <div class="ref-cert">
+      <div class="ref-cert-label">♧ รับรอง</div>
+      <div class="ref-cert-cell">
+        <div class="ref-empty-box"></div>
+        <div class="ref-cert-caption">สแกนเพื่อเปิดด้วยเว็บไซต์</div>
+      </div>
+      <div class="ref-cert-cell">
+        <img class="ref-signature" src="sante-signature-director.png" alt="signature">
+        <div class="ref-cert-caption"><b>${SANTE.signer}</b><br>ผู้ออกเอกสาร (ผู้ขาย)</div>
+      </div>
+      <div class="ref-cert-cell">
+        <img class="ref-signature" src="sante-signature-director.png" alt="signature">
+        <div class="ref-cert-caption"><b>${SANTE.signer}</b><br>ผู้อนุมัติเอกสาร (ผู้ขาย)</div>
+      </div>
+      <div class="ref-cert-cell">
+        <div class="ref-stamp-frame"><img class="ref-stamp" src="sante-company-stamp.png" alt="stamp"></div>
+        <div class="ref-cert-caption">ตราประทับ (ผู้ขาย)</div>
+      </div>
+      <div class="ref-cert-cell">
+        <div class="ref-empty-box"></div>
+        <div class="ref-cert-caption">ผู้รับเอกสาร (ลูกค้า)</div>
+      </div>
+    </div>
+  `;
+}
+
 async function openEditor(id=null,req=null){
   resetEditor();
   editingId=id;
