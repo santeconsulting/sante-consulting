@@ -3238,6 +3238,111 @@ textarea{
 </style>
 <meta name="sante-build" content="QUOTATION-R26-HEADER-NOTES-PRINTCOLOR">
 
+
+<style id="sante-quotation-r27-reference-header-salutation">
+/* R27 — header/customer section follows supplied quotation reference */
+
+/* Seller block: logo | seller details | contact, with no collisions */
+.reference-qo .ref-head{
+  grid-template-columns:minmax(0,1fr) 69mm!important;
+  gap:7mm!important;
+  align-items:start!important;
+}
+.reference-qo .ref-seller-block{
+  display:grid!important;
+  grid-template-columns:18mm minmax(0,1fr)!important;
+  gap:4mm!important;
+  align-items:start!important;
+  min-width:0!important;
+}
+.reference-qo .ref-logo{
+  width:16.5mm!important;
+  height:20mm!important;
+  max-width:16.5mm!important;
+  max-height:20mm!important;
+  object-fit:contain!important;
+  object-position:center top!important;
+  margin-top:1mm!important;
+}
+.reference-qo .ref-seller-body{
+  display:grid!important;
+  grid-template-columns:minmax(0,1.35fr) minmax(38mm,.9fr)!important;
+  gap:4.5mm!important;
+  align-items:start!important;
+  min-width:0!important;
+}
+.reference-qo .ref-seller-main{
+  display:grid!important;
+  gap:1.2mm!important;
+  min-width:0!important;
+}
+.reference-qo .ref-seller-row{
+  display:grid!important;
+  grid-template-columns:30mm minmax(0,1fr)!important;
+  gap:2mm!important;
+  align-items:start!important;
+  min-width:0!important;
+}
+.reference-qo .ref-company-name{
+  white-space:normal!important;
+  overflow:visible!important;
+  font-size:7.55pt!important;
+  line-height:1.38!important;
+  font-weight:700!important;
+}
+.reference-qo .ref-seller-contact{
+  display:grid!important;
+  gap:2mm!important;
+  min-width:0!important;
+  padding-top:.2mm!important;
+}
+.reference-qo .ref-seller-contact-row{
+  display:grid!important;
+  grid-template-columns:5mm minmax(0,1fr)!important;
+  gap:1.4mm!important;
+  align-items:start!important;
+  min-width:0!important;
+}
+.reference-qo .ref-seller-contact-row > div{
+  min-width:0!important;
+  overflow-wrap:anywhere!important;
+  word-break:normal!important;
+}
+
+/* Customer area follows the same visual rhythm as supplied reference */
+.reference-qo .ref-party{
+  grid-template-columns:minmax(0,1.35fr) minmax(0,.75fr)!important;
+  gap:10mm!important;
+}
+.reference-qo .ref-party-left{
+  min-width:0!important;
+}
+.reference-qo .ref-party-row{
+  grid-template-columns:31mm minmax(0,1fr)!important;
+  gap:2mm!important;
+  align-items:start!important;
+  font-size:7.8pt!important;
+  line-height:1.48!important;
+}
+.reference-qo .ref-party-row b{
+  white-space:nowrap!important;
+}
+.reference-qo .ref-contact{
+  min-width:0!important;
+}
+.reference-qo .ref-contact-row{
+  grid-template-columns:5mm minmax(0,1fr)!important;
+  gap:1.5mm!important;
+  align-items:start!important;
+}
+
+/* Visible salutation field on the editor should look like the other inputs */
+#documentSubject{
+  width:100%!important;
+}
+</style>
+<meta name="sante-build" content="QUOTATION-R27-REFERENCE-HEADER-SALUTATION">
+
 </head>
 <body>
 
@@ -3369,7 +3474,10 @@ textarea{
 <div><label>เลขประจำตัวผู้เสียภาษี</label><input id="customerTaxId" class="input"></div><div><label>สาขา</label><input id="customerBranch" class="input"></div>
 <div><label>อีเมล</label><input id="email" class="input"></div><div><label>โทรศัพท์</label><input id="phone" class="input"></div>
 <div class="full"><label>ที่อยู่สำหรับออกเอกสาร</label><textarea id="billingAddress" rows="3"></textarea></div>
-<input id="documentSubject" type="hidden" value="">
+<div class="full">
+  <label>เรียน</label>
+  <input id="documentSubject" class="input" type="text" placeholder="เช่น ผู้จัดการฝ่ายทรัพยากรบุคคล / คุณ...">
+</div>
 <div><label>วันที่ออก</label><input id="issueDate" type="date" class="input"></div><div><label>ใช้ได้ถึง (มาตรฐาน 60 วัน)</label><input id="validUntil" type="date" class="input"></div></div>
 <div class="items"><div style="display:flex;justify-content:space-between;align-items:center"><h3>รายการ</h3><button class="btn light" onclick="addItem()">+ เพิ่มรายการ</button></div><div id="items"></div></div>
 <div class="grid">
@@ -3736,7 +3844,7 @@ function renderPaper(c){
         <div class="ref-party-row"><b>ชื่อ :</b><div><b>${esc(organizationName.value||customerName.value||"-")}</b></div></div>
         <div class="ref-party-row"><b>ที่อยู่ :</b><div>${esc(billingAddress.value||"-")}</div></div>
         <div class="ref-party-row"><b>เลขประจำตัวผู้เสียภาษี :</b><div>${esc(customerTaxId.value||"-")} ${esc(customerBranch.value||"")}</div></div>
-        <div class="ref-party-row"><b>เรียน :</b><div>${esc(customerName.value||organizationName.value||"-")}</div></div>
+        <div class="ref-party-row"><b>เรียน :</b><div>${esc(documentSubject.value||"-")}</div></div>
       </div>
       <div>
         <div class="ref-party-title">ติดต่อกลับที่ :</div>
