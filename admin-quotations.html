@@ -2931,6 +2931,22 @@ textarea{
 </style>
 <meta name="sante-build" content="QUOTATION-R21-A4-CORRECTED">
 
+
+<style id="sante-quotation-r22-cert-note">
+.reference-qo .ref-cert-label{
+  display:block!important;
+  color:#17283d!important;
+}
+.reference-qo .ref-cert-note{
+  margin-top:1.1mm!important;
+  font-size:6.8pt!important;
+  line-height:1.45!important;
+  font-weight:400!important;
+  color:#607287!important;
+}
+</style>
+<meta name="sante-build" content="QUOTATION-R22-CERT-NOTE">
+
 </head>
 <body>
 
@@ -3452,7 +3468,7 @@ function renderPaper(c){
     </div>
 
     <div class="ref-cert">
-      <div class="ref-cert-label">♧ รับรอง</div>
+      <div class="ref-cert-label">♧ รับรอง<div class="ref-cert-note">ลงนามเพื่อยืนยันความถูกต้องของเอกสาร และสำหรับลูกค้าใช้ลงนาม/ประทับตราเมื่อมีการตอบรับเอกสาร</div></div>
       <div class="ref-cert-cell">
         <img class="ref-signature" src="sante-signature-director.png" alt="signature">
         <div class="ref-cert-caption">
@@ -3482,7 +3498,7 @@ function renderPaper(c){
       </div>
       <div class="ref-cert-cell">
         <div class="ref-empty-box"></div>
-        <div class="ref-cert-caption">ตราประทับ (ลูกค้า)</div>
+        <div class="ref-cert-caption">ตราประทับ (ลูกค้า) (ถ้ามี)</div>
       </div>
     </div>
   `;
