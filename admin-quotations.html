@@ -2684,6 +2684,101 @@ textarea{
 </style>
 <meta name="sante-build" content="QUOTATION-R18-BANK-STAMP">
 
+
+<style id="sante-quotation-r19-certification-balance">
+/* R19 — certification/footer alignment only */
+
+/* All 5 approval cells use the same vertical structure */
+.reference-qo .ref-cert{
+  grid-template-columns:repeat(5,minmax(0,1fr))!important;
+  gap:2.8mm!important;
+  align-items:end!important;
+}
+.reference-qo .ref-cert-cell{
+  min-height:39mm!important;
+  display:grid!important;
+  grid-template-rows:25mm minmax(12mm,auto)!important;
+  align-items:end!important;
+  justify-items:center!important;
+  text-align:center!important;
+}
+
+/* signatures sit on the same baseline */
+.reference-qo .ref-signature{
+  display:block!important;
+  width:auto!important;
+  height:11mm!important;
+  max-width:30mm!important;
+  max-height:11mm!important;
+  object-fit:contain!important;
+  object-position:center bottom!important;
+  margin:0 auto 1mm!important;
+  align-self:end!important;
+}
+
+/*
+  The current stamp source visibly contains large transparent/empty margins.
+  Crop/zoom it inside a fixed frame so the visible stamp is comparable
+  to the signatures without changing the source asset itself.
+*/
+.reference-qo .ref-stamp-frame{
+  width:27mm!important;
+  height:25mm!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  overflow:hidden!important;
+  align-self:end!important;
+  background:#fff!important;
+}
+.reference-qo .ref-stamp{
+  display:block!important;
+  width:100%!important;
+  height:100%!important;
+  max-width:none!important;
+  max-height:none!important;
+  object-fit:contain!important;
+  object-position:center!important;
+  transform:scale(3.35)!important;
+  transform-origin:center center!important;
+}
+
+/* customer boxes match the seller stamp/signature visual slot */
+.reference-qo .ref-empty-box{
+  width:24mm!important;
+  height:24mm!important;
+  align-self:end!important;
+  border:1px dashed #cfd6df!important;
+  background:#fff!important;
+}
+
+/* Captions/details under all cells line up consistently */
+.reference-qo .ref-cert-caption{
+  min-height:12mm!important;
+  display:block!important;
+  text-align:center!important;
+  font-size:7.2pt!important;
+  line-height:1.42!important;
+  color:#1f3145!important;
+}
+.reference-qo .ref-cert-caption b{
+  display:block!important;
+  font-weight:700!important;
+}
+.reference-qo .ref-cert-date{
+  display:block!important;
+  margin-top:.7mm!important;
+  color:#53687d!important;
+  font-size:6.9pt!important;
+}
+.reference-qo .ref-customer-name{
+  display:block!important;
+  margin-bottom:.7mm!important;
+  font-weight:700!important;
+}
+</style>
+<meta name="sante-build" content="QUOTATION-R19-CERTIFICATION-BALANCE">
+
 </head>
 <body>
 
@@ -3073,6 +3168,14 @@ function thaiBahtText(value){
   return result;
 }
 
+
+function formatQuotationDocDate(v){
+  const s=String(v||"").trim();
+  if(!s)return "-";
+  const m=s.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  return m?`${m[3]}/${m[2]}/${m[1]}`:s;
+}
+
 function renderPaper(c){
   const quoteNo=quotationNo.textContent.split(" · ")[0]||"(สร้างเมื่อบันทึก)";
   const refNo=requestId.value?requests.find(x=>x.id===requestId.value)?.request_no||"-":"-";
@@ -3169,11 +3272,19 @@ function renderPaper(c){
       <div class="ref-cert-label">♧ รับรอง</div>
       <div class="ref-cert-cell">
         <img class="ref-signature" src="sante-signature-director.png" alt="signature">
-        <div class="ref-cert-caption"><b>${SANTE.signer}</b><br>ผู้ออกเอกสาร (ผู้ขาย)</div>
+        <div class="ref-cert-caption">
+          <b>${SANTE.signer}</b>
+          ผู้ออกเอกสาร (ผู้ขาย)
+          <span class="ref-cert-date">${formatQuotationDocDate(issueDate.value)}</span>
+        </div>
       </div>
       <div class="ref-cert-cell">
         <img class="ref-signature" src="sante-signature-director.png" alt="signature">
-        <div class="ref-cert-caption"><b>${SANTE.signer}</b><br>ผู้อนุมัติเอกสาร (ผู้ขาย)</div>
+        <div class="ref-cert-caption">
+          <b>${SANTE.signer}</b>
+          ผู้อนุมัติเอกสาร (ผู้ขาย)
+          <span class="ref-cert-date">${formatQuotationDocDate(issueDate.value)}</span>
+        </div>
       </div>
       <div class="ref-cert-cell">
         <div class="ref-stamp-frame"><img class="ref-stamp" src="sante-company-stamp.png" alt="stamp"></div>
@@ -3181,7 +3292,10 @@ function renderPaper(c){
       </div>
       <div class="ref-cert-cell">
         <div class="ref-empty-box"></div>
-        <div class="ref-cert-caption">ผู้รับเอกสาร (ลูกค้า)</div>
+        <div class="ref-cert-caption">
+          <span class="ref-customer-name">${esc(organizationName.value||customerName.value||"")}</span>
+          ผู้รับเอกสาร (ลูกค้า)
+        </div>
       </div>
       <div class="ref-cert-cell">
         <div class="ref-empty-box"></div>
