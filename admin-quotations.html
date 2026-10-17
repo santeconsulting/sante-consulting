@@ -2154,6 +2154,38 @@ textarea{
 }
 </style>
 
+
+<style id="sante-accounting-tabs-active-underline-fix">
+/* FIX ONLY: keep accounting tabs aligned and show the same active underline */
+.accounting-subnav a{
+  position:relative!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+  min-height:44px!important;
+  height:44px!important;
+  line-height:1.25!important;
+  box-sizing:border-box!important;
+}
+.accounting-subnav a::after{
+  content:none!important;
+}
+.accounting-subnav a.active::after{
+  content:""!important;
+  display:block!important;
+  position:absolute!important;
+  left:50%!important;
+  bottom:4px!important;
+  transform:translateX(-50%)!important;
+  width:54px!important;
+  height:2px!important;
+  border-radius:2px!important;
+  background:#ffbf19!important;
+}
+</style>
+<meta name="sante-build" content="QUOTATION-ACTIVE-TAB-UNDERLINE-FIX-R12">
+
 </head>
 <body>
 
