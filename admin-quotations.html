@@ -2947,6 +2947,44 @@ textarea{
 </style>
 <meta name="sante-build" content="QUOTATION-R22-CERT-NOTE">
 
+
+<style id="sante-quotation-r23-wht-optional">
+.wht-option{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) 110px!important;
+  gap:10px!important;
+  align-items:center!important;
+}
+.wht-switch{
+  min-height:46px!important;
+  display:flex!important;
+  align-items:center!important;
+  gap:9px!important;
+  padding:9px 12px!important;
+  border:1px solid #d9e5ef!important;
+  border-radius:12px!important;
+  background:#f8fbfd!important;
+  color:#36516e!important;
+  font-size:12px!important;
+  line-height:1.4!important;
+  cursor:pointer!important;
+}
+.wht-switch input{
+  width:18px!important;
+  height:18px!important;
+  flex:0 0 18px!important;
+}
+#whtRate:disabled{
+  opacity:.48!important;
+  background:#f3f6f8!important;
+  cursor:not-allowed!important;
+}
+@media(max-width:620px){
+  .wht-option{grid-template-columns:1fr!important}
+}
+</style>
+<meta name="sante-build" content="QUOTATION-R23-WHT-OPTIONAL">
+
 </head>
 <body>
 
@@ -3081,10 +3119,21 @@ textarea{
 <div class="full"><label>เรื่อง / ขอบเขตงาน</label><textarea id="documentSubject" rows="2"></textarea></div>
 <div><label>วันที่ออก</label><input id="issueDate" type="date" class="input"></div><div><label>ใช้ได้ถึง (มาตรฐาน 60 วัน)</label><input id="validUntil" type="date" class="input"></div></div>
 <div class="items"><div style="display:flex;justify-content:space-between;align-items:center"><h3>รายการ</h3><button class="btn light" onclick="addItem()">+ เพิ่มรายการ</button></div><div id="items"></div></div>
-<div class="grid"><div><label>VAT %</label><input id="vatRate" class="input" type="number" value="7" step=".01" oninput="recalc()"></div><div><label>WHT %</label><select id="whtRate" class="select" onchange="recalc()"><option value="0">0%</option><option value="3" selected>3%</option></select></div>
+<div class="grid">
+<div><label>VAT %</label><input id="vatRate" class="input" type="number" value="7" step=".01" oninput="recalc()"></div>
+<div>
+  <label>หัก ณ ที่จ่าย</label>
+  <div class="wht-option">
+    <label class="wht-switch"><input id="showWht" type="checkbox" onchange="toggleWht();recalc()"><span>แสดงหัก ณ ที่จ่ายในใบเสนอราคา (ถ้ามี)</span></label>
+    <select id="whtRate" class="select" onchange="recalc()" disabled>
+      <option value="0">0%</option>
+      <option value="3" selected>3%</option>
+    </select>
+  </div>
+</div>
 <div class="full"><label>เงื่อนไขการชำระเงิน</label><textarea id="terms" rows="3">ใบเสนอราคามีอายุ 60 วัน และเครดิตเทอม 30 วัน หลังการให้บริการ</textarea></div>
 <div class="full"><label>หมายเหตุ</label><textarea id="note" rows="2"></textarea></div></div>
-<div class="summary"><span>มูลค่าหลังส่วนลด</span><span id="sumSubtotal">0.00</span><span>VAT</span><span id="sumVat">0.00</span><span>ยอดรวมทั้งสิ้น</span><strong id="sumGrand">0.00</strong><span>หัก ณ ที่จ่าย</span><span id="sumWht">0.00</span><span>ยอดชำระสุทธิ</span><strong id="sumNet">0.00</strong></div>
+<div class="summary"><span>มูลค่าหลังส่วนลด</span><span id="sumSubtotal">0.00</span><span>VAT</span><span id="sumVat">0.00</span><span>ยอดรวมทั้งสิ้น</span><strong id="sumGrand">0.00</strong><span id="sumWhtLabel">หัก ณ ที่จ่าย</span><span id="sumWht">0.00</span><span id="sumNetLabel">ยอดชำระสุทธิ</span><strong id="sumNet">0.00</strong></div>
 
 <div class="doc-copy-switch">
   <span>รูปแบบเอกสาร</span>
@@ -3129,12 +3178,15 @@ const validUntil=$("validUntil");
 const items=$("items");
 const vatRate=$("vatRate");
 const whtRate=$("whtRate");
+const showWht=$("showWht");
 const terms=$("terms");
 const note=$("note");
 const sumSubtotal=$("sumSubtotal");
 const sumVat=$("sumVat");
 const sumGrand=$("sumGrand");
 const sumWht=$("sumWht");
+const sumWhtLabel=$("sumWhtLabel");
+const sumNetLabel=$("sumNetLabel");
 const sumNet=$("sumNet");
 const paper=$("paper");
 const logoutBtn=$("logoutBtn");
@@ -3168,7 +3220,15 @@ async function init(){
 async function loadAll(){const [q,r]=await Promise.all([db.from("quotations").select("*").order("created_at",{ascending:false}),db.from("service_requests").select("*").order("created_at",{ascending:false})]);if(q.error){alert(q.error.message);return}quotes=q.data||[];requests=r.data||[];render();fillRequests()}
 function render(){const q=search.value.toLowerCase().trim(),st=statusFilter.value;const rows=quotes.filter(x=>(!q||[x.quotation_no,x.customer_name,x.organization_name].join(" ").toLowerCase().includes(q))&&(!st||x.status===st));sAll.textContent=quotes.length;sDraft.textContent=quotes.filter(x=>x.status==="DRAFT").length;sSent.textContent=quotes.filter(x=>x.status==="SENT").length;sApproved.textContent=quotes.filter(x=>x.status==="APPROVED").length;sClosed.textContent=quotes.filter(x=>["REJECTED","EXPIRED"].includes(x.status)).length;body.innerHTML=rows.length?rows.map(x=>`<tr><td><strong>${esc(x.quotation_no)}</strong></td><td>${esc(x.organization_name||x.customer_name||"-")}<div class="muted">${esc(x.customer_name||"")}</div></td><td>${esc(x.issue_date||"-")}</td><td>${esc(x.valid_until||"-")}</td><td>${x.revision_no||0}</td><td>${money(x.grand_total)}</td><td>${money(x.wht_amount)}</td><td>${money(x.net_receivable)}</td><td><span class="badge">${esc(x.status)}</span></td><td><button class="btn light" onclick="openEditor('${x.id}')">เปิด / แก้ไข</button></td></tr>`).join(""):`<tr><td colspan="10" style="padding:28px;text-align:center;color:#72869b">ยังไม่มีใบเสนอราคา — ไปที่ งานบริการ → คำขอบริการ → เปิดรายละเอียด → สร้างใบเสนอราคา</td></tr>`}
 function fillRequests(){requestId.innerHTML='<option value="">ไม่ผูกคำขอ</option>'+requests.map(x=>`<option value="${x.id}">${esc(x.request_no||"-")} · ${esc(x.organization_name||x.customer_name||"")}</option>`).join("")}
-function resetEditor(){editingId=null;editorTitle.textContent="สร้างใบเสนอราคา";quotationNo.textContent="";requestId.value="";customerName.value=organizationName.value=customerTaxId.value=customerBranch.value=email.value=phone.value=billingAddress.value=documentSubject.value=note.value="";issueDate.value=new Date().toISOString().slice(0,10);validUntil.value=addDays(issueDate.value,60);vatRate.value=7;whtRate.value=3;terms.value="ใบเสนอราคามีอายุ 60 วัน และเครดิตเทอม 30 วัน หลังการให้บริการ";items.innerHTML="";addItem();try{recalc()}catch(e){console.warn('initial preview error',e)}}
+function toggleWht(){
+  const enabled=!!showWht?.checked;
+  if(whtRate)whtRate.disabled=!enabled;
+  if(sumWhtLabel)sumWhtLabel.style.display=enabled?"":"none";
+  if(sumWht)sumWht.style.display=enabled?"":"none";
+  if(sumNetLabel)sumNetLabel.textContent=enabled?"ยอดชำระสุทธิ":"ยอดชำระ";
+}
+
+function resetEditor(){editingId=null;editorTitle.textContent="สร้างใบเสนอราคา";quotationNo.textContent="";requestId.value="";customerName.value=organizationName.value=customerTaxId.value=customerBranch.value=email.value=phone.value=billingAddress.value=documentSubject.value=note.value="";issueDate.value=new Date().toISOString().slice(0,10);validUntil.value=addDays(issueDate.value,60);vatRate.value=7;showWht.checked=false;whtRate.value=3;toggleWht();terms.value="ใบเสนอราคามีอายุ 60 วัน และเครดิตเทอม 30 วัน หลังการให้บริการ";items.innerHTML="";addItem();try{recalc()}catch(e){console.warn('initial preview error',e)}}
 function requestAddress(r){return [r.address_no,r.moo&&"หมู่ "+r.moo,r.building,r.soi&&"ซอย "+r.soi,r.road&&"ถนน"+r.road,r.subdistrict,r.district,r.province,r.postcode].filter(Boolean).join(" ")}
 function requestDescription(r){if(r.request_type==="TRAINING")return `${r.course_name||"อบรม In-house"} จำนวน ${r.participant_count||"-"} คน`;if(r.request_type==="CONSULTING")return r.service_detail?.subject||"งานที่ปรึกษา";if(r.service_group==="ELECTRICAL")return "ตรวจสอบและรับรองระบบไฟฟ้าและบริภัณฑ์ไฟฟ้า";const m=r.service_detail?.measurements||{};return Object.values(m).map(x=>`${x.name} จำนวน ${x.count||0} ${x.unit||""}`).join("\n")||"บริการตรวจวัดด้านสุขศาสตร์อุตสาหกรรม"}
 function applyRequest(){const r=requests.find(x=>x.id===requestId.value);if(!r)return;customerName.value=r.customer_name||r.contact_name||"";organizationName.value=r.organization_name||"";customerTaxId.value=r.company_tax_id||"";customerBranch.value=r.company_branch_type==="BRANCH"?"สาขา "+(r.company_branch_no||""):"สำนักงานใหญ่";email.value=r.email||"";phone.value=r.phone||r.contact_phone||"";billingAddress.value=requestAddress(r);documentSubject.value=requestDescription(r);items.innerHTML="";addItemFrom({description:requestDescription(r),quantity:1,unit:r.request_type==="TRAINING"?"งาน":"งาน",unit_price:0,discount_amount:0});recalc()}
@@ -3272,14 +3332,14 @@ function collectItems(){
       discount_amount:d,
       line_total:Math.max(0,q*p-d),
       vat_applicable:true,
-      wht_applicable:true,
+      wht_applicable:!!showWht?.checked,
       vat_rate:Number(vatRate.value||7),
-      wht_rate:Number(whtRate.value||3)
+      wht_rate:showWht?.checked?Number(whtRate.value||3):0
     }
   }).filter(x=>x.description)
 }
-function calc(){const a=collectItems(),subtotal=a.reduce((s,x)=>s+x.line_total,0),vat=subtotal*Number(vatRate.value||0)/100,grand=subtotal+vat,wht=subtotal*Number(whtRate.value||0)/100,net=grand-wht;return{a,subtotal,vat,grand,wht,net}}
-function recalc(){const c=calc();sumSubtotal.textContent=money(c.subtotal);sumVat.textContent=money(c.vat);sumGrand.textContent=money(c.grand);sumWht.textContent=money(c.wht);sumNet.textContent=money(c.net);renderPaper(c)}
+function calc(){const a=collectItems(),subtotal=a.reduce((s,x)=>s+x.line_total,0),vat=subtotal*Number(vatRate.value||0)/100,grand=subtotal+vat,wht=showWht?.checked?subtotal*Number(whtRate.value||0)/100:0,net=grand-wht;return{a,subtotal,vat,grand,wht,net}}
+function recalc(){toggleWht();const c=calc();sumSubtotal.textContent=money(c.subtotal);sumVat.textContent=money(c.vat);sumGrand.textContent=money(c.grand);sumWht.textContent=money(c.wht);sumNet.textContent=money(c.net);renderPaper(c)}
 
 function quotationCopyMode(){
   return document.querySelector('input[name="quotationCopyMode"]:checked')?.value || "ORIGINAL";
@@ -3447,12 +3507,12 @@ function renderPaper(c){
       <div class="ref-summary-left">
         <div class="ref-summary-icon">▣ สรุป</div><div>มูลค่าที่คำนวณภาษี ${vatRate.value}%</div><div class="amount">${money(c.subtotal)} บาท</div>
         <div></div><div>ภาษีมูลค่าเพิ่ม ${vatRate.value}%</div><div class="amount">${money(c.vat)} บาท</div>
-        <div></div><div>หัก ณ ที่จ่าย ${whtRate.value}%</div><div class="amount">${money(c.wht)} บาท</div>
+        ${showWht?.checked?`<div></div><div>หัก ณ ที่จ่าย ${whtRate.value}% (ถ้ามี ตามหลักเกณฑ์กฎหมาย)</div><div class="amount">${money(c.wht)} บาท</div>`:""}
       </div>
       <div>
         <div class="ref-total-box"><span>จำนวนเงินทั้งสิ้น</span><strong>${money(c.grand)}</strong><span>บาท</span></div>
-        <div class="ref-total-line"><span>จำนวนเงินที่ถูกหัก ณ ที่จ่าย</span><span>${money(c.wht)} บาท</span></div>
-        <div class="ref-total-line"><b>จำนวนเงินที่ชำระ</b><b>${money(c.net)} บาท</b></div>
+        ${showWht?.checked?`<div class="ref-total-line"><span>จำนวนเงินที่ถูกหัก ณ ที่จ่าย</span><span>${money(c.wht)} บาท</span></div>`:""}
+        <div class="ref-total-line"><b>${showWht?.checked?"ยอดชำระสุทธิหลังหัก ณ ที่จ่าย":"จำนวนเงินที่ชำระ"}</b><b>${money(c.net)} บาท</b></div>
         <div class="ref-paid-words">(${thaiBahtText(c.net)})</div>
       </div>
     </div>
@@ -3525,7 +3585,9 @@ async function openEditor(id=null,req=null){
     issueDate.value=q.issue_date||"";
     validUntil.value=q.valid_until||"";
     vatRate.value=q.vat_rate??7;
-    whtRate.value=q.wht_rate??3;
+    whtRate.value=(q.wht_rate??3)||3;
+    showWht.checked=Number(q.wht_rate||0)>0 || Number(q.wht_amount||0)>0;
+    toggleWht();
     note.value=q.note||"";
     terms.value=q.terms||"";
 
@@ -3668,7 +3730,7 @@ async function saveQuotation(send){
    p_issue_date:issueDate.value||null,
    p_valid_until:validUntil.value||null,
    p_vat_rate:Number(vatRate.value||7),
-   p_wht_rate:Number(whtRate.value||3),
+   p_wht_rate:showWht?.checked?Number(whtRate.value||3):0,
    p_note:String(note?.value||"").trim()||null,
    p_terms:String(terms?.value||"").trim()||null,
    p_items:c.a,
