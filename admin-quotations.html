@@ -2985,6 +2985,85 @@ textarea{
 </style>
 <meta name="sante-build" content="QUOTATION-R23-WHT-OPTIONAL">
 
+
+<style id="sante-quotation-r24-summary-details-logo">
+/* R24 — item readability, final totals, larger seller logo */
+
+/* Larger and more balanced company logo */
+.reference-qo .ref-seller-block{
+  grid-template-columns:21mm minmax(0,1fr)!important;
+  gap:4mm!important;
+}
+.reference-qo .ref-logo{
+  width:19mm!important;
+  height:22mm!important;
+  max-width:19mm!important;
+  max-height:22mm!important;
+  object-fit:contain!important;
+  object-position:center top!important;
+  margin-top:.5mm!important;
+}
+
+/* Item number and description should be readable but not bold */
+.reference-qo .quotation-desc-layout{
+  gap:1.5mm!important;
+}
+.reference-qo .quotation-desc-no{
+  font-size:8.4pt!important;
+  line-height:1.48!important;
+  font-weight:400!important;
+  color:#43566b!important;
+}
+.reference-qo .quotation-desc-main{
+  font-size:8.8pt!important;
+  line-height:1.5!important;
+  font-weight:400!important;
+  color:#17283d!important;
+}
+.reference-qo .quotation-desc-sub{
+  margin-top:1mm!important;
+  font-size:8.2pt!important;
+  line-height:1.5!important;
+  font-weight:400!important;
+  color:#526b84!important;
+}
+
+/* Final net amount is the main payment conclusion */
+.reference-qo .ref-net-total{
+  margin-top:1mm!important;
+  padding:2mm 0 1mm!important;
+  border-top:1px solid #d8d9de!important;
+  font-size:10.2pt!important;
+  line-height:1.35!important;
+}
+.reference-qo .ref-net-total b:first-child{
+  font-size:9.3pt!important;
+  font-weight:700!important;
+}
+.reference-qo .ref-net-total b:last-child{
+  font-size:12.2pt!important;
+  font-weight:800!important;
+  color:#17283d!important;
+}
+.reference-qo .ref-paid-words{
+  margin-top:1.2mm!important;
+  text-align:right!important;
+  color:#263b51!important;
+  font-size:9.2pt!important;
+  line-height:1.45!important;
+  font-weight:600!important;
+}
+
+/* Certification explanation remains secondary, not dominant */
+.reference-qo .ref-cert-note{
+  max-width:150mm!important;
+  font-size:6.9pt!important;
+  line-height:1.48!important;
+  color:#607287!important;
+}
+</style>
+<meta name="sante-build" content="QUOTATION-R24-SUMMARY-DETAILS-LOGO">
+
 </head>
 <body>
 
@@ -3507,12 +3586,12 @@ function renderPaper(c){
       <div class="ref-summary-left">
         <div class="ref-summary-icon">▣ สรุป</div><div>มูลค่าที่คำนวณภาษี ${vatRate.value}%</div><div class="amount">${money(c.subtotal)} บาท</div>
         <div></div><div>ภาษีมูลค่าเพิ่ม ${vatRate.value}%</div><div class="amount">${money(c.vat)} บาท</div>
-        ${showWht?.checked?`<div></div><div>หัก ณ ที่จ่าย ${whtRate.value}% (ถ้ามี ตามหลักเกณฑ์กฎหมาย)</div><div class="amount">${money(c.wht)} บาท</div>`:""}
+        ${showWht?.checked?`<div></div><div>หัก ณ ที่จ่าย ${whtRate.value}%</div><div class="amount">${money(c.wht)} บาท</div>`:""}
       </div>
       <div>
         <div class="ref-total-box"><span>จำนวนเงินทั้งสิ้น</span><strong>${money(c.grand)}</strong><span>บาท</span></div>
         ${showWht?.checked?`<div class="ref-total-line"><span>จำนวนเงินที่ถูกหัก ณ ที่จ่าย</span><span>${money(c.wht)} บาท</span></div>`:""}
-        <div class="ref-total-line"><b>${showWht?.checked?"ยอดชำระสุทธิหลังหัก ณ ที่จ่าย":"จำนวนเงินที่ชำระ"}</b><b>${money(c.net)} บาท</b></div>
+        <div class="ref-total-line ref-net-total"><b>${showWht?.checked?"ยอดชำระสุทธิหลังหัก ณ ที่จ่าย":"ยอดชำระสุทธิ"}</b><b>${money(c.net)} บาท</b></div>
         <div class="ref-paid-words">(${thaiBahtText(c.net)})</div>
       </div>
     </div>
@@ -3528,7 +3607,7 @@ function renderPaper(c){
     </div>
 
     <div class="ref-cert">
-      <div class="ref-cert-label">♧ รับรอง<div class="ref-cert-note">ลงนามเพื่อยืนยันความถูกต้องของเอกสาร และสำหรับลูกค้าใช้ลงนาม/ประทับตราเมื่อมีการตอบรับเอกสาร</div></div>
+      <div class="ref-cert-label">♧ รับรอง<div class="ref-cert-note">ผู้ขายลงนามเพื่อรับรองความถูกต้องของเอกสาร และลูกค้าสามารถลงนาม/ประทับตราเพื่อยืนยันการตอบรับใบเสนอราคา</div></div>
       <div class="ref-cert-cell">
         <img class="ref-signature" src="sante-signature-director.png" alt="signature">
         <div class="ref-cert-caption">
