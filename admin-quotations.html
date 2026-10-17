@@ -3582,6 +3582,105 @@ textarea{
 </style>
 <meta name="sante-build" content="QUOTATION-R30-HEADER-POLISH">
 
+
+<style id="sante-quotation-r31-seller-alignment">
+/* R31 — move seller information left and rebalance header */
+
+/* Keep the document info panel stable while giving seller data more room */
+.reference-qo .ref-head{
+  grid-template-columns:minmax(0,1fr) 61mm!important;
+  gap:4.5mm!important;
+  align-items:start!important;
+}
+
+/* Reduce empty space between logo and seller information */
+.reference-qo .ref-seller-block{
+  grid-template-columns:15mm minmax(0,1fr)!important;
+  gap:2.2mm!important;
+  align-items:start!important;
+  min-width:0!important;
+}
+.reference-qo .ref-logo{
+  width:14.5mm!important;
+  height:18.5mm!important;
+  max-width:14.5mm!important;
+  max-height:18.5mm!important;
+  object-fit:contain!important;
+  object-position:center top!important;
+  margin-top:.8mm!important;
+}
+
+/* Seller text gets more horizontal space */
+.reference-qo .ref-seller-body{
+  grid-template-columns:minmax(70mm,1.6fr) minmax(39mm,.85fr)!important;
+  gap:3mm!important;
+  min-width:0!important;
+  align-items:start!important;
+  font-size:7.9pt!important;
+  line-height:1.46!important;
+}
+.reference-qo .ref-seller-main{
+  gap:1.1mm!important;
+  min-width:0!important;
+}
+.reference-qo .ref-seller-row{
+  grid-template-columns:25mm minmax(0,1fr)!important;
+  gap:1.5mm!important;
+  align-items:start!important;
+  min-width:0!important;
+}
+.reference-qo .ref-seller-row .ref-label{
+  white-space:nowrap!important;
+  text-align:left!important;
+}
+.reference-qo .ref-company-name{
+  font-size:7.95pt!important;
+  line-height:1.4!important;
+  font-weight:700!important;
+  white-space:normal!important;
+  word-break:keep-all!important;
+}
+.reference-qo .ref-seller-address{
+  font-size:7.8pt!important;
+  line-height:1.48!important;
+  word-break:keep-all!important;
+}
+.reference-qo .ref-tax-label{
+  font-size:7.25pt!important;
+  white-space:nowrap!important;
+}
+
+/* Contact column stays readable without pushing seller details right */
+.reference-qo .ref-seller-contact{
+  padding-top:.1mm!important;
+  gap:1.8mm!important;
+  min-width:0!important;
+  font-size:7.5pt!important;
+}
+.reference-qo .ref-seller-contact-row{
+  grid-template-columns:4.5mm minmax(0,1fr)!important;
+  gap:1mm!important;
+  align-items:start!important;
+  min-width:0!important;
+}
+.reference-qo .ref-seller-contact-row > div{
+  min-width:0!important;
+  overflow-wrap:normal!important;
+  word-break:normal!important;
+}
+
+/* Slightly tighten top metadata panel to visually balance seller block */
+.reference-qo .ref-docbox{
+  padding:3mm 3.2mm!important;
+  grid-template-columns:22mm minmax(0,1fr)!important;
+}
+.reference-qo .ref-title{
+  font-size:23pt!important;
+  margin-bottom:4mm!important;
+}
+</style>
+<meta name="sante-build" content="QUOTATION-R31-SELLER-ALIGNMENT">
+
 </head>
 <body>
 
