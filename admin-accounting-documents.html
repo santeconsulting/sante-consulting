@@ -286,6 +286,23 @@ label{display:block;font-size:11px;font-weight:600;margin-bottom:5px}.input,text
 </style>
 <meta name="sante-build" content="ACCOUNTING-SYNC-BUTTON-CENTER-FIX-R6">
 
+
+<style id="sante-accounting-r8-remove-subnav-underline">
+/* R8 - remove underline from accounting subnav, keep centered tabs and sync button */
+.accounting-subnav a::after,
+.accounting-subnav a:after,
+.accounting-subnav a.active::after,
+.accounting-subnav a.active:after{
+  content:none!important;
+  display:none!important;
+}
+.accounting-subnav a.active{
+  background:#082d69!important;
+  color:#fff!important;
+}
+</style>
+<meta name="sante-build" content="ACCOUNTING-R8-REMOVE-SUBNAV-UNDERLINE">
+
 </head>
 <body>
 <div id="loading" class="loading">กำลังโหลดเอกสารบัญชี...</div>
