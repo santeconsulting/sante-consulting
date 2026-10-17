@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>SANTE Admin | Attendance & วุฒิบัตร</title>
+<title>SANTE Admin | การจบการอบรมและวุฒิบัตร</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -176,7 +176,7 @@ body{font-family:"Prompt",sans-serif!important;background:var(--bg)!important;co
 }
 </style>
 
-<meta name="sante-build" content="TRAINING-COMPLETION-VISUAL-R2">
+<meta name="sante-build" content="TRAINING-COMPLETION-TH-R3">
 </head>
 <body>
 <aside class="sidebar" id="sidebar">
@@ -208,7 +208,7 @@ body{font-family:"Prompt",sans-serif!important;background:var(--bg)!important;co
 
 <main class="main">
 <header class="topbar">
- <div class="topbar-left"><button id="menuBtn" class="btn mobile-menu">☰</button><div><div class="page-name">Attendance & วุฒิบัตร</div><div class="page-sub">เช็กการเข้าอบรมและตรวจสิทธิ์ออกวุฒิบัตร</div></div></div>
+ <div class="topbar-left"><button id="menuBtn" class="btn mobile-menu">☰</button><div><div class="page-name">การจบการอบรมและวุฒิบัตร</div><div class="page-sub">เช็กการเข้าอบรมและตรวจสิทธิ์ออกวุฒิบัตร</div></div></div>
  <div class="admin-area"><div class="admin-copy"><div class="admin-name">ผู้ดูแลระบบ SANTE</div><div id="adminEmail" class="admin-email"></div></div><button id="logoutBtn" class="btn">ออกจากระบบ</button></div>
 </header>
 
@@ -223,7 +223,7 @@ body{font-family:"Prompt",sans-serif!important;background:var(--bg)!important;co
 
  <section class="module-head">
    <div>
-     <h1>Attendance & Certificate Eligibility</h1>
+     <h1>การเข้าอบรมและสิทธิ์ออกวุฒิบัตร</h1>
      <p>ทำเครื่องหมายผู้เข้าอบรมและตรวจเงื่อนไขการออกวุฒิบัตรแบบรายรอบอบรม</p>
    </div>
    <div class="module-actions">
@@ -263,7 +263,7 @@ body{font-family:"Prompt",sans-serif!important;background:var(--bg)!important;co
   <button id="selectAllBtn" class="btn">เลือกทั้งหมดที่เห็น</button>
   <button id="attendedBtn" class="btn green">✓ เข้าร่วมอบรม</button>
   <button id="absentBtn" class="btn red">✕ ไม่เข้าร่วม</button>
-  <button id="clearBtn" class="btn">ล้างสถานะ Attendance</button>
+  <button id="clearBtn" class="btn">ล้างสถานะการเข้าอบรม</button>
   <div id="selectedCount" class="bulk-note">เลือก 0 คน</div>
  </div>
 
@@ -286,8 +286,8 @@ function certBadge(r){if(r.certificate_id)return `<span class="badge b-blue">${e
 
 async function init(){
  if(!sessionId){
-   msg("กรุณาเลือกรอบอบรมก่อนเข้าสู่หน้า Attendance & Certificate Eligibility","info");
-   $("sessionCard").innerHTML=`<h2>ยังไม่ได้เลือกรอบอบรม</h2><p>กลับไปที่เมนู “รอบอบรม” แล้วเลือก Attendance / Completion ของรอบที่ต้องการ</p><div class="chips"><a href="admin-training-sessions.html" class="btn yellow" style="display:inline-flex;text-decoration:none">เลือกรอบอบรม →</a></div>`;
+   msg("กรุณาเลือกรอบอบรมก่อนเข้าสู่หน้าการเข้าอบรมและสิทธิ์ออกวุฒิบัตร","info");
+   $("sessionCard").innerHTML=`<h2>ยังไม่ได้เลือกรอบอบรม</h2><p>กลับไปที่เมนู “รอบอบรม” แล้วเลือกการเข้าอบรม / การจบการอบรมของรอบที่ต้องการ</p><div class="chips"><a href="admin-training-sessions.html" class="btn yellow" style="display:inline-flex;text-decoration:none">เลือกรอบอบรม →</a></div>`;
    $("tableArea").innerHTML='<div class="empty">เลือก รอบอบรม เพื่อแสดงรายชื่อและตรวจสิทธิ์วุฒิบัตร</div>';
    return
  }
@@ -303,7 +303,7 @@ async function load(){
 }
 function renderHeader(){
  const s=payload.session||{};
- $("sessionCard").innerHTML=`<h2>${esc(s.session_name||s.course_name||"-")}</h2><p>${esc(s.course_name||"")} · ${s.training_start_at?new Date(s.training_start_at).toLocaleString("th-TH"):"-"}</p><div class="chips"><span class="chip">${s.requires_posttest?"ต้องสอบท้ายอบรม":"ไม่กำหนด Post-test"}</span>${s.pass_percentage!=null?`<span class="chip">ผ่าน ${esc(s.pass_percentage)}%</span>`:""}${s.training_hours!=null?`<span class="chip">${esc(s.training_hours)} ชั่วโมง</span>`:""}</div>`;
+ $("sessionCard").innerHTML=`<h2>${esc(s.session_name||s.course_name||"-")}</h2><p>${esc(s.course_name||"")} · ${s.training_start_at?new Date(s.training_start_at).toLocaleString("th-TH"):"-"}</p><div class="chips"><span class="chip">${s.requires_posttest?"ต้องสอบท้ายอบรม":"ไม่กำหนดแบบทดสอบหลังอบรม"}</span>${s.pass_percentage!=null?`<span class="chip">ผ่าน ${esc(s.pass_percentage)}%</span>`:""}${s.training_hours!=null?`<span class="chip">${esc(s.training_hours)} ชั่วโมง</span>`:""}</div>`;
  const rows=payload.rows||[];$("statTotal").textContent=rows.length;$("statAttended").textContent=rows.filter(x=>x.attendance_status==="ATTENDED").length;$("statEligible").textContent=rows.filter(x=>x.certificate_eligible).length;$("statIssued").textContent=rows.filter(x=>x.certificate_id).length
 }
 function visibleRows(){
@@ -317,18 +317,18 @@ function visibleRows(){
 function render(){
  const rows=visibleRows();updateSelected();
  if(!rows.length){$("tableArea").innerHTML='<div class="empty">ไม่พบข้อมูล</div>';return}
- $("tableArea").innerHTML=`<table class="table"><thead><tr><th><input type="checkbox" id="headCheck"></th><th>ผู้เข้าอบรม</th><th>การสมัคร / ชำระเงิน</th><th>Attendance</th><th>ผลสอบ</th><th>Eligibility</th><th>วุฒิบัตร</th></tr></thead><tbody>${rows.map(r=>`<tr><td><input class="row-check" type="checkbox" data-id="${r.registration_id}" ${selected.has(r.registration_id)?"checked":""}></td><td><div class="name">${esc(r.participant_name||"-")}</div><div class="sub">${esc(r.email||"-")} · ${esc(r.organization_name||"-")}</div></td><td><div>${esc(r.registration_status||"-")}</div><div class="sub">${r.payment_required?`Payment: ${esc(r.payment_status||"-")}`:"ไม่ต้องชำระเงิน"}</div></td><td>${attendanceBadge(r.attendance_status)}${r.attendance_note?`<div class="sub">${esc(r.attendance_note)}</div>`:""}</td><td>${examBadge(r)}</td><td>${r.certificate_eligible?'<span class="badge b-green">เข้าเกณฑ์</span>':'<span class="badge b-red">ยังไม่เข้าเกณฑ์</span>'}<div class="reason"><div class="${r.registration_ok?"ok":"no"}">${r.registration_ok?"✓":"✕"} สมัครยืนยัน</div><div class="${r.payment_ok?"ok":"no"}">${r.payment_ok?"✓":"✕"} Payment</div><div class="${r.attendance_ok?"ok":"no"}">${r.attendance_ok?"✓":"✕"} Attendance</div><div class="${r.posttest_ok?"ok":"no"}">${r.posttest_ok?"✓":"✕"} Post-test</div></div></td><td>${certBadge(r)}${r.certificate_no?`<div class="sub">${esc(r.certificate_no)}</div>`:""}</td></tr>`).join("")}</tbody></table>`;
+ $("tableArea").innerHTML=`<table class="table"><thead><tr><th><input type="checkbox" id="headCheck"></th><th>ผู้เข้าอบรม</th><th>การสมัคร / ชำระเงิน</th><th>การเข้าอบรม</th><th>ผลสอบ</th><th>สิทธิ์วุฒิบัตร</th><th>วุฒิบัตร</th></tr></thead><tbody>${rows.map(r=>`<tr><td><input class="row-check" type="checkbox" data-id="${r.registration_id}" ${selected.has(r.registration_id)?"checked":""}></td><td><div class="name">${esc(r.participant_name||"-")}</div><div class="sub">${esc(r.email||"-")} · ${esc(r.organization_name||"-")}</div></td><td><div>${esc(r.registration_status||"-")}</div><div class="sub">${r.payment_required?`การชำระเงิน: ${esc(r.payment_status||"-")}`:"ไม่ต้องชำระเงิน"}</div></td><td>${attendanceBadge(r.attendance_status)}${r.attendance_note?`<div class="sub">${esc(r.attendance_note)}</div>`:""}</td><td>${examBadge(r)}</td><td>${r.certificate_eligible?'<span class="badge b-green">เข้าเกณฑ์</span>':'<span class="badge b-red">ยังไม่เข้าเกณฑ์</span>'}<div class="reason"><div class="${r.registration_ok?"ok":"no"}">${r.registration_ok?"✓":"✕"} สมัครยืนยัน</div><div class="${r.payment_ok?"ok":"no"}">${r.payment_ok?"✓":"✕"} การชำระเงิน</div><div class="${r.attendance_ok?"ok":"no"}">${r.attendance_ok?"✓":"✕"} Attendance</div><div class="${r.posttest_ok?"ok":"no"}">${r.posttest_ok?"✓":"✕"} แบบทดสอบหลังอบรม</div></div></td><td>${certBadge(r)}${r.certificate_no?`<div class="sub">${esc(r.certificate_no)}</div>`:""}</td></tr>`).join("")}</tbody></table>`;
  document.querySelectorAll(".row-check").forEach(x=>x.onchange=()=>{x.checked?selected.add(x.dataset.id):selected.delete(x.dataset.id);updateSelected()});
  $("headCheck").onchange=e=>{rows.forEach(r=>e.target.checked?selected.add(r.registration_id):selected.delete(r.registration_id));render()}
 }
 function updateSelected(){$("selectedCount").textContent=`เลือก ${selected.size} คน`}
 async function mark(status){
  if(!selected.size){alert("กรุณาเลือกผู้เข้าอบรมก่อน");return}
- const labels={ATTENDED:"เข้าร่วมอบรม",ABSENT:"ไม่เข้าร่วม",NOT_MARKED:"ล้าง Attendance"};
+ const labels={ATTENDED:"เข้าร่วมอบรม",ABSENT:"ไม่เข้าร่วม",NOT_MARKED:"ล้างสถานะการเข้าอบรม"};
  if(!confirm(`${labels[status]} จำนวน ${selected.size} คนหรือไม่?`))return;
  const note=status==="NOT_MARKED"?null:(prompt("หมายเหตุ (เว้นว่างได้)")||null);
  const r=await db.rpc("admin_mark_training_attendance",{p_registration_ids:[...selected],p_status:status,p_note:note});
- if(r.error){msg(r.error.message,"error");return}msg(`บันทึก Attendance แล้ว ${r.data?.updated||selected.size} คน`,"success");await load()
+ if(r.error){msg(r.error.message,"error");return}msg(`บันทึกสถานะการเข้าอบรมแล้ว ${r.data?.updated||selected.size} คน`,"success");await load()
 }
 $("search").oninput=render;$("filter").onchange=render;$("selectAllBtn").onclick=()=>{visibleRows().forEach(r=>selected.add(r.registration_id));render()};$("attendedBtn").onclick=()=>mark("ATTENDED");$("absentBtn").onclick=()=>mark("ABSENT");$("clearBtn").onclick=()=>mark("NOT_MARKED");$("logoutBtn").onclick=async()=>{await db.auth.signOut();location="admin-login.html"};
 const sidebar=$("sidebar"),overlay=$("santeMobileOverlay");$("menuBtn").onclick=()=>{sidebar.classList.toggle("open");overlay.classList.toggle("show")};overlay.onclick=()=>{sidebar.classList.remove("open");overlay.classList.remove("show")};document.querySelectorAll(".sidebar .nav-link").forEach(a=>a.addEventListener("click",()=>{sidebar.classList.remove("open");overlay.classList.remove("show")}));
