@@ -142,28 +142,131 @@ label{display:block;font-size:11px;font-weight:600;margin-bottom:5px}.input,text
 
 <meta name="sante-build" content="ACCOUNTING-COPY-MODE-R3">
 
-<style id="sante-accounting-r4">
-/* ACCOUNTING WORKFLOW R4 */
-.accounting-subnav a{position:relative}
-.accounting-subnav a.active:after{content:"";position:absolute;left:14px;right:14px;bottom:4px;height:2px;border-radius:2px;background:#ffbf19}
+<style id="sante-accounting-r5">
+/* ACCOUNTING WORKFLOW / DOCUMENT DESIGN R5 */
+.accounting-subnav{align-items:stretch}
+.accounting-subnav a{
+  position:relative;justify-content:center;text-align:center;
+  flex:0 0 auto;min-width:132px;height:40px;padding:0 18px;
+  line-height:1;border-radius:10px;
+  white-space:nowrap;
+}
+.accounting-subnav a.active{background:#082d69!important;color:#fff!important}
+.accounting-subnav a.active:after{
+  content:"";position:absolute;left:50%;transform:translateX(-50%);
+  width:54px;bottom:4px;height:2px;border-radius:2px;background:#ffbf19;
+}
 .hero-actions .context-hidden{display:none!important}
 .workflow-hint{margin-top:12px;padding:10px 12px;border:1px solid #dce8f3;background:#f8fbff;border-radius:12px;color:#49657f;font-size:11px}
 .workflow-hint b{color:#082d69}
-.paper{padding:42px 44px 40px}
-.paper .head{border-bottom:2px solid #082d69;padding-bottom:14px}
-.paper .seller{font-size:10px}
-.paper .doc-title{font-size:24px}
-.paper .doc-title-en{font-size:11px;color:#6f83a2;font-weight:600;text-align:right;margin-top:2px}
-.paper .party{grid-template-columns:1.35fr .65fr}
-.paper .box{border-radius:7px}
-.paper table{margin-top:16px;border:1px solid #cfddea}
-.paper th,.paper td{border:1px solid #dce6ef}
-.paper th{font-weight:700;color:#173654}
-.paper .doc-kind{display:inline-block;padding:3px 7px;border:1px solid #9db2c8;border-radius:4px;font-size:9px;margin-bottom:6px}
-.paper .accounting-foot{margin-top:20px;padding-top:10px;border-top:1px solid #dce6ef;font-size:9px;color:#5f7186;line-height:1.55}
+.accounting-subject-input{min-height:92px!important;height:auto!important;line-height:1.65!important;resize:vertical!important;padding:12px 14px!important}
+
+/* ===== A4 ACCOUNTING PAPER ===== */
+.paper{
+  width:794px;min-height:1123px;background:#fff;color:#173654;
+  padding:36px 40px 34px;font-family:Prompt,sans-serif;
+}
+.paper .head{
+  display:grid!important;grid-template-columns:1.22fr .78fr;
+  align-items:start;gap:28px;border-bottom:2px solid #082d69;
+  padding-bottom:14px;
+}
+.paper-logo{width:108px!important;height:66px!important;object-fit:contain!important;object-position:left center}
+.paper .seller{font-size:10px;line-height:1.55}
+.paper .seller b{font-size:12px}
+.paper .doc-box{
+  background:#eef4ff;border:1px solid #d5e1f2;border-radius:10px;
+  padding:11px 13px;text-align:right;
+}
+.paper .doc-box .copy-label{text-align:right;font-size:9px;font-weight:700;margin-bottom:3px}
+.paper .doc-title{font-size:22px;line-height:1.15;font-weight:800;color:#082d69;text-align:right}
+.paper .doc-title-en{font-size:10px;color:#49657f;font-weight:700;text-align:right;margin-top:2px}
+.paper .doc-meta{font-size:10px;line-height:1.65;text-align:right;margin-top:5px}
+.paper .doc-kind{display:inline-block;padding:3px 7px;border:1px solid #9db2c8;border-radius:4px;font-size:8px;margin:0 0 5px;color:#5c7189;background:#fff}
+
+.paper .party{
+  display:grid;grid-template-columns:1.3fr .7fr;gap:12px;margin-top:14px;
+}
+.paper .box{
+  border:1px solid #d7e2ee;border-radius:8px;padding:10px 12px;
+  font-size:10px;line-height:1.62;min-height:86px;
+}
+.paper .box b{font-size:10px;color:#082d69}
+.paper .box-right{text-align:left}
+.paper table{
+  width:100%;min-width:0;margin-top:14px;border-collapse:collapse;
+  border:1px solid #cfddea;table-layout:fixed;
+}
+.paper th,.paper td{border:1px solid #d8e3ee;vertical-align:top}
+.paper th{
+  padding:7px 7px;font-size:9px;font-weight:800;color:#173654;
+  background:#eef5fb;line-height:1.3;
+}
+.paper td{padding:7px 7px;font-size:9px;line-height:1.48}
+.paper .desc-col{width:48%}.paper .qty-col{width:10%}.paper .unit-col{width:10%}.paper .price-col{width:11%}.paper .disc-col{width:9%}.paper .vat-col{width:7%}.paper .amount-col{width:13%}
+.paper .item-main{font-weight:700;color:#173654;font-size:10px;line-height:1.45}
+.paper .item-sub{margin-top:2px;color:#61758c;font-size:8.8px;line-height:1.45}
+.paper .item-code{font-size:8px;color:#6f83a2;margin-top:1px}
+.paper .item-thumb{
+  width:34px;height:34px;border-radius:6px;object-fit:cover;
+  float:left;margin:0 7px 2px 0;border:1px solid #d6e1ec;
+}
+.paper .item-no{font-weight:800;margin-right:4px;color:#082d69}
+.paper .money-cell{text-align:right;white-space:nowrap}
+
+.paper .totals-wrap{
+  display:grid;grid-template-columns:1fr 270px;gap:16px;align-items:start;
+  margin-top:16px;padding-top:11px;border-top:1px solid #d8e3ee;
+}
+.paper .summary-note{font-size:9px;color:#5f7186;line-height:1.55}
+.paper .summary-note b{color:#173654}
+.paper .totals{width:auto!important;margin:0!important}
+.paper .total-row{display:flex;justify-content:space-between;gap:15px;padding:4px 0;font-size:10px;line-height:1.45}
+.paper .total-row.grand{
+  margin-top:3px;padding:9px 10px;border:1px solid #cfddea;
+  border-radius:7px;background:#f3f7fc;font-size:13px;font-weight:800;color:#082d69;
+}
+.paper .paid-row{padding-top:7px;border-top:1px dashed #cbd8e6;margin-top:5px}
+
+.paper .payment-box{
+  margin-top:12px;padding:10px 12px;border-top:1px solid #d8e3ee;
+  border-bottom:1px solid #d8e3ee;font-size:9px;line-height:1.55;
+}
+.paper .payment-title{font-weight:800;color:#082d69;margin-bottom:4px}
+.paper .payment-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.paper .payment-item{padding-right:8px;border-right:1px solid #e0e8f0}.paper .payment-item:last-child{border-right:0}
+
+.paper .paper-note{margin-top:12px;font-size:9px;line-height:1.58;color:#516980}
+.paper .paper-note b{color:#173654}
+
+.paper .signature-area{
+  margin-top:18px;padding-top:10px;border-top:1px solid #d8e3ee;
+}
+.paper .signature-grid{
+  display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;
+  align-items:end;
+}
+.paper .signature-box{
+  min-height:95px;display:flex;flex-direction:column;
+  justify-content:flex-end;text-align:center;font-size:8.8px;color:#4f667d;
+}
+.paper .signature-space{height:52px;display:flex;align-items:flex-end;justify-content:center}
+.paper .signature-line{border-top:1px solid #7b8c9d;padding-top:5px}
+.paper .seal-box{
+  height:52px;display:flex;align-items:center;justify-content:center;
+}
+.paper .seal-mark{
+  width:52px;height:52px;border:1.5px solid #6f83a2;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;text-align:center;
+  font-size:7px;line-height:1.15;font-weight:800;color:#365673;
+  letter-spacing:.2px;
+}
+.paper .seal-mark span{display:block}
+.paper .footer-sign-note{text-align:center;font-size:7.8px;color:#73869a;margin-top:5px}
+.paper .accounting-foot{margin-top:12px;padding-top:8px;border-top:1px solid #dce6ef;font-size:8px;color:#73869a;line-height:1.5;text-align:center}
 @media print{.paper{box-shadow:none}}
 </style>
-<meta name="sante-build" content="ACCOUNTING-WORKFLOW-R4">
+<meta name="sante-build" content="ACCOUNTING-DOCUMENT-DESIGN-R5">
 </head>
 <body>
 <div id="loading" class="loading">กำลังโหลดเอกสารบัญชี...</div>
@@ -278,7 +381,8 @@ label{display:block;font-size:11px;font-weight:600;margin-bottom:5px}.input,text
   <div class="full"><label>ที่อยู่ออกเอกสาร</label><textarea id="fAddress"></textarea></div>
   <div><label>อีเมล</label><input id="fEmail" class="input"></div>
   <div><label>โทรศัพท์</label><input id="fPhone" class="input"></div>
-  <div class="full"><label>รายการ / เรื่อง</label><input id="fSubject" class="input"></div>
+  <div class="full"><label>รายละเอียดรายการ / เรื่อง</label><textarea id="fSubject" class="input accounting-subject-input" placeholder="พิมพ์รายละเอียดบริการ/งานที่ต้องการให้แสดงในเอกสาร เช่น อบรมหลักสูตร...
+รายละเอียดเพิ่มเติมบรรทัดที่ 2 (ถ้ามี)"></textarea></div>
   <div><label>มูลค่าก่อน VAT</label><input id="fSubtotal" class="input" type="number" step=".01"></div>
   <div><label>VAT %</label><input id="fVatRate" class="input" type="number" step=".01"></div>
   <div><label>VAT</label><input id="fVat" class="input" type="number" step=".01"></div>
@@ -510,27 +614,84 @@ function accountingCopyLabel(){
 }
 function paperHtml(x){
  const items=Array.isArray(x.items)?x.items:[];
- const rows=items.length?items.map((i,n)=>`<tr><td>${n+1}. ${esc(i.description||x.document_subject||"")}</td><td>${money(i.quantity||1)}</td><td>${esc(i.unit||"งาน")}</td><td style="text-align:right">${money(i.unit_price)}</td><td style="text-align:right">${money(i.discount_amount)}</td><td style="text-align:right">${money(i.line_total)}</td></tr>`).join(""):`<tr><td>1. ${esc(x.document_subject||"ค่าบริการ / ค่าอบรม SANTE")}</td><td>1.00</td><td>งาน</td><td style="text-align:right">${money(x.subtotal)}</td><td style="text-align:right">0.00</td><td style="text-align:right">${money(x.subtotal)}</td></tr>`;
+ const rows=items.length?items.map((i,n)=>{
+   const imageUrl=i.image_url||i.imageUrl||i.thumbnail_url||i.thumbnailUrl||"";
+   const title=i.description||i.name||x.document_subject||"";
+   const sub=i.detail||i.details||i.description2||i.remark||x.document_subject||"";
+   const code=i.code||i.product_code||i.sku||"";
+   const thumb=imageUrl?`<img class="item-thumb" src="${esc(imageUrl)}" crossorigin="anonymous">`:"";
+   return `<tr>
+     <td class="desc-col">${thumb}<span class="item-no">${n+1}.</span><div class="item-main">${esc(title)}</div>${code?`<div class="item-code">(${esc(code)})</div>`:""}${sub&&sub!==title?`<div class="item-sub">${esc(sub)}</div>`:""}</td>
+     <td class="qty-col">${money(i.quantity||1)}</td>
+     <td class="unit-col">${esc(i.unit||"งาน")}</td>
+     <td class="price-col money-cell">${money(i.unit_price)}</td>
+     <td class="disc-col money-cell">${money(i.discount_amount)}</td>
+     <td class="vat-col money-cell">${money(i.vat_rate??x.vat_rate??7)}%</td>
+     <td class="amount-col money-cell">${money(i.line_total)}</td>
+   </tr>`;
+ }).join(""):`<tr>
+   <td class="desc-col"><span class="item-no">1.</span><div class="item-main">${esc(x.document_subject||"ค่าบริการ / ค่าอบรม SANTE")}</div><div class="item-sub">${x.note?esc(x.note):""}</div></td>
+   <td class="qty-col">1.00</td><td class="unit-col">งาน</td>
+   <td class="price-col money-cell">${money(x.subtotal)}</td><td class="disc-col money-cell">0.00</td>
+   <td class="vat-col money-cell">${money(x.vat_rate??7)}%</td><td class="amount-col money-cell">${money(x.subtotal)}</td>
+ </tr>`;
+ const isReceipt=x.document_type==="RECEIPT_TAX_INVOICE";
+ const isInvoice=x.document_type==="INVOICE";
+ const isQuotation=x.document_type==="QUOTATION";
+ const docTitle=typeLabel(x.document_type);
+ const docEn=isQuotation?"QUOTATION":isInvoice?"INVOICE":"RECEIPT / TAX INVOICE";
+ const copyLabel=accountingCopyLabel();
+ const receiveAmount=x.amount_received??x.net_receivable??x.grand_total;
+ const paymentNo=x.payment_no||"-";
  return `<div class="paper">
   <div class="head">
-   <div><img class="paper-logo" src="SANTE-logo-primary.png"><div class="seller"><b>${SANTE.name}</b><br>${SANTE.address}<br>เลขประจำตัวผู้เสียภาษี ${SANTE.taxId}<br>${SANTE.phone} · ${SANTE.email}<br>${SANTE.website}</div></div>
-   <div><div class="copy-label">${accountingCopyLabel()}</div><div class="doc-kind">${esc(x.document_type)}</div><div class="doc-title">${esc(typeLabel(x.document_type))}</div><div class="doc-title-en">${x.document_type==="QUOTATION"?"QUOTATION":x.document_type==="INVOICE"?"INVOICE":"RECEIPT / TAX INVOICE"}</div><div class="doc-meta"><b>${esc(x.document_no||"-")}</b><br>วันที่ออก / Issue Date: ${esc(x.issue_date||new Date().toISOString().slice(0,10))}${x.due_date?`<br>ครบกำหนด / Due Date: ${esc(x.due_date)}`:""}</div></div>
+   <div>
+    <img class="paper-logo" src="SANTE-logo-primary.png" crossorigin="anonymous">
+    <div class="seller"><b>${SANTE.name}</b><br>${SANTE.address}<br>เลขประจำตัวผู้เสียภาษี ${SANTE.taxId}<br>โทร. ${SANTE.phone} · ${SANTE.email}<br>${SANTE.website}</div>
+   </div>
+   <div class="doc-box">
+     <div class="copy-label">${copyLabel}</div>
+     <div class="doc-kind">${esc(x.document_type||"")}</div>
+     <div class="doc-title">${esc(docTitle)}</div>
+     <div class="doc-title-en">${docEn}</div>
+     <div class="doc-meta"><b>เลขที่ / No.: ${esc(x.document_no||"-")}</b><br>วันที่ออก / Issue Date: ${esc(x.issue_date||new Date().toISOString().slice(0,10))}${x.due_date?`<br>ครบกำหนด / Due Date: ${esc(x.due_date)}`:""}</div>
+   </div>
   </div>
   <div class="party">
-   <div class="box"><b>ลูกค้า</b><br>${esc(x.organization_name||x.customer_name||"-")}<br>${esc(x.billing_address||"")}<br>เลขประจำตัวผู้เสียภาษี: ${esc(x.customer_tax_id||"-")} ${esc(x.customer_branch||"")}</div>
-   <div class="box"><b>ผู้ติดต่อ</b><br>${esc(x.customer_name||"-")}<br>${esc(x.phone||"-")}<br>${esc(x.email||"-")}</div>
+   <div class="box"><b>ลูกค้า / CUSTOMER</b><br>${esc(x.organization_name||x.customer_name||"-")}<br>${esc(x.billing_address||"")}<br>เลขประจำตัวผู้เสียภาษี: ${esc(x.customer_tax_id||"-")} ${esc(x.customer_branch||"")}</div>
+   <div class="box box-right"><b>ผู้ติดต่อ / CONTACT</b><br>${esc(x.customer_name||"-")}<br>โทร. ${esc(x.phone||"-")}<br>${esc(x.email||"-")}<br>อ้างอิง: ${esc(refText(x))}</div>
   </div>
-  <table><thead><tr><th>รายการ</th><th>จำนวน</th><th>หน่วย</th><th>ราคา/หน่วย</th><th>ส่วนลด</th><th>รวม</th></tr></thead><tbody>${rows}</tbody></table>
-  <div class="totals">
-   <div class="total-row"><span>มูลค่าก่อน VAT</span><span>${money(x.subtotal)} บาท</span></div>
-   <div class="total-row"><span>VAT ${money(x.vat_rate)}%</span><span>${money(x.vat_amount)} บาท</span></div>
-   <div class="total-row grand"><span>ยอดรวม</span><span>${money(x.grand_total)} บาท</span></div>
-   ${Number(x.wht_amount||0)>0?`<div class="total-row"><span>หัก ณ ที่จ่าย ${money(x.wht_rate)}%</span><span>${money(x.wht_amount)} บาท</span></div><div class="total-row"><b>ยอดชำระสุทธิ</b><b>${money(x.net_receivable)} บาท</b></div>`:""}
-   ${x.document_type==="RECEIPT_TAX_INVOICE"?`<div class="total-row"><b>ยอดรับเงินจริง</b><b>${money(x.amount_received??x.net_receivable)} บาท</b></div>`:""}
+  <table>
+   <thead><tr>
+    <th class="desc-col">คำอธิบาย / DESCRIPTION</th><th class="qty-col">จำนวน<br>QTY</th><th class="unit-col">หน่วย<br>UNIT</th><th class="price-col">ราคา<br>PRICE</th><th class="disc-col">ส่วนลด<br>DISCOUNT</th><th class="vat-col">VAT</th><th class="amount-col">มูลค่าก่อนภาษี<br>AMOUNT</th>
+   </tr></thead>
+   <tbody>${rows}</tbody>
+  </table>
+  <div class="totals-wrap">
+   <div class="summary-note">
+     <b>รายละเอียด / NOTES</b><br>
+     ${x.document_subject?`เรื่อง: ${esc(x.document_subject)}<br>`:""}
+     ${x.terms?`เงื่อนไข: ${esc(x.terms)}<br>`:""}
+     ${x.note?esc(x.note):"กรุณาตรวจสอบชื่อ/ที่อยู่ เลขประจำตัวผู้เสียภาษี และยอดเงินก่อนนำเอกสารไปใช้งาน"}
+   </div>
+   <div class="totals">
+    <div class="total-row"><span>มูลค่าก่อน VAT</span><span>${money(x.subtotal)} บาท</span></div>
+    <div class="total-row"><span>ภาษีมูลค่าเพิ่ม ${money(x.vat_rate??7)}%</span><span>${money(x.vat_amount)} บาท</span></div>
+    <div class="total-row grand"><span>จำนวนเงินทั้งสิ้น</span><span>${money(x.grand_total)} บาท</span></div>
+    ${Number(x.wht_amount||0)>0?`<div class="total-row"><span>หัก ณ ที่จ่าย ${money(x.wht_rate||0)}%</span><span>${money(x.wht_amount)} บาท</span></div><div class="total-row paid-row"><b>จำนวนเงินที่ชำระสุทธิ</b><b>${money(x.net_receivable)} บาท</b></div>`:""}
+    ${isReceipt?`<div class="total-row paid-row"><b>ยอดรับเงินจริง</b><b>${money(receiveAmount)} บาท</b></div>`:""}
+   </div>
   </div>
-  <div class="paper-note"><b>เรื่อง:</b> ${esc(x.document_subject||"-")}<br>${x.terms?`<b>เงื่อนไข:</b> ${esc(x.terms)}<br>`:""}${x.note?`<b>หมายเหตุ:</b> ${esc(x.note)}`:""}</div>
-  <div class="footer-sign"><div>................................................<br>ผู้จัดทำ / Prepared by</div><div>................................................<br>${x.document_type==="RECEIPT_TAX_INVOICE"?"ผู้อนุมัติเอกสารภาษี / Tax Approval":"ผู้อนุมัติเอกสาร / Authorized by"}</div></div>
-  <div class="accounting-foot">เอกสารฉบับนี้จัดทำจากระบบ SANTE Accounting Documents · กรุณาตรวจสอบเลขประจำตัวผู้เสียภาษี ชื่อ/ที่อยู่ และยอด VAT/WHT ก่อนนำไปใช้งานจริง</div>
+  ${isReceipt?`<div class="payment-box"><div class="payment-title">การชำระเงิน / PAYMENT</div><div class="payment-grid"><div class="payment-item">วันที่ชำระ: ${esc(x.payment_date||x.issue_date||"-")}</div><div class="payment-item">Payment No.: ${esc(paymentNo)}</div><div class="payment-item">จำนวนเงินที่รับ: ${money(receiveAmount)} บาท</div></div></div>`:""}
+  <div class="signature-area">
+   <div class="signature-grid">
+    <div class="signature-box"><div class="signature-space"></div><div class="signature-line">ผู้จัดทำเอกสาร / Prepared by</div></div>
+    <div class="signature-box"><div class="signature-space"></div><div class="signature-line">ผู้มีอำนาจลงนาม / Authorized Signatory</div></div>
+    <div class="signature-box"><div class="seal-box"><div class="seal-mark"><span>SANTE<br>CONSULTING<br>CO., LTD.</span></div></div><div class="signature-line">ตราประทับบริษัท / Company Seal</div></div>
+   </div>
+   <div class="footer-sign-note">${isReceipt?"เอกสารฉบับนี้ใช้เป็นหลักฐานการรับเงินและ/หรือใบกำกับภาษีตามข้อมูลที่ระบุข้างต้น":"เอกสารฉบับนี้จัดทำจากข้อมูลใน SANTE Accounting Documents"}</div>
+  </div>
+  <div class="accounting-foot">SANTE Accounting Documents · ${esc(docEn)} · ${copyLabel}</div>
  </div>`;
 }
 
