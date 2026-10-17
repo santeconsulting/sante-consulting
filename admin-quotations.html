@@ -3064,6 +3064,82 @@ textarea{
 </style>
 <meta name="sante-build" content="QUOTATION-R24-SUMMARY-DETAILS-LOGO">
 
+
+<style id="sante-quotation-r25-customer-details-summary">
+/* R25 — customer wording, item details, compact WHT summary */
+
+/* Item detail: readable, regular weight */
+.reference-qo .ref-desc-grid{
+  grid-template-columns:auto minmax(0,1fr)!important;
+  gap:1.5mm!important;
+  align-items:start!important;
+}
+.reference-qo .ref-desc-no{
+  font-size:8.5pt!important;
+  line-height:1.5!important;
+  font-weight:400!important;
+  color:#43566b!important;
+}
+.reference-qo .ref-desc-main{
+  font-size:8.9pt!important;
+  line-height:1.52!important;
+  font-weight:400!important;
+  color:#17283d!important;
+}
+.reference-qo .ref-desc-sub{
+  margin-top:1mm!important;
+  font-size:8.25pt!important;
+  line-height:1.52!important;
+  font-weight:400!important;
+  color:#526b84!important;
+}
+
+/* Give final summary enough width when WHT is enabled */
+.reference-qo .ref-summary{
+  grid-template-columns:minmax(0,1fr) 82mm!important;
+  gap:5mm!important;
+}
+.reference-qo .ref-total-line{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) 34mm!important;
+  gap:2.5mm!important;
+  align-items:center!important;
+  padding:1.2mm 0!important;
+  font-size:8.15pt!important;
+}
+.reference-qo .ref-total-line > :last-child{
+  text-align:right!important;
+  white-space:nowrap!important;
+}
+
+/* Final net payment should remain one clean summary block */
+.reference-qo .ref-net-total{
+  grid-template-columns:minmax(0,1fr) 36mm!important;
+  margin-top:1mm!important;
+  padding:2mm 0 1mm!important;
+}
+.reference-qo .ref-net-total b:first-child{
+  font-size:8.9pt!important;
+  line-height:1.3!important;
+  font-weight:700!important;
+  white-space:nowrap!important;
+}
+.reference-qo .ref-net-total b:last-child{
+  font-size:11.6pt!important;
+  line-height:1.25!important;
+  font-weight:800!important;
+  white-space:nowrap!important;
+}
+
+/* Slightly rebalance the left-side summary after widening the total column */
+.reference-qo .ref-summary-left{
+  grid-template-columns:15mm minmax(0,1fr) 27mm!important;
+  gap:1.3mm 2mm!important;
+  font-size:8pt!important;
+}
+</style>
+<meta name="sante-build" content="QUOTATION-R25-CUSTOMER-DETAILS-SUMMARY">
+
 </head>
 <body>
 
@@ -3195,7 +3271,7 @@ textarea{
 <div><label>เลขประจำตัวผู้เสียภาษี</label><input id="customerTaxId" class="input"></div><div><label>สาขา</label><input id="customerBranch" class="input"></div>
 <div><label>อีเมล</label><input id="email" class="input"></div><div><label>โทรศัพท์</label><input id="phone" class="input"></div>
 <div class="full"><label>ที่อยู่สำหรับออกเอกสาร</label><textarea id="billingAddress" rows="3"></textarea></div>
-<div class="full"><label>เรื่อง / ขอบเขตงาน</label><textarea id="documentSubject" rows="2"></textarea></div>
+<input id="documentSubject" type="hidden" value="">
 <div><label>วันที่ออก</label><input id="issueDate" type="date" class="input"></div><div><label>ใช้ได้ถึง (มาตรฐาน 60 วัน)</label><input id="validUntil" type="date" class="input"></div></div>
 <div class="items"><div style="display:flex;justify-content:space-between;align-items:center"><h3>รายการ</h3><button class="btn light" onclick="addItem()">+ เพิ่มรายการ</button></div><div id="items"></div></div>
 <div class="grid">
@@ -3210,7 +3286,7 @@ textarea{
     </select>
   </div>
 </div>
-<div class="full"><label>เงื่อนไขการชำระเงิน</label><textarea id="terms" rows="3">ใบเสนอราคามีอายุ 60 วัน และเครดิตเทอม 30 วัน หลังการให้บริการ</textarea></div>
+<input id="terms" type="hidden" value="">
 <div class="full"><label>หมายเหตุ</label><textarea id="note" rows="2"></textarea></div></div>
 <div class="summary"><span>มูลค่าหลังส่วนลด</span><span id="sumSubtotal">0.00</span><span>VAT</span><span id="sumVat">0.00</span><span>ยอดรวมทั้งสิ้น</span><strong id="sumGrand">0.00</strong><span id="sumWhtLabel">หัก ณ ที่จ่าย</span><span id="sumWht">0.00</span><span id="sumNetLabel">ยอดชำระสุทธิ</span><strong id="sumNet">0.00</strong></div>
 
@@ -3307,7 +3383,7 @@ function toggleWht(){
   if(sumNetLabel)sumNetLabel.textContent=enabled?"ยอดชำระสุทธิ":"ยอดชำระ";
 }
 
-function resetEditor(){editingId=null;editorTitle.textContent="สร้างใบเสนอราคา";quotationNo.textContent="";requestId.value="";customerName.value=organizationName.value=customerTaxId.value=customerBranch.value=email.value=phone.value=billingAddress.value=documentSubject.value=note.value="";issueDate.value=new Date().toISOString().slice(0,10);validUntil.value=addDays(issueDate.value,60);vatRate.value=7;showWht.checked=false;whtRate.value=3;toggleWht();terms.value="ใบเสนอราคามีอายุ 60 วัน และเครดิตเทอม 30 วัน หลังการให้บริการ";items.innerHTML="";addItem();try{recalc()}catch(e){console.warn('initial preview error',e)}}
+function resetEditor(){editingId=null;editorTitle.textContent="สร้างใบเสนอราคา";quotationNo.textContent="";requestId.value="";customerName.value=organizationName.value=customerTaxId.value=customerBranch.value=email.value=phone.value=billingAddress.value=documentSubject.value=note.value="";issueDate.value=new Date().toISOString().slice(0,10);validUntil.value=addDays(issueDate.value,60);vatRate.value=7;showWht.checked=false;whtRate.value=3;toggleWht();terms.value="";items.innerHTML="";addItem();try{recalc()}catch(e){console.warn('initial preview error',e)}}
 function requestAddress(r){return [r.address_no,r.moo&&"หมู่ "+r.moo,r.building,r.soi&&"ซอย "+r.soi,r.road&&"ถนน"+r.road,r.subdistrict,r.district,r.province,r.postcode].filter(Boolean).join(" ")}
 function requestDescription(r){if(r.request_type==="TRAINING")return `${r.course_name||"อบรม In-house"} จำนวน ${r.participant_count||"-"} คน`;if(r.request_type==="CONSULTING")return r.service_detail?.subject||"งานที่ปรึกษา";if(r.service_group==="ELECTRICAL")return "ตรวจสอบและรับรองระบบไฟฟ้าและบริภัณฑ์ไฟฟ้า";const m=r.service_detail?.measurements||{};return Object.values(m).map(x=>`${x.name} จำนวน ${x.count||0} ${x.unit||""}`).join("\n")||"บริการตรวจวัดด้านสุขศาสตร์อุตสาหกรรม"}
 function applyRequest(){const r=requests.find(x=>x.id===requestId.value);if(!r)return;customerName.value=r.customer_name||r.contact_name||"";organizationName.value=r.organization_name||"";customerTaxId.value=r.company_tax_id||"";customerBranch.value=r.company_branch_type==="BRANCH"?"สาขา "+(r.company_branch_no||""):"สำนักงานใหญ่";email.value=r.email||"";phone.value=r.phone||r.contact_phone||"";billingAddress.value=requestAddress(r);documentSubject.value=requestDescription(r);items.innerHTML="";addItemFrom({description:requestDescription(r),quantity:1,unit:r.request_type==="TRAINING"?"งาน":"งาน",unit_price:0,discount_amount:0});recalc()}
@@ -3559,8 +3635,8 @@ function renderPaper(c){
         <div class="ref-party-title">ลูกค้า :</div>
         <div class="ref-party-row"><b>ชื่อ :</b><div><b>${esc(organizationName.value||customerName.value||"-")}</b></div></div>
         <div class="ref-party-row"><b>ที่อยู่ :</b><div>${esc(billingAddress.value||"-")}</div></div>
-        <div class="ref-party-row"><b>เลขที่ภาษี :</b><div>${esc(customerTaxId.value||"-")} ${esc(customerBranch.value||"")}</div></div>
-        <div class="ref-party-row"><b>เรียน :</b><div>${esc(documentSubject.value||"-")}</div></div>
+        <div class="ref-party-row"><b>เลขประจำตัวผู้เสียภาษี :</b><div>${esc(customerTaxId.value||"-")} ${esc(customerBranch.value||"")}</div></div>
+        <div class="ref-party-row"><b>เรียน :</b><div>${esc(customerName.value||organizationName.value||"-")}</div></div>
       </div>
       <div>
         <div class="ref-party-title">ติดต่อกลับที่ :</div>
@@ -3575,7 +3651,7 @@ function renderPaper(c){
         <col style="width:55%"><col style="width:8%"><col style="width:8%"><col style="width:9%"><col style="width:8%"><col style="width:5%"><col style="width:10%">
       </colgroup>
       <thead><tr>
-        <th>คำอธิบาย</th><th>จำนวน</th><th>หน่วย</th><th>ราคา</th><th>ส่วนลด</th><th>VAT</th><th>มูลค่าก่อนภาษี</th>
+        <th>รายละเอียด</th><th>จำนวน</th><th>หน่วย</th><th>ราคา</th><th>ส่วนลด</th><th>VAT</th><th>มูลค่าก่อนภาษี</th>
       </tr></thead>
       <tbody>${itemRows}</tbody>
     </table>
