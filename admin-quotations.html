@@ -2280,6 +2280,56 @@ textarea{
 </style>
 <meta name="sante-build" content="QUOTATION-DOCUMENT-LAYOUT-R13">
 
+
+<style id="sante-quotation-r14-no-underline-stamp-fix">
+/* R14 - only remove accounting tab underline and enlarge stamp balance */
+.accounting-subnav a::after,
+.accounting-subnav a.active::after{
+  content:none!important;
+  display:none!important;
+}
+
+/* keep active tab style but without decorative underline */
+.accounting-subnav a.active{
+  background:#082d69!important;
+  color:#fff!important;
+}
+
+/* enlarge seller stamp area while keeping signature rows aligned */
+.cert{
+  align-items:end!important;
+}
+.cert > div{
+  min-height:37mm!important;
+  display:grid!important;
+  grid-template-rows:25mm auto!important;
+  align-items:end!important;
+  justify-items:center!important;
+}
+.cert .sig{
+  height:11.5mm!important;
+  max-height:11.5mm!important;
+  max-width:34mm!important;
+  margin:0 auto 1.5mm!important;
+}
+.cert .stamp{
+  width:48mm!important;
+  height:28mm!important;
+  max-width:48mm!important;
+  max-height:28mm!important;
+  margin:0 auto 1.5mm!important;
+  object-fit:contain!important;
+  object-position:center bottom!important;
+}
+.cert small{
+  min-height:10mm!important;
+  display:block!important;
+  text-align:center!important;
+  line-height:1.38!important;
+}
+</style>
+<meta name="sante-build" content="QUOTATION-R14-NO-UNDERLINE-STAMP-FIX">
+
 </head>
 <body>
 
