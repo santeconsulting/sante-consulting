@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>SANTE Admin - ใบประกาศนียบัตร</title>
+<title>SANTE Admin | วุฒิบัตร</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -11,7 +11,6 @@
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
-<link rel="stylesheet" href="admin-member-master.css">
 <style>
 :root{--navy:#112443;--blue:#0b447f;--yellow:#f8c73d;--line:#dbe5ef;--muted:#71839c;--bg:#f6f9fd}
 *{box-sizing:border-box}
@@ -646,9 +645,172 @@ body{font-family:"Prompt",sans-serif!important;background:var(--bg)!important;co
  .content{width:100%!important;padding:10px 12px 42px!important}
 }
 </style>
+
+<style id="sante-certificates-unified-r12">
+/* =========================================================
+   R12 — Match current SANTE Admin shell.
+   Visual/UI only; certificate business logic is untouched.
+========================================================= */
+:root{
+  --sidebar:285px!important;
+  --navy:#082d69!important;
+  --navy-dark:#061f4b!important;
+  --yellow:#ffbf19!important;
+  --bg:#f1f7fb!important;
+  --text:#082d69!important;
+  --muted:#6f83a2!important;
+  --line:#d9e5ef!important;
+}
+html,body{min-height:100%;background:var(--bg)!important}
+body{margin:0!important;font-family:"Prompt",sans-serif!important;color:var(--text)!important}
+
+/* Sidebar — exact structure used by the other modules */
+.sidebar{
+  position:fixed!important;left:0!important;top:0!important;bottom:0!important;
+  width:var(--sidebar)!important;z-index:1200!important;
+  padding:0!important;overflow-y:auto!important;overflow-x:hidden!important;
+  display:flex!important;flex-direction:column!important;
+  background:linear-gradient(180deg,#082d69 0%,#06265c 55%,#061f4b 100%)!important;
+  color:#fff!important;
+}
+.sidebar-brand{
+  min-height:128px!important;height:auto!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  padding:22px 25px!important;border-bottom:1px solid rgba(255,255,255,.09)!important;
+}
+.sidebar-brand img{
+  width:190px!important;height:82px!important;max-width:100%!important;
+  object-fit:contain!important;background:transparent!important;border:0!important;
+}
+.sidebar-label{
+  padding:26px 25px 10px!important;color:#9bb1d0!important;
+  font-size:12px!important;letter-spacing:1.7px!important;opacity:1!important;
+}
+.sidebar .nav{padding:0 15px 25px!important;display:block!important}
+.sidebar .nav-link{
+  min-height:58px!important;display:flex!important;align-items:center!important;gap:14px!important;
+  margin:5px 0!important;padding:0 17px!important;border-radius:16px!important;
+  color:#e4edfa!important;background:transparent!important;text-decoration:none!important;
+  font:500 15px/1.25 Prompt,sans-serif!important;
+}
+.sidebar .nav-link:hover{background:rgba(255,255,255,.07)!important}
+.sidebar .nav-link.active{background:var(--yellow)!important;color:var(--navy)!important;font-weight:600!important}
+.sidebar .nav-icon{width:29px!important;min-width:29px!important;text-align:center!important;font-size:20px!important}
+.sidebar-footer{
+  margin:auto 15px 22px!important;padding:18px!important;border:0!important;border-radius:17px!important;
+  background:rgba(255,255,255,.07)!important;font-size:11px!important;line-height:1.6!important;opacity:1!important;
+}
+.sidebar-footer p{margin:6px 0 0!important;color:#b6c8e2!important}
+
+/* Topbar */
+.main{
+  margin-left:var(--sidebar)!important;min-height:100vh!important;padding-top:88px!important;background:var(--bg)!important
+}
+.topbar{
+  position:fixed!important;left:var(--sidebar)!important;right:0!important;top:0!important;
+  height:88px!important;min-height:88px!important;z-index:1000!important;
+  padding:0 34px!important;background:rgba(255,255,255,.98)!important;
+  border-bottom:1px solid #e2ebf3!important;box-shadow:none!important;
+  display:flex!important;align-items:center!important;justify-content:space-between!important;
+}
+.topbar-left{display:flex!important;align-items:center!important;gap:14px!important}
+.page-name{font-size:21px!important;line-height:1.3!important;font-weight:600!important;color:var(--navy)!important}
+.page-sub{font-size:12px!important;color:var(--muted)!important;margin-top:4px!important}
+.admin-area{display:flex!important;align-items:center!important;gap:16px!important}
+.admin-copy{text-align:right!important}.admin-name{font-size:14px!important;font-weight:600!important}
+.admin-email{font-size:11px!important;color:var(--muted)!important}
+.mobile-menu{display:none!important}
+
+/* Content + hero */
+.content{
+  width:min(1540px,calc(100% - 58px))!important;margin:0 auto!important;padding:26px 0 46px!important
+}
+.admin-canonical-hero{
+  width:100%!important;display:block!important;overflow:hidden!important;
+  margin:0 0 22px!important;padding:6px!important;border-radius:24px!important;
+  background:#fff!important;box-shadow:0 10px 30px rgba(11,45,103,.07)!important;
+}
+.admin-canonical-hero picture,.admin-canonical-hero img{display:block!important;width:100%!important}
+.admin-canonical-hero img{height:auto!important;object-fit:contain!important;border-radius:18px!important}
+
+/* Replace the old white boxed heading with the same module heading rhythm */
+.page-header{
+  display:flex!important;justify-content:space-between!important;align-items:flex-start!important;gap:18px!important;
+  margin:0 4px 20px!important;padding:0!important;background:transparent!important;
+  border:0!important;border-radius:0!important;box-shadow:none!important;
+}
+.page-header h1{
+  margin:0!important;color:var(--navy)!important;font-size:30px!important;line-height:1.3!important;font-weight:700!important
+}
+.page-header p{margin:6px 0 0!important;color:var(--muted)!important;font-size:13px!important;line-height:1.55!important}
+
+/* Tabs */
+.tabs{
+  display:flex!important;align-items:stretch!important;gap:8px!important;padding:7px!important;
+  margin-bottom:18px!important;background:#fff!important;border:1px solid var(--line)!important;border-radius:16px!important
+}
+.tab{
+  flex:1!important;min-width:145px!important;min-height:44px!important;border:0!important;border-radius:11px!important;
+  display:inline-flex!important;align-items:center!important;justify-content:center!important;
+  background:transparent!important;color:var(--navy)!important;font:600 12px Prompt,sans-serif!important;
+  text-align:center!important
+}
+.tab.active{background:var(--navy)!important;color:#fff!important}
+
+/* Cards and buttons match the rest of the Admin system */
+.panel,.form,.preview-panel,.stat,.table-wrap{
+  border-color:var(--line)!important;box-shadow:0 6px 20px rgba(8,45,105,.035)!important
+}
+.btn{
+  min-height:43px!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;
+  text-align:center!important;line-height:1.2!important;border-radius:11px!important;box-sizing:border-box!important
+}
+.btn.primary{background:var(--navy)!important;color:#fff!important}
+.btn.yellow{background:var(--yellow)!important;color:var(--navy)!important}
+.btn.light{background:#fff!important;color:var(--navy)!important;border:1px solid var(--line)!important}
+.final-section-kicker{
+  text-transform:none!important;letter-spacing:0!important;font-family:"Prompt",sans-serif!important;color:#6f83a2!important
+}
+
+/* Prevent the old designer from making the whole page visually wider than other pages */
+.designer{grid-template-columns:minmax(380px,440px) minmax(620px,1fr)!important}
+.preview-panel{top:104px!important}
+
+@media(max-width:1200px) and (min-width:901px){
+  :root{--sidebar:255px!important}
+}
+@media(max-width:1050px){
+  .designer{grid-template-columns:1fr!important}
+  .preview-panel{position:relative!important;top:auto!important;max-height:none!important;overflow:visible!important}
+}
+@media(max-width:900px){
+  :root{--sidebar:285px!important}
+  .sidebar{
+    width:min(84vw,320px)!important;height:100dvh!important;
+    transform:translateX(-100%)!important;transition:transform .22s ease!important
+  }
+  .sidebar.open{transform:translateX(0)!important}
+  .main{margin-left:0!important;padding-top:68px!important}
+  .topbar{left:0!important;height:68px!important;min-height:68px!important;padding:0 12px!important}
+  .mobile-menu{display:inline-flex!important;align-items:center!important;justify-content:center!important;min-width:44px!important;height:44px!important}
+  .admin-copy,.page-sub{display:none!important}
+  .content{width:100%!important;padding:14px 12px 42px!important}
+  .admin-canonical-hero{margin-bottom:16px!important;border-radius:20px!important}
+  .page-header{flex-direction:column!important;margin:0 2px 16px!important}
+  .page-header h1{font-size:24px!important}
+  .tabs{overflow:auto!important}
+  .tab{flex:0 0 auto!important}
+}
+@media(max-width:767px){
+  .admin-canonical-hero{padding:5px!important;border-radius:18px!important}
+  .admin-canonical-hero img{border-radius:14px!important}
+}
+</style>
+<meta name="sante-build" content="CERTIFICATES-UNIFIED-R12">
+
 </head>
 <body>
-<div class="loading" id="loading"><div class="loading-box"><strong>SANTE CERTIFICATE</strong><div>กำลังตรวจสอบสิทธิ์และโหลดข้อมูล...</div><div class="spinner"></div></div></div>
+<div class="loading" id="loading"><div class="loading-box"><strong>ระบบวุฒิบัตร SANTE</strong><div>กำลังตรวจสอบสิทธิ์และโหลดข้อมูล...</div><div class="spinner"></div></div></div>
 
 
 <div id="santeMobileOverlay"></div>
@@ -681,27 +843,40 @@ body{font-family:"Prompt",sans-serif!important;background:var(--bg)!important;co
 
 <header class="topbar">
   <div class="topbar-left">
-    <button id="certMenuBtn" class="mobile-menu" type="button">☰</button>
+    <button id="certMenuBtn" class="btn mobile-menu" type="button">☰</button>
     <div>
       <div class="page-name">วุฒิบัตร</div>
-      <div class="page-sub">ออกแบบ ออกวุฒิบัตร และจัดการเอกสาร</div>
+      <div class="page-sub">ออกแบบ ออกวุฒิบัตร ตรวจสอบ และจัดการเอกสาร</div>
     </div>
   </div>
-  <button class="btn light" type="button" onclick="logout()">ออกจากระบบ</button>
+  <div class="admin-area">
+    <div class="admin-copy">
+      <div class="admin-name">ผู้ดูแลระบบ SANTE</div>
+      <div id="adminEmail" class="admin-email"></div>
+    </div>
+    <button class="btn" type="button" onclick="logout()">ออกจากระบบ</button>
+  </div>
 </header>
 
 <main class="main">
   <div class="content">
+
+    <section class="admin-canonical-hero" aria-label="SANTE Admin">
+      <picture>
+        <source media="(max-width:767px)" srcset="sante-dashboard-hero-mobile.png">
+        <img src="sante-dashboard-hero-desktop.png" alt="Trust in Safety. Trust in SANTE.">
+      </picture>
+    </section>
     <section class="page-header">
-      <div><h1>ใบประกาศนียบัตร</h1><p>ออกวุฒิบัตร ออกแบบข้อความ ตรวจสอบ QR และจัดการเอกสารจากหน้าเดียว</p></div>
+      <div><h1>วุฒิบัตร</h1><p>ออกแบบ ออกวุฒิบัตร ตรวจสอบ QR และจัดการเอกสารจากหน้าเดียว</p></div>
       <button class="btn yellow" onclick="switchTab('designer')">+ ออกวุฒิบัตร</button>
     </section>
 
     <div class="tabs">
       <button class="tab active" data-tab="list" onclick="switchTab('list')">รายการวุฒิบัตร</button>
-      <button class="tab" data-tab="designer" onclick="switchTab('designer')">ออกวุฒิบัตร / Designer</button>
-      <button class="tab" data-tab="bulk" onclick="switchTab('bulk')">ออกหลายใบ</button>
-      <button class="tab" data-tab="signers" onclick="switchTab('signers')">ผู้ลงนาม</button>
+      <button class="tab" data-tab="designer" onclick="switchTab('designer')">ออกแบบและออกวุฒิบัตร</button>
+      <button class="tab" data-tab="bulk" onclick="switchTab('bulk')">ออกวุฒิบัตรหลายใบ</button>
+      <button class="tab" data-tab="signers" onclick="switchTab('signers')">ข้อมูลผู้ลงนาม</button>
     </div>
 
     <section id="tab-list" class="tab-panel active">
@@ -740,11 +915,11 @@ body{font-family:"Prompt",sans-serif!important;background:var(--bg)!important;co
             <button class="btn primary" id="updateTemplateBtn" onclick="updateSavedTemplate()" disabled>อัปเดตแม่แบบ</button>
             <button class="btn danger" id="deleteTemplateBtn" onclick="deleteSavedTemplate()" disabled>ลบแม่แบบ</button>
           </div>
-          <div class="template-note">กรอกข้อความแล้ว Preview จะเปลี่ยนทันที คุณสามารถเลือกข้อความบน Preview แล้วใช้ปุ่มลูกศรเพื่อขยับตำแหน่ง และ +/- เพื่อปรับขนาดได้</div>
+          <div class="template-note">กรอกข้อความแล้วตัวอย่างวุฒิบัตรจะเปลี่ยนทันที สามารถเลือกข้อความบนตัวอย่างแล้วใช้ปุ่มลูกศรเพื่อขยับตำแหน่ง และปุ่มเพิ่ม/ลดเพื่อปรับขนาดได้</div>
 
           <div class="group"><label>ประเภท</label><select id="typeCode" onchange="applyType()"><option value="FREE_TRAINING">อบรมฟรี</option><option value="PAID_TRAINING">อบรมมีค่าใช้จ่าย</option><option value="SERVICE">งานบริการ</option></select></div>
-          <div class="group" id="subtypeGroup" style="display:none"><label>รูปแบบการอบรมมีค่าใช้จ่าย</label><select id="subtype" onchange="applyPrefix()"><option value="PUBLIC">Public Training</option><option value="INHOUSE">In-house Training</option></select></div>
-          <div class="group"><label>ภาษา</label><select id="language"><option value="th">ภาษาไทย</option><option value="en">English (ใช้เมื่อต้องการ)</option></select></div>
+          <div class="group" id="subtypeGroup" style="display:none"><label>รูปแบบการอบรมมีค่าใช้จ่าย</label><select id="subtype" onchange="applyPrefix()"><option value="PUBLIC">อบรมสาธารณะ</option><option value="INHOUSE">อบรมภายในองค์กร</option></select></div>
+          <div class="group"><label>ภาษา</label><select id="language"><option value="th">ภาษาไทย</option><option value="en">ภาษาอังกฤษ (ใช้เมื่อต้องการ)</option></select></div>
 
           <div class="bg-manager">
             <div class="bg-manager-head">
@@ -773,7 +948,7 @@ body{font-family:"Prompt",sans-serif!important;background:var(--bg)!important;co
             <select id="userId" onchange="applySelectedUser()"><option value="">-- พิมพ์ชื่อเอง --</option></select>
           </div>
           <div class="dynamic-help">
-  <strong>Dynamic Fields ของแม่แบบ</strong><br>
+  <strong>ช่องข้อมูลอัตโนมัติของแม่แบบ</strong><br>
   ตอนบันทึกแม่แบบ ระบบจะจำตำแหน่ง ขนาด สี และกรอบข้อความ แต่จะไม่จำชื่อผู้รับจริง
   <div style="margin-top:6px">
     <span class="dynamic-token">{{recipient_name}}</span>
@@ -791,7 +966,7 @@ body{font-family:"Prompt",sans-serif!important;background:var(--bg)!important;co
 <div class="final-section issuer-final-section">
   <div class="final-section-head">
     <div>
-      <div class="final-section-kicker">CERTIFICATE ISSUER</div>
+      <div class="final-section-kicker">ผู้ออกวุฒิบัตร</div>
       <h4>รูปแบบการออกวุฒิบัตร</h4>
       <p>เลือกก่อนว่าออกในนาม SANTE หรือออกในนามบริษัท/หน่วยงานลูกค้า</p>
     </div>
@@ -869,7 +1044,7 @@ body{font-family:"Prompt",sans-serif!important;background:var(--bg)!important;co
 </div>
           <div class="group"><label>ข้อความนำ</label><input id="bodyTitle" value="ผ่านการฝึกอบรมหลักสูตร" oninput="syncPreview()"></div>
           <div class="final-section details-final-section">
-  <div class="final-section-head"><div><div class="final-section-kicker">ADDITIONAL DETAILS</div><h4>รายละเอียดเพิ่มเติมบนวุฒิบัตร</h4><p>แยกเป็น 3 ช่อง เพื่อควบคุมข้อความและตำแหน่งได้ชัดเจน</p></div></div>
+  <div class="final-section-head"><div><div class="final-section-kicker">รายละเอียดเพิ่มเติม</div><h4>รายละเอียดเพิ่มเติมบนวุฒิบัตร</h4><p>แยกเป็น 3 ช่อง เพื่อควบคุมข้อความและตำแหน่งได้ชัดเจน</p></div></div>
 <div class="detail-section">
   <div class="detail-section-title">รายละเอียด 3 บรรทัด</div>
 
@@ -931,11 +1106,11 @@ body{font-family:"Prompt",sans-serif!important;background:var(--bg)!important;co
 
 
 <div class="final-section signature-final-section">
-  <div class="final-section-head"><div><div class="final-section-kicker">SIGNATURES</div><h4>ผู้ลงนามในวุฒิบัตร</h4><p>เลือก 0 / 1 / 2 คน — 1 คนอยู่กึ่งกลาง, 2 คนจัดซ้าย–ขวาอัตโนมัติ</p></div></div>
+  <div class="final-section-head"><div><div class="final-section-kicker">ผู้ลงนาม</div><h4>ผู้ลงนามในวุฒิบัตร</h4><p>เลือก 0 / 1 / 2 คน — 1 คนอยู่กึ่งกลาง, 2 คนจัดซ้าย–ขวาอัตโนมัติ</p></div></div>
   <div class="signature-editor-card">
   <div class="signature-editor-head">
     <div>
-      <strong>ผู้ลงนาม</strong>
+      <strong>ข้อมูลผู้ลงนาม</strong>
       <div class="hint">0 คน = ไม่แสดงลายเซ็น · 1 คน = จัดกึ่งกลาง · 2 คน = ซ้าย–ขวา</div>
     </div>
     <select id="signatureCount" onchange="applySignatureCount();syncPreview()">
@@ -996,7 +1171,7 @@ body{font-family:"Prompt",sans-serif!important;background:var(--bg)!important;co
         </aside>
 
         <section class="preview-panel">
-          <div class="preview-head"><div><h3>Preview</h3><div class="hint">เลือกข้อความบนวุฒิบัตรแล้วปรับได้ทันที โดยไม่ต้องเลื่อนกลับไปด้านล่าง</div></div><div class="preview-actions"><button class="btn light" onclick="zoomPreview(.9)">- Zoom</button><button class="btn light" onclick="zoomPreview(1.1)">+ Zoom</button></div></div>
+          <div class="preview-head"><div><h3>ตัวอย่างวุฒิบัตร</h3><div class="hint">เลือกข้อความบนวุฒิบัตรแล้วปรับได้ทันที โดยไม่ต้องเลื่อนกลับไปด้านล่าง</div></div><div class="preview-actions"><button class="btn light" onclick="zoomPreview(.9)">- ย่อ</button><button class="btn light" onclick="zoomPreview(1.1)">+ ขยาย</button></div></div>
           <div class="preview-toolbox">
             <div><label>ข้อความที่กำลังปรับ</label><select id="selectedField" onchange="selectField(this.value)"></select></div>
             <div class="color-wrap"><label>สี</label><input type="color" id="fieldColor" value="#172848" onchange="changeColor(this.value)"></div>
@@ -1023,8 +1198,8 @@ body{font-family:"Prompt",sans-serif!important;background:var(--bg)!important;co
                 <option value="center" selected>กลาง</option>
                 <option value="right">ขวา</option>
               </select>
-              <button onclick="toggleAutoFit()" id="autoFitBtn">Auto-fit ✓</button>
-              <button onclick="fitSelectedNow()">Fit now</button>
+              <button onclick="toggleAutoFit()" id="autoFitBtn">ปรับพอดีอัตโนมัติ ✓</button>
+              <button onclick="fitSelectedNow()">ปรับให้พอดี</button>
             </div>
           </div>
           <div class="cert-stage-wrap">
@@ -1055,7 +1230,7 @@ body{font-family:"Prompt",sans-serif!important;background:var(--bg)!important;co
               <div class="cert-item" data-field="duration" id="fDuration"></div>
               <div class="cert-item" data-field="delivery" id="fDelivery"></div>
               <div class="cert-item" data-field="date" id="fDate"></div>
-              <div class="qrbox" id="qrBox"></div><div class="qr-label" id="qrLabel">SCAN TO VERIFY</div>
+              <div class="qrbox" id="qrBox"></div><div class="qr-label" id="qrLabel">สแกนเพื่อตรวจสอบ</div>
             </div>
           </div>
         </section>
@@ -1737,7 +1912,7 @@ function renderList(){
  <td>${x.certificate_types?.type_name_th||"-"}</td>
  <td><span class="badge ${x.certificate_status==="REVOKED"?"red":""}">${x.certificate_status||"-"}</span>${x.revoked_reason?`<div class="hint">${x.revoked_reason}</div>`:""}</td>
  <td style="white-space:nowrap">
-   ${x.verification_url?`<a class="btn light" style="display:inline-flex;align-items:center" href="${x.verification_url}" target="_blank">Verify</a>`:""}
+   ${x.verification_url?`<a class="btn light" style="display:inline-flex;align-items:center" href="${x.verification_url}" target="_blank">ตรวจสอบ</a>`:""}
    ${x.pdf_storage_path?`<button class="btn light" onclick="openStoredCertificatePdf('${x.pdf_storage_bucket||"certificates"}','${x.pdf_storage_path}')">PDF</button>`:""}
  </td>
  <td style="white-space:nowrap">
@@ -1794,7 +1969,7 @@ async function issueCertificate(){
   document.getElementById("previewNo").value=data.certificate_no;syncPreview();
   lastVerificationUrl=data.verification_url;
   await makeQR(data.verification_url);
-  const box=document.getElementById("issueResult");box.style.display="block";box.innerHTML=`ออกวุฒิบัตรสำเร็จ<br><strong>${data.certificate_no}</strong><br><a href="${data.verification_url}" target="_blank">ทดสอบหน้า Verify</a><br>${data.verification_url}`;
+  const box=document.getElementById("issueResult");box.style.display="block";box.innerHTML=`ออกวุฒิบัตรสำเร็จ<br><strong>${data.certificate_no}</strong><br><a href="${data.verification_url}" target="_blank">ทดสอบหน้าตรวจสอบ</a><br>${data.verification_url}`;
   await loadCertificates();
  }catch(e){alert("ออกวุฒิบัตรไม่สำเร็จ: "+(e.message||e))}
  finally{btn.disabled=false;btn.textContent="ออกวุฒิบัตรรายบุคคล + สร้าง QR"}
@@ -1852,7 +2027,7 @@ function refreshBulkSummary(){
  if(!preview||!session){if(preview)preview.style.display="none";return}
  const saved=savedTemplates.find(x=>x.id===templateId);
  preview.style.display="block";
- preview.innerHTML=`<strong>ข้อมูลที่จะพิมพ์ลงวุฒิบัตร Batch · HOTFIX ชั่วโมง</strong><br>
+ preview.innerHTML=`<strong>ข้อมูลที่จะพิมพ์ลงวุฒิบัตรแบบกลุ่ม</strong><br>
    ชื่อหลักสูตรบนวุฒิบัตร: ${getBulkCourseText(session,saved)}<br>
    วันที่อบรมบนวุฒิบัตร: ${getBulkTrainingDateText(session,saved)}<br>
    ผู้ออกวุฒิบัตร: ${saved?getBulkIssuerName(saved):"กรุณาเลือกแม่แบบ"}<br>
@@ -1870,13 +2045,13 @@ async function loadBulkParticipants(){
    return
  }
  refreshBulkSummary();
- list.innerHTML='<div class="empty">กำลังตรวจ Attendance / ผลสอบ / Eligibility...</div>';
+ list.innerHTML='<div class="empty">กำลังตรวจการเข้าอบรม / ผลสอบ / สิทธิ์วุฒิบัตร...</div>';
 
  const {data,error}=await db.rpc("admin_get_training_completion",{
    p_training_session_id:id
  });
  if(error){
-   list.innerHTML='<div class="empty">โหลด Eligibility ไม่สำเร็จ: '+error.message+'</div>';
+   list.innerHTML='<div class="empty">โหลดสิทธิ์วุฒิบัตรไม่สำเร็จ: '+error.message+'</div>';
    return
  }
 
@@ -1919,10 +2094,10 @@ function renderBulk(){
  list.innerHTML=
  `<div style="padding:10px 12px;background:#eef6ff;border-radius:11px;margin-bottom:10px;font-size:11px;color:#315577">
    พร้อมออกวุฒิบัตร <strong>${eligible}</strong> คน · มีวุฒิบัตรแล้ว <strong>${issued}</strong> คน<br>
-   ระบบเลือกได้เฉพาะผู้ที่ผ่าน Registration + Payment + Attendance + Post-test ตามเงื่อนไขรอบ
+   ระบบเลือกได้เฉพาะผู้ที่ผ่าน การลงทะเบียน + การชำระเงิน + การเข้าอบรม + แบบทดสอบหลังอบรม ตามเงื่อนไขรอบ
  </div>`+
  `<div class="bulk-row head" style="grid-template-columns:42px 1.5fr 1.2fr .8fr .8fr 1fr">
-   <div></div><div>ผู้รับ</div><div>อีเมล</div><div>Attendance</div><div>ผลสอบ</div><div>Eligibility</div>
+   <div></div><div>ผู้รับ</div><div>อีเมล</div><div>การเข้าอบรม</div><div>ผลสอบ</div><div>สิทธิ์วุฒิบัตร</div>
  </div>`+
  bulkParticipants.map((x,i)=>{
    const examText=x.exam_passed
@@ -1939,8 +2114,8 @@ function renderBulk(){
      <div><strong>${x.participant_name||"-"}</strong>${x.organization_name?`<br><span class="hint">${x.organization_name}</span>`:""}</div>
      <div>${x.participant_email||"-"}</div>
      <div>${x.attendance_status==="ATTENDED"
-       ? '<span class="badge" style="background:#eaf9f1;color:#087744">ATTENDED</span>'
-       : `<span class="badge red">${x.attendance_status||"NOT_MARKED"}</span>`}</div>
+       ? '<span class="badge" style="background:#eaf9f1;color:#087744">เข้าร่วม</span>'
+       : `<span class="badge red">${x.attendance_status==="NOT_MARKED"?"ยังไม่เช็กชื่อ":(x.attendance_status||"ยังไม่เช็กชื่อ")}</span>`}</div>
      <div>${examText}</div>
      <div>${certText}</div>
    </div>`;
@@ -2513,7 +2688,7 @@ renderList=function(){
  <td>${x.certificate_types?.type_name_th||"-"}</td>
  <td><span class="badge ${status==="REVOKED"||status==="DELETED"?"red":""}">${status}</span>${x.revoked_reason?`<div class="hint">${x.revoked_reason}</div>`:""}</td>
  <td style="white-space:nowrap">
-   ${x.verification_url?`<a class="btn light" style="display:inline-flex;align-items:center" href="${x.verification_url}" target="_blank">Verify</a>`:""}
+   ${x.verification_url?`<a class="btn light" style="display:inline-flex;align-items:center" href="${x.verification_url}" target="_blank">ตรวจสอบ</a>`:""}
    ${x.pdf_storage_path?`<button class="btn light" onclick="openStoredCertificatePdf('${x.pdf_storage_bucket||"certificates"}','${x.pdf_storage_path}')">PDF</button>`:""}
  </td>
  <td style="white-space:nowrap">
@@ -2545,7 +2720,6 @@ setTimeout(()=>{
 
 init();
 </script>
-<script src="admin-member-master.js"></script>
 
 <script id="sante-cert-shell-script">
 (function(){
