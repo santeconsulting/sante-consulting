@@ -2330,6 +2330,22 @@ textarea{
 </style>
 <meta name="sante-build" content="QUOTATION-R14-NO-UNDERLINE-STAMP-FIX">
 
+
+<style id="sante-quotation-final-r15">
+/* FINAL R15 - reinforce stamp balance without changing quotation business logic */
+.cert .stamp{
+  width:48mm!important;
+  height:28mm!important;
+  max-width:48mm!important;
+  max-height:28mm!important;
+  object-fit:contain!important;
+  object-position:center bottom!important;
+  transform:scale(1.14)!important;
+  transform-origin:center bottom!important;
+}
+</style>
+<meta name="sante-build" content="QUOTATION-FINAL-R15-PREVIEW-STAMP">
+
 </head>
 <body>
 
@@ -2713,6 +2729,9 @@ async function openEditor(id=null,req=null){
 
   editor.classList.add("show");
   editor.scrollTop=0;
+  const previewWrap=editor.querySelector(".preview-wrap");
+  if(previewWrap) previewWrap.scrollTop=0;
+  if(paper) paper.scrollTop=0;
 
   try{
     recalc();
