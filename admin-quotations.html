@@ -2541,7 +2541,7 @@ textarea{
 .reference-qo .ref-cert{
   margin-top:3mm!important;
   display:grid!important;
-  grid-template-columns:27mm 1fr 1fr 1fr 1fr!important;
+  grid-template-columns:27mm 1fr 1fr 1fr!important;
   gap:3mm!important;
   align-items:end!important;
   text-align:center!important;
@@ -2600,6 +2600,73 @@ textarea{
 }
 </style>
 <meta name="sante-build" content="QUOTATION-REFERENCE-LAYOUT-R16">
+
+
+<style id="sante-quotation-r17-document-corrections">
+/* R17 - requested document corrections only */
+.reference-qo .ref-company-name{
+  white-space:nowrap!important;
+  font-weight:700!important;
+  font-size:8.2pt!important;
+}
+.reference-qo .ref-seller-address{
+  line-height:1.48!important;
+}
+.reference-qo .ref-paid-words{
+  margin-top:1mm!important;
+  text-align:right!important;
+  color:#4c5768!important;
+  font-size:7.8pt!important;
+  line-height:1.45!important;
+}
+.reference-qo .ref-payment{
+  grid-template-columns:19mm minmax(0,1fr)!important;
+  align-items:center!important;
+}
+.reference-qo .ref-bank-row{
+  display:flex!important;
+  align-items:center!important;
+  gap:3mm!important;
+}
+.reference-qo .ref-bank-logo{
+  width:11mm!important;
+  height:11mm!important;
+  flex:0 0 11mm!important;
+  border-radius:50%!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  background:#159447!important;
+  color:#fff!important;
+  font-size:8pt!important;
+  font-weight:700!important;
+  letter-spacing:-.2px!important;
+}
+.reference-qo .ref-cert{
+  border-top:1px solid #d8d9de!important;
+  padding-top:3mm!important;
+}
+.reference-qo .ref-cert-label{
+  display:block!important;
+  color:#17283d!important;
+}
+.reference-qo .ref-stamp-frame{
+  width:34mm!important;
+  height:25mm!important;
+  align-items:flex-end!important;
+}
+.reference-qo .ref-stamp{
+  width:32mm!important;
+  height:25mm!important;
+  max-width:none!important;
+  max-height:none!important;
+  object-fit:contain!important;
+  object-position:center bottom!important;
+  transform:scale(1.9)!important;
+  transform-origin:center bottom!important;
+}
+</style>
+<meta name="sante-build" content="QUOTATION-R17-DOCUMENT-CORRECTIONS">
 
 </head>
 <body>
@@ -2946,6 +3013,49 @@ function quotationReferenceDescription(desc,index){
   return `<div class="ref-desc-grid"><div class="ref-desc-no">${index+1}.</div><div><div class="ref-desc-main">${esc(main)}</div>${sub}</div></div>`;
 }
 
+
+function thaiIntegerText(n){
+  n=Math.floor(Math.abs(Number(n)||0));
+  if(n===0)return "ศูนย์";
+  const digits=["ศูนย์","หนึ่ง","สอง","สาม","สี่","ห้า","หก","เจ็ด","แปด","เก้า"];
+  const pos=["","สิบ","ร้อย","พัน","หมื่น","แสน"];
+  function underMillion(v){
+    if(v===0)return "";
+    const s=String(v).padStart(6,"0");
+    let out="";
+    for(let i=0;i<6;i++){
+      const d=Number(s[i]);
+      if(!d)continue;
+      const p=5-i;
+      if(p===1){
+        if(d===1)out+="สิบ";
+        else if(d===2)out+="ยี่สิบ";
+        else out+=digits[d]+"สิบ";
+      }else if(p===0){
+        if(d===1 && out)out+="เอ็ด";
+        else out+=digits[d];
+      }else{
+        out+=digits[d]+pos[p];
+      }
+    }
+    return out;
+  }
+  if(n>=1000000){
+    const high=Math.floor(n/1000000);
+    const low=n%1000000;
+    return thaiIntegerText(high)+"ล้าน"+underMillion(low);
+  }
+  return underMillion(n);
+}
+function thaiBahtText(value){
+  const num=Math.round((Number(value)||0)*100)/100;
+  const baht=Math.floor(num);
+  const satang=Math.round((num-baht)*100);
+  let result=thaiIntegerText(baht)+"บาท";
+  result+=satang===0?"ถ้วน":thaiIntegerText(satang)+"สตางค์";
+  return result;
+}
+
 function renderPaper(c){
   const quoteNo=quotationNo.textContent.split(" · ")[0]||"(สร้างเมื่อบันทึก)";
   const refNo=requestId.value?requests.find(x=>x.id===requestId.value)?.request_no||"-":"-";
@@ -2968,9 +3078,9 @@ function renderPaper(c){
       <div class="ref-seller-block">
         <img class="ref-logo" src="SANTE-logo-primary.png" alt="SANTE">
         <div class="ref-seller-grid">
-          <div class="ref-label">ผู้ขาย :</div><div><b>${SANTE.name}</b></div><div class="ref-icon">☎</div><div>${SANTE.phone||"-"}</div>
-          <div class="ref-label">ที่อยู่ :</div><div>${sellerAddress}</div><div class="ref-icon">✉</div><div>${SANTE.email||"-"}</div>
-          <div class="ref-label">เลขที่ภาษี :</div><div>${SANTE.taxId}</div><div class="ref-icon">⌾</div><div>${SANTE.website||"-"}</div>
+          <div class="ref-label">ผู้ขาย :</div><div class="ref-company-name">บริษัท ซานเต้ คอนซัลติ้ง จำกัด (สำนักงานใหญ่)</div><div class="ref-icon">☎</div><div>${SANTE.phone||"-"}</div>
+          <div class="ref-label">ที่อยู่ :</div><div class="ref-seller-address">49 ถนนทางหลวง สาย 3191<br>ตำบลมาบข่า อำเภอนิคมพัฒนา<br>จังหวัดระยอง 21180</div><div class="ref-icon">✉</div><div>${SANTE.email||"-"}</div>
+          <div class="ref-label">เลขประจำตัวผู้เสียภาษี :</div><div>${SANTE.taxId}</div><div class="ref-icon">⌾</div><div>${SANTE.website||"-"}</div>
         </div>
       </div>
       <div class="ref-doc-side">
@@ -3024,12 +3134,13 @@ function renderPaper(c){
         <div class="ref-total-box"><span>จำนวนเงินทั้งสิ้น</span><strong>${money(c.grand)}</strong><span>บาท</span></div>
         <div class="ref-total-line"><span>จำนวนเงินที่ถูกหัก ณ ที่จ่าย</span><span>${money(c.wht)} บาท</span></div>
         <div class="ref-total-line"><b>จำนวนเงินที่ชำระ</b><b>${money(c.net)} บาท</b></div>
+        <div class="ref-paid-words">(${thaiBahtText(c.net)})</div>
       </div>
     </div>
 
     <div class="ref-payment">
       <div><b>▣ ชำระเงิน</b></div>
-      <div><b>${SANTE.bank}</b> · ชื่อบัญชี ${SANTE.bankName} · เลขบัญชี ${SANTE.bankAccount}</div>
+      <div class="ref-bank-row"><span class="ref-bank-logo">K+</span><div><b>${SANTE.bank}</b><br>ชื่อบัญชี ${SANTE.bankName} · เลขบัญชี ${SANTE.bankAccount}</div></div>
     </div>
 
     <div class="ref-note">
@@ -3039,10 +3150,6 @@ function renderPaper(c){
 
     <div class="ref-cert">
       <div class="ref-cert-label">♧ รับรอง</div>
-      <div class="ref-cert-cell">
-        <div class="ref-empty-box"></div>
-        <div class="ref-cert-caption">สแกนเพื่อเปิดด้วยเว็บไซต์</div>
-      </div>
       <div class="ref-cert-cell">
         <img class="ref-signature" src="sante-signature-director.png" alt="signature">
         <div class="ref-cert-caption"><b>${SANTE.signer}</b><br>ผู้ออกเอกสาร (ผู้ขาย)</div>
