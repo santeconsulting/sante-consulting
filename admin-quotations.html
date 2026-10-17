@@ -3518,6 +3518,70 @@ textarea{
 </style>
 <meta name="sante-build" content="QUOTATION-R29-CUSTOMER-HEADER-CLEANUP">
 
+
+<style id="sante-quotation-r30-header-polish">
+/* R30 — final visual polish only */
+
+/* Slightly larger logo for better balance with quotation title */
+.reference-qo .ref-logo{
+  width:18.5mm!important;
+  height:21.5mm!important;
+  max-width:18.5mm!important;
+  max-height:21.5mm!important;
+  object-fit:contain!important;
+  object-position:center top!important;
+  margin-top:.7mm!important;
+}
+
+/* Seller information: a little larger and easier to read */
+.reference-qo .ref-seller-body{
+  font-size:7.9pt!important;
+  line-height:1.46!important;
+}
+.reference-qo .ref-company-name{
+  font-size:7.9pt!important;
+  line-height:1.42!important;
+}
+.reference-qo .ref-seller-address{
+  font-size:7.8pt!important;
+  line-height:1.5!important;
+}
+.reference-qo .ref-seller-contact{
+  font-size:7.65pt!important;
+  line-height:1.45!important;
+}
+
+/* Tax ID row: give the label and value a clear visual gap */
+.reference-qo .ref-seller-row{
+  grid-template-columns:31mm minmax(0,1fr)!important;
+  column-gap:2.6mm!important;
+}
+.reference-qo .ref-tax-label{
+  white-space:nowrap!important;
+}
+.reference-qo .ref-tax-label + div{
+  padding-left:.8mm!important;
+}
+
+/* Item detail: slightly larger while staying regular weight */
+.reference-qo .quotation-desc-no{
+  font-size:8.6pt!important;
+  font-weight:400!important;
+  line-height:1.5!important;
+}
+.reference-qo .quotation-desc-main{
+  font-size:9.1pt!important;
+  font-weight:400!important;
+  line-height:1.52!important;
+}
+.reference-qo .quotation-desc-sub{
+  font-size:8.45pt!important;
+  font-weight:400!important;
+  line-height:1.52!important;
+}
+</style>
+<meta name="sante-build" content="QUOTATION-R30-HEADER-POLISH">
+
 </head>
 <body>
 
