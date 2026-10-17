@@ -2186,6 +2186,100 @@ textarea{
 </style>
 <meta name="sante-build" content="QUOTATION-ACTIVE-TAB-UNDERLINE-FIX-R12">
 
+
+<style id="sante-quotation-document-layout-r13">
+/* R13 - ONLY: item description usability + signature/stamp balance */
+
+/* Larger manual item-detail field while preserving the existing item grid */
+#editor .item textarea.desc{
+  min-height:104px!important;
+  padding:12px 13px!important;
+  font-size:12.5px!important;
+  line-height:1.6!important;
+  white-space:pre-wrap!important;
+  overflow:hidden!important;
+  resize:vertical!important;
+}
+
+/* PDF item description: first line emphasized, following lines secondary */
+.qtable .quotation-desc-cell{
+  text-align:left!important;
+  vertical-align:top!important;
+}
+.quotation-desc-layout{
+  display:grid!important;
+  grid-template-columns:auto minmax(0,1fr)!important;
+  gap:1.8mm!important;
+  align-items:start!important;
+}
+.quotation-desc-no{
+  color:#6f83a2!important;
+  font-size:7.7pt!important;
+  line-height:1.45!important;
+}
+.quotation-desc-main{
+  color:#182c42!important;
+  font-size:8.4pt!important;
+  line-height:1.42!important;
+  font-weight:700!important;
+}
+.quotation-desc-sub{
+  margin-top:1.1mm!important;
+  color:#526b84!important;
+  font-size:7.8pt!important;
+  line-height:1.48!important;
+  font-weight:400!important;
+}
+
+/* Give the three certification columns an identical media area and text baseline */
+.cert{
+  align-items:end!important;
+}
+.cert > div{
+  min-height:35mm!important;
+  display:grid!important;
+  grid-template-rows:23mm auto!important;
+  align-items:end!important;
+  justify-items:center!important;
+  align-content:end!important;
+}
+
+/* Signature keeps its natural proportion but uses a consistent visual slot */
+.cert .sig{
+  display:block!important;
+  width:auto!important;
+  height:11mm!important;
+  max-width:32mm!important;
+  max-height:11mm!important;
+  margin:0 auto 1.5mm!important;
+  object-fit:contain!important;
+  object-position:center bottom!important;
+  align-self:end!important;
+}
+
+/* Company stamp gets a larger visual box and the same bottom baseline */
+.cert .stamp{
+  display:block!important;
+  width:38mm!important;
+  height:23mm!important;
+  max-width:38mm!important;
+  max-height:23mm!important;
+  margin:0 auto 1.5mm!important;
+  object-fit:contain!important;
+  object-position:center bottom!important;
+  align-self:end!important;
+}
+
+.cert small{
+  min-height:10mm!important;
+  display:block!important;
+  text-align:center!important;
+  font-size:7.6pt!important;
+  line-height:1.38!important;
+}
+</style>
+<meta name="sante-build" content="QUOTATION-DOCUMENT-LAYOUT-R13">
+
 </head>
 <body>
 
@@ -2509,9 +2603,23 @@ function quotationCopyLabel(){
   return quotationCopyMode()==="COPY" ? "(สำเนา)" : "(ต้นฉบับ)";
 }
 
+
+function quotationDescriptionHtml(desc,index){
+  const lines=String(desc||"")
+    .replace(/\r/g,"")
+    .split("\n")
+    .map(x=>x.trim())
+    .filter(Boolean);
+  const first=lines.shift()||"-";
+  const rest=lines.length
+    ? `<div class="quotation-desc-sub">${lines.map(x=>esc(x)).join("<br>")}</div>`
+    : "";
+  return `<div class="quotation-desc-layout"><span class="quotation-desc-no">${index+1}.</span><div><div class="quotation-desc-main">${esc(first)}</div>${rest}</div></div>`;
+}
+
 function renderPaper(c){paper.innerHTML=`<div class="doc-head"><div class="seller"><img class="paper-logo" src="SANTE-logo-primary.png"><div class="seller-info"><strong class="seller-company">${SANTE.name}</strong><div>49 ถนนทางหลวงสาย 3191 ตำบลมาบข่า อำเภอนิคมพัฒนา<br>จังหวัดระยอง 21180</div><div>เลขประจำตัวผู้เสียภาษี: ${SANTE.taxId}</div><div>โทร: ${SANTE.phone} · ${SANTE.email}</div><div>${SANTE.website}</div></div></div><div><div class="copy-label">${quotationCopyLabel()}</div><div class="doc-title">ใบเสนอราคา</div><div class="docbox"><b>เลขที่เอกสาร</b><span>${quotationNo.textContent.split(" · ")[0]||"(สร้างเมื่อบันทึก)"}</span><b>วันที่ออก</b><span>${issueDate.value||"-"}</span><b>ใช้ได้ถึง</b><span>${validUntil.value||"-"}</span><b>อ้างอิง</b><span>${requestId.value?requests.find(x=>x.id===requestId.value)?.request_no||"-":"-"}</span></div></div></div>
 <div class="party"><div><h4>ลูกค้า</h4><strong class="party-company">${esc(organizationName.value||customerName.value||"-")}</strong><div>${esc(billingAddress.value||"-")}</div><div>เลขที่ภาษี: ${esc(customerTaxId.value||"-")} ${esc(customerBranch.value||"")}</div></div><div><h4>ติดต่อกลับที่</h4><div>${esc(customerName.value||"-")}</div><div>${esc(phone.value||"-")}</div><div>${esc(email.value||"-")}</div></div></div>
-<table class="qtable"><thead><tr><th>คำอธิบาย</th><th>จำนวน</th><th>หน่วย</th><th>ราคา</th><th>ส่วนลด</th><th>VAT</th><th>มูลค่า</th></tr></thead><tbody>${c.a.length ? c.a.map((x,i)=>`<tr><td>${i+1}. ${esc(x.description).replaceAll("\n","<br>")}</td><td>${money(x.quantity)}</td><td>${esc(x.unit)}</td><td>${money(x.unit_price)}</td><td>${money(x.discount_amount)}</td><td>${vatRate.value}%</td><td>${money(x.line_total)}</td></tr>`).join("") : `<tr><td colspan="7" style="padding:28px;text-align:center;color:#72869b">ยังไม่มีรายการ</td></tr>`}</tbody></table><div class="doc-spacer"></div>
+<table class="qtable"><thead><tr><th>คำอธิบาย</th><th>จำนวน</th><th>หน่วย</th><th>ราคา</th><th>ส่วนลด</th><th>VAT</th><th>มูลค่า</th></tr></thead><tbody>${c.a.length ? c.a.map((x,i)=>`<tr><td class="quotation-desc-cell">${quotationDescriptionHtml(x.description,i)}</td><td>${money(x.quantity)}</td><td>${esc(x.unit)}</td><td>${money(x.unit_price)}</td><td>${money(x.discount_amount)}</td><td>${vatRate.value}%</td><td>${money(x.line_total)}</td></tr>`).join("") : `<tr><td colspan="7" style="padding:28px;text-align:center;color:#72869b">ยังไม่มีรายการ</td></tr>`}</tbody></table><div class="doc-spacer"></div>
 <div class="doc-summary"><div><b>สรุป</b><div class="sumrow"><span>มูลค่าที่คำนวณภาษี</span><span>${money(c.subtotal)} บาท</span></div><div class="sumrow"><span>ภาษีมูลค่าเพิ่ม ${vatRate.value}%</span><span>${money(c.vat)} บาท</span></div><div class="sumrow"><span>หัก ณ ที่จ่าย ${whtRate.value}%</span><span>${money(c.wht)} บาท</span></div></div><div><div class="totalbox"><span>จำนวนเงินทั้งสิ้น</span><span>${money(c.grand)} บาท</span></div><div class="sumrow"><b>จำนวนเงินที่ชำระสุทธิ</b><b>${money(c.net)} บาท</b></div></div></div>
 <div class="bank"><b>ชำระเงิน</b> · ${SANTE.bank} · ชื่อบัญชี ${SANTE.bankName} · เลขบัญชี ${SANTE.bankAccount}</div><div class="footer-note"><b>เงื่อนไข:</b> ${esc(terms.value)}<br><b>หมายเหตุ:</b> ${esc(note.value||"-")}</div>
 <div class="cert"><div><img class="sig" src="sante-signature-director.png"><small><b>${SANTE.signer}</b><br>ผู้ออกเอกสาร (ผู้ขาย)</small></div><div><img class="sig" src="sante-signature-director.png"><small><b>${SANTE.signer}</b><br>ผู้อนุมัติเอกสาร (ผู้ขาย)</small></div><div><img class="stamp" src="sante-company-stamp.png"><small>ตราประทับ (ผู้ขาย)</small></div></div>`}
