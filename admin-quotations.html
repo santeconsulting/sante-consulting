@@ -2807,6 +2807,130 @@ textarea{
 </style>
 <meta name="sante-build" content="QUOTATION-R20-NEW-STAMP-ASSET">
 
+
+<style id="sante-quotation-r21-a4-corrections">
+/* R21 — header collision, table proportions, one-page A4 fitting */
+
+/* Header gets more room for seller details and a slightly narrower document box */
+.reference-qo .ref-head{
+  grid-template-columns:minmax(0,1fr) 70mm!important;
+  gap:6mm!important;
+}
+.reference-qo .ref-seller-block{
+  grid-template-columns:16mm minmax(0,1fr)!important;
+  gap:4mm!important;
+}
+.reference-qo .ref-logo{
+  width:14mm!important;
+  height:17mm!important;
+}
+.reference-qo .ref-seller-grid{
+  grid-template-columns:31mm minmax(0,1fr)!important;
+  gap:1.1mm 2.2mm!important;
+  line-height:1.42!important;
+  font-size:7.6pt!important;
+  min-width:0!important;
+}
+.reference-qo .ref-company-name{
+  white-space:nowrap!important;
+  font-size:7.55pt!important;
+  line-height:1.35!important;
+  min-width:0!important;
+}
+.reference-qo .ref-tax-label{
+  white-space:nowrap!important;
+  font-size:7.35pt!important;
+}
+.reference-qo .ref-website{
+  overflow-wrap:anywhere!important;
+  word-break:break-word!important;
+  color:#253b55!important;
+}
+.reference-qo .ref-docbox{
+  grid-template-columns:24mm minmax(0,1fr)!important;
+  padding:3.3mm 3.5mm!important;
+}
+.reference-qo .ref-title{
+  font-size:23pt!important;
+  margin-bottom:4mm!important;
+}
+
+/* Correct item table proportions */
+.reference-qo .ref-items col:nth-child(1){width:53%!important}
+.reference-qo .ref-items col:nth-child(2){width:7%!important}
+.reference-qo .ref-items col:nth-child(3){width:7%!important}
+.reference-qo .ref-items col:nth-child(4){width:10%!important}
+.reference-qo .ref-items col:nth-child(5){width:7%!important}
+.reference-qo .ref-items col:nth-child(6){width:5%!important}
+.reference-qo .ref-items col:nth-child(7){width:11%!important}
+.reference-qo .ref-items th{
+  padding:2.5mm 1.35mm!important;
+  line-height:1.25!important;
+}
+.reference-qo .ref-items th:last-child{
+  font-size:7.55pt!important;
+  white-space:normal!important;
+}
+.reference-qo .ref-items td{
+  padding:2.4mm 1.35mm!important;
+}
+
+/* Reduce unused middle whitespace so certification remains on the same A4 page */
+.reference-qo .ref-doc-spacer{
+  min-height:20mm!important;
+}
+.reference-qo .ref-summary{
+  padding-top:3mm!important;
+}
+.reference-qo .ref-payment{
+  margin-top:3mm!important;
+  padding:2.6mm 0!important;
+}
+.reference-qo .ref-note{
+  padding:2.5mm 0!important;
+  min-height:9mm!important;
+}
+.reference-qo .ref-cert{
+  margin-top:2mm!important;
+  padding-top:2.3mm!important;
+}
+.reference-qo .ref-cert-cell{
+  min-height:34mm!important;
+  grid-template-rows:22mm minmax(10mm,auto)!important;
+}
+.reference-qo .ref-stamp-frame{
+  width:24mm!important;
+  height:22mm!important;
+}
+.reference-qo .ref-stamp{
+  width:22mm!important;
+  height:22mm!important;
+  max-width:22mm!important;
+  max-height:22mm!important;
+}
+
+/* Print page must be exactly one A4 page */
+@media print{
+  #paper.reference-qo{
+    width:210mm!important;
+    height:297mm!important;
+    min-height:297mm!important;
+    max-height:297mm!important;
+    overflow:hidden!important;
+    page-break-after:avoid!important;
+    break-after:avoid-page!important;
+  }
+  .reference-qo .ref-summary,
+  .reference-qo .ref-payment,
+  .reference-qo .ref-note,
+  .reference-qo .ref-cert{
+    break-inside:avoid!important;
+    page-break-inside:avoid!important;
+  }
+}
+</style>
+<meta name="sante-build" content="QUOTATION-R21-A4-CORRECTED">
+
 </head>
 <body>
 
@@ -2952,7 +3076,7 @@ textarea{
   <label><input type="radio" name="quotationCopyMode" value="COPY"> สำเนา</label>
 </div>
 
-<div class="actions"><button class="btn light" type="button" onclick="recalc();setTimeout(()=>window.print(),80)">พิมพ์ / PDF</button><button class="btn primary" onclick="saveQuotation(false)">บันทึก Draft</button><button class="btn yellow" onclick="saveQuotation(true)">บันทึกและส่งลูกค้า</button></div>
+<div class="actions"><button class="btn light" type="button" onclick="printQuotation()">พิมพ์ / PDF</button><button class="btn primary" onclick="saveQuotation(false)">บันทึก Draft</button><button class="btn yellow" onclick="saveQuotation(true)">บันทึกและส่งลูกค้า</button></div>
 </div><div class="preview-wrap"><div class="paper" id="paper"></div></div></div></div></div>
 <div id="toast" class="toast"></div>
 <script>
@@ -3103,14 +3227,31 @@ function collectItems(){
     const discEl=r.querySelector("input.disc");
     const descEl=r.querySelector("textarea.desc");
     const unitEl=r.querySelector("input.unit");
-    const q=Number(qtyEl?.value||0);
-    const p=Number(priceEl?.value||0);
-    const d=Number(discEl?.value||0);
+    let q=Number(qtyEl?.value||0);
+    let p=Number(priceEl?.value||0);
+    let d=Number(discEl?.value||0);
+    const description=String(descEl?.value||"").trim();
+    const unit=String(unitEl?.value||"").trim();
+
+    // Legacy quotation repair:
+    // old records sometimes encoded a package price as 0.99 งาน × 10,000.
+    // For training descriptions that explicitly state participant count,
+    // show/store it as 1 งาน at the same net line value instead.
+    if(unit==="งาน" && q>0 && q<1 && /จำนวน\s*\d+(?:\.\d+)?\s*คน/.test(description)){
+      const sameLineTotal=Math.max(0,q*p-d);
+      q=1;
+      p=sameLineTotal;
+      d=0;
+      if(qtyEl)qtyEl.value="1";
+      if(priceEl)priceEl.value=String(sameLineTotal);
+      if(discEl)discEl.value="0";
+    }
+
     return{
       sort_order:i,
-      description:String(descEl?.value||"").trim(),
+      description,
       quantity:q,
-      unit:String(unitEl?.value||"").trim(),
+      unit,
       unit_price:p,
       discount_amount:d,
       line_total:Math.max(0,q*p-d),
@@ -3226,9 +3367,23 @@ function renderPaper(c){
       <div class="ref-seller-block">
         <img class="ref-logo" src="SANTE-logo-primary.png" alt="SANTE">
         <div class="ref-seller-grid">
-          <div class="ref-label">ผู้ขาย :</div><div class="ref-company-name">บริษัท ซานเต้ คอนซัลติ้ง จำกัด (สำนักงานใหญ่)</div><div class="ref-icon">☎</div><div>${SANTE.phone||"-"}</div>
-          <div class="ref-label">ที่อยู่ :</div><div class="ref-seller-address">49 ถนนทางหลวง สาย 3191<br>ตำบลมาบข่า อำเภอนิคมพัฒนา<br>จังหวัดระยอง 21180</div><div class="ref-icon">✉</div><div>${SANTE.email||"-"}</div>
-          <div class="ref-label">เลขประจำตัวผู้เสียภาษี :</div><div>${SANTE.taxId}</div><div class="ref-icon">⌾</div><div>${SANTE.website||"-"}</div>
+          <div class="ref-label">ผู้ขาย :</div>
+          <div class="ref-company-name">บริษัท ซานเต้ คอนซัลติ้ง จำกัด (สำนักงานใหญ่)</div>
+
+          <div class="ref-label">ที่อยู่ :</div>
+          <div class="ref-seller-address">49 ถนนทางหลวง สาย 3191<br>ตำบลมาบข่า อำเภอนิคมพัฒนา<br>จังหวัดระยอง 21180</div>
+
+          <div class="ref-label ref-tax-label">เลขประจำตัวผู้เสียภาษี :</div>
+          <div>${SANTE.taxId}</div>
+
+          <div class="ref-label">โทรศัพท์ :</div>
+          <div>${SANTE.phone||"-"}</div>
+
+          <div class="ref-label">อีเมล :</div>
+          <div>${SANTE.email||"-"}</div>
+
+          <div class="ref-label">เว็บไซต์ :</div>
+          <div class="ref-website">${SANTE.website||"-"}</div>
         </div>
       </div>
       <div class="ref-doc-side">
@@ -3237,7 +3392,7 @@ function renderPaper(c){
         <div class="ref-docbox">
           <b>เลขที่เอกสาร :</b><span>${esc(quoteNo)}</span>
           <b>วันที่ออก :</b><span>${esc(issueDate.value||"-")}</span>
-          <b>วันที่ต่อรับ :</b><span>-</span>
+          <b>วันที่ตอบรับ :</b><span>-</span>
           <b>ใช้ได้ถึง :</b><span>${esc(validUntil.value||"-")}</span>
           <b>อ้างอิง :</b><span>${esc(refNo)}</span>
         </div>
@@ -3387,6 +3542,97 @@ async function openEditor(id=null,req=null){
   }
 }
 function closeEditor(){editor.classList.remove("show")}
+
+async function printQuotation(){
+  recalc();
+
+  const source=document.getElementById("paper");
+  if(!source)return alert("ไม่พบตัวอย่างเอกสาร");
+
+  const iframe=document.createElement("iframe");
+  iframe.setAttribute("aria-hidden","true");
+  iframe.style.position="fixed";
+  iframe.style.right="0";
+  iframe.style.bottom="0";
+  iframe.style.width="0";
+  iframe.style.height="0";
+  iframe.style.border="0";
+  document.body.appendChild(iframe);
+
+  const doc=iframe.contentDocument||iframe.contentWindow.document;
+  const styleMarkup=[...document.querySelectorAll('style')]
+    .map(s=>s.outerHTML)
+    .join("\n");
+  const fontLinks=[...document.querySelectorAll('link[rel="stylesheet"]')]
+    .map(l=>l.outerHTML)
+    .join("\n");
+
+  doc.open();
+  doc.write(`<!doctype html>
+  <html lang="th">
+  <head>
+    <meta charset="utf-8">
+    ${fontLinks}
+    ${styleMarkup}
+    <style id="quotation-print-isolation">
+      html,body{
+        margin:0!important;
+        padding:0!important;
+        width:210mm!important;
+        min-height:297mm!important;
+        background:#fff!important;
+        overflow:visible!important;
+      }
+      body *{visibility:visible!important}
+      #paper{
+        display:block!important;
+        position:relative!important;
+        left:auto!important;
+        top:auto!important;
+        margin:0!important;
+        box-shadow:none!important;
+        zoom:1!important;
+        transform:none!important;
+        page-break-after:avoid!important;
+        break-after:avoid-page!important;
+      }
+      #paper.reference-qo{
+        width:210mm!important;
+        height:297mm!important;
+        min-height:297mm!important;
+        max-height:297mm!important;
+        overflow:hidden!important;
+      }
+      .ref-summary,.ref-payment,.ref-note,.ref-cert{
+        break-inside:avoid!important;
+        page-break-inside:avoid!important;
+      }
+      @page{size:A4 portrait;margin:0}
+    </style>
+  </head>
+  <body>${source.outerHTML}</body>
+  </html>`);
+  doc.close();
+
+  try{
+    if(doc.fonts&&doc.fonts.ready)await doc.fonts.ready;
+    const images=[...doc.images];
+    await Promise.all(images.map(img=>{
+      if(img.complete)return Promise.resolve();
+      return new Promise(resolve=>{
+        img.addEventListener("load",resolve,{once:true});
+        img.addEventListener("error",resolve,{once:true});
+        setTimeout(resolve,2500);
+      });
+    }));
+    await new Promise(r=>setTimeout(r,120));
+    iframe.contentWindow.focus();
+    iframe.contentWindow.print();
+  }finally{
+    setTimeout(()=>iframe.remove(),1200);
+  }
+}
+
 async function saveQuotation(send){
  const c=calc();
  if(!String(organizationName?.value||"").trim()&&!String(customerName?.value||"").trim())return toast("กรุณากรอกลูกค้าหรือบริษัท");
