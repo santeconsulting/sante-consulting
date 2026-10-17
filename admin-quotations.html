@@ -3495,6 +3495,29 @@ textarea{
 </style>
 <meta name="sante-build" content="QUOTATION-R28-BALANCED-HEADER-WHT-HIGHLIGHT">
 
+
+<style id="sante-quotation-r29-customer-header-cleanup">
+/* R29 — remove unused acceptance date and simplify customer identity */
+.reference-qo .ref-customer-name-row{
+  margin-bottom:.5mm!important;
+}
+.reference-qo .ref-customer-name-row > div{
+  font-size:8.1pt!important;
+  line-height:1.42!important;
+  color:#17283d!important;
+}
+.reference-qo .ref-customer-name-row > div b{
+  font-weight:700!important;
+}
+.reference-qo .ref-docbox{
+  align-content:start!important;
+  row-gap:1.8mm!important;
+  padding-top:3.6mm!important;
+  padding-bottom:3.6mm!important;
+}
+</style>
+<meta name="sante-build" content="QUOTATION-R29-CUSTOMER-HEADER-CLEANUP">
+
 </head>
 <body>
 
@@ -3983,7 +4006,6 @@ function renderPaper(c){
         <div class="ref-docbox">
           <b>เลขที่เอกสาร :</b><span>${esc(quoteNo)}</span>
           <b>วันที่ออก :</b><span>${esc(issueDate.value||"-")}</span>
-          <b>วันที่ตอบรับ :</b><span>-</span>
           <b>ใช้ได้ถึง :</b><span>${esc(validUntil.value||"-")}</span>
           <b>อ้างอิง :</b><span>${esc(refNo)}</span>
         </div>
@@ -3992,8 +4014,7 @@ function renderPaper(c){
 
     <div class="ref-party">
       <div>
-        <div class="ref-party-title">ลูกค้า :</div>
-        <div class="ref-party-row"><b>ชื่อ :</b><div><b>${esc(organizationName.value||customerName.value||"-")}</b></div></div>
+        <div class="ref-party-row ref-customer-name-row"><b>ลูกค้า :</b><div><b>${esc(organizationName.value||customerName.value||"-")}</b></div></div>
         <div class="ref-party-row"><b>ที่อยู่ :</b><div>${esc(billingAddress.value||"-")}</div></div>
         <div class="ref-party-row"><b>เลขประจำตัวผู้เสียภาษี :</b><div>${esc(customerTaxId.value||"-")} ${esc(customerBranch.value||"")}</div></div>
         <div class="ref-party-row"><b>เรียน :</b><div>${esc(documentSubject.value||"-")}</div></div>
