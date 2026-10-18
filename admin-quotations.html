@@ -4302,6 +4302,26 @@ textarea{
 </style>
 <meta name="sante-build" content="QUOTATION-R35-FINAL-POLISH">
 
+
+<style id="sante-quotation-r36-taxid-fix">
+/* R36 — targeted fix only: seller Tax ID row must never overlap */
+.reference-qo .qh-tax-row{
+  grid-template-columns:34mm minmax(0,1fr)!important;
+  column-gap:2.8mm!important;
+  align-items:start!important;
+}
+.reference-qo .qh-tax-row .qh-label{
+  white-space:nowrap!important;
+  font-size:7.35pt!important;
+}
+.reference-qo .qh-tax-row .qh-nowrap{
+  white-space:nowrap!important;
+  padding-left:.5mm!important;
+  font-size:7.55pt!important;
+}
+</style>
+<meta name="sante-build" content="QUOTATION-R36-TAXID-FIX">
+
 </head>
 <body>
 
