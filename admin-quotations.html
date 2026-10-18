@@ -4013,6 +4013,165 @@ textarea{
 </style>
 <meta name="sante-build" content="QUOTATION-R32C-COMPACT-BALANCED-HEADER">
 
+
+<style id="sante-quotation-r32d-unified-create-edit">
+.quotation-build-mark{
+  margin-left:6px!important;
+  color:#9aabc0!important;
+  font-size:10px!important;
+  font-weight:500!important;
+}
+</style>
+<meta name="sante-build" content="QUOTATION-R32D-UNIFIED-CREATE-EDIT">
+
+
+<style id="sante-quotation-r34-clean-header">
+/* =========================================================
+   R34 — NEW isolated quotation header.
+   Does not reuse legacy ref-seller/ref-head classes.
+========================================================= */
+
+.reference-qo .qh{
+  display:grid!important;
+  grid-template-columns:15mm minmax(58mm,1.25fr) minmax(42mm,.82fr) 58mm!important;
+  column-gap:3.2mm!important;
+  align-items:start!important;
+  width:100%!important;
+  min-width:0!important;
+  padding:0 0 5mm!important;
+  border-bottom:1px solid #cfd7df!important;
+  box-sizing:border-box!important;
+}
+
+/* LOGO — same top baseline as seller */
+.reference-qo .qh-logo-cell{
+  display:flex!important;
+  align-items:flex-start!important;
+  justify-content:flex-start!important;
+  padding-top:.4mm!important;
+}
+.reference-qo .qh-logo{
+  display:block!important;
+  width:13.5mm!important;
+  height:17mm!important;
+  max-width:13.5mm!important;
+  max-height:17mm!important;
+  object-fit:contain!important;
+  object-position:left top!important;
+  margin:0!important;
+}
+
+/* SELLER */
+.reference-qo .qh-seller{
+  display:grid!important;
+  row-gap:1.4mm!important;
+  min-width:0!important;
+  font-size:7.55pt!important;
+  line-height:1.44!important;
+  color:#17283d!important;
+}
+.reference-qo .qh-row{
+  display:grid!important;
+  grid-template-columns:18mm minmax(0,1fr)!important;
+  column-gap:1.8mm!important;
+  align-items:start!important;
+  min-width:0!important;
+}
+.reference-qo .qh-label{
+  font-weight:700!important;
+  white-space:nowrap!important;
+}
+.reference-qo .qh-company{
+  font-weight:700!important;
+  line-height:1.42!important;
+}
+.reference-qo .qh-company > div,
+.reference-qo .qh-address > div,
+.reference-qo .qh-nowrap{
+  white-space:nowrap!important;
+}
+.reference-qo .qh-address{
+  line-height:1.5!important;
+}
+.reference-qo .qh-tax-row{
+  margin-top:.3mm!important;
+}
+
+/* CONTACT — entirely inside its own column */
+.reference-qo .qh-contact{
+  display:grid!important;
+  row-gap:2mm!important;
+  min-width:0!important;
+  padding-top:.1mm!important;
+  font-size:7.3pt!important;
+  line-height:1.4!important;
+  color:#17283d!important;
+}
+.reference-qo .qh-contact-row{
+  display:grid!important;
+  grid-template-columns:4.5mm minmax(0,1fr)!important;
+  column-gap:1.2mm!important;
+  align-items:start!important;
+  min-width:0!important;
+}
+.reference-qo .qh-contact-row > span:first-child{
+  text-align:center!important;
+  font-weight:700!important;
+}
+.reference-qo .qh-contact .qh-nowrap{
+  white-space:nowrap!important;
+  font-size:7.05pt!important;
+}
+
+/* DOCUMENT SIDE */
+.reference-qo .qh-doc{
+  min-width:0!important;
+  text-align:right!important;
+}
+.reference-qo .qh-copy{
+  min-height:5mm!important;
+  margin:0 0 1mm!important;
+  font-size:7.4pt!important;
+  font-weight:700!important;
+  color:#17283d!important;
+}
+.reference-qo .qh-title{
+  margin:0 0 5mm!important;
+  color:#6f70ea!important;
+  font-size:24pt!important;
+  line-height:1.08!important;
+  font-weight:700!important;
+  text-align:right!important;
+  white-space:nowrap!important;
+}
+.reference-qo .qh-docbox{
+  display:grid!important;
+  grid-template-columns:24mm minmax(0,1fr)!important;
+  gap:1.7mm 2mm!important;
+  padding:3.8mm 4mm!important;
+  border-radius:2mm!important;
+  background:#eeeeff!important;
+  text-align:left!important;
+  font-size:7.7pt!important;
+  line-height:1.4!important;
+  box-sizing:border-box!important;
+  -webkit-print-color-adjust:exact!important;
+  print-color-adjust:exact!important;
+}
+.reference-qo .qh-docbox b,
+.reference-qo .qh-docbox span{
+  white-space:nowrap!important;
+}
+
+/* Customer starts immediately after the new header divider */
+.reference-qo .ref-party{
+  border-top:0!important;
+  margin-top:0!important;
+  padding-top:4.5mm!important;
+}
+</style>
+<meta name="sante-build" content="QUOTATION-R34-CLEAN-HEADER">
+
 </head>
 <body>
 
@@ -4259,7 +4418,16 @@ function toggleWht(){
   if(sumNetLabel)sumNetLabel.textContent=enabled?"ยอดชำระสุทธิ":"ยอดชำระ";
 }
 
-function resetEditor(){editingId=null;editorTitle.textContent="สร้างใบเสนอราคา";quotationNo.textContent="";requestId.value="";customerName.value=organizationName.value=customerTaxId.value=customerBranch.value=email.value=phone.value=billingAddress.value=documentSubject.value=note.value="";issueDate.value=new Date().toISOString().slice(0,10);validUntil.value=addDays(issueDate.value,60);vatRate.value=7;showWht.checked=false;whtRate.value=3;toggleWht();terms.value="";items.innerHTML="";addItem();try{recalc()}catch(e){console.warn('initial preview error',e)}}
+
+function prepareQuotationPreview(){
+  if(!paper)return;
+  paper.className="paper reference-qo";
+  paper.removeAttribute("style");
+  paper.innerHTML="";
+  paper.dataset.templateVersion="R34";
+}
+
+function resetEditor(){prepareQuotationPreview();editingId=null;editorTitle.textContent="สร้างใบเสนอราคา";quotationNo.textContent="";requestId.value="";customerName.value=organizationName.value=customerTaxId.value=customerBranch.value=email.value=phone.value=billingAddress.value=documentSubject.value=note.value="";issueDate.value=new Date().toISOString().slice(0,10);validUntil.value=addDays(issueDate.value,60);vatRate.value=7;showWht.checked=false;whtRate.value=3;toggleWht();terms.value="";items.innerHTML="";addItem();try{recalc()}catch(e){console.warn('initial preview error',e)}}
 function requestAddress(r){return [r.address_no,r.moo&&"หมู่ "+r.moo,r.building,r.soi&&"ซอย "+r.soi,r.road&&"ถนน"+r.road,r.subdistrict,r.district,r.province,r.postcode].filter(Boolean).join(" ")}
 function requestDescription(r){if(r.request_type==="TRAINING")return `${r.course_name||"อบรม In-house"} จำนวน ${r.participant_count||"-"} คน`;if(r.request_type==="CONSULTING")return r.service_detail?.subject||"งานที่ปรึกษา";if(r.service_group==="ELECTRICAL")return "ตรวจสอบและรับรองระบบไฟฟ้าและบริภัณฑ์ไฟฟ้า";const m=r.service_detail?.measurements||{};return Object.values(m).map(x=>`${x.name} จำนวน ${x.count||0} ${x.unit||""}`).join("\n")||"บริการตรวจวัดด้านสุขศาสตร์อุตสาหกรรม"}
 function applyRequest(){const r=requests.find(x=>x.id===requestId.value);if(!r)return;customerName.value=r.customer_name||r.contact_name||"";organizationName.value=r.organization_name||"";customerTaxId.value=r.company_tax_id||"";customerBranch.value=r.company_branch_type==="BRANCH"?"สาขา "+(r.company_branch_no||""):"สำนักงานใหญ่";email.value=r.email||"";phone.value=r.phone||r.contact_phone||"";billingAddress.value=requestAddress(r);documentSubject.value=requestDescription(r);items.innerHTML="";addItemFrom({description:requestDescription(r),quantity:1,unit:r.request_type==="TRAINING"?"งาน":"งาน",unit_price:0,discount_amount:0});recalc()}
@@ -4453,6 +4621,7 @@ function formatQuotationDocDate(v){
 }
 
 function renderPaper(c){
+  prepareQuotationPreview();
   const quoteNo=quotationNo.textContent.split(" · ")[0]||"(สร้างเมื่อบันทึก)";
   const refNo=requestId.value?requests.find(x=>x.id===requestId.value)?.request_no||"-":"-";
   const sellerAddress=`49 ถนนทางหลวงสาย 3191 ตำบลมาบข่า อำเภอนิคมพัฒนา จังหวัดระยอง 21180`;
@@ -4468,49 +4637,44 @@ function renderPaper(c){
       </tr>`).join("")
     : `<tr><td colspan="7" style="padding:8mm;text-align:center;color:#7b8492">ยังไม่มีรายการ</td></tr>`;
 
-  paper.classList.add("reference-qo");
   paper.innerHTML=`
-    <div class="ref-head ref-head-reference">
-      <div class="ref-left-head">
-        <div class="ref-brand-row">
-          <img class="ref-logo" src="SANTE-logo-primary.png" alt="SANTE">
+    <div class="qh">
+      <div class="qh-logo-cell">
+        <img class="qh-logo" src="SANTE-logo-primary.png" alt="SANTE">
+      </div>
+
+      <div class="qh-seller">
+        <div class="qh-row">
+          <div class="qh-label">ผู้ขาย :</div>
+          <div class="qh-company">
+            <div>บริษัท ซานเต้ คอนซัลติ้ง จำกัด</div>
+            <div>(สำนักงานใหญ่)</div>
+          </div>
         </div>
-
-        <div class="ref-seller-reference">
-          <div class="ref-seller-main">
-            <div class="ref-seller-row">
-              <div class="ref-label">ผู้ขาย :</div>
-              <div class="ref-company-name">
-                <div>บริษัท ซานเต้ คอนซัลติ้ง จำกัด</div>
-                <div>(สำนักงานใหญ่)</div>
-              </div>
-            </div>
-            <div class="ref-seller-row">
-              <div class="ref-label">ที่อยู่ :</div>
-              <div class="ref-seller-address">
-                <div>49 ถนนทางหลวง สาย 3191</div>
-                <div>ตำบลมาบข่า อำเภอนิคมพัฒนา</div>
-                <div>จังหวัดระยอง 21180</div>
-              </div>
-            </div>
-            <div class="ref-seller-row">
-              <div class="ref-label ref-tax-label">เลขประจำตัวผู้เสียภาษี :</div>
-              <div class="ref-tax-value">${SANTE.taxId}</div>
-            </div>
+        <div class="qh-row">
+          <div class="qh-label">ที่อยู่ :</div>
+          <div class="qh-address">
+            <div>49 ถนนทางหลวง สาย 3191</div>
+            <div>ตำบลมาบข่า อำเภอนิคมพัฒนา</div>
+            <div>จังหวัดระยอง 21180</div>
           </div>
-
-          <div class="ref-seller-contact">
-            <div class="ref-seller-contact-row"><b>☎</b><div class="ref-contact-value">${SANTE.phone||"-"}</div></div>
-            <div class="ref-seller-contact-row"><b>✉</b><div class="ref-contact-value">${SANTE.email||"-"}</div></div>
-            <div class="ref-seller-contact-row"><b>◉</b><div class="ref-contact-value ref-website">${SANTE.website||"-"}</div></div>
-          </div>
+        </div>
+        <div class="qh-row qh-tax-row">
+          <div class="qh-label">เลขประจำตัวผู้เสียภาษี :</div>
+          <div class="qh-nowrap">${SANTE.taxId}</div>
         </div>
       </div>
 
-      <div class="ref-doc-side">
-        <div class="copy-label">${quotationCopyLabel()}</div>
-        <div class="ref-title">ใบเสนอราคา</div>
-        <div class="ref-docbox">
+      <div class="qh-contact">
+        <div class="qh-contact-row"><span>☎</span><span class="qh-nowrap">${SANTE.phone||"-"}</span></div>
+        <div class="qh-contact-row"><span>✉</span><span class="qh-nowrap">${SANTE.email||"-"}</span></div>
+        <div class="qh-contact-row"><span>◉</span><span class="qh-nowrap">${SANTE.website||"-"}</span></div>
+      </div>
+
+      <div class="qh-doc">
+        <div class="qh-copy">${quotationCopyLabel()}</div>
+        <div class="qh-title">ใบเสนอราคา</div>
+        <div class="qh-docbox">
           <b>เลขที่เอกสาร :</b><span>${esc(quoteNo)}</span>
           <b>วันที่ออก :</b><span>${esc(issueDate.value||"-")}</span>
           <b>ใช้ได้ถึง :</b><span>${esc(validUntil.value||"-")}</span>
@@ -4608,6 +4772,7 @@ function renderPaper(c){
 }
 
 async function openEditor(id=null,req=null){
+  prepareQuotationPreview();
   resetEditor();
   editingId=id;
 
