@@ -2373,6 +2373,7 @@ label{font-size:14px}.input,.select,textarea{font-size:15px;padding:13px 14px}.h
 }
 </style>
 <meta name="sante-build-r8" content="MEMBER-QUOTATION-R8-SCREEN-SIZE-FIX">
+<meta name="sante-build-r9" content="MEMBER-QUOTATION-R9-AUTO-INVOICE">
 
 </head><body><div id="loading" class="loading">กำลังโหลดใบเสนอราคา...</div>
 <header class="topbar">
@@ -2610,22 +2611,44 @@ async function init(){
 }
 async function approve(){
   if(!q||q.status!=="SENT")return;
-  if(!confirm("ยืนยันอนุมัติใบเสนอราคานี้?"))return;
+  if(!confirm("ยืนยันอนุมัติใบเสนอราคานี้?\nเมื่ออนุมัติแล้ว ระบบจะเตรียมใบแจ้งหนี้ให้อัตโนมัติ"))return;
+
   approveBtn.disabled=true;
+  const originalText=approveBtn.textContent;
+  approveBtn.textContent="กำลังอนุมัติ...";
+
   try{
-    const r=await db.rpc("member_approve_quotation",{p_quotation_id:id});
+    const r=await db.rpc("member_approve_quotation_and_create_invoice",{
+      p_quotation_id:id
+    });
     if(r.error)throw r.error;
+
+    const result=Array.isArray(r.data)?r.data[0]:r.data;
     q.status="APPROVED";
+
     msg.style.display="block";
     msg.classList.remove("error");
-    msg.textContent="อนุมัติใบเสนอราคาเรียบร้อยแล้ว สถานะเปลี่ยนเป็น APPROVED";
+
+    if(result?.invoice_no){
+      msg.innerHTML=
+        `อนุมัติใบเสนอราคาเรียบร้อยแล้ว<br>`+
+        `ระบบเตรียมใบแจ้งหนี้ <b>${esc(result.invoice_no)}</b> แล้ว `+
+        `(สถานะ ${esc(result.invoice_status||"READY_TO_ISSUE")})`;
+    }else if(result?.warning){
+      msg.textContent="อนุมัติใบเสนอราคาแล้ว แต่ยังไม่ได้สร้างใบแจ้งหนี้: "+result.warning;
+    }else{
+      msg.textContent="อนุมัติใบเสนอราคาเรียบร้อยแล้ว";
+    }
+
     approveBtn.style.display="none";
   }catch(e){
+    console.error(e);
     msg.style.display="block";
     msg.classList.add("error");
     msg.textContent="ไม่สามารถอนุมัติใบเสนอราคาได้: "+(e.message||e);
   }finally{
     approveBtn.disabled=false;
+    approveBtn.textContent=originalText;
   }
 }
 async function printQuotation(){
