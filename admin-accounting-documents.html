@@ -308,7 +308,6 @@ label{display:block;font-size:11px;font-weight:600;margin-bottom:5px}.input,text
 /* FINAL R9 - center only the workflow action buttons that were visually off-center */
 #syncQuotesBtn,
 #newReceiptBtn{
-  display:inline-flex!important;
   align-items:center!important;
   justify-content:center!important;
   text-align:center!important;
@@ -665,7 +664,6 @@ label{display:block;font-size:11px;font-weight:600;margin-bottom:5px}.input,text
 <style id="sante-accounting-r15-credit-button-center">
 #newCreditNoteBtn,
 #createCreditNoteBtn{
-  display:inline-flex!important;
   align-items:center!important;
   justify-content:center!important;
   text-align:center!important;
@@ -680,6 +678,17 @@ label{display:block;font-size:11px;font-weight:600;margin-bottom:5px}.input,text
 </style>
 <meta name="sante-build-r15" content="ACCOUNTING-R15-CREDIT-NOTE-FIX">
 <meta name="sante-build-r16" content="ACCOUNTING-R16-LOAD-FIX">
+
+
+<style id="sante-accounting-r17-context-actions">
+/* Context buttons must obey JS visibility; do not force them visible with !important. */
+#syncQuotesBtn[style*="display: none"],
+#newReceiptBtn[style*="display: none"],
+#newCreditNoteBtn[style*="display: none"]{
+  display:none!important;
+}
+</style>
+<meta name="sante-build-r17" content="ACCOUNTING-R17-WORKFLOW-FIX">
 
 </head>
 <body>
@@ -739,8 +748,8 @@ label{display:block;font-size:11px;font-weight:600;margin-bottom:5px}.input,text
  <section class="hero">
   <div><h1>เอกสารทางบัญชี</h1><p>ใบเสนอราคาและใบแจ้งหนี้ออกได้อัตโนมัติ · ใบเสร็จ/ใบกำกับภาษีต้องอนุมัติก่อนทุกครั้ง</p></div>
   <div class="hero-actions">
-   <button id="syncQuotesBtn" class="btn yellow">ซิงก์ใบเสนอราคา</button>
-   <button id="generateReadyBtn" class="btn">สร้าง PDF ที่พร้อมออก</button>
+   <button id="syncQuotesBtn" class="btn yellow">ซิงก์ใบเสนอราคา → ใบแจ้งหนี้</button>
+   <button id="generateReadyBtn" class="btn">ออก PDF เอกสารพร้อมออก</button>
    <button id="newReceiptBtn" class="btn">สร้าง Draft ใบเสร็จจาก Payment</button>
    <button id="newCreditNoteBtn" class="btn" style="display:none">สร้างใบลดหนี้</button>
   </div>
@@ -955,10 +964,12 @@ function updateWorkflowActions(){
   $("newReceiptBtn").style.display=isReceipt||!type?"inline-flex":"none";
   $("newCreditNoteBtn").style.display=isCreditNote?"inline-flex":"none";
   $("workflowHint").innerHTML=isReceipt
-    ? "<b>ขั้นตอนใบเสร็จ/ใบกำกับภาษี:</b> 1) เลือก Payment ที่ VERIFIED/PAID → 2) สร้าง Draft → 3) ตรวจข้อมูลลูกค้า/VAT/WHT → 4) อนุมัติ → 5) สร้าง PDF และออกเลข"
+    ? "<b>ขั้นตอนใบเสร็จ/ใบกำกับภาษี:</b> 1) เลือก Payment ที่ VERIFIED/PAID → 2) สร้าง Draft → 3) ตรวจข้อมูลลูกค้า/VAT/WHT → 4) อนุมัติ → 5) ออก PDF"
     : isCreditNote
-      ? "<b>ขั้นตอนใบลดหนี้:</b> 1) เลือกใบเสร็จ/ใบกำกับภาษีต้นทาง → 2) สร้าง Draft → 3) ตรวจเหตุผล/ยอดลด/VAT → 4) บันทึก → 5) สร้าง PDF"
-      : "<b>ขั้นตอนเอกสาร:</b> ใบเสนอราคา/ใบแจ้งหนี้ใช้ข้อมูลจากรายการต้นทางและสามารถสร้าง PDF ได้เมื่อสถานะพร้อมออก";
+      ? "<b>ขั้นตอนใบลดหนี้:</b> 1) เลือกใบเสร็จ/ใบกำกับภาษีต้นทาง → 2) สร้าง Draft → 3) ตรวจเหตุผล/ยอดลด/VAT → 4) บันทึก → 5) ออก PDF"
+      : type==="INVOICE"
+        ? "<b>ขั้นตอนใบแจ้งหนี้:</b> อนุมัติใบเสนอราคาให้เป็น APPROVED ก่อน → กด “ซิงก์ใบเสนอราคา → ใบแจ้งหนี้” → ตรวจ Invoice → ออก PDF"
+        : "<b>ขั้นตอนเอกสาร:</b> ใบเสนอราคาที่ APPROVED เท่านั้นจึงจะสร้างใบแจ้งหนี้ได้";
 }
 
 async function ensureStaff(){
@@ -1002,22 +1013,78 @@ function render(){
 }
 
 async function syncQuotes(){
- $("syncQuotesBtn").disabled=true;
+ const btn=$("syncQuotesBtn");
+ btn.disabled=true;
+ const originalText=btn.textContent;
+ btn.textContent="กำลังซิงก์...";
  try{
-  const {data,error}=await db.from("quotations").select("id,status").order("created_at",{ascending:false}).limit(500);
+  const {data,error}=await db
+    .from("quotations")
+    .select("id,quotation_no,status,grand_total,customer_name,organization_name")
+    .order("created_at",{ascending:false})
+    .limit(500);
+
   if(error)throw error;
-  for(const q of data||[]){
-   const r=await db.rpc("admin_prepare_quotation_document",{p_quotation_id:q.id});
-   if(r.error)throw r.error;
-   if(q.status==="APPROVED"){
-    const i=await db.rpc("admin_create_invoice_from_quotation",{p_quotation_id:q.id});
-    if(i.error)console.warn(i.error);
-   }
+
+  const quotations=Array.isArray(data)?data:[];
+  let quotationPrepared=0;
+  let invoiceOk=0;
+  let skippedNotApproved=0;
+  let skippedZero=0;
+  const errors=[];
+
+  for(const q of quotations){
+    const prep=await db.rpc("admin_prepare_quotation_document",{p_quotation_id:q.id});
+    if(prep.error){
+      errors.push(`${q.quotation_no||q.id}: ซิงก์ใบเสนอราคาไม่สำเร็จ - ${prep.error.message||prep.error}`);
+      continue;
+    }
+    quotationPrepared++;
+
+    if(q.status!=="APPROVED"){
+      skippedNotApproved++;
+      continue;
+    }
+
+    if(Number(q.grand_total||0)<=0){
+      skippedZero++;
+      continue;
+    }
+
+    const inv=await db.rpc("admin_create_invoice_from_quotation",{p_quotation_id:q.id});
+    if(inv.error){
+      errors.push(`${q.quotation_no||q.id}: สร้างใบแจ้งหนี้ไม่สำเร็จ - ${inv.error.message||inv.error}`);
+      continue;
+    }
+    invoiceOk++;
   }
+
   await loadDocs();
-  alert("ซิงก์ใบเสนอราคาและ Invoice เรียบร้อย");
- }catch(e){alert(e.message||e)}
- finally{$("syncQuotesBtn").disabled=false}
+
+  let message=
+    `ผลการซิงก์\n`+
+    `• ใบเสนอราคาที่ตรวจ/ซิงก์สำเร็จ: ${quotationPrepared}\n`+
+    `• Invoice ที่สร้าง/ตรวจพบสำเร็จ: ${invoiceOk}\n`+
+    `• ข้ามเพราะยังไม่ APPROVED: ${skippedNotApproved}\n`+
+    `• ข้ามเพราะยอดรวมเป็น 0: ${skippedZero}`;
+
+  if(errors.length){
+    message+=`\n\nพบข้อผิดพลาด ${errors.length} รายการ:\n`+errors.slice(0,8).join("\n");
+    if(errors.length>8)message+=`\n...และอีก ${errors.length-8} รายการ`;
+  }
+
+  if(!quotations.length){
+    message="ยังไม่มีใบเสนอราคาในระบบสำหรับซิงก์";
+  }
+
+  alert(message);
+ }catch(e){
+  console.error("SYNC QUOTATION/INVOICE ERROR",e);
+  alert("ซิงก์ใบเสนอราคา/ใบแจ้งหนี้ไม่สำเร็จ: "+(e.message||e));
+ }finally{
+  btn.disabled=false;
+  btn.textContent=originalText;
+ }
 }
 
 function fillEditor(x){
@@ -1335,8 +1402,13 @@ async function issueReadyAll(){
      alert("ยังไม่มีใบเสร็จ/ใบกำกับภาษีที่พร้อมออก\nให้สร้าง Draft จาก Payment ก่อน แล้วตรวจสอบและอนุมัติ");
    }else if(type==="CREDIT_NOTE"){
      alert("ยังไม่มีใบลดหนี้ที่พร้อมออก\nให้สร้าง Draft จากใบเสร็จ/ใบกำกับภาษีเดิม แล้วตรวจแก้ยอดก่อน");
+   }else if(type==="INVOICE"){
+     const invoiceStatuses=visible.map(x=>x.document_status).filter(Boolean);
+     alert(invoiceStatuses.length
+       ? "ยังไม่มีใบแจ้งหนี้สถานะ READY_TO_ISSUE หรือ APPROVED สำหรับออก PDF\nสถานะที่พบ: "+[...new Set(invoiceStatuses)].join(", ")
+       : "ยังไม่มีใบแจ้งหนี้ในรายการนี้\nให้อานุมัติใบเสนอราคาเป็น APPROVED แล้วกดซิงก์ใบเสนอราคา → ใบแจ้งหนี้ก่อน");
    }else{
-     alert("ไม่มีเอกสารที่พร้อมออกในรายการที่กำลังแสดง");
+     alert("ไม่มีเอกสารสถานะ READY_TO_ISSUE หรือ APPROVED ในรายการที่กำลังแสดง");
    }
    return;
  }
