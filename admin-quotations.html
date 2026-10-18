@@ -3873,6 +3873,67 @@ textarea{
 </style>
 <meta name="sante-build" content="QUOTATION-R32A-ONLY-3-FIXES">
 
+
+<style id="sante-quotation-r32b-no-wrap-seller-info">
+/* R32B — keep requested seller lines intact, no mid-line wrapping */
+
+.reference-qo .ref-seller-reference{
+  grid-template-columns:minmax(78mm,1.62fr) minmax(46mm,.88fr)!important;
+  gap:4mm!important;
+}
+
+.reference-qo .ref-seller-row{
+  grid-template-columns:29mm minmax(0,1fr)!important;
+  gap:2mm!important;
+}
+
+.reference-qo .ref-company-name > div,
+.reference-qo .ref-seller-address > div,
+.reference-qo .ref-tax-value,
+.reference-qo .ref-contact-value{
+  white-space:nowrap!important;
+  word-break:normal!important;
+  overflow-wrap:normal!important;
+}
+
+.reference-qo .ref-company-name{
+  font-size:7.9pt!important;
+  line-height:1.45!important;
+}
+
+.reference-qo .ref-seller-address{
+  font-size:7.75pt!important;
+  line-height:1.5!important;
+}
+
+.reference-qo .ref-tax-value{
+  font-size:7.7pt!important;
+}
+
+.reference-qo .ref-seller-contact{
+  max-width:none!important;
+  width:46mm!important;
+  transform:none!important;
+  font-size:7.55pt!important;
+}
+
+.reference-qo .ref-seller-contact-row{
+  grid-template-columns:5mm minmax(0,1fr)!important;
+  gap:1.5mm!important;
+}
+
+.reference-qo .ref-contact-value{
+  min-width:0!important;
+}
+
+.reference-qo .ref-website{
+  white-space:nowrap!important;
+  overflow-wrap:normal!important;
+  word-break:normal!important;
+}
+</style>
+<meta name="sante-build" content="QUOTATION-R32B-NO-WRAP-SELLER-INFO">
+
 </head>
 <body>
 
@@ -4340,22 +4401,29 @@ function renderPaper(c){
           <div class="ref-seller-main">
             <div class="ref-seller-row">
               <div class="ref-label">ผู้ขาย :</div>
-              <div class="ref-company-name">บริษัท ซานเต้ คอนซัลติ้ง จำกัด (สำนักงานใหญ่)</div>
+              <div class="ref-company-name">
+                <div>บริษัท ซานเต้ คอนซัลติ้ง จำกัด</div>
+                <div>(สำนักงานใหญ่)</div>
+              </div>
             </div>
             <div class="ref-seller-row">
               <div class="ref-label">ที่อยู่ :</div>
-              <div class="ref-seller-address">49 ถนนทางหลวง สาย 3191 ตำบลมาบข่า อำเภอนิคมพัฒนา จังหวัดระยอง 21180</div>
+              <div class="ref-seller-address">
+                <div>49 ถนนทางหลวง สาย 3191</div>
+                <div>ตำบลมาบข่า อำเภอนิคมพัฒนา</div>
+                <div>จังหวัดระยอง 21180</div>
+              </div>
             </div>
             <div class="ref-seller-row">
               <div class="ref-label ref-tax-label">เลขประจำตัวผู้เสียภาษี :</div>
-              <div>${SANTE.taxId}</div>
+              <div class="ref-tax-value">${SANTE.taxId}</div>
             </div>
           </div>
 
           <div class="ref-seller-contact">
-            <div class="ref-seller-contact-row"><b>☎</b><div>${SANTE.phone||"-"}</div></div>
-            <div class="ref-seller-contact-row"><b>✉</b><div>${SANTE.email||"-"}</div></div>
-            <div class="ref-seller-contact-row"><b>◉</b><div class="ref-website">${SANTE.website||"-"}</div></div>
+            <div class="ref-seller-contact-row"><b>☎</b><div class="ref-contact-value">${SANTE.phone||"-"}</div></div>
+            <div class="ref-seller-contact-row"><b>✉</b><div class="ref-contact-value">${SANTE.email||"-"}</div></div>
+            <div class="ref-seller-contact-row"><b>◉</b><div class="ref-contact-value ref-website">${SANTE.website||"-"}</div></div>
           </div>
         </div>
       </div>
