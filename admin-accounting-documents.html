@@ -569,6 +569,97 @@ label{display:block;font-size:11px;font-weight:600;margin-bottom:5px}.input,text
 </style>
 <meta name="sante-build" content="ACCOUNTING-R12-RECEIPT-TAX-UNIFIED">
 
+
+<style id="sante-accounting-r13-credit-note">
+/* =========================================================
+   R13 — CREDIT NOTE display/PDF only.
+   No creation RPC is invented here.
+========================================================= */
+.paper-creditnote{
+  color:#17283d!important;
+  -webkit-print-color-adjust:exact!important;
+  print-color-adjust:exact!important;
+}
+.paper-creditnote .rth{
+  display:grid!important;
+  grid-template-columns:15mm minmax(58mm,1.25fr) minmax(42mm,.82fr) 62mm!important;
+  gap:3.2mm!important;
+  align-items:start!important;
+  padding-bottom:5mm!important;
+  border-bottom:1px solid #cfd7df!important;
+}
+.paper-creditnote .rth-logo-cell{padding-top:.4mm!important}
+.paper-creditnote .rth-logo{width:13.5mm!important;height:17mm!important;display:block!important;object-fit:contain!important}
+.paper-creditnote .rth-seller{display:grid!important;row-gap:1.4mm!important;font-size:7.7pt!important;line-height:1.45!important}
+.paper-creditnote .rth-row{display:grid!important;grid-template-columns:18mm minmax(0,1fr)!important;gap:1.8mm!important;align-items:start!important}
+.paper-creditnote .rth-label{font-weight:700!important;white-space:nowrap!important}
+.paper-creditnote .rth-company{font-weight:700!important}
+.paper-creditnote .rth-company>div,
+.paper-creditnote .rth-address>div,
+.paper-creditnote .rth-contact-row span:last-child,
+.paper-creditnote .rth-docbox b,
+.paper-creditnote .rth-docbox span{white-space:nowrap!important}
+.paper-creditnote .rth-contact{display:grid!important;row-gap:2mm!important;padding-top:.1mm!important;font-size:7.2pt!important;line-height:1.42!important}
+.paper-creditnote .rth-contact-row{display:grid!important;grid-template-columns:4.5mm minmax(0,1fr)!important;gap:1.2mm!important}
+.paper-creditnote .rth-doc{text-align:right!important}
+.paper-creditnote .rth-copy{min-height:5mm!important;font-size:7.3pt!important;font-weight:700!important}
+.paper-creditnote .rth-title{
+  margin:0 0 4.5mm!important;color:#6f70ea!important;font-size:24pt!important;
+  line-height:1.08!important;font-weight:700!important;white-space:nowrap!important
+}
+.paper-creditnote .rth-docbox{
+  display:grid!important;grid-template-columns:26mm minmax(0,1fr)!important;
+  gap:1.7mm 2mm!important;padding:3.8mm 4mm!important;border-radius:2mm!important;
+  background:#eeeeff!important;text-align:left!important;font-size:7.55pt!important;line-height:1.4!important
+}
+.paper-creditnote .rt-party{
+  display:grid!important;grid-template-columns:minmax(0,1.35fr) minmax(0,.75fr)!important;
+  gap:10mm!important;padding-top:4.5mm!important
+}
+.paper-creditnote .rt-party-row{
+  display:grid!important;grid-template-columns:34mm minmax(0,1fr)!important;
+  gap:2mm!important;font-size:8pt!important;line-height:1.52!important
+}
+.paper-creditnote .rt-party-row b{white-space:nowrap!important}
+.paper-creditnote .rt-contact-title{font-size:8.1pt!important;font-weight:700!important;margin-bottom:1.6mm!important}
+.paper-creditnote .rt-contact-row{
+  display:grid!important;grid-template-columns:5mm minmax(0,1fr)!important;
+  gap:1.5mm!important;font-size:8pt!important;line-height:1.5!important
+}
+.paper-creditnote table{margin-top:4.5mm!important;border:0!important}
+.paper-creditnote th{
+  background:#eeeeff!important;color:#17283d!important;font-size:8.1pt!important;
+  padding:2.6mm 1.3mm!important;border:0!important;line-height:1.25!important
+}
+.paper-creditnote td{
+  border-left:0!important;border-right:0!important;font-size:8.4pt!important;
+  padding:2.8mm 1.3mm!important;line-height:1.5!important
+}
+.paper-creditnote .item-no{font-weight:400!important;color:#43566b!important}
+.paper-creditnote .item-main{font-weight:400!important;color:#17283d!important;font-size:8.75pt!important}
+.paper-creditnote .totals-wrap{
+  grid-template-columns:minmax(0,1fr) 82mm!important;gap:5mm!important;
+  margin-top:12mm!important;padding-top:2.8mm!important
+}
+.paper-creditnote .summary-note{white-space:pre-wrap!important;font-size:8.2pt!important;line-height:1.55!important}
+.paper-creditnote .total-row{font-size:8.2pt!important;padding:1.2mm 0!important}
+.paper-creditnote .total-row.grand{
+  margin-top:1mm!important;padding:2.5mm 3mm!important;background:#eeeeff!important;
+  color:#3f43a7!important;border:0!important;border-radius:2mm!important;font-size:11.7pt!important
+}
+.paper-creditnote .signature-area{margin-top:5mm!important;padding-top:3mm!important}
+.paper-creditnote .signature-header{font-size:8.5pt!important}
+.paper-creditnote .signature-grid{grid-template-columns:repeat(5,1fr)!important;gap:3mm!important}
+.paper-creditnote .signature-box{min-height:31mm!important;font-size:7.5pt!important}
+.paper-creditnote .signature-space,
+.paper-creditnote .seal-box,
+.paper-creditnote .customer-stamp-box{height:18mm!important}
+.paper-creditnote .seal-mark-img{width:18mm!important;height:18mm!important}
+.paper-creditnote .customer-stamp-box{width:18mm!important}
+.paper-creditnote .footer-sign-note{font-size:7pt!important;line-height:1.45!important}
+</style>
+<meta name="sante-build" content="ACCOUNTING-R13-CREDIT-NOTE-READY">
+
 </head>
 <body>
 <div id="loading" class="loading">กำลังโหลดเอกสารบัญชี...</div>
@@ -622,6 +713,7 @@ label{display:block;font-size:11px;font-weight:600;margin-bottom:5px}.input,text
   <a id="tabQuotation" href="admin-quotations.html">ใบเสนอราคา</a>
   <a id="tabInvoice" href="admin-accounting-documents.html?type=INVOICE">ใบแจ้งหนี้</a>
   <a id="tabReceipt" href="admin-accounting-documents.html?type=RECEIPT_TAX_INVOICE">ใบเสร็จ / ใบกำกับภาษี</a>
+  <a id="tabCreditNote" href="admin-accounting-documents.html?type=CREDIT_NOTE">ใบลดหนี้</a>
 </div>
  <section class="hero">
   <div><h1>Accounting Documents</h1><p>ใบเสนอราคาและใบแจ้งหนี้ออกได้อัตโนมัติ · ใบเสร็จ/ใบกำกับภาษีต้องอนุมัติก่อนทุกครั้ง</p></div>
@@ -649,6 +741,7 @@ label{display:block;font-size:11px;font-weight:600;margin-bottom:5px}.input,text
    <option value="QUOTATION">ใบเสนอราคา</option>
    <option value="INVOICE">ใบแจ้งหนี้</option>
    <option value="RECEIPT_TAX_INVOICE">ใบเสร็จ/ใบกำกับภาษี</option>
+   <option value="CREDIT_NOTE">ใบลดหนี้</option>
   </select>
   <select id="statusFilter" class="filter">
    <option value="">ทุกสถานะ</option>
@@ -777,7 +870,7 @@ function applyAccountingTabFromUrl(){
   const tf=document.getElementById("typeFilter");
   if(tf) tf.value=type;
 
-  ["tabOverview","tabQuotation","tabInvoice","tabReceipt"].forEach(id=>{
+  ["tabOverview","tabQuotation","tabInvoice","tabReceipt","tabCreditNote"].forEach(id=>{
     const el=document.getElementById(id);
     if(el) el.classList.remove("active");
   });
@@ -786,6 +879,8 @@ function applyAccountingTabFromUrl(){
     document.getElementById("tabInvoice")?.classList.add("active");
   }else if(type==="RECEIPT_TAX_INVOICE"){
     document.getElementById("tabReceipt")?.classList.add("active");
+  }else if(type==="CREDIT_NOTE"){
+    document.getElementById("tabCreditNote")?.classList.add("active");
   }else{
     document.getElementById("tabOverview")?.classList.add("active");
   }
@@ -802,11 +897,14 @@ function getVisibleDocs(){
 function updateWorkflowActions(){
   const type=$("typeFilter")?.value||"";
   const isReceipt=type==="RECEIPT_TAX_INVOICE";
-  $("syncQuotesBtn").style.display=isReceipt?"none":"inline-flex";
+  const isCreditNote=type==="CREDIT_NOTE";
+  $("syncQuotesBtn").style.display=(isReceipt||isCreditNote)?"none":"inline-flex";
   $("newReceiptBtn").style.display=isReceipt||!type?"inline-flex":"none";
   $("workflowHint").innerHTML=isReceipt
     ? "<b>ขั้นตอนใบเสร็จ/ใบกำกับภาษี:</b> 1) เลือก Payment ที่ VERIFIED/PAID → 2) สร้าง Draft → 3) ตรวจข้อมูลลูกค้า/VAT/WHT → 4) อนุมัติ → 5) สร้าง PDF และออกเลข"
-    : "<b>ขั้นตอนเอกสาร:</b> ใบเสนอราคา/ใบแจ้งหนี้ใช้ข้อมูลจากรายการต้นทางและสามารถสร้าง PDF ได้เมื่อสถานะพร้อมออก";
+    : isCreditNote
+      ? "<b>ใบลดหนี้:</b> ระบบรองรับการแสดงผลและ PDF ของ CREDIT_NOTE แล้ว · การสร้างใบลดหนี้ใหม่ต้องใช้ RPC ฝั่งฐานข้อมูล ซึ่งไฟล์ปัจจุบันยังไม่มี จึงยังไม่เพิ่มปุ่มสร้างเพื่อป้องกันข้อมูลผิดพลาด"
+      : "<b>ขั้นตอนเอกสาร:</b> ใบเสนอราคา/ใบแจ้งหนี้ใช้ข้อมูลจากรายการต้นทางและสามารถสร้าง PDF ได้เมื่อสถานะพร้อมออก";
 }
 
 async function ensureStaff(){
@@ -970,12 +1068,13 @@ function paperHtml(x){
  const isReceipt=x.document_type==="RECEIPT_TAX_INVOICE";
  const isInvoice=x.document_type==="INVOICE";
  const isQuotation=x.document_type==="QUOTATION";
+ const isCreditNote=x.document_type==="CREDIT_NOTE";
  const docTitle=typeLabel(x.document_type);
- const docEn=isQuotation?"QUOTATION":isInvoice?"INVOICE":"RECEIPT / TAX INVOICE";
+ const docEn=isQuotation?"QUOTATION":isInvoice?"INVOICE":isCreditNote?"CREDIT NOTE":"RECEIPT / TAX INVOICE";
  const copyLabel=accountingCopyLabel();
  const receiveAmount=x.amount_received??x.net_receivable??x.grand_total;
  const paymentNo=x.payment_no||"-";
- return `<div class="paper ${isInvoice?"paper-invoice":isReceipt?"paper-receipt":"paper-other"}">
+ return `<div class="paper ${isInvoice?"paper-invoice":isReceipt?"paper-receipt":isCreditNote?"paper-creditnote":"paper-other"}">
   ${isInvoice?`
   <div class="invh">
     <div class="invh-logo-cell">
@@ -1056,12 +1155,12 @@ function paperHtml(x){
 
     <div class="rth-doc">
       <div class="rth-copy">${copyLabel}</div>
-      <div class="rth-title">${isReceipt?"ใบเสร็จรับเงิน / ใบกำกับภาษี":esc(docTitle)}</div>
+      <div class="rth-title">${isReceipt?"ใบเสร็จรับเงิน / ใบกำกับภาษี":isCreditNote?"ใบลดหนี้":esc(docTitle)}</div>
       <div class="rth-docbox">
         <b>เลขที่เอกสาร :</b><span>${esc(x.document_no||"-")}</span>
         <b>วันที่ออก :</b><span>${esc(x.issue_date||new Date().toISOString().slice(0,10))}</span>
         ${isReceipt?`<b>Payment No. :</b><span>${esc(paymentNo)}</span>`:""}
-        <b>อ้างอิง :</b><span>${esc(refText(x))}</span>
+        ${isCreditNote?`<b>เอกสารอ้างอิง :</b><span>${esc(refText(x))}</span>`:`<b>อ้างอิง :</b><span>${esc(refText(x))}</span>`}
       </div>
     </div>
   </div>`}
@@ -1094,21 +1193,21 @@ function paperHtml(x){
   </div>`}
   <table>
    <thead><tr>
-    ${(isInvoice||isReceipt)?`<th class="desc-col">รายละเอียด</th><th class="qty-col">จำนวน</th><th class="unit-col">หน่วย</th><th class="price-col">ราคา</th><th class="disc-col">ส่วนลด</th><th class="vat-col">VAT</th><th class="amount-col">มูลค่าก่อนภาษี</th>`:`<th class="desc-col">คำอธิบาย / DESCRIPTION</th><th class="qty-col">จำนวน<br>QTY</th><th class="unit-col">หน่วย<br>UNIT</th><th class="price-col">ราคา<br>PRICE</th><th class="disc-col">ส่วนลด<br>DISCOUNT</th><th class="vat-col">VAT</th><th class="amount-col">มูลค่าก่อนภาษี<br>AMOUNT</th>`}
+    ${(isInvoice||isReceipt||isCreditNote)?`<th class="desc-col">รายละเอียด</th><th class="qty-col">จำนวน</th><th class="unit-col">หน่วย</th><th class="price-col">ราคา</th><th class="disc-col">ส่วนลด</th><th class="vat-col">VAT</th><th class="amount-col">มูลค่าก่อนภาษี</th>`:`<th class="desc-col">คำอธิบาย / DESCRIPTION</th><th class="qty-col">จำนวน<br>QTY</th><th class="unit-col">หน่วย<br>UNIT</th><th class="price-col">ราคา<br>PRICE</th><th class="disc-col">ส่วนลด<br>DISCOUNT</th><th class="vat-col">VAT</th><th class="amount-col">มูลค่าก่อนภาษี<br>AMOUNT</th>`}
    </tr></thead>
    <tbody>${rows}</tbody>
   </table>
   <div class="totals-wrap">
    <div class="summary-note">
-     <b>รายละเอียด / NOTES</b><br>
-     ${x.document_subject?`เรื่อง: ${esc(x.document_subject)}<br>`:""}
+     <b>${isCreditNote?"เหตุผลและรายละเอียดการลดหนี้":"รายละเอียด / NOTES"}</b><br>
+     ${x.document_subject?`${isCreditNote?"เหตุผล":"เรื่อง"}: ${esc(x.document_subject)}<br>`:""}
      ${x.terms?`เงื่อนไข: ${esc(x.terms)}<br>`:""}
-     ${x.note?esc(x.note):"กรุณาตรวจสอบชื่อ/ที่อยู่ เลขประจำตัวผู้เสียภาษี และยอดเงินก่อนนำเอกสารไปใช้งาน"}
+     ${x.note?esc(x.note):(isCreditNote?"กรุณาตรวจสอบเอกสารอ้างอิง เหตุผลการลดหนี้ และยอดภาษีก่อนออกเอกสาร":"กรุณาตรวจสอบชื่อ/ที่อยู่ เลขประจำตัวผู้เสียภาษี และยอดเงินก่อนนำเอกสารไปใช้งาน")}
    </div>
    <div class="totals">
-    <div class="total-row"><span>มูลค่าก่อน VAT</span><span>${money(x.subtotal)} บาท</span></div>
-    <div class="total-row"><span>ภาษีมูลค่าเพิ่ม ${money(x.vat_rate??7)}%</span><span>${money(x.vat_amount)} บาท</span></div>
-    <div class="total-row grand"><span>จำนวนเงินทั้งสิ้น</span><span>${money(x.grand_total)} บาท</span></div>
+    <div class="total-row"><span>${isCreditNote?"มูลค่าที่ลดก่อน VAT":"มูลค่าก่อน VAT"}</span><span>${money(x.subtotal)} บาท</span></div>
+    <div class="total-row"><span>${isCreditNote?"ภาษีมูลค่าเพิ่มที่ลด":"ภาษีมูลค่าเพิ่ม"} ${money(x.vat_rate??7)}%</span><span>${money(x.vat_amount)} บาท</span></div>
+    <div class="total-row grand"><span>${isCreditNote?"รวมมูลค่าลดหนี้":"จำนวนเงินทั้งสิ้น"}</span><span>${money(x.grand_total)} บาท</span></div>
     ${Number(x.wht_amount||0)>0?`<div class="total-row"><span>หัก ณ ที่จ่าย ${money(x.wht_rate||0)}%</span><span>${money(x.wht_amount)} บาท</span></div><div class="total-row paid-row"><b>จำนวนเงินที่ชำระสุทธิ</b><b>${money(x.net_receivable)} บาท</b></div><div class="amount-words">(${thaiBahtText(x.net_receivable)})</div>`:`<div class="amount-words">(${thaiBahtText(isReceipt?receiveAmount:x.grand_total)})</div>`}
     ${isReceipt?`<div class="total-row paid-row"><b>ยอดรับเงินจริง</b><b>${money(receiveAmount)} บาท</b></div>`:""}
    </div>
@@ -1124,7 +1223,7 @@ function paperHtml(x){
     <div class="signature-box"><div class="signature-space"></div><div class="signature-line">ผู้รับเอกสาร (ลูกค้า)</div></div>
     <div class="signature-box"><div class="customer-stamp-box"></div><div class="signature-line">ตราประทับ (ลูกค้า) (ถ้ามี)</div></div>
    </div>
-   <div class="footer-sign-note">${isInvoice?"ผู้ขายลงนามเพื่อรับรองความถูกต้องของใบแจ้งหนี้ และลูกค้าสามารถลงนาม/ประทับตราเพื่อยืนยันการรับเอกสาร":isReceipt?"เอกสารฉบับนี้ใช้เป็นหลักฐานการรับชำระเงินและใบกำกับภาษีตามข้อมูลที่ระบุข้างต้น":"เอกสารฉบับนี้จัดทำจากข้อมูลใน SANTE Accounting Documents"}</div>
+   <div class="footer-sign-note">${isInvoice?"ผู้ขายลงนามเพื่อรับรองความถูกต้องของใบแจ้งหนี้ และลูกค้าสามารถลงนาม/ประทับตราเพื่อยืนยันการรับเอกสาร":isReceipt?"เอกสารฉบับนี้ใช้เป็นหลักฐานการรับชำระเงินและใบกำกับภาษีตามข้อมูลที่ระบุข้างต้น":isCreditNote?"ใบลดหนี้ฉบับนี้อ้างอิงเอกสารเดิมตามที่ระบุ กรุณาตรวจสอบเหตุผลและจำนวนเงินที่ลดก่อนนำเอกสารไปใช้":"เอกสารฉบับนี้จัดทำจากข้อมูลใน SANTE Accounting Documents"}</div>
   </div>
   <div class="accounting-foot">SANTE Accounting Documents · ${esc(docEn)} · ${copyLabel}</div>
  </div>`;
