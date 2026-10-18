@@ -244,4 +244,20 @@ async function init(){
  loading.style.display="none";
 }
 logout.onclick=async()=>{await db.auth.signOut();location="member-login.html"};init();
-</script></body></html>
+</script>
+<script id="member-r10-1-loading-watchdog">
+/* Prevent an indefinite full-screen loading overlay.
+   This does not change data logic; it only exposes a recoverable message. */
+window.setTimeout(function(){
+  const el=document.getElementById("loading");
+  if(!el)return;
+  const style=window.getComputedStyle(el);
+  const visible=style.display!=="none" && !el.classList.contains("hidden");
+  if(visible){
+    el.innerHTML='โหลดข้อมูลนานผิดปกติ<br><button type="button" onclick="location.reload()" style="margin-top:14px;min-height:42px;padding:0 16px;border:1px solid #d5e1ef;border-radius:10px;background:#fff;color:#082d69;font:600 14px Prompt,sans-serif;cursor:pointer">โหลดใหม่</button>';
+  }
+},15000);
+</script>
+<meta name="sante-hotfix" content="MEMBER-R10-1-LOADING-WATCHDOG">
+
+</body></html>

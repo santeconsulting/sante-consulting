@@ -613,9 +613,25 @@ async function init(){
  const cr=new URLSearchParams(location.search).get("created");if(cr){createdMsg.style.display="block";createdMsg.textContent="ส่งคำขอเรียบร้อย เลขคำขอ "+cr}
  const [rr,qq]=await Promise.all([db.from("service_requests").select("*").eq("user_id",u.id).order("created_at",{ascending:false}),db.from("quotations").select("id,service_request_id,quotation_no,status,grand_total,net_receivable").eq("member_id",u.id).order("created_at",{ascending:false})]);
  if(rr.error){cards.innerHTML='<div class="empty">โหลดคำขอไม่สำเร็จ</div>';loading.style.display="none";return}
- const qs=qq.data||[];quoteCount.textContent="("+qs.length+")";
+ const qs=qq.data||[];const quoteCountEl=document.getElementById("quoteCount");if(quoteCountEl)quoteCountEl.textContent="("+qs.length+")";
  cards.innerHTML=(rr.data||[]).map(r=>{const st=statusMap[r.status]||[r.status||"-",""];const q=qs.find(x=>x.service_request_id===r.id&&["SENT","APPROVED"].includes(x.status));const detail=r.course_name||r.service_group==="IH"?"บริการตรวจวัดด้านสุขศาสตร์อุตสาหกรรม":r.service_group==="ELECTRICAL"?"ตรวจสอบและรับรองระบบไฟฟ้า":r.service_detail?.subject||r.additional_detail||"-";return `<div class="request"><div><div class="reqno">${esc(r.request_no||"-")}</div><div class="rtitle">${esc(typeMap[r.request_type]||"คำขอบริการ")}</div><div class="meta">${esc(detail)}<br>${esc(r.organization_name||"")}</div></div><div><span class="badge ${st[1]}">${esc(st[0])}</span><div class="meta">ส่งเมื่อ ${new Date(r.created_at).toLocaleDateString("th-TH")}</div></div><div>${q?`<a class="btn yellow" href="member-quotation.html?id=${q.id}">เปิดใบเสนอราคา</a>`:""}</div></div>`}).join("")||'<div class="panel empty">ยังไม่มีคำขอบริการ <div style="margin-top:15px"><a class="btn yellow" href="service-request.html">สร้างคำขอใหม่</a></div></div>';
  loading.style.display="none";
 }
 logout.onclick=async()=>{await db.auth.signOut();location="member-login.html"};init();
-</script></body></html>
+</script>
+<script id="member-r10-1-loading-watchdog">
+/* Prevent an indefinite full-screen loading overlay.
+   This does not change data logic; it only exposes a recoverable message. */
+window.setTimeout(function(){
+  const el=document.getElementById("loading");
+  if(!el)return;
+  const style=window.getComputedStyle(el);
+  const visible=style.display!=="none" && !el.classList.contains("hidden");
+  if(visible){
+    el.innerHTML='โหลดข้อมูลนานผิดปกติ<br><button type="button" onclick="location.reload()" style="margin-top:14px;min-height:42px;padding:0 16px;border:1px solid #d5e1ef;border-radius:10px;background:#fff;color:#082d69;font:600 14px Prompt,sans-serif;cursor:pointer">โหลดใหม่</button>';
+  }
+},15000);
+</script>
+<meta name="sante-hotfix" content="MEMBER-R10-1-LOADING-WATCHDOG">
+
+</body></html>
