@@ -660,7 +660,25 @@ label{display:block;font-size:11px;font-weight:600;margin-bottom:5px}.input,text
 </style>
 <meta name="sante-build" content="ACCOUNTING-R13-CREDIT-NOTE-READY">
 <meta name="sante-build-r14" content="ACCOUNTING-R14-CREDIT-NOTE-CREATE">
-<meta name="sante-hotfix" content="ACCOUNTING-R14-LOAD-FIX">
+
+
+<style id="sante-accounting-r15-credit-button-center">
+#newCreditNoteBtn,
+#createCreditNoteBtn{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+  line-height:1.2!important;
+  box-sizing:border-box!important;
+  min-height:42px!important;
+  height:42px!important;
+  padding-top:0!important;
+  padding-bottom:0!important;
+  white-space:nowrap!important;
+}
+</style>
+<meta name="sante-build-r15" content="ACCOUNTING-R15-CREDIT-NOTE-FIX">
 
 </head>
 <body>
@@ -718,7 +736,7 @@ label{display:block;font-size:11px;font-weight:600;margin-bottom:5px}.input,text
   <a id="tabCreditNote" href="admin-accounting-documents.html?type=CREDIT_NOTE">ใบลดหนี้</a>
 </div>
  <section class="hero">
-  <div><h1>Accounting Documents</h1><p>ใบเสนอราคาและใบแจ้งหนี้ออกได้อัตโนมัติ · ใบเสร็จ/ใบกำกับภาษีต้องอนุมัติก่อนทุกครั้ง</p></div>
+  <div><h1>เอกสารทางบัญชี</h1><p>ใบเสนอราคาและใบแจ้งหนี้ออกได้อัตโนมัติ · ใบเสร็จ/ใบกำกับภาษีต้องอนุมัติก่อนทุกครั้ง</p></div>
   <div class="hero-actions">
    <button id="syncQuotesBtn" class="btn yellow">ซิงก์ใบเสนอราคา</button>
    <button id="generateReadyBtn" class="btn">สร้าง PDF ที่พร้อมออก</button>
@@ -810,37 +828,6 @@ label{display:block;font-size:11px;font-weight:600;margin-bottom:5px}.input,text
  <label style="margin-top:12px">Quotation ID (ถ้ามี)</label><input id="receiptQuotationId" class="input" placeholder="เว้นว่างได้">
  <div class="modal-actions"><button id="createReceiptBtn" class="btn yellow">สร้าง Draft</button></div>
 </div></div>
-
-<div id="creditNoteBg" class="modal-bg">
- <div class="modal-card" style="max-width:720px">
-  <div class="modal-head">
-   <div>
-    <h2 style="margin:0">สร้าง Draft ใบลดหนี้</h2>
-    <div class="muted">เลือกใบเสร็จ/ใบกำกับภาษีต้นทาง และระบุเหตุผลการลดหนี้</div>
-   </div>
-   <button class="btn" type="button" onclick="$('creditNoteBg').classList.remove('show')">ปิด</button>
-  </div>
-
-  <div class="form-grid" style="margin-top:14px">
-   <label class="field" style="grid-column:1/-1">
-    <span>เอกสารต้นทาง</span>
-    <select id="creditSourceSelect"></select>
-   </label>
-   <label class="field" style="grid-column:1/-1">
-    <span>เหตุผลการลดหนี้</span>
-    <textarea id="creditReason" rows="4" placeholder="เช่น ลดค่าบริการบางส่วน / ยกเลิกรายการ / แก้ไขยอดตามเอกสารเดิม"></textarea>
-   </label>
-  </div>
-
-  <div class="workflow-note" style="margin-top:14px">
-   ระบบจะคัดลอกข้อมูลจากเอกสารเดิมเป็น Draft ก่อน กรุณาตรวจสอบและแก้ไขยอดลดหนี้, VAT และรายละเอียดให้ถูกต้องก่อนออก PDF
-  </div>
-
-  <div class="modal-actions">
-   <button id="createCreditNoteBtn" class="btn yellow" type="button">สร้าง Draft ใบลดหนี้</button>
-  </div>
- </div>
-</div>
 
 <div id="printStage"></div>
 
@@ -1337,18 +1324,18 @@ async function issueReadyAll(){
 function getCreditNoteSources(){
  return docs.filter(x=>
    x.document_type==="RECEIPT_TAX_INVOICE" &&
-   ["APPROVED","ISSUED"].includes(x.document_status)
+   x.document_status!=="CANCELLED"
  );
 }
 
 function openCreditNoteCreator(){
  const src=getCreditNoteSources();
  if(!src.length){
-   alert("ยังไม่มีใบเสร็จ/ใบกำกับภาษีที่อนุมัติหรือออกเอกสารแล้วสำหรับใช้อ้างอิง");
+   alert("ยังไม่มีใบเสร็จ/ใบกำกับภาษีในระบบสำหรับใช้อ้างอิงใบลดหนี้ กรุณาสร้างใบเสร็จ/ใบกำกับภาษีก่อน");
    return;
  }
  $("creditSourceSelect").innerHTML=src.map(x=>
-   `<option value="${x.id}">${esc(x.document_no||"ยังไม่ออกเลข")} · ${esc(x.organization_name||x.customer_name||"-")} · ${money(x.grand_total)} บาท</option>`
+   `<option value="${x.id}">${esc(x.document_no||"ยังไม่ออกเลข")} · ${esc(x.organization_name||x.customer_name||"-")} · ${money(x.grand_total)} บาท · ${esc(x.document_status||"-")}</option>`
  ).join("");
  $("creditReason").value="";
  $("creditNoteBg").classList.add("show");
@@ -1357,6 +1344,11 @@ function openCreditNoteCreator(){
 async function createCreditNoteDraft(){
  const sourceId=$("creditSourceSelect").value;
  const reason=$("creditReason").value.trim();
+ const sourceDoc=docs.find(x=>x.id===sourceId);
+ if(!sourceDoc || sourceDoc.document_type!=="RECEIPT_TAX_INVOICE"){
+   alert("เอกสารต้นทางไม่ถูกต้อง กรุณาเลือกใบเสร็จ/ใบกำกับภาษีอีกครั้ง");
+   return;
+ }
  if(!sourceId){
    alert("กรุณาเลือกเอกสารต้นทาง");
    return;
@@ -1413,10 +1405,8 @@ $("syncQuotesBtn").onclick=syncQuotes;$("generateReadyBtn").onclick=issueReadyAl
 $("approveBtn").onclick=async()=>{try{await approveEditing()}catch(e){alert(e.message)}};
 $("pdfBtn").onclick=()=>editing&&issueOne(editing.id);
 $("newReceiptBtn").onclick=async()=>{try{await loadPayments();$("receiptBg").classList.add("show")}catch(e){alert(e.message)}};
-const newCreditNoteBtnEl=$("newCreditNoteBtn");
-const createCreditNoteBtnEl=$("createCreditNoteBtn");
-if(newCreditNoteBtnEl)newCreditNoteBtnEl.onclick=openCreditNoteCreator;
-if(createCreditNoteBtnEl)createCreditNoteBtnEl.onclick=createCreditNoteDraft;
+$("newCreditNoteBtn").onclick=openCreditNoteCreator;
+$("createCreditNoteBtn").onclick=createCreditNoteDraft;
 $("createReceiptBtn").onclick=createReceiptDraft;
 $("logoutBtn").onclick=async()=>{await db.auth.signOut();location.replace("admin-login.html")};
 
@@ -1430,17 +1420,39 @@ overlay.onclick=()=>{sidebar.classList.remove("open");overlay.classList.remove("
   applyAccountingTabFromUrl();
   await loadDocs();
   $("loading").classList.add("hidden");
- }catch(e){
-  console.error(e);
-  $("loading").textContent="โหลดเอกสารบัญชีไม่สำเร็จ: "+(e.message||e);
- }
+ }catch(e){console.error(e);$("loading").textContent="โหลดเอกสารบัญชีไม่สำเร็จ: "+(e.message||e)}
 })();
-setTimeout(()=>{
- const el=$("loading");
- if(el && !el.classList.contains("hidden") && el.textContent==="กำลังโหลดเอกสารบัญชี..."){
-   el.textContent="โหลดข้อมูลนานผิดปกติ กรุณารีเฟรชหน้า หรือตรวจสอบการเชื่อมต่อ Supabase";
- }
-},15000);
 </script>
+
+<div id="creditNoteBg" class="modal-bg">
+ <div class="modal" style="width:min(720px,100%)">
+  <div class="modal-head">
+   <div>
+    <h2 style="margin:0">สร้าง Draft ใบลดหนี้</h2>
+    <div class="muted">เลือกใบเสร็จ/ใบกำกับภาษีต้นทาง และระบุเหตุผลการลดหนี้</div>
+   </div>
+   <button class="btn" type="button" onclick="$('creditNoteBg').classList.remove('show')">ปิด</button>
+  </div>
+
+  <div class="form-grid" style="margin-top:14px">
+   <label class="field" style="grid-column:1/-1">
+    <span>เอกสารต้นทาง</span>
+    <select id="creditSourceSelect"></select>
+   </label>
+   <label class="field" style="grid-column:1/-1">
+    <span>เหตุผลการลดหนี้</span>
+    <textarea id="creditReason" rows="4" placeholder="เช่น ลดค่าบริการบางส่วน / ยกเลิกรายการ / แก้ไขยอดตามเอกสารเดิม"></textarea>
+   </label>
+  </div>
+
+  <div class="workflow-note" style="margin-top:14px">
+   ระบบจะคัดลอกข้อมูลจากเอกสารเดิมเป็น Draft ก่อน กรุณาตรวจสอบและแก้ไขยอดลดหนี้, VAT และรายละเอียดให้ถูกต้องก่อนออก PDF
+  </div>
+
+  <div class="modal-actions">
+   <button id="createCreditNoteBtn" class="btn yellow" type="button">สร้าง Draft ใบลดหนี้</button>
+  </div>
+ </div>
+</div>
 
 </body></html>
