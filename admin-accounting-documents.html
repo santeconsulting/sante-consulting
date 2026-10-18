@@ -690,6 +690,50 @@ label{display:block;font-size:11px;font-weight:600;margin-bottom:5px}.input,text
 </style>
 <meta name="sante-build-r17" content="ACCOUNTING-R17-WORKFLOW-FIX">
 
+
+<style id="sante-accounting-r18-preview">
+.preview-modal{
+  width:min(1180px,96vw)!important;
+  max-height:94vh!important;
+  overflow:hidden!important;
+  display:flex!important;
+  flex-direction:column!important;
+}
+.preview-scroll{
+  flex:1 1 auto!important;
+  overflow:auto!important;
+  padding:18px!important;
+  background:#eef3f8!important;
+  border:1px solid #d8e3ee!important;
+  border-radius:14px!important;
+}
+#previewPaper{
+  display:flex!important;
+  justify-content:center!important;
+  align-items:flex-start!important;
+  min-width:max-content!important;
+}
+#previewPaper>.paper{
+  margin:0 auto!important;
+  box-shadow:0 8px 28px rgba(8,45,105,.12)!important;
+}
+.preview-actions{
+  flex:0 0 auto!important;
+}
+.row-actions{
+  flex-wrap:wrap!important;
+}
+.btn.preview{
+  background:#eef4fb!important;
+  color:#082d69!important;
+}
+@media(max-width:767px){
+  .preview-modal{width:98vw!important;max-height:96vh!important}
+  .preview-scroll{padding:8px!important}
+}
+</style>
+<meta name="sante-build-r18" content="ACCOUNTING-R18-INVOICE-PREVIEW">
+
 </head>
 <body>
 <div id="loading" class="loading">กำลังโหลดเอกสารบัญชี...</div>
@@ -832,6 +876,34 @@ label{display:block;font-size:11px;font-weight:600;margin-bottom:5px}.input,text
  </div>
 </div></div>
 
+
+<div id="previewBg" class="modal-bg">
+ <div class="modal preview-modal">
+  <div class="modal-head">
+   <div>
+    <h2 id="previewTitle" style="margin:0">ตัวอย่างเอกสาร</h2>
+    <div id="previewRef" class="muted"></div>
+   </div>
+   <button class="btn" type="button" onclick="closePreview()">ปิด</button>
+  </div>
+
+  <div class="copy-mode-bar">
+   <span>รูปแบบเอกสาร</span>
+   <label><input type="radio" name="previewCopyMode" value="ORIGINAL" checked onchange="rerenderPreview()"> ต้นฉบับ</label>
+   <label><input type="radio" name="previewCopyMode" value="COPY" onchange="rerenderPreview()"> สำเนา</label>
+  </div>
+
+  <div class="preview-scroll">
+   <div id="previewPaper"></div>
+  </div>
+
+  <div class="modal-actions preview-actions">
+   <button id="previewEditBtn" class="btn" type="button" style="display:none">แก้ไขข้อมูล</button>
+   <button id="previewPdfBtn" class="btn navy" type="button" style="display:none">ออก PDF เอกสารนี้</button>
+  </div>
+ </div>
+</div>
+
 <div id="receiptBg" class="modal-bg"><div class="modal" style="width:min(650px,100%)">
  <div class="modal-head"><div><h2>สร้าง Draft ใบเสร็จ/ใบกำกับภาษี</h2><div class="muted">เลือก Payment ที่ตรวจสอบแล้ว</div></div><button class="btn" onclick="receiptBg.classList.remove('show')">ปิด</button></div>
  <label>Payment</label><select id="paymentSelect" class="input"></select>
@@ -921,6 +993,8 @@ function thaiBahtText(value){
  result+=satang===0?"ถ้วน":thaiIntegerText(satang)+"สตางค์";
  return result;
 }
+let previewing=null;
+
 function typeLabel(t){return ({QUOTATION:"ใบเสนอราคา",INVOICE:"ใบแจ้งหนี้",RECEIPT_TAX_INVOICE:"ใบเสร็จ/ใบกำกับภาษี",CREDIT_NOTE:"ใบลดหนี้"})[t]||t}
 function statusBadge(s){const c=s==="ISSUED"?"ok":s==="WAITING_APPROVAL"?"wait":s==="APPROVED"||s==="READY_TO_ISSUE"?"issue":s==="CANCELLED"?"cancel":"";return `<span class="badge ${c}">${esc(s)}</span>`}
 function refText(x){return x.quotation_no||x.payment_no||"-"}
@@ -1006,8 +1080,9 @@ function render(){
   <td class="money">${money(x.net_receivable)}</td>
   <td>${statusBadge(x.document_status)}</td>
   <td><div class="row-actions">
-    <button class="btn small" onclick="openEditor('${x.id}')">เปิด</button>
-    ${["READY_TO_ISSUE","APPROVED"].includes(x.document_status)?`<button class="btn small yellow" onclick="issueOne('${x.id}')">สร้าง PDF</button>`:""}
+    <button class="btn small preview" onclick="openPreview('${x.id}')">ดูเอกสาร</button>
+    ${["DRAFT","READY_TO_ISSUE","WAITING_APPROVAL"].includes(x.document_status)?`<button class="btn small" onclick="openEditor('${x.id}')">แก้ไข</button>`:""}
+    ${["READY_TO_ISSUE","APPROVED"].includes(x.document_status)?`<button class="btn small yellow" onclick="issueOne('${x.id}')">ออก PDF</button>`:""}
   </div></td>
  </tr>`).join(""):`<tr><td colspan="9"><div class="empty">ยังไม่มีเอกสารบัญชี</div></td></tr>`;
 }
@@ -1061,12 +1136,18 @@ async function syncQuotes(){
 
   await loadDocs();
 
+  // After syncing, stay on Invoice view and take admin directly to the resulting list.
+  $("typeFilter").value="INVOICE";
+  render();
+  document.querySelector(".table-wrap")?.scrollIntoView({behavior:"smooth",block:"start"});
+
   let message=
     `ผลการซิงก์\n`+
     `• ใบเสนอราคาที่ตรวจ/ซิงก์สำเร็จ: ${quotationPrepared}\n`+
     `• Invoice ที่สร้าง/ตรวจพบสำเร็จ: ${invoiceOk}\n`+
     `• ข้ามเพราะยังไม่ APPROVED: ${skippedNotApproved}\n`+
-    `• ข้ามเพราะยอดรวมเป็น 0: ${skippedZero}`;
+    `• ข้ามเพราะยอดรวมเป็น 0: ${skippedZero}`+
+    `\n\nขั้นตอนต่อไป: ดูรายการด้านล่างแล้วกด “ดูเอกสาร” ที่ใบแจ้งหนี้ที่ต้องการ`;
 
   if(errors.length){
     message+=`\n\nพบข้อผิดพลาด ${errors.length} รายการ:\n`+errors.slice(0,8).join("\n");
@@ -1085,6 +1166,60 @@ async function syncQuotes(){
   btn.disabled=false;
   btn.textContent=originalText;
  }
+}
+
+
+function getPreviewCopyMode(){
+ return document.querySelector('input[name="previewCopyMode"]:checked')?.value||"ORIGINAL";
+}
+function renderPreviewPaper(x){
+ if(!x)return;
+ const oldMode=document.querySelector('input[name="accountingCopyMode"]:checked')?.value;
+ const targetMode=getPreviewCopyMode();
+ const editorRadio=document.querySelector(`input[name="accountingCopyMode"][value="${targetMode}"]`);
+ if(editorRadio)editorRadio.checked=true;
+
+ $("previewPaper").innerHTML=paperHtml(x);
+
+ // restore editor copy-mode selection so preview does not change editor state
+ if(oldMode){
+   const restore=document.querySelector(`input[name="accountingCopyMode"][value="${oldMode}"]`);
+   if(restore)restore.checked=true;
+ }
+}
+function rerenderPreview(){
+ if(previewing)renderPreviewPaper(previewing);
+}
+function openPreview(id){
+ const x=docs.find(d=>d.id===id);
+ if(!x)return;
+ previewing=x;
+
+ $("previewTitle").textContent="ตัวอย่าง"+typeLabel(x.document_type);
+ $("previewRef").textContent=(x.document_no||"ยังไม่ออกเลข")+" · "+(x.document_status||"-");
+
+ const original=document.querySelector('input[name="previewCopyMode"][value="ORIGINAL"]');
+ if(original)original.checked=true;
+
+ renderPreviewPaper(x);
+
+ const editable=["DRAFT","READY_TO_ISSUE","WAITING_APPROVAL"].includes(x.document_status);
+ $("previewEditBtn").style.display=editable?"inline-flex":"none";
+ $("previewPdfBtn").style.display=["READY_TO_ISSUE","APPROVED"].includes(x.document_status)?"inline-flex":"none";
+
+ $("previewEditBtn").onclick=()=>{
+   const pid=previewing?.id;
+   closePreview();
+   if(pid)openEditor(pid);
+ };
+ $("previewPdfBtn").onclick=()=>previewing&&issueOne(previewing.id);
+
+ $("previewBg").classList.add("show");
+}
+function closePreview(){
+ $("previewBg").classList.remove("show");
+ $("previewPaper").innerHTML="";
+ previewing=null;
 }
 
 function fillEditor(x){
@@ -1109,11 +1244,20 @@ function fillEditor(x){
  $("fReceived").value=x.amount_received??"";
  $("fNote").value=x.note||"";
  updateSummary();
+ $("saveBtn").style.display=["DRAFT","READY_TO_ISSUE","WAITING_APPROVAL"].includes(x.document_status)?"inline-flex":"none";
  $("approveBtn").style.display=x.document_type==="RECEIPT_TAX_INVOICE"&&x.document_status==="WAITING_APPROVAL"?"inline-flex":"none";
  $("pdfBtn").style.display=["READY_TO_ISSUE","APPROVED"].includes(x.document_status)?"inline-flex":"none";
  $("editorBg").classList.add("show");
 }
-function openEditor(id){const x=docs.find(d=>d.id===id);if(x)fillEditor(x)}
+function openEditor(id){
+ const x=docs.find(d=>d.id===id);
+ if(!x)return;
+ if(!["DRAFT","READY_TO_ISSUE","WAITING_APPROVAL"].includes(x.document_status)){
+   openPreview(id);
+   return;
+ }
+ fillEditor(x);
+}
 function closeEditor(){$("editorBg").classList.remove("show");editing=null}
 function updateSummary(){
  $("sumSubtotal").textContent=money($("fSubtotal").value);
