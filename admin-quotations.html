@@ -3843,103 +3843,35 @@ textarea{
 <meta name="sante-build" content="QUOTATION-R32-REFERENCE-LAYOUT">
 
 
-<style id="sante-quotation-r33-contact-logo-phone">
-/* R33 — contact/doc separation + logo raised + seller phone formatting */
+<style id="sante-quotation-r32a-only-3-fixes">
+/* ONLY the 3 requested corrections. Keep R32 layout otherwise unchanged. */
 
-/* Give a clearer separation between seller info zone and document box zone */
-.reference-qo .ref-head-reference{
-  grid-template-columns:minmax(0,1fr) 70mm!important;
-  gap:9mm!important;
-  align-items:start!important;
-}
-
-/* Put logo on the same visual level as seller info */
-.reference-qo .ref-left-head{
-  position:relative!important;
-  padding-left:19mm!important;
-  min-width:0!important;
-}
+/* Move logo upward to align visually with "ผู้ขาย" */
 .reference-qo .ref-brand-row{
-  position:absolute!important;
-  left:0!important;
-  top:.8mm!important;
-  width:15.5mm!important;
-  height:auto!important;
+  height:22mm!important;
   padding-top:0!important;
-  display:block!important;
+  align-items:flex-start!important;
 }
 .reference-qo .ref-logo{
-  width:15mm!important;
-  height:19mm!important;
-  max-width:15mm!important;
-  max-height:19mm!important;
-  margin:0!important;
-  object-fit:contain!important;
+  margin-top:-1.2mm!important;
   object-position:left top!important;
 }
 
-/* Seller info starts at the top, next to the logo */
+/* Keep seller contact clearly inside seller-information zone */
 .reference-qo .ref-seller-reference{
-  display:grid!important;
-  grid-template-columns:minmax(0,1.28fr) minmax(34mm,.75fr)!important;
-  gap:4.5mm!important;
-  align-items:start!important;
-  min-width:0!important;
-  margin-top:0!important;
+  grid-template-columns:minmax(0,1.52fr) minmax(37mm,.78fr)!important;
+  gap:3.5mm!important;
 }
-.reference-qo .ref-seller-main{
-  padding-top:.1mm!important;
-}
-.reference-qo .ref-seller-row{
-  grid-template-columns:28mm minmax(0,1fr)!important;
-  gap:1.9mm!important;
-  align-items:start!important;
-}
-.reference-qo .ref-company-name{
-  font-size:8pt!important;
-  line-height:1.42!important;
-}
-.reference-qo .ref-seller-address{
-  font-size:7.8pt!important;
-  line-height:1.48!important;
-}
-
-/* Keep seller contact comfortably left of the purple document box */
 .reference-qo .ref-seller-contact{
-  max-width:34mm!important;
-  gap:2mm!important;
-  padding-top:.2mm!important;
-  font-size:7.45pt!important;
-  line-height:1.42!important;
+  transform:translateX(-3mm)!important;
+  max-width:39mm!important;
 }
 .reference-qo .ref-seller-contact-row{
-  grid-template-columns:4.7mm minmax(0,1fr)!important;
-  gap:1.1mm!important;
-  align-items:start!important;
-  min-width:0!important;
-}
-.reference-qo .ref-seller-contact-row > div{
-  min-width:0!important;
-  overflow-wrap:anywhere!important;
-  word-break:break-word!important;
-}
-
-/* Stable document area on the right */
-.reference-qo .ref-doc-side{
-  min-width:70mm!important;
-  max-width:70mm!important;
-  text-align:right!important;
-}
-.reference-qo .copy-label{
-  margin:0 0 1.2mm 0!important;
-}
-.reference-qo .ref-docbox{
-  margin-top:.8mm!important;
-  padding:4mm 4mm!important;
-  grid-template-columns:24mm minmax(0,1fr)!important;
+  grid-template-columns:5mm minmax(0,1fr)!important;
+  gap:1.3mm!important;
 }
 </style>
-<meta name="sante-build" content="QUOTATION-R33-CONTACT-LOGO-PHONE">
+<meta name="sante-build" content="QUOTATION-R32A-ONLY-3-FIXES">
 
 </head>
 <body>
