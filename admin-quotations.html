@@ -3681,6 +3681,167 @@ textarea{
 </style>
 <meta name="sante-build" content="QUOTATION-R31-SELLER-ALIGNMENT">
 
+
+<style id="sante-quotation-r32-reference-layout">
+/* =========================================================
+   R32 — header follows the supplied quotation reference
+   Logo/title at top, seller/document detail below.
+========================================================= */
+
+.reference-qo .ref-head-reference{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) 66mm!important;
+  gap:7mm!important;
+  align-items:start!important;
+  padding-bottom:5mm!important;
+}
+
+/* Left side: logo first, seller information below it */
+.reference-qo .ref-left-head{
+  min-width:0!important;
+}
+.reference-qo .ref-brand-row{
+  height:25mm!important;
+  display:flex!important;
+  align-items:flex-start!important;
+  justify-content:flex-start!important;
+  padding-top:.5mm!important;
+}
+.reference-qo .ref-logo{
+  width:16mm!important;
+  height:20mm!important;
+  max-width:16mm!important;
+  max-height:20mm!important;
+  margin:0!important;
+  object-fit:contain!important;
+  object-position:left top!important;
+}
+
+/* Seller block sits below logo like the supplied reference */
+.reference-qo .ref-seller-reference{
+  display:grid!important;
+  grid-template-columns:minmax(0,1.45fr) minmax(40mm,.85fr)!important;
+  gap:5mm!important;
+  align-items:start!important;
+  min-width:0!important;
+  font-size:7.8pt!important;
+  line-height:1.46!important;
+}
+.reference-qo .ref-seller-main{
+  display:grid!important;
+  gap:1.3mm!important;
+  min-width:0!important;
+}
+.reference-qo .ref-seller-row{
+  display:grid!important;
+  grid-template-columns:30mm minmax(0,1fr)!important;
+  gap:2.2mm!important;
+  align-items:start!important;
+  min-width:0!important;
+}
+.reference-qo .ref-seller-row .ref-label{
+  white-space:nowrap!important;
+  font-weight:700!important;
+}
+.reference-qo .ref-company-name{
+  font-size:8pt!important;
+  line-height:1.42!important;
+  font-weight:700!important;
+  white-space:normal!important;
+  word-break:keep-all!important;
+}
+.reference-qo .ref-seller-address{
+  font-size:7.8pt!important;
+  line-height:1.5!important;
+  white-space:normal!important;
+  word-break:keep-all!important;
+}
+.reference-qo .ref-tax-label{
+  font-size:7.35pt!important;
+  white-space:nowrap!important;
+}
+
+/* Contact column to the right of seller information */
+.reference-qo .ref-seller-contact{
+  display:grid!important;
+  gap:2.1mm!important;
+  min-width:0!important;
+  padding-top:.2mm!important;
+  font-size:7.65pt!important;
+}
+.reference-qo .ref-seller-contact-row{
+  display:grid!important;
+  grid-template-columns:5mm minmax(0,1fr)!important;
+  gap:1.5mm!important;
+  align-items:start!important;
+  min-width:0!important;
+}
+.reference-qo .ref-seller-contact-row b{
+  text-align:center!important;
+}
+.reference-qo .ref-seller-contact-row > div{
+  min-width:0!important;
+  overflow-wrap:anywhere!important;
+}
+
+/* Right side: copy label + quotation title + metadata box */
+.reference-qo .ref-doc-side{
+  min-width:0!important;
+  text-align:right!important;
+}
+.reference-qo .copy-label{
+  min-height:7mm!important;
+  margin:0 1mm 1mm 0!important;
+}
+.reference-qo .ref-title{
+  font-size:25pt!important;
+  line-height:1.1!important;
+  margin:0 0 6mm!important;
+  color:#6f70ea!important;
+  font-weight:700!important;
+  text-align:right!important;
+}
+.reference-qo .ref-docbox{
+  display:grid!important;
+  grid-template-columns:25mm minmax(0,1fr)!important;
+  gap:1.8mm 2.5mm!important;
+  padding:4mm 4.2mm!important;
+  border-radius:2mm!important;
+  background:#eeeeff!important;
+  text-align:left!important;
+  font-size:8pt!important;
+  line-height:1.4!important;
+}
+.reference-qo .ref-docbox b{
+  white-space:nowrap!important;
+}
+
+/* Separator and customer section mirror the reference */
+.reference-qo .ref-party{
+  border-top:1px solid #cfd7df!important;
+  padding-top:5mm!important;
+  margin-top:0!important;
+  grid-template-columns:minmax(0,1.3fr) minmax(0,.8fr)!important;
+  gap:10mm!important;
+}
+.reference-qo .ref-party-row{
+  grid-template-columns:34mm minmax(0,1fr)!important;
+  gap:2.1mm!important;
+  font-size:7.9pt!important;
+  line-height:1.5!important;
+}
+.reference-qo .ref-party-title{
+  font-size:8.1pt!important;
+  margin-bottom:2mm!important;
+}
+
+/* Keep table close to customer detail like reference */
+.reference-qo .ref-items{
+  margin-top:5mm!important;
+}
+</style>
+<meta name="sante-build" content="QUOTATION-R32-REFERENCE-LAYOUT">
+
 </head>
 <body>
 
@@ -4138,10 +4299,13 @@ function renderPaper(c){
 
   paper.classList.add("reference-qo");
   paper.innerHTML=`
-    <div class="ref-head">
-      <div class="ref-seller-block">
-        <img class="ref-logo" src="SANTE-logo-primary.png" alt="SANTE">
-        <div class="ref-seller-body">
+    <div class="ref-head ref-head-reference">
+      <div class="ref-left-head">
+        <div class="ref-brand-row">
+          <img class="ref-logo" src="SANTE-logo-primary.png" alt="SANTE">
+        </div>
+
+        <div class="ref-seller-reference">
           <div class="ref-seller-main">
             <div class="ref-seller-row">
               <div class="ref-label">ผู้ขาย :</div>
@@ -4149,13 +4313,14 @@ function renderPaper(c){
             </div>
             <div class="ref-seller-row">
               <div class="ref-label">ที่อยู่ :</div>
-              <div class="ref-seller-address">49 ถนนทางหลวง สาย 3191<br>ตำบลมาบข่า อำเภอนิคมพัฒนา<br>จังหวัดระยอง 21180</div>
+              <div class="ref-seller-address">49 ถนนทางหลวง สาย 3191 ตำบลมาบข่า อำเภอนิคมพัฒนา จังหวัดระยอง 21180</div>
             </div>
             <div class="ref-seller-row">
               <div class="ref-label ref-tax-label">เลขประจำตัวผู้เสียภาษี :</div>
               <div>${SANTE.taxId}</div>
             </div>
           </div>
+
           <div class="ref-seller-contact">
             <div class="ref-seller-contact-row"><b>☎</b><div>${SANTE.phone||"-"}</div></div>
             <div class="ref-seller-contact-row"><b>✉</b><div>${SANTE.email||"-"}</div></div>
@@ -4163,6 +4328,7 @@ function renderPaper(c){
           </div>
         </div>
       </div>
+
       <div class="ref-doc-side">
         <div class="copy-label">${quotationCopyLabel()}</div>
         <div class="ref-title">ใบเสนอราคา</div>
