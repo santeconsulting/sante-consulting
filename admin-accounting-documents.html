@@ -476,6 +476,99 @@ label{display:block;font-size:11px;font-weight:600;margin-bottom:5px}.input,text
 </style>
 <meta name="sante-build" content="ACCOUNTING-R11-INVOICE-UNIFIED">
 
+
+<style id="sante-accounting-r12-receipt-tax-unified">
+.paper-receipt{
+  color:#17283d!important;
+  -webkit-print-color-adjust:exact!important;
+  print-color-adjust:exact!important;
+}
+.paper-receipt .rth{
+  display:grid!important;
+  grid-template-columns:15mm minmax(58mm,1.25fr) minmax(42mm,.82fr) 64mm!important;
+  gap:3.2mm!important;
+  align-items:start!important;
+  padding-bottom:5mm!important;
+  border-bottom:1px solid #cfd7df!important;
+}
+.paper-receipt .rth-logo-cell{padding-top:.4mm!important}
+.paper-receipt .rth-logo{width:13.5mm!important;height:17mm!important;display:block!important;object-fit:contain!important}
+.paper-receipt .rth-seller{display:grid!important;row-gap:1.4mm!important;font-size:7.7pt!important;line-height:1.45!important}
+.paper-receipt .rth-row{display:grid!important;grid-template-columns:18mm minmax(0,1fr)!important;gap:1.8mm!important;align-items:start!important}
+.paper-receipt .rth-label{font-weight:700!important;white-space:nowrap!important}
+.paper-receipt .rth-company{font-weight:700!important}
+.paper-receipt .rth-company>div,
+.paper-receipt .rth-address>div,
+.paper-receipt .rth-contact-row span:last-child,
+.paper-receipt .rth-docbox b,
+.paper-receipt .rth-docbox span{white-space:nowrap!important}
+.paper-receipt .rth-contact{display:grid!important;row-gap:2mm!important;padding-top:.1mm!important;font-size:7.2pt!important;line-height:1.42!important}
+.paper-receipt .rth-contact-row{display:grid!important;grid-template-columns:4.5mm minmax(0,1fr)!important;gap:1.2mm!important}
+.paper-receipt .rth-doc{text-align:right!important}
+.paper-receipt .rth-copy{min-height:5mm!important;font-size:7.3pt!important;font-weight:700!important}
+.paper-receipt .rth-title{margin:0 0 4.5mm!important;color:#6f70ea!important;font-size:20.5pt!important;line-height:1.08!important;font-weight:700!important;white-space:nowrap!important}
+.paper-receipt .rth-docbox{
+  display:grid!important;grid-template-columns:24mm minmax(0,1fr)!important;
+  gap:1.7mm 2mm!important;padding:3.8mm 4mm!important;border-radius:2mm!important;
+  background:#eeeeff!important;text-align:left!important;font-size:7.55pt!important;line-height:1.4!important
+}
+.paper-receipt .rt-party{
+  display:grid!important;grid-template-columns:minmax(0,1.35fr) minmax(0,.75fr)!important;
+  gap:10mm!important;padding-top:4.5mm!important
+}
+.paper-receipt .rt-party-row{
+  display:grid!important;grid-template-columns:34mm minmax(0,1fr)!important;
+  gap:2mm!important;font-size:8pt!important;line-height:1.52!important
+}
+.paper-receipt .rt-party-row b{white-space:nowrap!important}
+.paper-receipt .rt-contact-title{font-size:8.1pt!important;font-weight:700!important;margin-bottom:1.6mm!important}
+.paper-receipt .rt-contact-row{display:grid!important;grid-template-columns:5mm minmax(0,1fr)!important;gap:1.5mm!important;font-size:8pt!important;line-height:1.5!important}
+.paper-receipt table{margin-top:4.5mm!important;border:0!important}
+.paper-receipt th{
+  background:#eeeeff!important;color:#17283d!important;font-size:8.1pt!important;
+  padding:2.6mm 1.3mm!important;border:0!important;line-height:1.25!important
+}
+.paper-receipt td{
+  border-left:0!important;border-right:0!important;font-size:8.4pt!important;
+  padding:2.8mm 1.3mm!important;line-height:1.5!important
+}
+.paper-receipt .item-no{font-weight:400!important;color:#43566b!important}
+.paper-receipt .item-main{font-weight:400!important;color:#17283d!important;font-size:8.75pt!important}
+.paper-receipt .totals-wrap{
+  grid-template-columns:minmax(0,1fr) 82mm!important;gap:5mm!important;
+  margin-top:12mm!important;padding-top:2.8mm!important
+}
+.paper-receipt .total-row{font-size:8.2pt!important;padding:1.2mm 0!important}
+.paper-receipt .total-row.grand{
+  margin-top:1mm!important;padding:2.5mm 3mm!important;background:#eeeeff!important;
+  color:#3f43a7!important;border:0!important;border-radius:2mm!important;font-size:11.7pt!important
+}
+.paper-receipt .paid-row{
+  margin-top:1.2mm!important;padding:2.1mm 2.6mm!important;border:0!important;
+  border-radius:1.6mm!important;background:#f3f1ff!important
+}
+.paper-receipt .paid-row b:last-child{color:#5651bd!important;font-size:11.5pt!important}
+.paper-receipt .amount-words{font-size:8.8pt!important;font-weight:600!important;color:#263b51!important}
+.paper-receipt .payment-box{
+  margin-top:4mm!important;padding:3mm 0!important;border-top:1px solid #d8e3ee!important;border-bottom:1px solid #d8e3ee!important
+}
+.paper-receipt .payment-title{font-size:8.2pt!important;font-weight:800!important;color:#082d69!important}
+.paper-receipt .payment-grid{grid-template-columns:1.25fr .85fr 1.2fr!important;gap:4mm!important;align-items:center!important}
+.paper-receipt .payment-bank-logo{width:11mm!important;height:11mm!important}
+.paper-receipt .payment-item{font-size:7.9pt!important;line-height:1.5!important}
+.paper-receipt .signature-area{margin-top:4mm!important;padding-top:3mm!important}
+.paper-receipt .signature-header{font-size:8.5pt!important}
+.paper-receipt .signature-grid{grid-template-columns:repeat(5,1fr)!important;gap:3mm!important}
+.paper-receipt .signature-box{min-height:31mm!important;font-size:7.5pt!important}
+.paper-receipt .signature-space,
+.paper-receipt .seal-box,
+.paper-receipt .customer-stamp-box{height:18mm!important}
+.paper-receipt .seal-mark-img{width:18mm!important;height:18mm!important}
+.paper-receipt .customer-stamp-box{width:18mm!important}
+.paper-receipt .footer-sign-note{font-size:7pt!important;line-height:1.45!important}
+</style>
+<meta name="sante-build" content="ACCOUNTING-R12-RECEIPT-TAX-UNIFIED">
+
 </head>
 <body>
 <div id="loading" class="loading">กำลังโหลดเอกสารบัญชี...</div>
@@ -928,18 +1021,49 @@ function paperHtml(x){
       </div>
     </div>
   </div>`:`
-  <div class="head">
-   <div>
-    <img class="paper-logo" src="SANTE-logo-primary.png" crossorigin="anonymous">
-    <div class="seller"><b>${SANTE.name}</b><br>${SANTE.address}<br>เลขประจำตัวผู้เสียภาษี ${SANTE.taxId}<br>โทร. ${SANTE.phone} · ${SANTE.email}<br>${SANTE.website}</div>
-   </div>
-   <div class="doc-box">
-     <div class="copy-label">${copyLabel}</div>
-     <div class="doc-kind">${esc(x.document_type||"")}</div>
-     <div class="doc-title">${esc(docTitle)}</div>
-     <div class="doc-title-en">${docEn}</div>
-     <div class="doc-meta"><b>เลขที่ / No.: ${esc(x.document_no||"-")}</b><br>วันที่ออก / Issue Date: ${esc(x.issue_date||new Date().toISOString().slice(0,10))}${x.due_date?`<br>ครบกำหนด / Due Date: ${esc(x.due_date)}`:""}</div>
-   </div>
+  <div class="rth">
+    <div class="rth-logo-cell">
+      <img class="rth-logo" src="SANTE-logo-primary.png" crossorigin="anonymous" alt="SANTE">
+    </div>
+
+    <div class="rth-seller">
+      <div class="rth-row">
+        <div class="rth-label">ผู้ขาย :</div>
+        <div class="rth-company">
+          <div>บริษัท ซานเต้ คอนซัลติ้ง จำกัด</div>
+          <div>(สำนักงานใหญ่)</div>
+        </div>
+      </div>
+      <div class="rth-row">
+        <div class="rth-label">ที่อยู่ :</div>
+        <div class="rth-address">
+          <div>49 ถนนทางหลวง สาย 3191</div>
+          <div>ตำบลมาบข่า อำเภอนิคมพัฒนา</div>
+          <div>จังหวัดระยอง 21180</div>
+        </div>
+      </div>
+      <div class="rth-row rth-tax-row">
+        <div class="rth-label">เลขประจำตัวผู้เสียภาษี :</div>
+        <div>${SANTE.taxId}</div>
+      </div>
+    </div>
+
+    <div class="rth-contact">
+      <div class="rth-contact-row"><span>☎</span><span>${SANTE.phone||"-"}</span></div>
+      <div class="rth-contact-row"><span>✉</span><span>${SANTE.email||"-"}</span></div>
+      <div class="rth-contact-row"><span>◉</span><span>${SANTE.website||"-"}</span></div>
+    </div>
+
+    <div class="rth-doc">
+      <div class="rth-copy">${copyLabel}</div>
+      <div class="rth-title">${isReceipt?"ใบเสร็จรับเงิน / ใบกำกับภาษี":esc(docTitle)}</div>
+      <div class="rth-docbox">
+        <b>เลขที่เอกสาร :</b><span>${esc(x.document_no||"-")}</span>
+        <b>วันที่ออก :</b><span>${esc(x.issue_date||new Date().toISOString().slice(0,10))}</span>
+        ${isReceipt?`<b>Payment No. :</b><span>${esc(paymentNo)}</span>`:""}
+        <b>อ้างอิง :</b><span>${esc(refText(x))}</span>
+      </div>
+    </div>
   </div>`}
   ${isInvoice?`
   <div class="inv-party">
@@ -955,13 +1079,22 @@ function paperHtml(x){
       <div class="inv-contact-row"><span>✉</span><span>${esc(x.email||"-")}</span></div>
     </div>
   </div>`:`
-  <div class="party">
-   <div class="box"><b>ลูกค้า / CUSTOMER</b><br>${esc(x.organization_name||x.customer_name||"-")}<br>${esc(x.billing_address||"")}<br>เลขประจำตัวผู้เสียภาษี: ${esc(x.customer_tax_id||"-")} ${esc(x.customer_branch||"")}</div>
-   <div class="box box-right"><b>ผู้ติดต่อ / CONTACT</b><br>${esc(x.customer_name||"-")}<br>โทร. ${esc(x.phone||"-")}<br>${esc(x.email||"-")}<br>อ้างอิง: ${esc(refText(x))}</div>
+  <div class="rt-party">
+    <div class="rt-party-left">
+      <div class="rt-party-row rt-customer-name"><b>ลูกค้า :</b><div><b>${esc(x.organization_name||x.customer_name||"-")}</b></div></div>
+      <div class="rt-party-row"><b>ที่อยู่ :</b><div>${esc(x.billing_address||"-")}</div></div>
+      <div class="rt-party-row"><b>เลขประจำตัวผู้เสียภาษี :</b><div>${esc(x.customer_tax_id||"-")} ${esc(x.customer_branch||"")}</div></div>
+    </div>
+    <div class="rt-contact">
+      <div class="rt-contact-title">ติดต่อกลับที่ :</div>
+      <div class="rt-contact-row"><span>♟</span><span>${esc(x.customer_name||"-")}</span></div>
+      <div class="rt-contact-row"><span>☎</span><span>${esc(x.phone||"-")}</span></div>
+      <div class="rt-contact-row"><span>✉</span><span>${esc(x.email||"-")}</span></div>
+    </div>
   </div>`}
   <table>
    <thead><tr>
-    ${isInvoice?`<th class="desc-col">รายละเอียด</th><th class="qty-col">จำนวน</th><th class="unit-col">หน่วย</th><th class="price-col">ราคา</th><th class="disc-col">ส่วนลด</th><th class="vat-col">VAT</th><th class="amount-col">มูลค่าก่อนภาษี</th>`:`<th class="desc-col">คำอธิบาย / DESCRIPTION</th><th class="qty-col">จำนวน<br>QTY</th><th class="unit-col">หน่วย<br>UNIT</th><th class="price-col">ราคา<br>PRICE</th><th class="disc-col">ส่วนลด<br>DISCOUNT</th><th class="vat-col">VAT</th><th class="amount-col">มูลค่าก่อนภาษี<br>AMOUNT</th>`}
+    ${(isInvoice||isReceipt)?`<th class="desc-col">รายละเอียด</th><th class="qty-col">จำนวน</th><th class="unit-col">หน่วย</th><th class="price-col">ราคา</th><th class="disc-col">ส่วนลด</th><th class="vat-col">VAT</th><th class="amount-col">มูลค่าก่อนภาษี</th>`:`<th class="desc-col">คำอธิบาย / DESCRIPTION</th><th class="qty-col">จำนวน<br>QTY</th><th class="unit-col">หน่วย<br>UNIT</th><th class="price-col">ราคา<br>PRICE</th><th class="disc-col">ส่วนลด<br>DISCOUNT</th><th class="vat-col">VAT</th><th class="amount-col">มูลค่าก่อนภาษี<br>AMOUNT</th>`}
    </tr></thead>
    <tbody>${rows}</tbody>
   </table>
@@ -991,7 +1124,7 @@ function paperHtml(x){
     <div class="signature-box"><div class="signature-space"></div><div class="signature-line">ผู้รับเอกสาร (ลูกค้า)</div></div>
     <div class="signature-box"><div class="customer-stamp-box"></div><div class="signature-line">ตราประทับ (ลูกค้า) (ถ้ามี)</div></div>
    </div>
-   <div class="footer-sign-note">${isInvoice?"ผู้ขายลงนามเพื่อรับรองความถูกต้องของใบแจ้งหนี้ และลูกค้าสามารถลงนาม/ประทับตราเพื่อยืนยันการรับเอกสาร":isReceipt?"เอกสารฉบับนี้ใช้เป็นหลักฐานการรับเงินและ/หรือใบกำกับภาษีตามข้อมูลที่ระบุข้างต้น":"เอกสารฉบับนี้จัดทำจากข้อมูลใน SANTE Accounting Documents"}</div>
+   <div class="footer-sign-note">${isInvoice?"ผู้ขายลงนามเพื่อรับรองความถูกต้องของใบแจ้งหนี้ และลูกค้าสามารถลงนาม/ประทับตราเพื่อยืนยันการรับเอกสาร":isReceipt?"เอกสารฉบับนี้ใช้เป็นหลักฐานการรับชำระเงินและใบกำกับภาษีตามข้อมูลที่ระบุข้างต้น":"เอกสารฉบับนี้จัดทำจากข้อมูลใน SANTE Accounting Documents"}</div>
   </div>
   <div class="accounting-foot">SANTE Accounting Documents · ${esc(docEn)} · ${copyLabel}</div>
  </div>`;
