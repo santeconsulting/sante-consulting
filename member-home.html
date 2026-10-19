@@ -1458,6 +1458,13 @@
 }
 </style>
 
+
+<style id="member-home-r11-compact">
+.member-quick-compact{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+@media(max-width:1023px){.member-quick-compact{grid-template-columns:1fr!important}}
+</style>
+<meta name="sante-build-r11" content="MEMBER-HOME-R11-ACCOUNTING-HUB">
+
 </head>
 
 
@@ -1736,7 +1743,7 @@
       <!-- PAYMENT -->
 
       <a
-        href="member-payments.html" class="service-card active payment-card"
+        href="member-accounting-documents.html" class="service-card active payment-card"
       >
 
         <div class="service-icon">
@@ -1746,16 +1753,16 @@
         <div class="service-content">
 
           <h3>
-            การชำระเงินและเอกสาร
+            การเงินและเอกสารทางบัญชี
           </h3>
 
           <p>
-            ติดตามรายการชำระเงินและสถานะการชำระของคุณ
-            ส่วนใบเสนอราคาและเอกสารที่ออกแล้วแยกดูได้จากเมนูด้านล่าง
+            รวมการชำระเงิน ใบเสนอราคา ใบแจ้งหนี้
+            ใบเสร็จ/ใบกำกับภาษี และใบลดหนี้ไว้ในหน้าเดียว
           </p>
 
           <span class="service-action">
-            ดูรายการชำระเงิน →
+            ดูการเงินและเอกสาร →
           </span>
 
         </div>
@@ -1774,21 +1781,18 @@
     ======================================================== -->
 
     
-<section class="quick-grid">
+
+<section class="quick-grid member-quick-compact">
   <a class="quick-card" href="member-service-requests.html">
     <div><h4>คำขอของฉัน</h4><p>ติดตามคำขอบริการ สถานะงาน และงานที่กำลังดำเนินการ</p></div>
     <span class="quick-status">เปิดดู →</span>
   </a>
-  <a class="quick-card" href="member-quotations.html">
-    <div><h4>ใบเสนอราคาของฉัน</h4><p>ดูใบเสนอราคาทั้งหมด ตรวจสอบสถานะ และอนุมัติราคา</p></div>
-    <span class="quick-status">เปิดดู →</span>
-  </a>
   <a class="quick-card" href="member-documents.html">
-    <div><h4>เอกสารของฉัน</h4><p>ดูใบแจ้งหนี้ ใบเสร็จ/ใบกำกับภาษี ใบลดหนี้ วุฒิบัตร และเอกสาร PDF ที่ออกแล้ว</p></div>
+    <div><h4>วุฒิบัตรและไฟล์ของฉัน</h4><p>ดูวุฒิบัตร เอกสารอบรม และไฟล์ PDF อื่นที่ SANTE ออกให้</p></div>
     <span class="quick-status">เปิดดู →</span>
   </a>
   <a class="quick-card" href="member-line-connect.html">
-    <div><h4>เชื่อมต่อ LINE</h4><p>เชื่อมบัญชีสมาชิกกับ LINE เพื่อรับแจ้งเตือนการลงทะเบียน การชำระเงิน ผลสอบ และวุฒิบัตร</p></div>
+    <div><h4>เชื่อมต่อ LINE</h4><p>ตั้งค่าการแจ้งเตือนการลงทะเบียน การชำระเงิน ผลสอบ และวุฒิบัตร</p></div>
     <span class="quick-status">ตั้งค่า →</span>
   </a>
 </section>

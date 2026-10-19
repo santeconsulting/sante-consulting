@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>SANTE Member | เอกสารทางบัญชีของฉัน</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--navy:#082d69;--yellow:#ffbf19;--blue:#087df0;--green:#188d49;--muted:#6f82a0;--line:#dce7f2;--bg:#eef7fc}
+html,body{width:100%;min-height:100%;font-family:"Prompt",sans-serif;color:var(--navy);background:linear-gradient(180deg,#fff,#f6fbff 45%,#eef7fc);overflow-x:hidden}
+a{text-decoration:none;color:inherit}button,select,input{font-family:inherit}
+.loading{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:#fff;font-size:16px}.loading.hidden{display:none}
+.topbar{width:100%;height:82px;position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;gap:30px;padding:0 max(28px,calc((100vw - 1480px)/2));background:rgba(255,255,255,.97);border-bottom:1px solid #e7eef6;box-shadow:0 3px 16px rgba(11,45,103,.04)}
+.brand-logo{width:220px;height:68px;object-fit:contain;object-position:left center}.member-area{display:flex;align-items:center;gap:18px}.member-copy{text-align:right}.member-name{font-size:16px;font-weight:600}.member-email{font-size:13px;color:#7184a3}.logout{min-height:44px;padding:0 18px;border:1px solid #d5e1ef;border-radius:11px;background:#fff;color:var(--navy);font-weight:600;cursor:pointer}
+.page{width:min(1480px,calc(100% - 48px));margin:0 auto;padding:24px 0 60px}
+.desktop-hero{width:100%;overflow:hidden;border-radius:28px;background:#fff;box-shadow:0 10px 30px rgba(11,45,103,.07)}.desktop-hero img{display:block;width:100%}.mobile-hero{display:none}
+.heading{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;margin:30px 8px 16px}.heading h1{font-size:30px;line-height:1.3}.heading p{margin-top:5px;color:var(--muted);font-size:15px}
+.actions{display:flex;gap:10px;flex-wrap:wrap}.btn{min-height:44px;padding:0 16px;border:1px solid #d5e1ef;border-radius:11px;background:#fff;color:var(--navy);font-size:14px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;cursor:pointer}.btn.yellow{background:var(--yellow);border-color:var(--yellow)}
+.summary{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px;margin:0 0 16px}.sum{background:#fff;border:1px solid var(--line);border-radius:17px;padding:17px}.sum span{display:block;color:var(--muted);font-size:13px}.sum strong{display:block;margin-top:5px;font-size:25px}
+.toolbar{display:grid;grid-template-columns:1fr 220px;gap:12px;margin-bottom:16px}.search,.filter{height:46px;border:1px solid #d5e1ec;border-radius:11px;padding:0 14px;background:#fff;color:var(--navy);font-size:14px}
+.list{display:grid;gap:12px}.card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:19px 20px;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(180px,.7fr) minmax(150px,.45fr) auto;gap:18px;align-items:center}
+.type{font-size:12px;font-weight:600;padding:5px 9px;border-radius:999px;background:#edf4fb;display:inline-flex;width:max-content}.title{margin-top:7px;font-size:18px;font-weight:700}.no{margin-top:3px;color:#597392;font-size:13px}.meta{font-size:13px;color:var(--muted);line-height:1.7}.amount{font-size:20px;font-weight:700}.status{display:inline-flex;width:max-content;padding:6px 10px;border-radius:999px;background:#eef3f8;font-size:12px;font-weight:600}.status.approved,.status.issued,.status.verified{background:#e7f7ed;color:#147440}.status.sent,.status.ready,.status.waiting{background:#fff4d7;color:#946500}
+.card-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}.empty{padding:45px;text-align:center;background:#fff;border:1px solid var(--line);border-radius:18px;color:var(--muted)}
+.modal-bg{position:fixed;inset:0;z-index:300;background:rgba(4,21,50,.55);display:none;align-items:center;justify-content:center;padding:18px}.modal-bg.show{display:flex}.modal{width:min(760px,96vw);max-height:92vh;overflow:auto;background:#fff;border-radius:20px;padding:22px;box-shadow:0 24px 60px rgba(0,0,0,.2)}.modal-head{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}.modal-head h2{font-size:23px}.doc-grid{display:grid;grid-template-columns:180px 1fr;gap:10px 16px;margin-top:20px;font-size:14px}.doc-grid dt{color:var(--muted)}.doc-grid dd{font-weight:500}.totals{margin-top:18px;border-top:1px solid var(--line);padding-top:15px;display:grid;gap:8px}.total-row{display:flex;justify-content:space-between;gap:20px}.total-row.net{font-size:18px;font-weight:700;background:#f5f8fc;padding:12px;border-radius:12px}
+@media(max-width:1100px){.summary{grid-template-columns:repeat(3,1fr)}.card{grid-template-columns:1fr 1fr}.card-actions{justify-content:flex-start}}
+@media(max-width:767px){.topbar{min-height:64px;height:auto;padding:7px 12px}.brand-logo{width:118px;height:50px}.member-copy{display:none}.logout{min-height:38px;padding:0 10px;font-size:11px}.page{width:100%;padding:10px 12px 35px}.desktop-hero{display:none}.mobile-hero{display:block;padding:22px 18px;border-radius:20px;background:linear-gradient(145deg,#eaf7ff,#fff 58%,#fff4c9);box-shadow:0 8px 25px rgba(11,45,103,.07)}.mobile-hero h2{font-size:27px}.mobile-hero p{margin-top:6px;color:var(--muted);font-size:12px}.heading{margin:24px 4px 14px;align-items:flex-start;flex-direction:column}.heading h1{font-size:23px}.heading p{font-size:13px}.actions{width:100%}.actions .btn{flex:1}.summary{grid-template-columns:repeat(2,1fr)}.toolbar{grid-template-columns:1fr}.card{grid-template-columns:1fr;padding:16px}.card-actions{justify-content:stretch}.card-actions .btn{flex:1}.doc-grid{grid-template-columns:1fr}.doc-grid dt{font-size:12px}.modal{padding:18px}}
+</style>
+<meta name="sante-build" content="MEMBER-ACCOUNTING-R11">
+</head>
+<body>
+<div id="loading" class="loading">กำลังโหลดเอกสารทางบัญชี...</div>
+<header class="topbar">
+  <a href="member-home.html"><img src="sante%20(en)-logo.png" class="brand-logo" alt="SANTE"></a>
+  <div class="member-area"><div class="member-copy"><div id="memberName" class="member-name">สมาชิก SANTE</div><div id="memberEmail" class="member-email"></div></div><button id="logout" class="logout">ออกจากระบบ</button></div>
+</header>
+<main class="page">
+  <section class="desktop-hero"><img src="sante-member-hero.png" alt="Trust in Safety. Trust in SANTE."></section>
+  <section class="mobile-hero"><h2>เอกสารทางบัญชี<br>ของคุณ</h2><p>ดูใบเสนอราคา ใบแจ้งหนี้ ใบเสร็จ/ใบกำกับภาษี และใบลดหนี้จากบัญชีเดียว</p></section>
+
+  <div class="heading">
+    <div><h1>เอกสารทางบัญชีของฉัน</h1><p>รวมเอกสารทางบัญชีทั้งหมดของคุณ พร้อมสถานะและยอดเงินล่าสุด</p></div>
+    <div class="actions">
+      <a class="btn" href="member-payments.html">การชำระเงิน</a>
+      <a class="btn" href="member-documents.html">วุฒิบัตร/ไฟล์อื่น</a>
+      <a class="btn yellow" href="member-home.html">หน้าหลัก</a>
+    </div>
+  </div>
+
+  <section class="summary">
+    <div class="sum"><span>ทั้งหมด</span><strong id="cAll">0</strong></div>
+    <div class="sum"><span>ใบเสนอราคา</span><strong id="cQ">0</strong></div>
+    <div class="sum"><span>ใบแจ้งหนี้</span><strong id="cI">0</strong></div>
+    <div class="sum"><span>ใบเสร็จ/ใบกำกับภาษี</span><strong id="cR">0</strong></div>
+    <div class="sum"><span>ใบลดหนี้</span><strong id="cC">0</strong></div>
+  </section>
+
+  <div class="toolbar">
+    <input id="search" class="search" placeholder="ค้นหาเลขเอกสาร ลูกค้า หรือเรื่อง">
+    <select id="typeFilter" class="filter">
+      <option value="">ทุกประเภท</option>
+      <option value="QUOTATION">ใบเสนอราคา</option>
+      <option value="INVOICE">ใบแจ้งหนี้</option>
+      <option value="RECEIPT_TAX_INVOICE">ใบเสร็จ/ใบกำกับภาษี</option>
+      <option value="CREDIT_NOTE">ใบลดหนี้</option>
+    </select>
+  </div>
+  <section id="list" class="list"></section>
+</main>
+
+<div id="detailBg" class="modal-bg">
+  <div class="modal">
+    <div class="modal-head"><div><h2 id="detailTitle">รายละเอียดเอกสาร</h2><div id="detailStatus" class="status"></div></div><button class="btn" onclick="closeDetail()">ปิด</button></div>
+    <dl id="detailGrid" class="doc-grid"></dl>
+    <div id="detailTotals" class="totals"></div>
+    <div id="detailActions" class="actions" style="margin-top:18px"></div>
+  </div>
+</div>
+
+<script>
+const db=window.supabase.createClient("https://cyegjwerxlxhczrfiurz.supabase.co","sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF",{auth:{storageKey:"sante-member-auth",persistSession:true,autoRefreshToken:true}});
+let rows=[], pdfDocs=[];
+const $=id=>document.getElementById(id);
+const esc=v=>String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[m]));
+const money=v=>Number(v||0).toLocaleString("th-TH",{minimumFractionDigits:2,maximumFractionDigits:2});
+const labels={QUOTATION:"ใบเสนอราคา",INVOICE:"ใบแจ้งหนี้",RECEIPT_TAX_INVOICE:"ใบเสร็จ/ใบกำกับภาษี",CREDIT_NOTE:"ใบลดหนี้"};
+const statusTH={DRAFT:"ร่าง",SENT:"รออนุมัติราคา",APPROVED:"อนุมัติแล้ว",READY_TO_ISSUE:"พร้อมออกเอกสาร",WAITING_APPROVAL:"รออนุมัติ",ISSUED:"ออกเอกสารแล้ว",CANCELLED:"ยกเลิก"};
+function statusClass(s){s=String(s||"").toLowerCase();return s.includes("approved")?"approved":s.includes("issued")?"issued":s.includes("ready")?"ready":s.includes("waiting")?"waiting":s.includes("sent")?"sent":""}
+function dateText(v){if(!v)return "-";const d=new Date(v);return Number.isNaN(d.getTime())?String(v):new Intl.DateTimeFormat("th-TH",{day:"2-digit",month:"short",year:"numeric"}).format(d)}
+function updateCounts(){
+  $("cAll").textContent=rows.length;
+  $("cQ").textContent=rows.filter(x=>x.document_type==="QUOTATION").length;
+  $("cI").textContent=rows.filter(x=>x.document_type==="INVOICE").length;
+  $("cR").textContent=rows.filter(x=>x.document_type==="RECEIPT_TAX_INVOICE").length;
+  $("cC").textContent=rows.filter(x=>x.document_type==="CREDIT_NOTE").length;
+}
+function currentRows(){
+  const q=$("search").value.trim().toLowerCase(),t=$("typeFilter").value;
+  return rows.filter(x=>(!t||x.document_type===t)&&(!q||[x.document_no,x.organization_name,x.customer_name,x.document_subject].some(v=>String(v||"").toLowerCase().includes(q))));
+}
+function render(){
+  const data=currentRows();
+  if(!data.length){$("list").innerHTML='<div class="empty">ไม่พบเอกสารตามเงื่อนไขที่เลือก</div>';return}
+  $("list").innerHTML=data.map(x=>`
+    <article class="card">
+      <div><span class="type">${labels[x.document_type]||esc(x.document_type)}</span><div class="title">${esc(x.organization_name||x.customer_name||"เอกสาร SANTE")}</div><div class="no">${esc(x.document_no||"ยังไม่ออกเลขเอกสาร")}</div></div>
+      <div class="meta">วันที่ออก: ${dateText(x.issue_date)}<br>เรื่อง: ${esc(x.document_subject||"-")}</div>
+      <div><div class="amount">${money(x.grand_total)} บาท</div><span class="status ${statusClass(x.document_status)}">${esc(statusTH[x.document_status]||x.document_status||"-")}</span></div>
+      <div class="card-actions">
+        <button class="btn" onclick="openDetail('${x.source_id}')">ดูรายละเอียด</button>
+        ${x.document_type==="QUOTATION"?`<a class="btn yellow" href="member-quotation.html?id=${encodeURIComponent(x.source_id)}">เปิดใบเสนอราคา</a>`:""}
+      </div>
+    </article>`).join("");
+}
+function findPdf(x){
+  const no=String(x.document_no||"").trim();
+  if(!no)return null;
+  return pdfDocs.find(d=>d.document_type===x.document_type && String(d.title||"").includes(no)) || null;
+}
+async function openPdf(bucket,path){
+  if(!bucket||!path)return alert("ยังไม่มีไฟล์ PDF สำหรับเอกสารนี้");
+  const {data,error}=await db.storage.from(bucket).createSignedUrl(path,120);
+  if(error)return alert(/Object not found/i.test(error.message||"")?"ไฟล์ PDF ยังไม่พร้อมใช้งาน กรุณาติดต่อ SANTE เพื่อออกไฟล์ใหม่":"เปิด PDF ไม่สำเร็จ: "+error.message);
+  window.open(data.signedUrl,"_blank","noopener");
+}
+function openDetail(id){
+  const x=rows.find(r=>String(r.source_id)===String(id));if(!x)return;
+  $("detailTitle").textContent=(labels[x.document_type]||x.document_type)+" "+(x.document_no||"");
+  $("detailStatus").className="status "+statusClass(x.document_status);
+  $("detailStatus").textContent=statusTH[x.document_status]||x.document_status||"-";
+  const meta=[
+    ["เลขที่เอกสาร",x.document_no||"-"],["วันที่ออก",dateText(x.issue_date)],["ครบกำหนด/ใช้ได้ถึง",dateText(x.due_date)],
+    ["ลูกค้า",x.organization_name||x.customer_name||"-"],["เรื่อง",x.document_subject||"-"],["หมายเหตุ",x.note||"-"]
+  ];
+  $("detailGrid").innerHTML=meta.map(([k,v])=>`<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join("");
+  $("detailTotals").innerHTML=`
+    <div class="total-row"><span>มูลค่าก่อน VAT</span><b>${money(x.subtotal)} บาท</b></div>
+    <div class="total-row"><span>VAT ${money(x.vat_rate)}%</span><b>${money(x.vat_amount)} บาท</b></div>
+    ${Number(x.wht_amount||0)>0?`<div class="total-row"><span>หัก ณ ที่จ่าย ${money(x.wht_rate)}%</span><b>${money(x.wht_amount)} บาท</b></div>`:""}
+    <div class="total-row net"><span>ยอดสุทธิ</span><span>${money(x.net_receivable||x.grand_total)} บาท</span></div>`;
+  const pdf=findPdf(x);
+  $("detailActions").innerHTML=
+    (x.document_type==="QUOTATION"?`<a class="btn yellow" href="member-quotation.html?id=${encodeURIComponent(x.source_id)}">เปิดใบเสนอราคา</a>`:"")+
+    (pdf?`<button class="btn" id="openPdfBtn">เปิด PDF</button>`:"");
+  if(pdf)$("openPdfBtn").onclick=()=>openPdf(pdf.storage_bucket,pdf.storage_path);
+  $("detailBg").classList.add("show");
+}
+function closeDetail(){$("detailBg").classList.remove("show")}
+async function init(){
+  try{
+    const {data:{session},error}=await db.auth.getSession();if(error)throw error;
+    if(!session?.user){location.replace("member-login.html");return}
+    $("memberEmail").textContent=session.user.email||"";
+    const {data:p}=await db.from("profiles").select("title_th,firstname_th,lastname_th,email").eq("id",session.user.id).maybeSingle();
+    if(p){$("memberName").textContent=[p.title_th,p.firstname_th,p.lastname_th].filter(Boolean).join(" ")||"สมาชิก SANTE";$("memberEmail").textContent=p.email||session.user.email||""}
+    const [a,b]=await Promise.all([db.rpc("member_get_my_accounting_documents"),db.rpc("member_get_my_documents")]);
+    if(a.error)throw a.error;
+    rows=Array.isArray(a.data)?a.data:[];
+    pdfDocs=(!b.error&&Array.isArray(b.data))?b.data:[];
+    updateCounts();render();$("loading").classList.add("hidden");
+  }catch(e){
+    console.error(e);$("loading").innerHTML='โหลดเอกสารไม่สำเร็จ<br><span style="font-size:13px;color:#6f82a0">'+esc(e.message||e)+'</span>';
+  }
+}
+$("search").addEventListener("input",render);$("typeFilter").addEventListener("change",render);
+$("logout").onclick=async()=>{await db.auth.signOut();location.replace("member-login.html")};
+setTimeout(()=>{if(!$("loading").classList.contains("hidden"))$("loading").innerHTML='โหลดข้อมูลนานผิดปกติ<br><button class="btn" onclick="location.reload()" style="margin-top:12px">โหลดใหม่</button>'},15000);
+init();
+</script>
+</body>
+</html>
