@@ -734,6 +734,51 @@ label{display:block;font-size:11px;font-weight:600;margin-bottom:5px}.input,text
 </style>
 <meta name="sante-build-r18" content="ACCOUNTING-R18-INVOICE-PREVIEW">
 
+
+<style id="sante-invoice-green-fix-r19">
+/* R19 — Invoice-only corrections: green palette + seller tax ID alignment.
+   Scope is limited to .paper-invoice so receipt/tax invoice and credit note styling remain unchanged. */
+.paper-invoice .invh{
+  grid-template-columns: 15mm minmax(62mm,1.25fr) minmax(38mm,.82fr) 54mm !important;
+  gap: 2.5mm !important;
+}
+.paper-invoice .invh-tax-row{
+  grid-template-columns: 29mm minmax(0,1fr) !important;
+  gap: 1.8mm !important;
+  align-items: start !important;
+}
+.paper-invoice .invh-tax-row .invh-label{
+  white-space: normal !important;
+  line-height: 1.3 !important;
+}
+.paper-invoice .invh-tax-row > div:last-child{
+  min-width: 0 !important;
+  overflow-wrap: anywhere !important;
+  white-space: normal !important;
+  line-height: 1.35 !important;
+}
+/* Replace purple/lavender accents with SANTE green. */
+.paper-invoice .invh-title{ color:#16834a !important; }
+.paper-invoice .invh-docbox{ background:#eaf7ef !important; }
+.paper-invoice th{ background:#eaf7ef !important; }
+.paper-invoice .total-row.grand{
+  background:#e4f4e9 !important;
+  color:#176b3a !important;
+}
+.paper-invoice .paid-row{ background:#eff9f2 !important; }
+.paper-invoice .paid-row b:last-child{ color:#16834a !important; }
+@media screen and (max-width: 900px){
+  .paper-invoice .invh{
+    grid-template-columns: 13mm minmax(0,1fr) !important;
+  }
+  .paper-invoice .invh-contact,
+  .paper-invoice .invh-doc{ grid-column: 2 !important; }
+  .paper-invoice .invh-tax-row{
+    grid-template-columns: 29mm minmax(0,1fr) !important;
+  }
+}
+</style>
+
 </head>
 <body>
 <div id="loading" class="loading">กำลังโหลดเอกสารบัญชี...</div>
