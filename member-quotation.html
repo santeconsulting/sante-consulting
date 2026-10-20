@@ -2434,6 +2434,8 @@ const db=window.supabase.createClient(
   {auth:{storageKey:"sante-member-auth",persistSession:true,autoRefreshToken:true}}
 );
 const id=new URLSearchParams(location.search).get("id");
+const approveBtn=document.getElementById("approveBtn");
+const msg=document.getElementById("msg");
 let q=null;
 let items=[];
 let requestNo="-";
@@ -2601,11 +2603,11 @@ async function init(){
     const s=await db.auth.getSession();
     if(!s.data.session){location="member-login.html";return}
     const u=s.data.session.user;
-    memberEmail.textContent=u.email||"";
+    document.getElementById("memberEmail").textContent=u.email||"";
     const pr=await db.from("profiles").select("title_th,firstname_th,lastname_th,email").eq("id",u.id).maybeSingle();
     if(pr.data){
-      memberName.textContent=[pr.data.title_th,pr.data.firstname_th,pr.data.lastname_th].filter(Boolean).join(" ")||"สมาชิก SANTE";
-      memberEmail.textContent=pr.data.email||u.email||"";
+      document.getElementById("memberName").textContent=[pr.data.title_th,pr.data.firstname_th,pr.data.lastname_th].filter(Boolean).join(" ")||"สมาชิก SANTE";
+      document.getElementById("memberEmail").textContent=pr.data.email||u.email||"";
     }
     if(!id){alert("ไม่พบใบเสนอราคา");location="member-quotations.html";return}
     const [qr,ir]=await Promise.all([
@@ -2628,16 +2630,16 @@ async function init(){
     }
 
     renderPaper();
-    approveBtn.style.display=q.status==="SENT"?"inline-flex":"none";
+    document.getElementById("approveBtn").style.display=q.status==="SENT"?"inline-flex":"none";
     if(q.status==="APPROVED"){
-      msg.style.display="block";
-      msg.textContent="ใบเสนอราคานี้ได้รับการอนุมัติแล้ว";
+      document.getElementById("msg").style.display="block";
+      document.getElementById("msg").textContent="ใบเสนอราคานี้ได้รับการอนุมัติแล้ว";
     }
   }catch(e){
     console.error(e);
     alert("ไม่สามารถโหลดใบเสนอราคาได้: "+(e.message||e));
   }finally{
-    loading.style.display="none";
+    const loadingEl=document.getElementById("loading");if(loadingEl)loadingEl.style.display="none";
   }
 }
 async function approve(){
@@ -2657,7 +2659,7 @@ async function approve(){
     const result=Array.isArray(r.data)?r.data[0]:r.data;
     q.status="APPROVED";
 
-    msg.style.display="block";
+    document.getElementById("msg").style.display="block";
     msg.classList.remove("error");
 
     if(result?.invoice_no){
@@ -2674,7 +2676,7 @@ async function approve(){
     approveBtn.style.display="none";
   }catch(e){
     console.error(e);
-    msg.style.display="block";
+    document.getElementById("msg").style.display="block";
     msg.classList.add("error");
     msg.textContent="ไม่สามารถอนุมัติใบเสนอราคาได้: "+(e.message||e);
   }finally{
@@ -2700,21 +2702,6 @@ async function printQuotation(){
     .ref-summary,.ref-payment,.ref-note,.ref-cert{break-inside:avoid!important;page-break-inside:avoid!important}
     @page{size:A4 portrait;margin:0}
   </style></head><body>${source.outerHTML}
-<script id="member-r10-1-loading-watchdog">
-/* Prevent an indefinite full-screen loading overlay.
-   This does not change data logic; it only exposes a recoverable message. */
-window.setTimeout(function(){
-  const el=document.getElementById("loading");
-  if(!el)return;
-  const style=window.getComputedStyle(el);
-  const visible=style.display!=="none" && !el.classList.contains("hidden");
-  if(visible){
-    el.innerHTML='โหลดข้อมูลนานผิดปกติ<br><button type="button" onclick="location.reload()" style="margin-top:14px;min-height:42px;padding:0 16px;border:1px solid #d5e1ef;border-radius:10px;background:#fff;color:#082d69;font:600 14px Prompt,sans-serif;cursor:pointer">โหลดใหม่</button>';
-  }
-},15000);
-</script>
-<meta name="sante-hotfix" content="MEMBER-R10-1-LOADING-WATCHDOG">
-
 </body></html>`);
   doc.close();
   try{
@@ -2731,4 +2718,17 @@ window.setTimeout(function(){
 }
 logout.onclick=async()=>{await db.auth.signOut();location="member-login.html"};
 init();
-</script></body></html>
+</script>
+<script id="member-r12-loading-watchdog">
+window.setTimeout(function(){
+  const el=document.getElementById("loading");
+  if(!el)return;
+  const visible=window.getComputedStyle(el).display!=="none";
+  if(visible){
+    el.innerHTML='โหลดใบเสนอราคานานผิดปกติ<br><button type="button" onclick="location.reload()" style="margin-top:14px;min-height:42px;padding:0 16px;border:1px solid #d5e1ef;border-radius:10px;background:#fff;color:#082d69;font:600 14px Prompt,sans-serif;cursor:pointer">โหลดใหม่</button>';
+  }
+},15000);
+</script>
+<meta name="sante-build-r12" content="MEMBER-QUOTATION-R12-LOAD-FIX">
+
+</body></html>

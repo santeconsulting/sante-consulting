@@ -30,6 +30,46 @@ a{text-decoration:none;color:inherit}button,select,input{font-family:inherit}
 @media(max-width:767px){.topbar{min-height:64px;height:auto;padding:7px 12px}.brand-logo{width:118px;height:50px}.member-copy{display:none}.logout{min-height:38px;padding:0 10px;font-size:11px}.page{width:100%;padding:10px 12px 35px}.desktop-hero{display:none}.mobile-hero{display:block;padding:22px 18px;border-radius:20px;background:linear-gradient(145deg,#eaf7ff,#fff 58%,#fff4c9);box-shadow:0 8px 25px rgba(11,45,103,.07)}.mobile-hero h2{font-size:27px}.mobile-hero p{margin-top:6px;color:var(--muted);font-size:12px}.heading{margin:24px 4px 14px;align-items:flex-start;flex-direction:column}.heading h1{font-size:23px}.heading p{font-size:13px}.actions{width:100%}.actions .btn{flex:1}.summary{grid-template-columns:repeat(2,1fr)}.toolbar{grid-template-columns:1fr}.card{grid-template-columns:1fr;padding:16px}.card-actions{justify-content:stretch}.card-actions .btn{flex:1}.doc-grid{grid-template-columns:1fr}.doc-grid dt{font-size:12px}.modal{padding:18px}}
 </style>
 <meta name="sante-build" content="MEMBER-ACCOUNTING-R11">
+
+<style id="member-accounting-r12-layout">
+@media (min-width:1024px){
+  .page{width:min(1260px,calc(100% - 56px))!important}
+  .heading{margin-top:26px!important}
+  .heading h1{font-size:29px!important}
+  .summary{grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:10px!important;margin-bottom:14px!important}
+  .sum{
+    min-height:74px!important;padding:13px 15px!important;border-radius:14px!important;
+    cursor:pointer!important;transition:.18s ease!important
+  }
+  .sum:hover{border-color:#aac9e8!important;transform:translateY(-1px)}
+  .sum.active{border-color:#87b8e7!important;box-shadow:0 0 0 2px rgba(8,125,240,.08)!important;background:#f8fbff!important}
+  .sum span{font-size:12px!important}
+  .sum strong{font-size:22px!important;margin-top:3px!important}
+  .toolbar{grid-template-columns:1fr 190px!important;margin-bottom:13px!important}
+  .card{
+    grid-template-columns:minmax(260px,1.15fr) minmax(250px,.9fr) minmax(170px,.55fr) 190px!important;
+    gap:20px!important;padding:17px 18px!important;border-radius:15px!important
+  }
+  .title{font-size:17px!important}.no{font-size:13px!important}
+  .meta{font-size:13px!important;line-height:1.55!important}
+  .amount{font-size:19px!important}
+  .card-actions{width:190px!important;display:grid!important;grid-template-columns:1fr!important}
+  .card-actions .btn{width:100%!important;min-height:40px!important}
+}
+.accounting-note{
+  margin:0 0 13px;padding:10px 13px;border:1px solid #dce7f2;border-radius:12px;
+  background:#fff;color:#627996;font-size:12.5px;line-height:1.55
+}
+.pdf-state{display:block;margin-top:5px;color:#8192a9;font-size:11.5px}
+.pdf-state.ready{color:#188d49}
+@media(max-width:767px){
+  .summary{display:grid!important;grid-template-columns:repeat(2,1fr)!important}
+  .sum:last-child{grid-column:1/-1}
+  .accounting-note{font-size:12px}
+}
+</style>
+<meta name="sante-build-r12" content="MEMBER-ACCOUNTING-R12-ORGANIZED">
+
 </head>
 <body>
 <div id="loading" class="loading">กำลังโหลดเอกสารทางบัญชี...</div>
@@ -51,13 +91,14 @@ a{text-decoration:none;color:inherit}button,select,input{font-family:inherit}
   </div>
 
   <section class="summary">
-    <div class="sum"><span>ทั้งหมด</span><strong id="cAll">0</strong></div>
-    <div class="sum"><span>ใบเสนอราคา</span><strong id="cQ">0</strong></div>
-    <div class="sum"><span>ใบแจ้งหนี้</span><strong id="cI">0</strong></div>
-    <div class="sum"><span>ใบเสร็จ/ใบกำกับภาษี</span><strong id="cR">0</strong></div>
-    <div class="sum"><span>ใบลดหนี้</span><strong id="cC">0</strong></div>
+    <div class="sum active" data-type=""><span>ทั้งหมด</span><strong id="cAll">0</strong></div>
+    <div class="sum" data-type="QUOTATION"><span>ใบเสนอราคา</span><strong id="cQ">0</strong></div>
+    <div class="sum" data-type="INVOICE"><span>ใบแจ้งหนี้</span><strong id="cI">0</strong></div>
+    <div class="sum" data-type="RECEIPT_TAX_INVOICE"><span>ใบเสร็จ/ใบกำกับภาษี</span><strong id="cR">0</strong></div>
+    <div class="sum" data-type="CREDIT_NOTE"><span>ใบลดหนี้</span><strong id="cC">0</strong></div>
   </section>
 
+  <div class="accounting-note">กดกล่องประเภทเอกสารด้านบนเพื่อกรองรายการได้ทันที · ใบเสนอราคาเปิดดูเอกสารฉบับเต็มได้จากปุ่มสีเหลือง · เอกสารอื่นจะแสดงรายละเอียดและปุ่ม PDF เมื่อมีไฟล์ที่ออกแล้ว</div>
   <div class="toolbar">
     <input id="search" class="search" placeholder="ค้นหาเลขเอกสาร ลูกค้า หรือเรื่อง">
     <select id="typeFilter" class="filter">
@@ -103,17 +144,42 @@ function currentRows(){
 }
 function render(){
   const data=currentRows();
-  if(!data.length){$("list").innerHTML='<div class="empty">ไม่พบเอกสารตามเงื่อนไขที่เลือก</div>';return}
-  $("list").innerHTML=data.map(x=>`
+  document.querySelectorAll(".sum[data-type]").forEach(el=>{
+    el.classList.toggle("active",(el.dataset.type||"")===$("typeFilter").value);
+  });
+  if(!data.length){
+    $("list").innerHTML='<div class="empty">ไม่พบเอกสารตามเงื่อนไขที่เลือก</div>';
+    return;
+  }
+  $("list").innerHTML=data.map(x=>{
+    const pdf=findPdf(x);
+    const pdfState=x.document_type==="QUOTATION"
+      ? '<span class="pdf-state ready">เปิดฉบับเต็มได้</span>'
+      : (pdf?'<span class="pdf-state ready">มีไฟล์ PDF แล้ว</span>':'<span class="pdf-state">ยังไม่มีไฟล์ PDF</span>');
+    return `
     <article class="card">
-      <div><span class="type">${labels[x.document_type]||esc(x.document_type)}</span><div class="title">${esc(x.organization_name||x.customer_name||"เอกสาร SANTE")}</div><div class="no">${esc(x.document_no||"ยังไม่ออกเลขเอกสาร")}</div></div>
-      <div class="meta">วันที่ออก: ${dateText(x.issue_date)}<br>เรื่อง: ${esc(x.document_subject||"-")}</div>
-      <div><div class="amount">${money(x.grand_total)} บาท</div><span class="status ${statusClass(x.document_status)}">${esc(statusTH[x.document_status]||x.document_status||"-")}</span></div>
+      <div>
+        <span class="type">${labels[x.document_type]||esc(x.document_type)}</span>
+        <div class="title">${esc(x.organization_name||x.customer_name||"เอกสาร SANTE")}</div>
+        <div class="no">${esc(x.document_no||"ยังไม่ออกเลขเอกสาร")}</div>
+      </div>
+      <div class="meta">
+        วันที่ออก: ${dateText(x.issue_date)}<br>
+        เรื่อง: ${esc(x.document_subject||"-")}
+      </div>
+      <div>
+        <div class="amount">${money(x.grand_total)} บาท</div>
+        <span class="status ${statusClass(x.document_status)}">${esc(statusTH[x.document_status]||x.document_status||"-")}</span>
+        ${pdfState}
+      </div>
       <div class="card-actions">
         <button class="btn" onclick="openDetail('${x.source_id}')">ดูรายละเอียด</button>
-        ${x.document_type==="QUOTATION"?`<a class="btn yellow" href="member-quotation.html?id=${encodeURIComponent(x.source_id)}">เปิดใบเสนอราคา</a>`:""}
+        ${x.document_type==="QUOTATION"
+          ? `<a class="btn yellow" href="member-quotation.html?id=${encodeURIComponent(x.source_id)}">เปิดใบเสนอราคา</a>`
+          : (pdf?`<button class="btn yellow" onclick="openPdf('${esc(pdf.storage_bucket)}','${esc(pdf.storage_path)}')">เปิด PDF</button>`:"")}
       </div>
-    </article>`).join("");
+    </article>`;
+  }).join("");
 }
 function findPdf(x){
   const no=String(x.document_no||"").trim();
@@ -165,7 +231,14 @@ async function init(){
     console.error(e);$("loading").innerHTML='โหลดเอกสารไม่สำเร็จ<br><span style="font-size:13px;color:#6f82a0">'+esc(e.message||e)+'</span>';
   }
 }
-$("search").addEventListener("input",render);$("typeFilter").addEventListener("change",render);
+$("search").addEventListener("input",render);
+$("typeFilter").addEventListener("change",render);
+document.querySelectorAll(".sum[data-type]").forEach(el=>{
+  el.addEventListener("click",()=>{
+    $("typeFilter").value=el.dataset.type||"";
+    render();
+  });
+});
 $("logout").onclick=async()=>{await db.auth.signOut();location.replace("member-login.html")};
 setTimeout(()=>{if(!$("loading").classList.contains("hidden"))$("loading").innerHTML='โหลดข้อมูลนานผิดปกติ<br><button class="btn" onclick="location.reload()" style="margin-top:12px">โหลดใหม่</button>'},15000);
 init();
