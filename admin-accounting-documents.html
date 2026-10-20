@@ -860,7 +860,9 @@ label{display:block;font-size:11px;font-weight:600;margin-bottom:5px}.input,text
 .paper-invoice .invh-contact-row{line-height:1.28!important}
 .paper-invoice .invh-copy{min-height:0!important;margin:0 0 1.2mm!important;padding:0!important;line-height:1.15!important}
 .paper-invoice .invh-title{margin:0 0 2.2mm!important;padding:0!important;line-height:1.05!important}
-.paper-invoice .invh-doc{margin-top:-.6mm!important;padding-top:0!important}
+.paper-invoice .invh-doc{margin-top:0!important;padding-top:0!important}
+.paper-invoice .invh-copy{line-height:1.25!important;margin:0 0 2mm!important}
+.paper-invoice .invh-title{line-height:1.15!important;margin:0 0 2.5mm!important}
 .paper-invoice .invh-docbox{margin:0!important;padding:2.6mm 3mm!important;gap:1.15mm 1.5mm!important;line-height:1.25!important}
 .paper-invoice .invh-docbox b,.paper-invoice .invh-docbox span{line-height:1.25!important}
 .paper-invoice .inv-party{padding-top:3.2mm!important}
@@ -1360,13 +1362,13 @@ async function printAccountingPreview(){
  Object.assign(iframe.style,{position:"fixed",right:"0",bottom:"0",width:"0",height:"0",border:"0"});
  document.body.appendChild(iframe);
  const doc=iframe.contentDocument||iframe.contentWindow.document;
- const styleMarkup=[...document.querySelectorAll("style")].map(s=>s.outerHTML).join("\\n");
- const fontLinks=[...document.querySelectorAll('link[rel="stylesheet"]')].map(l=>l.outerHTML).join("\\n");
+ const styleMarkup=[...document.querySelectorAll("style")].map(s=>s.outerHTML).join("\n");
+ const fontLinks=[...document.querySelectorAll('link[rel="stylesheet"]')].map(l=>l.outerHTML).join("\n");
  doc.open();
  doc.write(`<!doctype html><html lang="th"><head><meta charset="utf-8">${fontLinks}${styleMarkup}
  <style id="accounting-print-isolation-r23">
- html,body{margin:0!important;padding:0!important;width:210mm!important;min-height:297mm!important;background:#fff!important;overflow:visible!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;color-adjust:exact!important}
- body>.paper{display:block!important;position:relative!important;margin:0!important;box-shadow:none!important;transform:none!important;zoom:1!important;width:210mm!important;min-width:210mm!important;max-width:210mm!important;min-height:297mm!important;page-break-after:avoid!important;break-after:avoid-page!important}
+ html,body{margin:0!important;padding:0!important;width:210mm!important;min-height:0!important;height:auto!important;background:#fff!important;overflow:visible!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;color-adjust:exact!important}
+ body>.paper{display:block!important;position:relative!important;margin:0!important;box-shadow:none!important;transform:none!important;zoom:1!important;width:210mm!important;min-width:210mm!important;max-width:210mm!important;min-height:0!important;height:auto!important;page-break-after:avoid!important;break-after:avoid-page!important}
  @page{size:A4 portrait;margin:0}
  </style></head><body>${source.outerHTML}</body></html>`);
  doc.close();
