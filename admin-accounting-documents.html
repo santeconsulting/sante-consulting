@@ -889,6 +889,37 @@ label{display:block;font-size:11px;font-weight:600;margin-bottom:5px}.input,text
 .paper-invoice .invh-docbox{background:#e8f6ee!important}
 </style>
 <meta name="sante-header-match" content="2026-10-20">
+
+<style id="sante-accounting-r25-left-align">
+/* R25 — tighten seller/customer information to the left. Layout-only change. */
+.paper-invoice .invh{
+  grid-template-columns:13.5mm minmax(59.5mm,1.28fr) minmax(42mm,.82fr) 58mm!important;
+  column-gap:1.4mm!important;
+}
+.paper-invoice .invh-logo-cell{padding-left:0!important;margin-left:-.6mm!important}
+.paper-invoice .invh-seller .invh-row,
+.paper-invoice .invh-row{grid-template-columns:16mm minmax(0,1fr)!important;column-gap:1mm!important}
+.paper-invoice .invh-tax-row{grid-template-columns:28mm minmax(0,1fr)!important;column-gap:1mm!important}
+.paper-invoice .invh-label{text-align:left!important;padding-left:0!important;margin-left:0!important}
+.paper-invoice .inv-party{
+  margin-left:-2mm!important;
+  width:calc(100% + 2mm)!important;
+  grid-template-columns:minmax(0,1.35fr) minmax(0,.75fr)!important;
+  gap:8mm!important;
+}
+.paper-invoice .inv-party-left{padding-left:0!important;margin-left:0!important}
+.paper-invoice .inv-party-row{grid-template-columns:28mm minmax(0,1fr)!important;column-gap:1.2mm!important}
+.paper-invoice .inv-party-row>b{text-align:left!important;padding-left:0!important;margin-left:0!important}
+.paper-invoice .inv-party-row>div{min-width:0!important;padding-left:0!important}
+.paper-invoice .inv-contact-title,.paper-invoice .inv-contact-row{margin-left:0!important}
+@media screen and (max-width:900px){
+  .paper-invoice .invh{grid-template-columns:13mm minmax(0,1fr)!important;column-gap:1.4mm!important}
+  .paper-invoice .inv-party{margin-left:0!important;width:100%!important;gap:4mm!important}
+  .paper-invoice .inv-party-row{grid-template-columns:28mm minmax(0,1fr)!important}
+}
+</style>
+<meta name="sante-build-r25" content="ACCOUNTING-R25-LEFT-ALIGN">
+
 </head>
 <body>
 <div id="loading" class="loading">กำลังโหลดเอกสารบัญชี...</div>
