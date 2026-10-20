@@ -844,6 +844,11 @@ label{display:block;font-size:11px;font-weight:600;margin-bottom:5px}.input,text
 }
 </style>
 
+<style id="sante-accounting-r23-save-pdf">
+#previewPrintBtn{display:inline-flex!important;align-items:center!important;justify-content:center!important;text-align:center!important;min-height:42px!important}
+</style>
+<meta name="sante-build-r23" content="ACCOUNTING-R23-PRINT-SAVE-PDF">
+
 </head>
 <body>
 <div id="loading" class="loading">กำลังโหลดเอกสารบัญชี...</div>
@@ -1009,6 +1014,7 @@ label{display:block;font-size:11px;font-weight:600;margin-bottom:5px}.input,text
 
   <div class="modal-actions preview-actions">
    <button id="previewEditBtn" class="btn" type="button" style="display:none">แก้ไขข้อมูล</button>
+   <button id="previewPrintBtn" class="btn" type="button">พิมพ์ / บันทึก PDF</button>
    <button id="previewPdfBtn" class="btn navy" type="button" style="display:none">ออก PDF เอกสารนี้</button>
   </div>
  </div>
@@ -1322,10 +1328,38 @@ function openPreview(id){
    closePreview();
    if(pid)openEditor(pid);
  };
+ $("previewPrintBtn").onclick=()=>printAccountingPreview();
  $("previewPdfBtn").onclick=()=>previewing&&issueOne(previewing.id);
 
  $("previewBg").classList.add("show");
 }
+async function printAccountingPreview(){
+ const source=document.querySelector("#previewPaper .paper");
+ if(!source)return alert("ไม่พบตัวอย่างเอกสาร");
+ const iframe=document.createElement("iframe");
+ iframe.setAttribute("aria-hidden","true");
+ Object.assign(iframe.style,{position:"fixed",right:"0",bottom:"0",width:"0",height:"0",border:"0"});
+ document.body.appendChild(iframe);
+ const doc=iframe.contentDocument||iframe.contentWindow.document;
+ const styleMarkup=[...document.querySelectorAll("style")].map(s=>s.outerHTML).join("\\n");
+ const fontLinks=[...document.querySelectorAll('link[rel="stylesheet"]')].map(l=>l.outerHTML).join("\\n");
+ doc.open();
+ doc.write(`<!doctype html><html lang="th"><head><meta charset="utf-8">${fontLinks}${styleMarkup}
+ <style id="accounting-print-isolation-r23">
+ html,body{margin:0!important;padding:0!important;width:210mm!important;min-height:297mm!important;background:#fff!important;overflow:visible!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;color-adjust:exact!important}
+ body>.paper{display:block!important;position:relative!important;margin:0!important;box-shadow:none!important;transform:none!important;zoom:1!important;width:210mm!important;min-width:210mm!important;max-width:210mm!important;min-height:297mm!important;page-break-after:avoid!important;break-after:avoid-page!important}
+ @page{size:A4 portrait;margin:0}
+ </style></head><body>${source.outerHTML}</body></html>`);
+ doc.close();
+ try{
+   if(doc.fonts?.ready)await doc.fonts.ready;
+   await Promise.all([...doc.images].map(img=>img.complete?Promise.resolve():new Promise(resolve=>{img.addEventListener("load",resolve,{once:true});img.addEventListener("error",resolve,{once:true});setTimeout(resolve,2500)})));
+   await new Promise(r=>setTimeout(r,120));
+   iframe.contentWindow.focus();
+   iframe.contentWindow.print();
+ }finally{setTimeout(()=>iframe.remove(),1200)}
+}
+
 function closePreview(){
  $("previewBg").classList.remove("show");
  $("previewPaper").innerHTML="";
