@@ -779,6 +779,71 @@ label{display:block;font-size:11px;font-weight:600;margin-bottom:5px}.input,text
 }
 </style>
 
+
+<style id="sante-invoice-green-fix-r20">
+/* R20 — refine invoice heading spacing and seller information alignment only */
+.paper-invoice .invh{
+  grid-template-columns: 15mm minmax(68mm,1.35fr) minmax(39mm,.9fr) 52mm !important;
+  gap: 2.3mm !important;
+}
+.paper-invoice .invh-seller{
+  min-width:0 !important;
+}
+.paper-invoice .invh-seller .invh-row{
+  grid-template-columns: 31mm minmax(0,1fr) !important;
+  gap: 1.6mm !important;
+  align-items:start !important;
+}
+.paper-invoice .invh-seller .invh-label{
+  white-space:normal !important;
+  overflow-wrap:normal !important;
+  line-height:1.35 !important;
+}
+.paper-invoice .invh-seller .invh-row > div:last-child{
+  min-width:0 !important;
+  overflow-wrap:anywhere !important;
+  white-space:normal !important;
+  line-height:1.35 !important;
+}
+.paper-invoice .invh-tax-row{
+  grid-template-columns:31mm minmax(0,1fr) !important;
+}
+.paper-invoice .invh-copy{
+  display:block !important;
+  min-height:9mm !important;
+  line-height:1.4 !important;
+  padding-top:.5mm !important;
+  margin-bottom:1.5mm !important;
+  white-space:nowrap !important;
+}
+.paper-invoice .invh-title{
+  display:block !important;
+  margin:0 0 5mm !important;
+  padding-top:1mm !important;
+  line-height:1.22 !important;
+  white-space:nowrap !important;
+}
+.paper-invoice .invh-doc{
+  min-width:0 !important;
+  padding-top:0 !important;
+}
+.paper-invoice .invh-docbox{
+  grid-template-columns:23mm minmax(0,1fr) !important;
+}
+@media screen and (max-width: 900px){
+  .paper-invoice .invh{
+    grid-template-columns: 13mm minmax(0,1fr) !important;
+  }
+  .paper-invoice .invh-seller,
+  .paper-invoice .invh-contact,
+  .paper-invoice .invh-doc{ grid-column:2 !important; }
+  .paper-invoice .invh-seller .invh-row,
+  .paper-invoice .invh-tax-row{
+    grid-template-columns:31mm minmax(0,1fr) !important;
+  }
+}
+</style>
+
 </head>
 <body>
 <div id="loading" class="loading">กำลังโหลดเอกสารบัญชี...</div>
