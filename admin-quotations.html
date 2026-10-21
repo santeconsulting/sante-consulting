@@ -4397,6 +4397,122 @@ textarea{
 .reference-qo .qh-tax-row .qh-nowrap{font-size:7.55pt!important;white-space:nowrap!important;padding-left:0!important}
 </style>
 <meta name="sante-header-match" content="2026-10-20">
+<style id="sante-quotation-r40-seller-block">
+.reference-qo .qh-seller .qh-row{grid-template-columns:29mm minmax(0,1fr)!important;column-gap:1.4mm!important;align-items:start!important}
+.reference-qo .qh-seller .qh-label{font-size:7.55pt!important;line-height:1.35!important;font-weight:700!important;white-space:nowrap!important;position:static!important;left:auto!important;width:auto!important;letter-spacing:normal!important}
+.reference-qo .qh-company,.reference-qo .qh-address,.reference-qo .qh-row>div:last-child{font-size:7.55pt!important;line-height:1.35!important;padding-left:0!important;margin-left:0!important}
+.reference-qo .qh-company>div,.reference-qo .qh-address>div{margin:0!important;padding:0!important;line-height:1.35!important}
+.reference-qo .qh-tax-row{grid-template-columns:29mm minmax(0,1fr)!important;column-gap:1.4mm!important;align-items:start!important}
+.reference-qo .qh-tax-row .qh-label,.reference-qo .qh-tax-row .qh-nowrap{font-size:7.55pt!important;line-height:1.35!important;white-space:nowrap!important;position:static!important;left:auto!important;width:auto!important;padding-left:0!important;margin-left:0!important;letter-spacing:normal!important}
+</style>
+<meta name="sante-build-r40" content="QUOTATION-SELLER-BLOCK-ALIGN">
+
+<style id="sante-quotation-r41-structure-match">
+/* R41 — Seller + customer structure matched to invoice. Purple remains quotation-only. */
+
+/* 1) Seller block: labels share the same width, so every colon ends on one vertical axis. */
+.reference-qo .qh-seller .qh-row,
+.reference-qo .qh-tax-row{
+  grid-template-columns:34mm minmax(0,1fr)!important;
+  column-gap:1.2mm!important;
+  align-items:start!important;
+}
+.reference-qo .qh-seller .qh-label,
+.reference-qo .qh-tax-row .qh-label{
+  display:block!important;
+  width:auto!important;
+  position:static!important;
+  left:auto!important;
+  margin:0!important;
+  padding:0!important;
+  text-align:right!important;
+  white-space:nowrap!important;
+  font-size:7.55pt!important;
+  font-weight:700!important;
+  line-height:1.35!important;
+  letter-spacing:normal!important;
+}
+.reference-qo .qh-company,
+.reference-qo .qh-address,
+.reference-qo .qh-row>div:last-child,
+.reference-qo .qh-tax-row .qh-nowrap{
+  margin:0!important;
+  padding:0!important;
+  font-size:7.55pt!important;
+  line-height:1.35!important;
+  white-space:normal!important;
+}
+.reference-qo .qh-tax-row .qh-nowrap{
+  white-space:nowrap!important;
+}
+
+/* 2) Pull phone / email / website left without changing the document box. */
+.reference-qo .qh-contact{
+  position:relative!important;
+  left:-4mm!important;
+  row-gap:1.05mm!important;
+  font-size:7.2pt!important;
+  line-height:1.28!important;
+}
+.reference-qo .qh-contact-row{
+  grid-template-columns:4.3mm minmax(0,1fr)!important;
+  column-gap:1mm!important;
+}
+.reference-qo .qh-contact .qh-nowrap{
+  white-space:nowrap!important;
+  font-size:7.2pt!important;
+}
+
+/* 3) Customer block: same label axis and spacing as invoice. */
+.reference-qo .ref-party{
+  grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr)!important;
+  gap:8mm!important;
+}
+.reference-qo .ref-party-row{
+  grid-template-columns:34mm minmax(0,1fr)!important;
+  column-gap:1.2mm!important;
+  align-items:start!important;
+}
+.reference-qo .ref-party-row>b{
+  display:block!important;
+  margin:0!important;
+  padding:0!important;
+  text-align:right!important;
+  white-space:nowrap!important;
+  font-size:7.55pt!important;
+  line-height:1.35!important;
+}
+.reference-qo .ref-party-row>div{
+  margin:0!important;
+  padding:0!important;
+  min-width:0!important;
+  font-size:7.55pt!important;
+  line-height:1.35!important;
+}
+
+/* 4) Keep ORIGINAL/COPY safely separated from Thai document title. */
+.reference-qo .qh-copy{
+  min-height:4.5mm!important;
+  margin:0 0 2.6mm!important;
+  padding:0!important;
+  line-height:1.15!important;
+  white-space:nowrap!important;
+}
+.reference-qo .qh-title{
+  margin:0 0 2.2mm!important;
+  padding:0!important;
+  font-size:24pt!important;
+  font-weight:700!important;
+  line-height:1.15!important;
+  white-space:nowrap!important;
+  color:#7467e8!important;
+}
+.reference-qo .qh-docbox{
+  background:#efedff!important;
+}
+</style>
+<meta name="sante-build-r41" content="QUOTATION-STRUCTURE-MATCH">
+
 </head>
 <body>
 

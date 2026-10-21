@@ -920,6 +920,124 @@ label{display:block;font-size:11px;font-weight:600;margin-bottom:5px}.input,text
 </style>
 <meta name="sante-build-r25" content="ACCOUNTING-R25-LEFT-ALIGN">
 
+<style id="sante-accounting-r27-seller-block">
+.paper-invoice .invh-seller .invh-row,.paper-invoice .invh-row{grid-template-columns:29mm minmax(0,1fr)!important;column-gap:1.4mm!important;align-items:start!important}
+.paper-invoice .invh-seller .invh-label,.paper-invoice .invh-label{font-size:7.55pt!important;line-height:1.35!important;font-weight:700!important;white-space:nowrap!important;position:static!important;left:auto!important;width:auto!important;letter-spacing:normal!important}
+.paper-invoice .invh-company,.paper-invoice .invh-address,.paper-invoice .invh-row>div:last-child{font-size:7.55pt!important;line-height:1.35!important;padding-left:0!important;margin-left:0!important}
+.paper-invoice .invh-company>div,.paper-invoice .invh-address>div{margin:0!important;padding:0!important;line-height:1.35!important}
+.paper-invoice .invh-tax-row{grid-template-columns:29mm minmax(0,1fr)!important;column-gap:1.4mm!important;align-items:start!important}
+.paper-invoice .invh-tax-row .invh-label,.paper-invoice .invh-tax-row>div:last-child{font-size:7.55pt!important;line-height:1.35!important;white-space:nowrap!important;padding-left:0!important;margin-left:0!important;position:static!important;left:auto!important;width:auto!important;letter-spacing:normal!important}
+</style>
+<meta name="sante-build-r27" content="ACCOUNTING-SELLER-BLOCK-ALIGN">
+
+<style id="sante-accounting-r28-structure-match">
+/* R28 — Seller + customer structure matched to quotation. Green remains invoice-only. */
+
+/* 1) Seller block: labels share the same width, so every colon ends on one vertical axis. */
+.paper-invoice .invh-seller .invh-row,
+.paper-invoice .invh-tax-row{
+  grid-template-columns:34mm minmax(0,1fr)!important;
+  column-gap:1.2mm!important;
+  align-items:start!important;
+}
+.paper-invoice .invh-seller .invh-label,
+.paper-invoice .invh-tax-row .invh-label{
+  display:block!important;
+  width:auto!important;
+  position:static!important;
+  left:auto!important;
+  margin:0!important;
+  padding:0!important;
+  text-align:right!important;
+  white-space:nowrap!important;
+  font-size:7.55pt!important;
+  font-weight:700!important;
+  line-height:1.35!important;
+  letter-spacing:normal!important;
+}
+.paper-invoice .invh-company,
+.paper-invoice .invh-address,
+.paper-invoice .invh-row>div:last-child,
+.paper-invoice .invh-tax-row>div:last-child{
+  margin:0!important;
+  padding:0!important;
+  font-size:7.55pt!important;
+  line-height:1.35!important;
+  white-space:normal!important;
+}
+.paper-invoice .invh-tax-row>div:last-child{
+  white-space:nowrap!important;
+}
+
+/* 2) Pull phone / email / website left without changing the document box. */
+.paper-invoice .invh-contact{
+  position:relative!important;
+  left:-4mm!important;
+  row-gap:1.05mm!important;
+  font-size:7.2pt!important;
+  line-height:1.28!important;
+}
+.paper-invoice .invh-contact-row{
+  grid-template-columns:4.3mm minmax(0,1fr)!important;
+  column-gap:1mm!important;
+}
+.paper-invoice .invh-contact-row span:last-child{
+  white-space:nowrap!important;
+  font-size:7.2pt!important;
+}
+
+/* 3) Customer block: same label axis and spacing as quotation. */
+.paper-invoice .inv-party{
+  margin-left:0!important;
+  width:100%!important;
+  grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr)!important;
+  gap:8mm!important;
+}
+.paper-invoice .inv-party-row{
+  grid-template-columns:34mm minmax(0,1fr)!important;
+  column-gap:1.2mm!important;
+  align-items:start!important;
+}
+.paper-invoice .inv-party-row>b{
+  display:block!important;
+  margin:0!important;
+  padding:0!important;
+  text-align:right!important;
+  white-space:nowrap!important;
+  font-size:7.55pt!important;
+  line-height:1.35!important;
+}
+.paper-invoice .inv-party-row>div{
+  margin:0!important;
+  padding:0!important;
+  min-width:0!important;
+  font-size:7.55pt!important;
+  line-height:1.35!important;
+}
+
+/* 4) Increase clearance between (ต้นฉบับ) and ใบแจ้งหนี้ to protect the Thai tone mark. */
+.paper-invoice .invh-copy{
+  min-height:4.5mm!important;
+  margin:0 0 2.6mm!important;
+  padding:0!important;
+  line-height:1.15!important;
+  white-space:nowrap!important;
+}
+.paper-invoice .invh-title{
+  margin:0 0 2.2mm!important;
+  padding:0!important;
+  font-size:24pt!important;
+  font-weight:700!important;
+  line-height:1.15!important;
+  white-space:nowrap!important;
+  color:#07834a!important;
+}
+.paper-invoice .invh-docbox{
+  background:#eaf7ef!important;
+}
+</style>
+<meta name="sante-build-r28" content="ACCOUNTING-STRUCTURE-MATCH">
+
 </head>
 <body>
 <div id="loading" class="loading">กำลังโหลดเอกสารบัญชี...</div>
