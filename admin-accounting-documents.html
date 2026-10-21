@@ -1038,6 +1038,75 @@ label{display:block;font-size:11px;font-weight:600;margin-bottom:5px}.input,text
 </style>
 <meta name="sante-build-r28" content="ACCOUNTING-STRUCTURE-MATCH">
 
+
+<style id="sante-accounting-r29-final-alignment">
+/* R29: final header alignment overrides; invoice remains green. */
+.paper-invoice .invh-seller .invh-row,
+.paper-invoice .invh-seller .invh-tax-row{
+  display:grid!important;
+  grid-template-columns:34mm minmax(0,1fr)!important;
+  column-gap:1.2mm!important;
+  align-items:start!important;
+}
+.paper-invoice .invh-seller .invh-label,
+.paper-invoice .invh-seller .invh-tax-row .invh-label{
+  width:auto!important;
+  min-width:0!important;
+  margin:0!important;
+  padding:0!important;
+  position:static!important;
+  text-align:right!important;
+  white-space:nowrap!important;
+  font-size:7.55pt!important;
+  line-height:1.35!important;
+  font-weight:700!important;
+}
+.paper-invoice .invh-seller .invh-company,
+.paper-invoice .invh-seller .invh-address,
+.paper-invoice .invh-seller .invh-tax-row>div:last-child{
+  min-width:0!important;
+  margin:0!important;
+  padding:0!important;
+  font-size:7.55pt!important;
+  line-height:1.35!important;
+}
+.paper-invoice .invh-seller .invh-tax-row>div:last-child{
+  white-space:nowrap!important;
+}
+.paper-invoice .invh-contact{
+  left:0!important;
+  margin-left:0!important;
+  padding-left:0!important;
+}
+.paper-invoice .invh-contact-row{
+  grid-template-columns:4.3mm minmax(0,1fr)!important;
+  column-gap:1mm!important;
+}
+.paper-invoice .inv-party-row{
+  display:grid!important;
+  grid-template-columns:34mm minmax(0,1fr)!important;
+  column-gap:1.2mm!important;
+  align-items:start!important;
+}
+.paper-invoice .inv-party-row>b{
+  width:auto!important;
+  margin:0!important;
+  padding:0!important;
+  text-align:right!important;
+  white-space:nowrap!important;
+  font-size:7.55pt!important;
+  line-height:1.35!important;
+}
+.paper-invoice .inv-party-row>div{
+  min-width:0!important;
+  margin:0!important;
+  padding:0!important;
+  font-size:7.55pt!important;
+  line-height:1.35!important;
+}
+</style>
+<meta name="sante-build-r29" content="INVOICE-HEADER-ALIGNMENT">
+
 </head>
 <body>
 <div id="loading" class="loading">กำลังโหลดเอกสารบัญชี...</div>
