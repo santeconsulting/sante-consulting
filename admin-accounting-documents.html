@@ -1107,6 +1107,32 @@ label{display:block;font-size:11px;font-weight:600;margin-bottom:5px}.input,text
 </style>
 <meta name="sante-build-r29" content="INVOICE-HEADER-ALIGNMENT">
 
+
+<style id="sante-accounting-r31-final-match">
+.paper-invoice .invh{grid-template-columns:20mm minmax(72mm,1.34fr) minmax(48mm,.92fr) 60mm!important;column-gap:4.2mm!important;align-items:start!important;padding-bottom:4.8mm!important}
+.paper-invoice .invh-logo-cell{padding-top:.2mm!important}
+.paper-invoice .invh-logo{width:18.5mm!important;height:23.5mm!important;max-width:18.5mm!important;max-height:23.5mm!important;object-fit:contain!important;object-position:left top!important}
+.paper-invoice .invh-seller{row-gap:1.1mm!important;font-size:8pt!important;line-height:1.42!important}
+.paper-invoice .invh-seller .invh-row,.paper-invoice .invh-seller .invh-tax-row{grid-template-columns:33mm minmax(0,1fr)!important;column-gap:1.6mm!important;align-items:start!important}
+.paper-invoice .invh-seller .invh-label,.paper-invoice .invh-seller .invh-tax-row .invh-label{text-align:right!important;white-space:nowrap!important;font-size:7.85pt!important;line-height:1.42!important}
+.paper-invoice .invh-company,.paper-invoice .invh-company>div,.paper-invoice .invh-address,.paper-invoice .invh-address>div,.paper-invoice .invh-tax-row>div:last-child{font-size:7.95pt!important;line-height:1.42!important;white-space:nowrap!important}
+.paper-invoice .invh-contact{margin-left:4mm!important;padding-left:0!important;position:static!important;left:auto!important;row-gap:1.25mm!important;font-size:7.45pt!important;line-height:1.38!important}
+.paper-invoice .invh-contact-row{grid-template-columns:4.5mm minmax(0,1fr)!important;column-gap:1.2mm!important}
+.paper-invoice .invh-contact-row span:last-child{font-size:7.25pt!important;white-space:nowrap!important}
+.paper-invoice .invh-copy{min-height:4.4mm!important;margin:0 0 1.35mm!important;line-height:1.1!important;white-space:nowrap!important}
+.paper-invoice .invh-title{margin:0 0 4.1mm!important;font-size:24pt!important;line-height:1.08!important;color:#07834a!important;white-space:nowrap!important}
+.paper-invoice .invh-docbox{padding:3.8mm 4.2mm!important;gap:1.5mm 2.2mm!important;font-size:7.7pt!important;background:#eaf7ef!important}
+.paper-invoice .inv-party{grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr)!important;gap:8mm!important;padding-top:4.2mm!important}
+.paper-invoice .inv-party-row{grid-template-columns:34mm minmax(0,1fr)!important;column-gap:1.2mm!important;font-size:7.7pt!important;line-height:1.4!important}
+.paper-invoice .inv-party-row>b{text-align:right!important;white-space:nowrap!important}
+.paper-invoice .inv-contact-row{display:grid!important;grid-template-columns:4.5mm minmax(0,1fr)!important;column-gap:1.2mm!important;font-size:7.7pt!important;line-height:1.4!important}
+.paper-invoice .inv-contact-title{font-size:7.8pt!important;line-height:1.4!important;margin-bottom:1.1mm!important;font-weight:700!important}
+.paper-invoice table thead th{font-size:7.9pt!important;line-height:1.3!important;padding:2.5mm 1.4mm!important}
+.paper-invoice table tbody td{font-size:7.9pt!important;line-height:1.42!important;padding:2.55mm 1.4mm!important}
+.paper-invoice .item-sub{display:none!important}
+.paper-invoice .summary-note{font-size:7.75pt!important;line-height:1.45!important}
+</style>
+<meta name="sante-build-r31" content="ACCOUNTING-FINAL-MATCH">
 </head>
 <body>
 <div id="loading" class="loading">กำลังโหลดเอกสารบัญชี...</div>
@@ -1837,6 +1863,7 @@ function paperHtml(x){
       <div class="inv-party-row inv-customer-name"><b>ลูกค้า :</b><div><b>${esc(x.organization_name||x.customer_name||"-")}</b></div></div>
       <div class="inv-party-row"><b>ที่อยู่ :</b><div>${esc(x.billing_address||"-")}</div></div>
       <div class="inv-party-row"><b>เลขประจำตัวผู้เสียภาษี :</b><div>${esc(x.customer_tax_id||"-")} ${esc(x.customer_branch||"")}</div></div>
+      <div class="inv-party-row"><b>เรียน :</b><div>${esc(x.document_subject||"-")}</div></div>
     </div>
     <div class="inv-contact">
       <div class="inv-contact-title">ติดต่อกลับที่ :</div>
@@ -2086,4 +2113,23 @@ setTimeout(()=>{
 },15000);
 </script>
 
+
+<script id="sante-clean-stray-backslash-n-r31">
+(function(){
+  function clean(root){
+    if(!root||!root.childNodes)return;
+    [...root.childNodes].forEach(function(n){
+      if(n.nodeType===3 && /^\s*(?:\\n\s*)+$/.test(n.nodeValue||"")){
+        n.remove();
+      }
+    });
+  }
+  document.addEventListener('DOMContentLoaded', function(){
+    clean(document.body);
+    clean(document.documentElement);
+    const mo=new MutationObserver(function(){ clean(document.body); });
+    if(document.body) mo.observe(document.body,{childList:true});
+  });
+})();
+</script>
 </body></html>
