@@ -2607,6 +2607,7 @@ label{display:block;font-size:11px;font-weight:600;margin-bottom:5px}.input,text
 <meta name="sante-net-label-break-r3" content="FIXED-TWO-LINE-NET-LABEL">
 
 <meta name="sante-build-member-sync" content="ADMIN-ACCOUNTING-PDF-REPAIR-R4">
+<meta name="sante-build-taxid-validation" content="R5-TAXID-OPTIONAL-NONBLOCKING">
 </head>
 <body>
 <div id="loading" class="loading">กำลังโหลดเอกสารบัญชี...</div>
@@ -3584,8 +3585,6 @@ function validateBeforeIssue(x){
  const warnings=[];
  if(!String(x.organization_name||x.customer_name||"").trim())warnings.push("ไม่มีชื่อลูกค้า/บริษัท");
  if(!String(x.billing_address||"").trim())warnings.push("ไม่มีที่อยู่ลูกค้า");
- const tax=String(x.customer_tax_id||"").replace(/\D/g,"");
- if(x.customer_tax_id&&tax.length!==13)warnings.push("เลขประจำตัวผู้เสียภาษีลูกค้าไม่ครบ 13 หลัก");
  const its=Array.isArray(x.items)?x.items:[];
  if(!its.length)warnings.push("ไม่มีรายการสินค้า/บริการ");
  if(its.some(i=>!String(i.description||"").trim()))warnings.push("มีรายการที่ไม่มีรายละเอียดสินค้า/บริการ");
