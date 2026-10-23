@@ -1617,6 +1617,243 @@ label{display:block;font-size:11px;font-weight:600;margin-bottom:5px}.input,text
 </style>
 <meta name="sante-build-r36" content="ACCOUNTING-PDF-MATCH-MASTER">
 
+
+<style id="sante-final-invoice-master-match">
+/* FINAL MASTER MATCH — lower half of Invoice follows Quotation.
+   Header/customer geometry from R36 is intentionally preserved. */
+
+/* Table column proportions exactly follow quotation. */
+.paper-invoice table{table-layout:fixed!important}
+.paper-invoice th.desc-col,.paper-invoice td.desc-col{width:55%!important}
+.paper-invoice th.qty-col,.paper-invoice td.qty-col{width:8%!important}
+.paper-invoice th.unit-col,.paper-invoice td.unit-col{width:8%!important}
+.paper-invoice th.price-col,.paper-invoice td.price-col{width:9%!important}
+.paper-invoice th.disc-col,.paper-invoice td.disc-col{width:8%!important}
+.paper-invoice th.vat-col,.paper-invoice td.vat-col{width:5%!important}
+.paper-invoice th.amount-col,.paper-invoice td.amount-col{width:10%!important}
+
+/* Summary uses the same two-column rhythm as quotation. */
+.paper-invoice .totals-wrap{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) minmax(72mm,.95fr)!important;
+  gap:7mm!important;
+  margin-top:0!important;
+  padding-top:2.5mm!important;
+  border-top:1px solid #d8d9de!important;
+}
+.paper-invoice .invoice-summary-left{
+  display:grid!important;
+  grid-template-columns:15mm minmax(0,1fr) 27mm!important;
+  gap:1.3mm 2mm!important;
+  align-content:start!important;
+  font-size:8pt!important;
+  line-height:1.4!important;
+}
+.paper-invoice .totals{
+  width:auto!important;
+  margin:0!important;
+}
+.paper-invoice .total-row.grand{
+  display:flex!important;
+  justify-content:space-between!important;
+  align-items:center!important;
+  gap:4mm!important;
+  margin:0!important;
+  padding:4mm 3.5mm!important;
+  border:0!important;
+  border-radius:1.5mm!important;
+  background:#e4f4e9!important;
+  color:#176b3a!important;
+  font-size:9.5pt!important;
+  line-height:1.25!important;
+}
+.paper-invoice .total-row.grand span:last-child{
+  font-size:15pt!important;
+  font-weight:800!important;
+  white-space:nowrap!important;
+}
+.paper-invoice .totals>.total-row:not(.grand):not(.paid-row){
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) 34mm!important;
+  gap:2.5mm!important;
+  align-items:center!important;
+  padding:1.2mm 0!important;
+  font-size:8.15pt!important;
+}
+.paper-invoice .totals>.total-row:not(.grand):not(.paid-row)>:last-child{
+  text-align:right!important;
+  white-space:nowrap!important;
+}
+.paper-invoice .paid-row{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) 36mm!important;
+  gap:2.5mm!important;
+  align-items:center!important;
+  margin-top:1mm!important;
+  padding:2mm 0 1mm!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+}
+.paper-invoice .paid-row b:first-child{
+  font-size:8.9pt!important;
+  line-height:1.3!important;
+  white-space:nowrap!important;
+  color:#1b2736!important;
+}
+.paper-invoice .paid-row b:last-child{
+  text-align:right!important;
+  font-size:11.6pt!important;
+  line-height:1.25!important;
+  white-space:nowrap!important;
+  color:#16834a!important;
+}
+.paper-invoice .amount-words{
+  margin-top:.8mm!important;
+  text-align:right!important;
+  font-size:8.8pt!important;
+  line-height:1.4!important;
+  font-weight:600!important;
+  color:#263b51!important;
+}
+
+/* Payment block matches quotation payment block. */
+.paper-invoice .inv-payment{
+  margin-top:4mm!important;
+  padding:3.2mm 0!important;
+  border-top:1px solid #d8d9de!important;
+  border-bottom:1px solid #d8d9de!important;
+  display:grid!important;
+  grid-template-columns:19mm minmax(0,1fr)!important;
+  gap:3mm!important;
+  align-items:center!important;
+  font-size:8.2pt!important;
+  line-height:1.5!important;
+}
+.paper-invoice .inv-payment-title{
+  font-size:8.2pt!important;
+  font-weight:700!important;
+  color:#17283d!important;
+}
+.paper-invoice .inv-payment-bank{
+  display:flex!important;
+  align-items:center!important;
+  gap:3mm!important;
+  font-size:8.2pt!important;
+  line-height:1.5!important;
+}
+.paper-invoice .payment-bank-logo{
+  width:11.5mm!important;
+  height:11.5mm!important;
+  flex:0 0 11.5mm!important;
+  object-fit:contain!important;
+}
+
+/* Payment terms occupies the quotation note slot. */
+.paper-invoice .invoice-terms{
+  margin:0!important;
+  padding:3mm 0!important;
+  border-top:0!important;
+  border-bottom:1px solid #d8d9de!important;
+  display:grid!important;
+  grid-template-columns:38mm minmax(0,1fr)!important;
+  gap:3mm!important;
+  min-height:12mm!important;
+  align-items:start!important;
+  font-size:8.2pt!important;
+  line-height:1.5!important;
+  color:#1b2736!important;
+}
+
+/* Certification: use Invoice's clean line concept, standardized across all 5 cells. */
+.paper-invoice .signature-area{
+  margin-top:3mm!important;
+  padding-top:3mm!important;
+  border-top:1px solid #d8d9de!important;
+}
+.paper-invoice .signature-header{
+  margin:0 0 1.5mm!important;
+  font-size:8.5pt!important;
+  font-weight:800!important;
+  color:#17283d!important;
+}
+.paper-invoice .signature-grid{
+  display:grid!important;
+  grid-template-columns:repeat(5,minmax(0,1fr))!important;
+  gap:3mm!important;
+  align-items:end!important;
+}
+.paper-invoice .signature-box{
+  min-height:32mm!important;
+  display:grid!important;
+  grid-template-rows:18mm minmax(12mm,auto)!important;
+  align-items:end!important;
+  justify-items:stretch!important;
+  text-align:center!important;
+  font-size:7.2pt!important;
+  color:#1f3145!important;
+}
+.paper-invoice .signature-space,
+.paper-invoice .seal-box,
+.paper-invoice .customer-stamp-box{
+  width:100%!important;
+  height:18mm!important;
+  display:flex!important;
+  align-items:flex-end!important;
+  justify-content:center!important;
+  margin:0!important;
+  border:0!important;
+  background:transparent!important;
+}
+.paper-invoice .seal-box{align-items:center!important}
+.paper-invoice .sign-img{
+  display:block!important;
+  width:auto!important;
+  height:10mm!important;
+  max-width:30mm!important;
+  max-height:10mm!important;
+  object-fit:contain!important;
+  object-position:center bottom!important;
+  margin:0 auto 1mm!important;
+}
+.paper-invoice .seal-mark-img{
+  width:18mm!important;
+  height:18mm!important;
+  max-width:18mm!important;
+  max-height:18mm!important;
+  object-fit:contain!important;
+}
+.paper-invoice .customer-stamp-box{
+  /* User requested no visible customer signature/stamp frame. */
+  border:0!important;
+  outline:0!important;
+  box-shadow:none!important;
+}
+.paper-invoice .signature-line{
+  width:100%!important;
+  min-height:12mm!important;
+  border-top:1px solid #7b8c9d!important;
+  padding:1.5mm 0 0!important;
+  margin:0!important;
+  text-align:center!important;
+  line-height:1.42!important;
+  color:#1f3145!important;
+}
+.paper-invoice .signature-line b{
+  display:block!important;
+  margin:0 0 .5mm!important;
+  font-weight:700!important;
+}
+.paper-invoice .footer-sign-note{
+  margin-top:1.5mm!important;
+  text-align:center!important;
+  font-size:7.1pt!important;
+  line-height:1.45!important;
+  color:#53687d!important;
+}
+</style>
+<meta name="sante-final-build" content="INVOICE-FINAL-MASTER-MATCH">
+
 </head>
 <body>
 <div id="loading" class="loading">กำลังโหลดเอกสารบัญชี...</div>
@@ -2427,15 +2664,15 @@ function paperHtml(x){
      ${x.note?esc(x.note):(isCreditNote?"กรุณาตรวจสอบเอกสารอ้างอิง เหตุผลการลดหนี้ และยอดภาษีก่อนออกเอกสาร":"กรุณาตรวจสอบชื่อ/ที่อยู่ เลขประจำตัวผู้เสียภาษี และยอดเงินก่อนนำเอกสารไปใช้งาน")}
    </div>`}
    <div class="totals">
-    <div class="total-row"><span>${isCreditNote?"มูลค่าที่ลดก่อน VAT":"มูลค่าก่อน VAT"}</span><span>${money(x.subtotal)} บาท</span></div>
-    <div class="total-row"><span>${isCreditNote?"ภาษีมูลค่าเพิ่มที่ลด":"ภาษีมูลค่าเพิ่ม"} ${rateText(x.vat_rate??7)}%</span><span>${money(x.vat_amount)} บาท</span></div>
+    ${isInvoice?"":`<div class="total-row"><span>${isCreditNote?"มูลค่าที่ลดก่อน VAT":"มูลค่าก่อน VAT"}</span><span>${money(x.subtotal)} บาท</span></div>
+    <div class="total-row"><span>${isCreditNote?"ภาษีมูลค่าเพิ่มที่ลด":"ภาษีมูลค่าเพิ่ม"} ${rateText(x.vat_rate??7)}%</span><span>${money(x.vat_amount)} บาท</span></div>`}
     <div class="total-row grand"><span>${isCreditNote?"รวมมูลค่าลดหนี้":"จำนวนเงินทั้งสิ้น"}</span><span>${money(x.grand_total)} บาท</span></div>
     ${Number(x.wht_amount||0)>0?`<div class="total-row"><span>หัก ณ ที่จ่าย ${rateText(x.wht_rate||0)}%${isInvoice?" (กรณีเข้าหลักเกณฑ์)":""}</span><span>${money(x.wht_amount)} บาท</span></div><div class="total-row paid-row"><b>${isInvoice?"ยอดชำระสุทธิ (กรณีหัก ณ ที่จ่าย)":"จำนวนเงินที่ชำระสุทธิ"}</b><b>${money(x.net_receivable)} บาท</b></div><div class="amount-words">(${thaiBahtText(x.net_receivable)})</div>`:`<div class="amount-words">(${thaiBahtText(isReceipt?receiveAmount:x.grand_total)})</div>`}
     ${isReceipt?`<div class="total-row paid-row"><b>ยอดรับเงินจริง</b><b>${money(receiveAmount)} บาท</b></div>`:""}
    </div>
   </div>
-  ${isInvoice?`<div class="invoice-terms"><b>เงื่อนไขการชำระเงิน :</b> ${esc(invoiceTerms)}</div>`:""}
-  ${isInvoice?`<div class="inv-payment"><div class="inv-payment-title">ชำระเงิน</div><div class="inv-payment-bank"><img class="payment-bank-logo" src="${KBANK_LOGO_URI}" alt="Kasikornbank"><div><b>${SANTE.bank}</b><br>ชื่อบัญชี ${SANTE.bankName} · เลขบัญชี ${SANTE.bankAccount}</div></div></div>`:""}
+  ${isInvoice?`<div class="inv-payment"><div class="inv-payment-title">▣ ชำระเงิน</div><div class="inv-payment-bank"><img class="payment-bank-logo" src="${KBANK_LOGO_URI}" alt="Kasikornbank"><div><b>${SANTE.bank}</b><br>ชื่อบัญชี ${SANTE.bankName} · เลขบัญชี ${SANTE.bankAccount}</div></div></div>`:""}
+  ${isInvoice?`<div class="invoice-terms"><div><b>● เงื่อนไขการชำระเงิน</b></div><div>${esc(invoiceTerms)}</div></div>`:""}
   ${isReceipt?`<div class="payment-box"><div class="payment-title">การชำระเงิน / PAYMENT</div><div class="payment-grid"><div class="payment-item"><div class="payment-bank"><img class="payment-bank-logo" src="${KBANK_LOGO_URI}" alt="Kasikornbank"><div><b>${SANTE.bank}</b><br>ชื่อบัญชี ${SANTE.bankName}<br>เลขบัญชี ${SANTE.bankAccount}</div></div></div><div class="payment-item">วันที่ชำระ: ${esc(x.payment_date||x.issue_date||"-")}<br>Payment No.: ${esc(paymentNo)}</div><div class="payment-item">จำนวนเงินที่ชำระ: ${money(receiveAmount)} บาท<div class="payment-words">(${thaiBahtText(receiveAmount)})</div></div></div></div>`:""}
   <div class="signature-area">
    <div class="signature-header">♧ รับรอง</div>

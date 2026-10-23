@@ -4648,6 +4648,92 @@ textarea{
 </style>
 <meta name="sante-build-r44" content="QUOTATION-FINAL-MASTER">
 
+
+<style id="sante-final-quotation-signature-standard">
+/* FINAL — only certification/signature area. Quotation layout above remains master. */
+.reference-qo .ref-cert{
+  grid-template-columns:repeat(5,minmax(0,1fr))!important;
+  gap:3mm!important;
+  align-items:end!important;
+}
+.reference-qo .ref-cert-label{
+  grid-column:1/-1!important;
+  text-align:left!important;
+  margin:0 0 1.5mm!important;
+}
+.reference-qo .ref-cert-note{
+  margin-top:.8mm!important;
+  font-weight:400!important;
+  line-height:1.45!important;
+}
+.reference-qo .ref-cert-cell{
+  min-height:32mm!important;
+  display:grid!important;
+  grid-template-rows:18mm minmax(12mm,auto)!important;
+  align-items:end!important;
+  justify-items:stretch!important;
+  text-align:center!important;
+}
+.reference-qo .ref-signature{
+  align-self:end!important;
+  justify-self:center!important;
+  width:auto!important;
+  height:10mm!important;
+  max-width:30mm!important;
+  max-height:10mm!important;
+  margin:0 auto 1mm!important;
+  object-fit:contain!important;
+  object-position:center bottom!important;
+}
+.reference-qo .ref-stamp-frame{
+  width:100%!important;
+  height:18mm!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  overflow:visible!important;
+  background:transparent!important;
+}
+.reference-qo .ref-stamp{
+  width:18mm!important;
+  height:18mm!important;
+  max-width:18mm!important;
+  max-height:18mm!important;
+  object-fit:contain!important;
+  transform:none!important;
+}
+.reference-qo .ref-empty-box{
+  width:100%!important;
+  height:18mm!important;
+  border:0!important;
+  background:transparent!important;
+}
+/* Every signing/stamp cell gets the exact same line. */
+.reference-qo .ref-cert-caption{
+  width:100%!important;
+  min-height:12mm!important;
+  border-top:1px solid #7b8c9d!important;
+  padding-top:1.5mm!important;
+  margin:0!important;
+  text-align:center!important;
+  font-size:7.2pt!important;
+  line-height:1.42!important;
+  color:#1f3145!important;
+}
+.reference-qo .ref-cert-caption b,
+.reference-qo .ref-customer-name{
+  display:block!important;
+  margin:0 0 .5mm!important;
+}
+.reference-qo .ref-cert-date{
+  display:block!important;
+  margin-top:.6mm!important;
+  font-size:6.9pt!important;
+  color:#53687d!important;
+}
+</style>
+<meta name="sante-final-build" content="QUOTATION-FINAL-SIGNATURE-STANDARD">
+
 </head>
 <body>
 
