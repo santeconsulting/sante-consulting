@@ -5340,6 +5340,91 @@ textarea{
 </style>
 <meta name="sante-final-master-components" content="2026-10-23">
 
+
+<style id="sante-summary-r2-identical-geometry">
+/* R2 — Quotation and Invoice summary use the exact same geometry. */
+.reference-qo .master-summary,
+.paper-invoice .master-summary{
+  grid-template-columns:minmax(0,1fr) 82mm!important;
+  gap:7mm!important;
+}
+.reference-qo .master-summary-right,
+.paper-invoice .master-summary-right{
+  width:82mm!important;
+  min-width:82mm!important;
+  max-width:82mm!important;
+}
+.reference-qo .master-total-box,
+.reference-qo .master-net-box,
+.paper-invoice .master-total-box,
+.paper-invoice .master-net-box{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) 31mm 8mm!important;
+  column-gap:2mm!important;
+  align-items:center!important;
+  min-height:15mm!important;
+  padding:3.2mm 3.5mm!important;
+  border-radius:1.5mm!important;
+  box-sizing:border-box!important;
+}
+.reference-qo .master-total-line,
+.paper-invoice .master-total-line{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) 31mm 8mm!important;
+  column-gap:2mm!important;
+  align-items:center!important;
+  min-height:8mm!important;
+  padding:1.2mm 0!important;
+  box-sizing:border-box!important;
+  font-size:7.9pt!important;
+  line-height:1.35!important;
+}
+.reference-qo .master-total-label,
+.paper-invoice .master-total-label{
+  min-width:0!important;
+  max-width:100%!important;
+  line-height:1.35!important;
+  overflow-wrap:normal!important;
+  word-break:normal!important;
+}
+.reference-qo .master-total-box .master-total-label,
+.reference-qo .master-net-box .master-total-label,
+.paper-invoice .master-total-box .master-total-label,
+.paper-invoice .master-net-box .master-total-label{
+  font-size:7.9pt!important;
+  font-weight:600!important;
+}
+.reference-qo .master-total-amount,
+.paper-invoice .master-total-amount{
+  text-align:right!important;
+  white-space:nowrap!important;
+  font-size:14.5pt!important;
+  line-height:1.05!important;
+}
+.reference-qo .master-total-amount-small,
+.paper-invoice .master-total-amount-small{
+  font-size:8.2pt!important;
+  line-height:1.35!important;
+  font-weight:400!important;
+}
+.reference-qo .master-total-unit,
+.paper-invoice .master-total-unit{
+  text-align:right!important;
+  white-space:nowrap!important;
+  font-size:7.9pt!important;
+}
+.reference-qo .master-paid-words,
+.paper-invoice .master-paid-words{
+  margin-top:2mm!important;
+  min-height:5mm!important;
+  text-align:right!important;
+  font-size:8.3pt!important;
+  line-height:1.4!important;
+  font-weight:600!important;
+}
+</style>
+<meta name="sante-summary-r2" content="IDENTICAL-GEOMETRY">
+
 </head>
 <body>
 
@@ -5912,13 +5997,13 @@ function renderPaper(c){
 
         ${showWht?.checked?`
         <div class="master-total-line">
-          <span class="master-total-label">จำนวนเงินที่ถูกหัก ณ ที่จ่าย</span>
+          <span class="master-total-label">หัก ณ ที่จ่าย ${whtRate.value}%</span>
           <span class="master-total-amount master-total-amount-small">${money(c.wht)}</span>
           <span class="master-total-unit">บาท</span>
         </div>`:""}
 
         <div class="master-net-box">
-          <span class="master-total-label">${showWht?.checked?"ยอดชำระสุทธิหลังหัก ณ ที่จ่าย":"ยอดชำระสุทธิ"}</span>
+          <span class="master-total-label">${showWht?.checked?"ยอดชำระสุทธิหลังหัก ณ ที่จ่าย":"ยอดสุทธิ"}</span>
           <strong class="master-total-amount">${money(c.net)}</strong>
           <span class="master-total-unit">บาท</span>
         </div>
@@ -6068,6 +6153,8 @@ function closeEditor(){editor.classList.remove("show")}
 async function printQuotation(){
   recalc();
 
+  const quotationCode=(quotationNo.textContent.split(" · ")[0]||"QUOTATION").trim();
+  const pdfFilename=quotationCode.replace(/[^A-Za-z0-9_-]/g,"_")||"QUOTATION";
   const source=document.getElementById("paper");
   if(!source)return alert("ไม่พบตัวอย่างเอกสาร");
 
@@ -6094,6 +6181,7 @@ async function printQuotation(){
   <html lang="th">
   <head>
     <meta charset="utf-8">
+    <title>${pdfFilename}</title>
     ${fontLinks}
     ${styleMarkup}
     <style id="quotation-print-isolation">

@@ -2511,6 +2511,91 @@ label{display:block;font-size:11px;font-weight:600;margin-bottom:5px}.input,text
 </style>
 <meta name="sante-final-master-components" content="2026-10-23">
 
+
+<style id="sante-summary-r2-identical-geometry">
+/* R2 — Quotation and Invoice summary use the exact same geometry. */
+.reference-qo .master-summary,
+.paper-invoice .master-summary{
+  grid-template-columns:minmax(0,1fr) 82mm!important;
+  gap:7mm!important;
+}
+.reference-qo .master-summary-right,
+.paper-invoice .master-summary-right{
+  width:82mm!important;
+  min-width:82mm!important;
+  max-width:82mm!important;
+}
+.reference-qo .master-total-box,
+.reference-qo .master-net-box,
+.paper-invoice .master-total-box,
+.paper-invoice .master-net-box{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) 31mm 8mm!important;
+  column-gap:2mm!important;
+  align-items:center!important;
+  min-height:15mm!important;
+  padding:3.2mm 3.5mm!important;
+  border-radius:1.5mm!important;
+  box-sizing:border-box!important;
+}
+.reference-qo .master-total-line,
+.paper-invoice .master-total-line{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) 31mm 8mm!important;
+  column-gap:2mm!important;
+  align-items:center!important;
+  min-height:8mm!important;
+  padding:1.2mm 0!important;
+  box-sizing:border-box!important;
+  font-size:7.9pt!important;
+  line-height:1.35!important;
+}
+.reference-qo .master-total-label,
+.paper-invoice .master-total-label{
+  min-width:0!important;
+  max-width:100%!important;
+  line-height:1.35!important;
+  overflow-wrap:normal!important;
+  word-break:normal!important;
+}
+.reference-qo .master-total-box .master-total-label,
+.reference-qo .master-net-box .master-total-label,
+.paper-invoice .master-total-box .master-total-label,
+.paper-invoice .master-net-box .master-total-label{
+  font-size:7.9pt!important;
+  font-weight:600!important;
+}
+.reference-qo .master-total-amount,
+.paper-invoice .master-total-amount{
+  text-align:right!important;
+  white-space:nowrap!important;
+  font-size:14.5pt!important;
+  line-height:1.05!important;
+}
+.reference-qo .master-total-amount-small,
+.paper-invoice .master-total-amount-small{
+  font-size:8.2pt!important;
+  line-height:1.35!important;
+  font-weight:400!important;
+}
+.reference-qo .master-total-unit,
+.paper-invoice .master-total-unit{
+  text-align:right!important;
+  white-space:nowrap!important;
+  font-size:7.9pt!important;
+}
+.reference-qo .master-paid-words,
+.paper-invoice .master-paid-words{
+  margin-top:2mm!important;
+  min-height:5mm!important;
+  text-align:right!important;
+  font-size:8.3pt!important;
+  line-height:1.4!important;
+  font-weight:600!important;
+}
+</style>
+<meta name="sante-summary-r2" content="IDENTICAL-GEOMETRY">
+
 </head>
 <body>
 <div id="loading" class="loading">กำลังโหลดเอกสารบัญชี...</div>
@@ -3040,6 +3125,7 @@ function openPreview(id){
  $("previewBg").classList.add("show");
 }
 async function printAccountingPreview(){
+ const printCode=(previewing?.document_no||"DOCUMENT").replace(/[^A-Za-z0-9_-]/g,"_")||"DOCUMENT";
  const source=document.querySelector("#previewPaper .paper");
  if(!source)return alert("ไม่พบตัวอย่างเอกสาร");
  const iframe=document.createElement("iframe");
@@ -3050,7 +3136,7 @@ async function printAccountingPreview(){
  const styleMarkup=[...document.querySelectorAll("style")].map(s=>s.outerHTML).join("\n");
  const fontLinks=[...document.querySelectorAll('link[rel="stylesheet"]')].map(l=>l.outerHTML).join("\n");
  doc.open();
- doc.write(`<!doctype html><html lang="th"><head><meta charset="utf-8">${fontLinks}${styleMarkup}
+ doc.write(`<!doctype html><html lang="th"><head><meta charset="utf-8"><title>${printCode}</title>${fontLinks}${styleMarkup}
  <style id="accounting-print-isolation-r23">
  html,body{margin:0!important;padding:0!important;width:210mm!important;min-height:297mm!important;background:#fff!important;overflow:visible!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;color-adjust:exact!important}
  body>.paper{display:block!important;position:relative!important;margin:0!important;box-shadow:none!important;transform:none!important;zoom:1!important;width:210mm!important;min-width:210mm!important;max-width:210mm!important;min-height:297mm!important;page-break-after:avoid!important;break-after:avoid-page!important}
@@ -3351,7 +3437,7 @@ function paperHtml(x){
       </div>`:""}
 
       <div class="master-net-box">
-        <span class="master-total-label">${Number(x.wht_amount||0)>0?"ยอดชำระสุทธิ (กรณีหัก ณ ที่จ่าย)":"ยอดชำระสุทธิ"}</span>
+        <span class="master-total-label">${Number(x.wht_amount||0)>0?"ยอดชำระสุทธิหลังหัก ณ ที่จ่าย":"ยอดสุทธิ"}</span>
         <strong class="master-total-amount">${money(Number(x.wht_amount||0)>0?x.net_receivable:x.grand_total)}</strong>
         <span class="master-total-unit">บาท</span>
       </div>
@@ -3474,7 +3560,8 @@ async function generateBlob(x){
  const stage=$("printStage");stage.innerHTML=paperHtml(x);
  await new Promise(r=>setTimeout(r,250));
  const element=stage.firstElementChild;
- const opt={margin:0,filename:(x.document_no||"document")+".pdf",image:{type:"jpeg",quality:.98},html2canvas:{scale:3,useCORS:true,backgroundColor:"#ffffff"},jsPDF:{unit:"px",format:[794,1123],orientation:"portrait"}};
+ const pdfFilename=((x.document_no||"document").replace(/[^A-Za-z0-9_-]/g,"_")||"document")+".pdf";
+ const opt={margin:0,filename:pdfFilename,image:{type:"jpeg",quality:.98},html2canvas:{scale:3,useCORS:true,backgroundColor:"#ffffff"},jsPDF:{unit:"px",format:[794,1123],orientation:"portrait"}};
  const worker=html2pdf().set(opt).from(element).toPdf();
  const pdf=await worker.get("pdf");
  return pdf.output("blob");
@@ -3513,7 +3600,7 @@ async function issueOne(id,silent=false){
   if(up.error)throw up.error;
   const fin=await db.rpc("admin_finalize_accounting_document",{
     p_document_id:x.id,p_storage_bucket:BUCKET,p_storage_path:path,
-    p_original_filename:`${x.document_no||safe}.pdf`,p_file_size_bytes:blob.size
+    p_original_filename:`${(x.document_no||safe).replace(/[^A-Za-z0-9_-]/g,"_")}.pdf`,p_file_size_bytes:blob.size
   });
   if(fin.error)throw fin.error;
   await loadDocs();
