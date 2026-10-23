@@ -1537,6 +1537,86 @@ label{display:block;font-size:11px;font-weight:600;margin-bottom:5px}.input,text
 </style>
 <meta name="sante-build-r35" content="ACCOUNTING-LINE-RHYTHM-LOCK">
 
+
+<style id="sante-accounting-r36-pdf-match-master">
+/* R36 — based on rendered PDF comparison against quotation master.
+   Only Invoice visual rhythm/color is adjusted; data/workflow is untouched. */
+
+/* Main document text should use the same dark tone as quotation. */
+.paper.paper-invoice{color:#1b2736!important}
+.paper-invoice .invh-seller,
+.paper-invoice .inv-party,
+.paper-invoice .inv-contact,
+.paper-invoice table,
+.paper-invoice .totals-wrap,
+.paper-invoice .invoice-terms,
+.paper-invoice .inv-payment,
+.paper-invoice .signature-area{color:#1b2736!important}
+.paper-invoice .invh-seller .invh-label,
+.paper-invoice .inv-party-row>b,
+.paper-invoice .inv-contact-title,
+.paper-invoice .invoice-summary-left .sum-icon{color:#17283d!important}
+.paper-invoice table thead th{color:#20253a!important}
+.paper-invoice .invoice-summary-left,
+.paper-invoice .invoice-summary-left>div,
+.paper-invoice .summary-note{color:#1b2736!important}
+
+/* The invoice document-side block renders slightly taller in PDF.
+   Reduce only the bottom clearance so the divider aligns to quotation. */
+.paper-invoice .invh{padding-bottom:2.8mm!important}
+
+/* IMPORTANT: quotation master retains row margins.
+   Restore them here; R35 incorrectly zeroed these margins. */
+.paper-invoice .inv-party-row{
+  margin:.8mm 0!important;
+  padding:0!important;
+  line-height:1.42!important;
+}
+.paper-invoice .inv-contact-row{
+  margin:1mm 0!important;
+  padding:0!important;
+  line-height:1.42!important;
+}
+.paper-invoice .inv-contact-title{
+  margin-top:0!important;
+  margin-bottom:1.3mm!important;
+  line-height:1.4!important;
+}
+
+/* Match quotation's customer/contact visual density. */
+.paper-invoice .inv-party{padding-top:4mm!important}
+.paper-invoice .inv-party-row>b,
+.paper-invoice .inv-party-row>div,
+.paper-invoice .inv-party-row>div>b{line-height:1.42!important}
+.paper-invoice .inv-contact-row>span{line-height:1.42!important}
+
+/* Match table text emphasis to quotation. */
+.paper-invoice td.desc-col .item-no{color:#646b78!important}
+.paper-invoice td.desc-col .item-main{color:#161e2a!important}
+.paper-invoice table tbody td{color:#1b2736!important}
+
+/* Match summary text sizes/weight/color more closely to quotation. */
+.paper-invoice .invoice-summary-left{
+  font-size:8pt!important;
+  line-height:1.4!important;
+  row-gap:1.3mm!important;
+  column-gap:2mm!important;
+}
+.paper-invoice .invoice-summary-left .sum-icon{font-weight:700!important}
+.paper-invoice .invoice-summary-left .sum-amount{color:#1b2736!important}
+.paper-invoice .total-row{color:#1b2736!important}
+.paper-invoice .amount-words{color:#263b51!important}
+
+/* Keep Invoice-only green accents. */
+.paper-invoice .invh-title{color:#07834a!important}
+.paper-invoice .invh-docbox,
+.paper-invoice table thead th{background:#eaf7ef!important}
+.paper-invoice .total-row.grand{background:#e4f4e9!important;color:#176b3a!important}
+.paper-invoice .paid-row{background:#eff9f2!important}
+.paper-invoice .paid-row b:last-child{color:#16834a!important}
+</style>
+<meta name="sante-build-r36" content="ACCOUNTING-PDF-MATCH-MASTER">
+
 </head>
 <body>
 <div id="loading" class="loading">กำลังโหลดเอกสารบัญชี...</div>
