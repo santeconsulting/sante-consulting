@@ -1854,6 +1854,198 @@ label{display:block;font-size:11px;font-weight:600;margin-bottom:5px}.input,text
 </style>
 <meta name="sante-final-build" content="INVOICE-FINAL-MASTER-MATCH">
 
+
+<style id="sante-final-six-groups-invoice">
+/* FINAL 6 GROUPS — Invoice uses the same master geometry as Quotation. */
+
+/* 1. ITEM TABLE */
+.paper-invoice table{table-layout:fixed!important;width:100%!important}
+.paper-invoice table th,
+.paper-invoice table td{box-sizing:border-box!important}
+.paper-invoice table th.desc-col,.paper-invoice table td.desc-col{width:53%!important}
+.paper-invoice table th.qty-col,.paper-invoice table td.qty-col{width:8%!important}
+.paper-invoice table th.unit-col,.paper-invoice table td.unit-col{width:8%!important}
+.paper-invoice table th.price-col,.paper-invoice table td.price-col{width:9%!important}
+.paper-invoice table th.disc-col,.paper-invoice table td.disc-col{width:7%!important}
+.paper-invoice table th.vat-col,.paper-invoice table td.vat-col{width:5%!important}
+.paper-invoice table th.amount-col,.paper-invoice table td.amount-col{width:10%!important}
+.paper-invoice table th.amount-col{
+  white-space:nowrap!important;
+  font-size:7.75pt!important;
+}
+.paper-invoice table th:nth-child(n+2),
+.paper-invoice table td:nth-child(n+2){text-align:center!important}
+.paper-invoice table th.price-col,
+.paper-invoice table th.disc-col,
+.paper-invoice table th.amount-col,
+.paper-invoice table td.price-col,
+.paper-invoice table td.disc-col,
+.paper-invoice table td.amount-col{text-align:right!important}
+
+/* 2. TOP CONTACT — exact quotation rhythm */
+.paper-invoice .invh-contact{
+  margin-left:3.2mm!important;
+  row-gap:1.25mm!important;
+  line-height:1.35!important;
+}
+.paper-invoice .invh-contact-row{
+  grid-template-columns:4mm minmax(0,1fr)!important;
+  column-gap:1mm!important;
+  margin:0!important;
+  padding:0!important;
+  min-height:0!important;
+  line-height:1.35!important;
+}
+.paper-invoice .invh-contact-row>*{line-height:1.35!important}
+
+/* 3. CUSTOMER BLOCK — remove extra blank row effect */
+.paper-invoice .inv-party{
+  grid-template-columns:minmax(0,1.16fr) minmax(0,.84fr)!important;
+  gap:8mm!important;
+  padding-top:4mm!important;
+}
+.paper-invoice .inv-party-row{
+  grid-template-columns:32mm minmax(0,1fr)!important;
+  column-gap:1.4mm!important;
+  margin:0!important;
+  padding:0!important;
+  min-height:0!important;
+  font-size:7.7pt!important;
+  line-height:1.42!important;
+}
+.paper-invoice .inv-contact-title{
+  margin:0 0 1mm!important;
+  font-size:7.8pt!important;
+  line-height:1.4!important;
+}
+.paper-invoice .inv-contact-row{
+  grid-template-columns:4mm minmax(0,1fr)!important;
+  column-gap:1.1mm!important;
+  margin:0!important;
+  padding:0!important;
+  min-height:0!important;
+  font-size:7.7pt!important;
+  line-height:1.42!important;
+}
+
+/* 4. SUMMARY — same grid and vertical rhythm as quotation */
+.paper-invoice .totals-wrap{
+  grid-template-columns:minmax(0,1fr) 73mm!important;
+  gap:7mm!important;
+  margin-top:0!important;
+  padding-top:2.5mm!important;
+  border-top:1px solid #d8d9de!important;
+}
+.paper-invoice .invoice-summary-left{
+  grid-template-columns:15mm minmax(0,1fr) 30mm!important;
+  column-gap:3mm!important;
+  row-gap:1.3mm!important;
+  font-size:8pt!important;
+  line-height:1.4!important;
+}
+.paper-invoice .invoice-summary-left>div:nth-child(3n+2){
+  min-width:0!important;
+  white-space:nowrap!important;
+}
+.paper-invoice .total-row.grand{
+  min-height:14mm!important;
+  padding:4mm 3.5mm!important;
+}
+.paper-invoice .totals>.total-row:not(.grand):not(.paid-row){
+  padding:1.2mm 0!important;
+  font-size:8pt!important;
+  line-height:1.4!important;
+}
+.paper-invoice .totals>.total-row:not(.grand):not(.paid-row)>span:first-child{
+  white-space:nowrap!important;
+  font-size:7.7pt!important;
+}
+.paper-invoice .paid-row{
+  margin-top:0!important;
+  padding:1.2mm 0!important;
+  min-height:8mm!important;
+}
+.paper-invoice .amount-words{
+  margin-top:0!important;
+  line-height:1.4!important;
+}
+
+/* 5. PAYMENT / TERMS — same vertical slots as quotation */
+.paper-invoice .inv-payment{
+  min-height:15mm!important;
+  margin-top:3mm!important;
+  padding:3.2mm 0!important;
+  grid-template-columns:19mm minmax(0,1fr)!important;
+  align-items:center!important;
+}
+.paper-invoice .invoice-terms{
+  min-height:12mm!important;
+  margin:0!important;
+  padding:3mm 0!important;
+  grid-template-columns:38mm minmax(0,1fr)!important;
+  align-items:start!important;
+  line-height:1.5!important;
+}
+
+/* 6. CERTIFICATION — five identical baselines and lines */
+.paper-invoice .signature-area{
+  margin-top:3mm!important;
+  padding-top:3mm!important;
+}
+.paper-invoice .signature-grid{
+  grid-template-columns:repeat(5,minmax(0,1fr))!important;
+  gap:3mm!important;
+  align-items:end!important;
+}
+.paper-invoice .signature-box{
+  min-height:32mm!important;
+  display:grid!important;
+  grid-template-rows:18mm 12mm!important;
+  align-items:end!important;
+}
+.paper-invoice .signature-space,
+.paper-invoice .seal-box,
+.paper-invoice .customer-stamp-box{
+  width:100%!important;
+  height:18mm!important;
+  margin:0!important;
+  border:0!important;
+  outline:0!important;
+  box-shadow:none!important;
+  background:transparent!important;
+}
+.paper-invoice .sign-img{
+  height:10mm!important;
+  max-height:10mm!important;
+  max-width:30mm!important;
+  margin:0 auto 1mm!important;
+}
+.paper-invoice .seal-mark-img{
+  width:18mm!important;
+  height:18mm!important;
+  max-width:18mm!important;
+  max-height:18mm!important;
+}
+.paper-invoice .signature-line{
+  width:100%!important;
+  min-height:12mm!important;
+  border-top:1px solid #7b8c9d!important;
+  padding-top:1.5mm!important;
+  margin:0!important;
+  font-size:7.2pt!important;
+  line-height:1.42!important;
+  text-align:center!important;
+}
+.paper-invoice .footer-sign-note{
+  margin-top:1.5mm!important;
+  font-size:7.1pt!important;
+  line-height:1.45!important;
+  text-align:center!important;
+  color:#53687d!important;
+}
+</style>
+<meta name="sante-final-six-groups" content="INVOICE-LOCKED">
+
 </head>
 <body>
 <div id="loading" class="loading">กำลังโหลดเอกสารบัญชี...</div>
@@ -2089,6 +2281,11 @@ let docs=[],editing=null,payments=[];
 const $=id=>document.getElementById(id);
 function esc(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
 function money(v){return new Intl.NumberFormat("th-TH",{minimumFractionDigits:2,maximumFractionDigits:2}).format(Number(v||0))}
+function formatDocumentDate(v){
+ const s=String(v||"").trim();
+ const m=s.match(/^(\d{4})-(\d{2})-(\d{2})/);
+ return m?`${m[3]}/${m[2]}/${m[1]}`:s;
+}
 function rateText(v){const n=Number(v||0);return Number.isFinite(n)?String(Number(n.toFixed(4))):"0";}
 function thaiIntegerText(n){
  n=Math.floor(Math.abs(Number(n)||0));
@@ -2647,6 +2844,9 @@ function paperHtml(x){
     </div>
   </div>`}
   <table>
+   <colgroup>
+    <col style="width:53%"><col style="width:8%"><col style="width:8%"><col style="width:9%"><col style="width:7%"><col style="width:5%"><col style="width:10%">
+   </colgroup>
    <thead><tr>
     ${(isInvoice||isReceipt||isCreditNote)?`<th class="desc-col">รายละเอียด</th><th class="qty-col">จำนวน</th><th class="unit-col">หน่วย</th><th class="price-col">ราคา</th><th class="disc-col">ส่วนลด</th><th class="vat-col">VAT</th><th class="amount-col">มูลค่าก่อนภาษี</th>`:`<th class="desc-col">คำอธิบาย / DESCRIPTION</th><th class="qty-col">จำนวน<br>QTY</th><th class="unit-col">หน่วย<br>UNIT</th><th class="price-col">ราคา<br>PRICE</th><th class="disc-col">ส่วนลด<br>DISCOUNT</th><th class="vat-col">VAT</th><th class="amount-col">มูลค่าก่อนภาษี<br>AMOUNT</th>`}
    </tr></thead>
@@ -2677,8 +2877,8 @@ function paperHtml(x){
   <div class="signature-area">
    <div class="signature-header">♧ รับรอง</div>
    <div class="signature-grid">
-    <div class="signature-box"><div class="signature-space"><img class="sign-img" src="sante-signature-director.png" alt="signature"></div><div class="signature-line"><b>${SANTE.signer}</b><br>ผู้ออกเอกสาร (ผู้ขาย)<br>${esc(x.issue_date||"")}</div></div>
-    <div class="signature-box"><div class="signature-space"><img class="sign-img" src="sante-signature-director.png" alt="signature"></div><div class="signature-line"><b>${SANTE.signer}</b><br>ผู้อนุมัติเอกสาร (ผู้ขาย)<br>${esc(x.issue_date||"")}</div></div>
+    <div class="signature-box"><div class="signature-space"><img class="sign-img" src="sante-signature-director.png" alt="signature"></div><div class="signature-line"><b>${SANTE.signer}</b><br>ผู้ออกเอกสาร (ผู้ขาย)<br>${esc(formatDocumentDate(x.issue_date||""))}</div></div>
+    <div class="signature-box"><div class="signature-space"><img class="sign-img" src="sante-signature-director.png" alt="signature"></div><div class="signature-line"><b>${SANTE.signer}</b><br>ผู้อนุมัติเอกสาร (ผู้ขาย)<br>${esc(formatDocumentDate(x.issue_date||""))}</div></div>
     <div class="signature-box"><div class="seal-box"><img class="seal-mark-img" src="sante-company-stamp.png" alt="stamp"></div><div class="signature-line">ตราประทับ (ผู้ขาย)</div></div>
     <div class="signature-box"><div class="signature-space"></div><div class="signature-line"><b>${esc(x.organization_name||x.customer_name||"")}</b><br>ผู้รับเอกสาร (ลูกค้า)</div></div>
     <div class="signature-box"><div class="customer-stamp-box"></div><div class="signature-line">ตราประทับ (ลูกค้า) (ถ้ามี)</div></div>

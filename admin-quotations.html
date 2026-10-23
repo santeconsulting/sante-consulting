@@ -4734,6 +4734,149 @@ textarea{
 </style>
 <meta name="sante-final-build" content="QUOTATION-FINAL-SIGNATURE-STANDARD">
 
+
+<style id="sante-final-six-groups-quotation">
+/* FINAL 6 GROUPS — Quotation is the visual master. */
+
+/* 1. ITEM TABLE */
+#paper.reference-qo .ref-items{table-layout:fixed!important;width:100%!important}
+#paper.reference-qo .ref-items th,
+#paper.reference-qo .ref-items td{box-sizing:border-box!important}
+#paper.reference-qo .ref-items th:last-child{
+  white-space:nowrap!important;
+  font-size:7.75pt!important;
+}
+#paper.reference-qo .ref-items th:nth-child(n+2),
+#paper.reference-qo .ref-items td:nth-child(n+2){text-align:center!important}
+#paper.reference-qo .ref-items th:nth-child(4),
+#paper.reference-qo .ref-items th:nth-child(5),
+#paper.reference-qo .ref-items th:nth-child(7),
+#paper.reference-qo .ref-items td:nth-child(4),
+#paper.reference-qo .ref-items td:nth-child(5),
+#paper.reference-qo .ref-items td:nth-child(7){text-align:right!important}
+
+/* 2. TOP CONTACT */
+#paper.reference-qo .qh-contact{
+  row-gap:1.25mm!important;
+  line-height:1.35!important;
+}
+#paper.reference-qo .qh-contact-row{
+  margin:0!important;
+  padding:0!important;
+  min-height:0!important;
+  line-height:1.35!important;
+}
+#paper.reference-qo .qh-contact-row>*{line-height:1.35!important}
+
+/* 3. CUSTOMER BLOCK */
+#paper.reference-qo .ref-party-row,
+#paper.reference-qo .ref-contact-row{
+  margin:0!important;
+  padding:0!important;
+  min-height:0!important;
+}
+#paper.reference-qo .ref-party-row{line-height:1.42!important}
+#paper.reference-qo .ref-contact-row{line-height:1.42!important}
+#paper.reference-qo .ref-party-title{margin:0 0 1mm!important}
+
+/* 4. SUMMARY */
+#paper.reference-qo .ref-summary{
+  grid-template-columns:minmax(0,1fr) 73mm!important;
+  gap:7mm!important;
+  padding-top:2.5mm!important;
+}
+#paper.reference-qo .ref-summary-left{
+  grid-template-columns:15mm minmax(0,1fr) 30mm!important;
+  column-gap:3mm!important;
+  row-gap:1.3mm!important;
+  font-size:8pt!important;
+  line-height:1.4!important;
+}
+#paper.reference-qo .ref-total-line{
+  font-size:8pt!important;
+  line-height:1.4!important;
+}
+
+/* 5. PAYMENT / NOTE */
+#paper.reference-qo .ref-payment{
+  min-height:15mm!important;
+  margin-top:3mm!important;
+  padding:3.2mm 0!important;
+  align-items:center!important;
+}
+#paper.reference-qo .ref-note{
+  min-height:12mm!important;
+  margin-top:0!important;
+  padding:3mm 0!important;
+  align-items:start!important;
+  line-height:1.5!important;
+}
+
+/* 6. CERTIFICATION */
+#paper.reference-qo .ref-cert{
+  grid-template-columns:repeat(5,minmax(0,1fr))!important;
+  gap:3mm!important;
+  align-items:end!important;
+  margin-top:3mm!important;
+}
+#paper.reference-qo .ref-cert-label{
+  grid-column:1/-1!important;
+  margin:0 0 1.5mm!important;
+  text-align:left!important;
+}
+#paper.reference-qo .ref-cert-cell{
+  min-height:32mm!important;
+  display:grid!important;
+  grid-template-rows:18mm 12mm!important;
+  align-items:end!important;
+}
+#paper.reference-qo .ref-signature{
+  height:10mm!important;
+  max-height:10mm!important;
+  max-width:30mm!important;
+  margin:0 auto 1mm!important;
+}
+#paper.reference-qo .ref-stamp-frame,
+#paper.reference-qo .ref-empty-box{
+  width:100%!important;
+  height:18mm!important;
+  border:0!important;
+  background:transparent!important;
+}
+#paper.reference-qo .ref-stamp-frame{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+}
+#paper.reference-qo .ref-stamp{
+  width:18mm!important;
+  height:18mm!important;
+  max-width:18mm!important;
+  max-height:18mm!important;
+}
+#paper.reference-qo .ref-cert-caption{
+  width:100%!important;
+  min-height:12mm!important;
+  border-top:1px solid #7b8c9d!important;
+  padding-top:1.5mm!important;
+  margin:0!important;
+  font-size:7.2pt!important;
+  line-height:1.42!important;
+  text-align:center!important;
+}
+#paper.reference-qo .ref-cert-note{
+  grid-column:1/-1!important;
+  margin:1.5mm 0 0!important;
+  padding:0!important;
+  font-size:7.1pt!important;
+  line-height:1.45!important;
+  text-align:center!important;
+  font-weight:400!important;
+  color:#53687d!important;
+}
+</style>
+<meta name="sante-final-six-groups" content="QUOTATION-LOCKED">
+
 </head>
 <body>
 
@@ -5271,7 +5414,7 @@ function renderPaper(c){
 
     <table class="ref-items">
       <colgroup>
-        <col style="width:55%"><col style="width:8%"><col style="width:8%"><col style="width:9%"><col style="width:8%"><col style="width:5%"><col style="width:10%">
+        <col style="width:53%"><col style="width:8%"><col style="width:8%"><col style="width:9%"><col style="width:7%"><col style="width:5%"><col style="width:10%">
       </colgroup>
       <thead><tr>
         <th>รายละเอียด</th><th>จำนวน</th><th>หน่วย</th><th>ราคา</th><th>ส่วนลด</th><th>VAT</th><th>มูลค่าก่อนภาษี</th>
@@ -5306,7 +5449,7 @@ function renderPaper(c){
     </div>
 
     <div class="ref-cert">
-      <div class="ref-cert-label">♧ รับรอง<div class="ref-cert-note">ผู้ขายลงนามเพื่อรับรองความถูกต้องของเอกสาร และลูกค้าสามารถลงนาม/ประทับตราเพื่อยืนยันการตอบรับใบเสนอราคา</div></div>
+      <div class="ref-cert-label">♧ รับรอง</div>
       <div class="ref-cert-cell">
         <img class="ref-signature" src="sante-signature-director.png" alt="signature">
         <div class="ref-cert-caption">
@@ -5338,6 +5481,7 @@ function renderPaper(c){
         <div class="ref-empty-box"></div>
         <div class="ref-cert-caption">ตราประทับ (ลูกค้า) (ถ้ามี)</div>
       </div>
+      <div class="ref-cert-note">ผู้ขายลงนามเพื่อรับรองความถูกต้องของเอกสาร และลูกค้าสามารถลงนาม/ประทับตราเพื่อยืนยันการตอบรับใบเสนอราคา</div>
     </div>
   `;
 }
