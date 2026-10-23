@@ -1133,6 +1133,13 @@ label{display:block;font-size:11px;font-weight:600;margin-bottom:5px}.input,text
 .paper-invoice .summary-note{font-size:7.75pt!important;line-height:1.45!important}
 </style>
 <meta name="sante-build-r31" content="ACCOUNTING-FINAL-MATCH">
+
+<style id="sante-accounting-r32-content-standard">
+.paper-invoice .item-main{white-space:pre-wrap!important;font-weight:400!important;line-height:1.45!important}
+.paper-invoice .item-sub{display:none!important}
+.paper-invoice .summary-note{line-height:1.5!important}
+</style>
+<meta name="sante-build-r32" content="ACCOUNTING-CONTENT-STANDARD">
 </head>
 <body>
 <div id="loading" class="loading">กำลังโหลดเอกสารบัญชี...</div>
@@ -1368,6 +1375,7 @@ let docs=[],editing=null,payments=[];
 const $=id=>document.getElementById(id);
 function esc(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
 function money(v){return new Intl.NumberFormat("th-TH",{minimumFractionDigits:2,maximumFractionDigits:2}).format(Number(v||0))}
+function rateText(v){const n=Number(v||0);return Number.isFinite(n)?String(Number(n.toFixed(4))):"0";}
 function thaiIntegerText(n){
  n=Math.floor(Math.abs(Number(n)||0));
  if(n===0)return "ศูนย์";
@@ -1454,10 +1462,48 @@ async function ensureStaff(){
  return true;
 }
 
+
+async function hydrateInvoicesFromQuotations(){
+ const invoiceDocs=docs.filter(x=>x.document_type==="INVOICE"&&x.quotation_id);
+ const quotationIds=[...new Set(invoiceDocs.map(x=>x.quotation_id).filter(Boolean))];
+ if(!quotationIds.length)return;
+ try{
+  const [qr,ir]=await Promise.all([
+   db.from("quotations").select("id,quotation_no,customer_name,organization_name,customer_tax_id,customer_branch,billing_address,email,phone,document_subject,subtotal,vat_rate,vat_amount,grand_total,wht_rate,wht_amount,net_receivable").in("id",quotationIds),
+   db.from("quotation_items").select("*").in("quotation_id",quotationIds).order("sort_order")
+  ]);
+  if(qr.error||ir.error){console.warn("invoice hydration skipped",qr.error||ir.error);return;}
+  const qMap=new Map((qr.data||[]).map(x=>[x.id,x]));
+  const itemMap=new Map();
+  (ir.data||[]).forEach(i=>{
+   if(!itemMap.has(i.quotation_id))itemMap.set(i.quotation_id,[]);
+   itemMap.get(i.quotation_id).push({description:i.description||"",quantity:Number(i.quantity||0),unit:i.unit||"งาน",unit_price:Number(i.unit_price||0),discount_amount:Number(i.discount_amount||0),line_total:Number(i.line_total||0),sort_order:Number(i.sort_order||0),vat_rate:i.vat_rate});
+  });
+  invoiceDocs.forEach(x=>{
+   const q=qMap.get(x.quotation_id); if(!q)return;
+   x.quotation_no=q.quotation_no||x.quotation_no;
+   x.customer_name=q.customer_name||x.customer_name;
+   x.organization_name=q.organization_name||x.organization_name;
+   x.customer_tax_id=q.customer_tax_id||x.customer_tax_id;
+   x.customer_branch=q.customer_branch||x.customer_branch;
+   x.billing_address=q.billing_address||x.billing_address;
+   x.email=q.email||x.email; x.phone=q.phone||x.phone;
+   x.document_subject=q.document_subject||x.document_subject;
+   x.subtotal=Number(q.subtotal??x.subtotal??0); x.vat_rate=Number(q.vat_rate??x.vat_rate??7);
+   x.vat_amount=Number(q.vat_amount??x.vat_amount??0); x.grand_total=Number(q.grand_total??x.grand_total??0);
+   x.wht_rate=Number(q.wht_rate??x.wht_rate??0); x.wht_amount=Number(q.wht_amount??x.wht_amount??0);
+   x.net_receivable=Number(q.net_receivable??x.net_receivable??x.grand_total??0);
+   const srcItems=itemMap.get(x.quotation_id)||[]; if(srcItems.length)x.items=srcItems;
+   if(!x.terms||/ใบเสนอราคา|60\s*วัน/i.test(String(x.terms)))x.terms="กำหนดชำระภายใน 30 วันนับจากวันที่ออกใบแจ้งหนี้";
+  });
+ }catch(err){console.warn("invoice hydration error",err);}
+}
+
 async function loadDocs(){
  const {data,error}=await db.rpc("admin_get_accounting_documents",{p_status:null,p_type:null,p_limit:500});
  if(error)throw error;
  docs=Array.isArray(data)?data:[];
+ await hydrateInvoicesFromQuotations();
  render();
 }
 
@@ -1625,8 +1671,8 @@ async function printAccountingPreview(){
  Object.assign(iframe.style,{position:"fixed",right:"0",bottom:"0",width:"0",height:"0",border:"0"});
  document.body.appendChild(iframe);
  const doc=iframe.contentDocument||iframe.contentWindow.document;
- const styleMarkup=[...document.querySelectorAll("style")].map(s=>s.outerHTML).join("\\n");
- const fontLinks=[...document.querySelectorAll('link[rel="stylesheet"]')].map(l=>l.outerHTML).join("\\n");
+ const styleMarkup=[...document.querySelectorAll("style")].map(s=>s.outerHTML).join("\n");
+ const fontLinks=[...document.querySelectorAll('link[rel="stylesheet"]')].map(l=>l.outerHTML).join("\n");
  doc.open();
  doc.write(`<!doctype html><html lang="th"><head><meta charset="utf-8">${fontLinks}${styleMarkup}
  <style id="accounting-print-isolation-r23">
@@ -1740,7 +1786,7 @@ function paperHtml(x){
  const rows=items.length?items.map((i,n)=>{
    const imageUrl=i.image_url||i.imageUrl||i.thumbnail_url||i.thumbnailUrl||"";
    const title=i.description||i.name||x.document_subject||"";
-   const sub=i.detail||i.details||i.description2||i.remark||x.document_subject||"";
+   const sub=i.detail||i.details||i.description2||i.remark||"";
    const code=i.code||i.product_code||i.sku||"";
    const thumb=imageUrl?`<img class="item-thumb" src="${esc(imageUrl)}" crossorigin="anonymous">`:"";
    return `<tr>
@@ -1749,14 +1795,14 @@ function paperHtml(x){
      <td class="unit-col">${esc(i.unit||"งาน")}</td>
      <td class="price-col money-cell">${money(i.unit_price)}</td>
      <td class="disc-col money-cell">${money(i.discount_amount)}</td>
-     <td class="vat-col money-cell">${money(i.vat_rate??x.vat_rate??7)}%</td>
+     <td class="vat-col money-cell">${rateText(i.vat_rate??x.vat_rate??7)}%</td>
      <td class="amount-col money-cell">${money(i.line_total)}</td>
    </tr>`;
  }).join(""):`<tr>
-   <td class="desc-col"><span class="item-no">1.</span><div class="item-main">${esc(x.document_subject||"ค่าบริการ / ค่าอบรม SANTE")}</div><div class="item-sub">${x.note?esc(x.note):""}</div></td>
+   <td class="desc-col"><span class="item-no">1.</span><div class="item-main">${esc(x.document_subject||"ค่าบริการ / ค่าอบรม SANTE")}</div></td>
    <td class="qty-col">1.00</td><td class="unit-col">งาน</td>
    <td class="price-col money-cell">${money(x.subtotal)}</td><td class="disc-col money-cell">0.00</td>
-   <td class="vat-col money-cell">${money(x.vat_rate??7)}%</td><td class="amount-col money-cell">${money(x.subtotal)}</td>
+   <td class="vat-col money-cell">${rateText(x.vat_rate??7)}%</td><td class="amount-col money-cell">${money(x.subtotal)}</td>
  </tr>`;
  const isReceipt=x.document_type==="RECEIPT_TAX_INVOICE";
  const isInvoice=x.document_type==="INVOICE";
@@ -1767,6 +1813,7 @@ function paperHtml(x){
  const copyLabel=accountingCopyLabel();
  const receiveAmount=x.amount_received??x.net_receivable??x.grand_total;
  const paymentNo=x.payment_no||"-";
+ const invoiceTerms=(isInvoice&&(!x.terms||/ใบเสนอราคา|60\s*วัน/i.test(String(x.terms))))?"กำหนดชำระภายใน 30 วันนับจากวันที่ออกใบแจ้งหนี้":(x.terms||"");
  return `<div class="paper ${isInvoice?"paper-invoice":isReceipt?"paper-receipt":isCreditNote?"paper-creditnote":"paper-other"}">
   ${isInvoice?`
   <div class="invh">
@@ -1895,14 +1942,14 @@ function paperHtml(x){
    <div class="summary-note">
      <b>${isCreditNote?"เหตุผลและรายละเอียดการลดหนี้":"รายละเอียด / NOTES"}</b><br>
      ${x.document_subject?`${isCreditNote?"เหตุผล":"เรื่อง"}: ${esc(x.document_subject)}<br>`:""}
-     ${x.terms?`เงื่อนไข: ${esc(x.terms)}<br>`:""}
-     ${x.note?esc(x.note):(isCreditNote?"กรุณาตรวจสอบเอกสารอ้างอิง เหตุผลการลดหนี้ และยอดภาษีก่อนออกเอกสาร":"กรุณาตรวจสอบชื่อ/ที่อยู่ เลขประจำตัวผู้เสียภาษี และยอดเงินก่อนนำเอกสารไปใช้งาน")}
+     ${(isInvoice?invoiceTerms:x.terms)?`${isInvoice?"เงื่อนไขการชำระเงิน":"เงื่อนไข"}: ${esc(isInvoice?invoiceTerms:x.terms)}<br>`:""}
+     ${isInvoice?"":(x.note?esc(x.note):(isCreditNote?"กรุณาตรวจสอบเอกสารอ้างอิง เหตุผลการลดหนี้ และยอดภาษีก่อนออกเอกสาร":"กรุณาตรวจสอบชื่อ/ที่อยู่ เลขประจำตัวผู้เสียภาษี และยอดเงินก่อนนำเอกสารไปใช้งาน"))}
    </div>
    <div class="totals">
     <div class="total-row"><span>${isCreditNote?"มูลค่าที่ลดก่อน VAT":"มูลค่าก่อน VAT"}</span><span>${money(x.subtotal)} บาท</span></div>
-    <div class="total-row"><span>${isCreditNote?"ภาษีมูลค่าเพิ่มที่ลด":"ภาษีมูลค่าเพิ่ม"} ${money(x.vat_rate??7)}%</span><span>${money(x.vat_amount)} บาท</span></div>
+    <div class="total-row"><span>${isCreditNote?"ภาษีมูลค่าเพิ่มที่ลด":"ภาษีมูลค่าเพิ่ม"} ${rateText(x.vat_rate??7)}%</span><span>${money(x.vat_amount)} บาท</span></div>
     <div class="total-row grand"><span>${isCreditNote?"รวมมูลค่าลดหนี้":"จำนวนเงินทั้งสิ้น"}</span><span>${money(x.grand_total)} บาท</span></div>
-    ${Number(x.wht_amount||0)>0?`<div class="total-row"><span>หัก ณ ที่จ่าย ${money(x.wht_rate||0)}%</span><span>${money(x.wht_amount)} บาท</span></div><div class="total-row paid-row"><b>จำนวนเงินที่ชำระสุทธิ</b><b>${money(x.net_receivable)} บาท</b></div><div class="amount-words">(${thaiBahtText(x.net_receivable)})</div>`:`<div class="amount-words">(${thaiBahtText(isReceipt?receiveAmount:x.grand_total)})</div>`}
+    ${Number(x.wht_amount||0)>0?`<div class="total-row"><span>หัก ณ ที่จ่าย ${rateText(x.wht_rate||0)}%${isInvoice?" (กรณีเข้าหลักเกณฑ์)":""}</span><span>${money(x.wht_amount)} บาท</span></div><div class="total-row paid-row"><b>${isInvoice?"ยอดชำระสุทธิ (กรณีหัก ณ ที่จ่าย)":"จำนวนเงินที่ชำระสุทธิ"}</b><b>${money(x.net_receivable)} บาท</b></div><div class="amount-words">(${thaiBahtText(x.net_receivable)})</div>`:`<div class="amount-words">(${thaiBahtText(isReceipt?receiveAmount:x.grand_total)})</div>`}
     ${isReceipt?`<div class="total-row paid-row"><b>ยอดรับเงินจริง</b><b>${money(receiveAmount)} บาท</b></div>`:""}
    </div>
   </div>
@@ -1933,9 +1980,24 @@ async function generateBlob(x){
  return pdf.output("blob");
 }
 
+
+function validateBeforeIssue(x){
+ const warnings=[];
+ if(!String(x.organization_name||x.customer_name||"").trim())warnings.push("ไม่มีชื่อลูกค้า/บริษัท");
+ if(!String(x.billing_address||"").trim())warnings.push("ไม่มีที่อยู่ลูกค้า");
+ const tax=String(x.customer_tax_id||"").replace(/\D/g,"");
+ if(x.customer_tax_id&&tax.length!==13)warnings.push("เลขประจำตัวผู้เสียภาษีลูกค้าไม่ครบ 13 หลัก");
+ const its=Array.isArray(x.items)?x.items:[];
+ if(!its.length)warnings.push("ไม่มีรายการสินค้า/บริการ");
+ if(its.some(i=>!String(i.description||"").trim()))warnings.push("มีรายการที่ไม่มีรายละเอียดสินค้า/บริการ");
+ return warnings;
+}
+
 async function issueOne(id,silent=false){
  let x=docs.find(d=>d.id===id);
  if(!x)return false;
+ const issueWarnings=validateBeforeIssue(x);
+ if(issueWarnings.length){const msg="กรุณาตรวจสอบข้อมูลก่อนออกเอกสาร:\n• "+issueWarnings.join("\n• ");if(silent){console.warn(msg);return false;}alert(msg);return false;}
  if(x.document_type==="RECEIPT_TAX_INVOICE"&&x.document_status!=="APPROVED"){
    if(!silent)alert("ใบเสร็จ/ใบกำกับภาษีต้องผ่านการอนุมัติก่อน");
    return false;

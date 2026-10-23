@@ -4976,6 +4976,15 @@ function collectItems(){
 function calc(){const a=collectItems(),subtotal=a.reduce((s,x)=>s+x.line_total,0),vat=subtotal*Number(vatRate.value||0)/100,grand=subtotal+vat,wht=showWht?.checked?subtotal*Number(whtRate.value||0)/100:0,net=grand-wht;return{a,subtotal,vat,grand,wht,net}}
 function recalc(){toggleWht();const c=calc();sumSubtotal.textContent=money(c.subtotal);sumVat.textContent=money(c.vat);sumGrand.textContent=money(c.grand);sumWht.textContent=money(c.wht);sumNet.textContent=money(c.net);renderPaper(c)}
 
+
+function sanitizeDocumentNote(value){
+  const blocked=["สาเก่้กหวิ","khdkhnd[n","ด่้สก้สหก้ยทิกส้ยกห","ด่้สก้สหก้ยทิกส้ยกห"];
+  return String(value||"").replace(/\r/g,"").split("\n").map(s=>s.trim()).filter(s=>{
+    const normalized=s.replace(/^[0-9]+[.,)]?\s*/,"").trim();
+    return normalized&&!blocked.includes(normalized);
+  }).join("\n");
+}
+
 function quotationCopyMode(){
   return document.querySelector('input[name="quotationCopyMode"]:checked')?.value || "ORIGINAL";
 }
@@ -5167,7 +5176,7 @@ function renderPaper(c){
 
     <div class="ref-note">
       <div><b>● หมายเหตุ</b></div>
-      <div class="ref-note-value">${esc(note.value||"")}</div>
+      <div class="ref-note-value">${esc(sanitizeDocumentNote(note.value||""))}</div>
     </div>
 
     <div class="ref-cert">
@@ -5232,7 +5241,7 @@ async function openEditor(id=null,req=null){
     whtRate.value=(q.wht_rate??3)||3;
     showWht.checked=Number(q.wht_rate||0)>0 || Number(q.wht_amount||0)>0;
     toggleWht();
-    note.value=q.note||"";
+    note.value=sanitizeDocumentNote(q.note||"");
     terms.value=q.terms||"";
 
     const ir=await db.from("quotation_items")
