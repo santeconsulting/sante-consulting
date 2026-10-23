@@ -2608,6 +2608,7 @@ label{display:block;font-size:11px;font-weight:600;margin-bottom:5px}.input,text
 
 <meta name="sante-build-member-sync" content="ADMIN-ACCOUNTING-PDF-REPAIR-R4">
 <meta name="sante-build-taxid-validation" content="R5-TAXID-OPTIONAL-NONBLOCKING">
+<meta name="sante-build-pdf-repair" content="R6-STAGE-AWARE-REPAIR">
 </head>
 <body>
 <div id="loading" class="loading">กำลังโหลดเอกสารบัญชี...</div>
@@ -3593,27 +3594,33 @@ function validateBeforeIssue(x){
 
 async function issueOne(id,silent=false,regenerateIssued=false){
  let x=docs.find(d=>d.id===id);
- if(!x)return false;
+ if(!x)return {ok:false,error:"ไม่พบเอกสาร",stage:"lookup"};
 
  const isIssued=x.document_status==="ISSUED";
  const canIssue=["READY_TO_ISSUE","APPROVED"].includes(x.document_status);
  const canRegenerate=isIssued&&regenerateIssued;
 
  if(!canIssue&&!canRegenerate){
-   if(!silent)alert("เอกสารนี้ยังไม่อยู่ในสถานะที่สามารถออก PDF ได้");
-   return false;
+   const msg="เอกสารนี้ยังไม่อยู่ในสถานะที่สามารถออก PDF ได้";
+   if(!silent)alert(msg);
+   return {ok:false,error:msg,stage:"status"};
  }
 
- const issueWarnings=validateBeforeIssue(x);
- if(issueWarnings.length){
-   const msg="กรุณาตรวจสอบข้อมูลก่อนออกเอกสาร:\n• "+issueWarnings.join("\n• ");
-   if(silent){console.warn(msg);return false;}
-   alert(msg);return false;
+ // เอกสาร ISSUED ถูกออกไปแล้ว: regenerate = ซ่อม/สร้างไฟล์ PDF เท่านั้น
+ // ไม่บังคับ validation ข้อมูลธุรกิจซ้ำ และไม่แก้สถานะ/เลขเอกสาร
+ if(!isIssued){
+   const issueWarnings=validateBeforeIssue(x);
+   if(issueWarnings.length){
+     const msg="กรุณาตรวจสอบข้อมูลก่อนออกเอกสาร:\n• "+issueWarnings.join("\n• ");
+     if(!silent)alert(msg);
+     return {ok:false,error:msg,stage:"validation"};
+   }
  }
 
  if(x.document_type==="RECEIPT_TAX_INVOICE"&&!["APPROVED","ISSUED"].includes(x.document_status)){
-   if(!silent)alert("ใบเสร็จ/ใบกำกับภาษีต้องผ่านการอนุมัติก่อน");
-   return false;
+   const msg="ใบเสร็จ/ใบกำกับภาษีต้องผ่านการอนุมัติก่อน";
+   if(!silent)alert(msg);
+   return {ok:false,error:msg,stage:"status"};
  }
 
  const btn=$("pdfBtn");
@@ -3622,12 +3629,16 @@ async function issueOne(id,silent=false,regenerateIssued=false){
    btn.textContent=isIssued?"กำลังสร้าง PDF ใหม่...":"กำลังสร้าง PDF...";
  }
 
+ let stage="render";
  try{
   const blob=await generateBlob(x);
+  if(!blob||!blob.size)throw new Error("ไม่สามารถสร้างข้อมูล PDF ได้");
+
   const safe=(x.document_no||x.id).replace(/[^A-Za-z0-9_-]/g,"_");
   const year=String(x.issue_date||new Date().getFullYear()).slice(0,4) || String(new Date().getFullYear());
   const path=`accounting/${year}/${x.document_type}/${safe}.pdf`;
 
+  stage="upload";
   const up=await db.storage.from(BUCKET).upload(path,blob,{
     contentType:"application/pdf",
     upsert:true,
@@ -3635,7 +3646,15 @@ async function issueOne(id,silent=false,regenerateIssued=false){
   });
   if(up.error)throw up.error;
 
+  // Confirm object can actually be resolved before reporting success.
+  stage="verify";
+  const test=await db.storage.from(BUCKET).createSignedUrl(path,60);
+  if(test.error||!test.data?.signedUrl){
+    throw new Error("อัปโหลดแล้วแต่ตรวจสอบไฟล์ใน Storage ไม่สำเร็จ: "+(test.error?.message||"ไม่พบ signed URL"));
+  }
+
   if(!isIssued){
+    stage="finalize";
     const fin=await db.rpc("admin_finalize_accounting_document",{
       p_document_id:x.id,
       p_storage_bucket:BUCKET,
@@ -3644,9 +3663,6 @@ async function issueOne(id,silent=false,regenerateIssued=false){
       p_file_size_bytes:blob.size
     });
     if(fin.error)throw fin.error;
-  }else{
-    // ISSUED: regenerate file only. Do not mutate document status/business data.
-    console.info("Regenerated ISSUED PDF",x.document_no,path);
   }
 
   await loadDocs();
@@ -3656,13 +3672,14 @@ async function issueOne(id,silent=false,regenerateIssued=false){
   }
 
   if(!silent&&isIssued){
-    alert(`สร้าง PDF ใหม่สำเร็จ\n${x.document_no||safe}.pdf\nสถานะเอกสารยังคงเป็น ISSUED`);
+    alert(`สร้าง PDF ใหม่สำเร็จ\n${x.document_no||safe}.pdf\nตรวจสอบไฟล์ใน Storage แล้ว\nสถานะเอกสารยังคงเป็น ISSUED`);
   }
-  return true;
+  return {ok:true,path,bucket:BUCKET};
  }catch(e){
-  console.error("ACCOUNTING ISSUE ERROR",e);
-  if(!silent)alert((isIssued?"สร้าง PDF ใหม่ไม่สำเร็จ: ":"ออกเอกสารไม่สำเร็จ: ")+(e.message||e));
-  return false;
+  console.error("ACCOUNTING ISSUE ERROR",x.document_no,stage,e);
+  const msg=(e?.message||String(e));
+  if(!silent)alert(`${isIssued?"สร้าง PDF ใหม่":"ออกเอกสาร"}ไม่สำเร็จ\nขั้นตอน: ${stage}\n${msg}`);
+  return {ok:false,error:msg,stage,document_no:x.document_no||x.id};
  }finally{
   if(btn){
     btn.disabled=false;
@@ -3678,14 +3695,15 @@ async function issueReadyAll(){
  if(ready.length){
    if(!confirm(`สร้าง PDF และออกเอกสาร ${ready.length} รายการตามรายการที่กำลังแสดง?`))return;
    $("generateReadyBtn").disabled=true;
-   let ok=0,fail=0;
+   let ok=0; const errors=[];
    for(const x of ready){
-     const success=await issueOne(x.id,true,false);
-     if(success)ok++; else fail++;
+     const result=await issueOne(x.id,true,false);
+     if(result?.ok)ok++;
+     else errors.push(`${x.document_no||x.id} · ${result?.stage||"unknown"} · ${result?.error||"ไม่ทราบสาเหตุ"}`);
    }
    $("generateReadyBtn").disabled=false;
    await loadDocs();
-   alert(`เสร็จแล้ว ${ok} รายการ${fail?` · ไม่สำเร็จ ${fail}`:""}`);
+   alert(`เสร็จแล้ว ${ok} รายการ${errors.length?`\nไม่สำเร็จ ${errors.length}\n\n${errors.join("\n")}`:""}`);
    return;
  }
 
@@ -3693,14 +3711,15 @@ async function issueReadyAll(){
  if(issued.length){
    if(!confirm(`เอกสารที่แสดงเป็น ISSUED แล้ว ${issued.length} รายการ\nต้องการสร้าง/ซ่อมไฟล์ PDF ใหม่ด้วยรูปแบบล่าสุด โดยคงเลขเอกสารและสถานะเดิมหรือไม่?`))return;
    $("generateReadyBtn").disabled=true;
-   let ok=0,fail=0;
+   let ok=0; const errors=[];
    for(const x of issued){
-     const success=await issueOne(x.id,true,true);
-     if(success)ok++; else fail++;
+     const result=await issueOne(x.id,true,true);
+     if(result?.ok)ok++;
+     else errors.push(`${x.document_no||x.id} · ${result?.stage||"unknown"} · ${result?.error||"ไม่ทราบสาเหตุ"}`);
    }
    $("generateReadyBtn").disabled=false;
    await loadDocs();
-   alert(`สร้าง PDF ใหม่แล้ว ${ok} รายการ${fail?` · ไม่สำเร็จ ${fail}`:""}\nสถานะเอกสารยังคงเป็น ISSUED`);
+   alert(`สร้าง PDF ใหม่แล้ว ${ok} รายการ${errors.length?`\nไม่สำเร็จ ${errors.length}\n\n${errors.join("\n")}`:""}\n\nสถานะเอกสารยังคงเป็น ISSUED`);
    return;
  }
 

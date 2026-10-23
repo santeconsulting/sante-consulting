@@ -71,6 +71,7 @@ a{text-decoration:none;color:inherit}button,select,input{font-family:inherit}
 <meta name="sante-build-r12" content="MEMBER-ACCOUNTING-R12-ORGANIZED">
 
 <meta name="sante-build-member-sync" content="MEMBER-ACCOUNTING-PDF-SYNC-R4">
+<meta name="sante-build-pdf-repair" content="R6-MEMBER-STORAGE-FALLBACK">
 </head>
 <body>
 <div id="loading" class="loading">กำลังโหลดเอกสารทางบัญชี...</div>
@@ -217,6 +218,9 @@ async function openPdfForDocument(sourceId){
 
   const pdf=findPdf(x);
   const candidates=[];
+  if(x?.storage_bucket&&x?.storage_path){
+    candidates.push([x.storage_bucket,x.storage_path]);
+  }
   if(pdf?.storage_bucket&&pdf?.storage_path){
     candidates.push([pdf.storage_bucket,pdf.storage_path]);
   }
@@ -233,7 +237,8 @@ async function openPdfForDocument(sourceId){
     seen.add(key);
     const url=await signedUrlIfExists(bucket,path);
     if(url){
-      window.open(url,"_blank","noopener");
+      const sep=url.includes("?")?"&":"?";
+      window.open(url+sep+"v="+Date.now(),"_blank","noopener");
       return;
     }
   }
