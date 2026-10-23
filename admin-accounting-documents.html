@@ -1140,6 +1140,52 @@ label{display:block;font-size:11px;font-weight:600;margin-bottom:5px}.input,text
 .paper-invoice .summary-note{line-height:1.5!important}
 </style>
 <meta name="sante-build-r32" content="ACCOUNTING-CONTENT-STANDARD">
+
+<style id="sante-accounting-r33-final-master">
+/* FINAL MASTER — Invoice. Same geometry as quotation; only green theme/text differs. */
+.paper-invoice .invh{
+  grid-template-columns:20mm minmax(61mm,1fr) minmax(42mm,.76fr) 50mm!important;
+  column-gap:3mm!important;
+  align-items:start!important;
+  width:100%!important;
+  padding:0 0 4.5mm!important;
+  box-sizing:border-box!important;
+}
+.paper-invoice .invh-logo-cell{display:flex!important;align-items:flex-start!important;justify-content:center!important;padding-top:.3mm!important}
+.paper-invoice .invh-logo{
+  width:19mm!important;height:24mm!important;max-width:19mm!important;max-height:24mm!important;
+  object-fit:contain!important;object-position:center top!important;image-rendering:auto!important;
+}
+.paper-invoice .invh-seller{row-gap:1mm!important;font-size:7.8pt!important;line-height:1.4!important}
+.paper-invoice .invh-seller .invh-row,.paper-invoice .invh-seller .invh-tax-row{grid-template-columns:31mm minmax(0,1fr)!important;column-gap:1.5mm!important;align-items:start!important}
+.paper-invoice .invh-seller .invh-label,.paper-invoice .invh-seller .invh-tax-row .invh-label{font-size:7.75pt!important;line-height:1.4!important;text-align:right!important;white-space:nowrap!important}
+.paper-invoice .invh-company,.paper-invoice .invh-company>div,.paper-invoice .invh-address,.paper-invoice .invh-address>div,.paper-invoice .invh-tax-row>div:last-child{font-size:7.8pt!important;line-height:1.4!important;white-space:nowrap!important}
+.paper-invoice .invh-contact{position:static!important;left:auto!important;margin-left:3.2mm!important;padding:0!important;row-gap:1.25mm!important;font-size:7.2pt!important;line-height:1.35!important}
+.paper-invoice .invh-contact-row{grid-template-columns:4mm minmax(0,1fr)!important;column-gap:1mm!important;align-items:start!important}
+.paper-invoice .invh-contact-row span:last-child{font-size:7.15pt!important;white-space:nowrap!important}
+.paper-invoice .invh-doc{min-width:0!important;max-width:50mm!important;text-align:right!important}
+.paper-invoice .invh-copy{min-height:4.5mm!important;margin:0 0 1.5mm!important;font-size:7.3pt!important;line-height:1.1!important;white-space:nowrap!important}
+.paper-invoice .invh-title{margin:0 0 3.5mm!important;font-size:22.5pt!important;line-height:1.08!important;white-space:nowrap!important;text-align:right!important;color:#07834a!important}
+.paper-invoice .invh-docbox{grid-template-columns:22mm minmax(0,1fr)!important;padding:3.4mm 3.6mm!important;gap:1.35mm 1.8mm!important;font-size:7.55pt!important;line-height:1.35!important;background:#eaf7ef!important}
+.paper-invoice .inv-party{grid-template-columns:minmax(0,1.16fr) minmax(0,.84fr)!important;gap:8mm!important;padding-top:4mm!important;margin-left:0!important;width:100%!important}
+.paper-invoice .inv-party-row{grid-template-columns:32mm minmax(0,1fr)!important;column-gap:1.4mm!important;font-size:7.7pt!important;line-height:1.42!important}
+.paper-invoice .inv-party-row>b{text-align:right!important;white-space:nowrap!important}
+.paper-invoice .inv-contact-title{font-size:7.8pt!important;line-height:1.4!important;margin-bottom:1mm!important}
+.paper-invoice .inv-contact-row{grid-template-columns:4mm minmax(0,1fr)!important;column-gap:1.1mm!important;font-size:7.7pt!important;line-height:1.42!important}
+.paper-invoice table{margin-top:4mm!important}
+.paper-invoice table thead th{font-size:7.9pt!important;line-height:1.25!important;padding:2.4mm 1.2mm!important}
+.paper-invoice table tbody td{font-size:7.9pt!important;line-height:1.4!important;padding:2.5mm 1.2mm!important}
+.paper-invoice .totals-wrap{grid-template-columns:minmax(0,1fr) minmax(72mm,.95fr)!important;gap:7mm!important;padding-top:2.5mm!important}
+.paper-invoice .invoice-summary-left{display:grid!important;grid-template-columns:auto minmax(0,1fr) auto!important;column-gap:2.4mm!important;row-gap:1.35mm!important;align-content:start!important;font-size:7.75pt!important;line-height:1.4!important}
+.paper-invoice .invoice-summary-left .sum-icon{font-weight:700!important;white-space:nowrap!important}
+.paper-invoice .invoice-summary-left .sum-amount{text-align:right!important;white-space:nowrap!important}
+.paper-invoice .invoice-terms{margin-top:2.3mm!important;padding:2.3mm 0!important;border-top:1px solid #d8e3ee!important;font-size:7.6pt!important;line-height:1.45!important}
+.paper-invoice .inv-payment,.paper-invoice .signature-area{margin-top:3mm!important}
+.paper-invoice .signature-box{min-height:100px!important}
+.paper-invoice .sign-img{max-width:74px!important;max-height:36px!important}
+</style>
+<meta name="sante-build-r33" content="ACCOUNTING-FINAL-MASTER">
+
 </head>
 <body>
 <div id="loading" class="loading">กำลังโหลดเอกสารบัญชี...</div>
@@ -1939,12 +1985,16 @@ function paperHtml(x){
    <tbody>${rows}</tbody>
   </table>
   <div class="totals-wrap">
-   <div class="summary-note">
+   ${isInvoice?`<div class="summary-note invoice-summary-left">
+     <div class="sum-icon">▣ สรุป</div><div>มูลค่าที่คำนวณภาษี ${rateText(x.vat_rate??7)}%</div><div class="sum-amount">${money(x.subtotal)} บาท</div>
+     <div></div><div>ภาษีมูลค่าเพิ่ม ${rateText(x.vat_rate??7)}%</div><div class="sum-amount">${money(x.vat_amount)} บาท</div>
+     ${Number(x.wht_amount||0)>0?`<div></div><div>หัก ณ ที่จ่าย ${rateText(x.wht_rate||0)}% (กรณีเข้าหลักเกณฑ์)</div><div class="sum-amount">${money(x.wht_amount)} บาท</div>`:""}
+   </div>`:`<div class="summary-note">
      <b>${isCreditNote?"เหตุผลและรายละเอียดการลดหนี้":"รายละเอียด / NOTES"}</b><br>
      ${x.document_subject?`${isCreditNote?"เหตุผล":"เรื่อง"}: ${esc(x.document_subject)}<br>`:""}
-     ${(isInvoice?invoiceTerms:x.terms)?`${isInvoice?"เงื่อนไขการชำระเงิน":"เงื่อนไข"}: ${esc(isInvoice?invoiceTerms:x.terms)}<br>`:""}
-     ${isInvoice?"":(x.note?esc(x.note):(isCreditNote?"กรุณาตรวจสอบเอกสารอ้างอิง เหตุผลการลดหนี้ และยอดภาษีก่อนออกเอกสาร":"กรุณาตรวจสอบชื่อ/ที่อยู่ เลขประจำตัวผู้เสียภาษี และยอดเงินก่อนนำเอกสารไปใช้งาน"))}
-   </div>
+     ${x.terms?`เงื่อนไข: ${esc(x.terms)}<br>`:""}
+     ${x.note?esc(x.note):(isCreditNote?"กรุณาตรวจสอบเอกสารอ้างอิง เหตุผลการลดหนี้ และยอดภาษีก่อนออกเอกสาร":"กรุณาตรวจสอบชื่อ/ที่อยู่ เลขประจำตัวผู้เสียภาษี และยอดเงินก่อนนำเอกสารไปใช้งาน")}
+   </div>`}
    <div class="totals">
     <div class="total-row"><span>${isCreditNote?"มูลค่าที่ลดก่อน VAT":"มูลค่าก่อน VAT"}</span><span>${money(x.subtotal)} บาท</span></div>
     <div class="total-row"><span>${isCreditNote?"ภาษีมูลค่าเพิ่มที่ลด":"ภาษีมูลค่าเพิ่ม"} ${rateText(x.vat_rate??7)}%</span><span>${money(x.vat_amount)} บาท</span></div>
@@ -1953,15 +2003,16 @@ function paperHtml(x){
     ${isReceipt?`<div class="total-row paid-row"><b>ยอดรับเงินจริง</b><b>${money(receiveAmount)} บาท</b></div>`:""}
    </div>
   </div>
+  ${isInvoice?`<div class="invoice-terms"><b>เงื่อนไขการชำระเงิน :</b> ${esc(invoiceTerms)}</div>`:""}
   ${isInvoice?`<div class="inv-payment"><div class="inv-payment-title">ชำระเงิน</div><div class="inv-payment-bank"><img class="payment-bank-logo" src="${KBANK_LOGO_URI}" alt="Kasikornbank"><div><b>${SANTE.bank}</b><br>ชื่อบัญชี ${SANTE.bankName} · เลขบัญชี ${SANTE.bankAccount}</div></div></div>`:""}
   ${isReceipt?`<div class="payment-box"><div class="payment-title">การชำระเงิน / PAYMENT</div><div class="payment-grid"><div class="payment-item"><div class="payment-bank"><img class="payment-bank-logo" src="${KBANK_LOGO_URI}" alt="Kasikornbank"><div><b>${SANTE.bank}</b><br>ชื่อบัญชี ${SANTE.bankName}<br>เลขบัญชี ${SANTE.bankAccount}</div></div></div><div class="payment-item">วันที่ชำระ: ${esc(x.payment_date||x.issue_date||"-")}<br>Payment No.: ${esc(paymentNo)}</div><div class="payment-item">จำนวนเงินที่ชำระ: ${money(receiveAmount)} บาท<div class="payment-words">(${thaiBahtText(receiveAmount)})</div></div></div></div>`:""}
   <div class="signature-area">
    <div class="signature-header">♧ รับรอง</div>
    <div class="signature-grid">
-    <div class="signature-box"><div class="signature-space"><img class="sign-img" src="sante-signature-director.png" alt="signature"></div><div class="signature-line"><b>${SANTE.signer}</b><br>ผู้ออกเอกสาร (ผู้ขาย)</div></div>
-    <div class="signature-box"><div class="signature-space"><img class="sign-img" src="sante-signature-director.png" alt="signature"></div><div class="signature-line"><b>${SANTE.signer}</b><br>ผู้อนุมัติเอกสาร (ผู้ขาย)</div></div>
+    <div class="signature-box"><div class="signature-space"><img class="sign-img" src="sante-signature-director.png" alt="signature"></div><div class="signature-line"><b>${SANTE.signer}</b><br>ผู้ออกเอกสาร (ผู้ขาย)<br>${esc(x.issue_date||"")}</div></div>
+    <div class="signature-box"><div class="signature-space"><img class="sign-img" src="sante-signature-director.png" alt="signature"></div><div class="signature-line"><b>${SANTE.signer}</b><br>ผู้อนุมัติเอกสาร (ผู้ขาย)<br>${esc(x.issue_date||"")}</div></div>
     <div class="signature-box"><div class="seal-box"><img class="seal-mark-img" src="sante-company-stamp.png" alt="stamp"></div><div class="signature-line">ตราประทับ (ผู้ขาย)</div></div>
-    <div class="signature-box"><div class="signature-space"></div><div class="signature-line">ผู้รับเอกสาร (ลูกค้า)</div></div>
+    <div class="signature-box"><div class="signature-space"></div><div class="signature-line"><b>${esc(x.organization_name||x.customer_name||"")}</b><br>ผู้รับเอกสาร (ลูกค้า)</div></div>
     <div class="signature-box"><div class="customer-stamp-box"></div><div class="signature-line">ตราประทับ (ลูกค้า) (ถ้ามี)</div></div>
    </div>
    <div class="footer-sign-note">${isInvoice?"ผู้ขายลงนามเพื่อรับรองความถูกต้องของใบแจ้งหนี้ และลูกค้าสามารถลงนาม/ประทับตราเพื่อยืนยันการรับเอกสาร":isReceipt?"เอกสารฉบับนี้ใช้เป็นหลักฐานการรับชำระเงินและใบกำกับภาษีตามข้อมูลที่ระบุข้างต้น":isCreditNote?"ใบลดหนี้ฉบับนี้อ้างอิงเอกสารเดิมตามที่ระบุ กรุณาตรวจสอบเหตุผลและจำนวนเงินที่ลดก่อนนำเอกสารไปใช้":"เอกสารฉบับนี้จัดทำจากข้อมูลใน SANTE Accounting Documents"}</div>
@@ -1974,7 +2025,7 @@ async function generateBlob(x){
  const stage=$("printStage");stage.innerHTML=paperHtml(x);
  await new Promise(r=>setTimeout(r,250));
  const element=stage.firstElementChild;
- const opt={margin:0,filename:(x.document_no||"document")+".pdf",image:{type:"jpeg",quality:.98},html2canvas:{scale:2,useCORS:true,backgroundColor:"#ffffff"},jsPDF:{unit:"px",format:[794,1123],orientation:"portrait"}};
+ const opt={margin:0,filename:(x.document_no||"document")+".pdf",image:{type:"jpeg",quality:.98},html2canvas:{scale:3,useCORS:true,backgroundColor:"#ffffff"},jsPDF:{unit:"px",format:[794,1123],orientation:"portrait"}};
  const worker=html2pdf().set(opt).from(element).toPdf();
  const pdf=await worker.get("pdf");
  return pdf.output("blob");
