@@ -2375,37 +2375,7 @@ label{font-size:14px}.input,.select,textarea{font-size:15px;padding:13px 14px}.h
 <meta name="sante-build-r8" content="MEMBER-QUOTATION-R8-SCREEN-SIZE-FIX">
 <meta name="sante-build-r9" content="MEMBER-QUOTATION-R9-AUTO-INVOICE">
 
-
-<style id="sante-member-unified-r10">
-/* ===== SANTE MEMBER UNIFIED R10 ===== */
-:root{
-  --member-navy:#082d69;
-  --member-blue:#087df0;
-  --member-yellow:#ffbf19;
-  --member-muted:#6f82a0;
-  --member-line:#dce7f2;
-}
-@media (min-width:1024px){
-  .page{font-size:16px!important}
-  .page-title h1,.page>h1,.heading h1,.section-heading h2,.training-heading h2{font-size:30px!important;line-height:1.3!important}
-  .page-title p,.sub,.heading p,.section-heading p,.training-heading p{font-size:15px!important;line-height:1.65!important}
-  .service-content h3,.payment-title,.rtitle,.title,.document-body h3{font-size:19px!important;line-height:1.45!important}
-  .service-content p,.quick-card p,.meta,.payment-session,.document-meta,.document-meta dt,.document-meta dd{font-size:14px!important;line-height:1.65!important}
-  .quick-card h4{font-size:17px!important}
-  .btn,.logout,.logout-button,.home-link,.detail-btn,.document-button,.training-button{font-size:14px!important}
-  .badge,.status,.service-status,.quick-status,.document-type,.document-version,.reqno,.no,.payment-no{font-size:12.5px!important}
-}
-</style>
-
-
-<style id="member-quotation-r10-shell-readable">
-@media screen and (min-width:1024px){
-  .page-title h1{font-size:30px!important}
-  .page-title p{font-size:15px!important}
-  .member-doc-actions .btn{font-size:14px!important;min-height:44px!important}
-}
-</style>
-
+<meta name="sante-workflow" content="R7-MEMBER-QUOTATION-DECISION">
 </head><body><div id="loading" class="loading">กำลังโหลดใบเสนอราคา...</div>
 <header class="topbar">
   <a class="brand" href="member-home.html"><img class="brand-logo" src="sante%20(en)-logo.png" alt="SANTE Consulting"></a>
@@ -2426,7 +2396,7 @@ label{font-size:14px}.input,.select,textarea{font-size:15px;padding:13px 14px}.h
     <img src="sante-mobile-hero.png" alt="SANTE Member">
   </div>
 </section><div class="crumbs"><a href="member-home.html">หน้าหลักสมาชิก</a> › <a href="member-service-requests.html">คำขอของฉัน</a> › ใบเสนอราคา</div><div class="page-title"><h1>ใบเสนอราคา</h1><p>ตรวจสอบรายละเอียดก่อนอนุมัติราคา</p></div>
-<div class="paper-scroll"><div id="paper" class="paper reference-qo"></div></div><div id="msg" class="notice"></div><div class="member-doc-actions"><button class="btn light" onclick="printQuotation()">พิมพ์ / PDF</button><button id="approveBtn" class="btn yellow" onclick="approve()">อนุมัติใบเสนอราคา</button></div></main>
+<div class="paper-scroll"><div id="paper" class="paper reference-qo"></div></div><div id="msg" class="notice"></div><div class="member-doc-actions"><button class="btn light" onclick="printQuotation()">พิมพ์ / PDF</button><button id="rejectBtn" class="btn light" onclick="rejectQuotation()" style="display:none">ไม่อนุมัติ</button><button id="approveBtn" class="btn yellow" onclick="approve()">อนุมัติใบเสนอราคา</button></div></main>
 <script>
 const db=window.supabase.createClient(
   "https://cyegjwerxlxhczrfiurz.supabase.co",
@@ -2434,8 +2404,6 @@ const db=window.supabase.createClient(
   {auth:{storageKey:"sante-member-auth",persistSession:true,autoRefreshToken:true}}
 );
 const id=new URLSearchParams(location.search).get("id");
-const approveBtn=document.getElementById("approveBtn");
-const msg=document.getElementById("msg");
 let q=null;
 let items=[];
 let requestNo="-";
@@ -2603,11 +2571,11 @@ async function init(){
     const s=await db.auth.getSession();
     if(!s.data.session){location="member-login.html";return}
     const u=s.data.session.user;
-    document.getElementById("memberEmail").textContent=u.email||"";
+    memberEmail.textContent=u.email||"";
     const pr=await db.from("profiles").select("title_th,firstname_th,lastname_th,email").eq("id",u.id).maybeSingle();
     if(pr.data){
-      document.getElementById("memberName").textContent=[pr.data.title_th,pr.data.firstname_th,pr.data.lastname_th].filter(Boolean).join(" ")||"สมาชิก SANTE";
-      document.getElementById("memberEmail").textContent=pr.data.email||u.email||"";
+      memberName.textContent=[pr.data.title_th,pr.data.firstname_th,pr.data.lastname_th].filter(Boolean).join(" ")||"สมาชิก SANTE";
+      memberEmail.textContent=pr.data.email||u.email||"";
     }
     if(!id){alert("ไม่พบใบเสนอราคา");location="member-quotations.html";return}
     const [qr,ir]=await Promise.all([
@@ -2630,18 +2598,48 @@ async function init(){
     }
 
     renderPaper();
-    document.getElementById("approveBtn").style.display=q.status==="SENT"?"inline-flex":"none";
+    approveBtn.style.display=q.status==="SENT"?"inline-flex":"none";
+    rejectBtn.style.display=q.status==="SENT"?"inline-flex":"none";
     if(q.status==="APPROVED"){
-      document.getElementById("msg").style.display="block";
-      document.getElementById("msg").textContent="ใบเสนอราคานี้ได้รับการอนุมัติแล้ว";
+      msg.style.display="block";
+      msg.textContent="ใบเสนอราคานี้ได้รับการอนุมัติแล้ว และระบบจะใช้เป็นต้นทางของใบแจ้งหนี้";
+    }else if(q.status==="REJECTED"){
+      msg.style.display="block";
+      msg.textContent="คุณไม่อนุมัติใบเสนอราคานี้แล้ว";
+    }else if(q.status==="CANCELLED"){
+      msg.style.display="block";
+      msg.classList.add("error");
+      msg.textContent="ใบเสนอราคานี้ถูกยกเลิกโดย SANTE";
     }
   }catch(e){
     console.error(e);
     alert("ไม่สามารถโหลดใบเสนอราคาได้: "+(e.message||e));
   }finally{
-    const loadingEl=document.getElementById("loading");if(loadingEl)loadingEl.style.display="none";
+    loading.style.display="none";
   }
 }
+
+async function rejectQuotation(){
+  if(!q||q.status!=="SENT")return;
+  const reason=prompt("เหตุผลที่ไม่อนุมัติ (เว้นว่างได้)","");
+  if(reason===null)return;
+  if(!confirm("ยืนยันไม่อนุมัติใบเสนอราคานี้?"))return;
+  rejectBtn.disabled=true; approveBtn.disabled=true;
+  try{
+    const r=await db.rpc("member_reject_quotation",{p_quotation_id:id,p_reason:reason||null});
+    if(r.error)throw r.error;
+    q.status="REJECTED";
+    approveBtn.style.display="none";
+    rejectBtn.style.display="none";
+    msg.style.display="block";
+    msg.textContent="บันทึกการไม่อนุมัติใบเสนอราคาแล้ว";
+  }catch(e){
+    alert("ไม่สามารถบันทึกการไม่อนุมัติได้: "+(e.message||e));
+  }finally{
+    rejectBtn.disabled=false; approveBtn.disabled=false;
+  }
+}
+
 async function approve(){
   if(!q||q.status!=="SENT")return;
   if(!confirm("ยืนยันอนุมัติใบเสนอราคานี้?\nเมื่ออนุมัติแล้ว ระบบจะเตรียมใบแจ้งหนี้ให้อัตโนมัติ"))return;
@@ -2659,7 +2657,7 @@ async function approve(){
     const result=Array.isArray(r.data)?r.data[0]:r.data;
     q.status="APPROVED";
 
-    document.getElementById("msg").style.display="block";
+    msg.style.display="block";
     msg.classList.remove("error");
 
     if(result?.invoice_no){
@@ -2676,7 +2674,7 @@ async function approve(){
     approveBtn.style.display="none";
   }catch(e){
     console.error(e);
-    document.getElementById("msg").style.display="block";
+    msg.style.display="block";
     msg.classList.add("error");
     msg.textContent="ไม่สามารถอนุมัติใบเสนอราคาได้: "+(e.message||e);
   }finally{
@@ -2701,8 +2699,7 @@ async function printQuotation(){
     #paper{display:block!important;margin:0!important;box-shadow:none!important;border:0!important;width:210mm!important;height:297mm!important;min-height:297mm!important;max-height:297mm!important;overflow:hidden!important}
     .ref-summary,.ref-payment,.ref-note,.ref-cert{break-inside:avoid!important;page-break-inside:avoid!important}
     @page{size:A4 portrait;margin:0}
-  </style></head><body>${source.outerHTML}
-</body></html>`);
+  </style></head><body>${source.outerHTML}</body></html>`);
   doc.close();
   try{
     if(doc.fonts?.ready)await doc.fonts.ready;
@@ -2718,17 +2715,4 @@ async function printQuotation(){
 }
 logout.onclick=async()=>{await db.auth.signOut();location="member-login.html"};
 init();
-</script>
-<script id="member-r12-loading-watchdog">
-window.setTimeout(function(){
-  const el=document.getElementById("loading");
-  if(!el)return;
-  const visible=window.getComputedStyle(el).display!=="none";
-  if(visible){
-    el.innerHTML='โหลดใบเสนอราคานานผิดปกติ<br><button type="button" onclick="location.reload()" style="margin-top:14px;min-height:42px;padding:0 16px;border:1px solid #d5e1ef;border-radius:10px;background:#fff;color:#082d69;font:600 14px Prompt,sans-serif;cursor:pointer">โหลดใหม่</button>';
-  }
-},15000);
-</script>
-<meta name="sante-build-r12" content="MEMBER-QUOTATION-R12-LOAD-FIX">
-
-</body></html>
+</script></body></html>

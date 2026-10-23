@@ -72,6 +72,7 @@ a{text-decoration:none;color:inherit}button,select,input{font-family:inherit}
 
 <meta name="sante-build-member-sync" content="MEMBER-ACCOUNTING-PDF-SYNC-R4">
 <meta name="sante-build-pdf-repair" content="R6-MEMBER-STORAGE-FALLBACK">
+<meta name="sante-workflow" content="R7-MEMBER-VISIBILITY-ACTIONS">
 </head>
 <body>
 <div id="loading" class="loading">กำลังโหลดเอกสารทางบัญชี...</div>
@@ -134,15 +135,20 @@ const statusTH={DRAFT:"ร่าง",SENT:"รออนุมัติราค�
 function statusClass(s){s=String(s||"").toLowerCase();return s.includes("approved")?"approved":s.includes("issued")?"issued":s.includes("ready")?"ready":s.includes("waiting")?"waiting":s.includes("sent")?"sent":""}
 function dateText(v){if(!v)return "-";const d=new Date(v);return Number.isNaN(d.getTime())?String(v):new Intl.DateTimeFormat("th-TH",{day:"2-digit",month:"short",year:"numeric"}).format(d)}
 function updateCounts(){
-  $("cAll").textContent=rows.length;
-  $("cQ").textContent=rows.filter(x=>x.document_type==="QUOTATION").length;
-  $("cI").textContent=rows.filter(x=>x.document_type==="INVOICE").length;
-  $("cR").textContent=rows.filter(x=>x.document_type==="RECEIPT_TAX_INVOICE").length;
-  $("cC").textContent=rows.filter(x=>x.document_type==="CREDIT_NOTE").length;
+  const v=rows.filter(memberVisible);
+  $("cAll").textContent=v.length;
+  $("cQ").textContent=v.filter(x=>x.document_type==="QUOTATION").length;
+  $("cI").textContent=v.filter(x=>x.document_type==="INVOICE").length;
+  $("cR").textContent=v.filter(x=>x.document_type==="RECEIPT_TAX_INVOICE").length;
+  $("cC").textContent=v.filter(x=>x.document_type==="CREDIT_NOTE").length;
+}
+function memberVisible(x){
+  if(x.document_type==="QUOTATION")return ["SENT","APPROVED","REJECTED","CANCELLED","ISSUED"].includes(x.document_status);
+  return ["ISSUED","CANCELLED"].includes(x.document_status);
 }
 function currentRows(){
   const q=$("search").value.trim().toLowerCase(),t=$("typeFilter").value;
-  return rows.filter(x=>(!t||x.document_type===t)&&(!q||[x.document_no,x.organization_name,x.customer_name,x.document_subject].some(v=>String(v||"").toLowerCase().includes(q))));
+  return rows.filter(x=>memberVisible(x)&&(!t||x.document_type===t)&&(!q||[x.document_no,x.organization_name,x.customer_name,x.document_subject].some(v=>String(v||"").toLowerCase().includes(q))));
 }
 function render(){
   const data=currentRows();
@@ -178,7 +184,9 @@ function render(){
         <button class="btn" onclick="openDetail('${x.source_id}')">ดูรายละเอียด</button>
         ${x.document_type==="QUOTATION"
           ? `<a class="btn yellow" href="member-quotation.html?id=${encodeURIComponent(x.source_id)}">เปิดใบเสนอราคา</a>`
-          : (pdf||x.document_status==="ISSUED"?`<button class="btn yellow" onclick="openPdfForDocument('${x.source_id}')">เปิด PDF</button>`:"")}
+          : (x.document_status==="CANCELLED"
+              ? `<span class="btn" style="pointer-events:none;opacity:.65">เอกสารถูกยกเลิก</span>`
+              : `${pdf||x.document_status==="ISSUED"?`<button class="btn yellow" onclick="openPdfForDocument('${x.source_id}')">เปิด PDF</button>`:""}${x.document_type==="INVOICE"&&x.document_status==="ISSUED"?`<a class="btn" href="member-payments.html">แจ้งชำระเงิน</a>`:""}`)}
       </div>
     </article>`;
   }).join("");
@@ -264,8 +272,10 @@ function openDetail(id){
   const pdf=findPdf(x);
   $("detailActions").innerHTML=
     (x.document_type==="QUOTATION"?`<a class="btn yellow" href="member-quotation.html?id=${encodeURIComponent(x.source_id)}">เปิดใบเสนอราคา</a>`:"")+
-    ((pdf||x.document_status==="ISSUED")?`<button class="btn" id="openPdfBtn">เปิด PDF</button>`:"");
-  if(pdf||x.document_status==="ISSUED")$("openPdfBtn").onclick=()=>openPdfForDocument(x.source_id);
+    (x.document_status==="CANCELLED"?`<span class="btn" style="pointer-events:none;opacity:.65">เอกสารถูกยกเลิก</span>`:
+      ((pdf||x.document_status==="ISSUED")?`<button class="btn" id="openPdfBtn">เปิด PDF</button>`:"")+
+      (x.document_type==="INVOICE"&&x.document_status==="ISSUED"?`<a class="btn yellow" href="member-payments.html">แจ้งชำระเงิน</a>`:""));
+  if(x.document_status!=="CANCELLED"&&(pdf||x.document_status==="ISSUED"))$("openPdfBtn").onclick=()=>openPdfForDocument(x.source_id);
   $("detailBg").classList.add("show");
 }
 function closeDetail(){$("detailBg").classList.remove("show")}

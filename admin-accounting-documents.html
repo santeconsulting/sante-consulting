@@ -2609,6 +2609,7 @@ label{display:block;font-size:11px;font-weight:600;margin-bottom:5px}.input,text
 <meta name="sante-build-member-sync" content="ADMIN-ACCOUNTING-PDF-REPAIR-R4">
 <meta name="sante-build-taxid-validation" content="R5-TAXID-OPTIONAL-NONBLOCKING">
 <meta name="sante-build-pdf-repair" content="R6-STAGE-AWARE-REPAIR">
+<meta name="sante-workflow" content="R7-ACCOUNTING-STATE-ACTIONS">
 </head>
 <body>
 <div id="loading" class="loading">กำลังโหลดเอกสารบัญชี...</div>
@@ -2924,7 +2925,7 @@ function updateWorkflowActions(){
     : isCreditNote
       ? "<b>ขั้นตอนใบลดหนี้:</b> 1) เลือกใบเสร็จ/ใบกำกับภาษีต้นทาง → 2) สร้าง Draft → 3) ตรวจเหตุผล/ยอดลด/VAT → 4) บันทึก → 5) ออก PDF"
       : type==="INVOICE"
-        ? "<b>ขั้นตอนใบแจ้งหนี้:</b> อนุมัติใบเสนอราคาให้เป็น APPROVED ก่อน → กด “ซิงก์ใบเสนอราคา → ใบแจ้งหนี้” → ตรวจ Invoice → ออก PDF"
+        ? "<b>ขั้นตอนใบแจ้งหนี้:</b> APPROVED Quotation → สร้าง Invoice DRAFT/READY → ตรวจ/แก้ไข → พร้อมออก → ออกเอกสาร (ISSUED) → ลูกค้าเห็นใน Member · ISSUED แก้ยอดไม่ได้ ถ้าผิดให้ยกเลิก"
         : "<b>ขั้นตอนเอกสาร:</b> ใบเสนอราคาที่ APPROVED เท่านั้นจึงจะสร้างใบแจ้งหนี้ได้";
 }
 
@@ -3002,10 +3003,40 @@ function render(){
   <td><div class="row-actions">
     <button class="btn small preview" onclick="openPreview('${x.id}')">ดูเอกสาร</button>
     ${["DRAFT","READY_TO_ISSUE","WAITING_APPROVAL"].includes(x.document_status)?`<button class="btn small" onclick="openEditor('${x.id}')">แก้ไข</button>`:""}
-    ${["READY_TO_ISSUE","APPROVED"].includes(x.document_status)?`<button class="btn small yellow" onclick="issueOne('${x.id}')">ออก PDF</button>`:""}
-    ${x.document_status==="ISSUED"?`<button class="btn small yellow" onclick="issueOne('${x.id}',false,true)">สร้าง PDF ใหม่</button>`:""}
+    ${x.document_status==="DRAFT"?`<button class="btn small yellow" onclick="markAccountingReady('${x.id}')">พร้อมออก</button><button class="btn small red" onclick="deleteDraftAccounting('${x.id}')">ลบ Draft</button>`:""}
+    ${["READY_TO_ISSUE","APPROVED"].includes(x.document_status)?`<button class="btn small yellow" onclick="issueOne('${x.id}')">ออกเอกสาร</button><button class="btn small red" onclick="cancelAccounting('${x.id}')">ยกเลิก</button>`:""}
+    ${x.document_status==="ISSUED"?`<button class="btn small yellow" onclick="issueOne('${x.id}',false,true)">สร้าง PDF ใหม่</button><button class="btn small red" onclick="cancelAccounting('${x.id}')">ยกเลิก</button>`:""}
   </div></td>
  </tr>`).join(""):`<tr><td colspan="9"><div class="empty">ยังไม่มีเอกสารบัญชี</div></td></tr>`;
+}
+
+
+async function markAccountingReady(id){
+ const x=docs.find(d=>d.id===id); if(!x)return;
+ if(x.document_status!=="DRAFT")return alert("เปลี่ยนเป็นพร้อมออกได้เฉพาะ DRAFT");
+ if(!confirm(`ยืนยันว่า ${x.document_no||"เอกสารนี้"} ตรวจข้อมูลแล้วและพร้อมออกเอกสาร?`))return;
+ const {error}=await db.rpc("admin_mark_accounting_ready",{p_document_id:id});
+ if(error)return alert("เปลี่ยนสถานะไม่สำเร็จ: "+error.message);
+ await loadDocs();
+}
+async function deleteDraftAccounting(id){
+ const x=docs.find(d=>d.id===id); if(!x)return;
+ if(x.document_status!=="DRAFT")return alert("ลบได้เฉพาะ DRAFT");
+ if(!confirm(`ลบ Draft ${x.document_no||""} ถาวรหรือไม่?`))return;
+ const {error}=await db.rpc("admin_delete_draft_accounting_document",{p_document_id:id});
+ if(error)return alert("ลบ Draft ไม่สำเร็จ: "+error.message);
+ await loadDocs();
+}
+async function cancelAccounting(id){
+ const x=docs.find(d=>d.id===id); if(!x)return;
+ if(x.document_status==="DRAFT")return alert("Draft ให้ใช้ปุ่มลบ");
+ if(x.document_status==="CANCELLED")return;
+ const reason=prompt("เหตุผลการยกเลิกเอกสาร (เว้นว่างได้)","");
+ if(reason===null)return;
+ if(!confirm(`ยืนยันยกเลิก ${x.document_no||"เอกสาร"}? เลขเอกสารและประวัติจะยังคงอยู่`))return;
+ const {error}=await db.rpc("admin_cancel_accounting_document",{p_document_id:id,p_reason:reason||null});
+ if(error)return alert("ยกเลิกเอกสารไม่สำเร็จ: "+error.message);
+ await loadDocs();
 }
 
 async function syncQuotes(){

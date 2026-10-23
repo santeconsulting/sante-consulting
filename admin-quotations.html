@@ -5435,6 +5435,7 @@ textarea{
 </style>
 <meta name="sante-net-label-break-r3" content="FIXED-TWO-LINE-NET-LABEL">
 
+<meta name="sante-workflow" content="R7-QUOTATION-STATE-ACTIONS">
 </head>
 <body>
 
@@ -5594,7 +5595,7 @@ textarea{
   <label><input type="radio" name="quotationCopyMode" value="COPY"> สำเนา</label>
 </div>
 
-<div class="actions"><button class="btn light" type="button" onclick="printQuotation()">พิมพ์ / PDF</button><button class="btn primary" onclick="saveQuotation(false)">บันทึก Draft</button><button class="btn yellow" onclick="saveQuotation(true)">บันทึกและส่งลูกค้า</button></div>
+<div class="actions"><button class="btn light" type="button" onclick="printQuotation()">พิมพ์ / PDF</button><button id="quoteSaveDraftBtn" class="btn primary" onclick="saveQuotation(false)">บันทึก Draft</button><button id="quoteSendBtn" class="btn yellow" onclick="saveQuotation(true)">บันทึกและส่งลูกค้า</button></div>
 </div><div class="preview-wrap"><div class="paper" id="paper"></div></div></div></div></div>
 <div id="toast" class="toast"></div>
 <script>
@@ -5671,7 +5672,42 @@ async function init(){
  }
 }
 async function loadAll(){const [q,r]=await Promise.all([db.from("quotations").select("*").order("created_at",{ascending:false}),db.from("service_requests").select("*").order("created_at",{ascending:false})]);if(q.error){alert(q.error.message);return}quotes=q.data||[];requests=r.data||[];render();fillRequests()}
-function render(){const q=search.value.toLowerCase().trim(),st=statusFilter.value;const rows=quotes.filter(x=>(!q||[x.quotation_no,x.customer_name,x.organization_name].join(" ").toLowerCase().includes(q))&&(!st||x.status===st));sAll.textContent=quotes.length;sDraft.textContent=quotes.filter(x=>x.status==="DRAFT").length;sSent.textContent=quotes.filter(x=>x.status==="SENT").length;sApproved.textContent=quotes.filter(x=>x.status==="APPROVED").length;sClosed.textContent=quotes.filter(x=>["REJECTED","EXPIRED"].includes(x.status)).length;body.innerHTML=rows.length?rows.map(x=>`<tr><td><strong>${esc(x.quotation_no)}</strong></td><td>${esc(x.organization_name||x.customer_name||"-")}<div class="muted">${esc(x.customer_name||"")}</div></td><td>${esc(x.issue_date||"-")}</td><td>${esc(x.valid_until||"-")}</td><td>${x.revision_no||0}</td><td>${money(x.grand_total)}</td><td>${money(x.wht_amount)}</td><td>${money(x.net_receivable)}</td><td><span class="badge">${esc(x.status)}</span></td><td><button class="btn light" onclick="openEditor('${x.id}')">เปิด / แก้ไข</button></td></tr>`).join(""):`<tr><td colspan="10" style="padding:28px;text-align:center;color:#72869b">ยังไม่มีใบเสนอราคา — ไปที่ งานบริการ → คำขอบริการ → เปิดรายละเอียด → สร้างใบเสนอราคา</td></tr>`}
+function quotationActions(x){
+ const s=x.status||"DRAFT";
+ if(s==="DRAFT")return `
+   <button class="btn light" onclick="openQuotationByStatus('${x.id}')">เปิด / แก้ไข</button>
+   <button class="btn yellow" onclick="openQuotationByStatus('${x.id}',true)">ส่งลูกค้า</button>
+   <button class="btn red" onclick="deleteDraftQuotation('${x.id}')">ลบ Draft</button>`;
+ if(s==="SENT")return `
+   <button class="btn light" onclick="openQuotationByStatus('${x.id}')">เปิด / แก้ไข</button>
+   <button class="btn red" onclick="cancelQuotation('${x.id}')">ยกเลิก</button>`;
+ if(s==="APPROVED")return `
+   <button class="btn light" onclick="openQuotationByStatus('${x.id}')">ดูเอกสาร</button>
+   <button class="btn yellow" onclick="createInvoiceForQuotation('${x.id}')">สร้าง / เปิด Invoice</button>
+   <button class="btn red" onclick="cancelQuotation('${x.id}')">ยกเลิก</button>`;
+ return `<button class="btn light" onclick="openQuotationByStatus('${x.id}')">ดูเอกสาร</button>`;
+}
+function render(){
+ const q=search.value.toLowerCase().trim(),st=statusFilter.value;
+ const rows=quotes.filter(x=>(!q||[x.quotation_no,x.customer_name,x.organization_name].join(" ").toLowerCase().includes(q))&&(!st||x.status===st));
+ sAll.textContent=quotes.length;
+ sDraft.textContent=quotes.filter(x=>x.status==="DRAFT").length;
+ sSent.textContent=quotes.filter(x=>x.status==="SENT").length;
+ sApproved.textContent=quotes.filter(x=>x.status==="APPROVED").length;
+ sClosed.textContent=quotes.filter(x=>["REJECTED","EXPIRED","CANCELLED"].includes(x.status)).length;
+ body.innerHTML=rows.length?rows.map(x=>`<tr>
+  <td><strong>${esc(x.quotation_no)}</strong></td>
+  <td>${esc(x.organization_name||x.customer_name||"-")}<div class="muted">${esc(x.customer_name||"")}</div></td>
+  <td>${esc(x.issue_date||"-")}</td>
+  <td>${esc(x.valid_until||"-")}</td>
+  <td>${x.revision_no||0}</td>
+  <td>${money(x.grand_total)}</td>
+  <td>${money(x.wht_amount)}</td>
+  <td>${money(x.net_receivable)}</td>
+  <td><span class="badge">${esc(x.status)}</span></td>
+  <td><div class="row-actions">${quotationActions(x)}</div></td>
+ </tr>`).join(""):`<tr><td colspan="10" style="padding:28px;text-align:center;color:#72869b">ยังไม่มีใบเสนอราคา</td></tr>`;
+}
 function fillRequests(){requestId.innerHTML='<option value="">ไม่ผูกคำขอ</option>'+requests.map(x=>`<option value="${x.id}">${esc(x.request_no||"-")} · ${esc(x.organization_name||x.customer_name||"")}</option>`).join("")}
 function toggleWht(){
   const enabled=!!showWht?.checked;
@@ -6263,7 +6299,59 @@ async function printQuotation(){
   }
 }
 
+
+let quotationReadOnly=false;
+function setQuotationEditorMode(status){
+ const editable=["DRAFT","SENT"].includes(status||"DRAFT");
+ quotationReadOnly=!editable;
+ document.querySelectorAll("#editor input,#editor textarea,#editor select").forEach(el=>{
+   if(el.name==="quotationCopyMode")return;
+   el.disabled=!editable;
+ });
+ const saveBtn=document.getElementById("quoteSaveDraftBtn");
+ const sendBtn=document.getElementById("quoteSendBtn");
+ if(saveBtn)saveBtn.style.display=editable?"inline-flex":"none";
+ if(sendBtn)sendBtn.style.display=editable?"inline-flex":"none";
+}
+async function openQuotationByStatus(id,sendAfterOpen=false){
+ const x=quotes.find(q=>q.id===id);
+ if(!x)return;
+ await openEditor(id);
+ setQuotationEditorMode(x.status);
+ if(sendAfterOpen && x.status==="DRAFT"){
+   if(confirm("เปิด Draft แล้ว ต้องการส่งใบเสนอราคาให้ลูกค้าทันทีหรือไม่?"))await saveQuotation(true);
+ }
+}
+async function deleteDraftQuotation(id){
+ const x=quotes.find(q=>q.id===id); if(!x)return;
+ if(x.status!=="DRAFT")return alert("ลบได้เฉพาะใบเสนอราคาสถานะ DRAFT");
+ if(!confirm(`ลบ Draft ${x.quotation_no||""} ถาวรหรือไม่?`))return;
+ const {error}=await db.rpc("admin_delete_draft_quotation",{p_quotation_id:id});
+ if(error)return alert("ลบ Draft ไม่สำเร็จ: "+error.message);
+ await loadAll(); toast("ลบ Draft แล้ว");
+}
+async function cancelQuotation(id){
+ const x=quotes.find(q=>q.id===id); if(!x)return;
+ if(x.status==="DRAFT")return alert("Draft ควรใช้ปุ่มลบ ไม่ใช่ยกเลิก");
+ if(x.status==="CANCELLED")return;
+ const reason=prompt("เหตุผลการยกเลิกเอกสาร (เว้นว่างได้)","");
+ if(reason===null)return;
+ if(!confirm(`ยืนยันยกเลิก ${x.quotation_no||"ใบเสนอราคา"}? เลขเอกสารจะยังคงอยู่เพื่อประวัติ`))return;
+ const {error}=await db.rpc("admin_cancel_quotation",{p_quotation_id:id,p_reason:reason||null});
+ if(error)return alert("ยกเลิกไม่สำเร็จ: "+error.message);
+ await loadAll(); toast("ยกเลิกใบเสนอราคาแล้ว");
+}
+async function createInvoiceForQuotation(id){
+ const x=quotes.find(q=>q.id===id); if(!x)return;
+ if(x.status!=="APPROVED")return alert("สร้าง Invoice ได้เฉพาะใบเสนอราคาที่ APPROVED");
+ const {data,error}=await db.rpc("admin_create_invoice_from_quotation",{p_quotation_id:id});
+ if(error)return alert("สร้าง/เปิด Invoice ไม่สำเร็จ: "+error.message);
+ const inv=Array.isArray(data)?data[0]:data;
+ location.href="admin-accounting-documents.html?type=INVOICE"+(inv?.id?`&doc=${encodeURIComponent(inv.id)}`:"");
+}
+
 async function saveQuotation(send){
+ if(quotationReadOnly)return alert("เอกสารสถานะนี้เป็นแบบอ่านอย่างเดียว หากข้อมูลผิดให้ยกเลิกและออกฉบับใหม่");
  const c=calc();
  if(!String(organizationName?.value||"").trim()&&!String(customerName?.value||"").trim())return toast("กรุณากรอกลูกค้าหรือบริษัท");
  if(!requestId.value)return alert("กรุณาเลือกคำขอบริการก่อนบันทึกใบเสนอราคา");
