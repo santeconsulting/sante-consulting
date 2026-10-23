@@ -2606,6 +2606,7 @@ label{display:block;font-size:11px;font-weight:600;margin-bottom:5px}.input,text
 </style>
 <meta name="sante-net-label-break-r3" content="FIXED-TWO-LINE-NET-LABEL">
 
+<meta name="sante-build-member-sync" content="ADMIN-ACCOUNTING-PDF-REPAIR-R4">
 </head>
 <body>
 <div id="loading" class="loading">กำลังโหลดเอกสารบัญชี...</div>
@@ -3000,6 +3001,7 @@ function render(){
     <button class="btn small preview" onclick="openPreview('${x.id}')">ดูเอกสาร</button>
     ${["DRAFT","READY_TO_ISSUE","WAITING_APPROVAL"].includes(x.document_status)?`<button class="btn small" onclick="openEditor('${x.id}')">แก้ไข</button>`:""}
     ${["READY_TO_ISSUE","APPROVED"].includes(x.document_status)?`<button class="btn small yellow" onclick="issueOne('${x.id}')">ออก PDF</button>`:""}
+    ${x.document_status==="ISSUED"?`<button class="btn small yellow" onclick="issueOne('${x.id}',false,true)">สร้าง PDF ใหม่</button>`:""}
   </div></td>
  </tr>`).join(""):`<tr><td colspan="9"><div class="empty">ยังไม่มีเอกสารบัญชี</div></td></tr>`;
 }
@@ -3590,70 +3592,129 @@ function validateBeforeIssue(x){
  return warnings;
 }
 
-async function issueOne(id,silent=false){
+async function issueOne(id,silent=false,regenerateIssued=false){
  let x=docs.find(d=>d.id===id);
  if(!x)return false;
+
+ const isIssued=x.document_status==="ISSUED";
+ const canIssue=["READY_TO_ISSUE","APPROVED"].includes(x.document_status);
+ const canRegenerate=isIssued&&regenerateIssued;
+
+ if(!canIssue&&!canRegenerate){
+   if(!silent)alert("เอกสารนี้ยังไม่อยู่ในสถานะที่สามารถออก PDF ได้");
+   return false;
+ }
+
  const issueWarnings=validateBeforeIssue(x);
- if(issueWarnings.length){const msg="กรุณาตรวจสอบข้อมูลก่อนออกเอกสาร:\n• "+issueWarnings.join("\n• ");if(silent){console.warn(msg);return false;}alert(msg);return false;}
- if(x.document_type==="RECEIPT_TAX_INVOICE"&&x.document_status!=="APPROVED"){
+ if(issueWarnings.length){
+   const msg="กรุณาตรวจสอบข้อมูลก่อนออกเอกสาร:\n• "+issueWarnings.join("\n• ");
+   if(silent){console.warn(msg);return false;}
+   alert(msg);return false;
+ }
+
+ if(x.document_type==="RECEIPT_TAX_INVOICE"&&!["APPROVED","ISSUED"].includes(x.document_status)){
    if(!silent)alert("ใบเสร็จ/ใบกำกับภาษีต้องผ่านการอนุมัติก่อน");
    return false;
  }
- if(!["READY_TO_ISSUE","APPROVED"].includes(x.document_status))return false;
+
  const btn=$("pdfBtn");
- if(btn&&editing?.id===id){btn.disabled=true;btn.textContent="กำลังสร้าง PDF..."}
+ if(btn&&editing?.id===id){
+   btn.disabled=true;
+   btn.textContent=isIssued?"กำลังสร้าง PDF ใหม่...":"กำลังสร้าง PDF...";
+ }
+
  try{
   const blob=await generateBlob(x);
   const safe=(x.document_no||x.id).replace(/[^A-Za-z0-9_-]/g,"_");
-  const path=`accounting/${new Date().getFullYear()}/${x.document_type}/${safe}.pdf`;
-  const up=await db.storage.from(BUCKET).upload(path,blob,{contentType:"application/pdf",upsert:true});
-  if(up.error)throw up.error;
-  const fin=await db.rpc("admin_finalize_accounting_document",{
-    p_document_id:x.id,p_storage_bucket:BUCKET,p_storage_path:path,
-    p_original_filename:`${(x.document_no||safe).replace(/[^A-Za-z0-9_-]/g,"_")}.pdf`,p_file_size_bytes:blob.size
+  const year=String(x.issue_date||new Date().getFullYear()).slice(0,4) || String(new Date().getFullYear());
+  const path=`accounting/${year}/${x.document_type}/${safe}.pdf`;
+
+  const up=await db.storage.from(BUCKET).upload(path,blob,{
+    contentType:"application/pdf",
+    upsert:true,
+    cacheControl:"60"
   });
-  if(fin.error)throw fin.error;
+  if(up.error)throw up.error;
+
+  if(!isIssued){
+    const fin=await db.rpc("admin_finalize_accounting_document",{
+      p_document_id:x.id,
+      p_storage_bucket:BUCKET,
+      p_storage_path:path,
+      p_original_filename:`${safe}.pdf`,
+      p_file_size_bytes:blob.size
+    });
+    if(fin.error)throw fin.error;
+  }else{
+    // ISSUED: regenerate file only. Do not mutate document status/business data.
+    console.info("Regenerated ISSUED PDF",x.document_no,path);
+  }
+
   await loadDocs();
-  if(editing?.id===id){const fresh=docs.find(d=>d.id===id);if(fresh)fillEditor(fresh)}
+  if(editing?.id===id){
+    const fresh=docs.find(d=>d.id===id);
+    if(fresh)fillEditor(fresh);
+  }
+
+  if(!silent&&isIssued){
+    alert(`สร้าง PDF ใหม่สำเร็จ\n${x.document_no||safe}.pdf\nสถานะเอกสารยังคงเป็น ISSUED`);
+  }
   return true;
  }catch(e){
   console.error("ACCOUNTING ISSUE ERROR",e);
-  if(!silent)alert("ออกเอกสารไม่สำเร็จ: "+(e.message||e));
+  if(!silent)alert((isIssued?"สร้าง PDF ใหม่ไม่สำเร็จ: ":"ออกเอกสารไม่สำเร็จ: ")+(e.message||e));
   return false;
  }finally{
-  if(btn){btn.disabled=false;btn.textContent="สร้าง PDF และออกเอกสาร"}
+  if(btn){
+    btn.disabled=false;
+    btn.textContent=isIssued?"สร้าง PDF ใหม่":"สร้าง PDF และออกเอกสาร";
+  }
  }
 }
 
 async function issueReadyAll(){
  const visible=getVisibleDocs();
  const ready=visible.filter(x=>["READY_TO_ISSUE","APPROVED"].includes(x.document_status));
- if(!ready.length){
-   const type=$("typeFilter").value;
-   if(type==="RECEIPT_TAX_INVOICE"){
-     alert("ยังไม่มีใบเสร็จ/ใบกำกับภาษีที่พร้อมออก\nให้สร้าง Draft จาก Payment ก่อน แล้วตรวจสอบและอนุมัติ");
-   }else if(type==="CREDIT_NOTE"){
-     alert("ยังไม่มีใบลดหนี้ที่พร้อมออก\nให้สร้าง Draft จากใบเสร็จ/ใบกำกับภาษีเดิม แล้วตรวจแก้ยอดก่อน");
-   }else if(type==="INVOICE"){
-     const invoiceStatuses=visible.map(x=>x.document_status).filter(Boolean);
-     alert(invoiceStatuses.length
-       ? "ยังไม่มีใบแจ้งหนี้สถานะ READY_TO_ISSUE หรือ APPROVED สำหรับออก PDF\nสถานะที่พบ: "+[...new Set(invoiceStatuses)].join(", ")
-       : "ยังไม่มีใบแจ้งหนี้ในรายการนี้\nให้อานุมัติใบเสนอราคาเป็น APPROVED แล้วกดซิงก์ใบเสนอราคา → ใบแจ้งหนี้ก่อน");
-   }else{
-     alert("ไม่มีเอกสารสถานะ READY_TO_ISSUE หรือ APPROVED ในรายการที่กำลังแสดง");
+
+ if(ready.length){
+   if(!confirm(`สร้าง PDF และออกเอกสาร ${ready.length} รายการตามรายการที่กำลังแสดง?`))return;
+   $("generateReadyBtn").disabled=true;
+   let ok=0,fail=0;
+   for(const x of ready){
+     const success=await issueOne(x.id,true,false);
+     if(success)ok++; else fail++;
    }
+   $("generateReadyBtn").disabled=false;
+   await loadDocs();
+   alert(`เสร็จแล้ว ${ok} รายการ${fail?` · ไม่สำเร็จ ${fail}`:""}`);
    return;
  }
- if(!confirm(`สร้าง PDF และออกเอกสาร ${ready.length} รายการตามรายการที่กำลังแสดง?`))return;
- $("generateReadyBtn").disabled=true;
- let ok=0,fail=0;
- for(const x of ready){
-   const success=await issueOne(x.id,true);
-   if(success)ok++; else fail++;
+
+ const issued=visible.filter(x=>x.document_status==="ISSUED");
+ if(issued.length){
+   if(!confirm(`เอกสารที่แสดงเป็น ISSUED แล้ว ${issued.length} รายการ\nต้องการสร้าง/ซ่อมไฟล์ PDF ใหม่ด้วยรูปแบบล่าสุด โดยคงเลขเอกสารและสถานะเดิมหรือไม่?`))return;
+   $("generateReadyBtn").disabled=true;
+   let ok=0,fail=0;
+   for(const x of issued){
+     const success=await issueOne(x.id,true,true);
+     if(success)ok++; else fail++;
+   }
+   $("generateReadyBtn").disabled=false;
+   await loadDocs();
+   alert(`สร้าง PDF ใหม่แล้ว ${ok} รายการ${fail?` · ไม่สำเร็จ ${fail}`:""}\nสถานะเอกสารยังคงเป็น ISSUED`);
+   return;
  }
- $("generateReadyBtn").disabled=false;
- await loadDocs();
- alert(`เสร็จแล้ว ${ok} รายการ${fail?` · ไม่สำเร็จ ${fail}`:""}`);
+
+ const type=$("typeFilter").value;
+ if(type==="RECEIPT_TAX_INVOICE"){
+   alert("ยังไม่มีใบเสร็จ/ใบกำกับภาษีที่พร้อมออก\nให้สร้าง Draft จาก Payment ก่อน แล้วตรวจสอบและอนุมัติ");
+ }else if(type==="CREDIT_NOTE"){
+   alert("ยังไม่มีใบลดหนี้ที่พร้อมออก\nให้สร้าง Draft จากใบเสร็จ/ใบกำกับภาษีเดิม แล้วตรวจแก้ยอดก่อน");
+ }else if(type==="INVOICE"){
+   alert("ยังไม่มีใบแจ้งหนี้ที่พร้อมออกหรือเอกสาร ISSUED สำหรับสร้าง PDF ใหม่");
+ }else{
+   alert("ไม่มีเอกสารที่พร้อมออกหรือสร้าง PDF ใหม่ในรายการที่กำลังแสดง");
+ }
 }
 
 

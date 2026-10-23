@@ -70,6 +70,7 @@ a{text-decoration:none;color:inherit}button,select,input{font-family:inherit}
 </style>
 <meta name="sante-build-r12" content="MEMBER-ACCOUNTING-R12-ORGANIZED">
 
+<meta name="sante-build-member-sync" content="MEMBER-ACCOUNTING-PDF-SYNC-R4">
 </head>
 <body>
 <div id="loading" class="loading">กำลังโหลดเอกสารทางบัญชี...</div>
@@ -155,7 +156,7 @@ function render(){
     const pdf=findPdf(x);
     const pdfState=x.document_type==="QUOTATION"
       ? '<span class="pdf-state ready">เปิดฉบับเต็มได้</span>'
-      : (pdf?'<span class="pdf-state ready">มีไฟล์ PDF แล้ว</span>':'<span class="pdf-state">ยังไม่มีไฟล์ PDF</span>');
+      : (pdf?'<span class="pdf-state ready">มีไฟล์ PDF แล้ว</span>':(x.document_status==="ISSUED"?'<span class="pdf-state ready">เอกสารออกแล้ว · เปิด/ตรวจไฟล์ PDF</span>':'<span class="pdf-state">ยังไม่มีไฟล์ PDF</span>'));
     return `
     <article class="card">
       <div>
@@ -176,22 +177,70 @@ function render(){
         <button class="btn" onclick="openDetail('${x.source_id}')">ดูรายละเอียด</button>
         ${x.document_type==="QUOTATION"
           ? `<a class="btn yellow" href="member-quotation.html?id=${encodeURIComponent(x.source_id)}">เปิดใบเสนอราคา</a>`
-          : (pdf?`<button class="btn yellow" onclick="openPdf('${esc(pdf.storage_bucket)}','${esc(pdf.storage_path)}')">เปิด PDF</button>`:"")}
+          : (pdf||x.document_status==="ISSUED"?`<button class="btn yellow" onclick="openPdfForDocument('${x.source_id}')">เปิด PDF</button>`:"")}
       </div>
     </article>`;
   }).join("");
 }
+function normalizeDocNo(v){
+  return String(v||"").trim().toUpperCase().replace(/[^A-Z0-9_-]/g,"");
+}
+function pdfDocText(d){
+  return [
+    d?.title,d?.original_filename,d?.file_name,d?.filename,
+    d?.storage_path,d?.document_no,d?.name
+  ].map(v=>String(v||"")).join(" ").toUpperCase();
+}
 function findPdf(x){
-  const no=String(x.document_no||"").trim();
+  const no=normalizeDocNo(x?.document_no);
   if(!no)return null;
-  return pdfDocs.find(d=>d.document_type===x.document_type && String(d.title||"").includes(no)) || null;
+
+  const sameType=pdfDocs.filter(d=>!d?.document_type||d.document_type===x.document_type);
+  return sameType.find(d=>pdfDocText(d).includes(no))
+      || pdfDocs.find(d=>pdfDocText(d).includes(no))
+      || null;
 }
-async function openPdf(bucket,path){
-  if(!bucket||!path)return alert("ยังไม่มีไฟล์ PDF สำหรับเอกสารนี้");
+function accountingPdfPath(x){
+  const safe=String(x?.document_no||"").replace(/[^A-Za-z0-9_-]/g,"_");
+  const year=String(x?.issue_date||"").slice(0,4) || String(new Date().getFullYear());
+  return safe?`accounting/${year}/${x.document_type}/${safe}.pdf`:"";
+}
+async function signedUrlIfExists(bucket,path){
+  if(!bucket||!path)return null;
   const {data,error}=await db.storage.from(bucket).createSignedUrl(path,120);
-  if(error)return alert(/Object not found/i.test(error.message||"")?"ไฟล์ PDF ยังไม่พร้อมใช้งาน กรุณาติดต่อ SANTE เพื่อออกไฟล์ใหม่":"เปิด PDF ไม่สำเร็จ: "+error.message);
-  window.open(data.signedUrl,"_blank","noopener");
+  if(error)return null;
+  return data?.signedUrl||null;
 }
+async function openPdfForDocument(sourceId){
+  const x=rows.find(r=>String(r.source_id)===String(sourceId));
+  if(!x)return alert("ไม่พบข้อมูลเอกสาร");
+
+  const pdf=findPdf(x);
+  const candidates=[];
+  if(pdf?.storage_bucket&&pdf?.storage_path){
+    candidates.push([pdf.storage_bucket,pdf.storage_path]);
+  }
+
+  const fallbackPath=accountingPdfPath(x);
+  if(fallbackPath){
+    candidates.push(["training-documents",fallbackPath]);
+  }
+
+  const seen=new Set();
+  for(const [bucket,path] of candidates){
+    const key=`${bucket}|${path}`;
+    if(seen.has(key))continue;
+    seen.add(key);
+    const url=await signedUrlIfExists(bucket,path);
+    if(url){
+      window.open(url,"_blank","noopener");
+      return;
+    }
+  }
+
+  alert(`ไฟล์ PDF ของ ${x.document_no||"เอกสารนี้"} ยังไม่พร้อมใช้งาน\nกรุณาให้ SANTE กด “สร้าง PDF ใหม่” ที่หน้าเอกสารบัญชี แล้วลองอีกครั้ง`);
+}
+
 function openDetail(id){
   const x=rows.find(r=>String(r.source_id)===String(id));if(!x)return;
   $("detailTitle").textContent=(labels[x.document_type]||x.document_type)+" "+(x.document_no||"");
@@ -210,8 +259,8 @@ function openDetail(id){
   const pdf=findPdf(x);
   $("detailActions").innerHTML=
     (x.document_type==="QUOTATION"?`<a class="btn yellow" href="member-quotation.html?id=${encodeURIComponent(x.source_id)}">เปิดใบเสนอราคา</a>`:"")+
-    (pdf?`<button class="btn" id="openPdfBtn">เปิด PDF</button>`:"");
-  if(pdf)$("openPdfBtn").onclick=()=>openPdf(pdf.storage_bucket,pdf.storage_path);
+    ((pdf||x.document_status==="ISSUED")?`<button class="btn" id="openPdfBtn">เปิด PDF</button>`:"");
+  if(pdf||x.document_status==="ISSUED")$("openPdfBtn").onclick=()=>openPdfForDocument(x.source_id);
   $("detailBg").classList.add("show");
 }
 function closeDetail(){$("detailBg").classList.remove("show")}
