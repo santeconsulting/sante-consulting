@@ -73,6 +73,7 @@ a{text-decoration:none;color:inherit}button,select,input{font-family:inherit}
 <meta name="sante-build-member-sync" content="MEMBER-ACCOUNTING-PDF-SYNC-R4">
 <meta name="sante-build-pdf-repair" content="R6-MEMBER-STORAGE-FALLBACK">
 <meta name="sante-workflow" content="R7-MEMBER-VISIBILITY-ACTIONS">
+<meta name="sante-storage-policy" content="R8-MEMBER-ACCOUNTING-STORAGE">
 </head>
 <body>
 <div id="loading" class="loading">กำลังโหลดเอกสารทางบัญชี...</div>
@@ -251,7 +252,7 @@ async function openPdfForDocument(sourceId){
     }
   }
 
-  alert(`ไฟล์ PDF ของ ${x.document_no||"เอกสารนี้"} ยังไม่พร้อมใช้งาน\nกรุณาให้ SANTE กด “สร้าง PDF ใหม่” ที่หน้าเอกสารบัญชี แล้วลองอีกครั้ง`);
+  alert(`ไม่สามารถเปิด PDF ของ ${x.document_no||"เอกสารนี้"} ได้\nไฟล์ถูกสร้างแล้ว แต่บัญชีสมาชิกยังไม่สามารถอ่านไฟล์จาก Storage ได้\nกรุณาตรวจสอบ Storage policy สำหรับเอกสารบัญชี`);
 }
 
 function openDetail(id){
