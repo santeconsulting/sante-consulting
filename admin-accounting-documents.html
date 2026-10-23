@@ -2596,6 +2596,16 @@ label{display:block;font-size:11px;font-weight:600;margin-bottom:5px}.input,text
 </style>
 <meta name="sante-summary-r2" content="IDENTICAL-GEOMETRY">
 
+
+<style id="sante-net-label-break-r3">
+.reference-qo .master-net-box .master-total-label,
+.paper-invoice .master-net-box .master-total-label{
+  line-height:1.32!important;
+  white-space:normal!important;
+}
+</style>
+<meta name="sante-net-label-break-r3" content="FIXED-TWO-LINE-NET-LABEL">
+
 </head>
 <body>
 <div id="loading" class="loading">กำลังโหลดเอกสารบัญชี...</div>
@@ -3437,7 +3447,7 @@ function paperHtml(x){
       </div>`:""}
 
       <div class="master-net-box">
-        <span class="master-total-label">${Number(x.wht_amount||0)>0?"ยอดชำระสุทธิหลังหัก ณ ที่จ่าย":"ยอดสุทธิ"}</span>
+        <span class="master-total-label">${Number(x.wht_amount||0)>0?"ยอดชำระสุทธิ<br>หลังหัก ณ ที่จ่าย":"ยอดสุทธิ"}</span>
         <strong class="master-total-amount">${money(Number(x.wht_amount||0)>0?x.net_receivable:x.grand_total)}</strong>
         <span class="master-total-unit">บาท</span>
       </div>

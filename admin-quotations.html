@@ -5425,6 +5425,16 @@ textarea{
 </style>
 <meta name="sante-summary-r2" content="IDENTICAL-GEOMETRY">
 
+
+<style id="sante-net-label-break-r3">
+.reference-qo .master-net-box .master-total-label,
+.paper-invoice .master-net-box .master-total-label{
+  line-height:1.32!important;
+  white-space:normal!important;
+}
+</style>
+<meta name="sante-net-label-break-r3" content="FIXED-TWO-LINE-NET-LABEL">
+
 </head>
 <body>
 
@@ -6003,7 +6013,7 @@ function renderPaper(c){
         </div>`:""}
 
         <div class="master-net-box">
-          <span class="master-total-label">${showWht?.checked?"ยอดชำระสุทธิหลังหัก ณ ที่จ่าย":"ยอดสุทธิ"}</span>
+          <span class="master-total-label">${showWht?.checked?"ยอดชำระสุทธิ<br>หลังหัก ณ ที่จ่าย":"ยอดสุทธิ"}</span>
           <strong class="master-total-amount">${money(c.net)}</strong>
           <span class="master-total-unit">บาท</span>
         </div>
