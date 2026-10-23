@@ -2222,6 +2222,295 @@ label{display:block;font-size:11px;font-weight:600;margin-bottom:5px}.input,text
 </style>
 <meta name="sante-final-master-lock" content="INVOICE">
 
+
+<style id="sante-final-master-components">
+/* SANTE FINAL MASTER — Quotation + Invoice only */
+
+/* HEADER + CONTACT + CUSTOMER */
+.reference-qo .qh,
+.paper-invoice .invh{
+  grid-template-columns:20mm minmax(61mm,1fr) minmax(42mm,.76fr) 50mm!important;
+  column-gap:3mm!important;
+  align-items:start!important;
+  padding-bottom:4.5mm!important;
+}
+.reference-qo .qh-contact,
+.paper-invoice .invh-contact{
+  display:grid!important;
+  margin-left:3.2mm!important;
+  padding:0!important;
+  row-gap:1.25mm!important;
+  font-size:7.2pt!important;
+  line-height:1.35!important;
+}
+.reference-qo .qh-contact-row,
+.paper-invoice .invh-contact-row{
+  display:grid!important;
+  grid-template-columns:4mm minmax(0,1fr)!important;
+  column-gap:1mm!important;
+  margin:0!important;
+  padding:0!important;
+  min-height:0!important;
+  line-height:1.35!important;
+}
+.reference-qo .ref-party,
+.paper-invoice .inv-party{
+  grid-template-columns:minmax(0,1.16fr) minmax(0,.84fr)!important;
+  gap:8mm!important;
+  padding-top:4mm!important;
+}
+.reference-qo .ref-party-row,
+.paper-invoice .inv-party-row{
+  display:grid!important;
+  grid-template-columns:32mm minmax(0,1fr)!important;
+  column-gap:1.4mm!important;
+  margin:0!important;
+  padding:0!important;
+  min-height:0!important;
+  font-size:7.7pt!important;
+  line-height:1.42!important;
+}
+.reference-qo .ref-party-title,
+.paper-invoice .inv-contact-title{
+  margin:0 0 1mm!important;
+  font-size:7.8pt!important;
+  line-height:1.4!important;
+}
+.reference-qo .ref-contact-row,
+.paper-invoice .inv-contact-row{
+  display:grid!important;
+  grid-template-columns:4mm minmax(0,1fr)!important;
+  column-gap:1.1mm!important;
+  margin:0!important;
+  padding:0!important;
+  min-height:0!important;
+  font-size:7.7pt!important;
+  line-height:1.42!important;
+}
+
+/* TABLE */
+.master-items{
+  width:100%!important;
+  table-layout:fixed!important;
+  border-collapse:collapse!important;
+  margin-top:4mm!important;
+}
+.master-items th{
+  padding:2.4mm 1.2mm!important;
+  font-size:7.9pt!important;
+  line-height:1.25!important;
+  vertical-align:middle!important;
+  white-space:nowrap!important;
+}
+.master-items td{
+  padding:2.5mm 1.2mm!important;
+  font-size:7.9pt!important;
+  line-height:1.4!important;
+  vertical-align:top!important;
+}
+.master-items th:first-child,.master-items td:first-child{text-align:left!important}
+.master-items th:nth-child(2),.master-items td:nth-child(2),
+.master-items th:nth-child(3),.master-items td:nth-child(3),
+.master-items th:nth-child(6),.master-items td:nth-child(6){text-align:center!important}
+.master-items th:nth-child(4),.master-items td:nth-child(4),
+.master-items th:nth-child(5),.master-items td:nth-child(5),
+.master-items th:nth-child(7),.master-items td:nth-child(7){text-align:right!important}
+.reference-qo .ref-doc-spacer,
+.paper-invoice .invoice-doc-spacer{min-height:8mm!important}
+
+/* SUMMARY */
+.master-summary{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) 80mm!important;
+  gap:7mm!important;
+  margin:0!important;
+  padding-top:2.5mm!important;
+  border-top:1px solid #d8d9de!important;
+}
+.master-summary-left{
+  display:grid!important;
+  grid-template-columns:15mm minmax(0,1fr) 30mm!important;
+  column-gap:3mm!important;
+  row-gap:1.3mm!important;
+  align-content:start!important;
+  font-size:8pt!important;
+  line-height:1.4!important;
+  min-width:0!important;
+}
+.master-summary-title{font-weight:700!important;white-space:nowrap!important}
+.master-summary-label{min-width:0!important}
+.master-summary-amount{text-align:right!important;white-space:nowrap!important}
+.master-summary-right{min-width:0!important}
+.master-total-box,.master-net-box{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) 30mm 8mm!important;
+  column-gap:2mm!important;
+  align-items:center!important;
+  min-height:15mm!important;
+  padding:3.2mm 3.5mm!important;
+  border-radius:1.5mm!important;
+  box-sizing:border-box!important;
+}
+.master-total-line{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) 30mm 8mm!important;
+  column-gap:2mm!important;
+  align-items:center!important;
+  min-height:8mm!important;
+  padding:1.2mm 0!important;
+  font-size:7.9pt!important;
+  line-height:1.35!important;
+  box-sizing:border-box!important;
+}
+.master-total-label{
+  min-width:0!important;
+  overflow-wrap:anywhere!important;
+  line-height:1.35!important;
+}
+.master-total-amount{
+  text-align:right!important;
+  white-space:nowrap!important;
+  font-size:14.5pt!important;
+  line-height:1.05!important;
+}
+.master-total-amount-small{font-size:8.2pt!important;line-height:1.35!important}
+.master-total-unit{text-align:right!important;white-space:nowrap!important}
+.master-paid-words{
+  margin-top:2mm!important;
+  text-align:right!important;
+  font-size:8.3pt!important;
+  line-height:1.4!important;
+  font-weight:600!important;
+  color:#263b51!important;
+}
+.reference-qo .master-total-box,.reference-qo .master-net-box{
+  background:#eeeeff!important;color:#45459a!important;
+}
+.paper-invoice .master-total-box,.paper-invoice .master-net-box{
+  background:#e4f4e9!important;color:#176b3a!important;
+}
+
+/* PAYMENT + NOTE/TERMS */
+.master-payment{
+  display:grid!important;
+  grid-template-columns:19mm minmax(0,1fr)!important;
+  gap:3mm!important;
+  align-items:center!important;
+  min-height:15mm!important;
+  margin-top:3mm!important;
+  padding:3.2mm 0!important;
+  border-top:1px solid #d8d9de!important;
+  border-bottom:1px solid #d8d9de!important;
+  font-size:8.2pt!important;
+  line-height:1.5!important;
+}
+.master-section-title{font-weight:800!important;color:#17283d!important}
+.master-bank-row{display:flex!important;align-items:center!important;gap:3mm!important;min-width:0!important}
+.master-bank-logo{width:11.5mm!important;height:11.5mm!important;flex:0 0 11.5mm!important;object-fit:contain!important}
+.master-bank-copy{min-width:0!important;line-height:1.5!important}
+.master-note{
+  display:grid!important;
+  grid-template-columns:38mm minmax(0,1fr)!important;
+  gap:3mm!important;
+  align-items:start!important;
+  min-height:12mm!important;
+  margin:0!important;
+  padding:3mm 0!important;
+  border-bottom:1px solid #d8d9de!important;
+  font-size:8.2pt!important;
+  line-height:1.5!important;
+}
+
+/* CERTIFICATION */
+.master-cert{
+  margin-top:3mm!important;
+  padding-top:3mm!important;
+  border-top:1px solid #d8d9de!important;
+}
+.master-cert-head{
+  margin-bottom:3mm!important;
+  font-size:8pt!important;
+  line-height:1.5!important;
+  color:#17283d!important;
+}
+.master-cert-title{font-weight:800!important;margin-bottom:.8mm!important}
+.master-cert-note{font-size:7.5pt!important;color:#53687d!important}
+.master-cert-grid{
+  display:grid!important;
+  grid-template-columns:repeat(5,minmax(0,1fr))!important;
+  gap:3mm!important;
+  align-items:start!important;
+}
+.master-cert-cell{
+  min-width:0!important;
+  display:grid!important;
+  grid-template-rows:18mm 0 auto!important;
+  row-gap:1.8mm!important;
+  align-items:start!important;
+  text-align:center!important;
+}
+.master-cert-visual{
+  height:18mm!important;
+  display:flex!important;
+  align-items:flex-end!important;
+  justify-content:center!important;
+  overflow:visible!important;
+}
+.master-signature-img{
+  display:block!important;
+  max-height:9.5mm!important;
+  max-width:30mm!important;
+  width:auto!important;
+  object-fit:contain!important;
+  object-position:center bottom!important;
+  margin:0 auto 1.8mm!important;
+}
+.master-stamp-img{
+  display:block!important;
+  width:18mm!important;height:18mm!important;
+  max-width:18mm!important;max-height:18mm!important;
+  object-fit:contain!important;object-position:center!important;
+}
+.cert-line{
+  width:36mm!important;
+  max-width:100%!important;
+  height:0!important;
+  margin:0 auto!important;
+  border-top:1px solid #7b8c9d!important;
+}
+.master-cert-meta{
+  min-height:12mm!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  gap:.45mm!important;
+  font-size:7.15pt!important;
+  line-height:1.35!important;
+  color:#1f3145!important;
+}
+.master-cert-meta b{font-weight:700!important}
+.master-cert-meta span{display:block!important}
+
+/* FOOTER */
+.master-footer{
+  margin-top:3mm!important;
+  padding-top:2mm!important;
+  border-top:1px solid #dce6ef!important;
+  text-align:center!important;
+  font-size:7.1pt!important;
+  line-height:1.45!important;
+  color:#73869a!important;
+}
+
+/* A4 safety */
+.reference-qo,.paper-invoice{
+  break-inside:avoid!important;
+  page-break-inside:avoid!important;
+}
+</style>
+<meta name="sante-final-master-components" content="2026-10-23">
+
 </head>
 <body>
 <div id="loading" class="loading">กำลังโหลดเอกสารบัญชี...</div>
@@ -3019,7 +3308,7 @@ function paperHtml(x){
       <div class="rt-contact-row"><span>✉</span><span>${esc(x.email||"-")}</span></div>
     </div>
   </div>`}
-  <table>
+  <table class="${isInvoice?'master-items':''}">
    <colgroup>
     <col style="width:53%"><col style="width:8%"><col style="width:8%"><col style="width:9%"><col style="width:7%"><col style="width:5%"><col style="width:10%">
    </colgroup>
@@ -3029,34 +3318,141 @@ function paperHtml(x){
    <tbody>${rows}</tbody>
   </table>
   ${isInvoice?`<div class="invoice-doc-spacer"></div>`:""}
+
+  ${isInvoice?`
+  <div class="master-summary">
+    <div class="master-summary-left">
+      <div class="master-summary-title">▣ สรุป</div>
+      <div class="master-summary-label">มูลค่าที่คำนวณภาษี ${rateText(x.vat_rate??7)}%</div>
+      <div class="master-summary-amount">${money(x.subtotal)} บาท</div>
+
+      <div></div>
+      <div class="master-summary-label">ภาษีมูลค่าเพิ่ม ${rateText(x.vat_rate??7)}%</div>
+      <div class="master-summary-amount">${money(x.vat_amount)} บาท</div>
+
+      ${Number(x.wht_amount||0)>0?`
+      <div></div>
+      <div class="master-summary-label">หัก ณ ที่จ่าย ${rateText(x.wht_rate||0)}% (กรณีเข้าหลักเกณฑ์)</div>
+      <div class="master-summary-amount">${money(x.wht_amount)} บาท</div>`:""}
+    </div>
+
+    <div class="master-summary-right">
+      <div class="master-total-box">
+        <span class="master-total-label">จำนวนเงินทั้งสิ้น</span>
+        <strong class="master-total-amount">${money(x.grand_total)}</strong>
+        <span class="master-total-unit">บาท</span>
+      </div>
+
+      ${Number(x.wht_amount||0)>0?`
+      <div class="master-total-line">
+        <span class="master-total-label">หัก ณ ที่จ่าย ${rateText(x.wht_rate||0)}% (กรณีเข้าหลักเกณฑ์)</span>
+        <span class="master-total-amount master-total-amount-small">${money(x.wht_amount)}</span>
+        <span class="master-total-unit">บาท</span>
+      </div>`:""}
+
+      <div class="master-net-box">
+        <span class="master-total-label">${Number(x.wht_amount||0)>0?"ยอดชำระสุทธิ (กรณีหัก ณ ที่จ่าย)":"ยอดชำระสุทธิ"}</span>
+        <strong class="master-total-amount">${money(Number(x.wht_amount||0)>0?x.net_receivable:x.grand_total)}</strong>
+        <span class="master-total-unit">บาท</span>
+      </div>
+
+      <div class="master-paid-words">(${thaiBahtText(Number(x.wht_amount||0)>0?x.net_receivable:x.grand_total)})</div>
+    </div>
+  </div>
+
+  <div class="master-payment">
+    <div class="master-section-title">▣ ชำระเงิน</div>
+    <div class="master-bank-row">
+      <img class="master-bank-logo" src="${KBANK_LOGO_URI}" alt="Kasikornbank">
+      <div class="master-bank-copy">
+        <b>${SANTE.bank}</b>
+        <div>ชื่อบัญชี ${SANTE.bankName} · เลขบัญชี ${SANTE.bankAccount}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="master-note">
+    <div class="master-section-title">● เงื่อนไขการชำระเงิน</div>
+    <div class="master-note-value">${esc(invoiceTerms)}</div>
+  </div>
+
+  <div class="master-cert">
+    <div class="master-cert-head">
+      <div class="master-cert-title">♧ รับรอง</div>
+      <div class="master-cert-note">ผู้ขายลงนามเพื่อรับรองความถูกต้องของใบแจ้งหนี้ และลูกค้าสามารถลงนาม/ประทับตราเพื่อยืนยันการรับเอกสาร</div>
+    </div>
+
+    <div class="master-cert-grid">
+      <div class="master-cert-cell">
+        <div class="master-cert-visual">
+          <img class="master-signature-img" src="sante-signature-director.png" alt="signature">
+        </div>
+        <div class="cert-line"></div>
+        <div class="master-cert-meta">
+          <b>${SANTE.signer}</b>
+          <span>ผู้ออกเอกสาร (ผู้ขาย)</span>
+          <span>${esc(formatDocumentDate(x.issue_date||""))}</span>
+        </div>
+      </div>
+
+      <div class="master-cert-cell">
+        <div class="master-cert-visual">
+          <img class="master-signature-img" src="sante-signature-director.png" alt="signature">
+        </div>
+        <div class="cert-line"></div>
+        <div class="master-cert-meta">
+          <b>${SANTE.signer}</b>
+          <span>ผู้อนุมัติเอกสาร (ผู้ขาย)</span>
+          <span>${esc(formatDocumentDate(x.issue_date||""))}</span>
+        </div>
+      </div>
+
+      <div class="master-cert-cell">
+        <div class="master-cert-visual">
+          <img class="master-stamp-img" src="sante-company-stamp.png" alt="stamp">
+        </div>
+        <div class="cert-line"></div>
+        <div class="master-cert-meta">
+          <span>ตราประทับ (ผู้ขาย)</span>
+        </div>
+      </div>
+
+      <div class="master-cert-cell">
+        <div class="master-cert-visual"></div>
+        <div class="cert-line"></div>
+        <div class="master-cert-meta">
+          <b>${esc(x.organization_name||x.customer_name||"")}</b>
+          <span>ผู้รับเอกสาร (ลูกค้า)</span>
+        </div>
+      </div>
+
+      <div class="master-cert-cell">
+        <div class="master-cert-visual"></div>
+        <div class="cert-line"></div>
+        <div class="master-cert-meta">
+          <span>ตราประทับ (ลูกค้า) (ถ้ามี)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="master-footer">SANTE Accounting Documents · INVOICE (ใบแจ้งหนี้) · ${copyLabel}</div>
+  `:`
   <div class="totals-wrap">
-   ${isInvoice?`<div class="summary-note invoice-summary-left">
-     <div class="sum-icon">▣ สรุป</div><div>มูลค่าที่คำนวณภาษี ${rateText(x.vat_rate??7)}%</div><div class="sum-amount">${money(x.subtotal)} บาท</div>
-     <div></div><div>ภาษีมูลค่าเพิ่ม ${rateText(x.vat_rate??7)}%</div><div class="sum-amount">${money(x.vat_amount)} บาท</div>
-     ${Number(x.wht_amount||0)>0?`<div></div><div>หัก ณ ที่จ่าย ${rateText(x.wht_rate||0)}% (กรณีเข้าหลักเกณฑ์)</div><div class="sum-amount">${money(x.wht_amount)} บาท</div>`:""}
-   </div>`:`<div class="summary-note">
+   <div class="summary-note">
      <b>${isCreditNote?"เหตุผลและรายละเอียดการลดหนี้":"รายละเอียด / NOTES"}</b><br>
      ${x.document_subject?`${isCreditNote?"เหตุผล":"เรื่อง"}: ${esc(x.document_subject)}<br>`:""}
      ${x.terms?`เงื่อนไข: ${esc(x.terms)}<br>`:""}
      ${x.note?esc(x.note):(isCreditNote?"กรุณาตรวจสอบเอกสารอ้างอิง เหตุผลการลดหนี้ และยอดภาษีก่อนออกเอกสาร":"กรุณาตรวจสอบชื่อ/ที่อยู่ เลขประจำตัวผู้เสียภาษี และยอดเงินก่อนนำเอกสารไปใช้งาน")}
-   </div>`}
+   </div>
    <div class="totals">
-    ${isInvoice?`
-      <div class="invoice-total-box"><span>จำนวนเงินทั้งสิ้น</span><strong>${money(x.grand_total)}</strong><span>บาท</span></div>
-      ${Number(x.wht_amount||0)>0?`<div class="invoice-total-line"><span>หัก ณ ที่จ่าย ${rateText(x.wht_rate||0)}% (กรณีเข้าหลักเกณฑ์)</span><span>${money(x.wht_amount)}</span><span>บาท</span></div>`:""}
-      <div class="invoice-net-box"><b>${Number(x.wht_amount||0)>0?"ยอดชำระสุทธิ (กรณีหัก ณ ที่จ่าย)":"ยอดชำระสุทธิ"}</b><strong>${money(Number(x.wht_amount||0)>0?x.net_receivable:x.grand_total)}</strong><span>บาท</span></div>
-      <div class="amount-words">(${thaiBahtText(Number(x.wht_amount||0)>0?x.net_receivable:x.grand_total)})</div>
-    `:`
       <div class="total-row"><span>${isCreditNote?"มูลค่าที่ลดก่อน VAT":"มูลค่าก่อน VAT"}</span><span>${money(x.subtotal)} บาท</span></div>
       <div class="total-row"><span>${isCreditNote?"ภาษีมูลค่าเพิ่มที่ลด":"ภาษีมูลค่าเพิ่ม"} ${rateText(x.vat_rate??7)}%</span><span>${money(x.vat_amount)} บาท</span></div>
       <div class="total-row grand"><span>${isCreditNote?"รวมมูลค่าลดหนี้":"จำนวนเงินทั้งสิ้น"}</span><span>${money(x.grand_total)} บาท</span></div>
       ${Number(x.wht_amount||0)>0?`<div class="total-row"><span>หัก ณ ที่จ่าย ${rateText(x.wht_rate||0)}%</span><span>${money(x.wht_amount)} บาท</span></div><div class="total-row paid-row"><b>จำนวนเงินที่ชำระสุทธิ</b><b>${money(x.net_receivable)} บาท</b></div><div class="amount-words">(${thaiBahtText(x.net_receivable)})</div>`:`<div class="amount-words">(${thaiBahtText(isReceipt?receiveAmount:x.grand_total)})</div>`}
       ${isReceipt?`<div class="total-row paid-row"><b>ยอดรับเงินจริง</b><b>${money(receiveAmount)} บาท</b></div>`:""}
-    `}
    </div>
   </div>
-  ${isInvoice?`<div class="inv-payment"><div class="inv-payment-title">▣ ชำระเงิน</div><div class="inv-payment-bank"><img class="payment-bank-logo" src="${KBANK_LOGO_URI}" alt="Kasikornbank"><div><b>${SANTE.bank}</b><br>ชื่อบัญชี ${SANTE.bankName} · เลขบัญชี ${SANTE.bankAccount}</div></div></div>`:""}
-  ${isInvoice?`<div class="invoice-terms"><div><b>● เงื่อนไขการชำระเงิน</b></div><div>${esc(invoiceTerms)}</div></div>`:""}
   ${isReceipt?`<div class="payment-box"><div class="payment-title">การชำระเงิน / PAYMENT</div><div class="payment-grid"><div class="payment-item"><div class="payment-bank"><img class="payment-bank-logo" src="${KBANK_LOGO_URI}" alt="Kasikornbank"><div><b>${SANTE.bank}</b><br>ชื่อบัญชี ${SANTE.bankName}<br>เลขบัญชี ${SANTE.bankAccount}</div></div></div><div class="payment-item">วันที่ชำระ: ${esc(x.payment_date||x.issue_date||"-")}<br>Payment No.: ${esc(paymentNo)}</div><div class="payment-item">จำนวนเงินที่ชำระ: ${money(receiveAmount)} บาท<div class="payment-words">(${thaiBahtText(receiveAmount)})</div></div></div></div>`:""}
   <div class="signature-area">
    <div class="signature-header">♧ รับรอง</div>
@@ -3067,9 +3463,10 @@ function paperHtml(x){
     <div class="signature-box"><div class="signature-space"></div><div class="signature-line"><b>${esc(x.organization_name||x.customer_name||"")}</b><br>ผู้รับเอกสาร (ลูกค้า)</div></div>
     <div class="signature-box"><div class="customer-stamp-box"></div><div class="signature-line">ตราประทับ (ลูกค้า) (ถ้ามี)</div></div>
    </div>
-   <div class="footer-sign-note">${isInvoice?"ผู้ขายลงนามเพื่อรับรองความถูกต้องของใบแจ้งหนี้ และลูกค้าสามารถลงนาม/ประทับตราเพื่อยืนยันการรับเอกสาร":isReceipt?"เอกสารฉบับนี้ใช้เป็นหลักฐานการรับชำระเงินและใบกำกับภาษีตามข้อมูลที่ระบุข้างต้น":isCreditNote?"ใบลดหนี้ฉบับนี้อ้างอิงเอกสารเดิมตามที่ระบุ กรุณาตรวจสอบเหตุผลและจำนวนเงินที่ลดก่อนนำเอกสารไปใช้":"เอกสารฉบับนี้จัดทำจากข้อมูลใน SANTE Accounting Documents"}</div>
+   <div class="footer-sign-note">${isReceipt?"เอกสารฉบับนี้ใช้เป็นหลักฐานการรับชำระเงินและใบกำกับภาษีตามข้อมูลที่ระบุข้างต้น":isCreditNote?"ใบลดหนี้ฉบับนี้อ้างอิงเอกสารเดิมตามที่ระบุ กรุณาตรวจสอบเหตุผลและจำนวนเงินที่ลดก่อนนำเอกสารไปใช้":"เอกสารฉบับนี้จัดทำจากข้อมูลใน SANTE Accounting Documents"}</div>
   </div>
   <div class="accounting-foot">SANTE Accounting Documents · ${esc(docEn)} · ${copyLabel}</div>
+  `}
  </div>`;
 }
 
