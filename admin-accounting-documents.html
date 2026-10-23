@@ -3332,7 +3332,7 @@ function paperHtml(x){
 
       ${Number(x.wht_amount||0)>0?`
       <div></div>
-      <div class="master-summary-label">หัก ณ ที่จ่าย ${rateText(x.wht_rate||0)}% (กรณีเข้าหลักเกณฑ์)</div>
+      <div class="master-summary-label">หัก ณ ที่จ่าย ${rateText(x.wht_rate||0)}%</div>
       <div class="master-summary-amount">${money(x.wht_amount)} บาท</div>`:""}
     </div>
 
@@ -3345,7 +3345,7 @@ function paperHtml(x){
 
       ${Number(x.wht_amount||0)>0?`
       <div class="master-total-line">
-        <span class="master-total-label">หัก ณ ที่จ่าย ${rateText(x.wht_rate||0)}% (กรณีเข้าหลักเกณฑ์)</span>
+        <span class="master-total-label">หัก ณ ที่จ่าย ${rateText(x.wht_rate||0)}%</span>
         <span class="master-total-amount master-total-amount-small">${money(x.wht_amount)}</span>
         <span class="master-total-unit">บาท</span>
       </div>`:""}
