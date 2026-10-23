@@ -1392,6 +1392,151 @@ label{display:block;font-size:11px;font-weight:600;margin-bottom:5px}.input,text
 </style>
 <meta name="sante-build-r34" content="ACCOUNTING-MATCH-QUOTATION-EXACT">
 
+
+<style id="sante-accounting-r35-line-rhythm-lock">
+/* R35 — lock Invoice vertical rhythm to Quotation final master.
+   Vertical spacing only; horizontal geometry/business logic unchanged. */
+
+/* SELLER: remove inherited spacing from older styles */
+.paper-invoice .invh-seller{
+  display:grid!important;
+  row-gap:1mm!important;
+  line-height:1.4!important;
+}
+.paper-invoice .invh-seller .invh-row,
+.paper-invoice .invh-seller .invh-tax-row{
+  margin:0!important;
+  padding:0!important;
+  min-height:0!important;
+}
+.paper-invoice .invh-company,
+.paper-invoice .invh-address{
+  margin:0!important;
+  padding:0!important;
+  line-height:1.4!important;
+}
+.paper-invoice .invh-company>div,
+.paper-invoice .invh-address>div{
+  display:block!important;
+  margin:0!important;
+  padding:0!important;
+  line-height:1.4!important;
+  min-height:0!important;
+}
+.paper-invoice .invh-seller .invh-label,
+.paper-invoice .invh-tax-row>div:last-child{
+  margin:0!important;
+  padding:0!important;
+  line-height:1.4!important;
+}
+
+/* COMPANY CONTACT: exact same row rhythm as quotation */
+.paper-invoice .invh-contact{
+  display:grid!important;
+  row-gap:1.25mm!important;
+  line-height:1.35!important;
+}
+.paper-invoice .invh-contact-row{
+  margin:0!important;
+  padding:0!important;
+  min-height:0!important;
+  line-height:1.35!important;
+}
+.paper-invoice .invh-contact-row>span{
+  margin:0!important;
+  padding:0!important;
+  line-height:1.35!important;
+}
+
+/* DOCUMENT SIDE */
+.paper-invoice .invh-copy{
+  margin-top:0!important;
+  margin-bottom:1.2mm!important;
+  padding:0!important;
+  line-height:1.1!important;
+}
+.paper-invoice .invh-title{
+  margin-top:0!important;
+  margin-bottom:3.5mm!important;
+  padding:0!important;
+  line-height:1.08!important;
+}
+.paper-invoice .invh-docbox{
+  margin:0!important;
+  line-height:1.35!important;
+}
+.paper-invoice .invh-docbox>b,
+.paper-invoice .invh-docbox>span{
+  margin:0!important;
+  padding:0!important;
+  line-height:1.35!important;
+}
+
+/* CUSTOMER: lock four rows to quotation's rhythm */
+.paper-invoice .inv-party{
+  align-items:start!important;
+}
+.paper-invoice .inv-party-left{
+  margin:0!important;
+  padding:0!important;
+}
+.paper-invoice .inv-party-row{
+  margin:0!important;
+  padding:0!important;
+  min-height:0!important;
+  line-height:1.42!important;
+}
+.paper-invoice .inv-party-row>b,
+.paper-invoice .inv-party-row>div,
+.paper-invoice .inv-party-row>div>b{
+  margin:0!important;
+  padding:0!important;
+  line-height:1.42!important;
+}
+.paper-invoice .inv-contact{
+  margin:0!important;
+  padding:0!important;
+}
+.paper-invoice .inv-contact-title{
+  margin-top:0!important;
+  margin-bottom:1mm!important;
+  padding:0!important;
+  line-height:1.4!important;
+}
+.paper-invoice .inv-contact-row{
+  margin:0!important;
+  padding:0!important;
+  min-height:0!important;
+  line-height:1.42!important;
+}
+.paper-invoice .inv-contact-row>span{
+  margin:0!important;
+  padding:0!important;
+  line-height:1.42!important;
+}
+
+/* ITEM TABLE: identical vertical rhythm */
+.paper-invoice table{
+  border-collapse:collapse!important;
+}
+.paper-invoice table thead th{
+  line-height:1.25!important;
+  padding-top:2.4mm!important;
+  padding-bottom:2.4mm!important;
+}
+.paper-invoice table tbody td{
+  line-height:1.4!important;
+  padding-top:2.5mm!important;
+  padding-bottom:2.5mm!important;
+  vertical-align:top!important;
+}
+.paper-invoice td.desc-col .item-no,
+.paper-invoice td.desc-col .item-main{
+  line-height:1.4!important;
+}
+</style>
+<meta name="sante-build-r35" content="ACCOUNTING-LINE-RHYTHM-LOCK">
+
 </head>
 <body>
 <div id="loading" class="loading">กำลังโหลดเอกสารบัญชี...</div>
