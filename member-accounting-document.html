@@ -30,6 +30,7 @@ a{text-decoration:none;color:inherit}button{font:inherit}
 @media(max-width:850px){.meta{grid-template-columns:1fr 1fr}.head{align-items:flex-start;flex-direction:column}.stage{padding:6px}.paper-wrap{transform-origin:top left}}
 </style>
 <meta name="sante-member-live-master" content="R13-ADMIN-HTML-MASTER">
+<meta name="sante-member-live-master-fix" content="R13-FIX2-DEPENDENCIES">
 </head>
 <body>
 <div id="loading" class="loading">กำลังโหลดเอกสาร...</div>
@@ -102,6 +103,7 @@ function formatDocumentDate(v){
  return m?`${m[3]}/${m[2]}/${m[1]}`:s;
 }
 function typeLabel(t){return ({QUOTATION:"ใบเสนอราคา",INVOICE:"ใบแจ้งหนี้",RECEIPT_TAX_INVOICE:"ใบเสร็จ/ใบกำกับภาษี",CREDIT_NOTE:"ใบลดหนี้"})[t]||t}
+function refText(x){return x.quotation_no||x.payment_no||"-"}
 function accountingCopyLabel(){return "(ต้นฉบับ)";}
 function paperHtml(x){
  const items=Array.isArray(x.items)?x.items:[];
