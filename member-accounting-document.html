@@ -59,6 +59,7 @@ a{text-decoration:none;color:inherit}button{font:inherit}
 }
 </style>
 <meta name="sante-member-accounting-view" content="R14-ACTUAL-STORAGE-PDF">
+<meta name="sante-member-pdf-link" content="R15-EXACT-LATEST-STORAGE-PATH">
 </head>
 <body>
 <div id="loading" class="loading">กำลังโหลดเอกสาร...</div>
@@ -133,11 +134,7 @@ function thDate(v){
 function safeDocNo(v){
   return String(v||"DOCUMENT").trim().replace(/[^A-Za-z0-9_-]/g,"_")||"DOCUMENT";
 }
-function accountingPdfPath(x){
-  const safe=safeDocNo(x?.document_no);
-  const year=String(x?.issue_date||"").slice(0,4)||String(new Date().getFullYear());
-  return `accounting/${year}/${x.document_type}/${safe}.pdf`;
-}
+
 async function signedUrl(bucket,path){
   if(!bucket||!path)return "";
   const {data,error}=await db.storage.from(bucket).createSignedUrl(path,900);
@@ -145,18 +142,12 @@ async function signedUrl(bucket,path){
   return data?.signedUrl||"";
 }
 async function resolvePdf(x){
-  const candidates=[];
-  if(x?.storage_bucket&&x?.storage_path)candidates.push([x.storage_bucket,x.storage_path]);
-  candidates.push(["training-documents",accountingPdfPath(x)]);
-  const seen=new Set();
-  for(const [bucket,path] of candidates){
-    const key=bucket+"|"+path;
-    if(seen.has(key))continue;
-    seen.add(key);
-    const url=await signedUrl(bucket,path);
-    if(url)return {url,bucket,path};
-  }
-  return null;
+  const {data,error}=await db.rpc("member_get_accounting_pdf_info",{p_document_id:x.source_id});
+  if(error)throw error;
+  if(!data?.storage_bucket||!data?.storage_path)return null;
+  const url=await signedUrl(data.storage_bucket,data.storage_path);
+  if(!url)return null;
+  return {url,bucket:data.storage_bucket,path:data.storage_path};
 }
 async function downloadPdf(){
   if(!pdfUrl||!currentDoc)return;
@@ -235,7 +226,7 @@ async function init(){
     const pdf=await resolvePdf(currentDoc);
     if(pdf){
       pdfUrl=pdf.url;
-      $("pdfFrame").src=pdfUrl+(pdfUrl.includes("?")?"&":"?")+"v="+Date.now()+"#toolbar=1&navpanes=0&view=FitH";
+      $("pdfFrame").src=pdfUrl+(pdfUrl.includes("?")?"&":"?")+"fresh="+Date.now()+"#toolbar=1&navpanes=0&view=FitH";
       $("pdfShell").style.display="block";
     }else{
       $("pdfMissing").style.display="block";

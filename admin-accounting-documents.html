@@ -2613,6 +2613,7 @@ label{display:block;font-size:11px;font-weight:600;margin-bottom:5px}.input,text
 <meta name="sante-pdf-build" content="R12-FULL-CONTENT-TOP-FIT-A4">
 <meta name="sante-pdf-build" content="R10-HTML2PDF-CANVAS-FULL-A4">
 <meta name="sante-document-filename-r14" content="DOCUMENT-NUMBER-AS-PDF-NAME">
+<meta name="sante-pdf-version" content="R15-VERSIONED-STORAGE-LATEST">
 </head>
 <body>
 <div id="loading" class="loading">กำลังโหลดเอกสารบัญชี...</div>
@@ -3799,13 +3800,14 @@ async function issueOne(id,silent=false,regenerateIssued=false){
 
   const safe=(x.document_no||x.id).replace(/[^A-Za-z0-9_-]/g,"_");
   const year=String(x.issue_date||new Date().getFullYear()).slice(0,4) || String(new Date().getFullYear());
-  const path=`accounting/${year}/${x.document_type}/${safe}.pdf`;
+  const versionTag=isIssued?`-v${Date.now()}`:"";
+  const path=`accounting/${year}/${x.document_type}/${safe}${versionTag}.pdf`;
 
   stage="upload";
   const up=await db.storage.from(BUCKET).upload(path,blob,{
     contentType:"application/pdf",
-    upsert:true,
-    cacheControl:"60"
+    upsert:false,
+    cacheControl:"0"
   });
   if(up.error)throw up.error;
 
@@ -3826,6 +3828,16 @@ async function issueOne(id,silent=false,regenerateIssued=false){
       p_file_size_bytes:blob.size
     });
     if(fin.error)throw fin.error;
+  }else{
+    stage="link-latest";
+    const link=await db.rpc("admin_replace_accounting_pdf",{
+      p_document_id:x.id,
+      p_storage_bucket:BUCKET,
+      p_storage_path:path,
+      p_original_filename:`${safe}.pdf`,
+      p_file_size_bytes:blob.size
+    });
+    if(link.error)throw link.error;
   }
 
   await loadDocs();
