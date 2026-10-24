@@ -99,7 +99,7 @@ a{text-decoration:none;color:inherit}button{font:inherit}
       <iframe id="pdfFrame" class="pdf-frame" title="เอกสาร PDF"></iframe>
     </div>
     <div id="pdfMissing" style="display:none;align-self:center;text-align:center;color:#6f82a0;line-height:1.7">
-      ไม่พบไฟล์ PDF ของเอกสารนี้<br>กรุณาติดต่อ SANTE
+      ยังไม่มีไฟล์ PDF เวอร์ชันล่าสุดของเอกสารนี้<br>กรุณาให้ SANTE กด “สร้าง PDF ใหม่” หลังอัปเดตระบบ
     </div>
   </section>
 
@@ -144,7 +144,7 @@ async function signedUrl(bucket,path){
 async function resolvePdf(x){
   const {data,error}=await db.rpc("member_get_accounting_pdf_info",{p_document_id:x.source_id});
   if(error)throw error;
-  if(!data?.storage_bucket||!data?.storage_path)return null;
+  if(!data?.storage_bucket||!data?.storage_path){console.warn("LATEST PDF PATH MISSING",data);return null;}
   const url=await signedUrl(data.storage_bucket,data.storage_path);
   if(!url)return null;
   return {url,bucket:data.storage_bucket,path:data.storage_path};
