@@ -2610,7 +2610,7 @@ label{display:block;font-size:11px;font-weight:600;margin-bottom:5px}.input,text
 <meta name="sante-build-taxid-validation" content="R5-TAXID-OPTIONAL-NONBLOCKING">
 <meta name="sante-build-pdf-repair" content="R6-STAGE-AWARE-REPAIR">
 <meta name="sante-workflow" content="R7-ACCOUNTING-STATE-ACTIONS">
-<meta name="sante-pdf-build" content="R9-ADMIN-PREVIEW-STORAGE-PARITY">
+<meta name="sante-pdf-build" content="R11-EXACT-A4-0-0">
 <meta name="sante-pdf-build" content="R10-HTML2PDF-CANVAS-FULL-A4">
 </head>
 <body>
@@ -3627,19 +3627,23 @@ async function waitForPdfAssets(root){
 }
 
 async function generateBlob(x){
+ const pageW=794;
+ const pageH=1123;
+
  const host=document.createElement("div");
  host.className="sante-pdf-render-host";
  host.style.cssText=[
    "position:fixed",
    "left:0",
    "top:0",
-   "width:794px",
+   `width:${pageW}px`,
+   `height:${pageH}px`,
    "margin:0",
    "padding:0",
    "background:#fff",
    "z-index:-2147483000",
    "pointer-events:none",
-   "overflow:visible"
+   "overflow:hidden"
  ].join(";");
 
  host.innerHTML=paperHtml(x);
@@ -3649,27 +3653,35 @@ async function generateBlob(x){
    const element=host.firstElementChild;
    if(!element)throw new Error("ไม่พบโครงเอกสารสำหรับสร้าง PDF");
 
+   // IMPORTANT:
+   // PDF must use exactly the same A4 canvas as Admin Preview.
+   // Do not auto-fit or vertically center a shorter canvas.
    Object.assign(element.style,{
-     width:"794px",
-     minWidth:"794px",
-     maxWidth:"794px",
-     height:"auto",
-     minHeight:"1123px",
+     width:`${pageW}px`,
+     minWidth:`${pageW}px`,
+     maxWidth:`${pageW}px`,
+     height:`${pageH}px`,
+     minHeight:`${pageH}px`,
+     maxHeight:`${pageH}px`,
      margin:"0",
+     padding:"",
      boxShadow:"none",
      transform:"none",
+     transformOrigin:"top left",
      zoom:"1",
      position:"relative",
-     overflow:"visible"
+     overflow:"hidden",
+     boxSizing:"border-box"
    });
 
    await waitForPdfAssets(element);
 
-   const measuredHeight=Math.max(
-     1123,
-     Math.ceil(element.scrollHeight||0),
-     Math.ceil(element.getBoundingClientRect().height||0)
-   );
+   // If the Final Master exceeds one A4 page, stop instead of silently
+   // shrinking/centering/cropping the customer's PDF.
+   const contentHeight=Math.ceil(element.scrollHeight||0);
+   if(contentHeight>pageH+6){
+     throw new Error(`เนื้อหาเอกสารสูงเกิน A4 (${contentHeight}px) กรุณาตรวจ Preview ก่อนออก PDF`);
+   }
 
    const worker=html2pdf().set({
      margin:0,
@@ -3681,26 +3693,26 @@ async function generateBlob(x){
        logging:false,
        scrollX:0,
        scrollY:0,
-       windowWidth:794,
-       windowHeight:measuredHeight
+       width:pageW,
+       height:pageH,
+       windowWidth:pageW,
+       windowHeight:pageH
      },
      pagebreak:{mode:["avoid-all","css","legacy"]}
    }).from(element);
 
    await worker.toCanvas();
    const canvas=await worker.get("canvas");
-
    if(!canvas||!canvas.width||!canvas.height){
      throw new Error("ไม่สามารถ Render เอกสารเป็นภาพได้");
    }
 
    await worker.toPdf();
-   const pdf=await worker.get("pdf");
-   if(!pdf)throw new Error("ไม่พบ PDF engine");
+   const tempPdf=await worker.get("pdf");
+   if(!tempPdf)throw new Error("ไม่พบ PDF engine");
 
-   const JsPDF=pdf.constructor;
-   const pageW=794, pageH=1123;
-   const cleanPdf=new JsPDF({
+   const JsPDF=tempPdf.constructor;
+   const pdf=new JsPDF({
      unit:"px",
      format:[pageW,pageH],
      orientation:"portrait",
@@ -3708,28 +3720,16 @@ async function generateBlob(x){
      compress:true
    });
 
-   const sourceRatio=canvas.width/canvas.height;
-   const pageRatio=pageW/pageH;
-   let drawW,drawH,drawX=0,drawY=0;
-
-   if(sourceRatio>=pageRatio){
-     drawW=pageW;
-     drawH=pageW/sourceRatio;
-     drawY=Math.max(0,(pageH-drawH)/2);
-   }else{
-     drawH=pageH;
-     drawW=pageH*sourceRatio;
-     drawX=Math.max(0,(pageW-drawW)/2);
-   }
-
-   cleanPdf.addImage(
+   // Force exact A4 placement: top-left 0,0 and full A4.
+   // This removes the large blank top margin caused by the R10 fit/center logic.
+   pdf.addImage(
      canvas.toDataURL("image/jpeg",0.98),
      "JPEG",
-     drawX,drawY,drawW,drawH,
+     0,0,pageW,pageH,
      undefined,"FAST"
    );
 
-   return cleanPdf.output("blob");
+   return pdf.output("blob");
  }finally{
    host.remove();
  }
