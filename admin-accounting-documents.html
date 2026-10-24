@@ -2610,8 +2610,9 @@ label{display:block;font-size:11px;font-weight:600;margin-bottom:5px}.input,text
 <meta name="sante-build-taxid-validation" content="R5-TAXID-OPTIONAL-NONBLOCKING">
 <meta name="sante-build-pdf-repair" content="R6-STAGE-AWARE-REPAIR">
 <meta name="sante-workflow" content="R7-ACCOUNTING-STATE-ACTIONS">
-<meta name="sante-pdf-build" content="R11-EXACT-A4-0-0">
+<meta name="sante-pdf-build" content="R12-FULL-CONTENT-TOP-FIT-A4">
 <meta name="sante-pdf-build" content="R10-HTML2PDF-CANVAS-FULL-A4">
+<meta name="sante-document-filename-r14" content="DOCUMENT-NUMBER-AS-PDF-NAME">
 </head>
 <body>
 <div id="loading" class="loading">กำลังโหลดเอกสารบัญชี...</div>
@@ -3637,13 +3638,13 @@ async function generateBlob(x){
    "left:0",
    "top:0",
    `width:${pageW}px`,
-   `height:${pageH}px`,
+   "height:auto",
    "margin:0",
    "padding:0",
    "background:#fff",
    "z-index:-2147483000",
    "pointer-events:none",
-   "overflow:hidden"
+   "overflow:visible"
  ].join(";");
 
  host.innerHTML=paperHtml(x);
@@ -3653,35 +3654,36 @@ async function generateBlob(x){
    const element=host.firstElementChild;
    if(!element)throw new Error("ไม่พบโครงเอกสารสำหรับสร้าง PDF");
 
-   // IMPORTANT:
-   // PDF must use exactly the same A4 canvas as Admin Preview.
-   // Do not auto-fit or vertically center a shorter canvas.
+   // Measure the real document first.
+   // Do NOT clamp to A4 or hide overflow before capture.
    Object.assign(element.style,{
      width:`${pageW}px`,
      minWidth:`${pageW}px`,
      maxWidth:`${pageW}px`,
-     height:`${pageH}px`,
+     height:"auto",
      minHeight:`${pageH}px`,
-     maxHeight:`${pageH}px`,
+     maxHeight:"none",
      margin:"0",
-     padding:"",
      boxShadow:"none",
      transform:"none",
      transformOrigin:"top left",
      zoom:"1",
      position:"relative",
-     overflow:"hidden",
+     overflow:"visible",
      boxSizing:"border-box"
    });
 
    await waitForPdfAssets(element);
 
-   // If the Final Master exceeds one A4 page, stop instead of silently
-   // shrinking/centering/cropping the customer's PDF.
-   const contentHeight=Math.ceil(element.scrollHeight||0);
-   if(contentHeight>pageH+6){
-     throw new Error(`เนื้อหาเอกสารสูงเกิน A4 (${contentHeight}px) กรุณาตรวจ Preview ก่อนออก PDF`);
-   }
+   const naturalHeight=Math.max(
+     pageH,
+     Math.ceil(element.scrollHeight||0),
+     Math.ceil(element.getBoundingClientRect().height||0)
+   );
+
+   // Freeze measured height only after all content/assets are ready.
+   element.style.height=naturalHeight+"px";
+   element.style.minHeight=naturalHeight+"px";
 
    const worker=html2pdf().set({
      margin:0,
@@ -3694,11 +3696,10 @@ async function generateBlob(x){
        scrollX:0,
        scrollY:0,
        width:pageW,
-       height:pageH,
+       height:naturalHeight,
        windowWidth:pageW,
-       windowHeight:pageH
-     },
-     pagebreak:{mode:["avoid-all","css","legacy"]}
+       windowHeight:naturalHeight
+     }
    }).from(element);
 
    await worker.toCanvas();
@@ -3720,12 +3721,20 @@ async function generateBlob(x){
      compress:true
    });
 
-   // Force exact A4 placement: top-left 0,0 and full A4.
-   // This removes the large blank top margin caused by the R10 fit/center logic.
+   // Fit the COMPLETE document to one A4 page.
+   // Top-align at y=0. Never vertically center, so there is no blank top area.
+   const cssCanvasW=canvas.width/3;
+   const cssCanvasH=canvas.height/3;
+   const scaleToFit=Math.min(1,pageW/cssCanvasW,pageH/cssCanvasH);
+   const drawW=cssCanvasW*scaleToFit;
+   const drawH=cssCanvasH*scaleToFit;
+   const drawX=Math.max(0,(pageW-drawW)/2);
+   const drawY=0;
+
    pdf.addImage(
      canvas.toDataURL("image/jpeg",0.98),
      "JPEG",
-     0,0,pageW,pageH,
+     drawX,drawY,drawW,drawH,
      undefined,"FAST"
    );
 
