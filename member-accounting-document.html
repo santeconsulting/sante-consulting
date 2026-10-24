@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>SANTE Member | เอกสารทางบัญชี</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#082d69;--yellow:#ffbf19;--green:#188d49;--red:#a84242;
+  --muted:#6f82a0;--line:#dce7f2;--bg:#eef7fc;
+}
+html,body{width:100%;min-height:100%;font-family:"Prompt",sans-serif;color:var(--navy);background:linear-gradient(180deg,#fff,#f7fbff 48%,#eef7fc)}
+a{text-decoration:none;color:inherit}button{font-family:inherit}
+.loading{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:#fff;font-size:16px}.loading.hidden{display:none}
+.topbar{
+  width:100%;height:82px;position:sticky;top:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;gap:28px;
+  padding:0 max(28px,calc((100vw - 1480px)/2));
+  background:rgba(255,255,255,.97);border-bottom:1px solid #e7eef6;
+  box-shadow:0 3px 16px rgba(11,45,103,.04)
+}
+.brand-logo{width:220px;height:68px;object-fit:contain;object-position:left center}
+.member-area{display:flex;align-items:center;gap:18px}.member-copy{text-align:right}
+.member-name{font-size:16px;font-weight:600}.member-email{font-size:13px;color:#7184a3}
+.logout,.btn{
+  min-height:44px;padding:0 17px;border:1px solid #d5e1ef;border-radius:11px;
+  background:#fff;color:var(--navy);font-size:14px;font-weight:600;
+  display:inline-flex;align-items:center;justify-content:center;cursor:pointer
+}
+.btn.yellow{background:var(--yellow);border-color:var(--yellow)}
+.btn.green{background:#e7f7ed;border-color:#c9ebd5;color:#147440}
+.btn.disabled{pointer-events:none;opacity:.55}
+.page{width:min(1260px,calc(100% - 48px));margin:0 auto;padding:24px 0 60px}
+.desktop-hero{width:100%;overflow:hidden;border-radius:28px;background:#fff;box-shadow:0 10px 30px rgba(11,45,103,.07)}
+.desktop-hero img{display:block;width:100%}.mobile-hero{display:none}
+.crumbs{margin:18px 0 8px;font-size:12px;color:#7890aa}
+.crumbs a{color:#4e6f92}
+.page-head{
+  display:flex;align-items:flex-end;justify-content:space-between;gap:18px;
+  margin:0 0 16px
+}
+.page-head h1{font-size:29px;line-height:1.25}.page-head p{margin-top:4px;color:var(--muted);font-size:13px}
+.status{
+  display:inline-flex;width:max-content;padding:7px 11px;border-radius:999px;
+  background:#eef3f8;font-size:12px;font-weight:600
+}
+.status.issued{background:#e7f7ed;color:#147440}
+.status.cancelled{background:#fdecec;color:#9d3f3f}
+.meta-strip{
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;
+  margin-bottom:16px
+}
+.meta-card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:13px 15px}
+.meta-card span{display:block;color:var(--muted);font-size:11px}
+.meta-card strong{display:block;margin-top:4px;font-size:15px}
+.document-area{
+  display:flex;justify-content:center;align-items:flex-start;
+  padding:18px;border:1px solid var(--line);border-radius:18px;
+  background:linear-gradient(180deg,#f8fbfe,#eef5fa);
+  overflow:auto
+}
+.pdf-shell{
+  width:min(794px,100%);aspect-ratio:794/1123;background:#fff;
+  box-shadow:0 12px 32px rgba(7,38,78,.14);border:1px solid #d6e1eb
+}
+.pdf-frame{display:block;width:100%;height:100%;border:0;background:#fff}
+.doc-message{
+  width:min(794px,100%);min-height:420px;background:#fff;border:1px solid var(--line);
+  border-radius:16px;display:flex;align-items:center;justify-content:center;text-align:center;
+  padding:30px;color:var(--muted);line-height:1.7
+}
+.actionbar{
+  display:flex;justify-content:center;gap:10px;flex-wrap:wrap;
+  margin:16px 0 0;padding:14px;background:#fff;border:1px solid var(--line);border-radius:15px
+}
+.notice{
+  margin-top:12px;padding:11px 13px;border-radius:12px;background:#fff7df;
+  border:1px solid #f2df9b;color:#805e00;font-size:12.5px;text-align:center
+}
+.notice.cancelled{background:#fff0f0;border-color:#efcaca;color:#954040}
+@media(max-width:900px){
+  .meta-strip{grid-template-columns:repeat(2,1fr)}
+  .page-head{align-items:flex-start;flex-direction:column}
+}
+@media(max-width:767px){
+  .topbar{min-height:64px;height:auto;padding:7px 12px}.brand-logo{width:118px;height:50px}
+  .member-copy{display:none}.logout{min-height:38px;padding:0 10px;font-size:11px}
+  .page{width:100%;padding:10px 12px 35px}.desktop-hero{display:none}
+  .mobile-hero{display:block;padding:22px 18px;border-radius:20px;background:linear-gradient(145deg,#eaf7ff,#fff 58%,#fff4c9)}
+  .mobile-hero h2{font-size:26px}.mobile-hero p{margin-top:6px;color:var(--muted);font-size:12px}
+  .crumbs{margin-top:14px}.page-head h1{font-size:22px}
+  .meta-strip{grid-template-columns:1fr 1fr}
+  .document-area{padding:6px;border-radius:12px}
+  .actionbar .btn{flex:1;min-width:130px}
+}
+</style>
+<meta name="sante-member-accounting-document" content="R12-DEDICATED-PAGE">
+</head>
+<body>
+<div id="loading" class="loading">กำลังโหลดเอกสาร...</div>
+<header class="topbar">
+  <a href="member-home.html"><img src="sante%20(en)-logo.png" class="brand-logo" alt="SANTE"></a>
+  <div class="member-area">
+    <div class="member-copy"><div id="memberName" class="member-name">สมาชิก SANTE</div><div id="memberEmail" class="member-email"></div></div>
+    <button id="logout" class="logout">ออกจากระบบ</button>
+  </div>
+</header>
+
+<main class="page">
+  <section class="desktop-hero"><img src="sante-member-hero.png" alt="Trust in Safety. Trust in SANTE."></section>
+  <section class="mobile-hero"><h2>เอกสารทางบัญชี</h2><p>ดูเอกสารฉบับเต็มและดำเนินการจากหน้าเดียว</p></section>
+
+  <div class="crumbs"><a href="member-home.html">หน้าหลัก</a> › <a href="member-accounting-documents.html">เอกสารทางบัญชีของฉัน</a> › <span id="crumbType">เอกสาร</span></div>
+
+  <div class="page-head">
+    <div>
+      <h1 id="pageTitle">เอกสารทางบัญชี</h1>
+      <p id="pageSub">กำลังโหลดข้อมูล...</p>
+    </div>
+    <span id="docStatus" class="status">-</span>
+  </div>
+
+  <section class="meta-strip">
+    <div class="meta-card"><span>เลขที่เอกสาร</span><strong id="mNo">-</strong></div>
+    <div class="meta-card"><span>วันที่ออก</span><strong id="mDate">-</strong></div>
+    <div class="meta-card"><span>ครบกำหนด / วันที่อ้างอิง</span><strong id="mDue">-</strong></div>
+    <div class="meta-card"><span>ยอดสุทธิ</span><strong id="mNet">0.00 บาท</strong></div>
+  </section>
+
+  <section class="document-area">
+    <div id="pdfShell" class="pdf-shell" style="display:none">
+      <iframe id="pdfFrame" class="pdf-frame" title="เอกสาร PDF"></iframe>
+    </div>
+    <div id="docMessage" class="doc-message">กำลังเตรียมเอกสาร...</div>
+  </section>
+
+  <div id="notice" class="notice" style="display:none"></div>
+  <div id="actionbar" class="actionbar"></div>
+</main>
+
+<script>
+const db=window.supabase.createClient(
+  "https://cyegjwerxlxhczrfiurz.supabase.co",
+  "sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF",
+  {auth:{storageKey:"sante-member-auth",persistSession:true,autoRefreshToken:true}}
+);
+const $=id=>document.getElementById(id);
+const esc=v=>String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[m]));
+const money=v=>Number(v||0).toLocaleString("th-TH",{minimumFractionDigits:2,maximumFractionDigits:2});
+const labels={INVOICE:"ใบแจ้งหนี้",RECEIPT_TAX_INVOICE:"ใบเสร็จรับเงิน/ใบกำกับภาษี",CREDIT_NOTE:"ใบลดหนี้",QUOTATION:"ใบเสนอราคา"};
+const statusTH={ISSUED:"ออกเอกสารแล้ว",CANCELLED:"ยกเลิก",APPROVED:"อนุมัติแล้ว",SENT:"ส่งให้ลูกค้าแล้ว"};
+const id=new URLSearchParams(location.search).get("id");
+let row=null,pdfDocs=[],pdfUrl="";
+
+function dateText(v){
+  if(!v)return "-";
+  const d=new Date(v);
+  return Number.isNaN(d.getTime())?String(v):new Intl.DateTimeFormat("th-TH",{day:"2-digit",month:"short",year:"numeric"}).format(d);
+}
+function normalizeDocNo(v){return String(v||"").trim().toUpperCase().replace(/[^A-Z0-9_-]/g,"")}
+function pdfDocText(d){
+  return [d?.title,d?.original_filename,d?.file_name,d?.filename,d?.storage_path,d?.document_no,d?.name]
+    .map(v=>String(v||"")).join(" ").toUpperCase();
+}
+function findPdf(x){
+  const no=normalizeDocNo(x?.document_no); if(!no)return null;
+  const sameType=pdfDocs.filter(d=>!d?.document_type||d.document_type===x.document_type);
+  return sameType.find(d=>pdfDocText(d).includes(no))||pdfDocs.find(d=>pdfDocText(d).includes(no))||null;
+}
+function accountingPdfPath(x){
+  const safe=String(x?.document_no||"").replace(/[^A-Za-z0-9_-]/g,"_");
+  const year=String(x?.issue_date||"").slice(0,4)||String(new Date().getFullYear());
+  return safe?`accounting/${year}/${x.document_type}/${safe}.pdf`:"";
+}
+async function signedUrlIfExists(bucket,path){
+  if(!bucket||!path)return null;
+  const {data,error}=await db.storage.from(bucket).createSignedUrl(path,600);
+  if(error)return null;
+  return data?.signedUrl||null;
+}
+async function resolvePdfUrl(x){
+  const pdf=findPdf(x),candidates=[];
+  if(x?.storage_bucket&&x?.storage_path)candidates.push([x.storage_bucket,x.storage_path]);
+  if(pdf?.storage_bucket&&pdf?.storage_path)candidates.push([pdf.storage_bucket,pdf.storage_path]);
+  const fallback=accountingPdfPath(x);
+  if(fallback)candidates.push(["training-documents",fallback]);
+
+  const seen=new Set();
+  for(const [bucket,path] of candidates){
+    const key=bucket+"|"+path;
+    if(seen.has(key))continue;
+    seen.add(key);
+    const url=await signedUrlIfExists(bucket,path);
+    if(url)return url;
+  }
+  return "";
+}
+function renderActions(){
+  const actions=[];
+  actions.push(`<a class="btn" href="member-accounting-documents.html">กลับรายการเอกสาร</a>`);
+
+  if(row.document_status!=="CANCELLED"&&pdfUrl){
+    actions.push(`<button class="btn yellow" id="openPdfNew">เปิด PDF แยกหน้าต่าง</button>`);
+  }
+  if(row.document_type==="INVOICE"&&row.document_status==="ISSUED"){
+    actions.push(`<a class="btn green" href="member-payments.html">แจ้งชำระเงิน</a>`);
+  }
+
+  $("actionbar").innerHTML=actions.join("");
+  const b=$("openPdfNew");
+  if(b)b.onclick=()=>window.open(pdfUrl+(pdfUrl.includes("?")?"&":"?")+"v="+Date.now(),"_blank","noopener");
+}
+async function init(){
+  try{
+    const {data:{session},error}=await db.auth.getSession();
+    if(error)throw error;
+    if(!session?.user){location.replace("member-login.html");return}
+
+    $("memberEmail").textContent=session.user.email||"";
+    const {data:p}=await db.from("profiles").select("title_th,firstname_th,lastname_th,email").eq("id",session.user.id).maybeSingle();
+    if(p){
+      $("memberName").textContent=[p.title_th,p.firstname_th,p.lastname_th].filter(Boolean).join(" ")||"สมาชิก SANTE";
+      $("memberEmail").textContent=p.email||session.user.email||"";
+    }
+
+    if(!id)throw new Error("ไม่พบรหัสเอกสาร");
+
+    const [a,b]=await Promise.all([
+      db.rpc("member_get_my_accounting_documents"),
+      db.rpc("member_get_my_documents")
+    ]);
+    if(a.error)throw a.error;
+
+    const rows=Array.isArray(a.data)?a.data:[];
+    pdfDocs=(!b.error&&Array.isArray(b.data))?b.data:[];
+    row=rows.find(x=>String(x.source_id)===String(id));
+    if(!row)throw new Error("ไม่พบเอกสารนี้ในบัญชีของคุณ");
+
+    if(row.document_type==="QUOTATION"){
+      location.replace("member-quotation.html?id="+encodeURIComponent(row.source_id));
+      return;
+    }
+
+    const label=labels[row.document_type]||row.document_type||"เอกสาร";
+    document.title=`SANTE Member | ${label} ${row.document_no||""}`;
+    $("crumbType").textContent=label;
+    $("pageTitle").textContent=`${label} ${row.document_no||""}`;
+    $("pageSub").textContent=row.organization_name||row.customer_name||"เอกสาร SANTE";
+    $("mNo").textContent=row.document_no||"-";
+    $("mDate").textContent=dateText(row.issue_date);
+    $("mDue").textContent=dateText(row.due_date||row.valid_until);
+    $("mNet").textContent=money(row.net_receivable||row.grand_total)+" บาท";
+    $("docStatus").textContent=statusTH[row.document_status]||row.document_status||"-";
+    $("docStatus").className="status "+(row.document_status==="ISSUED"?"issued":row.document_status==="CANCELLED"?"cancelled":"");
+
+    if(row.document_status==="CANCELLED"){
+      $("notice").style.display="block";
+      $("notice").className="notice cancelled";
+      $("notice").textContent="เอกสารฉบับนี้ถูกยกเลิกแล้ว จึงไม่สามารถใช้เพื่อชำระเงินหรือดำเนินการต่อได้";
+    }
+
+    pdfUrl=await resolvePdfUrl(row);
+    if(pdfUrl){
+      $("pdfFrame").src=pdfUrl+(pdfUrl.includes("?")?"&":"?")+"v="+Date.now()+"#toolbar=0&navpanes=0&view=FitH";
+      $("pdfShell").style.display="block";
+      $("docMessage").style.display="none";
+    }else{
+      $("docMessage").innerHTML=`ไม่สามารถโหลดไฟล์ PDF ของ <b>${esc(row.document_no||"เอกสารนี้")}</b><br>กรุณาติดต่อ SANTE เพื่อตรวจสอบไฟล์เอกสาร`;
+    }
+
+    renderActions();
+    $("loading").classList.add("hidden");
+  }catch(e){
+    console.error(e);
+    $("loading").innerHTML='โหลดเอกสารไม่สำเร็จ<br><span style="font-size:13px;color:#6f82a0">'+esc(e.message||e)+'</span><br><a class="btn" style="margin-top:12px" href="member-accounting-documents.html">กลับรายการเอกสาร</a>';
+  }
+}
+$("logout").onclick=async()=>{await db.auth.signOut();location.replace("member-login.html")};
+init();
+</script>
+</body>
+</html>
