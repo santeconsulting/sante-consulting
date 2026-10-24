@@ -41,7 +41,7 @@ a{text-decoration:none;color:inherit}button,input,select,textarea{font-family:Pr
 label{display:block;font-size:11px;font-weight:600;margin-bottom:5px}.input,textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:13px}.input{height:43px}textarea{min-height:74px;resize:vertical}
 .summary{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:14px}.sum{background:#f6f9fc;border-radius:12px;padding:12px}.sum span{display:block;color:var(--muted);font-size:10px}.sum strong{font-size:15px}
 .modal-actions{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap;margin-top:18px}
-#printStage{position:fixed;left:-100000px;top:0;width:794px;background:#fff}
+#printStage{position:fixed;left:0;top:0;width:794px;background:#fff;z-index:-2147483000;pointer-events:none;overflow:visible}
 .paper{width:794px;min-height:1123px;background:#fff;color:#173654;padding:52px 48px;font-family:Prompt,sans-serif}
 .paper .head{display:flex;justify-content:space-between;gap:24px;border-bottom:3px solid #082d69;padding-bottom:18px}.paper-logo{width:130px}.seller{font-size:11px;line-height:1.55}.doc-title{text-align:right;font-size:27px;font-weight:700;color:#082d69}.doc-meta{font-size:11px;line-height:1.65;text-align:right}
 .party{display:grid;grid-template-columns:1.2fr .8fr;gap:14px;margin-top:20px}.box{border:1px solid #dce7f2;border-radius:11px;padding:12px;font-size:11px;line-height:1.65}
@@ -2610,6 +2610,7 @@ label{display:block;font-size:11px;font-weight:600;margin-bottom:5px}.input,text
 <meta name="sante-build-taxid-validation" content="R5-TAXID-OPTIONAL-NONBLOCKING">
 <meta name="sante-build-pdf-repair" content="R6-STAGE-AWARE-REPAIR">
 <meta name="sante-workflow" content="R7-ACCOUNTING-STATE-ACTIONS">
+<meta name="sante-pdf-build" content="R9-ADMIN-PREVIEW-STORAGE-PARITY">
 </head>
 <body>
 <div id="loading" class="loading">กำลังโหลดเอกสารบัญชี...</div>
@@ -3601,15 +3602,127 @@ function paperHtml(x){
  </div>`;
 }
 
+async function waitForPdfAssets(root){
+ try{
+   if(document.fonts?.ready){
+     await Promise.race([
+       document.fonts.ready,
+       new Promise(r=>setTimeout(r,3000))
+     ]);
+   }
+ }catch(_){}
+
+ const images=[...root.querySelectorAll("img")];
+ await Promise.all(images.map(img=>new Promise(resolve=>{
+   if(img.complete && img.naturalWidth>0)return resolve();
+   let done=false;
+   const finish=()=>{if(done)return;done=true;resolve()};
+   img.addEventListener("load",finish,{once:true});
+   img.addEventListener("error",finish,{once:true});
+   setTimeout(finish,3500);
+ })));
+
+ await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
+}
+
 async function generateBlob(x){
- const stage=$("printStage");stage.innerHTML=paperHtml(x);
- await new Promise(r=>setTimeout(r,250));
- const element=stage.firstElementChild;
- const pdfFilename=((x.document_no||"document").replace(/[^A-Za-z0-9_-]/g,"_")||"document")+".pdf";
- const opt={margin:0,filename:pdfFilename,image:{type:"jpeg",quality:.98},html2canvas:{scale:3,useCORS:true,backgroundColor:"#ffffff"},jsPDF:{unit:"px",format:[794,1123],orientation:"portrait"}};
- const worker=html2pdf().set(opt).from(element).toPdf();
- const pdf=await worker.get("pdf");
- return pdf.output("blob");
+ const host=document.createElement("div");
+ host.className="sante-pdf-render-host";
+ host.style.cssText=[
+   "position:fixed",
+   "left:0",
+   "top:0",
+   "width:794px",
+   "height:auto",
+   "margin:0",
+   "padding:0",
+   "background:#fff",
+   "z-index:-2147483000",
+   "pointer-events:none",
+   "overflow:visible"
+ ].join(";");
+
+ host.innerHTML=paperHtml(x);
+ document.body.appendChild(host);
+
+ try{
+   const element=host.firstElementChild;
+   if(!element)throw new Error("ไม่พบโครงเอกสารสำหรับสร้าง PDF");
+
+   // Lock the exact same A4 canvas used by Admin Preview.
+   Object.assign(element.style,{
+     width:"794px",
+     minWidth:"794px",
+     maxWidth:"794px",
+     minHeight:"1123px",
+     margin:"0",
+     boxShadow:"none",
+     transform:"none",
+     zoom:"1",
+     position:"relative"
+   });
+
+   await waitForPdfAssets(element);
+
+   const measuredHeight=Math.max(
+     1123,
+     Math.ceil(element.scrollHeight||0),
+     Math.ceil(element.getBoundingClientRect().height||0)
+   );
+   element.style.height=measuredHeight+"px";
+
+   const canvas=await html2canvas(element,{
+     scale:3,
+     useCORS:true,
+     allowTaint:false,
+     backgroundColor:"#ffffff",
+     logging:false,
+     scrollX:0,
+     scrollY:0,
+     windowWidth:Math.max(1400,document.documentElement.clientWidth||1400),
+     windowHeight:Math.max(measuredHeight,document.documentElement.clientHeight||1123)
+   });
+
+   if(!canvas.width||!canvas.height)throw new Error("ไม่สามารถ Render เอกสารเป็นภาพได้");
+
+   const JsPDF=window.jspdf?.jsPDF||window.jsPDF;
+   if(!JsPDF)throw new Error("ไม่พบ PDF engine");
+
+   const pageW=794,pageH=1123;
+   const sourceRatio=canvas.width/canvas.height;
+   const pageRatio=pageW/pageH;
+
+   let drawW,drawH,drawX=0,drawY=0;
+   if(sourceRatio>=pageRatio){
+     drawW=pageW;
+     drawH=pageW/sourceRatio;
+     drawY=(pageH-drawH)/2;
+   }else{
+     drawH=pageH;
+     drawW=pageH*sourceRatio;
+     drawX=(pageW-drawW)/2;
+   }
+
+   // For a correct 794x1123 Admin preview this resolves to 0,0,794,1123.
+   const pdf=new JsPDF({
+     unit:"px",
+     format:[pageW,pageH],
+     orientation:"portrait",
+     hotfixes:["px_scaling"],
+     compress:true
+   });
+
+   pdf.addImage(
+     canvas.toDataURL("image/jpeg",0.98),
+     "JPEG",
+     drawX,drawY,drawW,drawH,
+     undefined,"FAST"
+   );
+
+   return pdf.output("blob");
+ }finally{
+   host.remove();
+ }
 }
 
 
