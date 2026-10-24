@@ -74,6 +74,7 @@ a{text-decoration:none;color:inherit}button,select,input{font-family:inherit}
 <meta name="sante-build-pdf-repair" content="R6-MEMBER-STORAGE-FALLBACK">
 <meta name="sante-workflow" content="R7-MEMBER-VISIBILITY-ACTIONS">
 <meta name="sante-storage-policy" content="R8-MEMBER-ACCOUNTING-STORAGE">
+<meta name="sante-member-accounting-detail" content="R12-DEDICATED-DOCUMENT-PAGE">
 </head>
 <body>
 <div id="loading" class="loading">กำลังโหลดเอกสารทางบัญชี...</div>
@@ -102,7 +103,7 @@ a{text-decoration:none;color:inherit}button,select,input{font-family:inherit}
     <div class="sum" data-type="CREDIT_NOTE"><span>ใบลดหนี้</span><strong id="cC">0</strong></div>
   </section>
 
-  <div class="accounting-note">กดกล่องประเภทเอกสารด้านบนเพื่อกรองรายการได้ทันที · ใบเสนอราคาเปิดดูเอกสารฉบับเต็มได้จากปุ่มสีเหลือง · เอกสารอื่นจะแสดงรายละเอียดและปุ่ม PDF เมื่อมีไฟล์ที่ออกแล้ว</div>
+  <div class="accounting-note">กดกล่องประเภทเอกสารด้านบนเพื่อกรองรายการได้ทันที · กด “เปิดเอกสาร” เพื่อดูเอกสารฉบับเต็มในหน้าเฉพาะ โดยใช้รูปแบบ Master เดียวกับเอกสารที่ SANTE ออกให้</div>
   <div class="toolbar">
     <input id="search" class="search" placeholder="ค้นหาเลขเอกสาร ลูกค้า หรือเรื่อง">
     <select id="typeFilter" class="filter">
@@ -182,12 +183,15 @@ function render(){
         ${pdfState}
       </div>
       <div class="card-actions">
-        <button class="btn" onclick="openDetail('${x.source_id}')">ดูรายละเอียด</button>
         ${x.document_type==="QUOTATION"
           ? `<a class="btn yellow" href="member-quotation.html?id=${encodeURIComponent(x.source_id)}">เปิดใบเสนอราคา</a>`
-          : (x.document_status==="CANCELLED"
-              ? `<span class="btn" style="pointer-events:none;opacity:.65">เอกสารถูกยกเลิก</span>`
-              : `${pdf||x.document_status==="ISSUED"?`<button class="btn yellow" onclick="openPdfForDocument('${x.source_id}')">เปิด PDF</button>`:""}${x.document_type==="INVOICE"&&x.document_status==="ISSUED"?`<a class="btn" href="member-payments.html">แจ้งชำระเงิน</a>`:""}`)}
+          : `<a class="btn yellow" href="member-accounting-document.html?id=${encodeURIComponent(x.source_id)}">เปิดเอกสาร</a>`}
+        ${x.document_type==="INVOICE"&&x.document_status==="ISSUED"
+          ? `<a class="btn" href="member-payments.html">แจ้งชำระเงิน</a>`
+          : ""}
+        ${x.document_status==="CANCELLED"
+          ? `<span class="pdf-state" style="color:#a24c4c">เอกสารถูกยกเลิก</span>`
+          : ""}
       </div>
     </article>`;
   }).join("");
