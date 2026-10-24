@@ -3817,13 +3817,12 @@ async function issueOne(id,silent=false,regenerateIssued=false){
 
   const safe=(x.document_no||x.id).replace(/[^A-Za-z0-9_-]/g,"_");
   const year=String(x.issue_date||new Date().getFullYear()).slice(0,4) || String(new Date().getFullYear());
-  const versionTag=isIssued?`-v${Date.now()}`:"";
-  const path=`accounting/${year}/${x.document_type}/${safe}${versionTag}.pdf`;
+  const path=`accounting/${year}/${x.document_type}/${safe}.pdf`;
 
   stage="upload";
   const up=await db.storage.from(BUCKET).upload(path,blob,{
     contentType:"application/pdf",
-    upsert:false,
+    upsert:true,
     cacheControl:"0"
   });
   if(up.error)throw up.error;
@@ -3846,15 +3845,9 @@ async function issueOne(id,silent=false,regenerateIssued=false){
     });
     if(fin.error)throw fin.error;
   }else{
-    stage="link-latest";
-    const link=await db.rpc("admin_replace_accounting_pdf",{
-      p_document_id:x.id,
-      p_storage_bucket:BUCKET,
-      p_storage_path:path,
-      p_original_filename:`${safe}.pdf`,
-      p_file_size_bytes:blob.size
-    });
-    if(link.error)throw link.error;
+    // Regenerate ISSUED: overwrite the same canonical Storage object only.
+    // Do not write PDF metadata to accounting_documents.
+    stage="complete";
   }
 
   await loadDocs();
@@ -3864,7 +3857,7 @@ async function issueOne(id,silent=false,regenerateIssued=false){
   }
 
   if(!silent&&isIssued){
-    alert(`สร้าง PDF ใหม่สำเร็จ\n${x.document_no||safe}.pdf\nตรวจสอบไฟล์ใน Storage แล้ว\nสถานะเอกสารยังคงเป็น ISSUED`);
+    alert(`สร้าง PDF ใหม่สำเร็จ\n${x.document_no||safe}.pdf\nแทนที่ไฟล์ PDF เดิมใน Storage แล้ว\nสถานะเอกสารยังคงเป็น ISSUED`);
   }
   return {ok:true,path,bucket:BUCKET};
  }catch(e){
