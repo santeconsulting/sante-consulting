@@ -2617,6 +2617,71 @@ label{display:block;font-size:11px;font-weight:600;margin-bottom:5px}.input,text
 <meta name="sante-document-filename-r14" content="DOCUMENT-NUMBER-AS-PDF-NAME">
 <meta name="sante-pdf-version" content="R15-VERSIONED-STORAGE-LATEST">
 <meta name="sante-single-pdf-master" content="R21-ADMIN-UPLOAD-MEMBER-SAME-FILE">
+
+<style id="sante-receipt-tax-final-r22">
+/* RECEIPT / TAX INVOICE FINAL MASTER — LIGHT BLUE */
+.paper-receipt{
+  --rt-blue:#2f80ed;
+  --rt-blue-dark:#175ca8;
+  --rt-blue-soft:#eaf4ff;
+  --rt-blue-soft-2:#f4f9ff;
+  --rt-blue-line:#c9ddf3;
+  color:#17283d!important;
+}
+.paper-receipt .rth-title{
+  color:var(--rt-blue)!important;
+}
+.paper-receipt .rth-docbox{
+  background:var(--rt-blue-soft)!important;
+  color:#173654!important;
+}
+.paper-receipt th{
+  background:var(--rt-blue-soft)!important;
+  color:#173654!important;
+}
+.paper-receipt .total-row.grand{
+  background:var(--rt-blue-soft)!important;
+  color:var(--rt-blue-dark)!important;
+  border-color:var(--rt-blue-line)!important;
+}
+.paper-receipt .paid-row{
+  background:var(--rt-blue-soft-2)!important;
+  border:1px solid var(--rt-blue-line)!important;
+  color:#173654!important;
+}
+.paper-receipt .paid-row b:last-child{
+  color:var(--rt-blue-dark)!important;
+}
+.paper-receipt .payment-box{
+  border-top-color:var(--rt-blue-line)!important;
+  border-bottom-color:var(--rt-blue-line)!important;
+}
+.paper-receipt .payment-title,
+.paper-receipt .signature-header{
+  color:var(--rt-blue-dark)!important;
+}
+.paper-receipt .accounting-foot{
+  color:#5b7ea6!important;
+}
+.paper-receipt .signature-area{
+  border-top-color:var(--rt-blue-line)!important;
+}
+.paper-receipt .signature-line{
+  border-top-color:#7892ad!important;
+}
+.paper-receipt .receipt-tax-badge{
+  display:inline-block;
+  margin-top:1.5mm;
+  padding:1.1mm 2.2mm;
+  border-radius:999px;
+  background:var(--rt-blue-soft)!important;
+  color:var(--rt-blue-dark)!important;
+  font-size:6.8pt;
+  font-weight:700;
+}
+</style>
+<meta name="sante-receipt-tax-build" content="R22-LIGHT-BLUE-FINAL-MASTER">
+
 </head>
 <body>
 <div id="loading" class="loading">กำลังโหลดเอกสารบัญชี...</div>
@@ -3412,6 +3477,7 @@ function paperHtml(x){
     <div class="rth-doc">
       <div class="rth-copy">${copyLabel}</div>
       <div class="rth-title">${isReceipt?"ใบเสร็จรับเงิน / ใบกำกับภาษี":isCreditNote?"ใบลดหนี้":esc(docTitle)}</div>
+      ${isReceipt?`<div class="receipt-tax-badge">ใบกำกับภาษีแบบเต็มรูป / FULL TAX INVOICE</div>`:""}
       <div class="rth-docbox">
         <b>เลขที่เอกสาร :</b><span>${esc(x.document_no||"-")}</span>
         <b>วันที่ออก :</b><span>${esc(x.issue_date||new Date().toISOString().slice(0,10))}</span>
@@ -3580,20 +3646,32 @@ function paperHtml(x){
   `:`
   <div class="totals-wrap">
    <div class="summary-note">
-     <b>${isCreditNote?"เหตุผลและรายละเอียดการลดหนี้":"รายละเอียด / NOTES"}</b><br>
-     ${x.document_subject?`${isCreditNote?"เหตุผล":"เรื่อง"}: ${esc(x.document_subject)}<br>`:""}
-     ${x.terms?`เงื่อนไข: ${esc(x.terms)}<br>`:""}
-     ${x.note?esc(x.note):(isCreditNote?"กรุณาตรวจสอบเอกสารอ้างอิง เหตุผลการลดหนี้ และยอดภาษีก่อนออกเอกสาร":"กรุณาตรวจสอบชื่อ/ที่อยู่ เลขประจำตัวผู้เสียภาษี และยอดเงินก่อนนำเอกสารไปใช้งาน")}
+     ${isReceipt?`
+       <b>ข้อมูลการรับชำระ / PAYMENT RECEIPT</b><br>
+       เลขที่การชำระ: ${esc(paymentNo)}<br>
+       วันที่ชำระ: ${esc(x.payment_date||x.issue_date||"-")}<br>
+       ${x.note?`หมายเหตุ: ${esc(x.note)}`:"เอกสารนี้ออกเมื่อระบบยืนยันการรับชำระเงินแล้ว"}
+     `:`
+       <b>${isCreditNote?"เหตุผลและรายละเอียดการลดหนี้":"รายละเอียด / NOTES"}</b><br>
+       ${x.document_subject?`${isCreditNote?"เหตุผล":"เรื่อง"}: ${esc(x.document_subject)}<br>`:""}
+       ${x.terms?`เงื่อนไข: ${esc(x.terms)}<br>`:""}
+       ${x.note?esc(x.note):(isCreditNote?"กรุณาตรวจสอบเอกสารอ้างอิง เหตุผลการลดหนี้ และยอดภาษีก่อนออกเอกสาร":"กรุณาตรวจสอบชื่อ/ที่อยู่ เลขประจำตัวผู้เสียภาษี และยอดเงินก่อนนำเอกสารไปใช้งาน")}
+     `}
    </div>
    <div class="totals">
       <div class="total-row"><span>${isCreditNote?"มูลค่าที่ลดก่อน VAT":"มูลค่าก่อน VAT"}</span><span>${money(x.subtotal)} บาท</span></div>
       <div class="total-row"><span>${isCreditNote?"ภาษีมูลค่าเพิ่มที่ลด":"ภาษีมูลค่าเพิ่ม"} ${rateText(x.vat_rate??7)}%</span><span>${money(x.vat_amount)} บาท</span></div>
       <div class="total-row grand"><span>${isCreditNote?"รวมมูลค่าลดหนี้":"จำนวนเงินทั้งสิ้น"}</span><span>${money(x.grand_total)} บาท</span></div>
-      ${Number(x.wht_amount||0)>0?`<div class="total-row"><span>หัก ณ ที่จ่าย ${rateText(x.wht_rate||0)}%</span><span>${money(x.wht_amount)} บาท</span></div><div class="total-row paid-row"><b>จำนวนเงินที่ชำระสุทธิ</b><b>${money(x.net_receivable)} บาท</b></div><div class="amount-words">(${thaiBahtText(x.net_receivable)})</div>`:`<div class="amount-words">(${thaiBahtText(isReceipt?receiveAmount:x.grand_total)})</div>`}
-      ${isReceipt?`<div class="total-row paid-row"><b>ยอดรับเงินจริง</b><b>${money(receiveAmount)} บาท</b></div>`:""}
+      ${isReceipt?`
+        ${Number(x.wht_amount||0)>0?`<div class="total-row"><span>หัก ณ ที่จ่าย ${rateText(x.wht_rate||0)}%</span><span>${money(x.wht_amount)} บาท</span></div>`:""}
+        <div class="total-row paid-row"><b>ยอดรับเงินจริง</b><b>${money(receiveAmount)} บาท</b></div>
+        <div class="amount-words">(${thaiBahtText(receiveAmount)})</div>
+      `:`
+        ${Number(x.wht_amount||0)>0?`<div class="total-row"><span>หัก ณ ที่จ่าย ${rateText(x.wht_rate||0)}%</span><span>${money(x.wht_amount)} บาท</span></div><div class="total-row paid-row"><b>จำนวนเงินที่ชำระสุทธิ</b><b>${money(x.net_receivable)} บาท</b></div><div class="amount-words">(${thaiBahtText(x.net_receivable)})</div>`:`<div class="amount-words">(${thaiBahtText(x.grand_total)})</div>`}
+      `}
    </div>
   </div>
-  ${isReceipt?`<div class="payment-box"><div class="payment-title">การชำระเงิน / PAYMENT</div><div class="payment-grid"><div class="payment-item"><div class="payment-bank"><img class="payment-bank-logo" src="${KBANK_LOGO_URI}" alt="Kasikornbank"><div><b>${SANTE.bank}</b><br>ชื่อบัญชี ${SANTE.bankName}<br>เลขบัญชี ${SANTE.bankAccount}</div></div></div><div class="payment-item">วันที่ชำระ: ${esc(x.payment_date||x.issue_date||"-")}<br>Payment No.: ${esc(paymentNo)}</div><div class="payment-item">จำนวนเงินที่ชำระ: ${money(receiveAmount)} บาท<div class="payment-words">(${thaiBahtText(receiveAmount)})</div></div></div></div>`:""}
+  ${isReceipt?`<div class="payment-box"><div class="payment-title">รับชำระเงิน / PAYMENT RECEIVED</div><div class="payment-grid"><div class="payment-item"><div class="payment-bank"><img class="payment-bank-logo" src="${KBANK_LOGO_URI}" alt="Kasikornbank"><div><b>${SANTE.bank}</b><br>ชื่อบัญชี ${SANTE.bankName}<br>เลขบัญชี ${SANTE.bankAccount}</div></div></div><div class="payment-item">วันที่ชำระ: ${esc(x.payment_date||x.issue_date||"-")}<br>Payment No.: ${esc(paymentNo)}</div><div class="payment-item">จำนวนเงินที่ชำระ: ${money(receiveAmount)} บาท<div class="payment-words">(${thaiBahtText(receiveAmount)})</div></div></div></div>`:""}
   <div class="signature-area">
    <div class="signature-header">♧ รับรอง</div>
    <div class="signature-grid">
@@ -3603,9 +3681,9 @@ function paperHtml(x){
     <div class="signature-box"><div class="signature-space"></div><div class="signature-line"><b>${esc(x.organization_name||x.customer_name||"")}</b><br>ผู้รับเอกสาร (ลูกค้า)</div></div>
     <div class="signature-box"><div class="customer-stamp-box"></div><div class="signature-line">ตราประทับ (ลูกค้า) (ถ้ามี)</div></div>
    </div>
-   <div class="footer-sign-note">${isReceipt?"เอกสารฉบับนี้ใช้เป็นหลักฐานการรับชำระเงินและใบกำกับภาษีตามข้อมูลที่ระบุข้างต้น":isCreditNote?"ใบลดหนี้ฉบับนี้อ้างอิงเอกสารเดิมตามที่ระบุ กรุณาตรวจสอบเหตุผลและจำนวนเงินที่ลดก่อนนำเอกสารไปใช้":"เอกสารฉบับนี้จัดทำจากข้อมูลใน SANTE Accounting Documents"}</div>
+   <div class="footer-sign-note">${isReceipt?"เอกสารฉบับนี้เป็นหลักฐานการรับชำระเงิน และเป็นใบกำกับภาษีตามรายการภาษีมูลค่าเพิ่มที่ระบุข้างต้น":isCreditNote?"ใบลดหนี้ฉบับนี้อ้างอิงเอกสารเดิมตามที่ระบุ กรุณาตรวจสอบเหตุผลและจำนวนเงินที่ลดก่อนนำเอกสารไปใช้":"เอกสารฉบับนี้จัดทำจากข้อมูลใน SANTE Accounting Documents"}</div>
   </div>
-  <div class="accounting-foot">SANTE Accounting Documents · ${esc(docEn)} · ${copyLabel}</div>
+  <div class="accounting-foot">SANTE Accounting Documents · ${isReceipt?"RECEIPT / TAX INVOICE (ใบเสร็จรับเงิน / ใบกำกับภาษี)":isCreditNote?"CREDIT NOTE (ใบลดหนี้)":esc(docEn)} · ${copyLabel}</div>
   `}
  </div>`;
 }

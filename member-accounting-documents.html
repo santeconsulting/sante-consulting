@@ -84,7 +84,7 @@ a{text-decoration:none;color:inherit}button,select,input{font-family:inherit}
 </header>
 <main class="page">
   <section class="desktop-hero"><img src="sante-member-hero.png" alt="Trust in Safety. Trust in SANTE."></section>
-  <section class="mobile-hero"><h2>เอกสารทางบัญชี<br>ของคุณ</h2><p>ดูใบเสนอราคา ใบแจ้งหนี้ ใบเสร็จ/ใบกำกับภาษี และใบลดหนี้จากบัญชีเดียว</p></section>
+  <section class="mobile-hero"><h2>เอกสารทางบัญชี<br>ของคุณ</h2><p>ดูใบเสนอราคา ใบแจ้งหนี้ ใบเสร็จรับเงิน / ใบกำกับภาษี และใบลดหนี้จากบัญชีเดียว</p></section>
 
   <div class="heading">
     <div><h1>เอกสารทางบัญชีของฉัน</h1><p>รวมเอกสารทางบัญชีทั้งหมดของคุณ พร้อมสถานะและยอดเงินล่าสุด</p></div>
@@ -99,7 +99,7 @@ a{text-decoration:none;color:inherit}button,select,input{font-family:inherit}
     <div class="sum active" data-type=""><span>ทั้งหมด</span><strong id="cAll">0</strong></div>
     <div class="sum" data-type="QUOTATION"><span>ใบเสนอราคา</span><strong id="cQ">0</strong></div>
     <div class="sum" data-type="INVOICE"><span>ใบแจ้งหนี้</span><strong id="cI">0</strong></div>
-    <div class="sum" data-type="RECEIPT_TAX_INVOICE"><span>ใบเสร็จ/ใบกำกับภาษี</span><strong id="cR">0</strong></div>
+    <div class="sum" data-type="RECEIPT_TAX_INVOICE"><span>ใบเสร็จรับเงิน / ใบกำกับภาษี</span><strong id="cR">0</strong></div>
     <div class="sum" data-type="CREDIT_NOTE"><span>ใบลดหนี้</span><strong id="cC">0</strong></div>
   </section>
 
@@ -110,7 +110,7 @@ a{text-decoration:none;color:inherit}button,select,input{font-family:inherit}
       <option value="">ทุกประเภท</option>
       <option value="QUOTATION">ใบเสนอราคา</option>
       <option value="INVOICE">ใบแจ้งหนี้</option>
-      <option value="RECEIPT_TAX_INVOICE">ใบเสร็จ/ใบกำกับภาษี</option>
+      <option value="RECEIPT_TAX_INVOICE">ใบเสร็จรับเงิน / ใบกำกับภาษี</option>
       <option value="CREDIT_NOTE">ใบลดหนี้</option>
     </select>
   </div>
@@ -132,7 +132,7 @@ let rows=[], pdfDocs=[];
 const $=id=>document.getElementById(id);
 const esc=v=>String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[m]));
 const money=v=>Number(v||0).toLocaleString("th-TH",{minimumFractionDigits:2,maximumFractionDigits:2});
-const labels={QUOTATION:"ใบเสนอราคา",INVOICE:"ใบแจ้งหนี้",RECEIPT_TAX_INVOICE:"ใบเสร็จ/ใบกำกับภาษี",CREDIT_NOTE:"ใบลดหนี้"};
+const labels={QUOTATION:"ใบเสนอราคา",INVOICE:"ใบแจ้งหนี้",RECEIPT_TAX_INVOICE:"ใบเสร็จรับเงิน / ใบกำกับภาษี",CREDIT_NOTE:"ใบลดหนี้"};
 const statusTH={DRAFT:"ร่าง",SENT:"รออนุมัติราคา",APPROVED:"อนุมัติแล้ว",READY_TO_ISSUE:"พร้อมออกเอกสาร",WAITING_APPROVAL:"รออนุมัติ",ISSUED:"ออกเอกสารแล้ว",CANCELLED:"ยกเลิก"};
 function statusClass(s){s=String(s||"").toLowerCase();return s.includes("approved")?"approved":s.includes("issued")?"issued":s.includes("ready")?"ready":s.includes("waiting")?"waiting":s.includes("sent")?"sent":""}
 function dateText(v){if(!v)return "-";const d=new Date(v);return Number.isNaN(d.getTime())?String(v):new Intl.DateTimeFormat("th-TH",{day:"2-digit",month:"short",year:"numeric"}).format(d)}
