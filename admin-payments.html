@@ -83,8 +83,8 @@ label{display:block;font-size:11px;font-weight:600;margin-bottom:5px}.input,text
 }
 .main{padding-top:72px}
 .content{width:min(1540px,calc(100% - 56px));padding:24px 0 48px}
-.page-name{font-size:18px;line-height:1.35;font-weight:700;letter-spacing:-.15px}
-.page-sub{font-size:11px;line-height:1.5;color:#7185a3}
+.page-name{font-size:21px;line-height:1.35;font-weight:700;letter-spacing:0}
+.page-sub{font-size:12px;line-height:1.5;color:#7185a3}
 .hero{
   min-height:104px;
   padding:24px 28px;
@@ -144,50 +144,39 @@ td{padding-top:14px;padding-bottom:14px}
 </style>
 
 
-
-<style id="sante-payments-shared-shell-final">
-/* Match the shared SANTE Admin shell used by admin-accounting-documents.html.
-   Presentation-only: payment queries, approval actions and Supabase logic are unchanged. */
-:root{--sidebar:285px}
-.sidebar{width:var(--sidebar);padding:0 16px 22px}
-.sidebar-brand{height:108px}
-.sidebar-brand img{width:190px;height:82px;object-fit:contain}
-.nav{display:grid;gap:5px}
-.nav-link{min-height:54px;padding:0 14px;border-radius:15px;gap:12px;font-size:14px;line-height:1.4}
-.topbar{left:var(--sidebar);height:88px;padding:0 34px}
-.main{margin-left:var(--sidebar);padding-top:88px}
-.content{width:min(1540px,calc(100% - 58px));padding:26px 0 46px}
-.page-name{font-size:21px;line-height:1.35;font-weight:700;letter-spacing:0}
-.page-sub{font-size:12px;line-height:1.5}
-.accounting-hero{width:100%;display:block;overflow:hidden;margin-bottom:18px;padding:6px;border-radius:24px;background:#fff;box-shadow:0 10px 30px rgba(11,45,103,.07)}
+<style id="sante-admin-payments-visual-parity-r30">
+/* Presentation-only alignment to match admin-dashboard and admin-accounting-documents. */
+:root{--sidebar:285px!important}
+.sidebar{width:285px!important;padding:0 16px 22px!important}
+.sidebar-brand{height:108px!important;display:flex!important;align-items:center!important;justify-content:center!important}
+.sidebar-brand img{width:190px!important;height:82px!important;max-width:100%!important;object-fit:contain!important}
+.sidebar-label{padding:0 10px 8px!important;font-size:10px!important;letter-spacing:1.7px!important;opacity:.58!important}
+.sidebar .nav{display:grid!important;gap:5px!important}
+.sidebar .nav-link{min-height:54px!important;padding:0 14px!important;border-radius:15px!important;display:flex!important;align-items:center!important;gap:12px!important;font:500 14px/1.25 Prompt,sans-serif!important}
+.sidebar .nav-link.active{background:#ffbf19!important;color:#082d69!important;font-weight:700!important}
+.sidebar .nav-icon{width:22px!important;min-width:22px!important;text-align:center!important;font-size:17px!important}
+.sidebar-footer{font-size:11px!important;line-height:1.55!important}
+.topbar{left:285px!important;height:88px!important;padding:0 34px!important;background:#fff!important;border-bottom:1px solid #e4edf5!important;box-shadow:0 2px 10px rgba(8,45,105,.025)!important}
+.main{margin-left:285px!important;padding-top:88px!important}
+.content{width:min(1540px,calc(100% - 58px))!important;padding:26px 0 46px!important}
+.accounting-hero{width:100%;display:block;overflow:hidden;margin:0 0 18px;padding:6px;border-radius:24px;background:#fff;box-shadow:0 10px 30px rgba(11,45,103,.07)}
 .accounting-hero picture,.accounting-hero img{display:block;width:100%}
 .accounting-hero img{height:auto;object-fit:contain;border-radius:18px}
-.btn,.row-actions .btn,.hero-actions .btn,.review-actions .btn{
-  display:inline-flex;align-items:center;justify-content:center;text-align:center;
-  line-height:1.35;vertical-align:middle
-}
-.hero-actions{align-items:center}
-.hero-actions .btn{white-space:normal;min-height:42px}
-.row-actions .btn{white-space:nowrap}
-.review-actions{align-items:center}
+.btn,.hero-actions .btn,.hero-actions a{display:inline-flex;align-items:center;justify-content:center;text-align:center;vertical-align:middle;line-height:1.35;white-space:normal}
+.hero-actions{align-items:center;justify-content:flex-end}
+.hero h1{line-height:1.35}
+@media(max-width:1200px) and (min-width:901px){:root{--sidebar:255px!important}.sidebar{width:255px!important}.topbar{left:255px!important}.main{margin-left:255px!important}}
 @media(max-width:900px){
-  .sidebar{width:min(84vw,320px);transform:translateX(-100%);transition:.22s}
-  .sidebar.open{transform:translateX(0)}
-  .topbar{left:0;height:68px;padding:0 12px}
-  .main{margin-left:0;padding-top:68px}
-  .content{width:100%;padding:14px 12px 40px}
-  .menu-btn{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px}
-  .page-sub{display:none}
-  .accounting-hero{padding:5px;border-radius:18px;margin-bottom:14px}
-  .accounting-hero img{border-radius:14px}
-  .hero{display:block;padding:20px}
-  .hero h1{font-size:23px}
-  .hero-actions{margin-top:13px}
+ .sidebar{width:min(84vw,320px)!important;height:100dvh!important;transform:translateX(-100%)!important}
+ .sidebar.open{transform:translateX(0)!important}
+ .topbar{left:0!important;height:68px!important;padding:0 12px!important}
+ .main{margin-left:0!important;padding-top:68px!important}
+ .content{width:100%!important;padding:14px 12px 40px!important}
+ .accounting-hero{padding:5px;border-radius:18px;margin-bottom:14px}
+ .accounting-hero img{border-radius:14px}
+ .hero-actions{justify-content:flex-start}
 }
-@media(max-width:600px){
-  .page-name{font-size:17px}
-  .hero p{font-size:11px}
-}
+@media(max-width:600px){.btn{min-height:42px;padding:8px 12px}.hero-actions .btn,.hero-actions a{flex:1 1 100%;width:100%}}
 </style>
 
 </head>
