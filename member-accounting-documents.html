@@ -75,6 +75,7 @@ a{text-decoration:none;color:inherit}button,select,input{font-family:inherit}
 <meta name="sante-workflow" content="R7-MEMBER-VISIBILITY-ACTIONS">
 <meta name="sante-storage-policy" content="R8-MEMBER-ACCOUNTING-STORAGE">
 <meta name="sante-member-accounting-detail" content="R12-DEDICATED-DOCUMENT-PAGE">
+<meta name="sante-payment-fix" content="R25-PAYMENT-CONTEXT-STABLE">
 </head>
 <body>
 <div id="loading" class="loading">กำลังโหลดเอกสารทางบัญชี...</div>
@@ -187,7 +188,7 @@ function render(){
           ? `<a class="btn yellow" href="member-quotation.html?id=${encodeURIComponent(x.source_id)}">เปิดใบเสนอราคา</a>`
           : `<a class="btn yellow" href="member-accounting-document.html?id=${encodeURIComponent(x.source_id)}">เปิดเอกสาร</a>`}
         ${x.document_type==="INVOICE"&&x.document_status==="ISSUED"
-          ? `<a class="btn" href="member-payments.html">แจ้งชำระเงิน</a>`
+          ? `<button class="btn" type="button" onclick="goToInvoicePayment('${x.source_id}','${esc(x.document_no||"")}',${Number(x.net_receivable||x.grand_total||0)})">แจ้งชำระเงิน</button>`
           : ""}
         ${x.document_status==="CANCELLED"
           ? `<span class="pdf-state" style="color:#a24c4c">เอกสารถูกยกเลิก</span>`
@@ -196,6 +197,22 @@ function render(){
     </article>`;
   }).join("");
 }
+
+function goToInvoicePayment(id,no,amount){
+  const ctx={
+    invoice_id:String(id||""),
+    document_no:String(no||""),
+    amount:Number(amount||0)
+  };
+  sessionStorage.setItem("sante-invoice-payment-context",JSON.stringify(ctx));
+  const qs=new URLSearchParams({
+    invoice:ctx.invoice_id,
+    document:ctx.document_no,
+    amount:String(ctx.amount)
+  });
+  location.href="member-payments.html?"+qs.toString();
+}
+
 function normalizeDocNo(v){
   return String(v||"").trim().toUpperCase().replace(/[^A-Z0-9_-]/g,"");
 }
@@ -279,7 +296,7 @@ function openDetail(id){
     (x.document_type==="QUOTATION"?`<a class="btn yellow" href="member-quotation.html?id=${encodeURIComponent(x.source_id)}">เปิดใบเสนอราคา</a>`:"")+
     (x.document_status==="CANCELLED"?`<span class="btn" style="pointer-events:none;opacity:.65">เอกสารถูกยกเลิก</span>`:
       ((pdf||x.document_status==="ISSUED")?`<button class="btn" id="openPdfBtn">เปิด PDF</button>`:"")+
-      (x.document_type==="INVOICE"&&x.document_status==="ISSUED"?`<a class="btn yellow" href="member-payments.html">แจ้งชำระเงิน</a>`:""));
+      (x.document_type==="INVOICE"&&x.document_status==="ISSUED"?`<button class="btn yellow" type="button" onclick="goToInvoicePayment('${x.source_id}','${esc(x.document_no||"")}',${Number(x.net_receivable||x.grand_total||0)})">แจ้งชำระเงิน</button>`:""));
   if(x.document_status!=="CANCELLED"&&(pdf||x.document_status==="ISSUED"))$("openPdfBtn").onclick=()=>openPdfForDocument(x.source_id);
   $("detailBg").classList.add("show");
 }

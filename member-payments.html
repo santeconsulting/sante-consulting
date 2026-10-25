@@ -208,6 +208,7 @@ button{font-family:"Prompt",sans-serif}a{text-decoration:none;color:inherit}
 </style>
 <meta name="sante-build" content="MEMBER-SHELL-MATCH-HOME-R5-MEMBER-PAYMENTS">
 <meta name="sante-payment-fix" content="R23-INVOICE-CONTEXT">
+<meta name="sante-payment-fix" content="R25-PAYMENT-CONTEXT-STABLE">
 </head>
 <body>
 <header class="topbar">
@@ -237,8 +238,15 @@ button{font-family:"Prompt",sans-serif}a{text-decoration:none;color:inherit}
 const SUPABASE_URL="https://cyegjwerxlxhczrfiurz.supabase.co";
 const SUPABASE_KEY="sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF";
 const db=supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{storageKey:"sante-member-auth",persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
-const list=document.getElementById("paymentList"),memberName=document.getElementById("memberName"),memberEmail=document.getElementById("memberEmail");
+
+const list=document.getElementById("paymentList");
+const memberName=document.getElementById("memberName");
+const memberEmail=document.getElementById("memberEmail");
 const invoiceContextEl=document.getElementById("invoiceContext");
+
+const esc=v=>String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[m]));
+const money=v=>new Intl.NumberFormat("th-TH",{style:"currency",currency:"THB",minimumFractionDigits:2}).format(Number(v||0));
+
 const invoiceParams=new URLSearchParams(location.search);
 let invoiceCtx=null;
 try{
@@ -248,26 +256,141 @@ try{
     document_no:invoiceParams.get("document")||stored?.document_no||"",
     amount:Number(invoiceParams.get("amount")||stored?.amount||0)
   };
-}catch(_){invoiceCtx=null}
-if(invoiceCtx?.invoice_id){
+}catch(_){
+  invoiceCtx=null;
+}
+
+function renderInvoiceContext(){
+  if(!invoiceCtx?.invoice_id){
+    invoiceContextEl.classList.remove("show");
+    invoiceContextEl.innerHTML="";
+    return;
+  }
   invoiceContextEl.classList.add("show");
-  invoiceContextEl.innerHTML=`<strong>แจ้งชำระสำหรับ ${esc(invoiceCtx.document_no||"ใบแจ้งหนี้")}</strong>
-  <div class="muted">ยอดที่ต้องชำระ ${money(invoiceCtx.amount)} · เลือกรายการชำระเงินด้านล่าง หรือดำเนินการชำระเงินตามรายการที่เกี่ยวข้อง</div>`;
+  invoiceContextEl.innerHTML=`
+    <strong>แจ้งชำระสำหรับ ${esc(invoiceCtx.document_no||"ใบแจ้งหนี้")}</strong>
+    <div class="muted">ยอดตามใบแจ้งหนี้ ${money(invoiceCtx.amount)}</div>
+  `;
 }
-const esc=v=>String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[m]));
-const money=v=>new Intl.NumberFormat("th-TH",{style:"currency",currency:"THB",minimumFractionDigits:2}).format(Number(v||0));
-function statusInfo(v){const s=String(v||"PENDING").toUpperCase();if(s==="VERIFIED")return["verified","ชำระเงินแล้ว"];if(s==="FAILED")return["failed","ไม่สำเร็จ"];return["pending","รอชำระเงิน/ตรวจสอบ"]}
+
+function statusInfo(v){
+  const s=String(v||"PENDING").toUpperCase();
+  if(s==="VERIFIED"||s==="PAID")return["verified","ชำระเงินแล้ว"];
+  if(s==="FAILED")return["failed","ไม่สำเร็จ"];
+  return["pending","รอชำระเงิน/ตรวจสอบ"];
+}
+
+function paymentMatchesInvoice(x){
+  if(!invoiceCtx?.invoice_id)return true;
+  const directId=String(x.invoice_id||x.accounting_document_id||x.source_document_id||"");
+  if(directId && directId===String(invoiceCtx.invoice_id))return true;
+
+  const docNo=String(invoiceCtx.document_no||"").toUpperCase();
+  const searchable=[
+    x.invoice_no,x.document_no,x.reference_no,x.note,x.description,
+    x.course_name_th,x.session_name,x.payment_no
+  ].map(v=>String(v||"").toUpperCase()).join(" ");
+  if(docNo && searchable.includes(docNo))return true;
+
+  // Legacy payment rows may not have invoice linkage. Amount is used only as a last compatibility hint.
+  if(Number(invoiceCtx.amount)>0 && Math.abs(Number(x.amount||0)-Number(invoiceCtx.amount))<0.01)return true;
+  return false;
+}
+
+function renderPayments(rows){
+  const all=Array.isArray(rows)?rows:[];
+  const filtered=all.filter(paymentMatchesInvoice);
+
+  if(invoiceCtx?.invoice_id && !filtered.length){
+    list.innerHTML=`
+      <div class="empty">
+        <b>ยังไม่พบรายการชำระเงินที่ผูกกับ ${esc(invoiceCtx.document_no||"ใบแจ้งหนี้นี้")}</b><br>
+        ยอดตามใบแจ้งหนี้ ${money(invoiceCtx.amount)}<br><br>
+        <span style="font-size:13px">ระบบพบใบแจ้งหนี้แล้ว แต่ยังไม่มี Payment record ที่เชื่อมกับใบแจ้งหนี้นี้ จึงยังไม่สามารถเปิดหน้าส่งหลักฐานการชำระเงินได้</span>
+      </div>`;
+    return;
+  }
+
+  if(!filtered.length){
+    list.innerHTML='<div class="empty">ยังไม่มีรายการชำระเงินในบัญชีนี้</div>';
+    return;
+  }
+
+  list.innerHTML=filtered.map(x=>{
+    const [cls,label]=statusInfo(x.payment_status);
+    return `<article class="payment-card">
+      <div>
+        <div class="payment-no">${esc(x.payment_no||"-")}</div>
+        <div class="payment-title">${esc(x.course_name_th||x.description||"รายการชำระเงิน")}</div>
+        <div class="payment-session">${esc(x.session_name||invoiceCtx?.document_no||"")}</div>
+      </div>
+      <div class="payment-meta">
+        <div class="amount">${money(x.amount)}</div>
+        <span class="status ${cls}">${label}</span>
+        <button class="detail-btn" onclick="openPayment('${esc(x.payment_id||x.id)}')">
+          ${["VERIFIED","PAID"].includes(String(x.payment_status||"").toUpperCase())?"ดูรายละเอียด":"ดูรายละเอียด / แจ้งชำระเงิน"}
+        </button>
+      </div>
+    </article>`;
+  }).join("");
+}
+
+async function rpcWithTimeout(name,args={},ms=15000){
+  let timer;
+  try{
+    const timeout=new Promise((_,reject)=>{
+      timer=setTimeout(()=>reject(new Error("โหลดข้อมูลชำระเงินเกินเวลาที่กำหนด")),ms);
+    });
+    const request=db.rpc(name,args);
+    return await Promise.race([request,timeout]);
+  }finally{
+    clearTimeout(timer);
+  }
+}
+
 async function init(){
- const {data:{session}}=await db.auth.getSession();if(!session?.user){location.replace("member-login.html");return}
- const user=session.user;memberEmail.textContent=user.email||"";
- const {data:p}=await db.from("profiles").select("title_th,firstname_th,lastname_th,email").eq("id",user.id).maybeSingle();
- if(p){memberName.textContent=[p.title_th,p.firstname_th,p.lastname_th].filter(Boolean).join(" ")||"สมาชิก SANTE";memberEmail.textContent=p.email||user.email||""}
- const {data,error}=await db.rpc("get_my_payments");
- if(error){list.innerHTML='<div class="empty">ไม่สามารถโหลดรายการชำระเงินได้<br>'+esc(error.message)+'</div>';return}
- if(!data?.length){list.innerHTML='<div class="empty">ยังไม่มีรายการชำระเงินในบัญชีนี้</div>';return}
- list.innerHTML=data.map(x=>{const [cls,label]=statusInfo(x.payment_status);return `<article class="payment-card"><div><div class="payment-no">${esc(x.payment_no||"-")}</div><div class="payment-title">${esc(x.course_name_th||"รายการชำระเงิน")}</div><div class="payment-session">${esc(x.session_name||"")}</div></div><div class="payment-meta"><div class="amount">${money(x.amount)}</div><span class="status ${cls}">${label}</span><button class="detail-btn" onclick="openPayment('${esc(x.payment_id)}')">${String(x.payment_status||"").toUpperCase()==="VERIFIED"?"ดูรายละเอียด":"ดูรายละเอียด / ชำระเงิน"}</button></div></article>`}).join("");
+  renderInvoiceContext();
+
+  try{
+    const {data:{session},error:sessionError}=await db.auth.getSession();
+    if(sessionError)throw sessionError;
+    if(!session?.user){
+      location.replace("member-login.html");
+      return;
+    }
+
+    const user=session.user;
+    memberEmail.textContent=user.email||"";
+
+    const {data:p}=await db.from("profiles")
+      .select("title_th,firstname_th,lastname_th,email")
+      .eq("id",user.id)
+      .maybeSingle();
+
+    if(p){
+      memberName.textContent=[p.title_th,p.firstname_th,p.lastname_th].filter(Boolean).join(" ")||"สมาชิก SANTE";
+      memberEmail.textContent=p.email||user.email||"";
+    }
+
+    const result=await rpcWithTimeout("get_my_payments");
+    if(result?.error)throw result.error;
+    renderPayments(result?.data||[]);
+  }catch(e){
+    console.error("MEMBER PAYMENT LOAD ERROR",e);
+    list.innerHTML=`
+      <div class="empty">
+        <b>ไม่สามารถโหลดรายการชำระเงินได้</b><br>
+        ${esc(e.message||e)}<br><br>
+        <button class="detail-btn" type="button" onclick="location.reload()">ลองใหม่</button>
+      </div>`;
+  }
 }
+
 function openPayment(id){
+  if(!id){
+    alert("ไม่พบรหัสรายการชำระเงิน");
+    return;
+  }
   sessionStorage.setItem("sante-pending-payment-id",id);
   const qs=new URLSearchParams({payment:id});
   if(invoiceCtx?.invoice_id){
@@ -277,7 +400,11 @@ function openPayment(id){
   }
   location.href="payment.html?"+qs.toString();
 }
-document.getElementById("logoutButton").addEventListener("click",async()=>{await db.auth.signOut();location.replace("member-login.html")});
+
+document.getElementById("logoutButton").addEventListener("click",async()=>{
+  await db.auth.signOut();
+  location.replace("member-login.html");
+});
 init();
 </script>
 </body>

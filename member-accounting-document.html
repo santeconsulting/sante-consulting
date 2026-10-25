@@ -41,6 +41,7 @@ a{text-decoration:none;color:inherit}button{font:inherit}
 </style>
 <meta name="sante-member-accounting-view" content="R19-CANONICAL-PDF-ONLY">
 <meta name="sante-single-pdf-master" content="R21-MEMBER-READS-ADMIN-CANONICAL-PDF">
+<meta name="sante-payment-fix" content="R25-PAYMENT-CONTEXT-STABLE">
 </head>
 <body>
 <div id="loading" class="loading">กำลังโหลดเอกสาร...</div>
@@ -144,6 +145,22 @@ async function downloadPdf(){
     alert("ดาวน์โหลด PDF ไม่สำเร็จ: "+(e.message||e));
   }
 }
+
+function goToInvoicePayment(id,no,amount){
+  const ctx={
+    invoice_id:String(id||""),
+    document_no:String(no||""),
+    amount:Number(amount||0)
+  };
+  sessionStorage.setItem("sante-invoice-payment-context",JSON.stringify(ctx));
+  const qs=new URLSearchParams({
+    invoice:ctx.invoice_id,
+    document:ctx.document_no,
+    amount:String(ctx.amount)
+  });
+  location.href="member-payments.html?"+qs.toString();
+}
+
 function renderActions(){
   const actions=[`<a class="btn" href="member-accounting-documents.html">กลับรายการเอกสาร</a>`];
   if(pdfUrl){
@@ -151,11 +168,16 @@ function renderActions(){
     actions.push(`<button class="btn" id="downloadPdfBtn">ดาวน์โหลด PDF</button>`);
   }
   if(currentDoc?.document_type==="INVOICE"&&currentDoc.document_status==="ISSUED"){
-    actions.push(`<a class="btn green" href="member-payments.html">แจ้งชำระเงิน</a>`);
+    actions.push(`<button class="btn green" id="invoicePaymentBtn" type="button">แจ้งชำระเงิน</button>`);
   }
   $("actions").innerHTML=actions.join("");
   if($("openPdfBtn"))$("openPdfBtn").onclick=()=>window.open(pdfUrl+(pdfUrl.includes("?")?"&":"?")+"fresh="+Date.now(),"_blank","noopener");
   if($("downloadPdfBtn"))$("downloadPdfBtn").onclick=downloadPdf;
+  if($("invoicePaymentBtn"))$("invoicePaymentBtn").onclick=()=>goToInvoicePayment(
+    currentDoc.source_id,
+    currentDoc.document_no,
+    currentDoc.net_receivable||currentDoc.grand_total||0
+  );
 }
 async function init(){
   try{
