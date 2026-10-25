@@ -3,115 +3,185 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>ตรวจสอบการชำระเงิน | SANTE Admin</title>
+<title>SANTE Admin | การชำระเงิน</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:"Prompt",sans-serif;background:#f4f8fc;color:#082d69}
-button,input,select,textarea{font:inherit}button{cursor:pointer}a{text-decoration:none;color:inherit}
-:root{--navy:#082d69;--yellow:#ffbf19;--blue:#087df0;--green:#198754;--red:#a84141;--line:#d8e4ef;--muted:#7285a0;--card:#fff}
-.layout{display:grid;grid-template-columns:250px minmax(0,1fr);min-height:100vh}
-.sidebar{background:#031c3c;color:#fff;padding:18px 14px;position:sticky;top:0;height:100vh}
-.logo{width:160px;height:70px;object-fit:contain;display:block;margin:0 auto 12px}
-.nav{display:grid;gap:5px;margin-top:18px}.nav a{padding:12px 14px;border-radius:12px;color:#c8d4e7;font-size:14px}
-.nav a.active{background:#9a7500;color:#fff;font-weight:600}
-.main{min-width:0}.topbar{height:82px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 30px}
-.title{font-size:22px;font-weight:700}.sub{font-size:12px;color:var(--muted);margin-top:3px}
-.btn{min-height:40px;padding:0 15px;border-radius:10px;border:1px solid #d4dfeb;background:#fff;color:var(--navy);font-weight:600}
-.btn.primary{background:var(--navy);color:#fff;border-color:var(--navy)}.btn.approve{background:#e9f8ef;color:#18723d;border-color:#c7ead4}.btn.reject{background:#fff0f0;color:#963737;border-color:#efcccc}
-.content{padding:28px;max-width:1500px;margin:0 auto}
-.hero{background:#071f43;color:#fff;padding:24px 28px;border-radius:22px;margin-bottom:18px;display:flex;justify-content:space-between;align-items:center;gap:18px}
-.hero h1{margin:0;font-size:25px}.hero p{margin:5px 0 0;color:#b9c8dc;font-size:13px}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}.stat{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px}.stat span{font-size:12px;color:var(--muted)}.stat b{display:block;font-size:25px;margin-top:3px}
-.toolbar{display:grid;grid-template-columns:minmax(0,1fr) 190px 130px;gap:10px;margin-bottom:14px}.field{min-height:44px;border:1px solid var(--line);border-radius:12px;background:#fff;padding:0 13px;color:var(--navy)}
-.tablebox{background:#fff;border:1px solid var(--line);border-radius:18px;overflow:hidden}
-table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:13px 12px;border-bottom:1px solid #e7edf4;text-align:left;vertical-align:top}th{background:#f8fbfe;font-size:12px}
-.money{text-align:right;font-weight:700;white-space:nowrap}.badge{display:inline-flex;padding:5px 9px;border-radius:999px;font-size:11px;font-weight:600}.pending{background:#fff4d7;color:#815e00}.verified,.paid{background:#e6f6ec;color:#197240}.failed{background:#fdeaea;color:#963737}
-.ref{font-weight:600}.ref-sub{font-size:11px;color:var(--muted);margin-top:2px}
+
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:Prompt,sans-serif;color:#082d69;background:#f1f7fb}
+:root{--navy:#082d69;--navy-dark:#061f4b;--yellow:#ffbf19;--blue:#087df0;--green:#159447;--red:#b42318;--bg:#f1f7fb;--muted:#6f83a2;--line:#d9e5ef;--sidebar:285px}
+a{text-decoration:none;color:inherit}button,input,select,textarea{font-family:Prompt,sans-serif}
+.loading{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:#fff;font-weight:600}
+.loading.hidden{display:none}
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:var(--sidebar);z-index:1200;background:linear-gradient(180deg,#082d69,#06265c,#061f4b);color:#fff;padding:0 16px 22px;overflow:auto}
+.sidebar-brand{height:108px;display:flex;align-items:center;justify-content:center}
+.sidebar-brand img{width:190px;height:82px;object-fit:contain}
+.sidebar-label{font-size:10px;letter-spacing:1.7px;opacity:.58;padding:0 10px 8px}
+.nav{display:grid;gap:5px}.nav-link{min-height:54px;padding:0 14px;border-radius:15px;display:flex;align-items:center;gap:12px;font-size:14px}
+.nav-link:hover{background:rgba(255,255,255,.08)}.nav-link.active{background:var(--yellow);color:var(--navy);font-weight:700}
+.nav-icon{width:22px;text-align:center;font-size:18px}.sidebar-footer{margin-top:18px;padding:15px 10px;border-top:1px solid rgba(255,255,255,.12);font-size:11px;opacity:.72}
+.topbar{position:fixed;top:0;left:var(--sidebar);right:0;height:88px;z-index:1000;background:rgba(255,255,255,.97);border-bottom:1px solid #e2ebf3;display:flex;align-items:center;justify-content:space-between;padding:0 34px}
+.top-left{display:flex;align-items:center;gap:12px}.page-name{font-size:21px;font-weight:700}.page-sub{font-size:12px;color:var(--muted);margin-top:2px}.menu-btn{display:none}
+.main{margin-left:var(--sidebar);padding-top:88px;min-height:100vh}.content{width:min(1540px,calc(100% - 58px));margin:0 auto;padding:26px 0 46px}
+.hero{border-radius:24px;background:linear-gradient(135deg,#082d69,#0d4386);padding:25px 28px;color:#fff;display:flex;justify-content:space-between;align-items:center;gap:20px}
+.hero h1{margin:0;font-size:28px}.hero p{margin:5px 0 0;color:#cbdcf0;font-size:13px}.hero-actions{display:flex;gap:9px;flex-wrap:wrap}
+.btn{min-height:42px;padding:0 15px;border-radius:11px;border:1px solid var(--line);background:#fff;color:var(--navy);font-weight:600;cursor:pointer}
+.btn.yellow{background:var(--yellow);border-color:var(--yellow)}.btn.navy{background:var(--navy);color:#fff;border-color:var(--navy)}.btn.red{background:#fff0f1;color:#a52a35;border-color:#efc5ca}.btn:disabled{opacity:.55;cursor:not-allowed}
+.stats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin-top:18px}
+.stat{background:#fff;border:1px solid var(--line);border-radius:18px;padding:17px}.stat span{font-size:11px;color:var(--muted)}.stat strong{display:block;margin-top:4px;font-size:25px}
+.toolbar{display:flex;gap:10px;align-items:center;margin-top:18px}.search{flex:1;min-height:44px;border:1px solid var(--line);border-radius:11px;padding:0 14px;font-size:14px}.filter{min-height:44px;border:1px solid var(--line);border-radius:11px;padding:0 12px;background:#fff}
+.panel{margin-top:14px;background:#fff;border:1px solid var(--line);border-radius:20px;overflow:hidden}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:1150px}th,td{padding:13px 14px;border-bottom:1px solid #edf2f6;text-align:left;font-size:12px;vertical-align:top}th{font-size:11px;color:var(--muted);background:#f8fbfd;position:sticky;top:0}td strong{font-size:13px}.muted{color:var(--muted);font-size:11px}.money{text-align:right;white-space:nowrap}
+.badge{display:inline-flex;padding:5px 9px;border-radius:999px;font-size:10px;font-weight:700;background:#eef4fa;color:#49657f}.badge.wait{background:#fff5d8;color:#886400}.badge.ok{background:#eaf9f1;color:#087744}.badge.issue{background:#eaf4ff;color:#145b9c}.badge.cancel{background:#fff0f1;color:#a52a35}
+.row-actions{display:flex;gap:6px;flex-wrap:wrap}.small{min-height:34px;padding:0 10px;font-size:10px;border-radius:9px}
 .empty{padding:50px;text-align:center;color:var(--muted)}
-.modalbg{position:fixed;inset:0;background:rgba(1,17,40,.62);z-index:80;display:none;align-items:flex-start;justify-content:center;padding:45px 16px;overflow:auto}.modalbg.show{display:flex}
-.modal{width:min(980px,100%);background:#fff;border-radius:22px;overflow:hidden;box-shadow:0 24px 65px rgba(0,0,0,.25)}.modalhead{display:flex;justify-content:space-between;align-items:center;padding:19px 24px;border-bottom:1px solid var(--line)}.modalhead h2{margin:0;font-size:22px}
-.modalbody{padding:24px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.info{background:#f6f9fc;border-radius:14px;padding:13px 15px}.info span{font-size:11px;color:var(--muted)}.info b{display:block;margin-top:4px;font-size:14px;overflow-wrap:anywhere}
-.proof{margin-top:18px;border:1px solid var(--line);border-radius:16px;padding:12px;text-align:center;min-height:180px;display:flex;align-items:center;justify-content:center;background:#fafcff}.proof img{max-width:100%;max-height:600px;object-fit:contain}.proof a{color:#087df0;text-decoration:underline}
-.review{margin-top:18px}.review textarea{width:100%;min-height:85px;border:1px solid var(--line);border-radius:12px;padding:11px}.actions{display:flex;justify-content:flex-end;gap:9px;margin-top:12px;flex-wrap:wrap}
-@media(max-width:900px){.layout{display:block}.sidebar{display:none}.stats{grid-template-columns:1fr 1fr}.toolbar{grid-template-columns:1fr}.content{padding:16px}.grid{grid-template-columns:1fr}.tablebox{overflow:auto}table{min-width:950px}}
+.modal-bg{display:none;position:fixed;inset:0;z-index:4000;background:rgba(4,20,43,.62);padding:20px;overflow:auto}.modal-bg.show{display:flex;align-items:flex-start;justify-content:center}.modal{width:min(980px,100%);background:#fff;border-radius:22px;padding:24px;margin:auto;box-shadow:0 28px 80px rgba(0,0,0,.25)}
+.modal-head{display:flex;justify-content:space-between;gap:15px;align-items:flex-start;margin-bottom:16px}.modal-head h2{margin:0;font-size:22px}.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.full{grid-column:1/-1}
+label{display:block;font-size:11px;font-weight:600;margin-bottom:5px}.input,textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:13px}.input{height:43px}textarea{min-height:74px;resize:vertical}
+.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:14px}.sum{background:#f6f9fc;border-radius:12px;padding:12px}.sum span{display:block;color:var(--muted);font-size:10px}.sum strong{font-size:15px}
+.modal-actions{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap;margin-top:18px}
+#printStage{position:fixed;left:0;top:0;width:794px;background:#fff;z-index:-2147483000;pointer-events:none;overflow:visible}
+.paper{width:794px;min-height:1123px;background:#fff;color:#173654;padding:52px 48px;font-family:Prompt,sans-serif}
+.paper .head{display:flex;justify-content:space-between;gap:24px;border-bottom:3px solid #082d69;padding-bottom:18px}.paper-logo{width:130px}.seller{font-size:11px;line-height:1.55}.doc-title{text-align:right;font-size:27px;font-weight:700;color:#082d69}.doc-meta{font-size:11px;line-height:1.65;text-align:right}
+.party{display:grid;grid-template-columns:1.2fr .8fr;gap:14px;margin-top:20px}.box{border:1px solid #dce7f2;border-radius:11px;padding:12px;font-size:11px;line-height:1.65}
+.paper table{min-width:0;margin-top:20px}.paper th,.paper td{font-size:10px;padding:9px 8px}.paper th{position:static;background:#eef5fb}.totals{width:340px;margin:18px 0 0 auto}.total-row{display:flex;justify-content:space-between;gap:15px;padding:5px 0;font-size:11px}.total-row.grand{font-size:14px;font-weight:700;border-top:2px solid #082d69;margin-top:5px;padding-top:8px}
+.paper-note{margin-top:22px;font-size:10px;line-height:1.7}.footer-sign{display:grid;grid-template-columns:1fr 1fr;gap:30px;margin-top:58px;text-align:center;font-size:10px}
+.overlay{display:none}
+@media(max-width:1100px){.stats{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:900px){
+ .sidebar{width:min(84vw,320px);transform:translateX(-100%);transition:.22s}.sidebar.open{transform:translateX(0)}
+ .topbar{left:0;height:68px;padding:0 12px}.main{margin-left:0;padding-top:68px}.content{width:100%;padding:14px 12px 40px}.menu-btn{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px}.page-sub{display:none}
+ .overlay.show{display:block;position:fixed;inset:0;z-index:1100;background:rgba(3,20,48,.55)}
+ .hero{display:block;padding:20px}.hero h1{font-size:23px}.hero-actions{margin-top:13px}.stats{grid-template-columns:1fr 1fr}.toolbar{display:grid;grid-template-columns:1fr 1fr}.search{grid-column:1/-1}
+ .form-grid{grid-template-columns:1fr}.full{grid-column:auto}.summary{grid-template-columns:1fr 1fr}.modal-bg{padding:8px}.modal{padding:17px;border-radius:18px}
+}
+@media(max-width:430px){.stats{grid-template-columns:1fr 1fr}.stat strong{font-size:22px}.toolbar{grid-template-columns:1fr}.search{grid-column:auto}.filter{width:100%}.summary{grid-template-columns:1fr 1fr}.modal-actions .btn{width:100%}}
+
+
+.payment-proof{margin-top:16px;border:1px solid var(--line);border-radius:16px;padding:12px;min-height:220px;display:flex;align-items:center;justify-content:center;background:#f9fbfd;text-align:center}
+.payment-proof img{max-width:100%;max-height:620px;object-fit:contain;border-radius:10px}
+.payment-proof a{color:var(--blue);text-decoration:underline;font-weight:600}
+.payment-meta-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.payment-info{background:#f6f9fc;border-radius:12px;padding:12px 14px}
+.payment-info span{display:block;color:var(--muted);font-size:10px}
+.payment-info strong{display:block;margin-top:4px;font-size:13px;overflow-wrap:anywhere}
+.review-note{margin-top:14px}
+.review-actions{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;margin-top:12px}
+@media(max-width:900px){.payment-meta-grid{grid-template-columns:1fr}}
+
 </style>
-<meta name="sante-admin-payments" content="R27-GENERAL-PURPOSE-REVIEW">
+<meta name="sante-admin-payments" content="R28-MATCHED-ADMIN-UI-INVOICE-REFERENCE-PROOF">
 </head>
 <body>
-<div class="layout">
-<aside class="sidebar">
-  <img class="logo" src="sante%20(en)-logo.png" alt="SANTE">
+<div id="loading" class="loading">กำลังโหลดการชำระเงิน...</div>
+<div id="overlay" class="overlay"></div>
+
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-brand"><img src="sante%20(en)-logo.png" alt="SANTE Consulting"></div>
+  <div class="sidebar-label">SANTE ADMIN</div>
   <nav class="nav">
-    <a href="admin-dashboard.html">⌂ หน้าหลัก</a>
-    <a href="admin-courses.html">▤ หลักสูตร</a>
-    <a href="admin-training-sessions.html">◫ รอบอบรม</a>
-    <a href="admin-training-registrations.html">◉ ผู้ลงทะเบียน</a>
-    <a href="admin-payments.html" class="active">฿ การชำระเงิน</a>
-    <a href="admin-members.html">● สมาชิก</a>
-    <a href="admin-services.html">⚙ งานบริการ</a>
-    <a href="admin-accounting-documents.html">▣ เอกสารบัญชี</a>
-    <a href="admin-notifications.html">◌ การแจ้งเตือน</a>
+    <a href="admin-dashboard.html" class="nav-link"><span class="nav-icon">⌂</span><span>หน้าหลัก</span></a>
+    <a href="admin-courses.html" class="nav-link"><span class="nav-icon">▤</span><span>หลักสูตร</span></a>
+    <a href="admin-training-sessions.html" class="nav-link"><span class="nav-icon">◫</span><span>รอบอบรม</span></a>
+    <a href="admin-training-registrations.html" class="nav-link"><span class="nav-icon">◉</span><span>ผู้ลงทะเบียน</span></a>
+    <a href="admin-training-completion.html" class="nav-link"><span class="nav-icon">✓</span><span>การจบการอบรม</span></a>
+    <a href="admin-exams.html" class="nav-link"><span class="nav-icon">✓</span><span>ข้อสอบ</span></a>
+    <a href="admin-question-import.html" class="nav-link"><span class="nav-icon">⇩</span><span>นำเข้าข้อสอบ</span></a>
+    <a href="admin-payments.html" class="nav-link active"><span class="nav-icon">฿</span><span>การชำระเงิน</span></a>
+    <a href="admin-members.html" class="nav-link"><span class="nav-icon">●</span><span>สมาชิก</span></a>
+    <a href="admin-services.html" class="nav-link"><span class="nav-icon">⚙</span><span>งานบริการ</span></a>
+    <a href="admin-accounting-documents.html" class="nav-link"><span class="nav-icon">▣</span><span>เอกสารบัญชี</span></a>
+    <a href="admin-certificates.html" class="nav-link"><span class="nav-icon">◇</span><span>วุฒิบัตร</span></a>
+    <a href="admin-notifications.html" class="nav-link"><span class="nav-icon">◌</span><span>การแจ้งเตือน</span></a>
   </nav>
+  <div class="sidebar-footer"><strong>SANTE SYSTEM</strong><p>ระบบบริหารจัดการภายใน SANTE Consulting</p></div>
 </aside>
-<div class="main">
+
 <header class="topbar">
-  <div><div class="title">การชำระเงิน</div><div class="sub">ตรวจสอบหลักฐานการชำระเงินทุกประเภท: อบรม บริการ และเอกสารบัญชี</div></div>
-  <button id="logoutBtn" class="btn">ออกจากระบบ</button>
+  <div class="top-left">
+    <button id="menuBtn" class="btn menu-btn" type="button">☰</button>
+    <div>
+      <div class="page-name">การชำระเงิน</div>
+      <div class="page-sub">ตรวจสอบหลักฐานการชำระเงินจากใบแจ้งหนี้ งานบริการ และการอบรม</div>
+    </div>
+  </div>
+  <button id="logoutBtn" class="btn" type="button">ออกจากระบบ</button>
 </header>
-<main class="content">
+
+<main class="main"><div class="content">
   <section class="hero">
-    <div><h1>ตรวจสอบการชำระเงิน</h1><p>ใช้ “เอกสารอ้างอิง / รายละเอียดบริการ” แทนการผูกหน้าตรวจสอบกับหลักสูตรหรือรอบอบรมเพียงอย่างเดียว</p></div>
-    <a class="btn" href="admin-accounting-documents.html">ไปเอกสารบัญชี</a>
+    <div>
+      <h1>ตรวจสอบการชำระเงิน</h1>
+      <p>ตรวจสอบรายการอ้างอิงจากใบแจ้งหนี้ รายละเอียดบริการ และหลักฐานที่สมาชิกส่ง</p>
+    </div>
+    <div class="hero-actions">
+      <a class="btn" href="admin-accounting-documents.html">ไปเอกสารบัญชี</a>
+    </div>
   </section>
 
   <section class="stats">
-    <div class="stat"><span>รอตรวจสอบ</span><b id="sPending">0</b></div>
-    <div class="stat"><span>ชำระเงินแล้ว</span><b id="sVerified">0</b></div>
-    <div class="stat"><span>ไม่อนุมัติ</span><b id="sFailed">0</b></div>
-    <div class="stat"><span>ทั้งหมด</span><b id="sAll">0</b></div>
+    <div class="stat"><span>รอตรวจสอบ</span><strong id="sPending">0</strong></div>
+    <div class="stat"><span>ชำระเงินแล้ว</span><strong id="sVerified">0</strong></div>
+    <div class="stat"><span>ไม่อนุมัติ</span><strong id="sFailed">0</strong></div>
+    <div class="stat"><span>ทั้งหมด</span><strong id="sAll">0</strong></div>
   </section>
 
-  <section class="toolbar">
-    <input id="search" class="field" placeholder="ค้นหา Payment / สมาชิก / อีเมล / Invoice / บริการ">
-    <select id="statusFilter" class="field"><option value="">ทุกสถานะ</option><option value="PENDING">รอตรวจสอบ</option><option value="VERIFIED">ชำระเงินแล้ว</option><option value="FAILED">ไม่อนุมัติ</option></select>
+  <div class="toolbar">
+    <input id="search" class="search" type="search" placeholder="ค้นหา Payment / ลูกค้า / Invoice / รายการบริการ">
+    <select id="statusFilter" class="filter">
+      <option value="">ทุกสถานะ</option>
+      <option value="PENDING">รอตรวจสอบ</option>
+      <option value="VERIFIED">ชำระเงินแล้ว</option>
+      <option value="FAILED">ไม่อนุมัติ</option>
+    </select>
     <button id="refreshBtn" class="btn">↻ รีเฟรช</button>
-  </section>
+  </div>
 
-  <section class="tablebox"><div id="tableArea" class="empty">กำลังโหลดรายการชำระเงิน...</div></section>
-</main>
-</div>
-</div>
+  <section class="panel"><div class="table-wrap">
+    <table>
+      <thead><tr>
+        <th>เลขที่รายการ</th>
+        <th>สมาชิก/ลูกค้า</th>
+        <th>ประเภทรายการ</th>
+        <th>เอกสารอ้างอิง</th>
+        <th>วันที่ส่ง</th>
+        <th class="money">ยอดเงิน</th>
+        <th>สถานะ</th>
+        <th>จัดการ</th>
+      </tr></thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div></section>
+</div></main>
 
-<div id="modalBg" class="modalbg">
+<div id="reviewBg" class="modal-bg">
   <div class="modal">
-    <div class="modalhead"><h2>ตรวจสอบหลักฐานการชำระเงิน</h2><button id="closeBtn" class="btn">×</button></div>
-    <div class="modalbody">
-      <div id="detailGrid" class="grid"></div>
-      <div id="proofArea" class="proof">กำลังตรวจสอบหลักฐาน...</div>
-      <div class="review">
-        <label>หมายเหตุการตรวจสอบ</label>
-        <textarea id="reviewNote" placeholder="ระบุหมายเหตุเพิ่มเติมได้"></textarea>
-        <div class="actions">
-          <button id="rejectBtn" class="btn reject">ไม่อนุมัติ</button>
-          <button id="approveBtn" class="btn approve">✓ อนุมัติการชำระเงิน</button>
-        </div>
-      </div>
+    <div class="modal-head">
+      <div><h2>ตรวจสอบหลักฐานการชำระเงิน</h2><div id="reviewRef" class="muted"></div></div>
+      <button class="btn" type="button" onclick="closeReview()">ปิด</button>
+    </div>
+    <div id="detailGrid" class="payment-meta-grid"></div>
+    <div id="proofArea" class="payment-proof">กำลังโหลดหลักฐาน...</div>
+    <div class="review-note">
+      <label>หมายเหตุการตรวจสอบ</label>
+      <textarea id="reviewNote" placeholder="ระบุหมายเหตุเพิ่มเติมได้"></textarea>
+    </div>
+    <div class="review-actions">
+      <button id="rejectBtn" class="btn red">ไม่อนุมัติ</button>
+      <button id="approveBtn" class="btn yellow">✓ อนุมัติการชำระเงิน</button>
     </div>
   </div>
 </div>
 
 <script>
-const db=supabase.createClient(
-  "https://cyegjwerxlxhczrfiurz.supabase.co",
-  "sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF",
-  {auth:{storageKey:"sante-admin-auth",persistSession:true,autoRefreshToken:true}}
-);
+const SUPABASE_URL="https://cyegjwerxlxhczrfiurz.supabase.co";
+const SUPABASE_KEY="sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF";
+const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{storageKey:"sante-admin-auth",persistSession:true,autoRefreshToken:true}});
+const BUCKET="training-documents";
 const $=id=>document.getElementById(id);
 const esc=v=>String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[m]));
-const money=v=>Number(v||0).toLocaleString("th-TH",{minimumFractionDigits:2,maximumFractionDigits:2})+" บาท";
+const money=v=>new Intl.NumberFormat("th-TH",{minimumFractionDigits:2,maximumFractionDigits:2}).format(Number(v||0))+" บาท";
 const dt=v=>{if(!v)return"-";const d=new Date(v);return Number.isNaN(d.getTime())?String(v):new Intl.DateTimeFormat("th-TH",{dateStyle:"medium",timeStyle:"short"}).format(d)};
 let rows=[],current=null;
 
@@ -122,27 +192,13 @@ async function ensureStaff(){
   if(error||!data){await db.auth.signOut();location.replace("admin-login.html");return false}
   return true;
 }
-
 function statusInfo(s){
   s=String(s||"PENDING").toUpperCase();
-  if(["VERIFIED","PAID"].includes(s))return["verified","ชำระเงินแล้ว"];
-  if(["FAILED","REJECTED"].includes(s))return["failed","ไม่อนุมัติ"];
-  return["pending","รอตรวจสอบ"];
+  if(["VERIFIED","PAID"].includes(s))return["ok","ชำระเงินแล้ว"];
+  if(["FAILED","REJECTED"].includes(s))return["cancel","ไม่อนุมัติ"];
+  return["wait","รอตรวจสอบ"];
 }
 function paymentId(x){return x.id||x.payment_id}
-function proofCandidate(x){
-  const keys=["slip_url","proof_url","evidence_url","receipt_url","slip_path","proof_path","evidence_path","receipt_path","storage_path","file_path"];
-  for(const k of keys)if(x?.[k])return {key:k,value:x[k]};
-  return null;
-}
-async function proofUrl(x){
-  const c=proofCandidate(x);
-  if(!c)return "";
-  if(/^https?:\/\//i.test(c.value))return c.value;
-  const bucket=x.slip_bucket||x.proof_bucket||x.storage_bucket||x.bucket||"training-documents";
-  const {data,error}=await db.storage.from(bucket).createSignedUrl(c.value,900);
-  return error?"":(data?.signedUrl||"");
-}
 function renderStats(){
   $("sAll").textContent=rows.length;
   $("sPending").textContent=rows.filter(x=>!["VERIFIED","PAID","FAILED","REJECTED"].includes(String(x.payment_status||"PENDING").toUpperCase())).length;
@@ -152,80 +208,126 @@ function renderStats(){
 function render(){
   const q=$("search").value.trim().toLowerCase();
   const f=$("statusFilter").value;
-  const data=rows.filter(x=>{
+  const filtered=rows.filter(x=>{
     const s=String(x.payment_status||"PENDING").toUpperCase();
     const statusOk=!f||(f==="VERIFIED"?["VERIFIED","PAID"].includes(s):s===f);
-    const text=[x.payment_no,x.member_name,x.member_email,x.invoice_no,x.reference_type,x.reference_detail].join(" ").toLowerCase();
+    const text=[x.payment_no,x.member_name,x.member_email,x.invoice_no,x.reference_detail,x.reference_type].join(" ").toLowerCase();
     return statusOk&&(!q||text.includes(q));
   });
-  if(!data.length){$("tableArea").innerHTML='<div class="empty">ไม่พบรายการตามเงื่อนไข</div>';return}
-  $("tableArea").innerHTML=`<table><thead><tr>
-    <th>เลขที่รายการ</th><th>สมาชิก/ลูกค้า</th><th>ประเภทรายการ</th><th>เอกสารอ้างอิง / รายละเอียด</th><th>วันที่ส่ง</th><th>ยอดเงิน</th><th>สถานะ</th><th>จัดการ</th>
-  </tr></thead><tbody>${data.map(x=>{
+  if(!filtered.length){
+    $("tbody").innerHTML='<tr><td colspan="8" class="empty">ไม่พบรายการตามเงื่อนไข</td></tr>';
+    return;
+  }
+  $("tbody").innerHTML=filtered.map(x=>{
     const [cls,label]=statusInfo(x.payment_status);
     return `<tr>
-      <td><b>${esc(x.payment_no||"-")}</b></td>
-      <td><div>${esc(x.member_name||"-")}</div><div class="ref-sub">${esc(x.member_email||"")}</div></td>
-      <td>${esc(x.reference_type||"รายการทั่วไป")}</td>
-      <td><div class="ref">${esc(x.invoice_no||x.reference_no||"-")}</div><div class="ref-sub">${esc(x.reference_detail||"-")}</div></td>
+      <td><strong>${esc(x.payment_no||"-")}</strong></td>
+      <td><strong>${esc(x.member_name||"-")}</strong><div class="muted">${esc(x.member_email||"")}</div></td>
+      <td><strong>${esc(x.reference_detail||x.reference_type||"-")}</strong><div class="muted">${esc(x.reference_type||"")}</div></td>
+      <td><strong>${esc(x.invoice_no||"-")}</strong><div class="muted">ใบแจ้งหนี้</div></td>
       <td>${esc(dt(x.proof_submitted_at||x.submitted_at||x.updated_at||x.created_at))}</td>
-      <td class="money">${esc(money(x.amount))}</td>
+      <td class="money"><strong>${esc(money(x.amount))}</strong></td>
       <td><span class="badge ${cls}">${label}</span></td>
-      <td><button class="btn primary" onclick="openReview('${esc(paymentId(x))}')">ตรวจสอบ</button></td>
+      <td><button class="btn navy small" onclick="openReview('${esc(paymentId(x))}')">ตรวจสอบ</button></td>
     </tr>`;
-  }).join("")}</tbody></table>`;
+  }).join("");
 }
-async function load(){
-  $("tableArea").innerHTML='<div class="empty">กำลังโหลดรายการชำระเงิน...</div>';
-  const {data,error}=await db.rpc("admin_get_payment_review_rows");
-  if(error){$("tableArea").innerHTML='<div class="empty">โหลดรายการไม่สำเร็จ<br>'+esc(error.message)+'</div>';return}
-  rows=Array.isArray(data)?data:[];
-  renderStats();render();
+
+function collectProofCandidates(value,path="",out=[]){
+  if(value==null)return out;
+  if(typeof value==="string"){
+    const v=value.trim();
+    if(!v)return out;
+    const key=path.toLowerCase();
+    const score=(/slip|proof|evidence|receipt|file|path|url|image|attachment/.test(key)?10:0)
+      +(/\.(png|jpe?g|webp|pdf)(\?|$)/i.test(v)?8:0)
+      +(v.includes("/")?3:0)
+      +(/^https?:\/\//i.test(v)?10:0);
+    if(score>=8)out.push({path,value:v,score});
+    return out;
+  }
+  if(Array.isArray(value)){value.forEach((v,i)=>collectProofCandidates(v,`${path}[${i}]`,out));return out}
+  if(typeof value==="object")Object.entries(value).forEach(([k,v])=>collectProofCandidates(v,path?`${path}.${k}`:k,out));
+  return out;
 }
+async function signCandidate(c,raw){
+  if(!c)return "";
+  if(/^https?:\/\//i.test(c))return c;
+  const bucket=raw?.slip_bucket||raw?.proof_bucket||raw?.storage_bucket||raw?.bucket||BUCKET;
+  const clean=String(c).replace(/^\/+|^storage\/v1\/object\/[^/]+\//g,"");
+  const {data,error}=await db.storage.from(bucket).createSignedUrl(clean,900);
+  if(!error&&data?.signedUrl)return data.signedUrl;
+  return "";
+}
+async function findProofUrl(x){
+  const sources=[x];
+  try{
+    const {data,error}=await db.rpc("admin_get_payment_proof",{p_payment_id:paymentId(x)});
+    if(!error&&data)sources.push(data);
+  }catch(e){console.warn("proof rpc",e)}
+  const candidates=collectProofCandidates(sources).sort((a,b)=>b.score-a.score);
+  for(const c of candidates){
+    const url=await signCandidate(c.value,x);
+    if(url)return url;
+  }
+  return "";
+}
+
 async function openReview(id){
   current=rows.find(x=>String(paymentId(x))===String(id));
   if(!current)return;
   const [cls,label]=statusInfo(current.payment_status);
+  $("reviewRef").textContent=`${current.payment_no||""} · ${current.invoice_no||""}`;
   const infos=[
     ["เลขที่รายการ",current.payment_no||"-"],
     ["ยอดเงิน",money(current.amount)],
     ["สมาชิก/ลูกค้า",current.member_name||"-"],
     ["อีเมล",current.member_email||"-"],
-    ["ประเภทรายการ",current.reference_type||"รายการทั่วไป"],
-    ["เอกสารอ้างอิง",current.invoice_no||current.reference_no||"-"],
-    ["รายละเอียดบริการ/รายการ",current.reference_detail||"-"],
+    ["รายการบริการ/รายการ",current.reference_detail||"-"],
+    ["เอกสารอ้างอิง",current.invoice_no||"-"],
     ["วันที่ส่งหลักฐาน",dt(current.proof_submitted_at||current.submitted_at||current.updated_at||current.created_at)],
     ["สถานะ",label]
   ];
-  $("detailGrid").innerHTML=infos.map(([a,b])=>`<div class="info"><span>${esc(a)}</span><b>${esc(b)}</b></div>`).join("");
+  $("detailGrid").innerHTML=infos.map(([a,b])=>`<div class="payment-info"><span>${esc(a)}</span><strong>${esc(b)}</strong></div>`).join("");
   $("reviewNote").value=current.review_note||"";
-  const url=await proofUrl(current);
-  $("proofArea").innerHTML=url
-    ? (/\.pdf($|\?)/i.test(url)?`<a href="${esc(url)}" target="_blank">เปิดหลักฐาน PDF</a>`:`<img src="${esc(url)}" alt="หลักฐานการชำระเงิน">`)
-    : `<div>ไม่พบ URL/Path ของหลักฐานในข้อมูลรายการนี้<br><span class="ref-sub">รายการยังสามารถตรวจสอบข้อมูลอ้างอิงและสถานะได้</span></div>`;
-  $("approveBtn").style.display=["VERIFIED","PAID"].includes(String(current.payment_status||"").toUpperCase())?"none":"";
-  $("rejectBtn").style.display=["VERIFIED","PAID"].includes(String(current.payment_status||"").toUpperCase())?"none":"";
-  $("modalBg").classList.add("show");
+  $("proofArea").innerHTML="กำลังโหลดหลักฐาน...";
+  $("reviewBg").classList.add("show");
+  const url=await findProofUrl(current);
+  if(url){
+    const lower=url.toLowerCase();
+    $("proofArea").innerHTML=lower.includes(".pdf")?`<a href="${esc(url)}" target="_blank">เปิดหลักฐาน PDF</a>`:`<img src="${esc(url)}" alt="หลักฐานการชำระเงิน">`;
+  }else{
+    $("proofArea").innerHTML='<div>ยังไม่สามารถระบุตำแหน่งไฟล์หลักฐานได้<br><span class="muted">ระบบพบรายการชำระเงิน แต่ไม่พบ path/url ใน payment record หรือตารางหลักฐานที่ผูกด้วย payment_id</span></div>';
+  }
+  const locked=["VERIFIED","PAID"].includes(String(current.payment_status||"").toUpperCase());
+  $("approveBtn").style.display=locked?"none":"";
+  $("rejectBtn").style.display=locked?"none":"";
 }
+function closeReview(){$("reviewBg").classList.remove("show");current=null}
 async function review(action){
   if(!current)return;
-  const label=action==="APPROVE"?"อนุมัติการชำระเงิน":"ไม่อนุมัติรายการ";
-  if(!confirm(`ยืนยัน ${label} ${current.payment_no||""} ?`))return;
+  const ok=confirm(action==="APPROVE"?"ยืนยันอนุมัติการชำระเงินรายการนี้?":"ยืนยันไม่อนุมัติรายการนี้?");
+  if(!ok)return;
   const {data,error}=await db.rpc("admin_review_payment",{p_payment_id:paymentId(current),p_action:action,p_note:$("reviewNote").value.trim()||null});
   if(error){alert("ดำเนินการไม่สำเร็จ: "+error.message);return}
-  alert(action==="APPROVE"
-    ?"อนุมัติการชำระเงินแล้ว\nรายการพร้อมใช้สร้างใบเสร็จ/ใบกำกับภาษี"
-    :"บันทึกเป็นไม่อนุมัติแล้ว");
-  $("modalBg").classList.remove("show");current=null;await load();
+  alert(action==="APPROVE"?"อนุมัติการชำระเงินแล้ว\nรายการพร้อมใช้สร้างใบเสร็จ/ใบกำกับภาษี":"บันทึกเป็นไม่อนุมัติแล้ว");
+  closeReview();await load();
+}
+async function load(){
+  const {data,error}=await db.rpc("admin_get_payment_review_rows");
+  if(error)throw error;
+  rows=Array.isArray(data)?data:[];
+  renderStats();render();$("loading").classList.add("hidden");
 }
 
 $("search").oninput=render;$("statusFilter").onchange=render;$("refreshBtn").onclick=load;
-$("closeBtn").onclick=()=>{$("modalBg").classList.remove("show");current=null};
-$("modalBg").onclick=e=>{if(e.target===$("modalBg"))$("closeBtn").click()};
 $("approveBtn").onclick=()=>review("APPROVE");$("rejectBtn").onclick=()=>review("REJECT");
 $("logoutBtn").onclick=async()=>{await db.auth.signOut();location.replace("admin-login.html")};
+const sidebar=$("sidebar"),overlay=$("overlay");
+$("menuBtn").onclick=()=>{sidebar.classList.add("open");overlay.classList.add("show")};
+overlay.onclick=()=>{sidebar.classList.remove("open");overlay.classList.remove("show")};
 
-(async()=>{if(await ensureStaff())await load()})();
+(async()=>{try{if(!await ensureStaff())return;await load()}catch(e){console.error(e);$("loading").textContent="โหลดรายการชำระเงินไม่สำเร็จ: "+(e.message||e)}})();
 </script>
 </body>
 </html>
