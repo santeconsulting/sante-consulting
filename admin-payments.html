@@ -25,6 +25,21 @@ a{text-decoration:none;color:inherit}button,input,select,textarea{font-family:Pr
 .topbar{position:fixed;top:0;left:var(--sidebar);right:0;height:76px;z-index:1000;background:rgba(255,255,255,.97);border-bottom:1px solid #e2ebf3;display:flex;align-items:center;justify-content:space-between;padding:0 34px}
 .top-left{display:flex;align-items:center;gap:12px}.page-name{font-size:21px;font-weight:700}.page-sub{font-size:12px;color:var(--muted);margin-top:2px}.menu-btn{display:none}
 .main{margin-left:var(--sidebar);padding-top:76px;min-height:100vh}.content{width:min(1540px,calc(100% - 56px));margin:0 auto;padding:24px 0 46px}
+
+/* Canonical SANTE header banner — aligned with admin-dashboard */
+.payment-banner{
+  position:relative;
+  width:100%;
+  margin:0 0 28px;
+  padding:10px;
+  overflow:hidden;
+  border-radius:28px;
+  background:#fff;
+  box-shadow:0 10px 30px rgba(8,45,105,.06);
+}
+.payment-banner picture{display:block;width:100%;line-height:0;}
+.payment-banner img{display:block;width:100%;height:auto;max-width:100%;border-radius:22px;object-fit:contain;object-position:center;}
+
 .hero{border-radius:24px;background:linear-gradient(135deg,#082d69,#0d4386);padding:25px 28px;color:#fff;display:flex;justify-content:space-between;align-items:center;gap:20px}
 .hero h1{margin:0;font-size:28px}.hero p{margin:5px 0 0;color:#cbdcf0;font-size:13px}.hero-actions{display:flex;gap:9px;flex-wrap:wrap}
 .btn{min-height:42px;padding:0 15px;border-radius:11px;border:1px solid var(--line);background:#fff;color:var(--navy);font-weight:600;cursor:pointer}
@@ -125,6 +140,12 @@ td{padding-top:14px;padding-bottom:14px}
   .modal-head h2{font-size:18px}
 }
 
+
+@media(max-width:767px){
+  .payment-banner{margin:0 0 20px;padding:6px;border-radius:20px;}
+  .payment-banner img{border-radius:15px;width:100%;height:auto;object-fit:contain;}
+}
+
 </style>
 <meta name="sante-admin-payments" content="R29-CANONICAL-ADMIN-SHELL-PROOF-PENDING">
 
@@ -140,105 +161,6 @@ td{padding-top:14px;padding-bottom:14px}
   .admin-copy{display:none!important}
   .page-head{display:block!important}
   .page-head>.btn,.page-head>a{margin-top:12px}
-}
-</style>
-
-
-<style id="sante-admin-payments-r31-sidebar-match-dashboard">
-/* R31: Match the canonical SANTE admin-dashboard sidebar dimensions and typography.
-   Visual-only changes: payment workflow, data, and event handlers remain untouched. */
-:root{--sidebar:285px!important}
-.sidebar{
-  width:var(--sidebar)!important;
-  display:flex!important;
-  flex-direction:column!important;
-  padding:0!important;
-  background:linear-gradient(180deg,#082d69 0%,#06265c 55%,#061f4b 100%)!important;
-  overflow-y:auto!important;
-}
-.sidebar-brand{
-  height:auto!important;
-  min-height:128px!important;
-  display:flex!important;
-  align-items:center!important;
-  justify-content:center!important;
-  padding:22px 25px!important;
-  border-bottom:1px solid rgba(255,255,255,.10)!important;
-  flex-shrink:0!important;
-}
-.sidebar-brand img{
-  display:block!important;
-  width:190px!important;
-  max-width:100%!important;
-  height:82px!important;
-  object-fit:contain!important;
-}
-.sidebar-label{
-  padding:26px 25px 10px!important;
-  color:#9bb1d0!important;
-  font-size:12px!important;
-  font-weight:500!important;
-  letter-spacing:1.7px!important;
-  opacity:1!important;
-  flex-shrink:0!important;
-}
-.nav{
-  display:block!important;
-  padding:0 15px 25px!important;
-  gap:0!important;
-  flex-shrink:0!important;
-}
-.nav-link{
-  min-height:58px!important;
-  display:flex!important;
-  align-items:center!important;
-  gap:14px!important;
-  margin:5px 0!important;
-  padding:0 17px!important;
-  border-radius:16px!important;
-  color:#e4edfa!important;
-  font-size:15px!important;
-  font-weight:500!important;
-  line-height:1.35!important;
-  transition:.18s ease!important;
-  box-sizing:border-box!important;
-}
-.nav-link:hover{background:rgba(255,255,255,.08)!important;color:#fff!important}
-.nav-link.active{
-  background:var(--yellow,#ffbf19)!important;
-  color:var(--navy,#082d69)!important;
-  font-weight:600!important;
-  box-shadow:0 7px 18px rgba(0,0,0,.10)!important;
-}
-.nav-icon{
-  width:29px!important;
-  flex:0 0 29px!important;
-  display:grid!important;
-  place-items:center!important;
-  font-size:21px!important;
-  line-height:1!important;
-  text-align:center!important;
-}
-.sidebar-footer{
-  margin:auto 15px 22px!important;
-  padding:18px!important;
-  border:1px solid rgba(255,255,255,.05)!important;
-  border-top:1px solid rgba(255,255,255,.10)!important;
-  border-radius:17px!important;
-  background:rgba(255,255,255,.07)!important;
-  font-size:initial!important;
-  opacity:1!important;
-  flex-shrink:0!important;
-}
-.sidebar-footer strong{display:block!important;font-size:13px!important;font-weight:600!important;color:#fff!important}
-.sidebar-footer p{margin:6px 0 0!important;color:#b6c8e2!important;font-size:11px!important;line-height:1.65!important}
-@media(max-width:1200px){:root{--sidebar:255px!important}}
-@media(max-width:900px){
-  :root{--sidebar:285px!important}
-  .sidebar{width:285px!important;transform:translateX(-100%)!important;transition:.2s ease!important}
-  .sidebar.open{transform:translateX(0)!important}
-  .main{margin-left:0!important}
-  .topbar{left:0!important}
 }
 </style>
 
@@ -280,6 +202,12 @@ td{padding-top:14px;padding-bottom:14px}
 </header>
 
 <main class="main"><div class="content">
+  <section class="payment-banner" aria-label="SANTE Admin banner">
+    <picture>
+      <source media="(max-width:767px)" srcset="sante-dashboard-hero-mobile.png">
+      <img src="sante-dashboard-hero-desktop.png" alt="Trust in Safety. Trust in SANTE." loading="eager">
+    </picture>
+  </section>
   <section class="hero">
     <div>
       <h1>ตรวจสอบการชำระเงิน</h1>
