@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
-<title>การชำระเงิน | SANTE Consulting</title>
+<title>การชำระเงินและเอกสาร | SANTE Consulting</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -200,30 +200,14 @@ button{font-family:"Prompt",sans-serif}a{text-decoration:none;color:inherit}
   }
 }
 
+
+.invoice-context{display:none;margin:0 0 18px;padding:16px 18px;border:1px solid #cfe0f0;border-radius:16px;background:#f1f8ff;color:#082d69}
+.invoice-context.show{display:block}
+.invoice-context strong{font-size:17px}
+.invoice-context .muted{margin-top:4px;color:#6f82a0;font-size:13px}
 </style>
 <meta name="sante-build" content="MEMBER-SHELL-MATCH-HOME-R5-MEMBER-PAYMENTS">
-
-<style id="sante-member-unified-r10">
-/* ===== SANTE MEMBER UNIFIED R10 ===== */
-:root{
-  --member-navy:#082d69;
-  --member-blue:#087df0;
-  --member-yellow:#ffbf19;
-  --member-muted:#6f82a0;
-  --member-line:#dce7f2;
-}
-@media (min-width:1024px){
-  .page{font-size:16px!important}
-  .page-title h1,.page>h1,.heading h1,.section-heading h2,.training-heading h2{font-size:30px!important;line-height:1.3!important}
-  .page-title p,.sub,.heading p,.section-heading p,.training-heading p{font-size:15px!important;line-height:1.65!important}
-  .service-content h3,.payment-title,.rtitle,.title,.document-body h3{font-size:19px!important;line-height:1.45!important}
-  .service-content p,.quick-card p,.meta,.payment-session,.document-meta,.document-meta dt,.document-meta dd{font-size:14px!important;line-height:1.65!important}
-  .quick-card h4{font-size:17px!important}
-  .btn,.logout,.logout-button,.home-link,.detail-btn,.document-button,.training-button{font-size:14px!important}
-  .badge,.status,.service-status,.quick-status,.document-type,.document-version,.reqno,.no,.payment-no{font-size:12.5px!important}
-}
-</style>
-
+<meta name="sante-payment-fix" content="R23-INVOICE-CONTEXT">
 </head>
 <body>
 <header class="topbar">
@@ -236,23 +220,40 @@ button{font-family:"Prompt",sans-serif}a{text-decoration:none;color:inherit}
   <div class="mobile-hero-content">
     <div class="mobile-hero-badge">SANTE MEMBER</div>
     <h1>การชำระเงิน<br><span>และเอกสารของคุณ</span></h1>
-    <p class="mobile-hero-description">ติดตามสถานะการชำระเงินและกลับไปดำเนินการรายการที่ยังไม่เสร็จได้จากบัญชีเดียว</p>
+    <p class="mobile-hero-description">ติดตามสถานะการชำระเงิน เอกสาร และกลับไปดำเนินการรายการที่ยังไม่เสร็จได้จากบัญชีเดียว</p>
   </div>
   <div class="mobile-hero-visual">
     <img src="sante-mobile-hero.png" alt="SANTE Member">
   </div>
 </section>
  <div class="heading">
-  <div class="heading-left"><div class="section-icon">▣</div><div><h1>การชำระเงิน</h1><p>รายการชำระเงินทั้งหมดของบัญชีคุณ</p></div></div>
+  <div class="heading-left"><div class="section-icon">▣</div><div><h1>การชำระเงินและเอกสาร</h1><p>รายการชำระเงินทั้งหมดของบัญชีคุณ</p></div></div>
   <a class="home-link" href="member-home.html">← หน้าหลักสมาชิก</a>
  </div>
- <section id="paymentList" class="list"><div class="loading">กำลังโหลดรายการชำระเงิน...</div></section>
+ <section id="invoiceContext" class="invoice-context"></section>
+<section id="paymentList" class="list"><div class="loading">กำลังโหลดรายการชำระเงิน...</div></section>
 </main>
 <script>
 const SUPABASE_URL="https://cyegjwerxlxhczrfiurz.supabase.co";
 const SUPABASE_KEY="sb_publishable_Hhr1LDrJqvzdEcHR4cScwA_YA9b9eYF";
 const db=supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{storageKey:"sante-member-auth",persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
 const list=document.getElementById("paymentList"),memberName=document.getElementById("memberName"),memberEmail=document.getElementById("memberEmail");
+const invoiceContextEl=document.getElementById("invoiceContext");
+const invoiceParams=new URLSearchParams(location.search);
+let invoiceCtx=null;
+try{
+  const stored=JSON.parse(sessionStorage.getItem("sante-invoice-payment-context")||"null");
+  invoiceCtx={
+    invoice_id:invoiceParams.get("invoice")||stored?.invoice_id||"",
+    document_no:invoiceParams.get("document")||stored?.document_no||"",
+    amount:Number(invoiceParams.get("amount")||stored?.amount||0)
+  };
+}catch(_){invoiceCtx=null}
+if(invoiceCtx?.invoice_id){
+  invoiceContextEl.classList.add("show");
+  invoiceContextEl.innerHTML=`<strong>แจ้งชำระสำหรับ ${esc(invoiceCtx.document_no||"ใบแจ้งหนี้")}</strong>
+  <div class="muted">ยอดที่ต้องชำระ ${money(invoiceCtx.amount)} · เลือกรายการชำระเงินด้านล่าง หรือดำเนินการชำระเงินตามรายการที่เกี่ยวข้อง</div>`;
+}
 const esc=v=>String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[m]));
 const money=v=>new Intl.NumberFormat("th-TH",{style:"currency",currency:"THB",minimumFractionDigits:2}).format(Number(v||0));
 function statusInfo(v){const s=String(v||"PENDING").toUpperCase();if(s==="VERIFIED")return["verified","ชำระเงินแล้ว"];if(s==="FAILED")return["failed","ไม่สำเร็จ"];return["pending","รอชำระเงิน/ตรวจสอบ"]}
@@ -266,7 +267,16 @@ async function init(){
  if(!data?.length){list.innerHTML='<div class="empty">ยังไม่มีรายการชำระเงินในบัญชีนี้</div>';return}
  list.innerHTML=data.map(x=>{const [cls,label]=statusInfo(x.payment_status);return `<article class="payment-card"><div><div class="payment-no">${esc(x.payment_no||"-")}</div><div class="payment-title">${esc(x.course_name_th||"รายการชำระเงิน")}</div><div class="payment-session">${esc(x.session_name||"")}</div></div><div class="payment-meta"><div class="amount">${money(x.amount)}</div><span class="status ${cls}">${label}</span><button class="detail-btn" onclick="openPayment('${esc(x.payment_id)}')">${String(x.payment_status||"").toUpperCase()==="VERIFIED"?"ดูรายละเอียด":"ดูรายละเอียด / ชำระเงิน"}</button></div></article>`}).join("");
 }
-function openPayment(id){sessionStorage.setItem("sante-pending-payment-id",id);location.href="payment.html?payment="+encodeURIComponent(id)}
+function openPayment(id){
+  sessionStorage.setItem("sante-pending-payment-id",id);
+  const qs=new URLSearchParams({payment:id});
+  if(invoiceCtx?.invoice_id){
+    qs.set("invoice",invoiceCtx.invoice_id);
+    qs.set("document",invoiceCtx.document_no||"");
+    qs.set("amount",String(invoiceCtx.amount||0));
+  }
+  location.href="payment.html?"+qs.toString();
+}
 document.getElementById("logoutButton").addEventListener("click",async()=>{await db.auth.signOut();location.replace("member-login.html")});
 init();
 </script>
