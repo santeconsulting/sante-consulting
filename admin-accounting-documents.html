@@ -9,6 +9,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 *{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:Prompt,sans-serif;color:#082d69;background:#f1f7fb}
 :root{--navy:#082d69;--navy-dark:#061f4b;--yellow:#ffbf19;--blue:#087df0;--green:#159447;--red:#b42318;--bg:#f1f7fb;--muted:#6f83a2;--line:#d9e5ef;--sidebar:285px}
@@ -41,7 +43,7 @@ a{text-decoration:none;color:inherit}button,input,select,textarea{font-family:Pr
 label{display:block;font-size:11px;font-weight:600;margin-bottom:5px}.input,textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:13px}.input{height:43px}textarea{min-height:74px;resize:vertical}
 .summary{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:14px}.sum{background:#f6f9fc;border-radius:12px;padding:12px}.sum span{display:block;color:var(--muted);font-size:10px}.sum strong{font-size:15px}
 .modal-actions{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap;margin-top:18px}
-#printStage{position:fixed;left:-100000px;top:0;width:794px;background:#fff}
+#printStage{position:fixed;left:0;top:0;width:794px;background:#fff;z-index:-2147483000;pointer-events:none;overflow:visible}
 .paper{width:794px;min-height:1123px;background:#fff;color:#173654;padding:52px 48px;font-family:Prompt,sans-serif}
 .paper .head{display:flex;justify-content:space-between;gap:24px;border-bottom:3px solid #082d69;padding-bottom:18px}.paper-logo{width:130px}.seller{font-size:11px;line-height:1.55}.doc-title{text-align:right;font-size:27px;font-weight:700;color:#082d69}.doc-meta{font-size:11px;line-height:1.65;text-align:right}
 .party{display:grid;grid-template-columns:1.2fr .8fr;gap:14px;margin-top:20px}.box{border:1px solid #dce7f2;border-radius:11px;padding:12px;font-size:11px;line-height:1.65}
@@ -868,137 +870,2035 @@ label{display:block;font-size:11px;font-weight:600;margin-bottom:5px}.input,text
 </style>
 <meta name="sante-build-r24" content="ACCOUNTING-COMPACT-HEADER">
 
+<style id="sante-matched-header-final">
+/* Shared A4 header geometry — quotation and invoice; color is the only theme difference. */
+.paper-invoice .invh{grid-template-columns:15mm minmax(58mm,1.25fr) minmax(42mm,.82fr) 58mm!important;column-gap:2.2mm!important;row-gap:3.2mm!important;align-items:start!important;padding-bottom:3.2mm!important}
+.paper-invoice .invh-logo{width:13.5mm!important;height:17mm!important;object-fit:contain!important}
+.paper-invoice .invh-seller{font-size:7.7pt!important;line-height:1.3!important;row-gap:.8mm!important}
+.paper-invoice .invh-row{grid-template-columns:18mm minmax(0,1fr)!important;column-gap:1.3mm!important;row-gap:0!important}
+.paper-invoice .invh-company,.paper-invoice .invh-company>div,.paper-invoice .invh-address,.paper-invoice .invh-address>div{font-size:7.7pt!important;line-height:1.3!important}
+.paper-invoice .invh-contact{font-size:7.2pt!important;line-height:1.28!important;row-gap:1.15mm!important;padding-top:.1mm!important}
+.paper-invoice .invh-contact-row{grid-template-columns:4.5mm minmax(0,1fr)!important;column-gap:1.2mm!important;line-height:1.28!important}
+.paper-invoice .invh-copy{min-height:0!important;font-size:7.3pt!important;line-height:1.15!important;margin:0 0 1.2mm!important;padding:0!important;position:relative!important;z-index:1!important}
+.paper-invoice .invh-title{font-size:24pt!important;font-weight:700!important;line-height:1.12!important;margin:0 0 2.2mm!important;padding:0!important;white-space:nowrap!important;position:relative!important;z-index:0!important}
+.paper-invoice .invh-doc{margin-top:0!important;padding-top:0!important;text-align:right!important}
+.paper-invoice .invh-docbox{grid-template-columns:24mm minmax(0,1fr)!important;gap:1.15mm 1.5mm!important;padding:2.6mm 3mm!important;font-size:7.7pt!important;line-height:1.25!important;border-radius:2mm!important}
+.paper-invoice .invh-docbox b,.paper-invoice .invh-docbox span{line-height:1.25!important}
+.paper-invoice .paper-invoiceARTY{padding-top:3.2mm!important}
+@media screen and (max-width:900px){.paper-invoice .invh{padding-bottom:3mm!important}.paper-invoice .invh-docbox{padding:2.5mm 3mm!important}}
 
-<style id="sante-accounting-typography-unified-r32">
-/* R32: unify visible admin typography and button alignment with admin-dashboard.
-   Presentation-only changes; no workflow, data, or event handlers changed. */
-html, body {
-  font-family: "Prompt", sans-serif !important;
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
+.paper-invoice .invh-title{color:#07834a!important}
+.paper-invoice .invh-docbox{background:#e8f6ee!important}
+</style>
+<meta name="sante-header-match" content="2026-10-20">
+
+<style id="sante-accounting-r25-left-align">
+/* R25 — tighten seller/customer information to the left. Layout-only change. */
+.paper-invoice .invh{
+  grid-template-columns:13.5mm minmax(59.5mm,1.28fr) minmax(42mm,.82fr) 58mm!important;
+  column-gap:1.4mm!important;
 }
-body { font-size: 16px; line-height: 1.5; }
-button, input, select, textarea {
-  font-family: "Prompt", sans-serif !important;
+.paper-invoice .invh-logo-cell{padding-left:0!important;margin-left:-.6mm!important}
+.paper-invoice .invh-seller .invh-row,
+.paper-invoice .invh-row{grid-template-columns:16mm minmax(0,1fr)!important;column-gap:1mm!important}
+.paper-invoice .invh-tax-row{grid-template-columns:28mm minmax(0,1fr)!important;column-gap:1mm!important}
+.paper-invoice .invh-label{text-align:left!important;padding-left:0!important;margin-left:0!important}
+.paper-invoice .inv-party{
+  margin-left:-2mm!important;
+  width:calc(100% + 2mm)!important;
+  grid-template-columns:minmax(0,1.35fr) minmax(0,.75fr)!important;
+  gap:8mm!important;
 }
-/* Sidebar follows the dashboard's type scale and spacing. */
-.sidebar-brand {
-  height: auto !important;
-  min-height: 128px !important;
-  padding: 22px 25px !important;
-  border-bottom: 1px solid rgba(255,255,255,.10) !important;
-}
-.sidebar-brand img {
-  display: block !important;
-  width: 190px !important;
-  max-width: 100% !important;
-  height: 82px !important;
-}
-.sidebar-label {
-  padding: 26px 25px 10px !important;
-  color: #9bb1d0 !important;
-  font-size: 12px !important;
-  font-weight: 500 !important;
-  line-height: 1.4 !important;
-  letter-spacing: 1.7px !important;
-}
-.sidebar .nav {
-  display: block !important;
-  padding: 0 15px 25px !important;
-}
-.sidebar .nav-link {
-  min-height: 58px !important;
-  margin: 5px 0 !important;
-  padding: 0 17px !important;
-  display: flex !important;
-  align-items: center !important;
-  gap: 14px !important;
-  border-radius: 16px !important;
-  font-family: "Prompt", sans-serif !important;
-  font-size: 15px !important;
-  font-weight: 500 !important;
-  line-height: 1.35 !important;
-  letter-spacing: 0 !important;
-}
-.sidebar .nav-link.active { font-weight: 600 !important; }
-.sidebar .nav-icon {
-  width: 29px !important;
-  min-width: 29px !important;
-  flex: 0 0 29px !important;
-  display: grid !important;
-  place-items: center !important;
-  font-size: 21px !important;
-  line-height: 1 !important;
-}
-.sidebar-footer {
-  margin: auto 15px 22px !important;
-  padding: 18px !important;
-  border: 1px solid rgba(255,255,255,.05) !important;
-  border-radius: 17px !important;
-  background: rgba(255,255,255,.07) !important;
-  font-size: 13px !important;
-  line-height: 1.5 !important;
-}
-.sidebar-footer strong { font-size: 13px !important; font-weight: 600 !important; }
-.sidebar-footer p { margin-top: 6px !important; font-size: 11px !important; line-height: 1.65 !important; }
-/* Standardize heading scale and copy rhythm. */
-.page-name { font-size: 21px !important; font-weight: 600 !important; line-height: 1.3 !important; }
-.page-sub { font-size: 12px !important; font-weight: 400 !important; line-height: 1.5 !important; }
-.hero h1 { font-family: "Prompt", sans-serif !important; font-size: 28px !important; font-weight: 600 !important; line-height: 1.35 !important; }
-.hero p { font-family: "Prompt", sans-serif !important; font-size: 13px !important; font-weight: 400 !important; line-height: 1.65 !important; }
-.accounting-subnav a { font-family: "Prompt", sans-serif !important; font-size: 13px !important; font-weight: 600 !important; line-height: 1.35 !important; }
-/* All action buttons share the same font, weight, vertical centering and line-height. */
-.btn, .hero-actions .btn, .row-actions .btn, .modal-actions .btn {
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  text-align: center !important;
-  vertical-align: middle !important;
-  font-family: "Prompt", sans-serif !important;
-  font-size: 13px !important;
-  font-weight: 600 !important;
-  line-height: 1.4 !important;
-  letter-spacing: 0 !important;
-  box-sizing: border-box !important;
-}
-.btn { min-height: 42px; }
-.hero-actions {
-  display: grid !important;
-  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-  align-items: stretch !important;
-  gap: 9px !important;
-  flex: 1 1 680px !important;
-  min-width: 0 !important;
-}
-.hero-actions .btn {
-  width: 100% !important;
-  min-width: 0 !important;
-  min-height: 44px !important;
-  height: auto !important;
-  padding: 8px 12px !important;
-  white-space: normal !important;
-  overflow-wrap: anywhere;
-}
-.stats .stat span { font-size: 12px !important; line-height: 1.5 !important; }
-.stats .stat strong { font-size: 25px !important; line-height: 1.2 !important; font-weight: 700 !important; }
-.toolbar .search, .toolbar .filter { font-family: "Prompt", sans-serif !important; font-size: 14px !important; line-height: 1.4 !important; }
-th { font-size: 11px !important; line-height: 1.45 !important; font-weight: 600 !important; }
-td { font-size: 12px !important; line-height: 1.55 !important; }
-@media (max-width: 1200px) and (min-width: 901px) {
-  .hero-actions { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
-}
-@media (max-width: 900px) {
-  .sidebar-brand { min-height: 108px !important; padding: 14px 20px !important; }
-  .sidebar-label { padding: 18px 20px 9px !important; }
-  .sidebar .nav-link { min-height: 54px !important; font-size: 14px !important; }
-  .hero-actions { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
-  .hero h1 { font-size: 23px !important; }
-}
-@media (max-width: 520px) {
-  .hero-actions { grid-template-columns: minmax(0, 1fr) !important; }
-  .hero-actions .btn { min-height: 44px !important; }
+.paper-invoice .inv-party-left{padding-left:0!important;margin-left:0!important}
+.paper-invoice .inv-party-row{grid-template-columns:28mm minmax(0,1fr)!important;column-gap:1.2mm!important}
+.paper-invoice .inv-party-row>b{text-align:left!important;padding-left:0!important;margin-left:0!important}
+.paper-invoice .inv-party-row>div{min-width:0!important;padding-left:0!important}
+.paper-invoice .inv-contact-title,.paper-invoice .inv-contact-row{margin-left:0!important}
+@media screen and (max-width:900px){
+  .paper-invoice .invh{grid-template-columns:13mm minmax(0,1fr)!important;column-gap:1.4mm!important}
+  .paper-invoice .inv-party{margin-left:0!important;width:100%!important;gap:4mm!important}
+  .paper-invoice .inv-party-row{grid-template-columns:28mm minmax(0,1fr)!important}
 }
 </style>
+<meta name="sante-build-r25" content="ACCOUNTING-R25-LEFT-ALIGN">
+
+<style id="sante-accounting-r27-seller-block">
+.paper-invoice .invh-seller .invh-row,.paper-invoice .invh-row{grid-template-columns:29mm minmax(0,1fr)!important;column-gap:1.4mm!important;align-items:start!important}
+.paper-invoice .invh-seller .invh-label,.paper-invoice .invh-label{font-size:7.55pt!important;line-height:1.35!important;font-weight:700!important;white-space:nowrap!important;position:static!important;left:auto!important;width:auto!important;letter-spacing:normal!important}
+.paper-invoice .invh-company,.paper-invoice .invh-address,.paper-invoice .invh-row>div:last-child{font-size:7.55pt!important;line-height:1.35!important;padding-left:0!important;margin-left:0!important}
+.paper-invoice .invh-company>div,.paper-invoice .invh-address>div{margin:0!important;padding:0!important;line-height:1.35!important}
+.paper-invoice .invh-tax-row{grid-template-columns:29mm minmax(0,1fr)!important;column-gap:1.4mm!important;align-items:start!important}
+.paper-invoice .invh-tax-row .invh-label,.paper-invoice .invh-tax-row>div:last-child{font-size:7.55pt!important;line-height:1.35!important;white-space:nowrap!important;padding-left:0!important;margin-left:0!important;position:static!important;left:auto!important;width:auto!important;letter-spacing:normal!important}
+</style>
+<meta name="sante-build-r27" content="ACCOUNTING-SELLER-BLOCK-ALIGN">
+
+<style id="sante-accounting-r28-structure-match">
+/* R28 — Seller + customer structure matched to quotation. Green remains invoice-only. */
+
+/* 1) Seller block: labels share the same width, so every colon ends on one vertical axis. */
+.paper-invoice .invh-seller .invh-row,
+.paper-invoice .invh-tax-row{
+  grid-template-columns:34mm minmax(0,1fr)!important;
+  column-gap:1.2mm!important;
+  align-items:start!important;
+}
+.paper-invoice .invh-seller .invh-label,
+.paper-invoice .invh-tax-row .invh-label{
+  display:block!important;
+  width:auto!important;
+  position:static!important;
+  left:auto!important;
+  margin:0!important;
+  padding:0!important;
+  text-align:right!important;
+  white-space:nowrap!important;
+  font-size:7.55pt!important;
+  font-weight:700!important;
+  line-height:1.35!important;
+  letter-spacing:normal!important;
+}
+.paper-invoice .invh-company,
+.paper-invoice .invh-address,
+.paper-invoice .invh-row>div:last-child,
+.paper-invoice .invh-tax-row>div:last-child{
+  margin:0!important;
+  padding:0!important;
+  font-size:7.55pt!important;
+  line-height:1.35!important;
+  white-space:normal!important;
+}
+.paper-invoice .invh-tax-row>div:last-child{
+  white-space:nowrap!important;
+}
+
+/* 2) Pull phone / email / website left without changing the document box. */
+.paper-invoice .invh-contact{
+  position:relative!important;
+  left:-4mm!important;
+  row-gap:1.05mm!important;
+  font-size:7.2pt!important;
+  line-height:1.28!important;
+}
+.paper-invoice .invh-contact-row{
+  grid-template-columns:4.3mm minmax(0,1fr)!important;
+  column-gap:1mm!important;
+}
+.paper-invoice .invh-contact-row span:last-child{
+  white-space:nowrap!important;
+  font-size:7.2pt!important;
+}
+
+/* 3) Customer block: same label axis and spacing as quotation. */
+.paper-invoice .inv-party{
+  margin-left:0!important;
+  width:100%!important;
+  grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr)!important;
+  gap:8mm!important;
+}
+.paper-invoice .inv-party-row{
+  grid-template-columns:34mm minmax(0,1fr)!important;
+  column-gap:1.2mm!important;
+  align-items:start!important;
+}
+.paper-invoice .inv-party-row>b{
+  display:block!important;
+  margin:0!important;
+  padding:0!important;
+  text-align:right!important;
+  white-space:nowrap!important;
+  font-size:7.55pt!important;
+  line-height:1.35!important;
+}
+.paper-invoice .inv-party-row>div{
+  margin:0!important;
+  padding:0!important;
+  min-width:0!important;
+  font-size:7.55pt!important;
+  line-height:1.35!important;
+}
+
+/* 4) Increase clearance between (ต้นฉบับ) and ใบแจ้งหนี้ to protect the Thai tone mark. */
+.paper-invoice .invh-copy{
+  min-height:4.5mm!important;
+  margin:0 0 2.6mm!important;
+  padding:0!important;
+  line-height:1.15!important;
+  white-space:nowrap!important;
+}
+.paper-invoice .invh-title{
+  margin:0 0 2.2mm!important;
+  padding:0!important;
+  font-size:24pt!important;
+  font-weight:700!important;
+  line-height:1.15!important;
+  white-space:nowrap!important;
+  color:#07834a!important;
+}
+.paper-invoice .invh-docbox{
+  background:#eaf7ef!important;
+}
+</style>
+<meta name="sante-build-r28" content="ACCOUNTING-STRUCTURE-MATCH">
+
+
+<style id="sante-accounting-r29-final-alignment">
+/* R29: final header alignment overrides; invoice remains green. */
+.paper-invoice .invh-seller .invh-row,
+.paper-invoice .invh-seller .invh-tax-row{
+  display:grid!important;
+  grid-template-columns:34mm minmax(0,1fr)!important;
+  column-gap:1.2mm!important;
+  align-items:start!important;
+}
+.paper-invoice .invh-seller .invh-label,
+.paper-invoice .invh-seller .invh-tax-row .invh-label{
+  width:auto!important;
+  min-width:0!important;
+  margin:0!important;
+  padding:0!important;
+  position:static!important;
+  text-align:right!important;
+  white-space:nowrap!important;
+  font-size:7.55pt!important;
+  line-height:1.35!important;
+  font-weight:700!important;
+}
+.paper-invoice .invh-seller .invh-company,
+.paper-invoice .invh-seller .invh-address,
+.paper-invoice .invh-seller .invh-tax-row>div:last-child{
+  min-width:0!important;
+  margin:0!important;
+  padding:0!important;
+  font-size:7.55pt!important;
+  line-height:1.35!important;
+}
+.paper-invoice .invh-seller .invh-tax-row>div:last-child{
+  white-space:nowrap!important;
+}
+.paper-invoice .invh-contact{
+  left:0!important;
+  margin-left:0!important;
+  padding-left:0!important;
+}
+.paper-invoice .invh-contact-row{
+  grid-template-columns:4.3mm minmax(0,1fr)!important;
+  column-gap:1mm!important;
+}
+.paper-invoice .inv-party-row{
+  display:grid!important;
+  grid-template-columns:34mm minmax(0,1fr)!important;
+  column-gap:1.2mm!important;
+  align-items:start!important;
+}
+.paper-invoice .inv-party-row>b{
+  width:auto!important;
+  margin:0!important;
+  padding:0!important;
+  text-align:right!important;
+  white-space:nowrap!important;
+  font-size:7.55pt!important;
+  line-height:1.35!important;
+}
+.paper-invoice .inv-party-row>div{
+  min-width:0!important;
+  margin:0!important;
+  padding:0!important;
+  font-size:7.55pt!important;
+  line-height:1.35!important;
+}
+</style>
+<meta name="sante-build-r29" content="INVOICE-HEADER-ALIGNMENT">
+
+
+<style id="sante-accounting-r31-final-match">
+.paper-invoice .invh{grid-template-columns:20mm minmax(72mm,1.34fr) minmax(48mm,.92fr) 60mm!important;column-gap:4.2mm!important;align-items:start!important;padding-bottom:4.8mm!important}
+.paper-invoice .invh-logo-cell{padding-top:.2mm!important}
+.paper-invoice .invh-logo{width:18.5mm!important;height:23.5mm!important;max-width:18.5mm!important;max-height:23.5mm!important;object-fit:contain!important;object-position:left top!important}
+.paper-invoice .invh-seller{row-gap:1.1mm!important;font-size:8pt!important;line-height:1.42!important}
+.paper-invoice .invh-seller .invh-row,.paper-invoice .invh-seller .invh-tax-row{grid-template-columns:33mm minmax(0,1fr)!important;column-gap:1.6mm!important;align-items:start!important}
+.paper-invoice .invh-seller .invh-label,.paper-invoice .invh-seller .invh-tax-row .invh-label{text-align:right!important;white-space:nowrap!important;font-size:7.85pt!important;line-height:1.42!important}
+.paper-invoice .invh-company,.paper-invoice .invh-company>div,.paper-invoice .invh-address,.paper-invoice .invh-address>div,.paper-invoice .invh-tax-row>div:last-child{font-size:7.95pt!important;line-height:1.42!important;white-space:nowrap!important}
+.paper-invoice .invh-contact{margin-left:4mm!important;padding-left:0!important;position:static!important;left:auto!important;row-gap:1.25mm!important;font-size:7.45pt!important;line-height:1.38!important}
+.paper-invoice .invh-contact-row{grid-template-columns:4.5mm minmax(0,1fr)!important;column-gap:1.2mm!important}
+.paper-invoice .invh-contact-row span:last-child{font-size:7.25pt!important;white-space:nowrap!important}
+.paper-invoice .invh-copy{min-height:4.4mm!important;margin:0 0 1.35mm!important;line-height:1.1!important;white-space:nowrap!important}
+.paper-invoice .invh-title{margin:0 0 4.1mm!important;font-size:24pt!important;line-height:1.08!important;color:#07834a!important;white-space:nowrap!important}
+.paper-invoice .invh-docbox{padding:3.8mm 4.2mm!important;gap:1.5mm 2.2mm!important;font-size:7.7pt!important;background:#eaf7ef!important}
+.paper-invoice .inv-party{grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr)!important;gap:8mm!important;padding-top:4.2mm!important}
+.paper-invoice .inv-party-row{grid-template-columns:34mm minmax(0,1fr)!important;column-gap:1.2mm!important;font-size:7.7pt!important;line-height:1.4!important}
+.paper-invoice .inv-party-row>b{text-align:right!important;white-space:nowrap!important}
+.paper-invoice .inv-contact-row{display:grid!important;grid-template-columns:4.5mm minmax(0,1fr)!important;column-gap:1.2mm!important;font-size:7.7pt!important;line-height:1.4!important}
+.paper-invoice .inv-contact-title{font-size:7.8pt!important;line-height:1.4!important;margin-bottom:1.1mm!important;font-weight:700!important}
+.paper-invoice table thead th{font-size:7.9pt!important;line-height:1.3!important;padding:2.5mm 1.4mm!important}
+.paper-invoice table tbody td{font-size:7.9pt!important;line-height:1.42!important;padding:2.55mm 1.4mm!important}
+.paper-invoice .item-sub{display:none!important}
+.paper-invoice .summary-note{font-size:7.75pt!important;line-height:1.45!important}
+</style>
+<meta name="sante-build-r31" content="ACCOUNTING-FINAL-MATCH">
+
+<style id="sante-accounting-r32-content-standard">
+.paper-invoice .item-main{white-space:pre-wrap!important;font-weight:400!important;line-height:1.45!important}
+.paper-invoice .item-sub{display:none!important}
+.paper-invoice .summary-note{line-height:1.5!important}
+</style>
+<meta name="sante-build-r32" content="ACCOUNTING-CONTENT-STANDARD">
+
+<style id="sante-accounting-r33-final-master">
+/* FINAL MASTER — Invoice. Same geometry as quotation; only green theme/text differs. */
+.paper-invoice .invh{
+  grid-template-columns:20mm minmax(61mm,1fr) minmax(42mm,.76fr) 50mm!important;
+  column-gap:3mm!important;
+  align-items:start!important;
+  width:100%!important;
+  padding:0 0 4.5mm!important;
+  box-sizing:border-box!important;
+}
+.paper-invoice .invh-logo-cell{display:flex!important;align-items:flex-start!important;justify-content:center!important;padding-top:.3mm!important}
+.paper-invoice .invh-logo{
+  width:19mm!important;height:24mm!important;max-width:19mm!important;max-height:24mm!important;
+  object-fit:contain!important;object-position:center top!important;image-rendering:auto!important;
+}
+.paper-invoice .invh-seller{row-gap:1mm!important;font-size:7.8pt!important;line-height:1.4!important}
+.paper-invoice .invh-seller .invh-row,.paper-invoice .invh-seller .invh-tax-row{grid-template-columns:31mm minmax(0,1fr)!important;column-gap:1.5mm!important;align-items:start!important}
+.paper-invoice .invh-seller .invh-label,.paper-invoice .invh-seller .invh-tax-row .invh-label{font-size:7.75pt!important;line-height:1.4!important;text-align:right!important;white-space:nowrap!important}
+.paper-invoice .invh-company,.paper-invoice .invh-company>div,.paper-invoice .invh-address,.paper-invoice .invh-address>div,.paper-invoice .invh-tax-row>div:last-child{font-size:7.8pt!important;line-height:1.4!important;white-space:nowrap!important}
+.paper-invoice .invh-contact{position:static!important;left:auto!important;margin-left:3.2mm!important;padding:0!important;row-gap:1.25mm!important;font-size:7.2pt!important;line-height:1.35!important}
+.paper-invoice .invh-contact-row{grid-template-columns:4mm minmax(0,1fr)!important;column-gap:1mm!important;align-items:start!important}
+.paper-invoice .invh-contact-row span:last-child{font-size:7.15pt!important;white-space:nowrap!important}
+.paper-invoice .invh-doc{min-width:0!important;max-width:50mm!important;text-align:right!important}
+.paper-invoice .invh-copy{min-height:4.5mm!important;margin:0 0 1.5mm!important;font-size:7.3pt!important;line-height:1.1!important;white-space:nowrap!important}
+.paper-invoice .invh-title{margin:0 0 3.5mm!important;font-size:22.5pt!important;line-height:1.08!important;white-space:nowrap!important;text-align:right!important;color:#07834a!important}
+.paper-invoice .invh-docbox{grid-template-columns:22mm minmax(0,1fr)!important;padding:3.4mm 3.6mm!important;gap:1.35mm 1.8mm!important;font-size:7.55pt!important;line-height:1.35!important;background:#eaf7ef!important}
+.paper-invoice .inv-party{grid-template-columns:minmax(0,1.16fr) minmax(0,.84fr)!important;gap:8mm!important;padding-top:4mm!important;margin-left:0!important;width:100%!important}
+.paper-invoice .inv-party-row{grid-template-columns:32mm minmax(0,1fr)!important;column-gap:1.4mm!important;font-size:7.7pt!important;line-height:1.42!important}
+.paper-invoice .inv-party-row>b{text-align:right!important;white-space:nowrap!important}
+.paper-invoice .inv-contact-title{font-size:7.8pt!important;line-height:1.4!important;margin-bottom:1mm!important}
+.paper-invoice .inv-contact-row{grid-template-columns:4mm minmax(0,1fr)!important;column-gap:1.1mm!important;font-size:7.7pt!important;line-height:1.42!important}
+.paper-invoice table{margin-top:4mm!important}
+.paper-invoice table thead th{font-size:7.9pt!important;line-height:1.25!important;padding:2.4mm 1.2mm!important}
+.paper-invoice table tbody td{font-size:7.9pt!important;line-height:1.4!important;padding:2.5mm 1.2mm!important}
+.paper-invoice .totals-wrap{grid-template-columns:minmax(0,1fr) minmax(72mm,.95fr)!important;gap:7mm!important;padding-top:2.5mm!important}
+.paper-invoice .invoice-summary-left{display:grid!important;grid-template-columns:auto minmax(0,1fr) auto!important;column-gap:2.4mm!important;row-gap:1.35mm!important;align-content:start!important;font-size:7.75pt!important;line-height:1.4!important}
+.paper-invoice .invoice-summary-left .sum-icon{font-weight:700!important;white-space:nowrap!important}
+.paper-invoice .invoice-summary-left .sum-amount{text-align:right!important;white-space:nowrap!important}
+.paper-invoice .invoice-terms{margin-top:2.3mm!important;padding:2.3mm 0!important;border-top:1px solid #d8e3ee!important;font-size:7.6pt!important;line-height:1.45!important}
+.paper-invoice .inv-payment,.paper-invoice .signature-area{margin-top:3mm!important}
+.paper-invoice .signature-box{min-height:100px!important}
+.paper-invoice .sign-img{max-width:74px!important;max-height:36px!important}
+</style>
+<meta name="sante-build-r33" content="ACCOUNTING-FINAL-MASTER">
+
+
+<style id="sante-accounting-r34-match-quotation-exact">
+/* R34 — Invoice follows quotation geometry 1:1; green theme remains invoice-only. */
+
+/* Same A4 canvas and internal margins as quotation */
+.paper.paper-invoice{
+  width:210mm!important;
+  min-width:210mm!important;
+  max-width:210mm!important;
+  min-height:297mm!important;
+  padding:12mm 10mm 10mm!important;
+  box-sizing:border-box!important;
+  font-family:Prompt,sans-serif!important;
+  font-size:8.2pt!important;
+  color:#1b2736!important;
+}
+
+/* Header geometry copied from quotation final master */
+.paper-invoice .invh{
+  grid-template-columns:20mm minmax(61mm,1fr) minmax(42mm,.76fr) 50mm!important;
+  column-gap:3mm!important;
+  align-items:start!important;
+  width:100%!important;
+  padding:0 0 4.5mm!important;
+  box-sizing:border-box!important;
+}
+.paper-invoice .invh-logo-cell{
+  display:flex!important;
+  align-items:flex-start!important;
+  justify-content:center!important;
+  padding-top:.3mm!important;
+}
+.paper-invoice .invh-logo{
+  width:19mm!important;
+  height:24mm!important;
+  max-width:19mm!important;
+  max-height:24mm!important;
+  object-fit:contain!important;
+  object-position:center top!important;
+  image-rendering:auto!important;
+}
+.paper-invoice .invh-seller{
+  row-gap:1mm!important;
+  font-size:7.8pt!important;
+  line-height:1.4!important;
+}
+.paper-invoice .invh-seller .invh-row,
+.paper-invoice .invh-seller .invh-tax-row{
+  grid-template-columns:31mm minmax(0,1fr)!important;
+  column-gap:1.5mm!important;
+  align-items:start!important;
+}
+.paper-invoice .invh-seller .invh-label,
+.paper-invoice .invh-seller .invh-tax-row .invh-label{
+  font-size:7.75pt!important;
+  line-height:1.4!important;
+  text-align:right!important;
+  white-space:nowrap!important;
+}
+.paper-invoice .invh-company,
+.paper-invoice .invh-company>div,
+.paper-invoice .invh-address,
+.paper-invoice .invh-address>div,
+.paper-invoice .invh-tax-row>div:last-child{
+  font-size:7.8pt!important;
+  line-height:1.4!important;
+  white-space:nowrap!important;
+}
+.paper-invoice .invh-contact{
+  position:static!important;
+  left:auto!important;
+  margin-left:3.2mm!important;
+  padding:0!important;
+  row-gap:1.25mm!important;
+  font-size:7.2pt!important;
+  line-height:1.35!important;
+}
+.paper-invoice .invh-contact-row{
+  grid-template-columns:4mm minmax(0,1fr)!important;
+  column-gap:1mm!important;
+  align-items:start!important;
+}
+.paper-invoice .invh-contact-row span:last-child{
+  font-size:7.15pt!important;
+  white-space:nowrap!important;
+}
+.paper-invoice .invh-doc{
+  min-width:0!important;
+  max-width:50mm!important;
+  text-align:right!important;
+}
+.paper-invoice .invh-copy{
+  min-height:4.5mm!important;
+  margin:0 0 1.2mm!important;
+  font-size:7.3pt!important;
+  line-height:1.1!important;
+  white-space:nowrap!important;
+}
+.paper-invoice .invh-title{
+  margin:0 0 3.5mm!important;
+  font-size:22.5pt!important;
+  line-height:1.08!important;
+  white-space:nowrap!important;
+  text-align:right!important;
+  color:#07834a!important;
+}
+.paper-invoice .invh-docbox{
+  grid-template-columns:22mm minmax(0,1fr)!important;
+  padding:3.4mm 3.6mm!important;
+  gap:1.35mm 1.8mm!important;
+  font-size:7.55pt!important;
+  line-height:1.35!important;
+  background:#eaf7ef!important;
+}
+
+/* Customer/contact block copied from quotation geometry */
+.paper-invoice .inv-party{
+  display:grid!important;
+  grid-template-columns:minmax(0,1.16fr) minmax(0,.84fr)!important;
+  gap:8mm!important;
+  padding-top:4mm!important;
+  margin:0!important;
+  width:100%!important;
+}
+.paper-invoice .inv-party-row{
+  display:grid!important;
+  grid-template-columns:32mm minmax(0,1fr)!important;
+  column-gap:1.4mm!important;
+  font-size:7.7pt!important;
+  line-height:1.42!important;
+  margin:0!important;
+}
+.paper-invoice .inv-party-row>b{
+  text-align:right!important;
+  white-space:nowrap!important;
+}
+.paper-invoice .inv-contact-title{
+  font-size:7.8pt!important;
+  line-height:1.4!important;
+  margin-bottom:1mm!important;
+}
+.paper-invoice .inv-contact-row{
+  display:grid!important;
+  grid-template-columns:4mm minmax(0,1fr)!important;
+  column-gap:1.1mm!important;
+  font-size:7.7pt!important;
+  line-height:1.42!important;
+}
+
+/* Table geometry copied from quotation */
+.paper-invoice table{
+  margin-top:4mm!important;
+  width:100%!important;
+}
+.paper-invoice table thead th{
+  font-size:7.9pt!important;
+  line-height:1.25!important;
+  padding:2.4mm 1.2mm!important;
+}
+.paper-invoice table tbody td{
+  font-size:7.9pt!important;
+  line-height:1.4!important;
+  padding:2.5mm 1.2mm!important;
+}
+
+/* Invoice line description now follows quotation: item number + description on same line */
+.paper-invoice td.desc-col{
+  white-space:normal!important;
+}
+.paper-invoice td.desc-col .item-no{
+  display:inline!important;
+  margin-right:1.5mm!important;
+  font-weight:400!important;
+  color:#43566b!important;
+  vertical-align:baseline!important;
+}
+.paper-invoice td.desc-col .item-main{
+  display:inline!important;
+  white-space:pre-wrap!important;
+  font-size:7.9pt!important;
+  line-height:1.4!important;
+  font-weight:400!important;
+  color:#17283d!important;
+  vertical-align:baseline!important;
+}
+.paper-invoice td.desc-col .item-code{
+  display:inline!important;
+  margin-left:1mm!important;
+}
+.paper-invoice td.desc-col .item-sub{
+  display:none!important;
+}
+
+/* Summary spacing follows quotation rhythm */
+.paper-invoice .totals-wrap{
+  grid-template-columns:minmax(0,1fr) minmax(72mm,.95fr)!important;
+  gap:7mm!important;
+  padding-top:2.5mm!important;
+}
+.paper-invoice .inv-payment,
+.paper-invoice .signature-area{
+  margin-top:3mm!important;
+}
+</style>
+<meta name="sante-build-r34" content="ACCOUNTING-MATCH-QUOTATION-EXACT">
+
+
+<style id="sante-accounting-r35-line-rhythm-lock">
+/* R35 — lock Invoice vertical rhythm to Quotation final master.
+   Vertical spacing only; horizontal geometry/business logic unchanged. */
+
+/* SELLER: remove inherited spacing from older styles */
+.paper-invoice .invh-seller{
+  display:grid!important;
+  row-gap:1mm!important;
+  line-height:1.4!important;
+}
+.paper-invoice .invh-seller .invh-row,
+.paper-invoice .invh-seller .invh-tax-row{
+  margin:0!important;
+  padding:0!important;
+  min-height:0!important;
+}
+.paper-invoice .invh-company,
+.paper-invoice .invh-address{
+  margin:0!important;
+  padding:0!important;
+  line-height:1.4!important;
+}
+.paper-invoice .invh-company>div,
+.paper-invoice .invh-address>div{
+  display:block!important;
+  margin:0!important;
+  padding:0!important;
+  line-height:1.4!important;
+  min-height:0!important;
+}
+.paper-invoice .invh-seller .invh-label,
+.paper-invoice .invh-tax-row>div:last-child{
+  margin:0!important;
+  padding:0!important;
+  line-height:1.4!important;
+}
+
+/* COMPANY CONTACT: exact same row rhythm as quotation */
+.paper-invoice .invh-contact{
+  display:grid!important;
+  row-gap:1.25mm!important;
+  line-height:1.35!important;
+}
+.paper-invoice .invh-contact-row{
+  margin:0!important;
+  padding:0!important;
+  min-height:0!important;
+  line-height:1.35!important;
+}
+.paper-invoice .invh-contact-row>span{
+  margin:0!important;
+  padding:0!important;
+  line-height:1.35!important;
+}
+
+/* DOCUMENT SIDE */
+.paper-invoice .invh-copy{
+  margin-top:0!important;
+  margin-bottom:1.2mm!important;
+  padding:0!important;
+  line-height:1.1!important;
+}
+.paper-invoice .invh-title{
+  margin-top:0!important;
+  margin-bottom:3.5mm!important;
+  padding:0!important;
+  line-height:1.08!important;
+}
+.paper-invoice .invh-docbox{
+  margin:0!important;
+  line-height:1.35!important;
+}
+.paper-invoice .invh-docbox>b,
+.paper-invoice .invh-docbox>span{
+  margin:0!important;
+  padding:0!important;
+  line-height:1.35!important;
+}
+
+/* CUSTOMER: lock four rows to quotation's rhythm */
+.paper-invoice .inv-party{
+  align-items:start!important;
+}
+.paper-invoice .inv-party-left{
+  margin:0!important;
+  padding:0!important;
+}
+.paper-invoice .inv-party-row{
+  margin:0!important;
+  padding:0!important;
+  min-height:0!important;
+  line-height:1.42!important;
+}
+.paper-invoice .inv-party-row>b,
+.paper-invoice .inv-party-row>div,
+.paper-invoice .inv-party-row>div>b{
+  margin:0!important;
+  padding:0!important;
+  line-height:1.42!important;
+}
+.paper-invoice .inv-contact{
+  margin:0!important;
+  padding:0!important;
+}
+.paper-invoice .inv-contact-title{
+  margin-top:0!important;
+  margin-bottom:1mm!important;
+  padding:0!important;
+  line-height:1.4!important;
+}
+.paper-invoice .inv-contact-row{
+  margin:0!important;
+  padding:0!important;
+  min-height:0!important;
+  line-height:1.42!important;
+}
+.paper-invoice .inv-contact-row>span{
+  margin:0!important;
+  padding:0!important;
+  line-height:1.42!important;
+}
+
+/* ITEM TABLE: identical vertical rhythm */
+.paper-invoice table{
+  border-collapse:collapse!important;
+}
+.paper-invoice table thead th{
+  line-height:1.25!important;
+  padding-top:2.4mm!important;
+  padding-bottom:2.4mm!important;
+}
+.paper-invoice table tbody td{
+  line-height:1.4!important;
+  padding-top:2.5mm!important;
+  padding-bottom:2.5mm!important;
+  vertical-align:top!important;
+}
+.paper-invoice td.desc-col .item-no,
+.paper-invoice td.desc-col .item-main{
+  line-height:1.4!important;
+}
+</style>
+<meta name="sante-build-r35" content="ACCOUNTING-LINE-RHYTHM-LOCK">
+
+
+<style id="sante-accounting-r36-pdf-match-master">
+/* R36 — based on rendered PDF comparison against quotation master.
+   Only Invoice visual rhythm/color is adjusted; data/workflow is untouched. */
+
+/* Main document text should use the same dark tone as quotation. */
+.paper.paper-invoice{color:#1b2736!important}
+.paper-invoice .invh-seller,
+.paper-invoice .inv-party,
+.paper-invoice .inv-contact,
+.paper-invoice table,
+.paper-invoice .totals-wrap,
+.paper-invoice .invoice-terms,
+.paper-invoice .inv-payment,
+.paper-invoice .signature-area{color:#1b2736!important}
+.paper-invoice .invh-seller .invh-label,
+.paper-invoice .inv-party-row>b,
+.paper-invoice .inv-contact-title,
+.paper-invoice .invoice-summary-left .sum-icon{color:#17283d!important}
+.paper-invoice table thead th{color:#20253a!important}
+.paper-invoice .invoice-summary-left,
+.paper-invoice .invoice-summary-left>div,
+.paper-invoice .summary-note{color:#1b2736!important}
+
+/* The invoice document-side block renders slightly taller in PDF.
+   Reduce only the bottom clearance so the divider aligns to quotation. */
+.paper-invoice .invh{padding-bottom:2.8mm!important}
+
+/* IMPORTANT: quotation master retains row margins.
+   Restore them here; R35 incorrectly zeroed these margins. */
+.paper-invoice .inv-party-row{
+  margin:.8mm 0!important;
+  padding:0!important;
+  line-height:1.42!important;
+}
+.paper-invoice .inv-contact-row{
+  margin:1mm 0!important;
+  padding:0!important;
+  line-height:1.42!important;
+}
+.paper-invoice .inv-contact-title{
+  margin-top:0!important;
+  margin-bottom:1.3mm!important;
+  line-height:1.4!important;
+}
+
+/* Match quotation's customer/contact visual density. */
+.paper-invoice .inv-party{padding-top:4mm!important}
+.paper-invoice .inv-party-row>b,
+.paper-invoice .inv-party-row>div,
+.paper-invoice .inv-party-row>div>b{line-height:1.42!important}
+.paper-invoice .inv-contact-row>span{line-height:1.42!important}
+
+/* Match table text emphasis to quotation. */
+.paper-invoice td.desc-col .item-no{color:#646b78!important}
+.paper-invoice td.desc-col .item-main{color:#161e2a!important}
+.paper-invoice table tbody td{color:#1b2736!important}
+
+/* Match summary text sizes/weight/color more closely to quotation. */
+.paper-invoice .invoice-summary-left{
+  font-size:8pt!important;
+  line-height:1.4!important;
+  row-gap:1.3mm!important;
+  column-gap:2mm!important;
+}
+.paper-invoice .invoice-summary-left .sum-icon{font-weight:700!important}
+.paper-invoice .invoice-summary-left .sum-amount{color:#1b2736!important}
+.paper-invoice .total-row{color:#1b2736!important}
+.paper-invoice .amount-words{color:#263b51!important}
+
+/* Keep Invoice-only green accents. */
+.paper-invoice .invh-title{color:#07834a!important}
+.paper-invoice .invh-docbox,
+.paper-invoice table thead th{background:#eaf7ef!important}
+.paper-invoice .total-row.grand{background:#e4f4e9!important;color:#176b3a!important}
+.paper-invoice .paid-row{background:#eff9f2!important}
+.paper-invoice .paid-row b:last-child{color:#16834a!important}
+</style>
+<meta name="sante-build-r36" content="ACCOUNTING-PDF-MATCH-MASTER">
+
+
+<style id="sante-final-invoice-master-match">
+/* FINAL MASTER MATCH — lower half of Invoice follows Quotation.
+   Header/customer geometry from R36 is intentionally preserved. */
+
+/* Table column proportions exactly follow quotation. */
+.paper-invoice table{table-layout:fixed!important}
+.paper-invoice th.desc-col,.paper-invoice td.desc-col{width:55%!important}
+.paper-invoice th.qty-col,.paper-invoice td.qty-col{width:8%!important}
+.paper-invoice th.unit-col,.paper-invoice td.unit-col{width:8%!important}
+.paper-invoice th.price-col,.paper-invoice td.price-col{width:9%!important}
+.paper-invoice th.disc-col,.paper-invoice td.disc-col{width:8%!important}
+.paper-invoice th.vat-col,.paper-invoice td.vat-col{width:5%!important}
+.paper-invoice th.amount-col,.paper-invoice td.amount-col{width:10%!important}
+
+/* Summary uses the same two-column rhythm as quotation. */
+.paper-invoice .totals-wrap{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) minmax(72mm,.95fr)!important;
+  gap:7mm!important;
+  margin-top:0!important;
+  padding-top:2.5mm!important;
+  border-top:1px solid #d8d9de!important;
+}
+.paper-invoice .invoice-summary-left{
+  display:grid!important;
+  grid-template-columns:15mm minmax(0,1fr) 27mm!important;
+  gap:1.3mm 2mm!important;
+  align-content:start!important;
+  font-size:8pt!important;
+  line-height:1.4!important;
+}
+.paper-invoice .totals{
+  width:auto!important;
+  margin:0!important;
+}
+.paper-invoice .total-row.grand{
+  display:flex!important;
+  justify-content:space-between!important;
+  align-items:center!important;
+  gap:4mm!important;
+  margin:0!important;
+  padding:4mm 3.5mm!important;
+  border:0!important;
+  border-radius:1.5mm!important;
+  background:#e4f4e9!important;
+  color:#176b3a!important;
+  font-size:9.5pt!important;
+  line-height:1.25!important;
+}
+.paper-invoice .total-row.grand span:last-child{
+  font-size:15pt!important;
+  font-weight:800!important;
+  white-space:nowrap!important;
+}
+.paper-invoice .totals>.total-row:not(.grand):not(.paid-row){
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) 34mm!important;
+  gap:2.5mm!important;
+  align-items:center!important;
+  padding:1.2mm 0!important;
+  font-size:8.15pt!important;
+}
+.paper-invoice .totals>.total-row:not(.grand):not(.paid-row)>:last-child{
+  text-align:right!important;
+  white-space:nowrap!important;
+}
+.paper-invoice .paid-row{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) 36mm!important;
+  gap:2.5mm!important;
+  align-items:center!important;
+  margin-top:1mm!important;
+  padding:2mm 0 1mm!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+}
+.paper-invoice .paid-row b:first-child{
+  font-size:8.9pt!important;
+  line-height:1.3!important;
+  white-space:nowrap!important;
+  color:#1b2736!important;
+}
+.paper-invoice .paid-row b:last-child{
+  text-align:right!important;
+  font-size:11.6pt!important;
+  line-height:1.25!important;
+  white-space:nowrap!important;
+  color:#16834a!important;
+}
+.paper-invoice .amount-words{
+  margin-top:.8mm!important;
+  text-align:right!important;
+  font-size:8.8pt!important;
+  line-height:1.4!important;
+  font-weight:600!important;
+  color:#263b51!important;
+}
+
+/* Payment block matches quotation payment block. */
+.paper-invoice .inv-payment{
+  margin-top:4mm!important;
+  padding:3.2mm 0!important;
+  border-top:1px solid #d8d9de!important;
+  border-bottom:1px solid #d8d9de!important;
+  display:grid!important;
+  grid-template-columns:19mm minmax(0,1fr)!important;
+  gap:3mm!important;
+  align-items:center!important;
+  font-size:8.2pt!important;
+  line-height:1.5!important;
+}
+.paper-invoice .inv-payment-title{
+  font-size:8.2pt!important;
+  font-weight:700!important;
+  color:#17283d!important;
+}
+.paper-invoice .inv-payment-bank{
+  display:flex!important;
+  align-items:center!important;
+  gap:3mm!important;
+  font-size:8.2pt!important;
+  line-height:1.5!important;
+}
+.paper-invoice .payment-bank-logo{
+  width:11.5mm!important;
+  height:11.5mm!important;
+  flex:0 0 11.5mm!important;
+  object-fit:contain!important;
+}
+
+/* Payment terms occupies the quotation note slot. */
+.paper-invoice .invoice-terms{
+  margin:0!important;
+  padding:3mm 0!important;
+  border-top:0!important;
+  border-bottom:1px solid #d8d9de!important;
+  display:grid!important;
+  grid-template-columns:38mm minmax(0,1fr)!important;
+  gap:3mm!important;
+  min-height:12mm!important;
+  align-items:start!important;
+  font-size:8.2pt!important;
+  line-height:1.5!important;
+  color:#1b2736!important;
+}
+
+/* Certification: use Invoice's clean line concept, standardized across all 5 cells. */
+.paper-invoice .signature-area{
+  margin-top:3mm!important;
+  padding-top:3mm!important;
+  border-top:1px solid #d8d9de!important;
+}
+.paper-invoice .signature-header{
+  margin:0 0 1.5mm!important;
+  font-size:8.5pt!important;
+  font-weight:800!important;
+  color:#17283d!important;
+}
+.paper-invoice .signature-grid{
+  display:grid!important;
+  grid-template-columns:repeat(5,minmax(0,1fr))!important;
+  gap:3mm!important;
+  align-items:end!important;
+}
+.paper-invoice .signature-box{
+  min-height:32mm!important;
+  display:grid!important;
+  grid-template-rows:18mm minmax(12mm,auto)!important;
+  align-items:end!important;
+  justify-items:stretch!important;
+  text-align:center!important;
+  font-size:7.2pt!important;
+  color:#1f3145!important;
+}
+.paper-invoice .signature-space,
+.paper-invoice .seal-box,
+.paper-invoice .customer-stamp-box{
+  width:100%!important;
+  height:18mm!important;
+  display:flex!important;
+  align-items:flex-end!important;
+  justify-content:center!important;
+  margin:0!important;
+  border:0!important;
+  background:transparent!important;
+}
+.paper-invoice .seal-box{align-items:center!important}
+.paper-invoice .sign-img{
+  display:block!important;
+  width:auto!important;
+  height:10mm!important;
+  max-width:30mm!important;
+  max-height:10mm!important;
+  object-fit:contain!important;
+  object-position:center bottom!important;
+  margin:0 auto 1mm!important;
+}
+.paper-invoice .seal-mark-img{
+  width:18mm!important;
+  height:18mm!important;
+  max-width:18mm!important;
+  max-height:18mm!important;
+  object-fit:contain!important;
+}
+.paper-invoice .customer-stamp-box{
+  /* User requested no visible customer signature/stamp frame. */
+  border:0!important;
+  outline:0!important;
+  box-shadow:none!important;
+}
+.paper-invoice .signature-line{
+  width:100%!important;
+  min-height:12mm!important;
+  border-top:1px solid #7b8c9d!important;
+  padding:1.5mm 0 0!important;
+  margin:0!important;
+  text-align:center!important;
+  line-height:1.42!important;
+  color:#1f3145!important;
+}
+.paper-invoice .signature-line b{
+  display:block!important;
+  margin:0 0 .5mm!important;
+  font-weight:700!important;
+}
+.paper-invoice .footer-sign-note{
+  margin-top:1.5mm!important;
+  text-align:center!important;
+  font-size:7.1pt!important;
+  line-height:1.45!important;
+  color:#53687d!important;
+}
+</style>
+<meta name="sante-final-build" content="INVOICE-FINAL-MASTER-MATCH">
+
+
+<style id="sante-final-six-groups-invoice">
+/* FINAL 6 GROUPS — Invoice uses the same master geometry as Quotation. */
+
+/* 1. ITEM TABLE */
+.paper-invoice table{table-layout:fixed!important;width:100%!important}
+.paper-invoice table th,
+.paper-invoice table td{box-sizing:border-box!important}
+.paper-invoice table th.desc-col,.paper-invoice table td.desc-col{width:53%!important}
+.paper-invoice table th.qty-col,.paper-invoice table td.qty-col{width:8%!important}
+.paper-invoice table th.unit-col,.paper-invoice table td.unit-col{width:8%!important}
+.paper-invoice table th.price-col,.paper-invoice table td.price-col{width:9%!important}
+.paper-invoice table th.disc-col,.paper-invoice table td.disc-col{width:7%!important}
+.paper-invoice table th.vat-col,.paper-invoice table td.vat-col{width:5%!important}
+.paper-invoice table th.amount-col,.paper-invoice table td.amount-col{width:10%!important}
+.paper-invoice table th.amount-col{
+  white-space:nowrap!important;
+  font-size:7.75pt!important;
+}
+.paper-invoice table th:nth-child(n+2),
+.paper-invoice table td:nth-child(n+2){text-align:center!important}
+.paper-invoice table th.price-col,
+.paper-invoice table th.disc-col,
+.paper-invoice table th.amount-col,
+.paper-invoice table td.price-col,
+.paper-invoice table td.disc-col,
+.paper-invoice table td.amount-col{text-align:right!important}
+
+/* 2. TOP CONTACT — exact quotation rhythm */
+.paper-invoice .invh-contact{
+  margin-left:3.2mm!important;
+  row-gap:1.25mm!important;
+  line-height:1.35!important;
+}
+.paper-invoice .invh-contact-row{
+  grid-template-columns:4mm minmax(0,1fr)!important;
+  column-gap:1mm!important;
+  margin:0!important;
+  padding:0!important;
+  min-height:0!important;
+  line-height:1.35!important;
+}
+.paper-invoice .invh-contact-row>*{line-height:1.35!important}
+
+/* 3. CUSTOMER BLOCK — remove extra blank row effect */
+.paper-invoice .inv-party{
+  grid-template-columns:minmax(0,1.16fr) minmax(0,.84fr)!important;
+  gap:8mm!important;
+  padding-top:4mm!important;
+}
+.paper-invoice .inv-party-row{
+  grid-template-columns:32mm minmax(0,1fr)!important;
+  column-gap:1.4mm!important;
+  margin:0!important;
+  padding:0!important;
+  min-height:0!important;
+  font-size:7.7pt!important;
+  line-height:1.42!important;
+}
+.paper-invoice .inv-contact-title{
+  margin:0 0 1mm!important;
+  font-size:7.8pt!important;
+  line-height:1.4!important;
+}
+.paper-invoice .inv-contact-row{
+  grid-template-columns:4mm minmax(0,1fr)!important;
+  column-gap:1.1mm!important;
+  margin:0!important;
+  padding:0!important;
+  min-height:0!important;
+  font-size:7.7pt!important;
+  line-height:1.42!important;
+}
+
+/* 4. SUMMARY — same grid and vertical rhythm as quotation */
+.paper-invoice .totals-wrap{
+  grid-template-columns:minmax(0,1fr) 73mm!important;
+  gap:7mm!important;
+  margin-top:0!important;
+  padding-top:2.5mm!important;
+  border-top:1px solid #d8d9de!important;
+}
+.paper-invoice .invoice-summary-left{
+  grid-template-columns:15mm minmax(0,1fr) 30mm!important;
+  column-gap:3mm!important;
+  row-gap:1.3mm!important;
+  font-size:8pt!important;
+  line-height:1.4!important;
+}
+.paper-invoice .invoice-summary-left>div:nth-child(3n+2){
+  min-width:0!important;
+  white-space:nowrap!important;
+}
+.paper-invoice .total-row.grand{
+  min-height:14mm!important;
+  padding:4mm 3.5mm!important;
+}
+.paper-invoice .totals>.total-row:not(.grand):not(.paid-row){
+  padding:1.2mm 0!important;
+  font-size:8pt!important;
+  line-height:1.4!important;
+}
+.paper-invoice .totals>.total-row:not(.grand):not(.paid-row)>span:first-child{
+  white-space:nowrap!important;
+  font-size:7.7pt!important;
+}
+.paper-invoice .paid-row{
+  margin-top:0!important;
+  padding:1.2mm 0!important;
+  min-height:8mm!important;
+}
+.paper-invoice .amount-words{
+  margin-top:0!important;
+  line-height:1.4!important;
+}
+
+/* 5. PAYMENT / TERMS — same vertical slots as quotation */
+.paper-invoice .inv-payment{
+  min-height:15mm!important;
+  margin-top:3mm!important;
+  padding:3.2mm 0!important;
+  grid-template-columns:19mm minmax(0,1fr)!important;
+  align-items:center!important;
+}
+.paper-invoice .invoice-terms{
+  min-height:12mm!important;
+  margin:0!important;
+  padding:3mm 0!important;
+  grid-template-columns:38mm minmax(0,1fr)!important;
+  align-items:start!important;
+  line-height:1.5!important;
+}
+
+/* 6. CERTIFICATION — five identical baselines and lines */
+.paper-invoice .signature-area{
+  margin-top:3mm!important;
+  padding-top:3mm!important;
+}
+.paper-invoice .signature-grid{
+  grid-template-columns:repeat(5,minmax(0,1fr))!important;
+  gap:3mm!important;
+  align-items:end!important;
+}
+.paper-invoice .signature-box{
+  min-height:32mm!important;
+  display:grid!important;
+  grid-template-rows:18mm 12mm!important;
+  align-items:end!important;
+}
+.paper-invoice .signature-space,
+.paper-invoice .seal-box,
+.paper-invoice .customer-stamp-box{
+  width:100%!important;
+  height:18mm!important;
+  margin:0!important;
+  border:0!important;
+  outline:0!important;
+  box-shadow:none!important;
+  background:transparent!important;
+}
+.paper-invoice .sign-img{
+  height:10mm!important;
+  max-height:10mm!important;
+  max-width:30mm!important;
+  margin:0 auto 1mm!important;
+}
+.paper-invoice .seal-mark-img{
+  width:18mm!important;
+  height:18mm!important;
+  max-width:18mm!important;
+  max-height:18mm!important;
+}
+.paper-invoice .signature-line{
+  width:100%!important;
+  min-height:12mm!important;
+  border-top:1px solid #7b8c9d!important;
+  padding-top:1.5mm!important;
+  margin:0!important;
+  font-size:7.2pt!important;
+  line-height:1.42!important;
+  text-align:center!important;
+}
+.paper-invoice .footer-sign-note{
+  margin-top:1.5mm!important;
+  font-size:7.1pt!important;
+  line-height:1.45!important;
+  text-align:center!important;
+  color:#53687d!important;
+}
+</style>
+<meta name="sante-final-six-groups" content="INVOICE-LOCKED">
+
+
+<style id="sante-final-master-lock-invoice">
+/* FINAL MASTER LOCK — Invoice matches Quotation geometry */
+
+/* 1. Header/contact/customer */
+.paper-invoice .invh-contact{
+  display:grid!important;
+  margin-left:3.2mm!important;
+  row-gap:1.25mm!important;
+  line-height:1.35!important;
+}
+.paper-invoice .invh-contact-row{
+  display:grid!important;
+  grid-template-columns:4mm minmax(0,1fr)!important;
+  column-gap:1mm!important;
+  margin:0!important;
+  padding:0!important;
+  min-height:0!important;
+  line-height:1.35!important;
+}
+.paper-invoice .inv-party-row,
+.paper-invoice .inv-contact-row{
+  margin:0!important;
+  padding:0!important;
+  min-height:0!important;
+  line-height:1.42!important;
+}
+
+/* 2. Table */
+.paper-invoice table{table-layout:fixed!important;width:100%!important}
+.paper-invoice table th{font-size:7.9pt!important;line-height:1.25!important;padding:2.4mm 1.2mm!important;vertical-align:middle!important}
+.paper-invoice table td{font-size:7.9pt!important;line-height:1.4!important;padding:2.5mm 1.2mm!important}
+.paper-invoice table th.amount-col{white-space:nowrap!important;font-size:7.75pt!important}
+.paper-invoice table th.qty-col,.paper-invoice table td.qty-col,
+.paper-invoice table th.unit-col,.paper-invoice table td.unit-col,
+.paper-invoice table th.vat-col,.paper-invoice table td.vat-col{text-align:center!important}
+.paper-invoice table th.price-col,.paper-invoice table td.price-col,
+.paper-invoice table th.disc-col,.paper-invoice table td.disc-col,
+.paper-invoice table th.amount-col,.paper-invoice table td.amount-col{text-align:right!important}
+
+/* 3. Spacer + summary */
+.paper-invoice .invoice-doc-spacer{min-height:8mm!important}
+.paper-invoice .totals-wrap{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) 73mm!important;
+  gap:7mm!important;
+  margin:0!important;
+  padding-top:2.5mm!important;
+  border-top:1px solid #d8d9de!important;
+}
+.paper-invoice .invoice-summary-left{
+  grid-template-columns:15mm minmax(0,1fr) 30mm!important;
+  column-gap:3mm!important;
+  row-gap:1.3mm!important;
+  font-size:8pt!important;
+  line-height:1.4!important;
+}
+.paper-invoice .invoice-total-box,
+.paper-invoice .invoice-net-box{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) 32mm 9mm!important;
+  gap:1.5mm!important;
+  align-items:center!important;
+  min-height:14mm!important;
+  padding:3.2mm 3.5mm!important;
+  border-radius:1.5mm!important;
+  background:#e4f4e9!important;
+  color:#176b3a!important;
+}
+.paper-invoice .invoice-total-box strong,
+.paper-invoice .invoice-net-box strong{
+  text-align:right!important;
+  white-space:nowrap!important;
+  font-size:13.5pt!important;
+  line-height:1.1!important;
+}
+.paper-invoice .invoice-total-box>span:last-child,
+.paper-invoice .invoice-net-box>span:last-child{text-align:right!important}
+.paper-invoice .invoice-total-line{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) 32mm 9mm!important;
+  gap:1.5mm!important;
+  align-items:center!important;
+  min-height:7mm!important;
+  padding:1.2mm 0!important;
+  font-size:8pt!important;
+  line-height:1.4!important;
+  color:#1b2736!important;
+}
+.paper-invoice .invoice-total-line>span:nth-child(2),
+.paper-invoice .invoice-total-line>span:nth-child(3){text-align:right!important;white-space:nowrap!important}
+.paper-invoice .amount-words{
+  margin-top:.8mm!important;
+  text-align:right!important;
+  font-size:8.8pt!important;
+  line-height:1.4!important;
+  color:#263b51!important;
+}
+
+/* 4. Payment / terms */
+.paper-invoice .inv-payment{
+  min-height:15mm!important;
+  margin-top:3mm!important;
+  padding:3.2mm 0!important;
+  border-top:1px solid #d8d9de!important;
+  border-bottom:1px solid #d8d9de!important;
+}
+.paper-invoice .invoice-terms{
+  min-height:12mm!important;
+  margin:0!important;
+  padding:3mm 0!important;
+  border-bottom:1px solid #d8d9de!important;
+  line-height:1.5!important;
+}
+
+/* 5. Certification */
+.paper-invoice .signature-area{
+  margin-top:3mm!important;
+  padding-top:3mm!important;
+  border-top:1px solid #d8d9de!important;
+}
+.paper-invoice .signature-grid{
+  grid-template-columns:repeat(5,minmax(0,1fr))!important;
+  gap:3mm!important;
+  align-items:end!important;
+}
+.paper-invoice .signature-box{
+  min-height:32mm!important;
+  display:grid!important;
+  grid-template-rows:18mm 12mm!important;
+  align-items:end!important;
+}
+.paper-invoice .signature-space,
+.paper-invoice .seal-box,
+.paper-invoice .customer-stamp-box{
+  width:100%!important;
+  height:18mm!important;
+  margin:0!important;
+  border:0!important;
+  outline:0!important;
+  box-shadow:none!important;
+  background:transparent!important;
+}
+.paper-invoice .sign-img{height:10mm!important;max-height:10mm!important;max-width:30mm!important;margin:0 auto 1mm!important}
+.paper-invoice .seal-mark-img{width:18mm!important;height:18mm!important;max-width:18mm!important;max-height:18mm!important}
+.paper-invoice .signature-line{
+  width:100%!important;
+  min-height:12mm!important;
+  border-top:1px solid #7b8c9d!important;
+  padding-top:1.5mm!important;
+  margin:0!important;
+  font-size:7.2pt!important;
+  line-height:1.42!important;
+  text-align:center!important;
+}
+.paper-invoice .footer-sign-note{
+  margin-top:1.5mm!important;
+  font-size:7.1pt!important;
+  line-height:1.45!important;
+  text-align:center!important;
+  color:#53687d!important;
+}
+
+/* 6. Footer identical to quotation */
+.paper-invoice .accounting-foot{
+  margin-top:3mm!important;
+  padding-top:2mm!important;
+  border-top:1px solid #dce6ef!important;
+  text-align:center!important;
+  font-size:7.1pt!important;
+  line-height:1.45!important;
+  color:#73869a!important;
+}
+</style>
+<meta name="sante-final-master-lock" content="INVOICE">
+
+
+<style id="sante-final-master-components">
+/* SANTE FINAL MASTER — Quotation + Invoice only */
+
+/* HEADER + CONTACT + CUSTOMER */
+.reference-qo .qh,
+.paper-invoice .invh{
+  grid-template-columns:20mm minmax(61mm,1fr) minmax(42mm,.76fr) 50mm!important;
+  column-gap:3mm!important;
+  align-items:start!important;
+  padding-bottom:4.5mm!important;
+}
+.reference-qo .qh-contact,
+.paper-invoice .invh-contact{
+  display:grid!important;
+  margin-left:3.2mm!important;
+  padding:0!important;
+  row-gap:1.25mm!important;
+  font-size:7.2pt!important;
+  line-height:1.35!important;
+}
+.reference-qo .qh-contact-row,
+.paper-invoice .invh-contact-row{
+  display:grid!important;
+  grid-template-columns:4mm minmax(0,1fr)!important;
+  column-gap:1mm!important;
+  margin:0!important;
+  padding:0!important;
+  min-height:0!important;
+  line-height:1.35!important;
+}
+.reference-qo .ref-party,
+.paper-invoice .inv-party{
+  grid-template-columns:minmax(0,1.16fr) minmax(0,.84fr)!important;
+  gap:8mm!important;
+  padding-top:4mm!important;
+}
+.reference-qo .ref-party-row,
+.paper-invoice .inv-party-row{
+  display:grid!important;
+  grid-template-columns:32mm minmax(0,1fr)!important;
+  column-gap:1.4mm!important;
+  margin:0!important;
+  padding:0!important;
+  min-height:0!important;
+  font-size:7.7pt!important;
+  line-height:1.42!important;
+}
+.reference-qo .ref-party-title,
+.paper-invoice .inv-contact-title{
+  margin:0 0 1mm!important;
+  font-size:7.8pt!important;
+  line-height:1.4!important;
+}
+.reference-qo .ref-contact-row,
+.paper-invoice .inv-contact-row{
+  display:grid!important;
+  grid-template-columns:4mm minmax(0,1fr)!important;
+  column-gap:1.1mm!important;
+  margin:0!important;
+  padding:0!important;
+  min-height:0!important;
+  font-size:7.7pt!important;
+  line-height:1.42!important;
+}
+
+/* TABLE */
+.master-items{
+  width:100%!important;
+  table-layout:fixed!important;
+  border-collapse:collapse!important;
+  margin-top:4mm!important;
+}
+.master-items th{
+  padding:2.4mm 1.2mm!important;
+  font-size:7.9pt!important;
+  line-height:1.25!important;
+  vertical-align:middle!important;
+  white-space:nowrap!important;
+}
+.master-items td{
+  padding:2.5mm 1.2mm!important;
+  font-size:7.9pt!important;
+  line-height:1.4!important;
+  vertical-align:top!important;
+}
+.master-items th:first-child,.master-items td:first-child{text-align:left!important}
+.master-items th:nth-child(2),.master-items td:nth-child(2),
+.master-items th:nth-child(3),.master-items td:nth-child(3),
+.master-items th:nth-child(6),.master-items td:nth-child(6){text-align:center!important}
+.master-items th:nth-child(4),.master-items td:nth-child(4),
+.master-items th:nth-child(5),.master-items td:nth-child(5),
+.master-items th:nth-child(7),.master-items td:nth-child(7){text-align:right!important}
+.reference-qo .ref-doc-spacer,
+.paper-invoice .invoice-doc-spacer{min-height:8mm!important}
+
+/* SUMMARY */
+.master-summary{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) 80mm!important;
+  gap:7mm!important;
+  margin:0!important;
+  padding-top:2.5mm!important;
+  border-top:1px solid #d8d9de!important;
+}
+.master-summary-left{
+  display:grid!important;
+  grid-template-columns:15mm minmax(0,1fr) 30mm!important;
+  column-gap:3mm!important;
+  row-gap:1.3mm!important;
+  align-content:start!important;
+  font-size:8pt!important;
+  line-height:1.4!important;
+  min-width:0!important;
+}
+.master-summary-title{font-weight:700!important;white-space:nowrap!important}
+.master-summary-label{min-width:0!important}
+.master-summary-amount{text-align:right!important;white-space:nowrap!important}
+.master-summary-right{min-width:0!important}
+.master-total-box,.master-net-box{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) 30mm 8mm!important;
+  column-gap:2mm!important;
+  align-items:center!important;
+  min-height:15mm!important;
+  padding:3.2mm 3.5mm!important;
+  border-radius:1.5mm!important;
+  box-sizing:border-box!important;
+}
+.master-total-line{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) 30mm 8mm!important;
+  column-gap:2mm!important;
+  align-items:center!important;
+  min-height:8mm!important;
+  padding:1.2mm 0!important;
+  font-size:7.9pt!important;
+  line-height:1.35!important;
+  box-sizing:border-box!important;
+}
+.master-total-label{
+  min-width:0!important;
+  overflow-wrap:anywhere!important;
+  line-height:1.35!important;
+}
+.master-total-amount{
+  text-align:right!important;
+  white-space:nowrap!important;
+  font-size:14.5pt!important;
+  line-height:1.05!important;
+}
+.master-total-amount-small{font-size:8.2pt!important;line-height:1.35!important}
+.master-total-unit{text-align:right!important;white-space:nowrap!important}
+.master-paid-words{
+  margin-top:2mm!important;
+  text-align:right!important;
+  font-size:8.3pt!important;
+  line-height:1.4!important;
+  font-weight:600!important;
+  color:#263b51!important;
+}
+.reference-qo .master-total-box,.reference-qo .master-net-box{
+  background:#eeeeff!important;color:#45459a!important;
+}
+.paper-invoice .master-total-box,.paper-invoice .master-net-box{
+  background:#e4f4e9!important;color:#176b3a!important;
+}
+
+/* PAYMENT + NOTE/TERMS */
+.master-payment{
+  display:grid!important;
+  grid-template-columns:19mm minmax(0,1fr)!important;
+  gap:3mm!important;
+  align-items:center!important;
+  min-height:15mm!important;
+  margin-top:3mm!important;
+  padding:3.2mm 0!important;
+  border-top:1px solid #d8d9de!important;
+  border-bottom:1px solid #d8d9de!important;
+  font-size:8.2pt!important;
+  line-height:1.5!important;
+}
+.master-section-title{font-weight:800!important;color:#17283d!important}
+.master-bank-row{display:flex!important;align-items:center!important;gap:3mm!important;min-width:0!important}
+.master-bank-logo{width:11.5mm!important;height:11.5mm!important;flex:0 0 11.5mm!important;object-fit:contain!important}
+.master-bank-copy{min-width:0!important;line-height:1.5!important}
+.master-note{
+  display:grid!important;
+  grid-template-columns:38mm minmax(0,1fr)!important;
+  gap:3mm!important;
+  align-items:start!important;
+  min-height:12mm!important;
+  margin:0!important;
+  padding:3mm 0!important;
+  border-bottom:1px solid #d8d9de!important;
+  font-size:8.2pt!important;
+  line-height:1.5!important;
+}
+
+/* CERTIFICATION */
+.master-cert{
+  margin-top:3mm!important;
+  padding-top:3mm!important;
+  border-top:1px solid #d8d9de!important;
+}
+.master-cert-head{
+  margin-bottom:3mm!important;
+  font-size:8pt!important;
+  line-height:1.5!important;
+  color:#17283d!important;
+}
+.master-cert-title{font-weight:800!important;margin-bottom:.8mm!important}
+.master-cert-note{font-size:7.5pt!important;color:#53687d!important}
+.master-cert-grid{
+  display:grid!important;
+  grid-template-columns:repeat(5,minmax(0,1fr))!important;
+  gap:3mm!important;
+  align-items:start!important;
+}
+.master-cert-cell{
+  min-width:0!important;
+  display:grid!important;
+  grid-template-rows:18mm 0 auto!important;
+  row-gap:1.8mm!important;
+  align-items:start!important;
+  text-align:center!important;
+}
+.master-cert-visual{
+  height:18mm!important;
+  display:flex!important;
+  align-items:flex-end!important;
+  justify-content:center!important;
+  overflow:visible!important;
+}
+.master-signature-img{
+  display:block!important;
+  max-height:9.5mm!important;
+  max-width:30mm!important;
+  width:auto!important;
+  object-fit:contain!important;
+  object-position:center bottom!important;
+  margin:0 auto 1.8mm!important;
+}
+.master-stamp-img{
+  display:block!important;
+  width:18mm!important;height:18mm!important;
+  max-width:18mm!important;max-height:18mm!important;
+  object-fit:contain!important;object-position:center!important;
+}
+.cert-line{
+  width:36mm!important;
+  max-width:100%!important;
+  height:0!important;
+  margin:0 auto!important;
+  border-top:1px solid #7b8c9d!important;
+}
+.master-cert-meta{
+  min-height:12mm!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  gap:.45mm!important;
+  font-size:7.15pt!important;
+  line-height:1.35!important;
+  color:#1f3145!important;
+}
+.master-cert-meta b{font-weight:700!important}
+.master-cert-meta span{display:block!important}
+
+/* FOOTER */
+.master-footer{
+  margin-top:3mm!important;
+  padding-top:2mm!important;
+  border-top:1px solid #dce6ef!important;
+  text-align:center!important;
+  font-size:7.1pt!important;
+  line-height:1.45!important;
+  color:#73869a!important;
+}
+
+/* A4 safety */
+.reference-qo,.paper-invoice{
+  break-inside:avoid!important;
+  page-break-inside:avoid!important;
+}
+</style>
+<meta name="sante-final-master-components" content="2026-10-23">
+
+
+<style id="sante-summary-r2-identical-geometry">
+/* R2 — Quotation and Invoice summary use the exact same geometry. */
+.reference-qo .master-summary,
+.paper-invoice .master-summary{
+  grid-template-columns:minmax(0,1fr) 82mm!important;
+  gap:7mm!important;
+}
+.reference-qo .master-summary-right,
+.paper-invoice .master-summary-right{
+  width:82mm!important;
+  min-width:82mm!important;
+  max-width:82mm!important;
+}
+.reference-qo .master-total-box,
+.reference-qo .master-net-box,
+.paper-invoice .master-total-box,
+.paper-invoice .master-net-box{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) 31mm 8mm!important;
+  column-gap:2mm!important;
+  align-items:center!important;
+  min-height:15mm!important;
+  padding:3.2mm 3.5mm!important;
+  border-radius:1.5mm!important;
+  box-sizing:border-box!important;
+}
+.reference-qo .master-total-line,
+.paper-invoice .master-total-line{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) 31mm 8mm!important;
+  column-gap:2mm!important;
+  align-items:center!important;
+  min-height:8mm!important;
+  padding:1.2mm 0!important;
+  box-sizing:border-box!important;
+  font-size:7.9pt!important;
+  line-height:1.35!important;
+}
+.reference-qo .master-total-label,
+.paper-invoice .master-total-label{
+  min-width:0!important;
+  max-width:100%!important;
+  line-height:1.35!important;
+  overflow-wrap:normal!important;
+  word-break:normal!important;
+}
+.reference-qo .master-total-box .master-total-label,
+.reference-qo .master-net-box .master-total-label,
+.paper-invoice .master-total-box .master-total-label,
+.paper-invoice .master-net-box .master-total-label{
+  font-size:7.9pt!important;
+  font-weight:600!important;
+}
+.reference-qo .master-total-amount,
+.paper-invoice .master-total-amount{
+  text-align:right!important;
+  white-space:nowrap!important;
+  font-size:14.5pt!important;
+  line-height:1.05!important;
+}
+.reference-qo .master-total-amount-small,
+.paper-invoice .master-total-amount-small{
+  font-size:8.2pt!important;
+  line-height:1.35!important;
+  font-weight:400!important;
+}
+.reference-qo .master-total-unit,
+.paper-invoice .master-total-unit{
+  text-align:right!important;
+  white-space:nowrap!important;
+  font-size:7.9pt!important;
+}
+.reference-qo .master-paid-words,
+.paper-invoice .master-paid-words{
+  margin-top:2mm!important;
+  min-height:5mm!important;
+  text-align:right!important;
+  font-size:8.3pt!important;
+  line-height:1.4!important;
+  font-weight:600!important;
+}
+</style>
+<meta name="sante-summary-r2" content="IDENTICAL-GEOMETRY">
+
+
+<style id="sante-net-label-break-r3">
+.reference-qo .master-net-box .master-total-label,
+.paper-invoice .master-net-box .master-total-label{
+  line-height:1.32!important;
+  white-space:normal!important;
+}
+</style>
+<meta name="sante-net-label-break-r3" content="FIXED-TWO-LINE-NET-LABEL">
+
+<meta name="sante-build-member-sync" content="ADMIN-ACCOUNTING-PDF-REPAIR-R4">
+<meta name="sante-build-taxid-validation" content="R5-TAXID-OPTIONAL-NONBLOCKING">
+<meta name="sante-build-pdf-repair" content="R6-STAGE-AWARE-REPAIR">
+<meta name="sante-workflow" content="R7-ACCOUNTING-STATE-ACTIONS">
+<meta name="sante-pdf-build" content="R20-A4-DESKTOP-VIEWPORT">
+<meta name="sante-pdf-build" content="R10-HTML2PDF-CANVAS-FULL-A4">
+<meta name="sante-document-filename-r14" content="DOCUMENT-NUMBER-AS-PDF-NAME">
+<meta name="sante-pdf-version" content="R15-VERSIONED-STORAGE-LATEST">
+<meta name="sante-single-pdf-master" content="R21-ADMIN-UPLOAD-MEMBER-SAME-FILE">
+
+<style id="sante-receipt-tax-final-r22">
+/* RECEIPT / TAX INVOICE FINAL MASTER — LIGHT BLUE */
+.paper-receipt{
+  --rt-blue:#2f80ed;
+  --rt-blue-dark:#175ca8;
+  --rt-blue-soft:#eaf4ff;
+  --rt-blue-soft-2:#f4f9ff;
+  --rt-blue-line:#c9ddf3;
+  color:#17283d!important;
+}
+.paper-receipt .rth-title{
+  color:var(--rt-blue)!important;
+}
+.paper-receipt .rth-docbox{
+  background:var(--rt-blue-soft)!important;
+  color:#173654!important;
+}
+.paper-receipt th{
+  background:var(--rt-blue-soft)!important;
+  color:#173654!important;
+}
+.paper-receipt .total-row.grand{
+  background:var(--rt-blue-soft)!important;
+  color:var(--rt-blue-dark)!important;
+  border-color:var(--rt-blue-line)!important;
+}
+.paper-receipt .paid-row{
+  background:var(--rt-blue-soft-2)!important;
+  border:1px solid var(--rt-blue-line)!important;
+  color:#173654!important;
+}
+.paper-receipt .paid-row b:last-child{
+  color:var(--rt-blue-dark)!important;
+}
+.paper-receipt .payment-box{
+  border-top-color:var(--rt-blue-line)!important;
+  border-bottom-color:var(--rt-blue-line)!important;
+}
+.paper-receipt .payment-title,
+.paper-receipt .signature-header{
+  color:var(--rt-blue-dark)!important;
+}
+.paper-receipt .accounting-foot{
+  color:#5b7ea6!important;
+}
+.paper-receipt .signature-area{
+  border-top-color:var(--rt-blue-line)!important;
+}
+.paper-receipt .signature-line{
+  border-top-color:#7892ad!important;
+}
+.paper-receipt .receipt-tax-badge{
+  display:inline-block;
+  margin-top:1.5mm;
+  padding:1.1mm 2.2mm;
+  border-radius:999px;
+  background:var(--rt-blue-soft)!important;
+  color:var(--rt-blue-dark)!important;
+  font-size:6.8pt;
+  font-weight:700;
+}
+</style>
+<meta name="sante-receipt-tax-build" content="R22-LIGHT-BLUE-FINAL-MASTER">
+
+
+<style id="sante-receipt-tax-final-master-r24">
+/* =========================================================
+   RECEIPT / TAX INVOICE — FINAL MASTER
+   Geometry intentionally matches Quotation/Invoice.
+   ========================================================= */
+.paper-receipt{
+  --rt-blue:#4b98e8;
+  --rt-blue-dark:#276cae;
+  --rt-blue-soft:#e8f4ff;
+  --rt-blue-soft-2:#f3f9ff;
+  --rt-blue-line:#c7ddf2;
+  color:#17283d!important;
+}
+
+/* SAFE A4 HEADER — same master geometry as Invoice */
+.paper-receipt .rth{
+  display:grid!important;
+  grid-template-columns:20mm minmax(61mm,1fr) minmax(42mm,.76fr) 50mm!important;
+  column-gap:3mm!important;
+  align-items:start!important;
+  width:100%!important;
+  padding:0 0 4.5mm!important;
+  border-bottom:1px solid #cfd7df!important;
+  box-sizing:border-box!important;
+}
+.paper-receipt .rth-logo-cell{
+  display:flex!important;align-items:flex-start!important;justify-content:center!important;padding-top:.3mm!important
+}
+.paper-receipt .rth-logo{
+  width:19mm!important;height:24mm!important;max-width:19mm!important;max-height:24mm!important;
+  object-fit:contain!important;object-position:center top!important
+}
+.paper-receipt .rth-seller{
+  display:grid!important;row-gap:1mm!important;font-size:7.8pt!important;line-height:1.4!important
+}
+.paper-receipt .rth-row{
+  display:grid!important;grid-template-columns:31mm minmax(0,1fr)!important;
+  column-gap:1.5mm!important;align-items:start!important;margin:0!important;padding:0!important
+}
+.paper-receipt .rth-label{
+  font-size:7.75pt!important;line-height:1.4!important;text-align:right!important;white-space:nowrap!important
+}
+.paper-receipt .rth-company,
+.paper-receipt .rth-company>div,
+.paper-receipt .rth-address,
+.paper-receipt .rth-address>div,
+.paper-receipt .rth-tax-row>div:last-child{
+  font-size:7.8pt!important;line-height:1.4!important;white-space:nowrap!important
+}
+.paper-receipt .rth-contact{
+  display:grid!important;margin-left:3.2mm!important;padding:0!important;row-gap:1.25mm!important;
+  font-size:7.2pt!important;line-height:1.35!important
+}
+.paper-receipt .rth-contact-row{
+  display:grid!important;grid-template-columns:4mm minmax(0,1fr)!important;column-gap:1mm!important;
+  margin:0!important;padding:0!important;line-height:1.35!important
+}
+.paper-receipt .rth-contact-row span:last-child{font-size:7.15pt!important;white-space:nowrap!important}
+.paper-receipt .rth-doc{min-width:0!important;max-width:50mm!important;text-align:right!important}
+.paper-receipt .rth-copy{
+  min-height:4.5mm!important;margin:0 0 1.2mm!important;font-size:7.3pt!important;line-height:1.1!important;white-space:nowrap!important
+}
+.paper-receipt .rth-title{
+  margin:0 0 3.2mm!important;
+  color:var(--rt-blue)!important;
+  font-size:16.2pt!important;
+  line-height:1.12!important;
+  font-weight:700!important;
+  white-space:normal!important;
+  overflow-wrap:normal!important;
+  text-align:right!important;
+}
+.paper-receipt .rth-docbox{
+  display:grid!important;
+  grid-template-columns:22mm minmax(0,1fr)!important;
+  padding:3.4mm 3.6mm!important;
+  gap:1.35mm 1.8mm!important;
+  border-radius:2mm!important;
+  background:var(--rt-blue-soft)!important;
+  color:#173654!important;
+  text-align:left!important;
+  font-size:7.55pt!important;
+  line-height:1.35!important;
+}
+.paper-receipt .rth-docbox b,
+.paper-receipt .rth-docbox span{white-space:nowrap!important;line-height:1.35!important}
+
+/* CUSTOMER — same geometry as Invoice */
+.paper-receipt .rt-party{
+  display:grid!important;
+  grid-template-columns:minmax(0,1.16fr) minmax(0,.84fr)!important;
+  gap:8mm!important;
+  padding-top:4mm!important;
+  align-items:start!important
+}
+.paper-receipt .rt-party-row{
+  display:grid!important;grid-template-columns:32mm minmax(0,1fr)!important;column-gap:1.4mm!important;
+  margin:0!important;padding:0!important;min-height:0!important;font-size:7.7pt!important;line-height:1.42!important
+}
+.paper-receipt .rt-contact-title{margin:0 0 1mm!important;font-size:7.8pt!important;line-height:1.4!important}
+.paper-receipt .rt-contact-row{
+  display:grid!important;grid-template-columns:4mm minmax(0,1fr)!important;column-gap:1.1mm!important;
+  margin:0!important;padding:0!important;min-height:0!important;font-size:7.7pt!important;line-height:1.42!important
+}
+
+/* TABLE */
+.paper-receipt .master-items{margin-top:4mm!important}
+.paper-receipt .master-items th{
+  background:var(--rt-blue-soft)!important;color:#173654!important
+}
+.paper-receipt .receipt-doc-spacer{min-height:8mm!important}
+
+/* SUMMARY — same structure/dimensions as Invoice */
+.paper-receipt .master-summary{
+  grid-template-columns:minmax(0,1fr) 80mm!important;
+  gap:7mm!important;
+  margin:0!important;
+  padding-top:2.5mm!important;
+  border-top:1px solid #d8d9de!important
+}
+.paper-receipt .master-total-box,
+.paper-receipt .master-net-box{
+  background:var(--rt-blue-soft)!important;
+  color:var(--rt-blue-dark)!important;
+}
+.paper-receipt .receipt-paid-box{
+  margin-top:1.2mm!important;
+  background:var(--rt-blue-soft-2)!important;
+  border:1px solid var(--rt-blue-line)!important;
+}
+.paper-receipt .master-total-amount{color:var(--rt-blue-dark)!important}
+.paper-receipt .master-paid-words{color:#263b51!important}
+
+/* PAYMENT RECEIVED */
+.paper-receipt .receipt-master-payment{
+  display:grid!important;
+  grid-template-columns:19mm minmax(0,1.15fr) minmax(0,.9fr) minmax(0,.8fr)!important;
+  gap:3mm!important;
+  align-items:center!important;
+  min-height:16mm!important;
+  margin-top:3mm!important;
+  padding:3.2mm 0!important;
+  border-top:1px solid #d8d9de!important;
+  border-bottom:1px solid #d8d9de!important;
+  font-size:7.8pt!important;
+  line-height:1.45!important
+}
+.paper-receipt .receipt-payment-bank{
+  display:flex!important;align-items:center!important;gap:3mm!important;min-width:0!important
+}
+.paper-receipt .receipt-payment-meta{display:grid!important;row-gap:.8mm!important;min-width:0!important}
+.paper-receipt .receipt-payment-meta div{min-width:0!important;overflow-wrap:anywhere!important}
+.paper-receipt .receipt-payment-amount{text-align:right!important;white-space:nowrap!important}
+.paper-receipt .receipt-payment-amount b{display:block!important;color:var(--rt-blue-dark)!important;font-size:10.5pt!important}
+
+/* NOTE/CERT/FOOTER — same master components */
+.paper-receipt .master-note{border-bottom:1px solid #d8d9de!important}
+.paper-receipt .receipt-master-cert{margin-top:3mm!important;padding-top:3mm!important}
+.paper-receipt .master-cert-note{color:#53687d!important}
+.paper-receipt .master-footer{color:#6d86a0!important}
+
+/* Remove obsolete receipt-only styling from earlier rounds */
+.paper-receipt .receipt-tax-badge{display:none!important}
+</style>
+<meta name="sante-receipt-tax-final-master" content="R24-MASTER-GRID-LIGHT-BLUE">
+
+<meta name="sante-payment-workflow" content="R27-GENERAL-PAYMENT-REVIEW">
+
+
+<style id="sante-accounting-documents-final-polish">
+/* Final visual consistency and receipt heading fit. Preserve existing document data and calculations. */
+.btn,.hero-actions .btn,.accounting-subnav a{
+  display:inline-flex;align-items:center;justify-content:center;text-align:center;
+  line-height:1.35;vertical-align:middle
+}
+.hero-actions{align-items:center}
+.hero-actions .btn{min-height:42px;white-space:normal;padding:10px 15px}
+.accounting-subnav a{min-height:42px;padding:10px 16px;white-space:normal}
+.accounting-hero{width:100%;display:block;overflow:hidden;margin-bottom:18px;padding:6px;border-radius:24px;background:#fff;box-shadow:0 10px 30px rgba(11,45,103,.07)}
+.accounting-hero picture,.accounting-hero img{display:block;width:100%}
+.accounting-hero img{height:auto;object-fit:contain;border-radius:18px}
+@media(max-width:767px){
+  .accounting-hero{padding:5px;border-radius:18px;margin-bottom:14px}
+  .accounting-hero img{border-radius:14px}
+  .hero-actions{justify-content:flex-start}
+  .hero-actions .btn{flex:1 1 100%}
+}
+/* Receipt/tax invoice uses the agreed pale-blue accent and must not overflow the A4 page. */
+.paper-receipt .rth-title{
+  color:#2673b9!important;
+  font-size:17pt!important;
+  line-height:1.15!important;
+  white-space:normal!important;
+  overflow-wrap:anywhere!important;
+  max-width:100%!important;
+  margin:0 0 3.5mm auto!important;
+  text-align:right!important;
+}
+.paper-receipt .rth-doc{
+  min-width:0!important;
+  max-width:100%!important;
+}
+.paper-receipt .rth-docbox{
+  background:#e8f4ff!important;
+  border:1px solid #c9e3fb!important;
+  grid-template-columns:minmax(20mm,24mm) minmax(0,1fr)!important;
+  max-width:100%!important;
+  overflow-wrap:anywhere!important;
+}
+.paper-receipt .rth-docbox span{
+  white-space:normal!important;
+  overflow-wrap:anywhere!important;
+}
+.paper-receipt .rth-docbox b{white-space:nowrap!important}
+</style>
+
 </head>
 <body>
 <div id="loading" class="loading">กำลังโหลดเอกสารบัญชี...</div>
@@ -1059,7 +2959,9 @@ td { font-size: 12px !important; line-height: 1.55 !important; }
   <div class="hero-actions">
    <button id="syncQuotesBtn" class="btn yellow">ซิงก์ใบเสนอราคา → ใบแจ้งหนี้</button>
    <button id="generateReadyBtn" class="btn">ออก PDF เอกสารพร้อมออก</button>
-   <button id="newReceiptBtn" class="btn">สร้าง Draft ใบเสร็จจาก Payment</button>
+<button class="btn" id="uploadMasterPdfBtn" type="button">อัปโหลด PDF ต้นฉบับ</button>
+   <a class="btn" href="admin-payments.html" style="text-decoration:none">ตรวจสอบการชำระเงิน</a>
+<button id="newReceiptBtn" class="btn">สร้าง Draft ใบเสร็จจาก Payment</button>
    <button id="newCreditNoteBtn" class="btn" style="display:none">สร้างใบลดหนี้</button>
   </div>
  </section>
@@ -1220,7 +3122,7 @@ const SANTE={
  nameEn:"SANTE CONSULTING CO., LTD.",
  address:"49 ถนนทางหลวงสาย 3191 ตำบลมาบข่า อำเภอนิคมพัฒนา จังหวัดระยอง 21180",
  taxId:"0215566009041",
- phone:"083 4874542",
+ phone:"083 487 4542",
  email:"santeconsulting45@gmail.com",
  website:"https://santeconsulting.co.th",
  bank:"ธนาคารกสิกรไทย",
@@ -1234,6 +3136,12 @@ let docs=[],editing=null,payments=[];
 const $=id=>document.getElementById(id);
 function esc(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
 function money(v){return new Intl.NumberFormat("th-TH",{minimumFractionDigits:2,maximumFractionDigits:2}).format(Number(v||0))}
+function formatDocumentDate(v){
+ const s=String(v||"").trim();
+ const m=s.match(/^(\d{4})-(\d{2})-(\d{2})/);
+ return m?`${m[3]}/${m[2]}/${m[1]}`:s;
+}
+function rateText(v){const n=Number(v||0);return Number.isFinite(n)?String(Number(n.toFixed(4))):"0";}
 function thaiIntegerText(n){
  n=Math.floor(Math.abs(Number(n)||0));
  if(n===0)return "ศูนย์";
@@ -1308,7 +3216,7 @@ function updateWorkflowActions(){
     : isCreditNote
       ? "<b>ขั้นตอนใบลดหนี้:</b> 1) เลือกใบเสร็จ/ใบกำกับภาษีต้นทาง → 2) สร้าง Draft → 3) ตรวจเหตุผล/ยอดลด/VAT → 4) บันทึก → 5) ออก PDF"
       : type==="INVOICE"
-        ? "<b>ขั้นตอนใบแจ้งหนี้:</b> อนุมัติใบเสนอราคาให้เป็น APPROVED ก่อน → กด “ซิงก์ใบเสนอราคา → ใบแจ้งหนี้” → ตรวจ Invoice → ออก PDF"
+        ? "<b>ขั้นตอนใบแจ้งหนี้:</b> APPROVED Quotation → สร้าง Invoice DRAFT/READY → ตรวจ/แก้ไข → พร้อมออก → ออกเอกสาร (ISSUED) → ลูกค้าเห็นใน Member · ISSUED แก้ยอดไม่ได้ ถ้าผิดให้ยกเลิก"
         : "<b>ขั้นตอนเอกสาร:</b> ใบเสนอราคาที่ APPROVED เท่านั้นจึงจะสร้างใบแจ้งหนี้ได้";
 }
 
@@ -1320,10 +3228,48 @@ async function ensureStaff(){
  return true;
 }
 
+
+async function hydrateInvoicesFromQuotations(){
+ const invoiceDocs=docs.filter(x=>x.document_type==="INVOICE"&&x.quotation_id);
+ const quotationIds=[...new Set(invoiceDocs.map(x=>x.quotation_id).filter(Boolean))];
+ if(!quotationIds.length)return;
+ try{
+  const [qr,ir]=await Promise.all([
+   db.from("quotations").select("id,quotation_no,customer_name,organization_name,customer_tax_id,customer_branch,billing_address,email,phone,document_subject,subtotal,vat_rate,vat_amount,grand_total,wht_rate,wht_amount,net_receivable").in("id",quotationIds),
+   db.from("quotation_items").select("*").in("quotation_id",quotationIds).order("sort_order")
+  ]);
+  if(qr.error||ir.error){console.warn("invoice hydration skipped",qr.error||ir.error);return;}
+  const qMap=new Map((qr.data||[]).map(x=>[x.id,x]));
+  const itemMap=new Map();
+  (ir.data||[]).forEach(i=>{
+   if(!itemMap.has(i.quotation_id))itemMap.set(i.quotation_id,[]);
+   itemMap.get(i.quotation_id).push({description:i.description||"",quantity:Number(i.quantity||0),unit:i.unit||"งาน",unit_price:Number(i.unit_price||0),discount_amount:Number(i.discount_amount||0),line_total:Number(i.line_total||0),sort_order:Number(i.sort_order||0),vat_rate:i.vat_rate});
+  });
+  invoiceDocs.forEach(x=>{
+   const q=qMap.get(x.quotation_id); if(!q)return;
+   x.quotation_no=q.quotation_no||x.quotation_no;
+   x.customer_name=q.customer_name||x.customer_name;
+   x.organization_name=q.organization_name||x.organization_name;
+   x.customer_tax_id=q.customer_tax_id||x.customer_tax_id;
+   x.customer_branch=q.customer_branch||x.customer_branch;
+   x.billing_address=q.billing_address||x.billing_address;
+   x.email=q.email||x.email; x.phone=q.phone||x.phone;
+   x.document_subject=q.document_subject||x.document_subject;
+   x.subtotal=Number(q.subtotal??x.subtotal??0); x.vat_rate=Number(q.vat_rate??x.vat_rate??7);
+   x.vat_amount=Number(q.vat_amount??x.vat_amount??0); x.grand_total=Number(q.grand_total??x.grand_total??0);
+   x.wht_rate=Number(q.wht_rate??x.wht_rate??0); x.wht_amount=Number(q.wht_amount??x.wht_amount??0);
+   x.net_receivable=Number(q.net_receivable??x.net_receivable??x.grand_total??0);
+   const srcItems=itemMap.get(x.quotation_id)||[]; if(srcItems.length)x.items=srcItems;
+   if(!x.terms||/ใบเสนอราคา|60\s*วัน/i.test(String(x.terms)))x.terms="กำหนดชำระภายใน 30 วันนับจากวันที่ออกใบแจ้งหนี้";
+  });
+ }catch(err){console.warn("invoice hydration error",err);}
+}
+
 async function loadDocs(){
  const {data,error}=await db.rpc("admin_get_accounting_documents",{p_status:null,p_type:null,p_limit:500});
  if(error)throw error;
  docs=Array.isArray(data)?data:[];
+ await hydrateInvoicesFromQuotations();
  render();
 }
 
@@ -1348,9 +3294,40 @@ function render(){
   <td><div class="row-actions">
     <button class="btn small preview" onclick="openPreview('${x.id}')">ดูเอกสาร</button>
     ${["DRAFT","READY_TO_ISSUE","WAITING_APPROVAL"].includes(x.document_status)?`<button class="btn small" onclick="openEditor('${x.id}')">แก้ไข</button>`:""}
-    ${["READY_TO_ISSUE","APPROVED"].includes(x.document_status)?`<button class="btn small yellow" onclick="issueOne('${x.id}')">ออก PDF</button>`:""}
+    ${x.document_status==="DRAFT"?`<button class="btn small yellow" onclick="markAccountingReady('${x.id}')">พร้อมออก</button><button class="btn small red" onclick="deleteDraftAccounting('${x.id}')">ลบ Draft</button>`:""}
+    ${["READY_TO_ISSUE","APPROVED"].includes(x.document_status)?`<button class="btn small yellow" onclick="issueOne('${x.id}')">ออกเอกสาร</button><button class="btn small red" onclick="cancelAccounting('${x.id}')">ยกเลิก</button>`:""}
+    ${x.document_status==="ISSUED"?`<button class="btn small yellow" onclick="issueOne('${x.id}',false,true)">สร้าง PDF ใหม่</button><button class="btn small red" onclick="cancelAccounting('${x.id}')">ยกเลิก</button>`:""}
   </div></td>
  </tr>`).join(""):`<tr><td colspan="9"><div class="empty">ยังไม่มีเอกสารบัญชี</div></td></tr>`;
+}
+
+
+async function markAccountingReady(id){
+ const x=docs.find(d=>d.id===id); if(!x)return;
+ if(x.document_status!=="DRAFT")return alert("เปลี่ยนเป็นพร้อมออกได้เฉพาะ DRAFT");
+ if(!confirm(`ยืนยันว่า ${x.document_no||"เอกสารนี้"} ตรวจข้อมูลแล้วและพร้อมออกเอกสาร?`))return;
+ const {error}=await db.rpc("admin_mark_accounting_ready",{p_document_id:id});
+ if(error)return alert("เปลี่ยนสถานะไม่สำเร็จ: "+error.message);
+ await loadDocs();
+}
+async function deleteDraftAccounting(id){
+ const x=docs.find(d=>d.id===id); if(!x)return;
+ if(x.document_status!=="DRAFT")return alert("ลบได้เฉพาะ DRAFT");
+ if(!confirm(`ลบ Draft ${x.document_no||""} ถาวรหรือไม่?`))return;
+ const {error}=await db.rpc("admin_delete_draft_accounting_document",{p_document_id:id});
+ if(error)return alert("ลบ Draft ไม่สำเร็จ: "+error.message);
+ await loadDocs();
+}
+async function cancelAccounting(id){
+ const x=docs.find(d=>d.id===id); if(!x)return;
+ if(x.document_status==="DRAFT")return alert("Draft ให้ใช้ปุ่มลบ");
+ if(x.document_status==="CANCELLED")return;
+ const reason=prompt("เหตุผลการยกเลิกเอกสาร (เว้นว่างได้)","");
+ if(reason===null)return;
+ if(!confirm(`ยืนยันยกเลิก ${x.document_no||"เอกสาร"}? เลขเอกสารและประวัติจะยังคงอยู่`))return;
+ const {error}=await db.rpc("admin_cancel_accounting_document",{p_document_id:id,p_reason:reason||null});
+ if(error)return alert("ยกเลิกเอกสารไม่สำเร็จ: "+error.message);
+ await loadDocs();
 }
 
 async function syncQuotes(){
@@ -1484,6 +3461,7 @@ function openPreview(id){
  $("previewBg").classList.add("show");
 }
 async function printAccountingPreview(){
+ const printCode=(previewing?.document_no||"DOCUMENT").replace(/[^A-Za-z0-9_-]/g,"_")||"DOCUMENT";
  const source=document.querySelector("#previewPaper .paper");
  if(!source)return alert("ไม่พบตัวอย่างเอกสาร");
  const iframe=document.createElement("iframe");
@@ -1491,15 +3469,16 @@ async function printAccountingPreview(){
  Object.assign(iframe.style,{position:"fixed",right:"0",bottom:"0",width:"0",height:"0",border:"0"});
  document.body.appendChild(iframe);
  const doc=iframe.contentDocument||iframe.contentWindow.document;
- const styleMarkup=[...document.querySelectorAll("style")].map(s=>s.outerHTML).join("\\n");
- const fontLinks=[...document.querySelectorAll('link[rel="stylesheet"]')].map(l=>l.outerHTML).join("\\n");
+ const styleMarkup=[...document.querySelectorAll("style")].map(s=>s.outerHTML).join("\n");
+ const fontLinks=[...document.querySelectorAll('link[rel="stylesheet"]')].map(l=>l.outerHTML).join("\n");
  doc.open();
- doc.write(`<!doctype html><html lang="th"><head><meta charset="utf-8">${fontLinks}${styleMarkup}
+ doc.write(`<!doctype html><html lang="th"><head><meta charset="utf-8"><title>${printCode}</title>${fontLinks}${styleMarkup}
  <style id="accounting-print-isolation-r23">
  html,body{margin:0!important;padding:0!important;width:210mm!important;min-height:297mm!important;background:#fff!important;overflow:visible!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;color-adjust:exact!important}
  body>.paper{display:block!important;position:relative!important;margin:0!important;box-shadow:none!important;transform:none!important;zoom:1!important;width:210mm!important;min-width:210mm!important;max-width:210mm!important;min-height:297mm!important;page-break-after:avoid!important;break-after:avoid-page!important}
  @page{size:A4 portrait;margin:0}
- </style></head><body>${source.outerHTML}</body></html>`);
+ </style></head><body>${source.outerHTML}<input id="masterPdfUploadInput" type="file" accept="application/pdf,.pdf" style="display:none">
+</body></html>`);
  doc.close();
  try{
    if(doc.fonts?.ready)await doc.fonts.ready;
@@ -1606,7 +3585,7 @@ function paperHtml(x){
  const rows=items.length?items.map((i,n)=>{
    const imageUrl=i.image_url||i.imageUrl||i.thumbnail_url||i.thumbnailUrl||"";
    const title=i.description||i.name||x.document_subject||"";
-   const sub=i.detail||i.details||i.description2||i.remark||x.document_subject||"";
+   const sub=i.detail||i.details||i.description2||i.remark||"";
    const code=i.code||i.product_code||i.sku||"";
    const thumb=imageUrl?`<img class="item-thumb" src="${esc(imageUrl)}" crossorigin="anonymous">`:"";
    return `<tr>
@@ -1615,14 +3594,14 @@ function paperHtml(x){
      <td class="unit-col">${esc(i.unit||"งาน")}</td>
      <td class="price-col money-cell">${money(i.unit_price)}</td>
      <td class="disc-col money-cell">${money(i.discount_amount)}</td>
-     <td class="vat-col money-cell">${money(i.vat_rate??x.vat_rate??7)}%</td>
+     <td class="vat-col money-cell">${rateText(i.vat_rate??x.vat_rate??7)}%</td>
      <td class="amount-col money-cell">${money(i.line_total)}</td>
    </tr>`;
  }).join(""):`<tr>
-   <td class="desc-col"><span class="item-no">1.</span><div class="item-main">${esc(x.document_subject||"ค่าบริการ / ค่าอบรม SANTE")}</div><div class="item-sub">${x.note?esc(x.note):""}</div></td>
+   <td class="desc-col"><span class="item-no">1.</span><div class="item-main">${esc(x.document_subject||"ค่าบริการ / ค่าอบรม SANTE")}</div></td>
    <td class="qty-col">1.00</td><td class="unit-col">งาน</td>
    <td class="price-col money-cell">${money(x.subtotal)}</td><td class="disc-col money-cell">0.00</td>
-   <td class="vat-col money-cell">${money(x.vat_rate??7)}%</td><td class="amount-col money-cell">${money(x.subtotal)}</td>
+   <td class="vat-col money-cell">${rateText(x.vat_rate??7)}%</td><td class="amount-col money-cell">${money(x.subtotal)}</td>
  </tr>`;
  const isReceipt=x.document_type==="RECEIPT_TAX_INVOICE";
  const isInvoice=x.document_type==="INVOICE";
@@ -1633,6 +3612,7 @@ function paperHtml(x){
  const copyLabel=accountingCopyLabel();
  const receiveAmount=x.amount_received??x.net_receivable??x.grand_total;
  const paymentNo=x.payment_no||"-";
+ const invoiceTerms=(isInvoice&&(!x.terms||/ใบเสนอราคา|60\s*วัน/i.test(String(x.terms))))?"กำหนดชำระภายใน 30 วันนับจากวันที่ออกใบแจ้งหนี้":(x.terms||"");
  return `<div class="paper ${isInvoice?"paper-invoice":isReceipt?"paper-receipt":isCreditNote?"paper-creditnote":"paper-other"}">
   ${isInvoice?`
   <div class="invh">
@@ -1715,11 +3695,12 @@ function paperHtml(x){
     <div class="rth-doc">
       <div class="rth-copy">${copyLabel}</div>
       <div class="rth-title">${isReceipt?"ใบเสร็จรับเงิน / ใบกำกับภาษี":isCreditNote?"ใบลดหนี้":esc(docTitle)}</div>
+      
       <div class="rth-docbox">
-        <b>เลขที่เอกสาร :</b><span>${esc(x.document_no||"-")}</span>
+        <b>เลขที่เอกสาร :</b><span>${esc(isReceipt?(x.document_no||"รอออกเลข"):(x.document_no||"-"))}</span>
         <b>วันที่ออก :</b><span>${esc(x.issue_date||new Date().toISOString().slice(0,10))}</span>
-        ${isReceipt?`<b>Payment No. :</b><span>${esc(paymentNo)}</span>`:""}
-        ${isCreditNote?`<b>เอกสารอ้างอิง :</b><span>${esc(refText(x))}</span>`:`<b>อ้างอิง :</b><span>${esc(refText(x))}</span>`}
+        ${isReceipt?`<b>วันที่ชำระ :</b><span>${esc(x.payment_date||x.issue_date||"-")}</span>`:""}
+        ${isCreditNote?`<b>เอกสารอ้างอิง :</b><span>${esc(refText(x))}</span>`:`<b>อ้างอิง :</b><span>${esc(isReceipt?(x.invoice_no||x.quotation_no||paymentNo||"-"):refText(x))}</span>`}
       </div>
     </div>
   </div>`}
@@ -1729,6 +3710,7 @@ function paperHtml(x){
       <div class="inv-party-row inv-customer-name"><b>ลูกค้า :</b><div><b>${esc(x.organization_name||x.customer_name||"-")}</b></div></div>
       <div class="inv-party-row"><b>ที่อยู่ :</b><div>${esc(x.billing_address||"-")}</div></div>
       <div class="inv-party-row"><b>เลขประจำตัวผู้เสียภาษี :</b><div>${esc(x.customer_tax_id||"-")} ${esc(x.customer_branch||"")}</div></div>
+      <div class="inv-party-row"><b>เรียน :</b><div>${esc(x.document_subject||"-")}</div></div>
     </div>
     <div class="inv-contact">
       <div class="inv-contact-title">ติดต่อกลับที่ :</div>
@@ -1750,116 +3732,638 @@ function paperHtml(x){
       <div class="rt-contact-row"><span>✉</span><span>${esc(x.email||"-")}</span></div>
     </div>
   </div>`}
-  <table>
+  <table class="${(isInvoice||isReceipt)?'master-items':''}">
+   <colgroup>
+    <col style="width:53%"><col style="width:8%"><col style="width:8%"><col style="width:9%"><col style="width:7%"><col style="width:5%"><col style="width:10%">
+   </colgroup>
    <thead><tr>
     ${(isInvoice||isReceipt||isCreditNote)?`<th class="desc-col">รายละเอียด</th><th class="qty-col">จำนวน</th><th class="unit-col">หน่วย</th><th class="price-col">ราคา</th><th class="disc-col">ส่วนลด</th><th class="vat-col">VAT</th><th class="amount-col">มูลค่าก่อนภาษี</th>`:`<th class="desc-col">คำอธิบาย / DESCRIPTION</th><th class="qty-col">จำนวน<br>QTY</th><th class="unit-col">หน่วย<br>UNIT</th><th class="price-col">ราคา<br>PRICE</th><th class="disc-col">ส่วนลด<br>DISCOUNT</th><th class="vat-col">VAT</th><th class="amount-col">มูลค่าก่อนภาษี<br>AMOUNT</th>`}
    </tr></thead>
    <tbody>${rows}</tbody>
   </table>
+  ${isInvoice?`<div class="invoice-doc-spacer"></div>`:isReceipt?`<div class="receipt-doc-spacer"></div>`:""}
+
+  ${isInvoice?`
+  <div class="master-summary">
+    <div class="master-summary-left">
+      <div class="master-summary-title">▣ สรุป</div>
+      <div class="master-summary-label">มูลค่าที่คำนวณภาษี ${rateText(x.vat_rate??7)}%</div>
+      <div class="master-summary-amount">${money(x.subtotal)} บาท</div>
+
+      <div></div>
+      <div class="master-summary-label">ภาษีมูลค่าเพิ่ม ${rateText(x.vat_rate??7)}%</div>
+      <div class="master-summary-amount">${money(x.vat_amount)} บาท</div>
+
+      ${Number(x.wht_amount||0)>0?`
+      <div></div>
+      <div class="master-summary-label">หัก ณ ที่จ่าย ${rateText(x.wht_rate||0)}%</div>
+      <div class="master-summary-amount">${money(x.wht_amount)} บาท</div>`:""}
+    </div>
+
+    <div class="master-summary-right">
+      <div class="master-total-box">
+        <span class="master-total-label">จำนวนเงินทั้งสิ้น</span>
+        <strong class="master-total-amount">${money(x.grand_total)}</strong>
+        <span class="master-total-unit">บาท</span>
+      </div>
+
+      ${Number(x.wht_amount||0)>0?`
+      <div class="master-total-line">
+        <span class="master-total-label">หัก ณ ที่จ่าย ${rateText(x.wht_rate||0)}%</span>
+        <span class="master-total-amount master-total-amount-small">${money(x.wht_amount)}</span>
+        <span class="master-total-unit">บาท</span>
+      </div>`:""}
+
+      <div class="master-net-box">
+        <span class="master-total-label">${Number(x.wht_amount||0)>0?"ยอดชำระสุทธิ<br>หลังหัก ณ ที่จ่าย":"ยอดสุทธิ"}</span>
+        <strong class="master-total-amount">${money(Number(x.wht_amount||0)>0?x.net_receivable:x.grand_total)}</strong>
+        <span class="master-total-unit">บาท</span>
+      </div>
+
+      <div class="master-paid-words">(${thaiBahtText(Number(x.wht_amount||0)>0?x.net_receivable:x.grand_total)})</div>
+    </div>
+  </div>
+
+  <div class="master-payment">
+    <div class="master-section-title">▣ ชำระเงิน</div>
+    <div class="master-bank-row">
+      <img class="master-bank-logo" src="${KBANK_LOGO_URI}" alt="Kasikornbank">
+      <div class="master-bank-copy">
+        <b>${SANTE.bank}</b>
+        <div>ชื่อบัญชี ${SANTE.bankName} · เลขบัญชี ${SANTE.bankAccount}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="master-note">
+    <div class="master-section-title">● เงื่อนไขการชำระเงิน</div>
+    <div class="master-note-value">${esc(invoiceTerms)}</div>
+  </div>
+
+  <div class="master-cert">
+    <div class="master-cert-head">
+      <div class="master-cert-title">♧ รับรอง</div>
+      <div class="master-cert-note">ผู้ขายลงนามเพื่อรับรองความถูกต้องของใบแจ้งหนี้ และลูกค้าสามารถลงนาม/ประทับตราเพื่อยืนยันการรับเอกสาร</div>
+    </div>
+
+    <div class="master-cert-grid">
+      <div class="master-cert-cell">
+        <div class="master-cert-visual">
+          <img class="master-signature-img" src="sante-signature-director.png" alt="signature">
+        </div>
+        <div class="cert-line"></div>
+        <div class="master-cert-meta">
+          <b>${SANTE.signer}</b>
+          <span>ผู้ออกเอกสาร (ผู้ขาย)</span>
+          <span>${esc(formatDocumentDate(x.issue_date||""))}</span>
+        </div>
+      </div>
+
+      <div class="master-cert-cell">
+        <div class="master-cert-visual">
+          <img class="master-signature-img" src="sante-signature-director.png" alt="signature">
+        </div>
+        <div class="cert-line"></div>
+        <div class="master-cert-meta">
+          <b>${SANTE.signer}</b>
+          <span>ผู้อนุมัติเอกสาร (ผู้ขาย)</span>
+          <span>${esc(formatDocumentDate(x.issue_date||""))}</span>
+        </div>
+      </div>
+
+      <div class="master-cert-cell">
+        <div class="master-cert-visual">
+          <img class="master-stamp-img" src="sante-company-stamp.png" alt="stamp">
+        </div>
+        <div class="cert-line"></div>
+        <div class="master-cert-meta">
+          <span>ตราประทับ (ผู้ขาย)</span>
+        </div>
+      </div>
+
+      <div class="master-cert-cell">
+        <div class="master-cert-visual"></div>
+        <div class="cert-line"></div>
+        <div class="master-cert-meta">
+          <b>${esc(x.organization_name||x.customer_name||"")}</b>
+          <span>ผู้รับเอกสาร (ลูกค้า)</span>
+        </div>
+      </div>
+
+      <div class="master-cert-cell">
+        <div class="master-cert-visual"></div>
+        <div class="cert-line"></div>
+        <div class="master-cert-meta">
+          <span>ตราประทับ (ลูกค้า) (ถ้ามี)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="master-footer">SANTE Accounting Documents · INVOICE (ใบแจ้งหนี้) · ${copyLabel}</div>
+  `:`
+  ${isReceipt?`
+  <div class="receipt-master-summary master-summary">
+    <div class="master-summary-left">
+      <div class="master-summary-title">▣ สรุป</div>
+      <div class="master-summary-label">มูลค่าที่คำนวณภาษี ${rateText(x.vat_rate??7)}%</div>
+      <div class="master-summary-amount">${money(x.subtotal)} บาท</div>
+
+      <div></div>
+      <div class="master-summary-label">ภาษีมูลค่าเพิ่ม ${rateText(x.vat_rate??7)}%</div>
+      <div class="master-summary-amount">${money(x.vat_amount)} บาท</div>
+
+      ${Number(x.wht_amount||0)>0?`
+      <div></div>
+      <div class="master-summary-label">หัก ณ ที่จ่าย ${rateText(x.wht_rate||0)}%</div>
+      <div class="master-summary-amount">${money(x.wht_amount)} บาท</div>`:""}
+    </div>
+
+    <div class="master-summary-right">
+      <div class="master-total-box">
+        <span class="master-total-label">จำนวนเงินทั้งสิ้น</span>
+        <strong class="master-total-amount">${money(x.grand_total)}</strong>
+        <span class="master-total-unit">บาท</span>
+      </div>
+
+      ${Number(x.wht_amount||0)>0?`
+      <div class="master-total-line">
+        <span class="master-total-label">หัก ณ ที่จ่าย ${rateText(x.wht_rate||0)}%</span>
+        <span class="master-total-amount master-total-amount-small">${money(x.wht_amount)}</span>
+        <span class="master-total-unit">บาท</span>
+      </div>`:""}
+
+      <div class="master-net-box receipt-paid-box">
+        <span class="master-total-label">ยอดรับเงินจริง</span>
+        <strong class="master-total-amount">${money(receiveAmount)}</strong>
+        <span class="master-total-unit">บาท</span>
+      </div>
+      <div class="master-paid-words">(${thaiBahtText(receiveAmount)})</div>
+    </div>
+  </div>
+
+  <div class="receipt-master-payment">
+    <div class="master-section-title">▣ รับชำระเงิน</div>
+    <div class="receipt-payment-bank">
+      <img class="master-bank-logo" src="${KBANK_LOGO_URI}" alt="Kasikornbank">
+      <div class="master-bank-copy">
+        <b>${SANTE.bank}</b>
+        <div>ชื่อบัญชี ${SANTE.bankName} · เลขบัญชี ${SANTE.bankAccount}</div>
+      </div>
+    </div>
+    <div class="receipt-payment-meta">
+      <div><b>วันที่ชำระ :</b> ${esc(x.payment_date||x.issue_date||"-")}</div>
+      <div><b>Payment No. :</b> ${esc(paymentNo)}</div>
+    </div>
+    <div class="receipt-payment-amount">
+      <div>จำนวนเงินที่ชำระ</div>
+      <b>${money(receiveAmount)} บาท</b>
+    </div>
+  </div>
+
+  ${x.note?`<div class="master-note">
+    <div class="master-section-title">● หมายเหตุ</div>
+    <div class="master-note-value">${esc(x.note)}</div>
+  </div>`:""}
+
+  <div class="master-cert receipt-master-cert">
+    <div class="master-cert-head">
+      <div class="master-cert-title">♧ รับรอง</div>
+      <div class="master-cert-note">ผู้ขายลงนามเพื่อรับรองการรับชำระเงินและความถูกต้องของใบเสร็จรับเงิน / ใบกำกับภาษีฉบับนี้</div>
+    </div>
+
+    <div class="master-cert-grid">
+      <div class="master-cert-cell">
+        <div class="master-cert-visual"><img class="master-signature-img" src="sante-signature-director.png" alt="signature"></div>
+        <div class="cert-line"></div>
+        <div class="master-cert-meta">
+          <b>${SANTE.signer}</b><span>ผู้ออกเอกสาร (ผู้ขาย)</span><span>${esc(formatDocumentDate(x.issue_date||""))}</span>
+        </div>
+      </div>
+
+      <div class="master-cert-cell">
+        <div class="master-cert-visual"><img class="master-signature-img" src="sante-signature-director.png" alt="signature"></div>
+        <div class="cert-line"></div>
+        <div class="master-cert-meta">
+          <b>${SANTE.signer}</b><span>ผู้อนุมัติเอกสาร (ผู้ขาย)</span><span>${esc(formatDocumentDate(x.issue_date||""))}</span>
+        </div>
+      </div>
+
+      <div class="master-cert-cell">
+        <div class="master-cert-visual"><img class="master-stamp-img" src="sante-company-stamp.png" alt="stamp"></div>
+        <div class="cert-line"></div>
+        <div class="master-cert-meta"><span>ตราประทับ (ผู้ขาย)</span></div>
+      </div>
+
+      <div class="master-cert-cell">
+        <div class="master-cert-visual"></div>
+        <div class="cert-line"></div>
+        <div class="master-cert-meta"><b>${esc(x.organization_name||x.customer_name||"")}</b><span>ผู้รับเอกสาร (ลูกค้า)</span></div>
+      </div>
+
+      <div class="master-cert-cell">
+        <div class="master-cert-visual"></div>
+        <div class="cert-line"></div>
+        <div class="master-cert-meta"><span>ตราประทับ (ลูกค้า) (ถ้ามี)</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="master-footer">SANTE Accounting Documents · RECEIPT / TAX INVOICE (ใบเสร็จรับเงิน / ใบกำกับภาษี) · ${copyLabel}</div>
+  `:`
   <div class="totals-wrap">
    <div class="summary-note">
-     <b>${isCreditNote?"เหตุผลและรายละเอียดการลดหนี้":"รายละเอียด / NOTES"}</b><br>
-     ${x.document_subject?`${isCreditNote?"เหตุผล":"เรื่อง"}: ${esc(x.document_subject)}<br>`:""}
-     ${x.terms?`เงื่อนไข: ${esc(x.terms)}<br>`:""}
-     ${x.note?esc(x.note):(isCreditNote?"กรุณาตรวจสอบเอกสารอ้างอิง เหตุผลการลดหนี้ และยอดภาษีก่อนออกเอกสาร":"กรุณาตรวจสอบชื่อ/ที่อยู่ เลขประจำตัวผู้เสียภาษี และยอดเงินก่อนนำเอกสารไปใช้งาน")}
+       <b>${isCreditNote?"เหตุผลและรายละเอียดการลดหนี้":"รายละเอียด / NOTES"}</b><br>
+       ${x.document_subject?`${isCreditNote?"เหตุผล":"เรื่อง"}: ${esc(x.document_subject)}<br>`:""}
+       ${x.terms?`เงื่อนไข: ${esc(x.terms)}<br>`:""}
+       ${x.note?esc(x.note):(isCreditNote?"กรุณาตรวจสอบเอกสารอ้างอิง เหตุผลการลดหนี้ และยอดภาษีก่อนออกเอกสาร":"กรุณาตรวจสอบชื่อ/ที่อยู่ เลขประจำตัวผู้เสียภาษี และยอดเงินก่อนนำเอกสารไปใช้งาน")}
    </div>
    <div class="totals">
-    <div class="total-row"><span>${isCreditNote?"มูลค่าที่ลดก่อน VAT":"มูลค่าก่อน VAT"}</span><span>${money(x.subtotal)} บาท</span></div>
-    <div class="total-row"><span>${isCreditNote?"ภาษีมูลค่าเพิ่มที่ลด":"ภาษีมูลค่าเพิ่ม"} ${money(x.vat_rate??7)}%</span><span>${money(x.vat_amount)} บาท</span></div>
-    <div class="total-row grand"><span>${isCreditNote?"รวมมูลค่าลดหนี้":"จำนวนเงินทั้งสิ้น"}</span><span>${money(x.grand_total)} บาท</span></div>
-    ${Number(x.wht_amount||0)>0?`<div class="total-row"><span>หัก ณ ที่จ่าย ${money(x.wht_rate||0)}%</span><span>${money(x.wht_amount)} บาท</span></div><div class="total-row paid-row"><b>จำนวนเงินที่ชำระสุทธิ</b><b>${money(x.net_receivable)} บาท</b></div><div class="amount-words">(${thaiBahtText(x.net_receivable)})</div>`:`<div class="amount-words">(${thaiBahtText(isReceipt?receiveAmount:x.grand_total)})</div>`}
-    ${isReceipt?`<div class="total-row paid-row"><b>ยอดรับเงินจริง</b><b>${money(receiveAmount)} บาท</b></div>`:""}
+      <div class="total-row"><span>${isCreditNote?"มูลค่าที่ลดก่อน VAT":"มูลค่าก่อน VAT"}</span><span>${money(x.subtotal)} บาท</span></div>
+      <div class="total-row"><span>${isCreditNote?"ภาษีมูลค่าเพิ่มที่ลด":"ภาษีมูลค่าเพิ่ม"} ${rateText(x.vat_rate??7)}%</span><span>${money(x.vat_amount)} บาท</span></div>
+      <div class="total-row grand"><span>${isCreditNote?"รวมมูลค่าลดหนี้":"จำนวนเงินทั้งสิ้น"}</span><span>${money(x.grand_total)} บาท</span></div>
+      ${Number(x.wht_amount||0)>0?`<div class="total-row"><span>หัก ณ ที่จ่าย ${rateText(x.wht_rate||0)}%</span><span>${money(x.wht_amount)} บาท</span></div><div class="total-row paid-row"><b>จำนวนเงินที่ชำระสุทธิ</b><b>${money(x.net_receivable)} บาท</b></div><div class="amount-words">(${thaiBahtText(x.net_receivable)})</div>`:`<div class="amount-words">(${thaiBahtText(x.grand_total)})</div>`}
    </div>
   </div>
-  ${isInvoice?`<div class="inv-payment"><div class="inv-payment-title">ชำระเงิน</div><div class="inv-payment-bank"><img class="payment-bank-logo" src="${KBANK_LOGO_URI}" alt="Kasikornbank"><div><b>${SANTE.bank}</b><br>ชื่อบัญชี ${SANTE.bankName} · เลขบัญชี ${SANTE.bankAccount}</div></div></div>`:""}
-  ${isReceipt?`<div class="payment-box"><div class="payment-title">การชำระเงิน / PAYMENT</div><div class="payment-grid"><div class="payment-item"><div class="payment-bank"><img class="payment-bank-logo" src="${KBANK_LOGO_URI}" alt="Kasikornbank"><div><b>${SANTE.bank}</b><br>ชื่อบัญชี ${SANTE.bankName}<br>เลขบัญชี ${SANTE.bankAccount}</div></div></div><div class="payment-item">วันที่ชำระ: ${esc(x.payment_date||x.issue_date||"-")}<br>Payment No.: ${esc(paymentNo)}</div><div class="payment-item">จำนวนเงินที่ชำระ: ${money(receiveAmount)} บาท<div class="payment-words">(${thaiBahtText(receiveAmount)})</div></div></div></div>`:""}
   <div class="signature-area">
    <div class="signature-header">♧ รับรอง</div>
    <div class="signature-grid">
-    <div class="signature-box"><div class="signature-space"><img class="sign-img" src="sante-signature-director.png" alt="signature"></div><div class="signature-line"><b>${SANTE.signer}</b><br>ผู้ออกเอกสาร (ผู้ขาย)</div></div>
-    <div class="signature-box"><div class="signature-space"><img class="sign-img" src="sante-signature-director.png" alt="signature"></div><div class="signature-line"><b>${SANTE.signer}</b><br>ผู้อนุมัติเอกสาร (ผู้ขาย)</div></div>
+    <div class="signature-box"><div class="signature-space"><img class="sign-img" src="sante-signature-director.png" alt="signature"></div><div class="signature-line"><b>${SANTE.signer}</b><br>ผู้ออกเอกสาร (ผู้ขาย)<br>${esc(formatDocumentDate(x.issue_date||""))}</div></div>
+    <div class="signature-box"><div class="signature-space"><img class="sign-img" src="sante-signature-director.png" alt="signature"></div><div class="signature-line"><b>${SANTE.signer}</b><br>ผู้อนุมัติเอกสาร (ผู้ขาย)<br>${esc(formatDocumentDate(x.issue_date||""))}</div></div>
     <div class="signature-box"><div class="seal-box"><img class="seal-mark-img" src="sante-company-stamp.png" alt="stamp"></div><div class="signature-line">ตราประทับ (ผู้ขาย)</div></div>
-    <div class="signature-box"><div class="signature-space"></div><div class="signature-line">ผู้รับเอกสาร (ลูกค้า)</div></div>
+    <div class="signature-box"><div class="signature-space"></div><div class="signature-line"><b>${esc(x.organization_name||x.customer_name||"")}</b><br>ผู้รับเอกสาร (ลูกค้า)</div></div>
     <div class="signature-box"><div class="customer-stamp-box"></div><div class="signature-line">ตราประทับ (ลูกค้า) (ถ้ามี)</div></div>
    </div>
-   <div class="footer-sign-note">${isInvoice?"ผู้ขายลงนามเพื่อรับรองความถูกต้องของใบแจ้งหนี้ และลูกค้าสามารถลงนาม/ประทับตราเพื่อยืนยันการรับเอกสาร":isReceipt?"เอกสารฉบับนี้ใช้เป็นหลักฐานการรับชำระเงินและใบกำกับภาษีตามข้อมูลที่ระบุข้างต้น":isCreditNote?"ใบลดหนี้ฉบับนี้อ้างอิงเอกสารเดิมตามที่ระบุ กรุณาตรวจสอบเหตุผลและจำนวนเงินที่ลดก่อนนำเอกสารไปใช้":"เอกสารฉบับนี้จัดทำจากข้อมูลใน SANTE Accounting Documents"}</div>
+   <div class="footer-sign-note">${isCreditNote?"ใบลดหนี้ฉบับนี้อ้างอิงเอกสารเดิมตามที่ระบุ กรุณาตรวจสอบเหตุผลและจำนวนเงินที่ลดก่อนนำเอกสารไปใช้":"เอกสารฉบับนี้จัดทำจากข้อมูลใน SANTE Accounting Documents"}</div>
   </div>
-  <div class="accounting-foot">SANTE Accounting Documents · ${esc(docEn)} · ${copyLabel}</div>
+  <div class="accounting-foot">SANTE Accounting Documents · ${isCreditNote?"CREDIT NOTE (ใบลดหนี้)":esc(docEn)} · ${copyLabel}</div>
+  `}
+  `}
  </div>`;
 }
 
-async function generateBlob(x){
- const stage=$("printStage");stage.innerHTML=paperHtml(x);
- await new Promise(r=>setTimeout(r,250));
- const element=stage.firstElementChild;
- const opt={margin:0,filename:(x.document_no||"document")+".pdf",image:{type:"jpeg",quality:.98},html2canvas:{scale:2,useCORS:true,backgroundColor:"#ffffff"},jsPDF:{unit:"px",format:[794,1123],orientation:"portrait"}};
- const worker=html2pdf().set(opt).from(element).toPdf();
- const pdf=await worker.get("pdf");
- return pdf.output("blob");
+async function waitForPdfAssets(root){
+ try{
+   if(document.fonts?.ready){
+     await Promise.race([
+       document.fonts.ready,
+       new Promise(r=>setTimeout(r,3000))
+     ]);
+   }
+ }catch(_){}
+
+ const images=[...root.querySelectorAll("img")];
+ await Promise.all(images.map(img=>new Promise(resolve=>{
+   if(img.complete && img.naturalWidth>0)return resolve();
+   let done=false;
+   const finish=()=>{if(done)return;done=true;resolve()};
+   img.addEventListener("load",finish,{once:true});
+   img.addEventListener("error",finish,{once:true});
+   setTimeout(finish,3500);
+ })));
+
+ await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
 }
 
-async function issueOne(id,silent=false){
- let x=docs.find(d=>d.id===id);
- if(!x)return false;
- if(x.document_type==="RECEIPT_TAX_INVOICE"&&x.document_status!=="APPROVED"){
-   if(!silent)alert("ใบเสร็จ/ใบกำกับภาษีต้องผ่านการอนุมัติก่อน");
-   return false;
+async function generateBlob(x){
+ const pageW=794;
+ const pageH=1123;
+
+ if(typeof window.html2canvas!=="function"){
+   throw new Error("ไม่พบ html2canvas renderer");
  }
- if(!["READY_TO_ISSUE","APPROVED"].includes(x.document_status))return false;
+ if(!window.jspdf?.jsPDF){
+   throw new Error("ไม่พบ jsPDF renderer");
+ }
+
+ const host=document.createElement("div");
+ host.className="sante-pdf-render-host";
+ host.style.cssText=[
+   "position:fixed",
+   "left:0",
+   "top:0",
+   `width:${pageW}px`,
+   `height:${pageH}px`,
+   "margin:0",
+   "padding:0",
+   "background:#ffffff",
+   "z-index:-2147483000",
+   "pointer-events:none",
+   "overflow:hidden"
+ ].join(";");
+
+ host.innerHTML=paperHtml(x);
+ document.body.appendChild(host);
+
+ try{
+   const element=host.firstElementChild;
+   if(!element)throw new Error("ไม่พบโครงเอกสารสำหรับสร้าง PDF");
+
+   Object.assign(element.style,{
+     width:`${pageW}px`,
+     minWidth:`${pageW}px`,
+     maxWidth:`${pageW}px`,
+     height:`${pageH}px`,
+     minHeight:`${pageH}px`,
+     maxHeight:`${pageH}px`,
+     margin:"0",
+     boxShadow:"none",
+     transform:"none",
+     transformOrigin:"top left",
+     zoom:"1",
+     position:"relative",
+     overflow:"hidden",
+     boxSizing:"border-box"
+   });
+
+   await waitForPdfAssets(element);
+   await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
+
+   const contentHeight=Math.ceil(element.scrollHeight||0);
+   const contentWidth=Math.ceil(element.scrollWidth||0);
+   if(contentHeight>pageH+4){
+     throw new Error(`Master สูงเกิน A4: ${contentHeight}px (กำหนด ${pageH}px)`);
+   }
+   if(contentWidth>pageW+4){
+     throw new Error(`Master กว้างเกิน A4: ${contentWidth}px (กำหนด ${pageW}px)`);
+   }
+
+   const canvas=await window.html2canvas(element,{
+     scale:2,
+     useCORS:true,
+     allowTaint:false,
+     backgroundColor:"#ffffff",
+     logging:false,
+     scrollX:0,
+     scrollY:0,
+     x:0,
+     y:0,
+     width:pageW,
+     height:pageH,
+     windowWidth:1440,
+     windowHeight:1600
+   });
+
+   if(!canvas?.width||!canvas?.height){
+     throw new Error("ไม่สามารถ Render เอกสารเป็นภาพได้");
+   }
+
+   const {jsPDF}=window.jspdf;
+   const pdf=new jsPDF({
+     unit:"px",
+     format:[pageW,pageH],
+     orientation:"portrait",
+     hotfixes:["px_scaling"],
+     compress:true
+   });
+
+   pdf.addImage(
+     canvas.toDataURL("image/jpeg",0.98),
+     "JPEG",
+     0,0,pageW,pageH,
+     undefined,"FAST"
+   );
+
+   return pdf.output("blob");
+ }finally{
+   host.remove();
+ }
+}
+
+
+function validateBeforeIssue(x){
+ const warnings=[];
+ if(!String(x.organization_name||x.customer_name||"").trim())warnings.push("ไม่มีชื่อลูกค้า/บริษัท");
+ if(!String(x.billing_address||"").trim())warnings.push("ไม่มีที่อยู่ลูกค้า");
+ if(x.document_type==="RECEIPT_TAX_INVOICE"&&!String(x.document_no||"").trim())warnings.push("ใบเสร็จ/ใบกำกับภาษียังไม่มีเลขที่เอกสาร");
+ const its=Array.isArray(x.items)?x.items:[];
+ if(!its.length)warnings.push("ไม่มีรายการสินค้า/บริการ");
+ if(its.some(i=>!String(i.description||"").trim()))warnings.push("มีรายการที่ไม่มีรายละเอียดสินค้า/บริการ");
+ return warnings;
+}
+
+async function issueOne(id,silent=false,regenerateIssued=false){
+ let x=docs.find(d=>d.id===id);
+ if(!x)return {ok:false,error:"ไม่พบเอกสาร",stage:"lookup"};
+
+ const isIssued=x.document_status==="ISSUED";
+ const canIssue=["READY_TO_ISSUE","APPROVED"].includes(x.document_status);
+ const canRegenerate=isIssued&&regenerateIssued;
+
+ if(!canIssue&&!canRegenerate){
+   const msg="เอกสารนี้ยังไม่อยู่ในสถานะที่สามารถออก PDF ได้";
+   if(!silent)alert(msg);
+   return {ok:false,error:msg,stage:"status"};
+ }
+
+ // เอกสาร ISSUED ถูกออกไปแล้ว: regenerate = ซ่อม/สร้างไฟล์ PDF เท่านั้น
+ // ไม่บังคับ validation ข้อมูลธุรกิจซ้ำ และไม่แก้สถานะ/เลขเอกสาร
+ if(!isIssued){
+   const issueWarnings=validateBeforeIssue(x);
+   if(issueWarnings.length){
+     const msg="กรุณาตรวจสอบข้อมูลก่อนออกเอกสาร:\n• "+issueWarnings.join("\n• ");
+     if(!silent)alert(msg);
+     return {ok:false,error:msg,stage:"validation"};
+   }
+ }
+
+ if(x.document_type==="RECEIPT_TAX_INVOICE"&&!["APPROVED","ISSUED"].includes(x.document_status)){
+   const msg="ใบเสร็จ/ใบกำกับภาษีต้องผ่านการอนุมัติก่อน";
+   if(!silent)alert(msg);
+   return {ok:false,error:msg,stage:"status"};
+ }
+
  const btn=$("pdfBtn");
- if(btn&&editing?.id===id){btn.disabled=true;btn.textContent="กำลังสร้าง PDF..."}
+ if(btn&&editing?.id===id){
+   btn.disabled=true;
+   btn.textContent=isIssued?"กำลังสร้าง PDF ใหม่...":"กำลังสร้าง PDF...";
+ }
+
+ let stage="render";
  try{
   const blob=await generateBlob(x);
+  if(!blob||!blob.size)throw new Error("ไม่สามารถสร้างข้อมูล PDF ได้");
+
   const safe=(x.document_no||x.id).replace(/[^A-Za-z0-9_-]/g,"_");
-  const path=`accounting/${new Date().getFullYear()}/${x.document_type}/${safe}.pdf`;
-  const up=await db.storage.from(BUCKET).upload(path,blob,{contentType:"application/pdf",upsert:true});
-  if(up.error)throw up.error;
-  const fin=await db.rpc("admin_finalize_accounting_document",{
-    p_document_id:x.id,p_storage_bucket:BUCKET,p_storage_path:path,
-    p_original_filename:`${x.document_no||safe}.pdf`,p_file_size_bytes:blob.size
+  const year=String(x.issue_date||new Date().getFullYear()).slice(0,4) || String(new Date().getFullYear());
+  const path=`accounting/${year}/${x.document_type}/${safe}.pdf`;
+
+  stage="upload";
+  const up=await db.storage.from(BUCKET).upload(path,blob,{
+    contentType:"application/pdf",
+    upsert:true,
+    cacheControl:"0"
   });
-  if(fin.error)throw fin.error;
+  if(up.error)throw up.error;
+
+  // Confirm object can actually be resolved before reporting success.
+  stage="verify";
+  const test=await db.storage.from(BUCKET).createSignedUrl(path,60);
+  if(test.error||!test.data?.signedUrl){
+    throw new Error("อัปโหลดแล้วแต่ตรวจสอบไฟล์ใน Storage ไม่สำเร็จ: "+(test.error?.message||"ไม่พบ signed URL"));
+  }
+
+  if(!isIssued){
+    stage="finalize";
+    const fin=await db.rpc("admin_finalize_accounting_document",{
+      p_document_id:x.id,
+      p_storage_bucket:BUCKET,
+      p_storage_path:path,
+      p_original_filename:`${safe}.pdf`,
+      p_file_size_bytes:blob.size
+    });
+    if(fin.error)throw fin.error;
+  }else{
+    // Regenerate ISSUED: overwrite the same canonical Storage object only.
+    // Do not write PDF metadata to accounting_documents.
+    stage="complete";
+  }
+
   await loadDocs();
-  if(editing?.id===id){const fresh=docs.find(d=>d.id===id);if(fresh)fillEditor(fresh)}
-  return true;
+  if(editing?.id===id){
+    const fresh=docs.find(d=>d.id===id);
+    if(fresh)fillEditor(fresh);
+  }
+
+  if(!silent&&isIssued){
+    alert(`สร้าง PDF ใหม่สำเร็จ\n${x.document_no||safe}.pdf\nแทนที่ไฟล์ PDF เดิมใน Storage แล้ว\nสถานะเอกสารยังคงเป็น ISSUED`);
+  }
+  return {ok:true,path,bucket:BUCKET};
  }catch(e){
-  console.error("ACCOUNTING ISSUE ERROR",e);
-  if(!silent)alert("ออกเอกสารไม่สำเร็จ: "+(e.message||e));
-  return false;
+  console.error("ACCOUNTING ISSUE ERROR",x.document_no,stage,e);
+  const msg=(e?.message||String(e));
+  if(!silent)alert(`${isIssued?"สร้าง PDF ใหม่":"ออกเอกสาร"}ไม่สำเร็จ\nขั้นตอน: ${stage}\n${msg}`);
+  return {ok:false,error:msg,stage,document_no:x.document_no||x.id};
  }finally{
-  if(btn){btn.disabled=false;btn.textContent="สร้าง PDF และออกเอกสาร"}
+  if(btn){
+    btn.disabled=false;
+    btn.textContent=isIssued?"สร้าง PDF ใหม่":"สร้าง PDF และออกเอกสาร";
+  }
  }
+}
+
+
+function currentAccountingDocumentForMasterPdf(){
+  if(editing?.id){
+    const found=docs.find(d=>d.id===editing.id);
+    if(found)return found;
+  }
+  const visible=getVisibleDocs();
+  const issued=visible.find(d=>d.document_status==="ISSUED");
+  return issued||null;
+}
+
+function canonicalAccountingPdfPath(x){
+  const safe=String(x?.document_no||x?.id||"DOCUMENT").replace(/[^A-Za-z0-9_-]/g,"_");
+  const year=String(x?.issue_date||"").slice(0,4)||String(new Date().getFullYear());
+  return `accounting/${year}/${x.document_type}/${safe}.pdf`;
+}
+
+async function uploadMasterAccountingPdf(file){
+  const x=currentAccountingDocumentForMasterPdf();
+  if(!x){
+    alert("กรุณาเปิดเอกสารที่ต้องการก่อนอัปโหลด PDF ต้นฉบับ");
+    return;
+  }
+  if(!file||file.type!=="application/pdf"){
+    alert("กรุณาเลือกไฟล์ PDF เท่านั้น");
+    return;
+  }
+
+  const expected=(x.document_no||"DOCUMENT")+".pdf";
+  const selected=String(file.name||"");
+  if(selected.toUpperCase()!==expected.toUpperCase()){
+    const ok=confirm(`ชื่อไฟล์ที่เลือกคือ\n${selected}\n\nชื่อที่ระบบแนะนำคือ\n${expected}\n\nต้องการอัปโหลดไฟล์นี้แทนเอกสาร ${x.document_no||""} หรือไม่?`);
+    if(!ok)return;
+  }
+
+  const path=canonicalAccountingPdfPath(x);
+  const btn=$("uploadMasterPdfBtn");
+  if(btn){btn.disabled=true;btn.textContent="กำลังอัปโหลด..."}
+
+  try{
+    const up=await db.storage.from(BUCKET).upload(path,file,{
+      contentType:"application/pdf",
+      upsert:true,
+      cacheControl:"0"
+    });
+    if(up.error)throw up.error;
+
+    // Verify the exact canonical object is accessible after upload.
+    const verify=await db.storage.from(BUCKET).createSignedUrl(path,60);
+    if(verify.error||!verify.data?.signedUrl){
+      throw verify.error||new Error("ตรวจสอบไฟล์หลังอัปโหลดไม่สำเร็จ");
+    }
+
+    alert(`อัปโหลด PDF ต้นฉบับสำเร็จ\n${expected}\n\nMember จะเปิดไฟล์นี้โดยตรง`);
+  }catch(e){
+    console.error("MASTER PDF UPLOAD ERROR",e);
+    alert("อัปโหลด PDF ต้นฉบับไม่สำเร็จ: "+(e.message||e));
+  }finally{
+    if(btn){btn.disabled=false;btn.textContent="อัปโหลด PDF ต้นฉบับ"}
+    const input=$("masterPdfUploadInput");
+    if(input)input.value="";
+  }
+}
+
+function openMasterPdfPicker(){
+  const x=currentAccountingDocumentForMasterPdf();
+  if(!x){
+    alert("กรุณากด “ดูเอกสาร” หรือเปิดเอกสารที่ต้องการก่อน");
+    return;
+  }
+  if(x.document_status!=="ISSUED"){
+    alert("อัปโหลด PDF ต้นฉบับได้หลังเอกสารถูกออกเป็น ISSUED แล้ว");
+    return;
+  }
+  $("masterPdfUploadInput")?.click();
 }
 
 async function issueReadyAll(){
  const visible=getVisibleDocs();
  const ready=visible.filter(x=>["READY_TO_ISSUE","APPROVED"].includes(x.document_status));
- if(!ready.length){
-   const type=$("typeFilter").value;
-   if(type==="RECEIPT_TAX_INVOICE"){
-     alert("ยังไม่มีใบเสร็จ/ใบกำกับภาษีที่พร้อมออก\nให้สร้าง Draft จาก Payment ก่อน แล้วตรวจสอบและอนุมัติ");
-   }else if(type==="CREDIT_NOTE"){
-     alert("ยังไม่มีใบลดหนี้ที่พร้อมออก\nให้สร้าง Draft จากใบเสร็จ/ใบกำกับภาษีเดิม แล้วตรวจแก้ยอดก่อน");
-   }else if(type==="INVOICE"){
-     const invoiceStatuses=visible.map(x=>x.document_status).filter(Boolean);
-     alert(invoiceStatuses.length
-       ? "ยังไม่มีใบแจ้งหนี้สถานะ READY_TO_ISSUE หรือ APPROVED สำหรับออก PDF\nสถานะที่พบ: "+[...new Set(invoiceStatuses)].join(", ")
-       : "ยังไม่มีใบแจ้งหนี้ในรายการนี้\nให้อานุมัติใบเสนอราคาเป็น APPROVED แล้วกดซิงก์ใบเสนอราคา → ใบแจ้งหนี้ก่อน");
-   }else{
-     alert("ไม่มีเอกสารสถานะ READY_TO_ISSUE หรือ APPROVED ในรายการที่กำลังแสดง");
+
+ if(ready.length){
+   if(!confirm(`สร้าง PDF และออกเอกสาร ${ready.length} รายการตามรายการที่กำลังแสดง?`))return;
+   $("generateReadyBtn").disabled=true;
+   let ok=0; const errors=[];
+   for(const x of ready){
+     const result=await issueOne(x.id,true,false);
+     if(result?.ok)ok++;
+     else errors.push(`${x.document_no||x.id} · ${result?.stage||"unknown"} · ${result?.error||"ไม่ทราบสาเหตุ"}`);
    }
+   $("generateReadyBtn").disabled=false;
+   await loadDocs();
+   alert(`เสร็จแล้ว ${ok} รายการ${errors.length?`\nไม่สำเร็จ ${errors.length}\n\n${errors.join("\n")}`:""}`);
    return;
  }
- if(!confirm(`สร้าง PDF และออกเอกสาร ${ready.length} รายการตามรายการที่กำลังแสดง?`))return;
- $("generateReadyBtn").disabled=true;
- let ok=0,fail=0;
- for(const x of ready){
-   const success=await issueOne(x.id,true);
-   if(success)ok++; else fail++;
+
+ const issued=visible.filter(x=>x.document_status==="ISSUED");
+ if(issued.length){
+   if(!confirm(`เอกสารที่แสดงเป็น ISSUED แล้ว ${issued.length} รายการ\nต้องการสร้าง/ซ่อมไฟล์ PDF ใหม่ด้วยรูปแบบล่าสุด โดยคงเลขเอกสารและสถานะเดิมหรือไม่?`))return;
+   $("generateReadyBtn").disabled=true;
+   let ok=0; const errors=[];
+   for(const x of issued){
+     const result=await issueOne(x.id,true,true);
+     if(result?.ok)ok++;
+     else errors.push(`${x.document_no||x.id} · ${result?.stage||"unknown"} · ${result?.error||"ไม่ทราบสาเหตุ"}`);
+   }
+   $("generateReadyBtn").disabled=false;
+   await loadDocs();
+   alert(`สร้าง PDF ใหม่แล้ว ${ok} รายการ${errors.length?`\nไม่สำเร็จ ${errors.length}\n\n${errors.join("\n")}`:""}\n\nสถานะเอกสารยังคงเป็น ISSUED`);
+   return;
  }
- $("generateReadyBtn").disabled=false;
- await loadDocs();
- alert(`เสร็จแล้ว ${ok} รายการ${fail?` · ไม่สำเร็จ ${fail}`:""}`);
+
+ const type=$("typeFilter").value;
+ if(type==="RECEIPT_TAX_INVOICE"){
+   alert("ยังไม่มีใบเสร็จ/ใบกำกับภาษีที่พร้อมออก\nให้สร้าง Draft จาก Payment ก่อน แล้วตรวจสอบและอนุมัติ");
+ }else if(type==="CREDIT_NOTE"){
+   alert("ยังไม่มีใบลดหนี้ที่พร้อมออก\nให้สร้าง Draft จากใบเสร็จ/ใบกำกับภาษีเดิม แล้วตรวจแก้ยอดก่อน");
+ }else if(type==="INVOICE"){
+   alert("ยังไม่มีใบแจ้งหนี้ที่พร้อมออกหรือเอกสาร ISSUED สำหรับสร้าง PDF ใหม่");
+ }else{
+   alert("ไม่มีเอกสารที่พร้อมออกหรือสร้าง PDF ใหม่ในรายการที่กำลังแสดง");
+ }
 }
 
 
@@ -1978,4 +4482,31 @@ setTimeout(()=>{
 },15000);
 </script>
 
+
+<script id="sante-clean-stray-backslash-n-r31">
+(function(){
+  function clean(root){
+    if(!root||!root.childNodes)return;
+    [...root.childNodes].forEach(function(n){
+      if(n.nodeType===3 && /^\s*(?:\\n\s*)+$/.test(n.nodeValue||"")){
+        n.remove();
+      }
+    });
+  }
+  document.addEventListener('DOMContentLoaded', function(){
+    clean(document.body);
+    clean(document.documentElement);
+    const mo=new MutationObserver(function(){ clean(document.body); });
+    if(document.body) mo.observe(document.body,{childList:true});
+  });
+})();
+
+const masterPdfUploadBtn=$("uploadMasterPdfBtn");
+if(masterPdfUploadBtn)masterPdfUploadBtn.addEventListener("click",openMasterPdfPicker);
+const masterPdfUploadInput=$("masterPdfUploadInput");
+if(masterPdfUploadInput)masterPdfUploadInput.addEventListener("change",e=>{
+  const file=e.target.files?.[0];
+  if(file)uploadMasterAccountingPdf(file);
+});
+</script>
 </body></html>
