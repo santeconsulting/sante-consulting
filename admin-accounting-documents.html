@@ -1038,7 +1038,7 @@ label{display:block;font-size:11px;font-weight:600;margin-bottom:5px}.input,text
   background:#eaf7ef!important;
 }
 </style>
-<meta name="sante-build-r28" content="ACCOUNTING-STRUCTURE-MATCH">
+<meta name="sante-build-r28" content="ACCOUNTING-STRUCTURE-MATCH-R30-BUTTON-BALANCE">
 
 
 <style id="sante-accounting-r29-final-alignment">
@@ -2850,6 +2850,21 @@ label{display:block;font-size:11px;font-weight:600;margin-bottom:5px}.input,text
 <meta name="sante-receipt-tax-final-master" content="R24-MASTER-GRID-LIGHT-BLUE">
 
 <meta name="sante-payment-workflow" content="R27-GENERAL-PAYMENT-REVIEW">
+
+<style id="sante-accounting-button-balance-r30">
+/* R30: balanced button text and consistent action controls.
+   Document rendering, tax/VAT calculations, and database workflows remain unchanged. */
+button,.btn,a.btn{text-align:center}
+.btn,button.btn,a.btn{display:inline-flex;align-items:center;justify-content:center;vertical-align:middle;line-height:1.3;gap:6px}
+.hero-actions{display:flex;align-items:center;justify-content:flex-end;gap:10px;flex-wrap:wrap}
+.hero-actions .btn{min-height:42px;padding:0 16px;white-space:normal;text-align:center;line-height:1.3}
+.accounting-subnav a{display:inline-flex;align-items:center;justify-content:center;text-align:center;line-height:1.3;white-space:normal}
+.modal-head .btn,.modal-actions .btn,.preview-actions .btn{display:inline-flex;align-items:center;justify-content:center;text-align:center;line-height:1.3}
+.modal-actions{align-items:center;justify-content:center;flex-wrap:wrap}
+@media(max-width:900px){.hero-actions{justify-content:flex-start}.hero-actions .btn{min-height:44px}}
+@media(max-width:600px){.hero-actions{display:grid;grid-template-columns:1fr;gap:9px}.hero-actions .btn{width:100%;min-height:44px}.accounting-subnav a{min-height:40px}}
+</style>
+
 </head>
 <body>
 <div id="loading" class="loading">กำลังโหลดเอกสารบัญชี...</div>
