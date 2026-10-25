@@ -12,54 +12,34 @@
 *{box-sizing:border-box}
 html,body{margin:0;min-height:100%;font-family:"Prompt",sans-serif;background:#f4f9fd;color:#082d69}
 a{text-decoration:none;color:inherit}button{font:inherit}
-.topbar{
-  height:72px;background:#fff;border-bottom:1px solid #e2ebf4;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 max(22px,calc((100vw - 1320px)/2));
-  position:sticky;top:0;z-index:20
-}
+.topbar{height:72px;background:#fff;border-bottom:1px solid #e2ebf4;display:flex;align-items:center;justify-content:space-between;padding:0 max(22px,calc((100vw - 1320px)/2));position:sticky;top:0;z-index:20}
 .brand{height:54px;width:180px;object-fit:contain;object-position:left center}
 .member{display:flex;gap:14px;align-items:center}.who{text-align:right;font-size:12px;color:#6f82a0}.who b{display:block;color:#082d69;font-size:14px}
-.btn{
-  min-height:42px;padding:0 16px;border-radius:10px;border:1px solid #d4e0ed;
-  background:#fff;color:#082d69;font-weight:600;cursor:pointer;
-  display:inline-flex;align-items:center;justify-content:center
-}
-.btn.yellow{background:#ffbf19;border-color:#ffbf19}
-.btn.green{background:#e7f7ed;border-color:#c8ead4;color:#167440}
-.btn.red{background:#fff0f0;border-color:#efcccc;color:#9d4242}
-.page{width:min(1320px,calc(100% - 36px));margin:0 auto;padding:22px 0 55px}
+.btn{min-height:42px;padding:0 16px;border-radius:10px;border:1px solid #d4e0ed;background:#fff;color:#082d69;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;justify-content:center}
+.btn.yellow{background:#ffbf19;border-color:#ffbf19}.btn.green{background:#e7f7ed;border-color:#c8ead4;color:#167440}
+.page{width:min(1380px,calc(100% - 36px));margin:0 auto;padding:22px 0 55px}
 .crumb{font-size:12px;color:#7387a1;margin-bottom:8px}
 .head{display:flex;justify-content:space-between;gap:16px;align-items:flex-end;margin-bottom:14px}
 .head h1{margin:0;font-size:28px}.sub{color:#6f82a0;font-size:13px;margin-top:4px}
-.badge{padding:7px 12px;border-radius:999px;font-size:12px;background:#e8f7ed;color:#167440;font-weight:600}.badge.cancelled{background:#fdecec;color:#9e4141}
+.badge{padding:7px 12px;border-radius:999px;font-size:12px;background:#e8f7ed;color:#167440;font-weight:600}
+.badge.cancelled{background:#fdecec;color:#9e4141}
 .meta{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:16px}
 .meta>div{background:#fff;border:1px solid #dce7f2;border-radius:12px;padding:12px 14px}
 .meta span{display:block;color:#7387a1;font-size:11px}.meta b{display:block;margin-top:3px;font-size:14px}
-.stage{
-  background:#eaf2f8;border:1px solid #d8e4ef;border-radius:18px;
-  padding:16px;display:flex;justify-content:center;min-height:720px
-}
-.pdf-shell{
-  width:min(100%,960px);height:calc(100vh - 250px);min-height:760px;
-  background:#fff;border:1px solid #d5e0ea;box-shadow:0 12px 34px rgba(6,37,76,.14)
-}
+.stage{background:#eaf2f8;border:1px solid #d8e4ef;border-radius:18px;padding:12px;display:flex;justify-content:center}
+.pdf-shell{width:min(100%,1080px);height:calc(100vh - 250px);min-height:760px;background:#fff;border:1px solid #d5e0ea;box-shadow:0 12px 34px rgba(6,37,76,.14)}
 .pdf-frame{width:100%;height:100%;border:0;display:block;background:#fff}
-.actions{
-  display:flex;gap:10px;justify-content:center;flex-wrap:wrap;
-  background:#fff;border:1px solid #dce7f2;border-radius:14px;margin-top:14px;padding:13px
-}
+.actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;background:#fff;border:1px solid #dce7f2;border-radius:14px;margin-top:14px;padding:13px}
 .notice{margin-top:12px;text-align:center;padding:11px;border-radius:10px;background:#fff7dd;color:#806000;border:1px solid #f1df9c;font-size:12px}
 .notice.cancelled{background:#fff0f0;color:#9d4242;border-color:#efcccc}
 .loading{position:fixed;inset:0;background:#fff;z-index:99;display:flex;align-items:center;justify-content:center;text-align:center}
 .loading.hide{display:none}
 @media(max-width:850px){
-  .meta{grid-template-columns:1fr 1fr}.head{align-items:flex-start;flex-direction:column}
-  .stage{padding:6px}.pdf-shell{height:72vh;min-height:520px}
+ .meta{grid-template-columns:1fr 1fr}.head{align-items:flex-start;flex-direction:column}
+ .stage{padding:4px}.pdf-shell{height:72vh;min-height:520px}
 }
 </style>
-<meta name="sante-member-accounting-view" content="R14-ACTUAL-STORAGE-PDF">
-<meta name="sante-member-pdf-link" content="R17-REGISTRY-CANONICAL-PATH">
+<meta name="sante-member-accounting-view" content="R19-CANONICAL-PDF-ONLY">
 </head>
 <body>
 <div id="loading" class="loading">กำลังโหลดเอกสาร...</div>
@@ -98,8 +78,9 @@ a{text-decoration:none;color:inherit}button{font:inherit}
     <div id="pdfShell" class="pdf-shell" style="display:none">
       <iframe id="pdfFrame" class="pdf-frame" title="เอกสาร PDF"></iframe>
     </div>
-    <div id="pdfMissing" style="display:none;align-self:center;text-align:center;color:#6f82a0;line-height:1.7">
-      ยังไม่มีไฟล์ PDF เวอร์ชันล่าสุดของเอกสารนี้<br>กรุณาให้ SANTE กด “สร้าง PDF ใหม่” หลังอัปเดตระบบ
+    <div id="pdfMissing" style="display:none;align-self:center;text-align:center;color:#6f82a0;line-height:1.7;padding:80px 20px">
+      ไม่พบไฟล์ PDF ที่ออกจากระบบสำหรับเอกสารนี้<br>
+      กรุณาติดต่อ SANTE
     </div>
   </section>
 
@@ -134,41 +115,15 @@ function thDate(v){
 function safeDocNo(v){
   return String(v||"DOCUMENT").trim().replace(/[^A-Za-z0-9_-]/g,"_")||"DOCUMENT";
 }
-function accountingPdfPath(x){
+function canonicalPdfPath(x){
   const safe=safeDocNo(x?.document_no);
   const year=String(x?.issue_date||"").slice(0,4)||String(new Date().getFullYear());
   return `accounting/${year}/${x.document_type}/${safe}.pdf`;
 }
-
-async function signedUrl(bucket,path){
-  if(!bucket||!path)return "";
-  const {data,error}=await db.storage.from(bucket).createSignedUrl(path,900);
-  if(error)return "";
+async function signedUrl(path){
+  const {data,error}=await db.storage.from("training-documents").createSignedUrl(path,900);
+  if(error){console.error("SIGNED URL ERROR",path,error);return ""}
   return data?.signedUrl||"";
-}
-async function resolvePdf(x){
-  const {data:docs,error:docsError}=await db.rpc("member_get_my_documents");
-  if(!docsError&&Array.isArray(docs)){
-    const no=String(x.document_no||"").toUpperCase();
-    const matches=docs.filter(d=>{
-      const text=[
-        d?.title,d?.original_filename,d?.file_name,d?.filename,
-        d?.storage_path,d?.document_no,d?.name
-      ].map(v=>String(v||"")).join(" ").toUpperCase();
-      return no && text.includes(no) && d?.storage_bucket && d?.storage_path;
-    });
-    matches.sort((a,b)=>String(b.updated_at||b.created_at||"").localeCompare(String(a.updated_at||a.created_at||"")));
-    for(const d of matches){
-      const url=await signedUrl(d.storage_bucket,d.storage_path);
-      if(url)return {url,bucket:d.storage_bucket,path:d.storage_path};
-    }
-  }
-
-  const path=accountingPdfPath(x);
-  const url=await signedUrl("training-documents",path);
-  if(url)return {url,bucket:"training-documents",path};
-
-  return null;
 }
 async function downloadPdf(){
   if(!pdfUrl||!currentDoc)return;
@@ -176,13 +131,14 @@ async function downloadPdf(){
     const r=await fetch(pdfUrl);
     if(!r.ok)throw new Error("ดาวน์โหลดไฟล์ไม่สำเร็จ");
     const blob=await r.blob();
+    const url=URL.createObjectURL(blob);
     const a=document.createElement("a");
-    a.href=URL.createObjectURL(blob);
+    a.href=url;
     a.download=safeDocNo(currentDoc.document_no)+".pdf";
     document.body.appendChild(a);
     a.click();
     a.remove();
-    setTimeout(()=>URL.revokeObjectURL(a.href),1200);
+    setTimeout(()=>URL.revokeObjectURL(url),1500);
   }catch(e){
     alert("ดาวน์โหลด PDF ไม่สำเร็จ: "+(e.message||e));
   }
@@ -197,7 +153,7 @@ function renderActions(){
     actions.push(`<a class="btn green" href="member-payments.html">แจ้งชำระเงิน</a>`);
   }
   $("actions").innerHTML=actions.join("");
-  if($("openPdfBtn"))$("openPdfBtn").onclick=()=>window.open(pdfUrl+(pdfUrl.includes("?")?"&":"?")+"v="+Date.now(),"_blank","noopener");
+  if($("openPdfBtn"))$("openPdfBtn").onclick=()=>window.open(pdfUrl+(pdfUrl.includes("?")?"&":"?")+"fresh="+Date.now(),"_blank","noopener");
   if($("downloadPdfBtn"))$("downloadPdfBtn").onclick=downloadPdf;
 }
 async function init(){
@@ -215,8 +171,10 @@ async function init(){
 
     if(!DOC_ID)throw new Error("ไม่พบรหัสเอกสาร");
 
+    // This RPC is used only to verify ownership and read document metadata.
     const {data,error:rpcError}=await db.rpc("member_get_my_accounting_documents");
     if(rpcError)throw rpcError;
+
     const rows=Array.isArray(data)?data:[];
     currentDoc=rows.find(x=>String(x.source_id)===String(DOC_ID));
     if(!currentDoc)throw new Error("ไม่พบเอกสารนี้ในบัญชีของคุณ");
@@ -244,9 +202,11 @@ async function init(){
       $("notice").textContent="เอกสารฉบับนี้ถูกยกเลิกแล้ว และไม่สามารถใช้เพื่อชำระเงินได้";
     }
 
-    const pdf=await resolvePdf(currentDoc);
-    if(pdf){
-      pdfUrl=pdf.url;
+    // IMPORTANT: display exactly the PDF that Admin writes.
+    const path=canonicalPdfPath(currentDoc);
+    pdfUrl=await signedUrl(path);
+
+    if(pdfUrl){
       $("pdfFrame").src=pdfUrl+(pdfUrl.includes("?")?"&":"?")+"fresh="+Date.now()+"#toolbar=1&navpanes=0&view=FitH";
       $("pdfShell").style.display="block";
     }else{
