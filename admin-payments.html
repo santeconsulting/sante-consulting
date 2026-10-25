@@ -11,20 +11,20 @@
 <style>
 
 *{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:Prompt,sans-serif;color:#082d69;background:#f1f7fb}
-:root{--navy:#082d69;--navy-dark:#061f4b;--yellow:#ffbf19;--blue:#087df0;--green:#159447;--red:#b42318;--bg:#f1f7fb;--muted:#6f83a2;--line:#d9e5ef;--sidebar:285px}
+:root{--navy:#082d69;--navy-dark:#061f4b;--yellow:#ffbf19;--blue:#087df0;--green:#159447;--red:#b42318;--bg:#f1f7fb;--muted:#6f83a2;--line:#d9e5ef;--sidebar:220px}
 a{text-decoration:none;color:inherit}button,input,select,textarea{font-family:Prompt,sans-serif}
 .loading{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:#fff;font-weight:600}
 .loading.hidden{display:none}
 .sidebar{position:fixed;left:0;top:0;bottom:0;width:var(--sidebar);z-index:1200;background:linear-gradient(180deg,#082d69,#06265c,#061f4b);color:#fff;padding:0 16px 22px;overflow:auto}
-.sidebar-brand{height:108px;display:flex;align-items:center;justify-content:center}
-.sidebar-brand img{width:190px;height:82px;object-fit:contain}
+.sidebar-brand{height:100px;display:flex;align-items:center;justify-content:center}
+.sidebar-brand img{width:150px;height:72px;object-fit:contain}
 .sidebar-label{font-size:10px;letter-spacing:1.7px;opacity:.58;padding:0 10px 8px}
-.nav{display:grid;gap:5px}.nav-link{min-height:54px;padding:0 14px;border-radius:15px;display:flex;align-items:center;gap:12px;font-size:14px}
+.nav{display:grid;gap:5px}.nav-link{min-height:48px;padding:0 12px;border-radius:12px;display:flex;align-items:center;gap:10px;font-size:13px}
 .nav-link:hover{background:rgba(255,255,255,.08)}.nav-link.active{background:var(--yellow);color:var(--navy);font-weight:700}
 .nav-icon{width:22px;text-align:center;font-size:18px}.sidebar-footer{margin-top:18px;padding:15px 10px;border-top:1px solid rgba(255,255,255,.12);font-size:11px;opacity:.72}
-.topbar{position:fixed;top:0;left:var(--sidebar);right:0;height:88px;z-index:1000;background:rgba(255,255,255,.97);border-bottom:1px solid #e2ebf3;display:flex;align-items:center;justify-content:space-between;padding:0 34px}
+.topbar{position:fixed;top:0;left:var(--sidebar);right:0;height:76px;z-index:1000;background:rgba(255,255,255,.97);border-bottom:1px solid #e2ebf3;display:flex;align-items:center;justify-content:space-between;padding:0 34px}
 .top-left{display:flex;align-items:center;gap:12px}.page-name{font-size:21px;font-weight:700}.page-sub{font-size:12px;color:var(--muted);margin-top:2px}.menu-btn{display:none}
-.main{margin-left:var(--sidebar);padding-top:88px;min-height:100vh}.content{width:min(1540px,calc(100% - 58px));margin:0 auto;padding:26px 0 46px}
+.main{margin-left:var(--sidebar);padding-top:76px;min-height:100vh}.content{width:min(1540px,calc(100% - 56px));margin:0 auto;padding:24px 0 46px}
 .hero{border-radius:24px;background:linear-gradient(135deg,#082d69,#0d4386);padding:25px 28px;color:#fff;display:flex;justify-content:space-between;align-items:center;gap:20px}
 .hero h1{margin:0;font-size:28px}.hero p{margin:5px 0 0;color:#cbdcf0;font-size:13px}.hero-actions{display:flex;gap:9px;flex-wrap:wrap}
 .btn{min-height:42px;padding:0 15px;border-radius:11px;border:1px solid var(--line);background:#fff;color:var(--navy);font-weight:600;cursor:pointer}
@@ -60,7 +60,7 @@ label{display:block;font-size:11px;font-weight:600;margin-bottom:5px}.input,text
 
 
 .payment-proof{margin-top:16px;border:1px solid var(--line);border-radius:16px;padding:12px;min-height:220px;display:flex;align-items:center;justify-content:center;background:#f9fbfd;text-align:center}
-.payment-proof img{max-width:100%;max-height:620px;object-fit:contain;border-radius:10px}
+.payment-proof img{display:block;max-width:100%;max-height:620px;object-fit:contain;border-radius:10px;margin:0 auto}.payment-proof iframe{display:block;width:100%;height:620px;border:0;border-radius:10px;background:#fff}.payment-proof .proof-open{display:inline-block;margin-top:10px}
 .payment-proof a{color:var(--blue);text-decoration:underline;font-weight:600}
 .payment-meta-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
 .payment-info{background:#f6f9fc;border-radius:12px;padding:12px 14px}
@@ -182,7 +182,7 @@ const BUCKET="training-documents";
 const $=id=>document.getElementById(id);
 const esc=v=>String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[m]));
 const money=v=>new Intl.NumberFormat("th-TH",{minimumFractionDigits:2,maximumFractionDigits:2}).format(Number(v||0))+" บาท";
-const dt=v=>{if(!v)return"-";const d=new Date(v);return Number.isNaN(d.getTime())?String(v):new Intl.DateTimeFormat("th-TH",{dateStyle:"medium",timeStyle:"short"}).format(d)};
+const dt=v=>{if(!v)return"-";const d=new Date(v);return Number.isNaN(d.getTime())?String(v):new Intl.DateTimeFormat("th-TH-u-ca-gregory",{dateStyle:"medium",timeStyle:"short"}).format(d)};
 let rows=[],current=null;
 
 async function ensureStaff(){
@@ -250,27 +250,75 @@ function collectProofCandidates(value,path="",out=[]){
   if(typeof value==="object")Object.entries(value).forEach(([k,v])=>collectProofCandidates(v,path?`${path}.${k}`:k,out));
   return out;
 }
-async function signCandidate(c,raw){
-  if(!c)return "";
-  if(/^https?:\/\//i.test(c))return c;
-  const bucket=raw?.slip_bucket||raw?.proof_bucket||raw?.storage_bucket||raw?.bucket||BUCKET;
-  const clean=String(c).replace(/^\/+|^storage\/v1\/object\/[^/]+\//g,"");
+async function signCandidate(pathOrUrl,raw){
+  if(!pathOrUrl)return "";
+  const value=String(pathOrUrl).trim();
+  if(/^https?:\/\//i.test(value))return value;
+  const bucket=raw?.storage_bucket||raw?.slip_bucket||raw?.proof_bucket||raw?.bucket||"payment-slips";
+  let clean=value.replace(/^\/+/, "");
+  const objectMatch=clean.match(/^storage\/v1\/object\/(?:sign|public)\/([^/]+)\/(.+)$/i);
+  if(objectMatch){
+    const urlBucket=objectMatch[1];
+    clean=objectMatch[2].split("?")[0];
+    const {data,error}=await db.storage.from(urlBucket).createSignedUrl(clean,900);
+    if(!error&&data?.signedUrl)return data.signedUrl;
+    return "";
+  }
+  clean=clean.replace(/^storage\/v1\/object\/[^/]+\//i,"");
   const {data,error}=await db.storage.from(bucket).createSignedUrl(clean,900);
   if(!error&&data?.signedUrl)return data.signedUrl;
   return "";
 }
-async function findProofUrl(x){
-  const sources=[x];
+function proofRecords(value,out=[]){
+  if(!value)return out;
+  if(Array.isArray(value)){value.forEach(v=>proofRecords(v,out));return out;}
+  if(typeof value==="string"){
+    try{const parsed=JSON.parse(value);if(parsed&&typeof parsed==="object")proofRecords(parsed,out);}catch(_){}
+    return out;
+  }
+  if(typeof value==="object"){
+    out.push(value);
+    for(const [k,v] of Object.entries(value)){
+      if(v&&typeof v==="object"&&/proof|slip|file|data|result|record/i.test(k))proofRecords(v,out);
+    }
+  }
+  return out;
+}
+async function findProofDetails(x){
+  const records=[];
   try{
     const {data,error}=await db.rpc("admin_get_payment_proof",{p_payment_id:paymentId(x)});
-    if(!error&&data)sources.push(data);
+    if(!error&&data)proofRecords(data,records);
+    else if(error)console.warn("admin_get_payment_proof:",error.message);
   }catch(e){console.warn("proof rpc",e)}
-  const candidates=collectProofCandidates(sources).sort((a,b)=>b.score-a.score);
-  for(const c of candidates){
-    const url=await signCandidate(c.value,x);
-    if(url)return url;
+  // payment.html uploads to payment_slips.storage_bucket + storage_path in bucket payment-slips.
+  try{
+    const {data,error}=await db.from("payment_slips")
+      .select("id,payment_id,user_id,original_filename,mime_type,storage_provider,storage_bucket,storage_path,submitted_at,slip_status")
+      .eq("payment_id",paymentId(x))
+      .maybeSingle();
+    if(!error&&data)records.push(data);
+    else if(error)console.warn("payment_slips fallback:",error.message);
+  }catch(e){console.warn("payment_slips fallback",e)}
+  records.sort((a,b)=>Number(Boolean(b.storage_path))-Number(Boolean(a.storage_path)));
+  for(const r of records){
+    const direct=r.signed_url||r.signedUrl||r.public_url||r.publicUrl||r.file_url||r.fileUrl||r.proof_url||r.proofUrl;
+    if(direct&&/^https?:\/\//i.test(String(direct))){
+      return {url:String(direct),mime:r.mime_type||r.content_type||"",filename:r.original_filename||r.filename||""};
+    }
+    const path=r.storage_path||r.slip_path||r.proof_path||r.file_path||r.object_path||r.path;
+    if(path){
+      const url=await signCandidate(path,r);
+      if(url)return {url,mime:r.mime_type||r.content_type||"",filename:r.original_filename||r.filename||""};
+    }
   }
-  return "";
+  const candidates=collectProofCandidates(records).sort((a,b)=>b.score-a.score);
+  for(const c of candidates){
+    const owner=records.find(r=>Object.values(r).some(v=>v===c.value))||x;
+    const url=await signCandidate(c.value,owner);
+    if(url)return {url,mime:owner.mime_type||"",filename:owner.original_filename||""};
+  }
+  return null;
 }
 
 async function openReview(id){
@@ -292,12 +340,17 @@ async function openReview(id){
   $("reviewNote").value=current.review_note||"";
   $("proofArea").innerHTML="กำลังโหลดหลักฐาน...";
   $("reviewBg").classList.add("show");
-  const url=await findProofUrl(current);
-  if(url){
-    const lower=url.toLowerCase();
-    $("proofArea").innerHTML=lower.includes(".pdf")?`<a href="${esc(url)}" target="_blank">เปิดหลักฐาน PDF</a>`:`<img src="${esc(url)}" alt="หลักฐานการชำระเงิน">`;
+  const proof=await findProofDetails(current);
+  if(proof?.url){
+    const url=proof.url;
+    const isPdf=/pdf/i.test(proof.mime||"")||/\\.pdf(?:[?#]|$)/i.test(proof.filename||url);
+    if(isPdf){
+      $("proofArea").innerHTML=`<div style="width:100%"><iframe src="${esc(url)}#toolbar=1" title="หลักฐานการชำระเงิน PDF"></iframe><a class="proof-open" href="${esc(url)}" target="_blank" rel="noopener">เปิด PDF ในแท็บใหม่</a></div>`;
+    }else{
+      $("proofArea").innerHTML=`<div style="width:100%"><img src="${esc(url)}" alt="หลักฐานการชำระเงิน" onerror="this.style.display='none';this.parentElement.insertAdjacentHTML('beforeend','<p>เปิดภาพไม่สำเร็จ กรุณาเปิดไฟล์ในแท็บใหม่</p>')"><a class="proof-open" href="${esc(url)}" target="_blank" rel="noopener">เปิดหลักฐานในแท็บใหม่</a></div>`;
+    }
   }else{
-    $("proofArea").innerHTML='<div>ยังไม่สามารถระบุตำแหน่งไฟล์หลักฐานได้<br><span class="muted">ระบบพบรายการชำระเงิน แต่ไม่พบ path/url ใน payment record หรือตารางหลักฐานที่ผูกด้วย payment_id</span></div>';
+    $("proofArea").innerHTML='<div>ยังไม่พบไฟล์หลักฐานที่เปิดดูได้<br><span class="muted">ตรวจสอบแล้วจาก RPC และตาราง payment_slips โดยใช้ payment_id หากยังไม่แสดง ให้ตรวจสอบสิทธิ์ RLS ของผู้ดูแลระบบและข้อมูล storage_path ในฐานข้อมูล</span></div>';
   }
   const locked=["VERIFIED","PAID"].includes(String(current.payment_status||"").toUpperCase());
   $("approveBtn").style.display=locked?"none":"";
