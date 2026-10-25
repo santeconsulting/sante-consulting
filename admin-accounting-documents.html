@@ -2616,6 +2616,7 @@ label{display:block;font-size:11px;font-weight:600;margin-bottom:5px}.input,text
 <meta name="sante-pdf-build" content="R10-HTML2PDF-CANVAS-FULL-A4">
 <meta name="sante-document-filename-r14" content="DOCUMENT-NUMBER-AS-PDF-NAME">
 <meta name="sante-pdf-version" content="R15-VERSIONED-STORAGE-LATEST">
+<meta name="sante-single-pdf-master" content="R21-ADMIN-UPLOAD-MEMBER-SAME-FILE">
 </head>
 <body>
 <div id="loading" class="loading">กำลังโหลดเอกสารบัญชี...</div>
@@ -2676,6 +2677,7 @@ label{display:block;font-size:11px;font-weight:600;margin-bottom:5px}.input,text
   <div class="hero-actions">
    <button id="syncQuotesBtn" class="btn yellow">ซิงก์ใบเสนอราคา → ใบแจ้งหนี้</button>
    <button id="generateReadyBtn" class="btn">ออก PDF เอกสารพร้อมออก</button>
+<button class="btn" id="uploadMasterPdfBtn" type="button">อัปโหลด PDF ต้นฉบับ</button>
    <button id="newReceiptBtn" class="btn">สร้าง Draft ใบเสร็จจาก Payment</button>
    <button id="newCreditNoteBtn" class="btn" style="display:none">สร้างใบลดหนี้</button>
   </div>
@@ -3192,7 +3194,8 @@ async function printAccountingPreview(){
  html,body{margin:0!important;padding:0!important;width:210mm!important;min-height:297mm!important;background:#fff!important;overflow:visible!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;color-adjust:exact!important}
  body>.paper{display:block!important;position:relative!important;margin:0!important;box-shadow:none!important;transform:none!important;zoom:1!important;width:210mm!important;min-width:210mm!important;max-width:210mm!important;min-height:297mm!important;page-break-after:avoid!important;break-after:avoid-page!important}
  @page{size:A4 portrait;margin:0}
- </style></head><body>${source.outerHTML}</body></html>`);
+ </style></head><body>${source.outerHTML}<input id="masterPdfUploadInput" type="file" accept="application/pdf,.pdf" style="display:none">
+</body></html>`);
  doc.close();
  try{
    if(doc.fonts?.ready)await doc.fonts.ready;
@@ -3846,6 +3849,83 @@ async function issueOne(id,silent=false,regenerateIssued=false){
  }
 }
 
+
+function currentAccountingDocumentForMasterPdf(){
+  if(editing?.id){
+    const found=docs.find(d=>d.id===editing.id);
+    if(found)return found;
+  }
+  const visible=getVisibleDocs();
+  const issued=visible.find(d=>d.document_status==="ISSUED");
+  return issued||null;
+}
+
+function canonicalAccountingPdfPath(x){
+  const safe=String(x?.document_no||x?.id||"DOCUMENT").replace(/[^A-Za-z0-9_-]/g,"_");
+  const year=String(x?.issue_date||"").slice(0,4)||String(new Date().getFullYear());
+  return `accounting/${year}/${x.document_type}/${safe}.pdf`;
+}
+
+async function uploadMasterAccountingPdf(file){
+  const x=currentAccountingDocumentForMasterPdf();
+  if(!x){
+    alert("กรุณาเปิดเอกสารที่ต้องการก่อนอัปโหลด PDF ต้นฉบับ");
+    return;
+  }
+  if(!file||file.type!=="application/pdf"){
+    alert("กรุณาเลือกไฟล์ PDF เท่านั้น");
+    return;
+  }
+
+  const expected=(x.document_no||"DOCUMENT")+".pdf";
+  const selected=String(file.name||"");
+  if(selected.toUpperCase()!==expected.toUpperCase()){
+    const ok=confirm(`ชื่อไฟล์ที่เลือกคือ\n${selected}\n\nชื่อที่ระบบแนะนำคือ\n${expected}\n\nต้องการอัปโหลดไฟล์นี้แทนเอกสาร ${x.document_no||""} หรือไม่?`);
+    if(!ok)return;
+  }
+
+  const path=canonicalAccountingPdfPath(x);
+  const btn=$("uploadMasterPdfBtn");
+  if(btn){btn.disabled=true;btn.textContent="กำลังอัปโหลด..."}
+
+  try{
+    const up=await db.storage.from(BUCKET).upload(path,file,{
+      contentType:"application/pdf",
+      upsert:true,
+      cacheControl:"0"
+    });
+    if(up.error)throw up.error;
+
+    // Verify the exact canonical object is accessible after upload.
+    const verify=await db.storage.from(BUCKET).createSignedUrl(path,60);
+    if(verify.error||!verify.data?.signedUrl){
+      throw verify.error||new Error("ตรวจสอบไฟล์หลังอัปโหลดไม่สำเร็จ");
+    }
+
+    alert(`อัปโหลด PDF ต้นฉบับสำเร็จ\n${expected}\n\nMember จะเปิดไฟล์นี้โดยตรง`);
+  }catch(e){
+    console.error("MASTER PDF UPLOAD ERROR",e);
+    alert("อัปโหลด PDF ต้นฉบับไม่สำเร็จ: "+(e.message||e));
+  }finally{
+    if(btn){btn.disabled=false;btn.textContent="อัปโหลด PDF ต้นฉบับ"}
+    const input=$("masterPdfUploadInput");
+    if(input)input.value="";
+  }
+}
+
+function openMasterPdfPicker(){
+  const x=currentAccountingDocumentForMasterPdf();
+  if(!x){
+    alert("กรุณากด “ดูเอกสาร” หรือเปิดเอกสารที่ต้องการก่อน");
+    return;
+  }
+  if(x.document_status!=="ISSUED"){
+    alert("อัปโหลด PDF ต้นฉบับได้หลังเอกสารถูกออกเป็น ISSUED แล้ว");
+    return;
+  }
+  $("masterPdfUploadInput")?.click();
+}
+
 async function issueReadyAll(){
  const visible=getVisibleDocs();
  const ready=visible.filter(x=>["READY_TO_ISSUE","APPROVED"].includes(x.document_status));
@@ -4027,5 +4107,13 @@ setTimeout(()=>{
     if(document.body) mo.observe(document.body,{childList:true});
   });
 })();
+
+const masterPdfUploadBtn=$("uploadMasterPdfBtn");
+if(masterPdfUploadBtn)masterPdfUploadBtn.addEventListener("click",openMasterPdfPicker);
+const masterPdfUploadInput=$("masterPdfUploadInput");
+if(masterPdfUploadInput)masterPdfUploadInput.addEventListener("change",e=>{
+  const file=e.target.files?.[0];
+  if(file)uploadMasterAccountingPdf(file);
+});
 </script>
 </body></html>
