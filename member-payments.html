@@ -209,6 +209,7 @@ button{font-family:"Prompt",sans-serif}a{text-decoration:none;color:inherit}
 <meta name="sante-build" content="MEMBER-SHELL-MATCH-HOME-R5-MEMBER-PAYMENTS">
 <meta name="sante-payment-fix" content="R23-INVOICE-CONTEXT">
 <meta name="sante-payment-fix" content="R25-PAYMENT-CONTEXT-STABLE">
+<meta name="sante-payment-fix" content="R26-INVOICE-AUTO-PAYMENT">
 </head>
 <body>
 <header class="topbar">
@@ -304,10 +305,15 @@ function renderPayments(rows){
   if(invoiceCtx?.invoice_id && !filtered.length){
     list.innerHTML=`
       <div class="empty">
-        <b>ยังไม่พบรายการชำระเงินที่ผูกกับ ${esc(invoiceCtx.document_no||"ใบแจ้งหนี้นี้")}</b><br>
+        <b>ยังไม่มีรายการชำระเงินสำหรับ ${esc(invoiceCtx.document_no||"ใบแจ้งหนี้นี้")}</b><br>
         ยอดตามใบแจ้งหนี้ ${money(invoiceCtx.amount)}<br><br>
-        <span style="font-size:13px">ระบบพบใบแจ้งหนี้แล้ว แต่ยังไม่มี Payment record ที่เชื่อมกับใบแจ้งหนี้นี้ จึงยังไม่สามารถเปิดหน้าส่งหลักฐานการชำระเงินได้</span>
+        <button id="prepareInvoicePaymentBtn" class="detail-btn" type="button">สร้างรายการและแจ้งชำระเงิน</button>
+        <div id="prepareInvoicePaymentMsg" style="margin-top:12px;font-size:12px;color:#6f82a0">
+          ระบบจะสร้างรายการ PENDING จากใบแจ้งหนี้นี้โดยอัตโนมัติ
+        </div>
       </div>`;
+    const btn=document.getElementById("prepareInvoicePaymentBtn");
+    if(btn)btn.onclick=prepareInvoicePayment;
     return;
   }
 
@@ -345,6 +351,42 @@ async function rpcWithTimeout(name,args={},ms=15000){
     return await Promise.race([request,timeout]);
   }finally{
     clearTimeout(timer);
+  }
+}
+
+
+async function prepareInvoicePayment(){
+  if(!invoiceCtx?.invoice_id){
+    alert("ไม่พบรหัสใบแจ้งหนี้");
+    return;
+  }
+
+  const btn=document.getElementById("prepareInvoicePaymentBtn");
+  const msg=document.getElementById("prepareInvoicePaymentMsg");
+  if(btn){btn.disabled=true;btn.textContent="กำลังสร้างรายการ..."}
+  if(msg)msg.textContent="กำลังตรวจสอบ/สร้าง Payment record...";
+
+  try{
+    const {data,error}=await db.rpc("member_prepare_invoice_payment",{
+      p_invoice_id:invoiceCtx.invoice_id
+    });
+    if(error)throw error;
+
+    const row=Array.isArray(data)?data[0]:data;
+    const paymentId=row?.payment_id||row?.id;
+    if(!paymentId)throw new Error("ระบบสร้างรายการแล้วแต่ไม่พบ Payment ID");
+
+    sessionStorage.setItem("sante-pending-payment-id",paymentId);
+
+    const qs=new URLSearchParams({payment:paymentId});
+    qs.set("invoice",invoiceCtx.invoice_id);
+    qs.set("document",invoiceCtx.document_no||"");
+    qs.set("amount",String(invoiceCtx.amount||0));
+    location.href="payment.html?"+qs.toString();
+  }catch(e){
+    console.error("PREPARE INVOICE PAYMENT ERROR",e);
+    if(btn){btn.disabled=false;btn.textContent="ลองสร้างรายการอีกครั้ง"}
+    if(msg)msg.innerHTML=`สร้างรายการไม่สำเร็จ: ${esc(e.message||e)}`;
   }
 }
 
