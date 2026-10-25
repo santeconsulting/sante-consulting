@@ -233,6 +233,14 @@ button{font-family:"Prompt",sans-serif}a{text-decoration:none;color:inherit}
   <a class="home-link" href="member-home.html">← หน้าหลักสมาชิก</a>
  </div>
  <section id="invoiceContext" class="invoice-context"></section>
+<section id="paymentProcessNote" class="invoice-context show" style="background:#f8fbff">
+  <strong>ขั้นตอนการตรวจสอบการชำระเงิน</strong>
+  <div class="muted">
+    หลังส่งหลักฐาน ระบบจะอยู่ในสถานะ “รอตรวจสอบการชำระเงิน”
+    เมื่อผู้ดูแลตรวจสอบและอนุมัติแล้ว สถานะจะเปลี่ยนเป็น “ชำระเงินแล้ว”
+    และระบบจะดำเนินการสิทธิ์ บริการ หรือเอกสารที่เกี่ยวข้องตามรายการต่อไป
+  </div>
+</section>
 <section id="paymentList" class="list"><div class="loading">กำลังโหลดรายการชำระเงิน...</div></section>
 </main>
 <script>
@@ -278,7 +286,7 @@ function statusInfo(v){
   const s=String(v||"PENDING").toUpperCase();
   if(s==="VERIFIED"||s==="PAID")return["verified","ชำระเงินแล้ว"];
   if(s==="FAILED")return["failed","ไม่สำเร็จ"];
-  return["pending","รอชำระเงิน/ตรวจสอบ"];
+  return["pending","รอตรวจสอบการชำระเงิน"];
 }
 
 function paymentMatchesInvoice(x){
@@ -309,7 +317,7 @@ function renderPayments(rows){
         ยอดตามใบแจ้งหนี้ ${money(invoiceCtx.amount)}<br><br>
         <button id="prepareInvoicePaymentBtn" class="detail-btn" type="button">สร้างรายการและแจ้งชำระเงิน</button>
         <div id="prepareInvoicePaymentMsg" style="margin-top:12px;font-size:12px;color:#6f82a0">
-          ระบบจะสร้างรายการ PENDING จากใบแจ้งหนี้นี้โดยอัตโนมัติ
+          ระบบจะสร้างรายการรอตรวจสอบจากใบแจ้งหนี้นี้โดยอัตโนมัติ
         </div>
       </div>`;
     const btn=document.getElementById("prepareInvoicePaymentBtn");
@@ -334,7 +342,7 @@ function renderPayments(rows){
         <div class="amount">${money(x.amount)}</div>
         <span class="status ${cls}">${label}</span>
         <button class="detail-btn" onclick="openPayment('${esc(x.payment_id||x.id)}')">
-          ${["VERIFIED","PAID"].includes(String(x.payment_status||"").toUpperCase())?"ดูรายละเอียด":"ดูรายละเอียด / แจ้งชำระเงิน"}
+          ${["VERIFIED","PAID"].includes(String(x.payment_status||"").toUpperCase())?"ดูรายละเอียด":"ดูรายละเอียด / ส่งหลักฐาน"}
         </button>
       </div>
     </article>`;
