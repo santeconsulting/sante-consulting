@@ -126,7 +126,23 @@ td{padding-top:14px;padding-bottom:14px}
 }
 
 </style>
-<meta name="sante-admin-payments" content="R28-MATCHED-ADMIN-UI-INVOICE-REFERENCE-PROOF">
+<meta name="sante-admin-payments" content="R29-CANONICAL-ADMIN-SHELL-PROOF-PENDING">
+
+<style id="sante-admin-payments-r29">
+/* R29 payment-page-specific refinements; business logic unchanged */
+#sPending,#sVerified,#sFailed,#sAll{font-variant-numeric:tabular-nums}
+.page-head .btn{white-space:nowrap}
+.panel{box-shadow:0 6px 18px rgba(8,45,105,.035)}
+.payment-proof{background:#f9fbfd}
+@media(max-width:900px){
+  .topbar{left:0!important}
+  .main{margin-left:0!important}
+  .admin-copy{display:none!important}
+  .page-head{display:block!important}
+  .page-head>.btn,.page-head>a{margin-top:12px}
+}
+</style>
+
 </head>
 <body>
 <div id="loading" class="loading">กำลังโหลดการชำระเงิน...</div>
