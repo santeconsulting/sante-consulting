@@ -9,6 +9,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 *{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:Prompt,sans-serif;color:#082d69;background:#f1f7fb}
 :root{--navy:#082d69;--navy-dark:#061f4b;--yellow:#ffbf19;--blue:#087df0;--green:#159447;--red:#b42318;--bg:#f1f7fb;--muted:#6f83a2;--line:#d9e5ef;--sidebar:285px}
@@ -2610,7 +2612,7 @@ label{display:block;font-size:11px;font-weight:600;margin-bottom:5px}.input,text
 <meta name="sante-build-taxid-validation" content="R5-TAXID-OPTIONAL-NONBLOCKING">
 <meta name="sante-build-pdf-repair" content="R6-STAGE-AWARE-REPAIR">
 <meta name="sante-workflow" content="R7-ACCOUNTING-STATE-ACTIONS">
-<meta name="sante-pdf-build" content="R16-HTML2PDF-STABLE-NO-MANUAL-ADDIMAGE">
+<meta name="sante-pdf-build" content="R18-EXACT-A4-STANDALONE-RENDERER">
 <meta name="sante-pdf-build" content="R10-HTML2PDF-CANVAS-FULL-A4">
 <meta name="sante-document-filename-r14" content="DOCUMENT-NUMBER-AS-PDF-NAME">
 <meta name="sante-pdf-version" content="R15-VERSIONED-STORAGE-LATEST">
@@ -3632,6 +3634,13 @@ async function generateBlob(x){
  const pageW=794;
  const pageH=1123;
 
+ if(typeof window.html2canvas!=="function"){
+   throw new Error("ไม่พบ html2canvas renderer");
+ }
+ if(!window.jspdf?.jsPDF){
+   throw new Error("ไม่พบ jsPDF renderer");
+ }
+
  const host=document.createElement("div");
  host.className="sante-pdf-render-host";
  host.style.cssText=[
@@ -3639,13 +3648,13 @@ async function generateBlob(x){
    "left:0",
    "top:0",
    `width:${pageW}px`,
-   "height:auto",
+   `height:${pageH}px`,
    "margin:0",
    "padding:0",
-   "background:#fff",
+   "background:#ffffff",
    "z-index:-2147483000",
    "pointer-events:none",
-   "overflow:visible"
+   "overflow:hidden"
  ].join(";");
 
  host.innerHTML=paperHtml(x);
@@ -3659,102 +3668,66 @@ async function generateBlob(x){
      width:`${pageW}px`,
      minWidth:`${pageW}px`,
      maxWidth:`${pageW}px`,
-     height:"auto",
+     height:`${pageH}px`,
      minHeight:`${pageH}px`,
-     maxHeight:"none",
+     maxHeight:`${pageH}px`,
      margin:"0",
      boxShadow:"none",
      transform:"none",
      transformOrigin:"top left",
      zoom:"1",
      position:"relative",
-     overflow:"visible",
+     overflow:"hidden",
      boxSizing:"border-box"
    });
 
    await waitForPdfAssets(element);
+   await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
 
-   const naturalHeight=Math.max(
-     pageH,
-     Math.ceil(element.scrollHeight||0),
-     Math.ceil(element.getBoundingClientRect().height||0)
+   const contentHeight=Math.ceil(element.scrollHeight||0);
+   const contentWidth=Math.ceil(element.scrollWidth||0);
+   if(contentHeight>pageH+4){
+     throw new Error(`Master สูงเกิน A4: ${contentHeight}px (กำหนด ${pageH}px)`);
+   }
+   if(contentWidth>pageW+4){
+     throw new Error(`Master กว้างเกิน A4: ${contentWidth}px (กำหนด ${pageW}px)`);
+   }
+
+   const canvas=await window.html2canvas(element,{
+     scale:2,
+     useCORS:true,
+     allowTaint:false,
+     backgroundColor:"#ffffff",
+     logging:false,
+     scrollX:0,
+     scrollY:0,
+     x:0,
+     y:0,
+     width:pageW,
+     height:pageH,
+     windowWidth:pageW,
+     windowHeight:pageH
+   });
+
+   if(!canvas?.width||!canvas?.height){
+     throw new Error("ไม่สามารถ Render เอกสารเป็นภาพได้");
+   }
+
+   const {jsPDF}=window.jspdf;
+   const pdf=new jsPDF({
+     unit:"px",
+     format:[pageW,pageH],
+     orientation:"portrait",
+     hotfixes:["px_scaling"],
+     compress:true
+   });
+
+   pdf.addImage(
+     canvas.toDataURL("image/jpeg",0.98),
+     "JPEG",
+     0,0,pageW,pageH,
+     undefined,"FAST"
    );
-
-   element.style.height=naturalHeight+"px";
-   element.style.minHeight=naturalHeight+"px";
-
-   const baseOpt={
-     margin:0,
-     filename:"document.pdf",
-     image:{type:"jpeg",quality:0.98},
-     html2canvas:{
-       scale:2.5,
-       useCORS:true,
-       allowTaint:false,
-       backgroundColor:"#ffffff",
-       logging:false,
-       scrollX:0,
-       scrollY:0,
-       width:pageW,
-       height:naturalHeight,
-       windowWidth:pageW,
-       windowHeight:naturalHeight
-     },
-     jsPDF:{
-       unit:"px",
-       format:[pageW,pageH],
-       orientation:"portrait",
-       hotfixes:["px_scaling"],
-       compress:true
-     },
-     pagebreak:{mode:["css","legacy"]}
-   };
-
-   let worker=html2pdf().set(baseOpt).from(element).toPdf();
-   let pdf=await worker.get("pdf");
-
-   if(!pdf||typeof pdf.output!=="function"){
-     throw new Error("PDF engine ไม่พร้อมใช้งาน");
-   }
-
-   const pageCount=typeof pdf.getNumberOfPages==="function"?pdf.getNumberOfPages():1;
-
-   if(pageCount>1){
-     const fitScale=Math.min(1,pageH/naturalHeight);
-
-     Object.assign(element.style,{
-       transform:`scale(${fitScale})`,
-       transformOrigin:"top left",
-       width:(pageW/fitScale)+"px",
-       maxWidth:(pageW/fitScale)+"px",
-       minWidth:(pageW/fitScale)+"px"
-     });
-
-     await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
-
-     const fittedOpt={
-       ...baseOpt,
-       html2canvas:{
-         ...baseOpt.html2canvas,
-         width:Math.ceil(pageW/fitScale),
-         height:naturalHeight,
-         windowWidth:Math.ceil(pageW/fitScale),
-         windowHeight:naturalHeight
-       }
-     };
-
-     worker=html2pdf().set(fittedOpt).from(element).toPdf();
-     pdf=await worker.get("pdf");
-
-     if(!pdf||typeof pdf.output!=="function"){
-       throw new Error("PDF engine ไม่พร้อมใช้งานหลังปรับขนาด");
-     }
-
-     const fittedPages=typeof pdf.getNumberOfPages==="function"?pdf.getNumberOfPages():1;
-     if(fittedPages>1){
-       throw new Error(`เอกสารยังเกิน 1 หน้า (${fittedPages} หน้า) กรุณาตรวจความสูงของ Master`);
-     }
-   }
 
    return pdf.output("blob");
  }finally{
