@@ -969,6 +969,77 @@ body{margin:0!important;font-family:"Prompt",sans-serif!important;color:var(--te
 }
 
 </style>
+
+<style id="sante-admin-hero-mobile-match-r4">
+/* Match the approved admin-dashboard(2).html hero. Keep page functionality untouched. */
+.admin-canonical-hero, .accounting-hero {
+  position:relative!important; width:100%!important; height:auto!important; min-height:0!important;
+  margin:0 0 28px!important; padding:10px!important; overflow:hidden!important;
+  border:0!important; border-radius:28px!important; background:#fff!important;
+  box-shadow:0 10px 30px rgba(8,45,105,.06)!important; box-sizing:border-box!important;
+}
+.admin-canonical-hero picture, .admin-canonical-hero img,
+.accounting-hero picture, .accounting-hero img {
+  position:relative!important; inset:auto!important; display:block!important; width:100%!important;
+  height:auto!important; max-width:100%!important; line-height:0!important;
+}
+.admin-canonical-hero img, .accounting-hero img {
+  border-radius:22px!important; object-fit:contain!important; object-position:center!important;
+}
+.admin-mobile-hero { display:none!important; }
+@media(max-width:767px) {
+  .admin-canonical-hero, .accounting-hero { display:none!important; }
+  .admin-mobile-hero {
+    position:relative!important; display:flex!important; flex-direction:column!important;
+    width:100%!important; min-height:390px!important; margin:0 0 20px!important;
+    padding:23px 20px 0!important; overflow:hidden!important; border:0!important;
+    border-radius:20px!important;
+    background:linear-gradient(145deg,#eaf7ff 0%,#fff 58%,#fff4c9 100%)!important;
+    box-shadow:0 8px 25px rgba(11,45,103,.07)!important; box-sizing:border-box!important;
+  }
+  .admin-mobile-hero::before {
+    content:""!important; position:absolute!important; width:190px!important; height:190px!important;
+    top:-90px!important; right:-70px!important; border-radius:50%!important;
+    background:rgba(255,191,25,.28)!important; pointer-events:none!important;
+  }
+  .admin-mobile-hero::after {
+    content:""!important; position:absolute!important; width:180px!important; height:180px!important;
+    left:-90px!important; bottom:-90px!important; border-radius:50%!important;
+    background:rgba(64,176,245,.14)!important; pointer-events:none!important;
+  }
+  .admin-mobile-hero-copy { position:relative!important; z-index:5!important; }
+  .admin-mobile-hero-badge {
+    width:max-content!important; display:inline-flex!important; align-items:center!important;
+    padding:6px 12px!important; border-radius:999px!important; background:#ffbf19!important;
+    color:#082d69!important; font-size:11px!important; font-weight:600!important; letter-spacing:.3px!important;
+  }
+  .admin-mobile-hero h1 {
+    margin:13px 0 0!important; color:#082d69!important;
+    font-size:clamp(27px,8vw,34px)!important; font-weight:700!important; line-height:1.23!important;
+  }
+  .admin-mobile-hero h1 span { color:#087df0!important; }
+  .admin-mobile-hero p {
+    max-width:320px!important; margin:9px 0 0!important; color:#637b9a!important;
+    font-size:13px!important; line-height:1.65!important;
+  }
+  .admin-mobile-hero-visual {
+    min-height:0!important; position:relative!important; z-index:3!important; flex:1 1 auto!important;
+    display:flex!important; align-items:flex-end!important; justify-content:center!important;
+    margin:5px -20px 0!important; overflow:hidden!important;
+  }
+  .admin-mobile-hero-visual img {
+    width:100%!important; height:auto!important; min-height:0!important; max-width:none!important;
+    display:block!important; object-fit:contain!important; object-position:center!important; border-radius:0!important;
+  }
+}
+@media(max-width:374px) {
+  .admin-mobile-hero { min-height:370px!important; padding:20px 17px 0!important; }
+  .admin-mobile-hero h1 { font-size:26px!important; }
+  .admin-mobile-hero p { font-size:12px!important; }
+  .admin-mobile-hero-visual { margin-left:-17px!important; margin-right:-17px!important; }
+}
+</style>
+
 </head>
 <body>
 <div class="loading" id="loading"><div class="loading-box"><strong>ระบบวุฒิบัตร SANTE</strong><div>กำลังตรวจสอบสิทธิ์และโหลดข้อมูล...</div><div class="spinner"></div></div></div>
@@ -1028,6 +1099,17 @@ body{margin:0!important;font-family:"Prompt",sans-serif!important;color:var(--te
         <img src="sante-dashboard-hero-desktop.png" alt="Trust in Safety. Trust in SANTE.">
       </picture>
     </section>
+<section class="admin-mobile-hero" aria-label="SANTE Admin">
+  <div class="admin-mobile-hero-copy">
+    <div class="admin-mobile-hero-badge">SANTE ADMIN</div>
+    <h1>Trust in Safety.<br><span>Trust in SANTE.</span></h1>
+    <p>จัดการระบบ SANTE ได้จากบัญชีผู้ดูแลเดียว ทั้งหลักสูตร รอบอบรม ข้อสอบ สมาชิก งานบริการ การชำระเงิน และเอกสาร</p>
+  </div>
+  <div class="admin-mobile-hero-visual">
+    <img src="sante-mobile-hero.png" alt="SANTE Admin">
+  </div>
+</section>
+
     <section class="page-header">
       <div><h1>วุฒิบัตร</h1><p>ออกแบบ ออกวุฒิบัตร ตรวจสอบ QR และจัดการเอกสารจากหน้าเดียว</p></div>
       <button class="btn yellow" onclick="switchTab('designer')">+ ออกวุฒิบัตร</button>
