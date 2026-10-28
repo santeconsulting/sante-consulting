@@ -375,6 +375,55 @@ td{padding-top:14px;padding-bottom:14px}
 }
 </style>
 
+
+<style id="sante-admin-payments-mobile-hero-r5">
+/* Payment page: force one correct hero per viewport and center hero action text. */
+#paymentsDesktopHero{display:block!important}
+#paymentsMobileHero{display:none!important}
+.hero-actions .btn{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+  line-height:1.25!important;
+}
+@media(max-width:767px){
+  #paymentsDesktopHero{display:none!important}
+  #paymentsMobileHero{
+    display:flex!important;
+    flex-direction:column!important;
+    width:100%!important;
+    height:390px!important;
+    min-height:390px!important;
+    max-height:390px!important;
+    margin:0 0 18px!important;
+    padding:23px 20px 0!important;
+    overflow:hidden!important;
+    border:0!important;
+    border-radius:20px!important;
+    background:linear-gradient(145deg,#eaf7ff 0%,#fff 58%,#fff4c9 100%)!important;
+    box-shadow:0 8px 25px rgba(11,45,103,.07)!important;
+    box-sizing:border-box!important;
+  }
+  #paymentsMobileHero .admin-mobile-hero-copy{flex:0 0 auto!important;position:relative!important;z-index:5!important}
+  #paymentsMobileHero .admin-mobile-hero-visual{
+    flex:1 1 0!important;min-height:0!important;max-height:235px!important;
+    margin:4px -20px 0!important;overflow:hidden!important;
+    display:flex!important;align-items:flex-end!important;justify-content:center!important;
+  }
+  #paymentsMobileHero .admin-mobile-hero-visual img{
+    display:block!important;width:100%!important;height:100%!important;max-width:none!important;
+    object-fit:contain!important;object-position:center bottom!important;border-radius:0!important;
+  }
+  .hero-actions .btn{min-height:42px!important;padding:0 15px!important}
+}
+@media(max-width:374px){
+  #paymentsMobileHero{height:370px!important;min-height:370px!important;max-height:370px!important;padding:20px 17px 0!important}
+  #paymentsMobileHero .admin-mobile-hero-visual{margin-left:-17px!important;margin-right:-17px!important;max-height:220px!important}
+}
+</style>
+<meta name="sante-admin-payments-build" content="MOBILE-HERO-R5-CENTERED-ACTION">
+
 </head>
 <body>
 <div id="loading" class="loading">กำลังโหลดการชำระเงิน...</div>
@@ -413,14 +462,14 @@ td{padding-top:14px;padding-bottom:14px}
 </header>
 
 <main class="main"><div class="content">
-<section class="admin-canonical-hero" aria-label="SANTE Admin">
+<section id="paymentsDesktopHero" class="admin-canonical-hero" aria-label="SANTE Admin">
   <picture>
     <source media="(max-width:767px)" srcset="sante-dashboard-hero-mobile.png">
     <img src="sante-dashboard-hero-desktop.png" alt="Trust in Safety. Trust in SANTE.">
   </picture>
 </section>
 
-<section class="admin-mobile-hero" aria-label="SANTE Admin">
+<section id="paymentsMobileHero" class="admin-mobile-hero" aria-label="SANTE Admin">
   <div class="admin-mobile-hero-copy">
     <div class="admin-mobile-hero-badge">SANTE ADMIN</div>
     <h1>Trust in Safety.<br><span>Trust in SANTE.</span></h1>
