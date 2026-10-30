@@ -414,8 +414,29 @@ td{padding-top:14px;padding-bottom:14px}
   .admin-mobile-hero p{font-size:12px!important}
   .admin-mobile-hero-visual{margin-left:-17px!important;margin-right:-17px!important}
 }
+
+/* ===== PAYMENTS MOBILE HERO HARD FIX R7 =====
+   Safari-safe: force exactly one hero by viewport. */
+@media (max-width:767px){
+  #paymentsDesktopHero{
+    display:none!important;visibility:hidden!important;
+    height:0!important;min-height:0!important;max-height:0!important;
+    margin:0!important;padding:0!important;border:0!important;
+    box-shadow:none!important;overflow:hidden!important;
+  }
+  #paymentsMobileHero{display:flex!important;visibility:visible!important;}
+}
+@media (min-width:768px){
+  #paymentsDesktopHero{display:block!important;visibility:visible!important;}
+  #paymentsMobileHero{display:none!important;visibility:hidden!important;}
+}
+.hero-actions a[href="admin-accounting-documents.html"]{
+  display:inline-flex!important;align-items:center!important;justify-content:center!important;
+  text-align:center!important;line-height:1.2!important;
+}
+
 </style>
-<meta name="sante-admin-payments-build" content="DASHBOARD-HERO-MATCH-R6">
+<meta name="sante-admin-payments-build" content="DASHBOARD-HERO-MATCH-R7">
 
 </head>
 <body>
@@ -455,13 +476,13 @@ td{padding-top:14px;padding-bottom:14px}
 </header>
 
 <main class="main"><div class="content">
-<section class="dashboard-hero canonical-hero" aria-label="SANTE Admin">
+<section id="paymentsDesktopHero" class="dashboard-hero canonical-hero" aria-label="SANTE Admin">
   <picture class="dashboard-hero-picture">
     <img src="sante-dashboard-hero-desktop.png" alt="SANTE Admin" class="dashboard-hero-image">
   </picture>
 </section>
 
-<section class="admin-mobile-hero" aria-label="SANTE Admin">
+<section id="paymentsMobileHero" class="admin-mobile-hero" aria-label="SANTE Admin">
   <div class="admin-mobile-hero-copy">
     <div class="admin-mobile-hero-badge">SANTE ADMIN</div>
     <h1>Trust in Safety.<br><span>Trust in SANTE.</span></h1>
@@ -535,6 +556,27 @@ td{padding-top:14px;padding-bottom:14px}
     </div>
   </div>
 </div>
+
+<script id="payments-mobile-hero-hard-fix-r7">
+(function(){
+  "use strict";
+  function syncPaymentsHero(){
+    var desktop=document.getElementById("paymentsDesktopHero");
+    var mobile=document.getElementById("paymentsMobileHero");
+    if(!desktop||!mobile) return;
+    var isMobile=window.matchMedia("(max-width:767px)").matches;
+    desktop.style.setProperty("display",isMobile?"none":"block","important");
+    desktop.style.setProperty("visibility",isMobile?"hidden":"visible","important");
+    mobile.style.setProperty("display",isMobile?"flex":"none","important");
+    mobile.style.setProperty("visibility",isMobile?"visible":"hidden","important");
+  }
+  if(document.readyState==="loading"){
+    document.addEventListener("DOMContentLoaded",syncPaymentsHero,{once:true});
+  }else{syncPaymentsHero();}
+  window.addEventListener("resize",syncPaymentsHero,{passive:true});
+  window.addEventListener("orientationchange",syncPaymentsHero,{passive:true});
+})();
+</script>
 
 <script>
 const SUPABASE_URL="https://cyegjwerxlxhczrfiurz.supabase.co";
