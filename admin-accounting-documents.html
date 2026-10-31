@@ -2964,6 +2964,7 @@ label{display:block;font-size:11px;font-weight:600;margin-bottom:5px}.input,text
 }
 </style>
 
+<meta name="sante-accounting-mobile-clean-fix" content="R37-HERO-SINGLE-MOBILE">
 </head>
 <body>
 <div id="loading" class="loading">กำลังโหลดเอกสารบัญชี...</div>
@@ -3007,7 +3008,6 @@ label{display:block;font-size:11px;font-weight:600;margin-bottom:5px}.input,text
 
 <section class="accounting-hero" aria-label="SANTE Admin">
   <picture>
-    <source media="(max-width:767px)" srcset="sante-dashboard-hero-mobile.png">
     <img src="sante-dashboard-hero-desktop.png" alt="Trust in Safety. Trust in SANTE.">
   </picture>
 </section>
@@ -3042,7 +3042,6 @@ label{display:block;font-size:11px;font-weight:600;margin-bottom:5px}.input,text
   </div>
  </section>
  <div id="workflowHint" class="workflow-hint"></div>
- </section>
 
  <section class="stats">
   <div class="stat"><span>เอกสารทั้งหมด</span><strong id="sAll">0</strong></div>
@@ -4646,15 +4645,14 @@ if(masterPdfUploadInput)masterPdfUploadInput.addEventListener("change",e=>{
     margin:0 !important; padding:14px 12px 42px !important; min-width:0 !important;
     box-sizing:border-box !important;
   }
-  .admin-canonical-hero, .canonical-hero, .dashboard-hero, .accounting-hero {
+  .admin-canonical-hero, .canonical-hero, .dashboard-hero {
     display:block !important; width:100% !important; max-width:100% !important;
     margin:0 0 16px !important; padding:5px !important; box-sizing:border-box !important;
     border-radius:18px !important; overflow:hidden !important;
   }
   .admin-canonical-hero picture, .admin-canonical-hero img,
   .canonical-hero picture, .canonical-hero img,
-  .dashboard-hero picture, .dashboard-hero img,
-  .accounting-hero picture, .accounting-hero img {
+  .dashboard-hero picture, .dashboard-hero img {
     display:block !important; width:100% !important; max-width:100% !important;
     height:auto !important; object-fit:contain !important; border-radius:13px !important;
   }
