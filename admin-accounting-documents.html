@@ -3152,6 +3152,309 @@ label{display:block;font-size:11px;font-weight:600;margin-bottom:5px}.input,text
 </style>
 <meta name="sante-accounting-master-geometry-r38" content="QO-IV-RT-ONE-MASTER">
 
+
+<style id="sante-accounting-master-header-r39">
+/* R39 — Master header geometry for QO / Invoice / Receipt-Tax.
+   Layout-only change. Business logic, calculations, Supabase and workflow remain unchanged. */
+
+/* A4 header */
+.paper-quotation .rth,
+.paper-invoice .invh,
+.paper-receipt .rth{
+  display:grid!important;
+  grid-template-columns:18mm 58mm 38mm 67mm!important;
+  column-gap:3mm!important;
+  align-items:start!important;
+  width:100%!important;
+  padding:0 0 4.8mm!important;
+  border-bottom:1px solid #cfd7df!important;
+  box-sizing:border-box!important;
+}
+
+/* Logo */
+.paper-quotation .rth-logo-cell,
+.paper-invoice .invh-logo-cell,
+.paper-receipt .rth-logo-cell{
+  display:flex!important;
+  align-items:flex-start!important;
+  justify-content:center!important;
+  padding-top:2.6mm!important;
+}
+.paper-quotation .rth-logo,
+.paper-invoice .invh-logo,
+.paper-receipt .rth-logo{
+  width:17mm!important;
+  height:21.5mm!important;
+  max-width:17mm!important;
+  max-height:21.5mm!important;
+  object-fit:contain!important;
+  object-position:center top!important;
+}
+
+/* Seller */
+.paper-quotation .rth-seller,
+.paper-invoice .invh-seller,
+.paper-receipt .rth-seller{
+  display:grid!important;
+  row-gap:.85mm!important;
+  min-width:0!important;
+  font-size:7.7pt!important;
+  line-height:1.35!important;
+}
+.paper-quotation .rth-row,
+.paper-invoice .invh-row,
+.paper-receipt .rth-row{
+  display:grid!important;
+  grid-template-columns:25mm minmax(0,1fr)!important;
+  column-gap:1.25mm!important;
+  align-items:start!important;
+  margin:0!important;
+  padding:0!important;
+  min-width:0!important;
+}
+.paper-quotation .rth-label,
+.paper-invoice .invh-label,
+.paper-receipt .rth-label{
+  margin:0!important;
+  padding:0!important;
+  text-align:right!important;
+  white-space:nowrap!important;
+  font-size:7.45pt!important;
+  font-weight:700!important;
+  line-height:1.35!important;
+}
+.paper-quotation .rth-company,
+.paper-quotation .rth-address,
+.paper-invoice .invh-company,
+.paper-invoice .invh-address,
+.paper-receipt .rth-company,
+.paper-receipt .rth-address{
+  min-width:0!important;
+  margin:0!important;
+  padding:0!important;
+  font-size:7.65pt!important;
+  line-height:1.35!important;
+}
+.paper-quotation .rth-company>div,
+.paper-quotation .rth-address>div,
+.paper-invoice .invh-company>div,
+.paper-invoice .invh-address>div,
+.paper-receipt .rth-company>div,
+.paper-receipt .rth-address>div{
+  margin:0!important;
+  padding:0!important;
+  line-height:1.35!important;
+  white-space:nowrap!important;
+}
+
+/* Company contact */
+.paper-quotation .rth-contact,
+.paper-invoice .invh-contact,
+.paper-receipt .rth-contact{
+  display:grid!important;
+  row-gap:1.05mm!important;
+  min-width:0!important;
+  margin:8.3mm 0 0!important;
+  padding:0!important;
+  font-size:7pt!important;
+  line-height:1.3!important;
+}
+.paper-quotation .rth-contact-row,
+.paper-invoice .invh-contact-row,
+.paper-receipt .rth-contact-row{
+  display:grid!important;
+  grid-template-columns:4mm minmax(0,1fr)!important;
+  column-gap:.9mm!important;
+  align-items:start!important;
+  min-width:0!important;
+  margin:0!important;
+  padding:0!important;
+  line-height:1.3!important;
+}
+.paper-quotation .rth-contact-row span:last-child,
+.paper-invoice .invh-contact-row span:last-child,
+.paper-receipt .rth-contact-row span:last-child{
+  min-width:0!important;
+  font-size:7pt!important;
+  line-height:1.3!important;
+  white-space:nowrap!important;
+}
+
+/* Document area */
+.paper-quotation .rth-doc,
+.paper-invoice .invh-doc,
+.paper-receipt .rth-doc{
+  position:relative!important;
+  width:67mm!important;
+  max-width:67mm!important;
+  min-width:0!important;
+  overflow:visible!important;
+  text-align:right!important;
+  padding-top:0!important;
+}
+.paper-quotation .rth-copy,
+.paper-invoice .invh-copy,
+.paper-receipt .rth-copy{
+  min-height:4.2mm!important;
+  margin:0 0 1mm!important;
+  padding:0!important;
+  font-size:7.2pt!important;
+  font-weight:700!important;
+  line-height:1.1!important;
+  text-align:right!important;
+  white-space:nowrap!important;
+}
+
+/* Same title size for all three types */
+.paper-quotation .rth-title,
+.paper-invoice .invh-title,
+.paper-receipt .rth-title{
+  position:relative!important;
+  left:-33mm!important;
+  width:100mm!important;
+  max-width:none!important;
+  margin:0 0 4mm!important;
+  padding:0!important;
+  transform:none!important;
+  transform-origin:initial!important;
+  letter-spacing:0!important;
+  color:var(--doc-accent)!important;
+  font-size:22.5pt!important;
+  font-weight:700!important;
+  line-height:1.08!important;
+  text-align:right!important;
+  white-space:nowrap!important;
+  word-break:normal!important;
+  overflow:visible!important;
+}
+
+/* Compact document meta box */
+.paper-quotation .rth-docbox,
+.paper-invoice .invh-docbox,
+.paper-receipt .rth-docbox{
+  width:50mm!important;
+  min-width:50mm!important;
+  max-width:50mm!important;
+  margin-left:auto!important;
+  display:grid!important;
+  grid-template-columns:21mm minmax(0,1fr)!important;
+  gap:1.15mm 1.5mm!important;
+  padding:3mm 3.2mm!important;
+  border-radius:2mm!important;
+  box-sizing:border-box!important;
+  background:var(--doc-soft)!important;
+  text-align:left!important;
+  font-size:7.35pt!important;
+  line-height:1.3!important;
+}
+.paper-quotation .rth-docbox b,
+.paper-quotation .rth-docbox span,
+.paper-invoice .invh-docbox b,
+.paper-invoice .invh-docbox span,
+.paper-receipt .rth-docbox b,
+.paper-receipt .rth-docbox span{
+  min-width:0!important;
+  margin:0!important;
+  padding:0!important;
+  line-height:1.3!important;
+}
+
+/* Customer/contact */
+.paper-quotation .rt-party,
+.paper-invoice .inv-party,
+.paper-receipt .rt-party{
+  display:grid!important;
+  grid-template-columns:minmax(0,1.24fr) minmax(0,.76fr)!important;
+  gap:11mm!important;
+  align-items:start!important;
+  width:100%!important;
+  margin:0!important;
+  padding-top:4.6mm!important;
+}
+.paper-quotation .rt-party-row,
+.paper-invoice .inv-party-row,
+.paper-receipt .rt-party-row{
+  display:grid!important;
+  grid-template-columns:31mm minmax(0,1fr)!important;
+  column-gap:1.3mm!important;
+  min-height:0!important;
+  margin:0!important;
+  padding:0!important;
+  font-size:7.6pt!important;
+  line-height:1.38!important;
+}
+.paper-quotation .rt-party-row>b,
+.paper-invoice .inv-party-row>b,
+.paper-receipt .rt-party-row>b{
+  text-align:right!important;
+  white-space:nowrap!important;
+}
+.paper-quotation .rt-contact-title,
+.paper-invoice .inv-contact-title,
+.paper-receipt .rt-contact-title{
+  margin:0 0 1mm!important;
+  padding:0!important;
+  font-size:7.7pt!important;
+  font-weight:700!important;
+  line-height:1.35!important;
+}
+.paper-quotation .rt-contact-row,
+.paper-invoice .inv-contact-row,
+.paper-receipt .rt-contact-row{
+  display:grid!important;
+  grid-template-columns:4mm minmax(0,1fr)!important;
+  column-gap:1mm!important;
+  min-height:0!important;
+  margin:0!important;
+  padding:0!important;
+  font-size:7.55pt!important;
+  line-height:1.38!important;
+}
+
+/* Table begins at same rhythm */
+.paper-quotation .master-items,
+.paper-invoice .master-items,
+.paper-receipt .master-items{
+  margin-top:4.2mm!important;
+}
+
+/* Preview buttons stay visually equal */
+.preview-actions{
+  display:flex!important;
+  justify-content:flex-end!important;
+  align-items:center!important;
+  gap:10px!important;
+  flex-wrap:wrap!important;
+}
+#previewEditBtn,#previewPrintBtn{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  min-width:154px!important;
+  height:46px!important;
+  min-height:46px!important;
+  padding:0 18px!important;
+  box-sizing:border-box!important;
+  font-size:13px!important;
+  font-weight:600!important;
+  line-height:1.25!important;
+  text-align:center!important;
+  white-space:nowrap!important;
+}
+@media(max-width:767px){
+  .preview-actions{
+    display:grid!important;
+    grid-template-columns:1fr 1fr!important;
+    width:100%!important;
+  }
+  #previewEditBtn,#previewPrintBtn{
+    width:100%!important;
+    min-width:0!important;
+  }
+}
+</style>
+<meta name="sante-accounting-master-header-r39" content="APPROVED-QO-HEADER-GEOMETRY">
+
 </head>
 <body>
 <div id="loading" class="loading">กำลังโหลดเอกสารบัญชี...</div>
