@@ -5670,6 +5670,192 @@ textarea{
 </style>
 <meta name="sante-reference-master" content="R46-QUOTATION">
 
+<style id="sante-r47-quotation-refine">
+/* R47 refined quotation master */
+#paper.reference-qo{
+  --doc-accent:#E75480!important;
+  --doc-dark:#C0396B!important;
+  --doc-soft:#FDEAF1!important;
+}
+#paper.reference-qo .qh{
+  display:grid!important;
+  grid-template-columns:23mm 64mm 46mm 48mm!important;
+  grid-template-areas:
+    "logo gap copy copy"
+    "logo gap title title"
+    "seller seller contact meta"!important;
+  column-gap:3mm!important;
+  row-gap:1.55mm!important;
+  align-items:start!important;
+  width:100%!important;
+  min-height:47mm!important;
+  padding:0 0 4.4mm!important;
+  border-bottom:1px solid #cfd7df!important;
+  box-sizing:border-box!important;
+}
+#paper.reference-qo .qh-logo-cell{
+  grid-area:logo!important;
+  display:flex!important;
+  justify-content:flex-start!important;
+  align-items:flex-start!important;
+  padding-top:1.2mm!important;
+}
+#paper.reference-qo .qh-logo{
+  width:19.5mm!important;
+  height:auto!important;
+  max-width:19.5mm!important;
+  max-height:24mm!important;
+  object-fit:contain!important;
+  object-position:left top!important;
+  margin:0!important;
+}
+#paper.reference-qo .qh-doc{display:contents!important}
+#paper.reference-qo .qh-copy{
+  grid-area:copy!important;
+  margin:0!important;
+  padding:0!important;
+  min-height:3.4mm!important;
+  text-align:right!important;
+  white-space:nowrap!important;
+  font-size:7.05pt!important;
+  font-weight:700!important;
+  line-height:1.1!important;
+}
+#paper.reference-qo .qh-title{
+  grid-area:title!important;
+  margin:0!important;
+  padding:0!important;
+  text-align:right!important;
+  white-space:nowrap!important;
+  overflow:visible!important;
+  font-size:18.8pt!important;
+  font-weight:700!important;
+  line-height:1.06!important;
+  letter-spacing:0!important;
+  transform:none!important;
+  width:auto!important;
+  max-width:none!important;
+  color:var(--doc-accent)!important;
+}
+#paper.reference-qo .qh-seller{
+  grid-area:seller!important;
+  display:grid!important;
+  gap:.75mm!important;
+  min-width:0!important;
+  margin:0!important;
+  padding:0!important;
+  font-size:7.4pt!important;
+  line-height:1.34!important;
+}
+#paper.reference-qo .qh-row,
+#paper.reference-qo .qh-tax-row{
+  display:grid!important;
+  grid-template-columns:20mm minmax(0,1fr)!important;
+  column-gap:1.35mm!important;
+  align-items:start!important;
+  margin:0!important;
+  padding:0!important;
+  min-width:0!important;
+}
+#paper.reference-qo .qh-label{
+  margin:0!important;
+  padding:0!important;
+  text-align:right!important;
+  white-space:nowrap!important;
+  font-size:7.2pt!important;
+  font-weight:700!important;
+  line-height:1.34!important;
+}
+#paper.reference-qo .qh-company,
+#paper.reference-qo .qh-company>div,
+#paper.reference-qo .qh-address,
+#paper.reference-qo .qh-address>div,
+#paper.reference-qo .qh-row>div:last-child,
+#paper.reference-qo .qh-tax-row .qh-nowrap{
+  min-width:0!important;
+  margin:0!important;
+  padding:0!important;
+  font-size:7.4pt!important;
+  line-height:1.34!important;
+  white-space:normal!important;
+  word-break:keep-all!important;
+  overflow-wrap:normal!important;
+}
+#paper.reference-qo .qh-contact{
+  grid-area:contact!important;
+  display:grid!important;
+  gap:.85mm!important;
+  min-width:0!important;
+  margin:0!important;
+  padding:0!important;
+  font-size:6.6pt!important;
+  line-height:1.27!important;
+}
+#paper.reference-qo .qh-contact-row{
+  display:grid!important;
+  grid-template-columns:3.8mm minmax(0,1fr)!important;
+  column-gap:.8mm!important;
+  align-items:start!important;
+  margin:0!important;
+  padding:0!important;
+  min-width:0!important;
+}
+#paper.reference-qo .qh-contact-row span:last-child{min-width:0!important;white-space:nowrap!important;font-size:6.6pt!important;line-height:1.27!important}
+#paper.reference-qo .qh-docbox{
+  grid-area:meta!important;
+  width:48mm!important;
+  min-width:48mm!important;
+  max-width:48mm!important;
+  margin:0!important;
+  display:grid!important;
+  grid-template-columns:17.5mm minmax(0,1fr)!important;
+  gap:1.05mm 1.15mm!important;
+  padding:3mm 3.2mm!important;
+  border:0!important;
+  border-radius:2mm!important;
+  background:var(--doc-soft)!important;
+  box-sizing:border-box!important;
+  text-align:left!important;
+  font-size:7pt!important;
+  line-height:1.28!important;
+}
+#paper.reference-qo .qh-docbox b,
+#paper.reference-qo .qh-docbox span{color:var(--doc-dark)!important;line-height:1.28!important}
+#paper.reference-qo .ref-party{
+  display:grid!important;
+  grid-template-columns:minmax(0,1.13fr) minmax(0,.87fr)!important;
+  gap:9mm!important;
+  width:100%!important;
+  padding-top:4.1mm!important;
+  margin:0!important;
+  align-items:start!important;
+}
+#paper.reference-qo .ref-party-row{
+  display:grid!important;
+  grid-template-columns:31mm minmax(0,1fr)!important;
+  column-gap:1.3mm!important;
+  margin:0!important;
+  padding:0!important;
+  font-size:7.55pt!important;
+  line-height:1.38!important;
+}
+#paper.reference-qo .ref-party-row b{white-space:nowrap!important;text-align:right!important}
+#paper.reference-qo .ref-party-title{margin:0 0 .9mm!important;font-size:7.55pt!important;line-height:1.38!important;font-weight:700!important}
+#paper.reference-qo .ref-contact-row{display:grid!important;grid-template-columns:3.8mm minmax(0,1fr)!important;column-gap:.9mm!important;margin:0!important;padding:0!important;font-size:7.45pt!important;line-height:1.38!important}
+#paper.reference-qo .master-items{width:100%!important;table-layout:fixed!important;border-collapse:collapse!important;margin-top:4mm!important}
+#paper.reference-qo .master-items th{background:var(--doc-soft)!important;color:var(--doc-accent)!important;padding:2.35mm 1.2mm!important;font-size:7.75pt!important;line-height:1.25!important;white-space:nowrap!important}
+#paper.reference-qo .master-items td{padding:2.4mm 1.2mm!important;font-size:7.7pt!important;line-height:1.38!important;vertical-align:top!important;color:#1b2736!important}
+#paper.reference-qo .master-items td:first-child{white-space:normal!important;word-break:normal!important;overflow-wrap:break-word!important}
+#paper.reference-qo .master-summary{display:grid!important;grid-template-columns:minmax(0,1fr) 82mm!important;gap:7mm!important;margin:0!important;padding-top:2.6mm!important;border-top:1px solid #d8d9de!important}
+#paper.reference-qo .master-summary-left{display:grid!important;grid-template-columns:15mm minmax(0,1fr) 30mm!important;column-gap:2.8mm!important;row-gap:1.2mm!important;align-content:start!important;font-size:7.85pt!important;line-height:1.38!important}
+#paper.reference-qo .master-total-box,
+#paper.reference-qo .master-net-box{display:grid!important;grid-template-columns:minmax(0,1fr) 31mm 8mm!important;column-gap:2mm!important;align-items:center!important;min-height:14mm!important;padding:3.2mm 3.5mm!important;border-radius:1.5mm!important;background:var(--doc-soft)!important}
+#paper.reference-qo .master-total-line{display:grid!important;grid-template-columns:minmax(0,1fr) 31mm 8mm!important;column-gap:2mm!important;align-items:center!important;min-height:7.4mm!important;padding:1mm 0!important;font-size:7.7pt!important;line-height:1.32!important;color:var(--doc-accent)!important}
+#paper.reference-qo .master-total-label,
+#paper.reference-qo .master-total-unit{font-size:7.7pt!important;line-height:1.28!important;color:var(--doc-accent)!important;font-weight:700!important}
+#paper.reference-qo .master-total-amount{font-size:14.3pt!important;line-height:1.05!important;color:var(--doc-accent)!important;text-align:right!important;white-space:nowrap!important}
+#paper.reference-qo .master-total-amount-small{font-size:8pt!important;line-height:1.32!important;color:var(--doc-accent)!important}
+</style>
 </head>
 <body>
 
