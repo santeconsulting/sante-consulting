@@ -5856,6 +5856,40 @@ textarea{
 #paper.reference-qo .master-total-amount{font-size:14.3pt!important;line-height:1.05!important;color:var(--doc-accent)!important;text-align:right!important;white-space:nowrap!important}
 #paper.reference-qo .master-total-amount-small{font-size:8pt!important;line-height:1.32!important;color:var(--doc-accent)!important}
 </style>
+
+<style id="sante-r48-quotation-final">
+/* R48 targeted final corrections — quotation */
+#paper.reference-qo{--doc-accent:#E75480!important;--doc-soft:#FDEAF1!important}
+
+/* keep title same size as other documents, with enough horizontal space */
+#paper.reference-qo .qh{grid-template-areas:"logo gap copy copy" "logo title title title" "seller seller contact meta"!important}
+#paper.reference-qo .qh-logo{width:21.5mm!important;max-width:21.5mm!important;max-height:26mm!important}
+#paper.reference-qo .qh-title{grid-area:title!important;font-size:18.8pt!important;color:var(--doc-accent)!important;white-space:nowrap!important;text-align:right!important;transform:none!important;width:auto!important;margin:0!important}
+
+/* company/HQ stays one line */
+#paper.reference-qo .qh-company>div{white-space:nowrap!important;font-size:7.25pt!important}
+
+/* tax ID has an identical fixed label/value rhythm */
+#paper.reference-qo .qh-tax-row{grid-template-columns:32mm minmax(0,1fr)!important;column-gap:1.4mm!important}
+#paper.reference-qo .qh-tax-row .qh-label,#paper.reference-qo .qh-tax-row .qh-nowrap{white-space:nowrap!important;font-size:7.2pt!important;line-height:1.34!important}
+
+/* every colored-box text uses EXACTLY the title accent */
+#paper.reference-qo .qh-docbox b,#paper.reference-qo .qh-docbox span,
+#paper.reference-qo .master-items thead th,
+#paper.reference-qo .master-total-box .master-total-label,
+#paper.reference-qo .master-total-box .master-total-amount,
+#paper.reference-qo .master-total-box .master-total-unit,
+#paper.reference-qo .master-net-box .master-total-label,
+#paper.reference-qo .master-net-box .master-total-amount,
+#paper.reference-qo .master-net-box .master-total-unit{color:var(--doc-accent)!important}
+#paper.reference-qo .qh-docbox,#paper.reference-qo .master-items thead th,#paper.reference-qo .master-total-box,#paper.reference-qo .master-net-box{background:var(--doc-soft)!important}
+
+/* WHT is always neutral black, never document accent */
+#paper.reference-qo .master-wht-text,
+#paper.reference-qo .master-wht-line,
+#paper.reference-qo .master-wht-line *{color:#1b2736!important}
+</style>
+
 </head>
 <body>
 
@@ -6340,8 +6374,7 @@ function renderPaper(c){
         <div class="qh-row">
           <div class="qh-label">ผู้ขาย :</div>
           <div class="qh-company">
-            <div>บริษัท ซานเต้ คอนซัลติ้ง จำกัด</div>
-            <div>(สำนักงานใหญ่)</div>
+            <div>บริษัท ซานเต้ คอนซัลติ้ง จำกัด (สำนักงานใหญ่)</div>
           </div>
         </div>
         <div class="qh-row">
@@ -6415,8 +6448,8 @@ function renderPaper(c){
 
         ${showWht?.checked?`
         <div></div>
-        <div class="master-summary-label">หัก ณ ที่จ่าย ${whtRate.value}%</div>
-        <div class="master-summary-amount">${money(c.wht)} บาท</div>`:""}
+        <div class="master-summary-label master-wht-text">หัก ณ ที่จ่าย ${whtRate.value}%</div>
+        <div class="master-summary-amount master-wht-text">${money(c.wht)} บาท</div>`:""}
       </div>
 
       <div class="master-summary-right">
@@ -6427,7 +6460,7 @@ function renderPaper(c){
         </div>
 
         ${showWht?.checked?`
-        <div class="master-total-line">
+        <div class="master-total-line master-wht-line">
           <span class="master-total-label">หัก ณ ที่จ่าย ${whtRate.value}%</span>
           <span class="master-total-amount master-total-amount-small">${money(c.wht)}</span>
           <span class="master-total-unit">บาท</span>

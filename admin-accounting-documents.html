@@ -3499,6 +3499,80 @@ label{display:block;font-size:11px;font-weight:600;margin-bottom:5px}.input,text
 .paper-invoice .master-note,.paper-receipt .master-note{margin:0!important;padding:3mm 0!important;border-bottom:1px solid #d8d9de!important;font-size:7.95pt!important;line-height:1.46!important}
 .paper-invoice .master-cert,.paper-receipt .master-cert{margin-top:3mm!important;padding-top:3mm!important;border-top:1px solid #d8d9de!important}
 </style>
+
+<style id="sante-r48-accounting-final">
+/* R48 targeted final corrections — invoice + receipt/tax */
+.paper-invoice{--doc-accent:#318FE8!important;--doc-soft:#EAF4FF!important}
+.paper-receipt{--doc-accent:#2DAD70!important;--doc-soft:#EAF7EF!important}
+
+/* same title geometry; receipt gets width, not a smaller/scaled typeface */
+.paper-invoice .invh,.paper-receipt .rth{grid-template-areas:"logo gap copy copy" "logo title title title" "seller seller contact meta"!important}
+.paper-invoice .invh-logo,.paper-receipt .rth-logo{width:21.5mm!important;max-width:21.5mm!important;max-height:26mm!important}
+.paper-invoice .invh-title,.paper-receipt .rth-title{
+  grid-area:title!important;font-size:18.8pt!important;color:var(--doc-accent)!important;
+  white-space:nowrap!important;text-align:right!important;transform:none!important;
+  width:auto!important;max-width:none!important;margin:0!important;letter-spacing:0!important
+}
+
+/* company/HQ single line */
+.paper-invoice .invh-company>div,.paper-receipt .rth-company>div{white-space:nowrap!important;font-size:7.25pt!important}
+
+/* identical seller tax-ID row for Invoice and Receipt */
+.paper-invoice .invh-tax-row,.paper-receipt .rth-tax-row{
+  display:grid!important;grid-template-columns:32mm minmax(0,1fr)!important;
+  column-gap:1.4mm!important;align-items:start!important;margin:0!important;padding:0!important
+}
+.paper-invoice .invh-tax-row .invh-label,.paper-invoice .invh-tax-row>div:last-child,
+.paper-receipt .rth-tax-row .rth-label,.paper-receipt .rth-tax-row>div:last-child{
+  white-space:nowrap!important;font-size:7.2pt!important;line-height:1.34!important;
+  margin:0!important;padding:0!important;position:static!important;width:auto!important
+}
+
+/* customer tax-ID also uses exactly the same label width */
+.paper-invoice .inv-party-row,.paper-receipt .rt-party-row{grid-template-columns:31mm minmax(0,1fr)!important;column-gap:1.3mm!important}
+
+/* exact accent color everywhere that sits in a colored box */
+.paper-invoice .invh-docbox b,.paper-invoice .invh-docbox span,
+.paper-invoice .master-items thead th,
+.paper-invoice .master-total-box .master-total-label,
+.paper-invoice .master-total-box .master-total-amount,
+.paper-invoice .master-total-box .master-total-unit,
+.paper-invoice .master-net-box .master-total-label,
+.paper-invoice .master-net-box .master-total-amount,
+.paper-invoice .master-net-box .master-total-unit{color:#318FE8!important}
+
+.paper-receipt .rth-docbox b,.paper-receipt .rth-docbox span,
+.paper-receipt .master-items thead th,
+.paper-receipt .master-total-box .master-total-label,
+.paper-receipt .master-total-box .master-total-amount,
+.paper-receipt .master-total-box .master-total-unit,
+.paper-receipt .master-net-box .master-total-label,
+.paper-receipt .master-net-box .master-total-amount,
+.paper-receipt .master-net-box .master-total-unit,
+.paper-receipt .receipt-payment-amount,
+.paper-receipt .receipt-payment-amount b{color:#2DAD70!important}
+
+.paper-invoice .invh-docbox,.paper-invoice .master-items thead th,.paper-invoice .master-total-box,.paper-invoice .master-net-box{background:#EAF4FF!important}
+.paper-receipt .rth-docbox,.paper-receipt .master-items thead th,.paper-receipt .master-total-box,.paper-receipt .master-net-box{background:#EAF7EF!important}
+
+/* WHT is black in every document */
+.paper-invoice .master-wht-text,.paper-invoice .master-wht-line,.paper-invoice .master-wht-line *,
+.paper-receipt .master-wht-text,.paper-receipt .master-wht-line,.paper-receipt .master-wht-line *{color:#1b2736!important}
+
+/* receipt item description must stay on the same first line like invoice/quotation */
+.paper-receipt td.desc-col{white-space:normal!important}
+.paper-receipt td.desc-col .item-no{display:inline!important;margin-right:1.5mm!important;vertical-align:baseline!important;font-weight:400!important;color:#43566b!important}
+.paper-receipt td.desc-col .item-main{display:inline!important;white-space:normal!important;vertical-align:baseline!important;font-size:7.7pt!important;line-height:1.38!important;font-weight:400!important;color:#17283d!important}
+.paper-receipt td.desc-col .item-code{display:inline!important;margin-left:1mm!important}
+.paper-receipt td.desc-col .item-sub{display:none!important}
+
+/* Receipt summary typography exactly matches Invoice */
+.paper-receipt .master-summary-left{font-size:7.85pt!important;line-height:1.38!important}
+.paper-receipt .master-total-box,.paper-receipt .master-net-box{min-height:14mm!important;padding:3.2mm 3.5mm!important}
+.paper-receipt .master-total-label,.paper-receipt .master-total-unit{font-size:7.7pt!important;line-height:1.28!important;font-weight:700!important}
+.paper-receipt .master-total-amount{font-size:14.3pt!important;line-height:1.05!important}
+</style>
+
 </head>
 <body>
 <div id="loading" class="loading">กำลังโหลดเอกสารบัญชี...</div>
@@ -4235,8 +4309,7 @@ function paperHtml(x){
       <div class="invh-row">
         <div class="invh-label">ผู้ขาย :</div>
         <div class="invh-company">
-          <div>บริษัท ซานเต้ คอนซัลติ้ง จำกัด</div>
-          <div>(สำนักงานใหญ่)</div>
+          <div>บริษัท ซานเต้ คอนซัลติ้ง จำกัด (สำนักงานใหญ่)</div>
         </div>
       </div>
       <div class="invh-row">
@@ -4248,7 +4321,7 @@ function paperHtml(x){
         </div>
       </div>
       <div class="invh-row invh-tax-row">
-        <div class="invh-label">เลขประจำตัวผู้เสียภาษี</div>
+        <div class="invh-label">เลขประจำตัวผู้เสียภาษี :</div>
         <div>${SANTE.taxId}</div>
       </div>
     </div>
@@ -4279,8 +4352,7 @@ function paperHtml(x){
       <div class="rth-row">
         <div class="rth-label">ผู้ขาย :</div>
         <div class="rth-company">
-          <div>บริษัท ซานเต้ คอนซัลติ้ง จำกัด</div>
-          <div>(สำนักงานใหญ่)</div>
+          <div>บริษัท ซานเต้ คอนซัลติ้ง จำกัด (สำนักงานใหญ่)</div>
         </div>
       </div>
       <div class="rth-row">
@@ -4292,7 +4364,7 @@ function paperHtml(x){
         </div>
       </div>
       <div class="rth-row rth-tax-row">
-        <div class="rth-label">เลขประจำตัวผู้เสียภาษี</div>
+        <div class="rth-label">เลขประจำตัวผู้เสียภาษี :</div>
         <div>${SANTE.taxId}</div>
       </div>
     </div>
@@ -4320,7 +4392,7 @@ function paperHtml(x){
     <div class="inv-party-left">
       <div class="inv-party-row inv-customer-name"><b>ลูกค้า :</b><div><b>${esc(x.organization_name||x.customer_name||"-")}</b></div></div>
       <div class="inv-party-row"><b>ที่อยู่ :</b><div>${esc(x.billing_address||"-")}</div></div>
-      <div class="inv-party-row"><b>เลขประจำตัวผู้เสียภาษี</b><div>${esc(x.customer_tax_id||"-")} ${esc(x.customer_branch||"")}</div></div>
+      <div class="inv-party-row"><b>เลขประจำตัวผู้เสียภาษี :</b><div>${esc(x.customer_tax_id||"-")} ${esc(x.customer_branch||"")}</div></div>
       <div class="inv-party-row"><b>เรียน :</b><div>${esc(x.document_subject||"-")}</div></div>
     </div>
     <div class="inv-contact">
@@ -4334,7 +4406,7 @@ function paperHtml(x){
     <div class="rt-party-left">
       <div class="rt-party-row rt-customer-name"><b>ลูกค้า :</b><div><b>${esc(x.organization_name||x.customer_name||"-")}</b></div></div>
       <div class="rt-party-row"><b>ที่อยู่ :</b><div>${esc(x.billing_address||"-")}</div></div>
-      <div class="rt-party-row"><b>เลขประจำตัวผู้เสียภาษี</b><div>${esc(x.customer_tax_id||"-")} ${esc(x.customer_branch||"")}</div></div>
+      <div class="rt-party-row"><b>เลขประจำตัวผู้เสียภาษี :</b><div>${esc(x.customer_tax_id||"-")} ${esc(x.customer_branch||"")}</div></div>
     </div>
     <div class="rt-contact">
       <div class="rt-contact-title">ติดต่อกลับที่ :</div>
@@ -4367,8 +4439,8 @@ function paperHtml(x){
 
       ${Number(x.wht_amount||0)>0?`
       <div></div>
-      <div class="master-summary-label">หัก ณ ที่จ่าย ${rateText(x.wht_rate||0)}%</div>
-      <div class="master-summary-amount">${money(x.wht_amount)} บาท</div>`:""}
+      <div class="master-summary-label master-wht-text">หัก ณ ที่จ่าย ${rateText(x.wht_rate||0)}%</div>
+      <div class="master-summary-amount master-wht-text">${money(x.wht_amount)} บาท</div>`:""}
     </div>
 
     <div class="master-summary-right">
@@ -4379,7 +4451,7 @@ function paperHtml(x){
       </div>
 
       ${Number(x.wht_amount||0)>0?`
-      <div class="master-total-line">
+      <div class="master-total-line master-wht-line">
         <span class="master-total-label">หัก ณ ที่จ่าย ${rateText(x.wht_rate||0)}%</span>
         <span class="master-total-amount master-total-amount-small">${money(x.wht_amount)}</span>
         <span class="master-total-unit">บาท</span>
@@ -4486,8 +4558,8 @@ function paperHtml(x){
 
       ${Number(x.wht_amount||0)>0?`
       <div></div>
-      <div class="master-summary-label">หัก ณ ที่จ่าย ${rateText(x.wht_rate||0)}%</div>
-      <div class="master-summary-amount">${money(x.wht_amount)} บาท</div>`:""}
+      <div class="master-summary-label master-wht-text">หัก ณ ที่จ่าย ${rateText(x.wht_rate||0)}%</div>
+      <div class="master-summary-amount master-wht-text">${money(x.wht_amount)} บาท</div>`:""}
     </div>
 
     <div class="master-summary-right">
@@ -4498,7 +4570,7 @@ function paperHtml(x){
       </div>
 
       ${Number(x.wht_amount||0)>0?`
-      <div class="master-total-line">
+      <div class="master-total-line master-wht-line">
         <span class="master-total-label">หัก ณ ที่จ่าย ${rateText(x.wht_rate||0)}%</span>
         <span class="master-total-amount master-total-amount-small">${money(x.wht_amount)}</span>
         <span class="master-total-unit">บาท</span>
