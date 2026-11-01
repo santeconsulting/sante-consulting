@@ -5439,31 +5439,35 @@ textarea{
 <meta name="sante-master-geometry-r43" content="QUOTATION-FINAL">
 
 
-<style id="sante-clean-document-master-r45-quotation">
-/* =========================================================
-   CLEAN DOCUMENT MASTER R45 — QUOTATION
-   Header geometry only. Business logic / calculations / PDF data unchanged.
-   3-column layout: LOGO | SELLER+CONTACT | DOCUMENT
-========================================================= */
 
+<style id="sante-reference-master-r46-quotation">
+/* =========================================================
+   REFERENCE MASTER R46 — QUOTATION
+   Based on the supplied QO / RT / IVT examples.
+   Two-level header:
+   Row 1-2: logo + document title
+   Row 3: seller + contact + document meta
+   No negative positioning, no scaleX, no title stretching.
+========================================================= */
 #paper.reference-qo{
   --doc-accent:#E75480;
-  --doc-accent-dark:#B83262;
+  --doc-dark:#B83262;
   --doc-soft:#FDEAF1;
 }
 
-/* 3 columns, no negative positioning */
+/* 190mm usable width: 22 + 72 + 43 + 44 + 3*3 gap = 190 */
 #paper.reference-qo .qh{
   display:grid!important;
-  grid-template-columns:24mm 78mm 82mm!important;
+  grid-template-columns:22mm 72mm 43mm 44mm!important;
   grid-template-areas:
-    "logo seller doc"
-    "logo contact doc"!important;
+    "logo empty copy copy"
+    "logo empty title title"
+    "seller seller contact meta"!important;
   column-gap:3mm!important;
-  row-gap:2.2mm!important;
+  row-gap:1.8mm!important;
   align-items:start!important;
   width:100%!important;
-  min-height:46mm!important;
+  min-height:48mm!important;
   padding:0 0 4.5mm!important;
   border-bottom:1px solid #cfd7df!important;
   box-sizing:border-box!important;
@@ -5473,34 +5477,68 @@ textarea{
 #paper.reference-qo .qh-logo-cell{
   grid-area:logo!important;
   display:flex!important;
-  justify-content:center!important;
+  justify-content:flex-start!important;
   align-items:flex-start!important;
-  padding-top:4mm!important;
+  padding-top:1.5mm!important;
 }
 #paper.reference-qo .qh-logo{
-  width:18mm!important;
+  width:17mm!important;
   height:auto!important;
-  max-height:22mm!important;
+  max-height:21mm!important;
   object-fit:contain!important;
   margin:0!important;
 }
 
-/* seller block */
+/* let title/docbox participate directly in parent grid */
+#paper.reference-qo .qh-doc{
+  display:contents!important;
+}
+#paper.reference-qo .qh-copy{
+  grid-area:copy!important;
+  margin:0!important;
+  padding:0!important;
+  min-height:3.5mm!important;
+  text-align:right!important;
+  white-space:nowrap!important;
+  font-size:7.1pt!important;
+  font-weight:700!important;
+  line-height:1.1!important;
+}
+#paper.reference-qo .qh-title{
+  grid-area:title!important;
+  position:static!important;
+  left:auto!important;
+  width:auto!important;
+  max-width:none!important;
+  margin:0!important;
+  padding:0!important;
+  transform:none!important;
+  color:var(--doc-accent)!important;
+  font-size:19.5pt!important;
+  font-weight:700!important;
+  line-height:1.05!important;
+  letter-spacing:0!important;
+  text-align:right!important;
+  white-space:nowrap!important;
+  overflow:visible!important;
+}
+
+/* seller begins lower, like the supplied examples */
 #paper.reference-qo .qh-seller{
   grid-area:seller!important;
   display:grid!important;
-  gap:1mm!important;
+  gap:.8mm!important;
   min-width:0!important;
   margin:0!important;
   padding:0!important;
-  font-size:7.5pt!important;
-  line-height:1.38!important;
+  font-size:7.45pt!important;
+  line-height:1.36!important;
 }
 #paper.reference-qo .qh-row,
 #paper.reference-qo .qh-tax-row{
   display:grid!important;
-  grid-template-columns:18mm minmax(0,1fr)!important;
-  gap:1.3mm!important;
+  grid-template-columns:20mm minmax(0,1fr)!important;
+  column-gap:1.4mm!important;
   align-items:start!important;
   min-width:0!important;
   margin:0!important;
@@ -5508,26 +5546,24 @@ textarea{
 }
 #paper.reference-qo .qh-label{
   width:auto!important;
-  min-width:0!important;
   position:static!important;
   transform:none!important;
   margin:0!important;
   padding:0!important;
   text-align:right!important;
   white-space:nowrap!important;
-  font-size:7.35pt!important;
+  font-size:7.3pt!important;
   font-weight:700!important;
-  line-height:1.38!important;
+  line-height:1.36!important;
 }
 #paper.reference-qo .qh-company,
 #paper.reference-qo .qh-address,
 #paper.reference-qo .qh-row>div:last-child{
   min-width:0!important;
-  width:auto!important;
   margin:0!important;
   padding:0!important;
-  font-size:7.5pt!important;
-  line-height:1.38!important;
+  font-size:7.45pt!important;
+  line-height:1.36!important;
   white-space:normal!important;
   word-break:keep-all!important;
   overflow-wrap:normal!important;
@@ -5536,15 +5572,11 @@ textarea{
 #paper.reference-qo .qh-address>div{
   margin:0!important;
   padding:0!important;
-  white-space:normal!important;
-  word-break:keep-all!important;
-  line-height:1.38!important;
+  line-height:1.36!important;
 }
-#paper.reference-qo .qh-tax-row .qh-nowrap{
-  white-space:nowrap!important;
-}
+#paper.reference-qo .qh-tax-row .qh-nowrap{white-space:nowrap!important}
 
-/* contact sits below seller in the SAME center column */
+/* company contact */
 #paper.reference-qo .qh-contact{
   grid-area:contact!important;
   position:static!important;
@@ -5552,17 +5584,17 @@ textarea{
   top:auto!important;
   width:auto!important;
   min-width:0!important;
-  margin:0 0 0 19.3mm!important;
+  margin:0!important;
   padding:0!important;
   display:grid!important;
-  gap:.8mm!important;
-  font-size:6.9pt!important;
-  line-height:1.3!important;
+  gap:.9mm!important;
+  font-size:6.65pt!important;
+  line-height:1.28!important;
 }
 #paper.reference-qo .qh-contact-row{
   display:grid!important;
   grid-template-columns:4mm minmax(0,1fr)!important;
-  gap:.9mm!important;
+  column-gap:.8mm!important;
   align-items:start!important;
   min-width:0!important;
   margin:0!important;
@@ -5571,111 +5603,61 @@ textarea{
 #paper.reference-qo .qh-contact-row span:last-child{
   min-width:0!important;
   white-space:nowrap!important;
-  word-break:normal!important;
-  overflow-wrap:normal!important;
-  font-size:6.9pt!important;
-  line-height:1.3!important;
+  font-size:6.65pt!important;
+  line-height:1.28!important;
 }
 
-/* document block */
-#paper.reference-qo .qh-doc{
-  grid-area:doc!important;
-  position:static!important;
-  width:100%!important;
-  max-width:none!important;
-  min-width:0!important;
-  margin:0!important;
-  padding:0!important;
-  text-align:right!important;
-  overflow:visible!important;
-}
-#paper.reference-qo .qh-copy{
-  margin:0 0 1.5mm!important;
-  min-height:4mm!important;
-  font-size:7.2pt!important;
-  line-height:1.1!important;
-  font-weight:700!important;
-  text-align:right!important;
-  white-space:nowrap!important;
-}
-#paper.reference-qo .qh-title{
-  position:static!important;
-  left:auto!important;
-  width:100%!important;
-  max-width:none!important;
-  margin:0 0 4mm!important;
-  padding:0!important;
-  transform:none!important;
-  color:var(--doc-accent)!important;
-  font-size:24pt!important;
-  font-weight:700!important;
-  line-height:1.08!important;
-  letter-spacing:0!important;
-  text-align:right!important;
-  white-space:nowrap!important;
-  word-break:normal!important;
-  overflow:visible!important;
-}
+/* document box sits under title, not beside seller */
 #paper.reference-qo .qh-docbox{
-  width:55mm!important;
-  min-width:55mm!important;
-  max-width:55mm!important;
-  margin-left:auto!important;
+  grid-area:meta!important;
+  width:44mm!important;
+  min-width:44mm!important;
+  max-width:44mm!important;
+  margin:0!important;
   display:grid!important;
-  grid-template-columns:21mm minmax(0,1fr)!important;
-  gap:1.2mm 1.6mm!important;
-  padding:3.2mm 3.5mm!important;
+  grid-template-columns:17mm minmax(0,1fr)!important;
+  gap:1.1mm 1.2mm!important;
+  padding:3mm 3.2mm!important;
   border:0!important;
   border-radius:2mm!important;
   background:var(--doc-soft)!important;
   box-sizing:border-box!important;
   text-align:left!important;
-  font-size:7.35pt!important;
-  line-height:1.3!important;
+  font-size:7.1pt!important;
+  line-height:1.28!important;
 }
 
-/* customer/contact below header */
+/* party section: identical baseline */
 #paper.reference-qo .ref-party{
   display:grid!important;
-  grid-template-columns:minmax(0,1.18fr) minmax(0,.82fr)!important;
+  grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr)!important;
   gap:10mm!important;
-  align-items:start!important;
+  width:100%!important;
   margin:0!important;
-  padding-top:4.2mm!important;
+  padding-top:4mm!important;
+  align-items:start!important;
 }
 #paper.reference-qo .ref-party-row{
   display:grid!important;
-  grid-template-columns:30mm minmax(0,1fr)!important;
-  gap:1.4mm!important;
-  min-width:0!important;
+  grid-template-columns:28mm minmax(0,1fr)!important;
+  column-gap:1.4mm!important;
   margin:0!important;
   padding:0!important;
-  font-size:7.65pt!important;
-  line-height:1.4!important;
+  font-size:7.55pt!important;
+  line-height:1.38!important;
 }
-#paper.reference-qo .ref-party-row>b{
-  text-align:right!important;
-  white-space:nowrap!important;
-}
-#paper.reference-qo .ref-party-row>div{
-  min-width:0!important;
-  white-space:normal!important;
-  word-break:keep-all!important;
-  overflow-wrap:break-word!important;
-}
+#paper.reference-qo .ref-party-row>b{text-align:right!important;white-space:nowrap!important}
 #paper.reference-qo .ref-contact-row{
   display:grid!important;
   grid-template-columns:4mm minmax(0,1fr)!important;
-  gap:1mm!important;
-  font-size:7.55pt!important;
-  line-height:1.4!important;
+  column-gap:1mm!important;
+  font-size:7.45pt!important;
+  line-height:1.38!important;
 }
 
-/* QO pink theme */
-#paper.reference-qo .ref-items thead th{
-  background:#FDEAF1!important;
-  color:#7E2349!important;
-}
+/* exact shared section rhythm */
+#paper.reference-qo .ref-items{margin-top:4mm!important}
+#paper.reference-qo .ref-items thead th{background:#FDEAF1!important;color:#7E2349!important}
 #paper.reference-qo .master-total-box,
 #paper.reference-qo .master-net-box{
   background:#FDEAF1!important;
@@ -5684,11 +5666,9 @@ textarea{
   box-shadow:none!important;
 }
 #paper.reference-qo .master-total-amount,
-#paper.reference-qo .master-total-unit{
-  color:#B83262!important;
-}
+#paper.reference-qo .master-total-unit{color:#B83262!important}
 </style>
-<meta name="sante-clean-document-master" content="R45-QUOTATION-PINK">
+<meta name="sante-reference-master" content="R46-QUOTATION">
 
 </head>
 <body>
