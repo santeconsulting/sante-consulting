@@ -3573,6 +3573,85 @@ label{display:block;font-size:11px;font-weight:600;margin-bottom:5px}.input,text
 .paper-receipt .master-total-amount{font-size:14.3pt!important;line-height:1.05!important}
 </style>
 
+
+<style id="sante-r49-accounting-master-typography">
+/* R49 — Invoice and Receipt/Tax inherit Quotation typography exactly. */
+.paper-invoice,.paper-receipt{
+  --master-title:18.8pt;
+  --master-seller:7.4pt;
+  --master-label:7.2pt;
+  --master-contact:6.6pt;
+  --master-docbox:7pt;
+  --master-party:7.55pt;
+  --master-contact-party:7.45pt;
+  --master-th:7.75pt;
+  --master-td:7.7pt;
+  --master-summary:7.85pt;
+  --master-total-label:7.7pt;
+  --master-total-amount:14.3pt;
+  --master-section:8.2pt;
+}
+/* Head title same size on every document; receipt gets width, not smaller type. */
+.paper-invoice .invh-title,.paper-receipt .rth-title{font-size:var(--master-title)!important;line-height:1.06!important;letter-spacing:0!important;transform:none!important;white-space:nowrap!important}
+.paper-receipt .rth{grid-template-columns:23mm 58mm 42mm 58mm!important;grid-template-areas:"logo gap copy copy" "logo title title title" "seller seller contact meta"!important}
+.paper-receipt .rth-docbox{width:58mm!important;min-width:58mm!important;max-width:58mm!important}
+.paper-receipt .rth-title{text-align:right!important;width:auto!important;max-width:none!important;overflow:visible!important}
+
+/* Seller + tax id: exact QO typography and rhythm */
+.paper-invoice .invh-seller,.paper-receipt .rth-seller,
+.paper-invoice .invh-company,.paper-invoice .invh-company>div,.paper-invoice .invh-address,.paper-invoice .invh-address>div,.paper-invoice .invh-tax-row>div:last-child,
+.paper-receipt .rth-company,.paper-receipt .rth-company>div,.paper-receipt .rth-address,.paper-receipt .rth-address>div,.paper-receipt .rth-tax-row>div:last-child{
+  font-size:var(--master-seller)!important;line-height:1.34!important
+}
+.paper-invoice .invh-label,.paper-invoice .invh-tax-row .invh-label,
+.paper-receipt .rth-label,.paper-receipt .rth-tax-row .rth-label{
+  font-size:var(--master-label)!important;line-height:1.34!important
+}
+.paper-invoice .invh-tax-row,.paper-receipt .rth-tax-row{grid-template-columns:32mm minmax(0,1fr)!important;column-gap:1.4mm!important;align-items:start!important}
+.paper-invoice .invh-company>div,.paper-receipt .rth-company>div{white-space:nowrap!important}
+.paper-invoice .invh-contact,.paper-invoice .invh-contact-row span:last-child,
+.paper-receipt .rth-contact,.paper-receipt .rth-contact-row span:last-child{font-size:var(--master-contact)!important;line-height:1.27!important}
+.paper-invoice .invh-docbox,.paper-receipt .rth-docbox{font-size:var(--master-docbox)!important;line-height:1.28!important}
+.paper-invoice .invh-docbox b,.paper-invoice .invh-docbox span,
+.paper-receipt .rth-docbox b,.paper-receipt .rth-docbox span{font-size:var(--master-docbox)!important;line-height:1.28!important}
+
+/* Party / contact typography exactly equal to quotation */
+.paper-invoice .inv-party-row,.paper-receipt .rt-party-row,
+.paper-invoice .inv-contact-title,.paper-receipt .rt-contact-title{font-size:var(--master-party)!important;line-height:1.38!important}
+.paper-invoice .inv-contact-row,.paper-receipt .rt-contact-row{font-size:var(--master-contact-party)!important;line-height:1.38!important}
+
+/* Item table exact master typography */
+.paper-invoice .master-items th,.paper-receipt .master-items th{font-size:var(--master-th)!important;line-height:1.25!important}
+.paper-invoice .master-items td,.paper-receipt .master-items td{font-size:var(--master-td)!important;line-height:1.38!important}
+.paper-receipt td.desc-col .item-no,.paper-receipt td.desc-col .item-main{font-size:var(--master-td)!important;line-height:1.38!important}
+
+/* Summary exact master typography */
+.paper-invoice .master-summary-left,.paper-receipt .master-summary-left{font-size:var(--master-summary)!important;line-height:1.38!important}
+.paper-invoice .master-total-label,.paper-invoice .master-total-unit,
+.paper-receipt .master-total-label,.paper-receipt .master-total-unit{font-size:var(--master-total-label)!important;line-height:1.28!important}
+.paper-invoice .master-total-amount,.paper-receipt .master-total-amount{font-size:var(--master-total-amount)!important;line-height:1.05!important}
+.paper-invoice .master-total-amount-small,.paper-receipt .master-total-amount-small{font-size:8pt!important;line-height:1.32!important}
+
+/* Receipt payment area must use quotation section typography, not its old smaller/independent sizing. */
+.paper-invoice .master-payment,.paper-invoice .master-note,.paper-invoice .master-cert-head,
+.paper-receipt .receipt-master-payment,.paper-receipt .master-note,.paper-receipt .master-cert-head{
+  font-size:var(--master-section)!important;line-height:1.5!important
+}
+.paper-receipt .receipt-payment-bank,.paper-receipt .receipt-payment-meta,.paper-receipt .receipt-payment-amount{font-size:var(--master-section)!important;line-height:1.5!important}
+.paper-receipt .receipt-payment-amount>div{font-size:var(--master-total-label)!important;line-height:1.28!important;font-weight:700!important}
+.paper-receipt .receipt-payment-amount>b{font-size:var(--master-total-amount)!important;line-height:1.05!important;font-weight:700!important}
+.paper-receipt .receipt-payment-meta div{overflow-wrap:normal!important;word-break:normal!important}
+
+/* WHT always neutral black */
+.paper-invoice .master-wht-text,.paper-invoice .master-wht-line,.paper-invoice .master-wht-line *,
+.paper-receipt .master-wht-text,.paper-receipt .master-wht-line,.paper-receipt .master-wht-line *{color:#1b2736!important}
+
+/* Larger company stamp on Invoice + Receipt */
+.paper-invoice .master-cert-cell,.paper-receipt .master-cert-cell{grid-template-rows:26mm 0 auto!important}
+.paper-invoice .master-cert-visual,.paper-receipt .master-cert-visual{height:26mm!important}
+.paper-invoice .master-stamp-img,.paper-receipt .master-stamp-img{width:26mm!important;height:26mm!important;max-width:26mm!important;max-height:26mm!important}
+</style>
+
 </head>
 <body>
 <div id="loading" class="loading">กำลังโหลดเอกสารบัญชี...</div>
